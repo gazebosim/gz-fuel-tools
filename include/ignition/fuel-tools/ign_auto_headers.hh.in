@@ -1,0 +1,3 @@
+// Automatically generated
+#include <${PROJECT_NAME_LOWER}/config.hh>
+${ign_headers}

@@ -1,29 +1,19 @@
-# README #
+# Ignition Fuel Tools
 
-This README would normally document whatever steps are necessary to get your application up and running.
+** Classes and tools for interacting with Ignition Fuel **
 
-### What is this repository for? ###
+Ignition Fuel Tools is composed by a client library and command line tools for
+interacting with Ignition Fuel servers.
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+  [http://bitbucket.org/ignitionrobotics/ign-fuel-tools](http://bitbucket.org/ignitionrobotics/ign-fuel-tools)
 
-### How do I get set up? ###
+## Continuous integration
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+Please refer to the [Bitbucket Pipelines](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/addon/pipelines/home#!/).
 
-### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+## Documentation
 
-### Who do I talk to? ###
+Check [here](http://ignition-fuel-tools.readthedocs.io/en/default/).
 
-* Repo owner or admin
-* Other community or team contact
+[![Documentation Status](https://readthedocs.org/projects/ignition-fuel-tools/badge/?version=default)](https://readthedocs.org/projects/ignition-fuel-tools/?badge=default)
