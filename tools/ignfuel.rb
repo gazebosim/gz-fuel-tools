@@ -14,7 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'open3'
+require 'json'
+require 'net/http'
 require 'optparse'
 require 'yaml'
 
@@ -22,7 +23,7 @@ conf_file = '/home/caguero/.ignition/fuel/.sources.yaml'
 conf_file = ENV['IGN_FUEL_CONFIG_PATH'] if ENV.key?('IGN_FUEL_CONFIG_PATH')
 
 # Sanity check: The configuration file should exist.
-if not File.exist?(conf_file)
+unless File.exist?(conf_file)
   puts "Unable to find configuration file in [#{conf_file}]\n"
   exit(-1)
 end
@@ -39,40 +40,51 @@ end
 # Read configuration.
 raise "['servers:'] not found" unless yml.key?('servers')
 servers = yml['servers']
-raise "No servers found" unless not servers.empty?
-#puts "#{servers}"
+raise 'No servers found' if servers.empty?
+
+# puts "#{servers}"
 raise "['install_dir:'] not found" unless yml.key?('install_dir')
 
 # Parse the command line arguments.
 options = {}
 option_parser = OptionParser.new do |opts|
-  opts.on("--install RESOURCE", "-i RESOURCE") do |resource|
+  opts.on('--search RESOURCE", "-s RESOURCE') do |resource|
     options[:resource] = resource
-    options['command'] = 'install'
+    options['command'] = 'search'
   end
 
-  opts.on("--type TYPE", [:models, :worlds], "Select type") do |type|
-    options[:type] = type
-    options['command'] = 'type'
-  end
+  # opts.on("--type TYPE", [:models, :worlds], "Select type") do |type|
+  #  options[:type] = type
+  #  options['command'] = 'type'
+  # end
 end
 
 option_parser.parse!
+
+# type = ARGV.pop
+# raise "No type specified" unless type
 #
-#type = ARGV.pop
-#raise "No type specified" unless type
-#
-## Command: install
-#if options.key?('command') and options['command'] == 'install'
-#
-#  # Check if the server contains the requested asset.
-#  command = "girder-cli --api-url #{server}/api/v1 download /collection/"\
-#            "#{options[:asset]} #{options[:asset]}"
-#  puts "#{type}"
-#  #stdout_str, stderr_str, status = Open3.capture3(command)
-#
-#  #unless status.exitstatus == 0
-#  #  puts "[#{options[:asset]}] Nonexisten asset"
-#  #  exit -1
-#  #end
-#end
+# Command: search
+if options.key?('command') && options['command'] == 'search'
+  query_string = 'q=' + options[:resource] + '&mode=text&types=["folder"]'
+  uri_string = 'http://localhost:8080/api/v1/resource/search?' + query_string
+  uri = URI.parse(uri_string)
+  http = Net::HTTP.new(uri.host, uri.port)
+  request = Net::HTTP::Get.new(uri.request_uri)
+  response = http.request(request)
+  if response.code != '200'
+    puts 'Error in request'
+    exit(-1)
+  end
+  json_output = JSON.parse(response.body)
+  json_output['folder'].each do |resource|
+    id = resource['_id']
+    # Query Girder to get the path of each resource.
+    uri_string = 'http://localhost:8080/api/v1/resource/' + id +
+                 '/path?type=folder'
+    uri = URI(uri_string)
+    response = Net::HTTP.get(uri)
+    # Remove the quotes around the returned paths.
+    puts response.delete('"')
+  end
+end
