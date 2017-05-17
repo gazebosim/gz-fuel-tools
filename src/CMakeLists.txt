@@ -18,7 +18,9 @@ elseif(WIN32)
   add_library(${PROJECT_NAME_LOWER}${PROJECT_MAJOR_VERSION} STATIC ${sources})
 endif()
 
-target_link_libraries(${PROJECT_NAME_LOWER}${PROJECT_MAJOR_VERSION})
+target_link_libraries(${PROJECT_NAME_LOWER}${PROJECT_MAJOR_VERSION}
+  ${CURL_LIBRARIES}
+)
 
 if(WIN32)
   target_link_libraries(${PROJECT_NAME_LOWER}${PROJECT_MAJOR_VERSION}
