@@ -33,3 +33,4 @@ endif()
 
 ign_install_library(${PROJECT_NAME_LOWER}${PROJECT_MAJOR_VERSION})
 
+add_subdirectory(cmd)

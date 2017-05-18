@@ -289,6 +289,7 @@ else (build_errors)
     set(TEST_TYPE "UNIT")
     add_subdirectory(src)
     add_subdirectory(include)
+    add_subdirectory(conf)
     add_subdirectory(test)
   endif (BUILD_IGNITION)
 
