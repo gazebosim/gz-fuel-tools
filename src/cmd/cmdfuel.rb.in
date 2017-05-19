@@ -17,58 +17,60 @@
 require 'json'
 require 'net/http'
 require 'optparse'
+require 'tempfile'
 require 'yaml'
 
-conf_file = '/home/caguero/.ignition/fuel/.sources.yaml'
-conf_file = ENV['IGN_FUEL_CONFIG_PATH'] if ENV.key?('IGN_FUEL_CONFIG_PATH')
-
-## Sanity check: The configuration file should exist.
-unless File.exist?(conf_file)
-  puts "Unable to find configuration file in [#{conf_file}]\n"
-  exit(-1)
-end
-
-# Read the configuration file.
-yml = YAML.load_file(conf_file)
-
-# Sanity check: Verify that the content of the file is YAML.
-unless yml && yml.is_a?(Hash)
-  puts "File [#{conf_file}] does not contain a valid YAML format\n"
-  exit(-1)
-end
-
-# Read configuration.
-raise "['servers:'] not found" unless yml.key?('servers')
-servers = yml['servers']
-raise 'No servers found' if servers.empty?
-
-# puts "#{servers}"
-raise "['install_dir:'] not found" unless yml.key?('install_dir')
-
 # Constants.
-LIBRARY_NAME = '@IGN_LIBRARY_NAME@'
-LIBRARY_VERSION = '@PROJECT_VERSION_FULL@'
 COMMON_OPTIONS =
-               "  -h [ --help ]              Print this help message.\n"\
-               "                                                    \n"        +
-               "  --force-version <VERSION>  Use a specific library version.\n"\
-               "                                                    \n"        +
-               '  --versions                 Show the available versions.'
-COMMANDS = {  'fuel' =>
-                       "Manage simulation resources.\n\n"                      +
-                       "  ign fuel [options]\n\n"                              +
-                       "Options:\n\n"                                          +
-                       "  -s [ --search ] arg        Search for a resource."   +
-                       "\n"                                                    +
-                       "                                                  \n\n"+
-                       COMMON_OPTIONS
-            }
-
+  "  -h [ --help ]              Print this help message.\n"\
+  "                                                    \n"\
+  "  --force-version <VERSION>  Use a specific library version.\n"\
+  "                                                    \n"\
+  '  --versions                 Show the available versions.'
+COMMANDS = { 'fuel' =>
+                       "Manage simulation resources.\n\n"\
+                       "  ign fuel [options]\n\n"\
+                       "Options:\n\n"\
+                       "  -i [ --install ] arg       Install a resource.\n"\
+                       "  -s [ --search ] arg        Search for a resource.\n"\
+                       "                                                 \n\n" +
+                       COMMON_OPTIONS }
 
 #
 # Class for the Ignition Fuel command line tools.
 #
 class Cmd
+  #
+  # Constructor.
+  #
+  def initialize
+    conf_file = '/home/caguero/.ignition/fuel/.sources.yaml'
+    conf_file = ENV['IGN_FUEL_CONFIG_PATH'] if ENV.key?('IGN_FUEL_CONFIG_PATH')
+
+    ## Sanity check: The configuration file should exist.
+    unless File.exist?(conf_file)
+      puts "Unable to find configuration file in [#{conf_file}]\n"
+      exit(-1)
+    end
+
+    # Read the configuration file.
+    @yml = YAML.load_file(conf_file)
+
+    # Sanity check: Verify that the content of the file is YAML.
+    unless @yml && @yml.is_a?(Hash)
+      puts "File [#{conf_file}] does not contain a valid YAML format\n"
+      exit(-1)
+    end
+
+    # Read configuration.
+    raise "['servers:'] not found" unless @yml.key?('servers')
+    servers = @yml['servers']
+    raise 'No servers found' if servers.empty?
+
+    # puts "#{servers}"
+    raise "['install_dir:'] not found" unless @yml.key?('install_dir')
+  end
+
   #
   # Return a structure describing the options.
   #
@@ -84,6 +86,10 @@ class Cmd
       opts.on('-h', '--help', 'Print this help message') do
         puts usage
         exit(0)
+      end
+
+      opts.on('--install RESOURCE", "-i RESOURCE') do |resource|
+        options['install'] = resource
       end
 
       opts.on('--search RESOURCE", "-s RESOURCE') do |resource|
@@ -108,7 +114,7 @@ class Cmd
     options['command'] = ARGV[0]
 
     options
-  end  # parse()
+  end # parse()
 
   def execute(args)
     options = parse(args)
@@ -116,34 +122,101 @@ class Cmd
     # puts 'Parsed:'
     # puts options
 
-    # Read the plugin that handles the command.
-    plugin = LIBRARY_NAME
-    conf_version = LIBRARY_VERSION
-
     begin
       case options['command']
       when 'fuel'
         if options.key?('search')
-          query_string = 'q=' + options['search'] + '&mode=text&types=["folder"]'
-          uri_string = 'http://localhost:8080/api/v1/resource/search?' + query_string
-          uri = URI.parse(uri_string)
-          http = Net::HTTP.new(uri.host, uri.port)
-          request = Net::HTTP::Get.new(uri.request_uri)
-          response = http.request(request)
-          if response.code != '200'
-            puts 'Error in request'
-            exit(-1)
+          @yml['servers'].each do |name, details|
+            query_string = 'q=' + options['search'] +
+                           '&mode=text&types=["folder"]'
+            host = details['url']
+            uri_string = host + '/api/v1/resource/search?' + query_string
+            uri = URI.parse(uri_string)
+            http = Net::HTTP.new(uri.host, uri.port)
+            request = Net::HTTP::Get.new(uri.request_uri)
+            response = http.request(request)
+            if response.code != '200'
+              puts 'Error in request'
+              exit(-1)
+            end
+            json_output = JSON.parse(response.body)
+            json_output['folder'].each do |resource|
+              id = resource['_id']
+              # Query Girder to get the path of each resource.
+              uri_string = host + '/api/v1/resource/' + id +
+                           '/path?type=folder'
+              uri = URI(uri_string)
+              http = Net::HTTP.new(uri.host, uri.port)
+              request = Net::HTTP::Get.new(uri.request_uri)
+              response = http.request(request)
+              if response.code != '200'
+                puts 'Error in request'
+                exit(-1)
+              end
+              # Remove the quotes around the returned paths.
+              puts host + response.body.delete('"')
+            end
           end
-          json_output = JSON.parse(response.body)
-          json_output['folder'].each do |resource|
-            id = resource['_id']
-            # Query Girder to get the path of each resource.
-            uri_string = 'http://localhost:8080/api/v1/resource/' + id +
-                         '/path?type=folder'
-            uri = URI(uri_string)
-            response = Net::HTTP.get(uri)
-            # Remove the quotes around the returned paths.
-            puts response.delete('"')
+        elsif options.key?('install')
+          @yml['servers'].each do |name, details|
+            query_string = 'q=' + options['install'] +
+                           '&mode=text&types=["folder"]'
+            host = details['url']
+            uri_string = host + '/api/v1/resource/search?' + query_string
+            uri = URI.parse(uri_string)
+            http = Net::HTTP.new(uri.host, uri.port)
+            request = Net::HTTP::Get.new(uri.request_uri)
+            response = http.request(request)
+            if response.code != '200'
+              puts 'Error in request'
+              exit(-1)
+            end
+            json_output = JSON.parse(response.body)
+            json_output['folder'].each do |resource|
+              id = resource['_id']
+              # Query Girder to get the path of each resource.
+              uri_string = host + '/api/v1/resource/' + id +
+                           '/path?type=folder'
+              uri = URI(uri_string)
+              http = Net::HTTP.new(uri.host, uri.port)
+              request = Net::HTTP::Get.new(uri.request_uri)
+              response = http.request(request)
+              if response.code != '200'
+                puts 'Error in request'
+                exit(-1)
+              end
+              # Remove the quotes around the returned paths.
+              remote_path = response.body.delete('"')
+
+              subfolder = ''
+              details['types'].each do |type, path|
+                if remote_path.include? path
+                  subfolder = type
+                  break
+                end
+              end
+              break if subfolder.empty?
+
+              ## Query Girder to download each resource.
+              uri_string = host + '/api/v1/folder/' + id +
+                           '/download'
+              uri = URI(uri_string)
+              http = Net::HTTP.new(uri.host, uri.port)
+              request = Net::HTTP::Get.new(uri.request_uri)
+              response = http.request(request)
+              if response.code != '200'
+                puts 'Error in request'
+                exit(-1)
+              end
+              dst = @yml['install_dir']
+              temp_file = Tempfile.new(options['install'])
+              temp_file.write(response.body)
+              temp_file.close
+              dst_dir = dst + '/' + name + '/' + subfolder
+              `mkdir -p #{dst_dir}`
+              `unzip -o #{temp_file.path} -d #{dst_dir}`
+              temp_file.unlink
+            end
           end
         else
           puts 'Command error: I do not have an implementation '\
@@ -155,7 +228,7 @@ class Cmd
       end
     rescue
       puts "Library error: Problem running [#{options['command']}]() "\
-           "from #{plugin}."
+           "from @IGN_LIBRARY_NAME@."
     end
   end
 end
