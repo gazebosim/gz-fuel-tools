@@ -16,6 +16,7 @@
 
 require 'json'
 require 'net/http'
+require 'open3'
 require 'optparse'
 require 'tempfile'
 require 'yaml'
@@ -31,8 +32,11 @@ COMMANDS = { 'fuel' =>
                        "Manage simulation resources.\n\n"\
                        "  ign fuel [options]\n\n"\
                        "Options:\n\n"\
+                       "  -d [ --dst ] arg           Destination directory.\n"\
                        "  -i [ --install ] arg       Install a resource.\n"\
+                       "  -r [ --remote ] arg        Remote server.\n"\
                        "  -s [ --search ] arg        Search for a resource.\n"\
+                       "  -u [ --upload ] arg        Upload a resource.\n"\
                        "                                                 \n\n" +
                        COMMON_OPTIONS }
 
@@ -88,12 +92,24 @@ class Cmd
         exit(0)
       end
 
+      opts.on('--dst FOLDER", "-d FOLDER') do |folder|
+        options['dst'] = folder
+      end
+
+      opts.on('--remote SERVER", "-r SERVER') do |server|
+        options['remote'] = server
+      end
+
       opts.on('--install RESOURCE", "-i RESOURCE') do |resource|
         options['install'] = resource
       end
 
       opts.on('--search RESOURCE", "-s RESOURCE') do |resource|
         options['search'] = resource
+      end
+
+      opts.on('--upload RESOURCE", "-u RESOURCE') do |resource|
+        options['upload'] = resource
       end
     end
     begin
@@ -218,6 +234,64 @@ class Cmd
               temp_file.unlink
             end
           end
+        elsif options.key?('upload')
+          if !options.key?('dst') || !options.key?('remote')
+            puts COMMANDS[args[0]]
+            exit (-1)
+          end
+
+          # Sanity check: Verify that the directory exists.
+          dir = options['upload']
+          if !File.directory?(dir)
+            puts "The resource #{dir} is not a valid directory"
+            exit(-1)
+          end
+
+          # Sanity check: Verify that the destination server exists.
+          remote_server = options['remote']
+          if !@yml['servers'].key?(remote_server)
+            puts "Unknown remote server [#{remote_server}]"
+            exit(-1)
+          end
+
+          # Sanity check: Verify that the configuration has an api key for this
+          # server.
+          remote_server = @yml['servers'][remote_server]
+          host = remote_server['url']
+          if !remote_server.key?('api_key')
+            puts "No api_key in configuration file for [#{remote_server}]"
+            exit(-1)
+          end
+          api_key = remote_server['api_key']
+
+          # Sanity check: Verify that the destination folder exists.
+          uri_string = host + '/api/v1/resource/lookup?path=' + options['dst'] +
+                       '&test=false'
+          puts uri_string
+          uri = URI(uri_string)
+          http = Net::HTTP.new(uri.host, uri.port)
+          request = Net::HTTP::Get.new(uri.request_uri)
+          response = http.request(request)
+          if response.code != '200'
+            puts 'Destination directory does not exist'
+            exit(-1)
+          end
+
+          json_output = JSON.parse(response.body)
+          id = json_output['_id']
+          command = "girder-cli --api-url #{host}/api/v1 --api-key #{api_key} "\
+                    "upload #{id} #{dir}"
+
+          puts command
+          stdout_str, stderr_str, status = Open3.capture3(command)
+
+          unless status.exitstatus == 0
+            puts "[#{options[:asset]}] Nonexisten asset"
+            exit -1
+          end
+
+          puts stdout_str
+
         else
           puts 'Command error: I do not have an implementation '\
                'for this command.'
