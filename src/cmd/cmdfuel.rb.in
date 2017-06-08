@@ -144,7 +144,7 @@ class Cmd
         if options.key?('search')
           @yml['servers'].each do |name, details|
             query_string = 'q=' + options['search'] +
-                           '&mode=text&types=["folder"]'
+                           '&mode=prefix&types=["folder"]'
             host = details['url']
             uri_string = host + '/api/v1/resource/search?' + query_string
             uri = URI.parse(uri_string)
@@ -176,7 +176,7 @@ class Cmd
         elsif options.key?('install')
           @yml['servers'].each do |name, details|
             query_string = 'q=' + options['install'] +
-                           '&mode=text&types=["folder"]'
+                           '&mode=prefix&types=["folder"]'
             host = details['url']
             uri_string = host + '/api/v1/resource/search?' + query_string
             uri = URI.parse(uri_string)
