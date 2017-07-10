@@ -39,6 +39,7 @@ namespace ignition
       public: ~ClientConfig();
 
       /// \brief List URI of servers the client will connect to
+      /// \return The list of server URIs.
       public: std::vector<std::string> Servers() const;
 
       /// \brief Add a server to the list
