@@ -32,7 +32,7 @@ namespace ignition
     /// \brief forward declaration
     class Model;
 
-    /// \briec class describing result of a model fetch
+    /// \brief Class describing result of a model delete
     class DeleteResult : public Result
     {
       friend Model;
