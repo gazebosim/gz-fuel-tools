@@ -21,6 +21,7 @@
 // #include <array>
 // #include <cstdint>
 #include <memory>
+#include <ignition/fuel-tools/Helpers.hh>
 
 namespace ignition
 {
@@ -30,7 +31,7 @@ namespace ignition
     class ModelIdentifierPrivate;
 
     /// \brief Defines how to identify a model
-    class ModelIdentifier
+    class IGNITION_FUEL_TOOLS_VISIBLE ModelIdentifier
     {
       /// \brief Constructor
       public: ModelIdentifier();

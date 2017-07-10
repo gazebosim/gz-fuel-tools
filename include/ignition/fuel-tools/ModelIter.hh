@@ -21,6 +21,7 @@
 #include <array>
 #include <memory>
 
+#include <ignition/fuel-tools/Helpers.hh>
 #include <ignition/fuel-tools/Model.hh>
 
 namespace ignition
@@ -34,7 +35,7 @@ namespace ignition
     class FuelClient;
 
     /// \brief class for iterating through models
-    class ModelIter
+    class IGNITION_FUEL_TOOLS_VISIBLE ModelIter
     {
       friend FuelClient;
 

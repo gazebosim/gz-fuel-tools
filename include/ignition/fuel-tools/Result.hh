@@ -19,6 +19,7 @@
 #define IGNITION_FUEL_TOOLS_RESULT_HH_
 
 #include <memory>
+#include <ignition/fuel-tools/Helpers.hh>
 
 namespace ignition
 {
@@ -29,7 +30,7 @@ namespace ignition
     class Model;
 
     /// \brief Class describing a result of an operation
-    class Result
+    class IGNITION_FUEL_TOOLS_VISIBLE Result
     {
       friend Model;
 
