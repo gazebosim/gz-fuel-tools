@@ -8,13 +8,13 @@ set (sources
   Result.cc
 )
 
-# set (gtest_sources
-#   GirderClient_TEST.cc
-# )
+set (gtest_sources
+  Result_TEST.cc
+)
 
 include_directories(${CMAKE_BINARY_DIR}/ ${CMAKE_BINARY_DIR}/test/)
 
-# ign_build_tests(${gtest_sources})
+ign_build_tests(${gtest_sources})
 
 if (UNIX)
   ign_add_library(${PROJECT_NAME_LOWER}${PROJECT_MAJOR_VERSION} ${sources})

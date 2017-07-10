@@ -81,10 +81,7 @@ namespace ignition
       public: ResultType Type() const;
 
       /// \brief protected constructor
-      protected: Result();
-
-      /// \brief protected constructor
-      protected: void Type(const ResultType _type);
+      public: Result(const ResultType _type);
 
       /// \brief operator bool returns true if operation was successful
       public: virtual operator bool() const;
