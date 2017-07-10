@@ -1,7 +1,7 @@
 'use strict'
 
 const express = require('express')
-const router = express.Router();
+const router = express.Router()
 
 let worlds = []
 
@@ -18,7 +18,7 @@ worlds.push(world0)
 
 exports.setRoutes = function (app) {
   router.get('/worlds', (req, res) => {
-    res.jsonp(worlds);
+    res.jsonp(worlds)
   })
 
   router.get('/worlds/:id', (req, res) => {
@@ -26,14 +26,14 @@ exports.setRoutes = function (app) {
     let idx = parseInt(req.id)
     if (idx < worlds.length)
       r = worlds[idx]
-    res.jsonp(r);
+    res.jsonp(r)
   })
 
 
   router.post('/worlds', (req, res) => {
     const m = req.body
     worlds.push(m)
-    res.jsonp(m);
+    res.jsonp(m)
   })
 
 
@@ -44,7 +44,7 @@ exports.setRoutes = function (app) {
       r = JSON.parse(JSON.stringify(worlds[idx]))
       worlds[idx] = null
     }
-    res.jsonp(r);
+    res.jsonp(r)
   })
 
   /// param for resource name

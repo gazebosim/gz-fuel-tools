@@ -29,7 +29,7 @@ models.push(model0)
 
 exports.setRoutes = function (app) {
   router.get('/models', (req, res) => {
-    res.jsonp(models);
+    res.jsonp(models)
   })
 
   router.get('/models/:id', (req, res) => {
@@ -37,14 +37,14 @@ exports.setRoutes = function (app) {
     let idx = parseInt(req.id)
     if (idx < models.length)
       r = models[idx]
-    res.jsonp(r);
+    res.jsonp(r)
   })
 
 
   router.post('/models', (req, res) => {
     const m = req.body
     models.push(m)
-    res.jsonp(m);
+    res.jsonp(m)
   })
 
 
@@ -55,7 +55,7 @@ exports.setRoutes = function (app) {
       r = JSON.parse(JSON.stringify(models[idx]))
       models[idx] = null
     }
-    res.jsonp(r);
+    res.jsonp(r)
   })
 
   /// param for resource name

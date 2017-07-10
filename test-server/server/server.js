@@ -10,7 +10,7 @@ const app = express()
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 
-const util = require('util');
+const util = require('util')
 
 const models = require('./models')
 const worlds = require('./worlds')
@@ -33,10 +33,10 @@ app.use(cors(corsOptions))
 app.use(bodyParser.json())
 
 app.use(morgan('combined'))
-app.use(express.static('public'));
+app.use(express.static('public'))
 
 app.get('/', function(req, res) {
-  res.sendfile('./public/index.html');
+  res.sendfile('./public/index.html')
 })
 
 
@@ -44,7 +44,7 @@ models.setRoutes(app)
 worlds.setRoutes(app)
 
 // Expose app
-exports = module.exports = app;
+exports = module.exports = app
 
 // ssl and https
 let httpServer = null
