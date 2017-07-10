@@ -13,6 +13,7 @@ const bodyParser = require('body-parser')
 const util = require('util');
 
 const models = require('./models')
+const worlds = require('./worlds')
 
 // dotenv.load()
 
@@ -40,6 +41,7 @@ app.get('/', function(req, res) {
 
 
 models.setRoutes(app)
+worlds.setRoutes(app)
 
 // Expose app
 exports = module.exports = app;
