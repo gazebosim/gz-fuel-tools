@@ -79,6 +79,9 @@ namespace ignition
       /// \brief protected constructor
       protected: Result(std::unique_ptr<ResultPrivate> _dptr);
 
+      /// \brief protected constructor
+      protected: void Type(const ResultType _type);
+
       /// \brief operator bool returns true if operation was successful
       virtual operator bool() const;
 
