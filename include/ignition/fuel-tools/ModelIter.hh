@@ -41,6 +41,9 @@ namespace ignition
       /// \brief Construct an iterator with the data it needs to function
       protected: ModelIter(std::unique_ptr<ModelIterPrivate> _dptr);
 
+      /// \brief Move constructor
+      public: ModelIter(ModelIter &&_old);
+
       public: ~ModelIter();
 
       /// \brief Prefix increment
