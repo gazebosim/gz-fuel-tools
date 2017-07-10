@@ -1,8 +1,12 @@
 include (${project_cmake_dir}/Utils.cmake)
 
 set (headers
-  GirderClient.hh
-  Helpers.hh
+  ClientConfig.hh
+  FuelClient.hh
+  ModelIter.hh
+  ModelIdentifier.hh
+  Model.hh
+  Result.hh
 )
 
 #################################################
