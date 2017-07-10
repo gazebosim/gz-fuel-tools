@@ -35,6 +35,12 @@ namespace ignition
       /// \brief constructor
       public: ClientConfig();
 
+      /// \brief copy constructor
+      public: ClientConfig(const ClientConfig &_copy);
+
+      /// \brief Assignment operator overload
+      public: void operator=(const ClientConfig &_copy);
+
       /// \brief destructor
       public: ~ClientConfig();
 
@@ -43,7 +49,8 @@ namespace ignition
       public: std::vector<std::string> Servers() const;
 
       /// \brief Add a server to the list
-      public: void AddServer();
+      /// \param[in] The base URL of the server
+      public: void AddServer(const std::string &_url);
 
       /// \brief PIMPL
       private: std::unique_ptr<ClientConfigPrivate> dataPtr;
