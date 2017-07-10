@@ -46,6 +46,9 @@ namespace ignition
 
       public: ~ModelIter();
 
+      /// \return false once the iterator is one past the end of the models
+      public: operator bool();
+
       /// \brief Prefix increment
       public: ModelIter &operator++();
 
