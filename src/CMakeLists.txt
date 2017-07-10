@@ -5,6 +5,7 @@ set (sources
   FuelClient.cc
   ModelIdentifier.cc
   ModelIter.cc
+  Result.cc
 )
 
 # set (gtest_sources

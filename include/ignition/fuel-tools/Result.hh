@@ -36,6 +36,9 @@ namespace ignition
       /// Result type
       public: enum ResultType
       {
+        /// \brief Uninitialized type
+        UNKNOWN = 0,
+
         /// \brief Delete successful.
         DELETE,
 
@@ -77,16 +80,16 @@ namespace ignition
       public: ResultType Type() const;
 
       /// \brief protected constructor
-      protected: Result(std::unique_ptr<ResultPrivate> _dptr);
+      protected: Result();
 
       /// \brief protected constructor
       protected: void Type(const ResultType _type);
 
       /// \brief operator bool returns true if operation was successful
-      virtual operator bool() const;
+      public: virtual operator bool() const;
 
       /// \brief Get human readable result string
-      virtual std::string ReadableResult() const;
+      public: virtual std::string ReadableResult() const;
 
       /// brief Pointer to private data
       private: std::unique_ptr<ResultPrivate> dataPtr;
