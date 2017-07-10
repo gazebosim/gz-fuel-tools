@@ -46,7 +46,7 @@ namespace ignition
 
       /// \brief Make sure this model is in the local cache
       /// \remarks this downloads the model and saves it locally if necessary
-      /// \returns The rsult of fetching
+      /// \returns The result of fetching
       public: FetchResult Fetch();
 
       /// \brief returns a path to the model on disk if it is already cached
