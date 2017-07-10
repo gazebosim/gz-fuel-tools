@@ -1,7 +1,11 @@
 include (${project_cmake_dir}/Utils.cmake)
 
 set (sources
+  ClientConfig.cc
   FuelClient.cc
+  ModelIdentifier.cc
+  ModelIter.cc
+  Result.cc
 )
 
 # set (gtest_sources

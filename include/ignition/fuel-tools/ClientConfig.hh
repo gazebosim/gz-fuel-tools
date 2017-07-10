@@ -21,6 +21,8 @@
 #include <memory>
 #include <vector>
 
+#include <ignition/fuel-tools/Helpers.hh>
+
 namespace ignition
 {
   namespace fuel_tools
@@ -30,7 +32,7 @@ namespace ignition
 
     /// \brief High level interface to ignition fuel
     ///
-    class ClientConfig
+    class IGNITION_FUEL_TOOLS_VISIBLE ClientConfig
     {
       /// \brief constructor
       public: ClientConfig();

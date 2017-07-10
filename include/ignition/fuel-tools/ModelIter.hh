@@ -21,6 +21,7 @@
 #include <array>
 #include <memory>
 
+#include <ignition/fuel-tools/Helpers.hh>
 #include <ignition/fuel-tools/Model.hh>
 
 namespace ignition
@@ -34,7 +35,7 @@ namespace ignition
     class FuelClient;
 
     /// \brief class for iterating through models
-    class ModelIter
+    class IGNITION_FUEL_TOOLS_VISIBLE ModelIter
     {
       friend FuelClient;
 
@@ -45,6 +46,9 @@ namespace ignition
       public: ModelIter(ModelIter &&_old);
 
       public: ~ModelIter();
+
+      /// \return false once the iterator is one past the end of the models
+      public: operator bool();
 
       /// \brief Prefix increment
       public: ModelIter &operator++();

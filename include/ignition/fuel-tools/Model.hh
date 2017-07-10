@@ -19,6 +19,7 @@
 #define IGNITION_FUEL_TOOLS_MODEL_HH_
 
 #include <memory>
+#include <ignition/fuel-tools/Helpers.hh>
 #include <ignition/fuel-tools/Result.hh>
 #include <ignition/fuel-tools/ModelIdentifier.hh>
 
@@ -34,7 +35,7 @@ namespace ignition
     class ModelIter;
 
     /// \brief Defines how to identify a model
-    class Model
+    class IGNITION_FUEL_TOOLS_VISIBLE Model
     {
       friend ModelIter;
 
