@@ -2,6 +2,7 @@ include (${project_cmake_dir}/Utils.cmake)
 
 set (sources
   FuelClient.cc
+  ClientConfig.cc
 )
 
 # set (gtest_sources
