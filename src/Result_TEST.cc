@@ -34,6 +34,41 @@ TEST(Result, TypeCanBeSet)
   EXPECT_EQ(Result::DELETE, r2.Type());
 }
 
+/////////////////////////////////////////////////
+/// \brief Check that there are readable strings returned
+TEST(Result, ReadableStringsHaveLength)
+{
+  EXPECT_FALSE(Result(Result::DELETE).ReadableResult().empty());
+  EXPECT_FALSE(Result(Result::FETCH).ReadableResult().empty());
+  EXPECT_FALSE(Result(Result::FETCH_ALREADY_EXISTS).ReadableResult().empty());
+  EXPECT_FALSE(Result(Result::UPLOAD).ReadableResult().empty());
+  EXPECT_FALSE(Result(Result::UNKNOWN).ReadableResult().empty());
+  EXPECT_FALSE(Result(Result::DELETE_NOT_FOUND).ReadableResult().empty());
+  EXPECT_FALSE(Result(Result::DELETE_ERROR).ReadableResult().empty());
+  EXPECT_FALSE(Result(Result::FETCH_NOT_FOUND).ReadableResult().empty());
+  EXPECT_FALSE(Result(Result::FETCH_ERROR).ReadableResult().empty());
+  EXPECT_FALSE(Result(Result::UPLOAD_ALREADY_EXISTS).ReadableResult().empty());
+  EXPECT_FALSE(Result(Result::UPLOAD_ERROR).ReadableResult().empty());
+}
+
+
+//////////////////////////////////////////////////
+/// \brief Check that operator bool returns true for successfull cases
+TEST(Result, TrueOnSuccess)
+{
+  EXPECT_TRUE(Result(Result::DELETE));
+  EXPECT_TRUE(Result(Result::FETCH));
+  EXPECT_TRUE(Result(Result::FETCH_ALREADY_EXISTS));
+  EXPECT_TRUE(Result(Result::UPLOAD));
+  EXPECT_FALSE(Result(Result::UNKNOWN));
+  EXPECT_FALSE(Result(Result::DELETE_NOT_FOUND));
+  EXPECT_FALSE(Result(Result::DELETE_ERROR));
+  EXPECT_FALSE(Result(Result::FETCH_NOT_FOUND));
+  EXPECT_FALSE(Result(Result::FETCH_ERROR));
+  EXPECT_FALSE(Result(Result::UPLOAD_ALREADY_EXISTS));
+  EXPECT_FALSE(Result(Result::UPLOAD_ERROR));
+}
+
 
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
