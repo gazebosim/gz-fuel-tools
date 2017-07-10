@@ -20,22 +20,75 @@
 
 #include <memory>
 
-
 namespace ignition
 {
   namespace fuel_tools
   {
-    /// \brief base class describing a result of an operation
+    // forward declaration
+    class ResultPrivate;
+    class Model;
+
+    /// \brief Class describing a result of an operation
     class Result
     {
+      friend Model;
+
+      /// Result type
+      public: enum ResultType
+      {
+        /// \brief Delete successful.
+        DELETE,
+
+        /// \brief Model not found.
+        DELETE_NOT_FOUND,
+
+        /// \brief Delete failed. Other errors.
+        /// \sa ReadableResult
+        DELETE_ERROR,
+
+        /// \brief Fetch successful.
+        FETCH,
+
+        /// \brief Model already exists.
+        FETCH_ALREADY_EXISTS,
+
+        /// \brief Model not found.
+        FETCH_NOT_FOUND,
+
+        /// \brief Fetch failed. Other errors.
+        /// \sa ReadableResult
+        FETCH_ERROR,
+
+        /// \brief Upload successful.
+        UPLOAD,
+
+        /// \brief Model already exists.
+        UPLOAD_ALREADY_EXISTS,
+
+        /// \brief Upload failed. Other errors.
+        /// \sa ReadableResult
+        UPLOAD_ERROR
+      };
+
+      /// \brief Destructor
+      public: ~Result();
+
+      /// \brief Get the type of result
+      public: ResultType Type() const;
+
+      /// \brief protected constructor
+      protected: Result(std::unique_ptr<ResultPrivate> _dptr);
+
       /// \brief operator bool returns true if operation was successful
-      virtual operator bool() const = 0;
+      virtual operator bool() const;
 
       /// \brief Get human readable result string
-      virtual std::string ReadableResult() const = 0;
+      virtual std::string ReadableResult() const;
+
+      /// brief Pointer to private data
+      private: std::unique_ptr<ResultPrivate> dataPtr;
     };
   }
 }
 
 #endif
-

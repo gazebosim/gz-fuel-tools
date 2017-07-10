@@ -19,7 +19,7 @@
 #define IGNITION_FUEL_TOOLS_MODEL_HH_
 
 #include <memory>
-#include <ignition/fuel-tools/FetchResult.hh>
+#include <ignition/fuel-tools/Result.hh>
 #include <ignition/fuel-tools/ModelIdentifier.hh>
 
 
@@ -47,7 +47,7 @@ namespace ignition
       /// \brief Make sure this model is in the local cache
       /// \remarks this downloads the model and saves it locally if necessary
       /// \returns The result of fetching
-      public: FetchResult Fetch();
+      public: Result Fetch();
 
       /// \brief returns a path to the model on disk if it is already cached
       /// \returns path, or empty string if the model is not cached.

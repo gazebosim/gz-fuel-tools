@@ -32,21 +32,26 @@ namespace ignition
     /// \brief Defines how to identify a model
     class ModelIdentifier
     {
+      /// \brief Constructor
       public: ModelIdentifier();
 
+      /// \brief Destructor
       public: ~ModelIdentifier();
 
       /// \brief Returns just the last part of the model name
+      /// \return Model name
       public: std::string Name() const;
 
       /// \brief Returns the first part of the model name
+      /// \return Unique model name
       public: std::string UniqueName() const;
 
       /// \brief set the second part of a model name
-      /// \returns true if successful
+      /// \return true if successful
       public: bool Name(const std::string &_name);
 
       /// \brief set the first part of a model name
+      /// \return True if successful
       public: bool UniqueName(const std::string &_name);
 
       // /// \brief returns a SHA 2 256 hash of the model

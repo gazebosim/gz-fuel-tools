@@ -36,15 +36,14 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id)
 }
 
 //////////////////////////////////////////////////
-UploadResult FuelClient::UploadModel(const std::string &_pathToModelDir,
+Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     const ModelIdentifier &_id)
 {
-  // TODO Upload a model and return an UploadResult
+  // TODO Upload a model and return an Result
 }
 
 //////////////////////////////////////////////////
-DeleteResult FuelClient::DeleteModel(const ModelIdentifier &_id)
+Result FuelClient::DeleteModel(const ModelIdentifier &_id)
 {
-  // TODO Delete a model and return a DeleteResult
+  // TODO Delete a model and return a Result
 }
-
