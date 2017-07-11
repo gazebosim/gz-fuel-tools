@@ -25,9 +25,13 @@ using namespace ignft;
 
 /////////////////////////////////////////////////
 /// \brief Nothing crashes
-TEST(ModelIdentifier, ConstructorDoesNotCrash)
+TEST(ModelIdentifier, SetNames)
 {
   ModelIdentifier id;
+  id.Name("Hello");
+  id.UniqueName("World");
+  EXPECT_EQ(std::string("Hello"), id.Name());
+  EXPECT_EQ(std::string("World"), id.UniqueName());
 }
 
 //////////////////////////////////////////////////
