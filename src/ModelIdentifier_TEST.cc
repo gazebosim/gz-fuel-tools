@@ -34,6 +34,26 @@ TEST(ModelIdentifier, SetNames)
   EXPECT_EQ(std::string("World"), id.UniqueName());
 }
 
+/////////////////////////////////////////////////
+/// \brief Copy constructor deep copies
+TEST(ModelIdentifier, CopyConstructorDeepCopy)
+{
+  ModelIdentifier id;
+  id.Name("Hello");
+  id.UniqueName("World");
+
+  ModelIdentifier id2(id);
+  EXPECT_EQ(std::string("Hello"), id2.Name());
+  EXPECT_EQ(std::string("World"), id2.UniqueName());
+
+  id2.Name("Hello2");
+  id2.UniqueName("World2");
+  EXPECT_EQ(std::string("Hello"), id.Name());
+  EXPECT_EQ(std::string("World"), id.UniqueName());
+  EXPECT_EQ(std::string("Hello2"), id2.Name());
+  EXPECT_EQ(std::string("World2"), id2.UniqueName());
+}
+
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
