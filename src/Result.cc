@@ -48,6 +48,12 @@ Result::Result(const Result::ResultType _type) : dataPtr(new ResultPrivate)
 }
 
 //////////////////////////////////////////////////
+Result::Result(const Result &_orig) : dataPtr(new ResultPrivate)
+{
+  *(this->dataPtr) = *(_orig.dataPtr);
+}
+
+//////////////////////////////////////////////////
 Result::operator bool() const
 {
   switch(this->dataPtr->type)

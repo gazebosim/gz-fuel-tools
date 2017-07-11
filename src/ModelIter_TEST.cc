@@ -45,10 +45,11 @@ class ignft::FuelClient
       {
         ModelIdentifier id;
         char buf[10];
-        std::sprintf(buf, "%d", i);
-        id.Name("model" + buf[0]);
-        id.UniqueName("unique_model" + buf[0]);
-        ids.push_back(std::move(id));
+        std::sprintf(buf, "model%d", i);
+        std::string name = buf;
+        id.Name(name);
+        id.UniqueName("unique_" + name);
+        ids.push_back(id);
       }
       std::unique_ptr<ModelIterPrivate> priv(new ModelIterPrivate(ids));
       return ModelIter(std::move(priv));
@@ -63,10 +64,33 @@ TEST(ModelIterTestFixture, FalseIfNoModels)
 }
 
 /////////////////////////////////////////////////
-/// \brief Iter should move through 3 ids
+/// \brief Iter should be ready to move if there are ids
 TEST(ModelIterTestFixture, TrueIfSomeModels)
 {
   EXPECT_TRUE(FuelClient::ModelIterThreeModels());
+}
+
+/////////////////////////////////////////////////
+/// \brief Iter should move through 3 ids
+TEST(ModelIterTestFixture, MoveThroughIds)
+{
+  ModelIter iter = FuelClient::ModelIterThreeModels();
+  EXPECT_TRUE(iter);
+  EXPECT_EQ("model0", iter->Identification().Name());
+  EXPECT_EQ("model0", (*iter).Identification().Name());
+
+  ++iter;
+  EXPECT_TRUE(iter);
+  EXPECT_EQ("model1", iter->Identification().Name());
+  EXPECT_EQ("model1", (*iter).Identification().Name());
+
+  ++iter;
+  EXPECT_TRUE(iter);
+  EXPECT_EQ("model2", iter->Identification().Name());
+  EXPECT_EQ("model2", (*iter).Identification().Name());
+
+  ++iter;
+  EXPECT_FALSE(iter);
 }
 
 //////////////////////////////////////////////////

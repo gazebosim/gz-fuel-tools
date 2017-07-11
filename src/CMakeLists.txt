@@ -3,6 +3,7 @@ include (${project_cmake_dir}/Utils.cmake)
 set (sources
   ClientConfig.cc
   FuelClient.cc
+  Model.cc
   ModelIdentifier.cc
   ModelIter.cc
   Result.cc

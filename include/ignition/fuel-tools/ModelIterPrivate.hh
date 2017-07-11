@@ -54,6 +54,9 @@ namespace ignition
 
       /// \brief where the current iterator is in the list of ids
       private: std::vector<ModelIdentifier>::iterator idIter;
+
+      /// \brief current model for returning references
+      private: Model model;
     };
   }
 }
