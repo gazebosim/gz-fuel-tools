@@ -31,6 +31,7 @@ endif()
 
 target_link_libraries(${PROJECT_NAME_LOWER}${PROJECT_MAJOR_VERSION}
   ${CURL_LIBRARIES}
+  ${IGNITION-COMMON_LIBRARIES}
 )
 
 if(WIN32)

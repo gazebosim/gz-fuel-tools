@@ -54,6 +54,13 @@ namespace ignition
       /// \param[in] The base URL of the server
       public: void AddServer(const std::string &_url);
 
+      /// \brief Where are models and stuff stored locally?
+      public: std::string CacheLocation() const;
+
+      /// \brief Set where models and stuff are saved
+      /// \param[in] _path path on disk where models are saved
+      public: void CacheLocation(const std::string &_path);
+
       /// \brief PIMPL
       private: std::unique_ptr<ClientConfigPrivate> dataPtr;
     };

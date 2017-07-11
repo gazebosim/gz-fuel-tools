@@ -27,6 +27,9 @@ class ignft::ClientConfigPrivate
 {
   /// \brief A list of servers;
   public: std::vector<std::string> servers;
+
+  /// \brief a path on disk to where data is cached
+  public: std::string cacheLocation;
 };
 
 //////////////////////////////////////////////////
@@ -61,4 +64,16 @@ std::vector<std::string> ClientConfig::Servers() const
 void ClientConfig::AddServer(const std::string &_url)
 {
   this->dataPtr->servers.push_back(_url);
+}
+
+//////////////////////////////////////////////////
+std::string ClientConfig::CacheLocation() const
+{
+  return this->dataPtr->cacheLocation;
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::CacheLocation(const std::string &_path)
+{
+  this->dataPtr->cacheLocation = _path;
 }

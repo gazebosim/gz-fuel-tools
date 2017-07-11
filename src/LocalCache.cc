@@ -16,6 +16,8 @@
 */
 
 #include <vector>
+#include <ignition/common/Console.hh>
+#include <ignition/common/Util.hh>
 #include <ignition/fuel-tools/LocalCache.hh>
 
 namespace ignft = ignition::fuel_tools;
@@ -26,7 +28,7 @@ using namespace ignft;
 class ignft::LocalCachePrivate
 {
   /// \brief client configuration
-  public: const ClientConfig *config;
+  public: const ClientConfig *config = nullptr;
 };
 
 
@@ -34,7 +36,15 @@ class ignft::LocalCachePrivate
 LocalCache::LocalCache(const ClientConfig *_config)
   : dataPtr(new LocalCachePrivate)
 {
-  this->dataPtr->config = _config;
+  if (common::isDirectory(_config->CacheLocation()))
+  {
+    this->dataPtr->config = _config;
+  }
+  else
+  {
+    ignerr << "Cache location does not exist [" << _config->CacheLocation()
+      << "]\n";
+  }
 }
 
 //////////////////////////////////////////////////
