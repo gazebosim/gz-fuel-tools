@@ -44,7 +44,7 @@ namespace ignition
       friend ModelIterPrivate;
 
       /// \brief Protected Constructor
-      protected: Model();
+      public: Model();
 
       /// \brief Protected constructor
       protected: Model(std::shared_ptr<ModelPrivate> _dptr);
