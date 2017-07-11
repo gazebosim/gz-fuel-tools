@@ -32,7 +32,7 @@ class ignft::ClientConfigPrivate
 };
 
 //////////////////////////////////////////////////
-ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate())
+ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
 }
 
