@@ -34,13 +34,23 @@ namespace ignition
     /// \brief Forward declaration
     class ModelIter;
 
+    /// \brief Forward declaration
+    class ModelIterPrivate;
+
     /// \brief Defines how to identify a model
     class IGNITION_FUEL_TOOLS_VISIBLE Model
     {
       friend ModelIter;
+      friend ModelIterPrivate;
+
+      /// \brief Protected Constructor
+      public: Model();
 
       /// \brief Protected constructor
-      protected: Model(std::unique_ptr<ModelPrivate> _dptr);
+      protected: Model(std::shared_ptr<ModelPrivate> _dptr);
+
+      /// \brief Copy constructor
+      protected: Model(const Model &_orig) = default;
 
       /// \brief returns information identifying the model
       public: ModelIdentifier Identification();
@@ -55,7 +65,7 @@ namespace ignition
       public: std::string PathToModel();
 
       /// \brief PIMPL
-      private: std::unique_ptr<ModelPrivate> dataPtr;
+      private: std::shared_ptr<ModelPrivate> dataPtr;
     };
   }
 }

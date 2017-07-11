@@ -39,6 +39,18 @@ ModelIdentifier::ModelIdentifier() : dataPtr(new ModelIdentifierPrivate)
 }
 
 //////////////////////////////////////////////////
+ModelIdentifier::ModelIdentifier(const ModelIdentifier &_orig)
+{
+  this->dataPtr.reset(new ModelIdentifierPrivate(*(_orig.dataPtr.get())));
+}
+
+//////////////////////////////////////////////////
+void ModelIdentifier::operator=(const ModelIdentifier &_orig)
+{
+  this->dataPtr.reset(new ModelIdentifierPrivate(*(_orig.dataPtr.get())));
+}
+
+//////////////////////////////////////////////////
 ModelIdentifier::~ModelIdentifier()
 {
 }
