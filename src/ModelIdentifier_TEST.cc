@@ -24,7 +24,7 @@ using namespace ignft;
 
 
 /////////////////////////////////////////////////
-/// \brief Nothing crashes
+/// \brief Names can be set
 TEST(ModelIdentifier, SetNames)
 {
   ModelIdentifier id;
