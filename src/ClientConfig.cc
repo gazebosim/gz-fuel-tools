@@ -15,6 +15,8 @@
  *
 */
 
+#include <iostream>
+
 #include <ignition/fuel-tools/ClientConfig.hh>
 
 
@@ -30,7 +32,7 @@ class ignft::ClientConfigPrivate
 };
 
 //////////////////////////////////////////////////
-ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
+ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate())
 {
 }
 
@@ -41,9 +43,11 @@ ClientConfig::ClientConfig(const ClientConfig &_copy)
 }
 
 //////////////////////////////////////////////////
-void ClientConfig::operator=(const ClientConfig &_rhs)
+ClientConfig &ClientConfig::operator=(const ClientConfig &_rhs)
 {
   *(this->dataPtr) = *(_rhs.dataPtr);
+
+  return *this;
 }
 
 //////////////////////////////////////////////////

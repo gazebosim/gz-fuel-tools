@@ -20,7 +20,7 @@
 
 #include <ignition/fuel-tools/FuelClient.hh>
 #include <ignition/fuel-tools/REST.hh>
-//#include <ignition/fuel-tools/ModelIterPrivate.hh>
+#include <ignition/fuel-tools/ModelIterPrivate.hh>
 
 
 namespace ignft = ignition::fuel_tools;
@@ -38,6 +38,7 @@ class ignft::FuelClientPrivate
 
 //////////////////////////////////////////////////
 FuelClient::FuelClient(const ClientConfig &_config)
+  : dataPtr(new FuelClientPrivate)
 {
   this->dataPtr->config = _config;
 }
@@ -64,15 +65,15 @@ ModelIter FuelClient::Models()
     if (resp.statusCode != 200)
     {
       // TODO throw Result complaining of bad response from server?
-//      std::unique_ptr<ModelIterPrivate> noResults(new ModelIterPrivate);
-//      return std::move(ModelIter(std::move(noResults)));
+      std::unique_ptr<ModelIterPrivate> noResults(new ModelIterPrivate);
+      return std::move(ModelIter(std::move(noResults)));
     }
 
     std::cerr << "Got response [" << resp.data << "]\n";
   }
 
-//  std::unique_ptr<ModelIterPrivate> results(new ModelIterPrivate);
-//  return std::move(ModelIter(std::move(results)));
+  std::unique_ptr<ModelIterPrivate> results(new ModelIterPrivate);
+  return std::move(ModelIter(std::move(results)));
 }
 
 //////////////////////////////////////////////////

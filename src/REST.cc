@@ -25,6 +25,34 @@
 using namespace ignition;
 using namespace fuel_tools;
 
+
+//////////////////////////////////////////////////
+std::string JoinURL(const std::string &_base,
+    const std::string &_more)
+{
+  if (_base.empty())
+    return _more;
+  else if (_more.empty())
+    return _base;
+
+  if ((_base[_base.size()-1] == '/' && _more[0] != '/')
+      || (_base[_base.size()-1] != '/' && _more[0] == '/'))
+  {
+    // Only one of them has a slash
+    return _base + _more;
+  }
+  else if (_base[_base.size()-1] != '/' && _more[0] != '/')
+  {
+    // Niether have a slash
+    return  _base + '/' + _more;
+  }
+  else
+  {
+    // Both have a slash
+    return _base + _more.substr(1, _more.size() - 1);
+  }
+}
+
 /////////////////////////////////////////////////
 size_t WriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
     void *_userp)
@@ -48,7 +76,7 @@ RESTResponse REST::Request(const std::string &_httpMethod,
   if (_url.empty())
     return res;
 
-  std::string url = _url + "/" + _path;
+  std::string url = JoinURL(_url, _path);
 
   // Process query strings.
   if (!_queryStrings.empty())
@@ -59,10 +87,10 @@ RESTResponse REST::Request(const std::string &_httpMethod,
     url.pop_back();
   }
 
-  // Process headers.
-
   CURL *curl = curl_easy_init();
-  struct curl_slist *headers = NULL;
+
+  // Process headers.
+  struct curl_slist *headers = nullptr;
   for (auto const &header : _headers)
   {
     headers = curl_slist_append(headers, header.c_str());
