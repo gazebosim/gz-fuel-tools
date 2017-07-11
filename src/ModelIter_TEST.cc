@@ -48,6 +48,7 @@ class ignft::FuelClient
         std::sprintf(buf, "%d", i);
         id.Name("model" + buf[0]);
         id.UniqueName("unique_model" + buf[0]);
+        priv->ids.push_back(std::move(id));
       }
       return ModelIter(std::move(priv));
     }
