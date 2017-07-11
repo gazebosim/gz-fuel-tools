@@ -25,7 +25,7 @@ using namespace ignft;
 
 /////////////////////////////////////////////////
 /// \brief Nothing crashes
-TEST(ClientConfig, ConstructorDoesNotCrash)
+TEST(FuelClient, ConstructorDoesNotCrash)
 {
   ClientConfig config;
   FuelClient client(config);

@@ -25,7 +25,7 @@ using namespace ignft;
 
 /////////////////////////////////////////////////
 /// \brief Nothing crashes
-TEST(ClientConfig, ConstructorDoesNotCrash)
+TEST(Model, ConstructorDoesNotCrash)
 {
   Model model;
 }
@@ -36,4 +36,3 @@ int main(int argc, char **argv)
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-
