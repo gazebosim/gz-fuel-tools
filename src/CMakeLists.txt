@@ -3,9 +3,10 @@ include (${project_cmake_dir}/Utils.cmake)
 set (sources
   ClientConfig.cc
   FuelClient.cc
+  JSONParser.cc
   ModelIdentifier.cc
   ModelIter.cc
-  REST.cc  
+  REST.cc
   Result.cc
 )
 
@@ -14,7 +15,11 @@ set (sources
 #   GirderClient_TEST.cc
 # )
 
-include_directories(${CMAKE_BINARY_DIR}/ ${CMAKE_BINARY_DIR}/test/)
+include_directories(
+  ${CMAKE_BINARY_DIR}/
+  ${CMAKE_BINARY_DIR}/test/
+  ${JsonCpp_INCLUDE_DIRS}
+)
 
 
 # ign_build_tests(${gtest_sources})
@@ -29,6 +34,7 @@ endif()
 
 target_link_libraries(${libname}
   ${CURL_LIBRARIES}
+  ${JsonCpp_LIBRARIES}
 )
 
 if(WIN32)
