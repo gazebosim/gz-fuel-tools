@@ -10,6 +10,7 @@ set (sources
 
 set (gtest_sources
   ClientConfig_TEST.cc
+  ModelIter_TEST.cc
   Result_TEST.cc
 )
 
