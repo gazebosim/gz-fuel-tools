@@ -34,13 +34,20 @@ namespace ignition
     class FuelClient;
 
     /// \brief Private class, do not include or instantiate
-    class ModelIterPrivate
+    class IGNITION_FUEL_TOOLS_VISIBLE ModelIterPrivate
     {
       friend FuelClient;
 
       friend ModelIter;
 
       // TODO Page? What's being requested?
+
+      /// \brief creates an iterator where all ids are known now
+      /// \param[in] _ids The ids this iterator should move through
+      private: ModelIterPrivate(std::vector<ModelIdentifier> _ids);
+
+      /// \brief default constructor
+      private: ModelIterPrivate();
 
       /// \brief Model identifiers that have been requested
       private: std::vector<ModelIdentifier> ids;

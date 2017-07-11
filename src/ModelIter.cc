@@ -23,15 +23,28 @@ namespace ignft = ignition::fuel_tools;
 using namespace ignition;
 using namespace ignft;
 
+//////////////////////////////////////////////////
+ModelIterPrivate::ModelIterPrivate(std::vector<ModelIdentifier> _ids)
+  : ids(_ids)
+{
+  this->idIter = this->ids.begin();
+}
+
+//////////////////////////////////////////////////
+ModelIterPrivate::ModelIterPrivate()
+{
+}
 
 //////////////////////////////////////////////////
 ModelIter::ModelIter(std::unique_ptr<ModelIterPrivate> _dptr)
 {
+  this->dataPtr.reset(_dptr.release());
 }
 
 //////////////////////////////////////////////////
 ModelIter::ModelIter(ModelIter &&_old)
 {
+  this->dataPtr.reset(_old.dataPtr.release());
 }
 
 //////////////////////////////////////////////////
@@ -42,13 +55,18 @@ ModelIter::~ModelIter()
 //////////////////////////////////////////////////
 ModelIter::operator bool()
 {
-  return false;
+  return !this->dataPtr->ids.empty()
+    && this->dataPtr->idIter != this->dataPtr->ids.end();
 }
 
 //////////////////////////////////////////////////
 ModelIter &ModelIter::operator++()
 {
-  // TODO increment iterator
+  // TODO Request more data if there are more pages
+  if (this->operator bool())
+  {
+    this->dataPtr->idIter++;
+  }
   return *this;
 }
 

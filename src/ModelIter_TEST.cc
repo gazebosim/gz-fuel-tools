@@ -40,7 +40,7 @@ class ignft::FuelClient
 
   public: static ModelIter ModelIterThreeModels()
     {
-      std::unique_ptr<ModelIterPrivate> priv(new ModelIterPrivate);
+      std::vector<ModelIdentifier> ids;
       for (int i = 0; i < 3; i++)
       {
         ModelIdentifier id;
@@ -48,8 +48,9 @@ class ignft::FuelClient
         std::sprintf(buf, "%d", i);
         id.Name("model" + buf[0]);
         id.UniqueName("unique_model" + buf[0]);
-        priv->ids.push_back(std::move(id));
+        ids.push_back(std::move(id));
       }
+      std::unique_ptr<ModelIterPrivate> priv(new ModelIterPrivate(ids));
       return ModelIter(std::move(priv));
     }
 };
