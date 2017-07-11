@@ -49,17 +49,33 @@ namespace ignition
       /// \return Model name
       public: std::string Name() const;
 
-      /// \brief Returns the first part of the model name
+      /// \brief Returns owner to attribute model to
+      /// \return Model name
+      public: std::string Owner() const;
+
+      /// \brief Returns server to retrieve model from
+      /// \return Model name
+      public: std::string SourceURL() const;
+
+      /// \brief Returns a unique name for the model
+      /// \remarks this is Server/Owner/Name
       /// \return Unique model name
       public: std::string UniqueName() const;
 
-      /// \brief set the second part of a model name
+      /// \brief set the name of the model
+      /// \param[in] _name The name to set. Must be ascii and pass [-_a-z0-9]+
       /// \return true if successful
       public: bool Name(const std::string &_name);
 
-      /// \brief set the first part of a model name
-      /// \return True if successful
-      public: bool UniqueName(const std::string &_name);
+      /// \brief Set the owner of the model
+      /// \param[in] _name The name to set. Must be ascii and pass [-_a-z0-9]+
+      /// \return true if successful
+      public: bool Owner(const std::string &_name);
+
+      /// \brief Set the server from which this model comes
+      /// \param[in] _name The name to set. Must be a valid https URL
+      /// \return true if successful
+      public: bool SourceURL(const std::string &_name);
 
       // /// \brief returns a SHA 2 256 hash of the model
       // /// \remarks fulfills versioning requirement

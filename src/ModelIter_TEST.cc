@@ -47,8 +47,11 @@ class ignft::FuelClient
         char buf[10];
         std::sprintf(buf, "model%d", i);
         std::string name = buf;
+        std::sprintf(buf, "owner%d", i);
+        std::string owner = buf;
         id.Name(name);
-        id.UniqueName("unique_" + name);
+        id.Owner(owner);
+        id.SourceURL("https://ignitionrobotics.org");
         ids.push_back(id);
       }
       std::unique_ptr<ModelIterPrivate> priv(new ModelIterPrivate(ids));

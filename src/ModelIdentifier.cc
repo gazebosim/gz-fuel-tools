@@ -25,13 +25,57 @@ using namespace ignft;
 
 class ignft::ModelIdentifierPrivate
 {
+  /// \brief returns true if name follows rules
+  /// \param[in] _name Name to validate
+  public: bool ValidName(const std::string &_name);
+
+  /// \brief returns true if URL follows rules
+  /// \param[in] _name Name to validate
+  public: bool ValidURL(const std::string &_URL);
+
   /// \brief a name given to this model by a user
   public: std::string name;
 
-  /// \brief a unique name for this model
-  public: std::string uniqueName;
+  /// \brief owner who this model is attributed to
+  public: std::string owner;
+
+  /// \brief source of this model
+  public: std::string source;
 };
 
+
+//////////////////////////////////////////////////
+bool ModelIdentifierPrivate::ValidName(const std::string &_name)
+{
+  bool valid = true;
+  if (_name.empty())
+    valid = false;
+  else
+  {
+    for (const char &ch : _name)
+    {
+      // [-_0-9a-z]+
+      if (ch == '-'
+          || ch == '_'
+          || (ch >= 'a' && ch <= 'z')
+          || (ch >= '0' && ch <= '9'))
+      {
+        continue;
+      }
+      valid = false;
+      break;
+    }
+  }
+  return valid;
+}
+
+
+//////////////////////////////////////////////////
+bool ModelIdentifierPrivate::ValidURL(const std::string &_name)
+{
+  // TODO
+  return !_name.empty();
+}
 
 //////////////////////////////////////////////////
 ModelIdentifier::ModelIdentifier() : dataPtr(new ModelIdentifierPrivate)
@@ -56,29 +100,63 @@ ModelIdentifier::~ModelIdentifier()
 }
 
 //////////////////////////////////////////////////
+std::string ModelIdentifier::UniqueName() const
+{
+  return this->dataPtr->source
+    + '/' + this->dataPtr->owner
+    + '/' + this->dataPtr->name;
+}
+
+//////////////////////////////////////////////////
 std::string ModelIdentifier::Name() const
 {
   return this->dataPtr->name;
 }
 
 //////////////////////////////////////////////////
-std::string ModelIdentifier::UniqueName() const
+std::string ModelIdentifier::Owner() const
 {
-  return this->dataPtr->uniqueName;
+  return this->dataPtr->owner;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::SourceURL() const
+{
+  return this->dataPtr->source;
 }
 
 //////////////////////////////////////////////////
 bool ModelIdentifier::Name(const std::string &_name)
 {
-  this->dataPtr->name = _name;
-  // TODO Useless return value?
-  return true;
+  bool success = false;
+  if (this->dataPtr->ValidName(_name))
+  {
+    success = true;
+    this->dataPtr->name = _name;
+  }
+  return success;
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifier::UniqueName(const std::string &_name)
+bool ModelIdentifier::Owner(const std::string &_name)
 {
-  this->dataPtr->uniqueName = _name;
-  // TODO Useless return value?
-  return true;
+  bool success = false;
+  if (this->dataPtr->ValidName(_name))
+  {
+    success = true;
+    this->dataPtr->owner = _name;
+  }
+  return success;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SourceURL(const std::string &_url)
+{
+  bool success = false;
+  if (this->dataPtr->ValidURL(_url))
+  {
+    success = true;
+    this->dataPtr->source = _url;
+  }
+  return success;
 }
