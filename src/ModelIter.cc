@@ -18,20 +18,40 @@
 #include <vector>
 #include <ignition/fuel-tools/ModelIter.hh>
 #include <ignition/fuel-tools/ModelIterPrivate.hh>
+#include <ignition/fuel-tools/ModelPrivate.hh>
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
 using namespace ignft;
 
+//////////////////////////////////////////////////
+ModelIterPrivate::ModelIterPrivate(std::vector<ModelIdentifier> _ids)
+  : ids(_ids)
+{
+  this->idIter = this->ids.begin();
+  if (!this->ids.empty())
+  {
+    std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
+    ptr->id = *(this->idIter);
+    this->model = Model(ptr);
+  }
+}
+
+//////////////////////////////////////////////////
+ModelIterPrivate::ModelIterPrivate()
+{
+}
 
 //////////////////////////////////////////////////
 ModelIter::ModelIter(std::unique_ptr<ModelIterPrivate> _dptr)
 {
+  this->dataPtr.reset(_dptr.release());
 }
 
 //////////////////////////////////////////////////
 ModelIter::ModelIter(ModelIter &&_old)
 {
+  this->dataPtr.reset(_old.dataPtr.release());
 }
 
 //////////////////////////////////////////////////
@@ -42,22 +62,38 @@ ModelIter::~ModelIter()
 //////////////////////////////////////////////////
 ModelIter::operator bool()
 {
-  return false;
+  return !this->dataPtr->ids.empty()
+    && this->dataPtr->idIter != this->dataPtr->ids.end();
 }
 
 //////////////////////////////////////////////////
 ModelIter &ModelIter::operator++()
 {
-  // TODO increment iterator
+  // TODO Request more data if there are more pages
+  if (this->operator bool())
+  {
+    // advance pointer
+    this->dataPtr->idIter++;
+
+    // Update personal model class
+    if (this->dataPtr->idIter != this->dataPtr->ids.end())
+    {
+      std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
+      ptr->id = *(this->dataPtr->idIter);
+      this->dataPtr->model = Model(ptr);
+    }
+  }
   return *this;
 }
 
 //////////////////////////////////////////////////
 Model &ModelIter::operator*()
 {
+  return this->dataPtr->model;
 }
 
 //////////////////////////////////////////////////
 Model *ModelIter::operator->()
 {
+  return &(this->dataPtr->model);
 }

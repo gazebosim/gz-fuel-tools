@@ -69,7 +69,7 @@ size_t WriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
 RESTResponse REST::Request(const std::string &_httpMethod,
     const std::string &_url, const std::string &_path,
     const std::vector<std::string> &_queryStrings,
-    const std::vector<std::string> &_headers, const std::string &_data)
+    const std::vector<std::string> &_headers, const std::string &_data) const
 {
   RESTResponse res;
 

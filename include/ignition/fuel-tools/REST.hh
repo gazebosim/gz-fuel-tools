@@ -56,7 +56,7 @@ namespace ignition
           const std::string &_url, const std::string &_path,
           const std::vector<std::string> &_queryStrings,
           const std::vector<std::string> &_headers,
-          const std::string &_data);
+          const std::string &_data) const;
     };
   }
 }

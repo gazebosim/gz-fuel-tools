@@ -42,14 +42,15 @@ Result::ResultType Result::Type() const
 }
 
 //////////////////////////////////////////////////
-Result::Result() : dataPtr (new ResultPrivate)
+Result::Result(const Result::ResultType _type) : dataPtr(new ResultPrivate)
 {
+  this->dataPtr->type = _type;
 }
 
 //////////////////////////////////////////////////
-void Result::Type(const Result::ResultType _type)
+Result::Result(const Result &_orig) : dataPtr(new ResultPrivate)
 {
-  this->dataPtr->type = _type;
+  *(this->dataPtr) = *(_orig.dataPtr);
 }
 
 //////////////////////////////////////////////////
