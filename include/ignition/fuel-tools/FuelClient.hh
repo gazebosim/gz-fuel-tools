@@ -21,6 +21,7 @@
 #include <memory>
 
 #include <ignition/fuel-tools/ClientConfig.hh>
+#include <ignition/fuel-tools/Helpers.hh>
 #include <ignition/fuel-tools/Result.hh>
 #include <ignition/fuel-tools/ModelIter.hh>
 
@@ -34,7 +35,7 @@ namespace ignition
 
     /// \brief High level interface to ignition fuel
     ///
-    class FuelClient
+    class IGNITION_FUEL_TOOLS_VISIBLE FuelClient
     {
       /// \brief Constructor accepts server and auth configuration
       /// \param[in] _config configuration about servers to connect to

@@ -19,6 +19,7 @@
 #define IGNITION_FUEL_TOOLS_RESULT_HH_
 
 #include <memory>
+#include <ignition/fuel-tools/Helpers.hh>
 
 namespace ignition
 {
@@ -29,13 +30,16 @@ namespace ignition
     class Model;
 
     /// \brief Class describing a result of an operation
-    class Result
+    class IGNITION_FUEL_TOOLS_VISIBLE Result
     {
       friend Model;
 
       /// Result type
       public: enum ResultType
       {
+        /// \brief Uninitialized type
+        UNKNOWN = 0,
+
         /// \brief Delete successful.
         DELETE,
 
@@ -77,16 +81,16 @@ namespace ignition
       public: ResultType Type() const;
 
       /// \brief protected constructor
-      protected: Result(std::unique_ptr<ResultPrivate> _dptr);
+      protected: Result();
 
       /// \brief protected constructor
       protected: void Type(const ResultType _type);
 
       /// \brief operator bool returns true if operation was successful
-      virtual operator bool() const;
+      public: virtual operator bool() const;
 
       /// \brief Get human readable result string
-      virtual std::string ReadableResult() const;
+      public: virtual std::string ReadableResult() const;
 
       /// brief Pointer to private data
       private: std::unique_ptr<ResultPrivate> dataPtr;
