@@ -36,6 +36,9 @@ namespace ignition
       /// \brief Constructor
       public: ModelIdentifier();
 
+      /// \brief Copy Constructor
+      public: ModelIdentifier(const ModelIdentifier &_orig);
+
       /// \brief Destructor
       public: ~ModelIdentifier();
 
