@@ -48,7 +48,7 @@ RESTResponse REST::Request(const std::string &_httpMethod,
   if (_url.empty())
     return res;
 
-  std::string url = _url;
+  std::string url = _url + "/" + _path;
 
   // Process query strings.
   if (!_queryStrings.empty())

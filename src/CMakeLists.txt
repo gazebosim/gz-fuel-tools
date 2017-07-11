@@ -36,6 +36,12 @@ else()
   )
 endif()
 
+add_executable(temp_fuel_client
+  temp_fuel_client.cc
+)
+target_link_libraries(temp_fuel_client ${libname})
+
+
 ign_install_library(${libname})
 
 add_subdirectory(cmd)
