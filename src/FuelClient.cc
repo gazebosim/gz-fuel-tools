@@ -19,7 +19,6 @@
 
 
 #include <ignition/fuel-tools/FuelClient.hh>
-#include <ignition/fuel-tools/REST.hh>
 #include <ignition/fuel-tools/ModelIterPrivate.hh>
 
 
@@ -33,14 +32,18 @@ class ignft::FuelClientPrivate
 {
   /// \brief Client configuration
   public: ClientConfig config;
+
+  /// \brief RESTful client
+  public: REST rest;
 };
 
 
 //////////////////////////////////////////////////
-FuelClient::FuelClient(const ClientConfig &_config)
+FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest)
   : dataPtr(new FuelClientPrivate)
 {
   this->dataPtr->config = _config;
+  this->dataPtr->rest = _rest;
 }
 
 //////////////////////////////////////////////////
@@ -60,7 +63,8 @@ ModelIter FuelClient::Models()
     std::string path = "/1.0/models";
     std::vector<std::string> headers =  {"Accept: application/json"};
 
-    RESTResponse resp = REST::Request("GET", serverURL, path, {}, headers, "");
+    RESTResponse resp =
+        this->dataPtr->rest.Request("GET", serverURL, path, {}, headers, "");
 
     if (resp.statusCode != 200)
     {

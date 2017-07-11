@@ -15,8 +15,6 @@
  *
 */
 
-#include <iostream>
-
 #include <ignition/fuel-tools/ClientConfig.hh>
 
 

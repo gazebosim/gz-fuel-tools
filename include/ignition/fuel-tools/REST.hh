@@ -27,8 +27,7 @@ namespace ignition
 {
   namespace fuel_tools
   {
-    /// \brief Stores the common configuration for all REST requests given
-    /// a specific Girder server.
+    /// \brief Stores a response to a RESTful request
     struct IGNITION_FUEL_TOOLS_VISIBLE RESTResponse
     {
       /// \brief The returned status code. E.g.: 200
@@ -53,7 +52,7 @@ namespace ignition
       /// \param[in] _headers All the headers to be included in the HTTP request
       ///            E.g.: {"Accept: application/json"}
       /// \param[in] _data Data to be included in the HTTP request.
-      public: static RESTResponse Request(const std::string &_httpMethod,
+      public: virtual RESTResponse Request(const std::string &_httpMethod,
           const std::string &_url, const std::string &_path,
           const std::vector<std::string> &_queryStrings,
           const std::vector<std::string> &_headers,

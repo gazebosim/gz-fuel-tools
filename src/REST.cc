@@ -132,8 +132,8 @@ RESTResponse REST::Request(const std::string &_httpMethod,
     std::cerr << "Unsupported method" << std::endl;
 
     // Cleanup.
-    curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
     return res;
   }
 
@@ -147,11 +147,10 @@ RESTResponse REST::Request(const std::string &_httpMethod,
   // Update the data.
   res.data = responseData;
 
-  // Cleaning.
-  curl_easy_cleanup(curl);
-
   // free the headers
   curl_slist_free_all(headers);
 
+  // Cleaning.
+  curl_easy_cleanup(curl);
   return res;
 }
