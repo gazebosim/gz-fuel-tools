@@ -4,16 +4,21 @@ set (sources
   ClientConfig.cc
   FuelClient.cc
   JSONParser.cc
+  Model.cc
   ModelIdentifier.cc
   ModelIter.cc
   REST.cc
   Result.cc
 )
 
-
-# set (gtest_sources
-#   GirderClient_TEST.cc
-# )
+set (gtest_sources
+  ClientConfig_TEST.cc
+  FuelClient_TEST.cc
+  Model_TEST.cc
+  ModelIdentifier_TEST.cc
+  ModelIter_TEST.cc
+  Result_TEST.cc
+)
 
 include_directories(
   ${CMAKE_BINARY_DIR}/
@@ -22,7 +27,7 @@ include_directories(
 )
 
 
-# ign_build_tests(${gtest_sources})
+ign_build_tests(${gtest_sources})
 
 set (libname ${PROJECT_NAME_LOWER}${PROJECT_MAJOR_VERSION})
 

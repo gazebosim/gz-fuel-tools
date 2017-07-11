@@ -18,9 +18,9 @@
 #ifndef IGNITION_FUEL_TOOLS_MODELITERPRIVATE_HH_
 #define IGNITION_FUEL_TOOLS_MODELITERPRIVATE_HH_
 
-#include <array>
-#include <memory>
+#include <vector>
 
+#include <ignition/fuel-tools/Model.hh>
 #include <ignition/fuel-tools/ModelIdentifier.hh>
 
 namespace ignition
@@ -34,7 +34,7 @@ namespace ignition
     class FuelClient;
 
     /// \brief Private class, do not include or instantiate
-    class ModelIterPrivate
+    class IGNITION_FUEL_TOOLS_VISIBLE ModelIterPrivate
     {
       friend FuelClient;
 
@@ -42,14 +42,23 @@ namespace ignition
 
       // TODO Page? What's being requested?
 
+      /// \brief creates an iterator where all ids are known now
+      /// \param[in] _ids The ids this iterator should move through
+      private: ModelIterPrivate(std::vector<ModelIdentifier> _ids);
+
+      /// \brief default constructor
+      private: ModelIterPrivate();
+
       /// \brief Model identifiers that have been requested
       private: std::vector<ModelIdentifier> ids;
 
       /// \brief where the current iterator is in the list of ids
       private: std::vector<ModelIdentifier>::iterator idIter;
+
+      /// \brief current model for returning references
+      private: Model model;
     };
   }
 }
 
 #endif
-
