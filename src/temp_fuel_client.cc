@@ -37,9 +37,11 @@ int main()
   // TODO LocalCache should be used inside FuelClient
   ignition::fuel_tools::LocalCache cache(&conf);
 
-  for (auto localIter = cache.AllModels(); iter; ++iter)
+  auto localIter = cache.AllModels();
+  while (localIter)
   {
-    ignmsg << "Model: " << iter->Identification().Name() << "\n";
+    ignmsg << "Model: " << localIter->Identification().Name() << "\n";
+    ++localIter;
   }
   ignmsg << "exiting\n";
   return 0;

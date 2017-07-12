@@ -23,6 +23,7 @@ class ModelIterTestFixture;
 
 #include "ignition/fuel-tools/ModelIter.hh"
 #include "ignition/fuel-tools/ModelIterPrivate.hh"
+#include "ignition/fuel-tools/ModelPrivate.hh"
 
 
 namespace ignft = ignition::fuel_tools;
@@ -41,7 +42,7 @@ namespace ignition
           return ModelIterFactory::Create();
         }
 
-      public: static ModelIter ModelIterThreeModels()
+      public: static ModelIter ModelIterThreeModelIds()
         {
           std::vector<ModelIdentifier> ids;
           for (int i = 0; i < 3; i++)
@@ -59,6 +60,28 @@ namespace ignition
           }
           return ModelIterFactory::Create(ids);
         }
+
+      public: static ModelIter ModelIterThreeModels()
+        {
+          std::vector<Model> models;
+          for (int i = 0; i < 3; i++)
+          {
+            ModelIdentifier id;
+            char buf[10];
+            std::sprintf(buf, "model%d", i);
+            std::string name = buf;
+            std::sprintf(buf, "owner%d", i);
+            std::string owner = buf;
+
+            std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
+            ptr->id.Name(name);
+            ptr->id.Owner(owner);
+            ptr->id.SourceURL("https://ignitionrobotics.org");
+
+            models.push_back(Model(ptr));
+          }
+          return ModelIterFactory::Create(models);
+        }
     };
   }
 }
@@ -74,12 +97,35 @@ TEST(ModelIterTestFixture, FalseIfNoModels)
 /// \brief Iter should be ready to move if there are ids
 TEST(ModelIterTestFixture, TrueIfSomeModels)
 {
-  EXPECT_TRUE(ModelIterTest::ModelIterThreeModels());
+  EXPECT_TRUE(ModelIterTest::ModelIterThreeModelIds());
 }
 
 /////////////////////////////////////////////////
 /// \brief Iter should move through 3 ids
 TEST(ModelIterTestFixture, MoveThroughIds)
+{
+  ModelIter iter = ModelIterTest::ModelIterThreeModelIds();
+  EXPECT_TRUE(iter);
+  EXPECT_EQ("model0", iter->Identification().Name());
+  EXPECT_EQ("model0", (*iter).Identification().Name());
+
+  ++iter;
+  EXPECT_TRUE(iter);
+  EXPECT_EQ("model1", iter->Identification().Name());
+  EXPECT_EQ("model1", (*iter).Identification().Name());
+
+  ++iter;
+  EXPECT_TRUE(iter);
+  EXPECT_EQ("model2", iter->Identification().Name());
+  EXPECT_EQ("model2", (*iter).Identification().Name());
+
+  ++iter;
+  EXPECT_FALSE(iter);
+}
+
+/////////////////////////////////////////////////
+/// \brief Iter should move through 3 models
+TEST(ModelIterTestFixture, MoveThroughModels)
 {
   ModelIter iter = ModelIterTest::ModelIterThreeModels();
   EXPECT_TRUE(iter);
