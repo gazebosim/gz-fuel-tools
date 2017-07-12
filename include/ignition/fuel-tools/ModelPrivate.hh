@@ -26,27 +26,14 @@ namespace ignition
 {
   namespace fuel_tools
   {
-    /// \brief forward declaration
-    class Model;
-
-    /// \brief forward declaration
-    class ModelIter;
-
-    /// \brief forward declaration
-    class ModelIterPrivate;
-
     /// \brief Private class, do not use
     class IGNITION_FUEL_TOOLS_VISIBLE ModelPrivate
     {
-      friend Model;
-      friend ModelIter;
-      friend ModelIterPrivate;
-
       /// \brief How this model is ID'd
-      private: ModelIdentifier id;
+      public: ModelIdentifier id;
 
       /// \brief Where this model is on disk
-      private: std::string pathOnDisk;
+      public: std::string pathOnDisk;
     };
   }
 }

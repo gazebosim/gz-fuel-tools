@@ -33,6 +33,9 @@ namespace ignition
     /// \brief forward declaration
     class FuelClient;
 
+    /// \brief forward delcaration
+    class LocalCache;
+
     /// \brief Private class, do not include or instantiate
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIterPrivate
     {
@@ -40,11 +43,17 @@ namespace ignition
 
       friend ModelIter;
 
+      friend LocalCache;
+
       // TODO Page? What's being requested?
 
       /// \brief creates an iterator where all ids are known now
       /// \param[in] _ids The ids this iterator should move through
       private: ModelIterPrivate(std::vector<ModelIdentifier> _ids);
+
+      /// \brief creates an iterator where all models are known
+      /// \param[in] _models The models iterator should move through
+      private: ModelIterPrivate(std::vector<Model> _models);
 
       /// \brief default constructor
       private: ModelIterPrivate();

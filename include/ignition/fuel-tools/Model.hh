@@ -37,11 +37,19 @@ namespace ignition
     /// \brief Forward declaration
     class ModelIterPrivate;
 
+    /// \brief forward declaration
+    class LocalCache;
+
+    /// \brief forward declaration
+    class LocalCachePrivate;
+
     /// \brief Defines how to identify a model
     class IGNITION_FUEL_TOOLS_VISIBLE Model
     {
       friend ModelIter;
       friend ModelIterPrivate;
+      friend LocalCache;
+      friend LocalCachePrivate;
 
       /// \brief Protected Constructor
       public: Model();
@@ -50,7 +58,7 @@ namespace ignition
       protected: Model(std::shared_ptr<ModelPrivate> _dptr);
 
       /// \brief Copy constructor
-      protected: Model(const Model &_orig) = default;
+      public: Model(const Model &_orig) = default;
 
       /// \brief returns information identifying the model
       public: ModelIdentifier Identification();

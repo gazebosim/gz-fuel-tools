@@ -19,6 +19,8 @@
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/fuel-tools/LocalCache.hh>
+#include <ignition/fuel-tools/ModelIterPrivate.hh>
+#include <ignition/fuel-tools/ModelPrivate.hh>
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
@@ -27,9 +29,67 @@ using namespace ignft;
 
 class ignft::LocalCachePrivate
 {
+  /// \brief return all models in a given directory
+  /// \param[in] _path A directory for the local server cache
+  public: std::vector<Model> ModelsInServer(
+              const std::string &_path) const;
+
+  /// \brief return all models in a given Owner directory
+  public: std::vector<Model> ModelsInPath(const std::string &_path);
+
   /// \brief client configuration
   public: const ClientConfig *config = nullptr;
 };
+
+//////////////////////////////////////////////////
+std::vector<Model> LocalCachePrivate::ModelsInServer(
+    const std::string &_path) const
+{
+  std::vector<Model> models;
+  if (!common::isDirectory(_path))
+  {
+    ignwarn << "Server directory does not exist [" << _path << "]\n";
+  }
+  else
+  {
+    common::DirIter end;
+    common::DirIter ownIter(_path);
+    while (ownIter != end)
+    {
+      if (common::isDirectory(*ownIter))
+      {
+        // This is an owner directory, look for models
+        common::DirIter modIter(*ownIter);
+        while (modIter != end)
+        {
+          if (common::isDirectory(*modIter))
+          {
+            std::string modelPath = common::absPath(*modIter);
+            std::string config = common::joinPaths(modelPath, "model.config");
+            if (common::exists(config))
+            {
+              // Found a model!!!
+              std::shared_ptr<ModelPrivate> modPriv(new ModelPrivate);
+              modPriv->id.Name(common::basename(*modIter));
+              modPriv->id.Owner(common::basename(*ownIter));
+              modPriv->pathOnDisk = modelPath;
+              Model model(modPriv);
+              models.push_back(model);
+              ignmsg << "Found model [" << modelPath << "]\n";
+            }
+            else
+            {
+              igndbg << "No model in [" << config << "]\n";
+            }
+          }
+          ++modIter;
+        }
+      }
+      ++ownIter;
+    }
+  }
+  return models;
+}
 
 
 //////////////////////////////////////////////////
@@ -55,11 +115,24 @@ LocalCache::~LocalCache()
 //////////////////////////////////////////////////
 ModelIter LocalCache::AllModels()
 {
-  // TODO
-  // Look through all servers
-  // Look through all owners
-  // Make a giant list of all models
+  std::vector<Model> models;
+  if (this->dataPtr->config)
+  {
+    for (auto &server : this->dataPtr->config->Servers())
+    {
+      std::string path = common::joinPaths(
+          this->dataPtr->config->CacheLocation(), server.LocalName());
+      auto srvModels = this->dataPtr->ModelsInServer(path);
+      for (auto &mod : srvModels)
+      {
+        mod.dataPtr->id.SourceURL(server.URL());
+      }
+      models.insert(models.end(), srvModels.begin(), srvModels.end());
+    }
+  }
 
+  std::unique_ptr<ModelIterPrivate> priv(new ModelIterPrivate(models));
+  return ModelIter(std::move(priv));
 }
 
 //////////////////////////////////////////////////

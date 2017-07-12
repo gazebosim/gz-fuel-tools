@@ -38,6 +38,19 @@ ModelIterPrivate::ModelIterPrivate(std::vector<ModelIdentifier> _ids)
 }
 
 //////////////////////////////////////////////////
+ModelIterPrivate::ModelIterPrivate(std::vector<Model> _models)
+  : models(_models)
+{
+  this->idIter = this->ids.begin();
+  if (!this->ids.empty())
+  {
+    std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
+    ptr->id = *(this->idIter);
+    this->model = Model(ptr);
+  }
+}
+
+//////////////////////////////////////////////////
 ModelIterPrivate::ModelIterPrivate()
 {
 }

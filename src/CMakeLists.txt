@@ -1,5 +1,7 @@
 include (${project_cmake_dir}/Utils.cmake)
 
+set (CMAKE_CXX_FLAGS "-fsanitize=address")
+
 set (sources
   ClientConfig.cc
   FuelClient.cc

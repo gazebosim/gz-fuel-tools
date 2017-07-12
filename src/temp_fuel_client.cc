@@ -15,19 +15,32 @@
  *
 */
 
-
+#include <ignition/common/Console.hh>
 #include <ignition/fuel-tools/FuelClient.hh>
-
+#include <ignition/fuel-tools/LocalCache.hh>
 
 int main()
 {
+  ignition::common::Console::SetVerbosity(4);
+
   ignition::fuel_tools::ClientConfig conf;
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8001/");
   srv.LocalName("local");
   conf.AddServer(srv);
 
+  conf.CacheLocation("/build/ign-fuel-tools");
+
   ignition::fuel_tools::FuelClient client(conf);
   auto iter = client.Models();
+
+  // TODO LocalCache should be used inside FuelClient
+  ignition::fuel_tools::LocalCache cache(&conf);
+
+  for (auto localIter = cache.AllModels(); iter; ++iter)
+  {
+    ignmsg << "Model: " << iter->Identification().Name() << "\n";
+  }
+  ignmsg << "exiting\n";
   return 0;
 }
