@@ -65,8 +65,7 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
           if (common::isDirectory(*modIter))
           {
             std::string modelPath = common::absPath(*modIter);
-            std::string config = common::joinPaths(modelPath, "model.config");
-            if (common::exists(config))
+            if (common::exists(common::joinPaths(modelPath, "model.config")))
             {
               // Found a model!!!
               std::shared_ptr<ModelPrivate> modPriv(new ModelPrivate);
@@ -76,10 +75,6 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
               Model model(modPriv);
               models.push_back(model);
               // ignmsg << "Found model [" << modelPath << "]\n";
-            }
-            else
-            {
-              igndbg << "No model in [" << config << "]\n";
             }
           }
           ++modIter;
@@ -137,8 +132,14 @@ ModelIter LocalCache::AllModels()
 //////////////////////////////////////////////////
 Model LocalCache::MatchingModel(const ModelIdentifier &_id)
 {
-  // TODO
-  // Find an exact model
+  for (auto iter = this->AllModels(); iter; ++iter)
+  {
+    if (_id == iter->Identification())
+    {
+      return *iter;
+    }
+  }
+  return Model();
 }
 
 //////////////////////////////////////////////////

@@ -113,6 +113,12 @@ void ModelIdentifier::operator=(const ModelIdentifier &_orig)
 }
 
 //////////////////////////////////////////////////
+bool ModelIdentifier::operator==(const ModelIdentifier &_rhs) const
+{
+  return this->UniqueName() == _rhs.UniqueName();
+}
+
+//////////////////////////////////////////////////
 ModelIdentifier::~ModelIdentifier()
 {
 }

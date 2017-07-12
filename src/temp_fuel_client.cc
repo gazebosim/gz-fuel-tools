@@ -43,6 +43,17 @@ int main()
     ignmsg << "Model: " << localIter->Identification().Name() << "\n";
     ++localIter;
   }
+
+  ignition::fuel_tools::ModelIdentifier someId;
+  someId.SourceURL("http://localhost:8001/");
+  someId.Owner("alice");
+  someId.Name("am2");
+  auto model = cache.MatchingModel(someId);
+  if (model)
+  {
+    ignmsg << "Found model: " << model.Identification().UniqueName() << "\n";
+  }
+
   ignmsg << "exiting\n";
   return 0;
 }

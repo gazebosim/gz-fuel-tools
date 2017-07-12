@@ -44,6 +44,9 @@ namespace ignition
       /// \brief Assignment operator
       public: void operator=(const ModelIdentifier &_orig);
 
+      /// \brief Equality operator
+      public: bool operator==(const ModelIdentifier &_rhs) const;
+
       /// \brief Destructor
       public: ~ModelIdentifier();
 
