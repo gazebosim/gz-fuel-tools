@@ -22,7 +22,10 @@
 int main()
 {
   ignition::fuel_tools::ClientConfig conf;
-  conf.AddServer("http://localhost:8001/");
+  ignition::fuel_tools::ServerConfig srv;
+  srv.URL("http://localhost:8001/");
+  srv.LocalName("local");
+  conf.AddServer(srv);
 
   ignition::fuel_tools::FuelClient client(conf);
   auto iter = client.Models();

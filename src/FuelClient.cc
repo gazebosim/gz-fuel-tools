@@ -59,7 +59,7 @@ ModelIter FuelClient::Models()
   if (!servers.empty())
   {
     std::string protocol = "GET";
-    auto serverURL = servers.front();
+    auto serverURL = servers.front().URL();
     std::string path = "/1.0/models";
     std::vector<std::string> headers =  {"Accept: application/json"};
 
