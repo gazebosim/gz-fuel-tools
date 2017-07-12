@@ -43,10 +43,6 @@ namespace ignition
       /// \brief Get all models in offline cache
       public: virtual ModelIter AllModels();
 
-      /// \brief Get all models which partially match an ID
-      /// \param[in] _id An id with at least one of name, owner, source
-      public: virtual ModelIter MatchingModels(const ModelIdentifier &_id);
-
       /// \brief Get the first model matching an ID
       /// \param[in] _id An id with at least one of name, owner, source
       public: virtual Model MatchingModel(const ModelIdentifier &_id);
@@ -54,7 +50,7 @@ namespace ignition
       /// \brief Add a model from packed data to the local cache
       /// \param[in] _id A completely populated ID
       /// \returns true if the model was successfully added to the local cache
-      public: virtual bool AddModel(
+      public: virtual bool SaveModel(
                   const ModelIdentifier &_id, const std::string &_data);
 
       private: std::shared_ptr<LocalCachePrivate> dataPtr;

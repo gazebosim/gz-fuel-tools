@@ -59,15 +59,7 @@ ModelIter LocalCache::AllModels()
   // Look through all servers
   // Look through all owners
   // Make a giant list of all models
-}
 
-//////////////////////////////////////////////////
-ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
-{
-  // TODO
-  // If servers is unset, look through all models
-  // if owners is unset, look through all owners
-  // if models is unset, look through all models
 }
 
 //////////////////////////////////////////////////
@@ -78,7 +70,7 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
 }
 
 //////////////////////////////////////////////////
-bool LocalCache::AddModel(
+bool LocalCache::SaveModel(
     const ModelIdentifier &_id, const std::string &_data)
 {
   // TODO
