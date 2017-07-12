@@ -24,16 +24,29 @@ using namespace ignft;
 
 
 /////////////////////////////////////////////////
-/// \brief Names can be set
-TEST(ModelIdentifier, SetNames)
+/// \brief Fields can be set
+TEST(ModelIdentifier, SetFields)
 {
   ModelIdentifier id;
-  EXPECT_TRUE(id.Name("hello"));
-  EXPECT_TRUE(id.Owner("world"));
-  EXPECT_TRUE(id.SourceURL("https://ignitionrobotics.org"));
-  EXPECT_EQ(std::string("hello"), id.Name());
-  EXPECT_EQ(std::string("world"), id.Owner());
-  EXPECT_EQ(std::string("https://ignitionrobotics.org"), id.SourceURL());
+  id.Name("Hello");
+  id.UniqueName("World");
+  id.Category("test");
+  id.Uuid("lllooo000ooolll");
+  id.FileSize(2048u);
+  std::time_t d1;
+  std::time(&d1);
+  id.ModifyDate(d1);
+  std::time_t d2;
+  std::time(&d2);
+  id.UploadDate(d2);
+
+  EXPECT_EQ(std::string("Hello"), id.Name());
+  EXPECT_EQ(std::string("World"), id.UniqueName());
+  EXPECT_EQ(std::string("test"), id.Category());
+  EXPECT_EQ(std::string("lllooo000ooolll"), id.Uuid());
+  EXPECT_EQ(2048u, id.FileSize());
+  EXPECT_EQ(d1, id.ModifyDate());
+  EXPECT_EQ(d2, id.UploadDate());
 }
 
 /////////////////////////////////////////////////
@@ -41,14 +54,33 @@ TEST(ModelIdentifier, SetNames)
 TEST(ModelIdentifier, CopyConstructorDeepCopy)
 {
   ModelIdentifier id;
-  id.Name("hello");
+  id.Name("Hello");
+  id.UniqueName("World");
+  id.Category("test");
+  id.Uuid("lllooo000ooolll");
+  id.FileSize(2048u);
+  std::time_t d1;
+  std::time(&d1);
+  id.ModifyDate(d1);
+  std::time_t d2;
+  std::time(&d2);
+  id.UploadDate(d2);
 
   ModelIdentifier id2(id);
-  EXPECT_EQ(std::string("hello"), id2.Name());
+  EXPECT_EQ(std::string("Hello"), id2.Name());
+  EXPECT_EQ(std::string("World"), id2.UniqueName());
+  EXPECT_EQ(std::string("test"), id.Category());
+  EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
+  EXPECT_EQ(2048u, id2.FileSize());
+  EXPECT_EQ(d1, id2.ModifyDate());
+  EXPECT_EQ(d2, id2.UploadDate());
 
-  id2.Name("hello2");
-  EXPECT_EQ(std::string("hello"), id.Name());
-  EXPECT_EQ(std::string("hello2"), id2.Name());
+  id2.Name("Hello2");
+  id2.UniqueName("World2");
+  EXPECT_EQ(std::string("Hello"), id.Name());
+  EXPECT_EQ(std::string("World"), id.UniqueName());
+  EXPECT_EQ(std::string("Hello2"), id2.Name());
+  EXPECT_EQ(std::string("World2"), id2.UniqueName());
 }
 
 /////////////////////////////////////////////////
@@ -56,37 +88,35 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
 TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
 {
   ModelIdentifier id;
-  id.Name("hello");
+  id.Name("Hello");
+  id.UniqueName("World");
+  id.Category("test");
+  id.Uuid("lllooo000ooolll");
+  id.FileSize(2048u);
+  std::time_t d1;
+  std::time(&d1);
+  id.ModifyDate(d1);
+  std::time_t d2;
+  std::time(&d2);
+  id.UploadDate(d2);
 
   ModelIdentifier id2(id);
   id2 = id;
-  EXPECT_EQ(std::string("hello"), id2.Name());
+  EXPECT_EQ(std::string("Hello"), id2.Name());
+  EXPECT_EQ(std::string("World"), id2.UniqueName());
+  EXPECT_EQ(std::string("test"), id.Category());
+  EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
+  EXPECT_EQ(2048u, id2.FileSize());
+  EXPECT_EQ(d1, id2.ModifyDate());
+  EXPECT_EQ(d2, id2.UploadDate());
 
-  id2.Name("hello2");
-  EXPECT_EQ(std::string("hello"), id.Name());
-  EXPECT_EQ(std::string("hello2"), id2.Name());
-}
 
-/////////////////////////////////////////////////
-/// \brief Names can be set
-TEST(ModelIdentifier, InvalidNames)
-{
-  ModelIdentifier id;
-  EXPECT_FALSE(id.Name("Hello"));
-  EXPECT_FALSE(id.Name("hEllo"));
-  EXPECT_FALSE(id.Name("heLlo"));
-  EXPECT_FALSE(id.Name("helLo"));
-  EXPECT_FALSE(id.Name("hellO"));
-  EXPECT_FALSE(id.Name("&hello"));
-  EXPECT_FALSE(id.Name("h&ello"));
-  EXPECT_FALSE(id.Name("he&llo"));
-  EXPECT_FALSE(id.Name("hel&lo"));
-  EXPECT_FALSE(id.Name("hell&o"));
-  EXPECT_FALSE(id.Name("hello&"));
-  EXPECT_FALSE(id.Name("=hello"));
-  EXPECT_FALSE(id.Name(" hello"));
-  EXPECT_FALSE(id.Name("\thello"));
-  EXPECT_FALSE(id.Name("\nhello"));
+  id2.Name("Hello2");
+  id2.UniqueName("World2");
+  EXPECT_EQ(std::string("Hello"), id.Name());
+  EXPECT_EQ(std::string("World"), id.UniqueName());
+  EXPECT_EQ(std::string("Hello2"), id2.Name());
+  EXPECT_EQ(std::string("World2"), id2.UniqueName());
 }
 
 //////////////////////////////////////////////////

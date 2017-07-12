@@ -20,6 +20,8 @@
 
 // #include <array>
 // #include <cstdint>
+
+#include <ctime>
 #include <memory>
 #include <ignition/fuel-tools/Helpers.hh>
 
@@ -76,6 +78,54 @@ namespace ignition
       /// \param[in] _name The name to set. Must be a valid https URL
       /// \return true if successful
       public: bool SourceURL(const std::string &_name);
+
+      /// \brief Returns the description of the model
+      /// \return Model description
+      public: std::string Description() const;
+
+      /// \brief Returns the file size of the model
+      /// \return Model file size
+      public: unsigned int FileSize() const;
+
+      /// \brief Returns the upload date of the model
+      /// \return Model upload date
+      public: std::time_t UploadDate() const;
+
+      /// \brief Returns the modify date of the model
+      /// \return Model modify date
+      public: std::time_t ModifyDate() const;
+
+      /// \brief Returns the category of the model
+      /// \return Model category
+      public: std::string Category() const;
+
+      /// \brief Returns the uuid of the model
+      /// \return Model uuid
+      public: std::string Uuid() const;
+
+      /// \brief Set the description of the model
+      /// \return True if successful
+      public: bool Description(const std::string &_desc);
+
+      /// \brief Set the file size of the model
+      /// \return True if successful
+      public: bool FileSize(const unsigned int _filesize);
+
+      /// \brief Set the upload date
+      /// \return True if successful
+      public: bool UploadDate(const std::time_t &_date);
+
+      /// \brief Set the modify date
+      /// \return True if successful
+      public: bool ModifyDate(const std::time_t &_date);
+
+      /// \brief Set the category of the model
+      /// \return True if successful
+      public: bool Category(const std::string &_cat);
+
+      /// \brief Set the uuid of the model
+      /// \return True if successful
+      public: bool Uuid(const std::string &_uuid);
 
       // /// \brief returns a SHA 2 256 hash of the model
       // /// \remarks fulfills versioning requirement

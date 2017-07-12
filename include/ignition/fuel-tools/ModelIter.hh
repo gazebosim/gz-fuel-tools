@@ -31,17 +31,15 @@ namespace ignition
     /// \brief forward declaration
     class ModelIterPrivate;
 
-    /// \brief forward declaration
-    class FuelClient;
+    class ModelIterFactory;
 
     /// \brief forward declaration
-    class LocalCache;
+    class FuelClient;
 
     /// \brief class for iterating through models
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIter
     {
-      friend FuelClient;
-      friend LocalCache;
+      friend ModelIterFactory;
 
       /// \brief Construct an iterator with the data it needs to function
       protected: ModelIter(std::unique_ptr<ModelIterPrivate> _dptr);
