@@ -69,7 +69,7 @@ size_t WriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
 RESTResponse REST::Request(const std::string &_httpMethod,
     const std::string &_url, const std::string &_path,
     const std::vector<std::string> &_queryStrings,
-    const std::vector<std::string> &_headers, const std::string &_data)
+    const std::vector<std::string> &_headers, const std::string &_data) const
 {
   RESTResponse res;
 
@@ -132,8 +132,8 @@ RESTResponse REST::Request(const std::string &_httpMethod,
     std::cerr << "Unsupported method" << std::endl;
 
     // Cleanup.
-    curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
     return res;
   }
 
@@ -147,11 +147,10 @@ RESTResponse REST::Request(const std::string &_httpMethod,
   // Update the data.
   res.data = responseData;
 
-  // Cleaning.
-  curl_easy_cleanup(curl);
-
   // free the headers
   curl_slist_free_all(headers);
 
+  // Cleaning.
+  curl_easy_cleanup(curl);
   return res;
 }
