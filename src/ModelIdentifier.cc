@@ -30,6 +30,24 @@ class ignft::ModelIdentifierPrivate
 
   /// \brief a unique name for this model
   public: std::string uniqueName;
+
+  /// \brief Description of this model
+  public: std::string description;
+
+  /// \brief FileSize of this model
+  public: unsigned int fileSize = 0u;
+
+  /// \brief Model upload date
+  public: std::time_t uploadDate;
+
+  /// \brief Model last modified date
+  public: std::time_t modifyDate;
+
+  /// \brief Category of this model
+  public: std::string category;
+
+  /// \brief UUID of this model
+  public: std::string uuid;
 };
 
 
@@ -68,6 +86,42 @@ std::string ModelIdentifier::UniqueName() const
 }
 
 //////////////////////////////////////////////////
+std::string ModelIdentifier::Description() const
+{
+  return this->dataPtr->description;
+}
+
+//////////////////////////////////////////////////
+unsigned int ModelIdentifier::FileSize() const
+{
+  return this->dataPtr->fileSize;
+}
+
+//////////////////////////////////////////////////
+std::time_t ModelIdentifier::UploadDate() const
+{
+  return this->dataPtr->uploadDate;
+}
+
+//////////////////////////////////////////////////
+std::time_t ModelIdentifier::ModifyDate() const
+{
+  return this->dataPtr->modifyDate;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::Category() const
+{
+  return this->dataPtr->category;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::Uuid() const
+{
+  return this->dataPtr->uuid;
+}
+
+//////////////////////////////////////////////////
 bool ModelIdentifier::Name(const std::string &_name)
 {
   this->dataPtr->name = _name;
@@ -80,5 +134,47 @@ bool ModelIdentifier::UniqueName(const std::string &_name)
 {
   this->dataPtr->uniqueName = _name;
   // TODO Useless return value?
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::Description(const std::string &_desc)
+{
+  this->dataPtr->description = _desc;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::FileSize(const unsigned int _fileSize)
+{
+  this->dataPtr->fileSize = _fileSize;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::ModifyDate(const std::time_t &_date)
+{
+  this->dataPtr->modifyDate = _date;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::UploadDate(const std::time_t &_date)
+{
+  this->dataPtr->uploadDate = _date;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::Category(const std::string &_cat)
+{
+  this->dataPtr->category = _cat;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::Uuid(const std::string &_uuid)
+{
+  this->dataPtr->uuid = _uuid;
   return true;
 }

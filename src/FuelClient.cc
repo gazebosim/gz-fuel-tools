@@ -19,6 +19,8 @@
 
 
 #include <ignition/fuel-tools/FuelClient.hh>
+#include <ignition/fuel-tools/JSONParser.hh>
+#include <ignition/fuel-tools/REST.hh>
 #include <ignition/fuel-tools/ModelIterPrivate.hh>
 
 
@@ -56,28 +58,28 @@ ModelIter FuelClient::Models()
 {
   // TODO fetch from all servers and combine result, not just one server
   auto servers = this->dataPtr->config.Servers();
-  if (!servers.empty())
+  if (servers.empty())
   {
-    std::string protocol = "GET";
-    auto serverURL = servers.front();
-    std::string path = "/1.0/models";
-    std::vector<std::string> headers =  {"Accept: application/json"};
-
-    RESTResponse resp =
-        this->dataPtr->rest.Request("GET", serverURL, path, {}, headers, "");
-
-    if (resp.statusCode != 200)
-    {
-      // TODO throw Result complaining of bad response from server?
-      std::unique_ptr<ModelIterPrivate> noResults(new ModelIterPrivate);
-      return std::move(ModelIter(std::move(noResults)));
-    }
-
-    std::cerr << "Got response [" << resp.data << "]\n";
+    return ModelIterFactory::Create({});
   }
 
-  std::unique_ptr<ModelIterPrivate> results(new ModelIterPrivate);
-  return std::move(ModelIter(std::move(results)));
+  std::string protocol = "GET";
+  auto serverURL = servers.front();
+  std::string path = "/1.0/models";
+  std::vector<std::string> headers =  {"Accept: application/json"};
+
+  RESTResponse resp = this->dataPtr->rest.Request(
+      "GET", serverURL, path, {}, headers, "");
+
+  if (resp.statusCode != 200)
+  {
+    // TODO throw Result complaining of bad response from server?
+    return ModelIterFactory::Create({});
+  }
+
+  std::cerr << "Got response [" << resp.data << "]\n";
+
+  return JSONParser::ParseModels(resp.data);
 }
 
 //////////////////////////////////////////////////

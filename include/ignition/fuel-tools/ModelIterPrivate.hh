@@ -18,9 +18,9 @@
 #ifndef IGNITION_FUEL_TOOLS_MODELITERPRIVATE_HH_
 #define IGNITION_FUEL_TOOLS_MODELITERPRIVATE_HH_
 
-#include <array>
-#include <memory>
+#include <vector>
 
+#include <ignition/fuel-tools/Model.hh>
 #include <ignition/fuel-tools/ModelIdentifier.hh>
 
 namespace ignition
@@ -31,14 +31,22 @@ namespace ignition
     class ModelIter;
 
     /// \brief forward declaration
-    class FuelClient;
+    class ModelIterFactory;
+
+    /// \brief Private class, do not include or instantiate
+    class IGNITION_FUEL_TOOLS_VISIBLE ModelIterFactory
+    {
+      /// \brief Create a model iterator from a vector of model identifiers
+      /// \param[in] _ids Model identifiers
+      public: static ModelIter Create(std::vector<ModelIdentifier> _ids);
+    };
 
     /// \brief Private class, do not include or instantiate
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIterPrivate
     {
-      friend FuelClient;
-
       friend ModelIter;
+
+      friend ModelIterFactory;
 
       // TODO Page? What's being requested?
 
@@ -62,4 +70,3 @@ namespace ignition
 }
 
 #endif
-

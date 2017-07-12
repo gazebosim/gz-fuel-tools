@@ -17,7 +17,6 @@
 
 #include <ignition/fuel-tools/ClientConfig.hh>
 
-
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
 using namespace ignft;
