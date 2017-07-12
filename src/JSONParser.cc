@@ -27,6 +27,30 @@
 using namespace ignition;
 using namespace fuel_tools;
 
+
+/////////////////////////////////////////////////
+std::time_t ParseDateTime(const std::string &_datetime)
+{
+  int y,M,d,h,m;
+  float s;
+  sscanf(_datetime.c_str(), "%d-%d-%dT%d:%d:%fZ", &y, &M, &d, &h, &m, &s);
+  std::tm tm;
+  // Year since 1900
+  tm.tm_year = y - 1900;
+  // 0-11
+  tm.tm_mon = M - 1;
+  // 1-31
+  tm.tm_mday = d;
+  // 0-23
+  tm.tm_hour = h;
+  // 0-59
+  tm.tm_min = m;
+  // 0-61 (0-60 in C++11)
+  tm.tm_sec = (int)s;
+  return std::mktime(&tm);
+}
+
+
 /////////////////////////////////////////////////
 ModelIter JSONParser::ParseModel(const std::string &_json)
 {
@@ -34,6 +58,25 @@ ModelIter JSONParser::ParseModel(const std::string &_json)
   Json::Value value;
   reader.parse(_json, value);
 
-//  std::unique_ptr<ModelIterPrivate> results(new ModelIterPrivate);
-//  return std::move(ModelIter(std::move(results)));
+//  Json::StyledWriter writer;
+//  std::string out = writer.write(value);
+
+  std::vector<ModelIdentifier> ids;
+  for (auto it = value.begin(); it != value.end(); ++it)
+  {
+    Json::Value model = *it;
+    ModelIdentifier id;
+    id.Name(model["name"].asString());
+    id.Description(model["description"].asString());
+    id.Downloads(model["downloads"].asUInt());
+    id.FileSize(model["filesize"].asUInt());
+    id.Likes(model["likes"].asUInt());
+    id.Uuid(model["uuid"].asString());
+    id.Category(model["category"].asString());
+    id.ModifyDate(ParseDateTime(model["modify_date"].asString()));
+    id.UploadDate(ParseDateTime(model["upload_date"].asString()));
+    ids.push_back(id);
+  }
+
+  return ModelIterFactory::Create(ids);
 }

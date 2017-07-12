@@ -25,6 +25,13 @@ using namespace ignition;
 using namespace ignft;
 
 //////////////////////////////////////////////////
+ModelIter ModelIterFactory::Create(std::vector<ModelIdentifier> _ids)
+{
+  std::unique_ptr<ModelIterPrivate> result(new ModelIterPrivate(_ids));
+  return std::move(ModelIter(std::move(result)));
+}
+
+//////////////////////////////////////////////////
 ModelIterPrivate::ModelIterPrivate(std::vector<ModelIdentifier> _ids)
   : ids(_ids)
 {

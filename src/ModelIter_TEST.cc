@@ -26,55 +26,58 @@ class ModelIterTestFixture;
 
 
 namespace ignft = ignition::fuel_tools;
-using namespace ignition;
 using namespace ignft;
 
-/// \brief Class to misuse friendship
-class ignft::FuelClient
+namespace ignition
 {
-  public: static ModelIter EmptyModelIter()
+  namespace fuel_tools
+  {
+    /// \brief Class to misuse friendship
+    class ModelIterTest
     {
-      std::unique_ptr<ModelIterPrivate> priv(new ModelIterPrivate);
-      return ModelIter(std::move(priv));
-    }
+      public: static ModelIter EmptyModelIter()
+        {
+          return ModelIterFactory::Create({});
+        }
 
-  public: static ModelIter ModelIterThreeModels()
-    {
-      std::vector<ModelIdentifier> ids;
-      for (int i = 0; i < 3; i++)
-      {
-        ModelIdentifier id;
-        char buf[10];
-        std::sprintf(buf, "model%d", i);
-        std::string name = buf;
-        id.Name(name);
-        id.UniqueName("unique_" + name);
-        ids.push_back(id);
-      }
-      std::unique_ptr<ModelIterPrivate> priv(new ModelIterPrivate(ids));
-      return ModelIter(std::move(priv));
-    }
-};
+      public: static ModelIter ModelIterThreeModels()
+        {
+          std::vector<ModelIdentifier> ids;
+          for (int i = 0; i < 3; i++)
+          {
+            ModelIdentifier id;
+            char buf[10];
+            std::sprintf(buf, "model%d", i);
+            std::string name = buf;
+            id.Name(name);
+            id.UniqueName("unique_" + name);
+            ids.push_back(id);
+          }
+          return ModelIterFactory::Create(ids);
+        }
+    };
+  }
+}
 
 /////////////////////////////////////////////////
 /// \brief No ids, iter should evaluate to false
 TEST(ModelIterTestFixture, FalseIfNoModels)
 {
-  EXPECT_FALSE(FuelClient::EmptyModelIter());
+  EXPECT_FALSE(ModelIterTest::EmptyModelIter());
 }
 
 /////////////////////////////////////////////////
 /// \brief Iter should be ready to move if there are ids
 TEST(ModelIterTestFixture, TrueIfSomeModels)
 {
-  EXPECT_TRUE(FuelClient::ModelIterThreeModels());
+  EXPECT_TRUE(ModelIterTest::ModelIterThreeModels());
 }
 
 /////////////////////////////////////////////////
 /// \brief Iter should move through 3 ids
 TEST(ModelIterTestFixture, MoveThroughIds)
 {
-  ModelIter iter = FuelClient::ModelIterThreeModels();
+  ModelIter iter = ModelIterTest::ModelIterThreeModels();
   EXPECT_TRUE(iter);
   EXPECT_EQ("model0", iter->Identification().Name());
   EXPECT_EQ("model0", (*iter).Identification().Name());
