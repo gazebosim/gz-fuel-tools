@@ -74,7 +74,7 @@ ModelIter FuelClient::Models()
 
   std::cerr << "Got response [" << resp.data << "]\n";
 
-  return JSONParser::ParseModel(resp.data);
+  return JSONParser::ParseModels(resp.data);
 }
 
 //////////////////////////////////////////////////

@@ -27,7 +27,7 @@ using namespace ignft;
 
 /////////////////////////////////////////////////
 /// \brief Nothing crashes
-TEST(JSONParser, ParseModel)
+TEST(JSONParser, ParseModels)
 {
   std::stringstream tmpJsonStr;
   tmpJsonStr
@@ -57,7 +57,7 @@ TEST(JSONParser, ParseModel)
   << "  }"
   << "]";
 
-  auto modelIt = JSONParser::ParseModel(tmpJsonStr.str());
+  auto modelIt = JSONParser::ParseModels(tmpJsonStr.str());
   EXPECT_TRUE(modelIt);
   EXPECT_EQ("car", modelIt->Identification().Name());
   EXPECT_EQ("I am a car", modelIt->Identification().Description());

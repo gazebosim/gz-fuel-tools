@@ -52,7 +52,7 @@ std::time_t ParseDateTime(const std::string &_datetime)
 
 
 /////////////////////////////////////////////////
-ModelIter JSONParser::ParseModel(const std::string &_json)
+ModelIter JSONParser::ParseModels(const std::string &_json)
 {
   Json::Reader reader;
   Json::Value value;
