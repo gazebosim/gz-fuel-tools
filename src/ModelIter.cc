@@ -27,12 +27,36 @@ using namespace ignft;
 //////////////////////////////////////////////////
 ModelIter ModelIterFactory::Create(std::vector<ModelIdentifier> _ids)
 {
-  std::unique_ptr<ModelIterPrivate> result(new ModelIterPrivate(_ids));
-  return std::move(ModelIter(std::move(result)));
+  std::unique_ptr<ModelIterPrivate> priv(new IterIds(_ids));
+  return std::move(ModelIter(std::move(priv)));
 }
 
 //////////////////////////////////////////////////
-ModelIterPrivate::ModelIterPrivate(std::vector<ModelIdentifier> _ids)
+ModelIter ModelIterFactory::Create()
+{
+  std::unique_ptr<ModelIterPrivate> priv(new IterIds({}));
+  return std::move(ModelIter(std::move(priv)));
+}
+
+//////////////////////////////////////////////////
+ModelIter ModelIterFactory::Create(std::vector<Model> _models)
+{
+  std::unique_ptr<ModelIterPrivate> priv(new IterModels(_models));
+  return std::move(ModelIter(std::move(priv)));
+}
+
+//////////////////////////////////////////////////
+ModelIterPrivate::~ModelIterPrivate()
+{
+}
+
+//////////////////////////////////////////////////
+IterIds::~IterIds()
+{
+}
+
+//////////////////////////////////////////////////
+IterIds::IterIds(std::vector<ModelIdentifier> _ids)
   : ids(_ids)
 {
   this->idIter = this->ids.begin();
@@ -45,11 +69,13 @@ ModelIterPrivate::ModelIterPrivate(std::vector<ModelIdentifier> _ids)
 }
 
 //////////////////////////////////////////////////
-ModelIterPrivate::ModelIterPrivate(std::vector<Model> _models)
-  : models(_models)
+void IterIds::Next()
 {
-  this->idIter = this->ids.begin();
-  if (!this->ids.empty())
+  // advance pointer
+  ++(this->idIter);
+
+  // Update personal model class
+  if (this->idIter != this->ids.end())
   {
     std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
     ptr->id = *(this->idIter);
@@ -58,8 +84,44 @@ ModelIterPrivate::ModelIterPrivate(std::vector<Model> _models)
 }
 
 //////////////////////////////////////////////////
-ModelIterPrivate::ModelIterPrivate()
+bool IterIds::HasReachedEnd()
 {
+  return this->ids.empty() || this->idIter == this->ids.end();
+}
+
+//////////////////////////////////////////////////
+IterModels::~IterModels()
+{
+}
+
+//////////////////////////////////////////////////
+IterModels::IterModels(std::vector<Model> _models)
+  : models(_models)
+{
+  this->modelIter = this->models.begin();
+  if (!this->models.empty())
+  {
+    this->model = this->models.front();
+  }
+}
+
+//////////////////////////////////////////////////
+void IterModels::Next()
+{
+  // advance pointer
+  ++(this->modelIter);
+
+  // Update personal model class
+  if (this->modelIter != this->models.end())
+  {
+    this->model = *(this->modelIter);
+  }
+}
+
+//////////////////////////////////////////////////
+bool IterModels::HasReachedEnd()
+{
+  return this->models.empty() || this->modelIter == this->models.end();
 }
 
 //////////////////////////////////////////////////
@@ -82,26 +144,16 @@ ModelIter::~ModelIter()
 //////////////////////////////////////////////////
 ModelIter::operator bool()
 {
-  return !this->dataPtr->ids.empty()
-    && this->dataPtr->idIter != this->dataPtr->ids.end();
+  return !this->dataPtr->HasReachedEnd();
 }
 
 //////////////////////////////////////////////////
 ModelIter &ModelIter::operator++()
 {
   // TODO Request more data if there are more pages
-  if (this->operator bool())
+  if (!this->dataPtr->HasReachedEnd())
   {
-    // advance pointer
-    this->dataPtr->idIter++;
-
-    // Update personal model class
-    if (this->dataPtr->idIter != this->dataPtr->ids.end())
-    {
-      std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
-      ptr->id = *(this->dataPtr->idIter);
-      this->dataPtr->model = Model(ptr);
-    }
+    this->dataPtr->Next();
   }
   return *this;
 }

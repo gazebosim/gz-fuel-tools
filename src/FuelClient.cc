@@ -60,7 +60,7 @@ ModelIter FuelClient::Models()
   auto servers = this->dataPtr->config.Servers();
   if (servers.empty())
   {
-    return ModelIterFactory::Create({});
+    return ModelIterFactory::Create();
   }
 
   std::string protocol = "GET";
@@ -74,7 +74,7 @@ ModelIter FuelClient::Models()
   if (resp.statusCode != 200)
   {
     // TODO throw Result complaining of bad response from server?
-    return ModelIterFactory::Create({});
+    return ModelIterFactory::Create();
   }
 
   std::cerr << "Got response [" << resp.data << "]\n";

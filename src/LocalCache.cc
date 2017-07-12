@@ -75,7 +75,7 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
               modPriv->pathOnDisk = modelPath;
               Model model(modPriv);
               models.push_back(model);
-              ignmsg << "Found model [" << modelPath << "]\n";
+              // ignmsg << "Found model [" << modelPath << "]\n";
             }
             else
             {
@@ -131,8 +131,7 @@ ModelIter LocalCache::AllModels()
     }
   }
 
-  std::unique_ptr<ModelIterPrivate> priv(new ModelIterPrivate(models));
-  return ModelIter(std::move(priv));
+  return ModelIterFactory::Create(models);
 }
 
 //////////////////////////////////////////////////

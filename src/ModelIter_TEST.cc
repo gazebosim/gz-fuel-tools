@@ -38,29 +38,30 @@ namespace ignition
     {
       public: static ModelIter EmptyModelIter()
         {
-          return ModelIterFactory::Create({});
+          return ModelIterFactory::Create();
         }
 
-  public: static ModelIter ModelIterThreeModels()
-    {
-      std::vector<ModelIdentifier> ids;
-      for (int i = 0; i < 3; i++)
-      {
-        ModelIdentifier id;
-        char buf[10];
-        std::sprintf(buf, "model%d", i);
-        std::string name = buf;
-        std::sprintf(buf, "owner%d", i);
-        std::string owner = buf;
-        id.Name(name);
-        id.Owner(owner);
-        id.SourceURL("https://ignitionrobotics.org");
-        ids.push_back(id);
-      }
-      std::unique_ptr<ModelIterPrivate> priv(new ModelIterPrivate(ids));
-      return ModelIter(std::move(priv));
-    }
-};
+      public: static ModelIter ModelIterThreeModels()
+        {
+          std::vector<ModelIdentifier> ids;
+          for (int i = 0; i < 3; i++)
+          {
+            ModelIdentifier id;
+            char buf[10];
+            std::sprintf(buf, "model%d", i);
+            std::string name = buf;
+            std::sprintf(buf, "owner%d", i);
+            std::string owner = buf;
+            id.Name(name);
+            id.Owner(owner);
+            id.SourceURL("https://ignitionrobotics.org");
+            ids.push_back(id);
+          }
+          return ModelIterFactory::Create(ids);
+        }
+    };
+  }
+}
 
 /////////////////////////////////////////////////
 /// \brief No ids, iter should evaluate to false
