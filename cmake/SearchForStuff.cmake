@@ -37,7 +37,6 @@ if (NOT JsonCpp_FOUND)
   BUILD_ERROR ("Missing: libjsoncpp-dev. Required for parsing json data.")
 endif()
 
-
 #################################################
 # Macro to check for visibility capability in compiler
 # Original idea from: https://gitorious.org/ferric-cmake-stuff/
