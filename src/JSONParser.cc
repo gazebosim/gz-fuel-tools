@@ -50,7 +50,6 @@ std::time_t ParseDateTime(const std::string &_datetime)
   return std::mktime(&tm);
 }
 
-
 /////////////////////////////////////////////////
 ModelIter JSONParser::ParseModels(const std::string &_json)
 {
@@ -79,4 +78,18 @@ ModelIter JSONParser::ParseModels(const std::string &_json)
   }
 
   return ModelIterFactory::Create(ids);
+}
+
+/////////////////////////////////////////////////
+std::string JSONParser::BuildModel(ModelIter _modelIt)
+{
+  ModelIdentifier id = _modelIt->Identification();
+  Json::Value value;
+  value["name"] = id.Name();
+  value["description"] = id.Description();
+  value["category"] = id.Category();
+  value["uuid"] = id.Uuid();
+
+  Json::StyledWriter writer;
+  return writer.write(value);
 }

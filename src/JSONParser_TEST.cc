@@ -26,7 +26,7 @@ using namespace ignition;
 using namespace ignft;
 
 /////////////////////////////////////////////////
-/// \brief Nothing crashes
+/// \brief Convert JSON string to model iterator
 TEST(JSONParser, ParseModels)
 {
   std::stringstream tmpJsonStr;
@@ -71,6 +71,31 @@ TEST(JSONParser, ParseModels)
   str = std::ctime(&t);
   EXPECT_EQ(str, "Sat Apr 21 19:25:44 2012\n");
   EXPECT_EQ("1234-abcd", modelIt->Identification().Uuid());
+}
+
+/////////////////////////////////////////////////
+/// \brief Convert model iterator to JSON string
+TEST(JSONParser, BuildModel)
+{
+  std::vector<ModelIdentifier> ids;
+  ModelIdentifier id;
+  id.Name("house");
+  id.Category("building");
+  id.Description("affordable");
+  id.Uuid("1234-0093asdf");
+  ids.push_back(id);
+
+  std::string jsonStr = JSONParser::BuildModel(ModelIterFactory::Create(ids));
+
+  std::stringstream tmpJsonStr;
+  tmpJsonStr
+  << "{\n"
+  << "   \"category\" : \"building\",\n"
+  << "   \"description\" : \"affordable\",\n"
+  << "   \"name\" : \"house\",\n"
+  << "   \"uuid\" : \"1234-0093asdf\"\n"
+  << "}\n";
+  EXPECT_EQ(tmpJsonStr.str(), jsonStr);
 }
 
 //////////////////////////////////////////////////
