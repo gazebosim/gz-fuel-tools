@@ -21,12 +21,16 @@
 
 #include <json/json.h>
 
+
 #include "ignition/fuel-tools/ModelIterPrivate.hh"
 #include "ignition/fuel-tools/JSONParser.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
 
+#if defined(_WIN32) && !defined(timegm)
+  #define timegm _mkgmtime
+#endif
 
 /////////////////////////////////////////////////
 std::time_t ParseDateTime(const std::string &_datetime)
@@ -49,7 +53,7 @@ std::time_t ParseDateTime(const std::string &_datetime)
   tm.tm_sec = (int)s;
   // 0 - standard time, 1, daylight saving, -1 unknown
   tm.tm_isdst = -1;
-  return std::mktime(&tm);
+  return timegm(&tm);
 }
 
 /////////////////////////////////////////////////

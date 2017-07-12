@@ -65,10 +65,10 @@ TEST(JSONParser, ParseModels)
   EXPECT_EQ(1024, modelIt->Identification().FileSize());
   EXPECT_EQ(3, modelIt->Identification().Likes());
   auto t = modelIt->Identification().ModifyDate();
-  std::string str = std::ctime(&t);
+  std::string str = std::asctime(gmtime(&t));
   EXPECT_EQ(str, "Mon Apr 23 18:25:43 2012\n");
   t = modelIt->Identification().UploadDate();
-  str = std::ctime(&t);
+  str = std::asctime(gmtime(&t));
   EXPECT_EQ(str, "Sat Apr 21 19:25:44 2012\n");
   EXPECT_EQ("1234-abcd", modelIt->Identification().Uuid());
 }
