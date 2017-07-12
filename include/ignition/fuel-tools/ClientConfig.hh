@@ -81,7 +81,7 @@ namespace ignition
       public: ClientConfig(const ClientConfig &_copy);
 
       /// \brief Assignment operator overload
-      public: void operator=(const ClientConfig &_copy);
+      public: ClientConfig &operator=(const ClientConfig &_copy);
 
       /// \brief destructor
       public: ~ClientConfig();

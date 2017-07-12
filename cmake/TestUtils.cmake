@@ -3,6 +3,7 @@
 # (like auxiliary apps using gtest files called from other tests)
 # set the IGN_SKIP_IN_TESTSUITE variable to true. The variable will
 # be set to false at the end of the function.
+
 macro (ign_build_tests)
 
   # Find the Python interpreter for running the
