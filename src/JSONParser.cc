@@ -47,6 +47,8 @@ std::time_t ParseDateTime(const std::string &_datetime)
   tm.tm_min = m;
   // 0-61 (0-60 in C++11)
   tm.tm_sec = (int)s;
+  // 0 - standard time, 1, daylight saving, -1 unknown
+  tm.tm_isdst = -1;
   return std::mktime(&tm);
 }
 
