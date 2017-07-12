@@ -33,32 +33,6 @@ namespace ignition
     class ModelIdentifierPrivate;
 
     /// \brief Defines how to identify a model
-    class IGNITION_FUEL_TOOLS_VISIBLE Tag
-    {
-      /// \brief Constructor
-      public: Tag();
-
-      /// \brief Destructor
-      public: ~Tag();
-
-      /// \brief Returns the tag id
-      /// \return Tag id
-      public: std::string Id() const;
-
-      /// \brief Returns the tag name
-      /// \return Tag name
-      public: std::string Name() const;
-
-      /// \brief Set the id of the tag
-      /// \return True if successful
-      public: bool Id(const std::string &_id);
-
-      /// \brief Set the name of the tag
-      /// \return True if successful
-      public: bool Name(const std::string &_name);
-    };
-
-    /// \brief Defines how to identify a model
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIdentifier
     {
       /// \brief Constructor
