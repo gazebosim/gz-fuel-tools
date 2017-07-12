@@ -32,8 +32,6 @@ TEST(ModelIdentifier, SetFields)
   id.UniqueName("World");
   id.Category("test");
   id.Uuid("lllooo000ooolll");
-  id.Likes(19u);
-  id.Downloads(200u);
   id.FileSize(2048u);
   std::time_t d1;
   std::time(&d1);
@@ -46,8 +44,6 @@ TEST(ModelIdentifier, SetFields)
   EXPECT_EQ(std::string("World"), id.UniqueName());
   EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id.Uuid());
-  EXPECT_EQ(19u, id.Likes());
-  EXPECT_EQ(200u, id.Downloads());
   EXPECT_EQ(2048u, id.FileSize());
   EXPECT_EQ(d1, id.ModifyDate());
   EXPECT_EQ(d2, id.UploadDate());
@@ -62,8 +58,6 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
   id.UniqueName("World");
   id.Category("test");
   id.Uuid("lllooo000ooolll");
-  id.Likes(19u);
-  id.Downloads(200u);
   id.FileSize(2048u);
   std::time_t d1;
   std::time(&d1);
@@ -77,8 +71,6 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
   EXPECT_EQ(std::string("World"), id2.UniqueName());
   EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
-  EXPECT_EQ(19u, id2.Likes());
-  EXPECT_EQ(200u, id2.Downloads());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
   EXPECT_EQ(d2, id2.UploadDate());
@@ -100,8 +92,6 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
   id.UniqueName("World");
   id.Category("test");
   id.Uuid("lllooo000ooolll");
-  id.Likes(19u);
-  id.Downloads(200u);
   id.FileSize(2048u);
   std::time_t d1;
   std::time(&d1);
@@ -116,8 +106,6 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
   EXPECT_EQ(std::string("World"), id2.UniqueName());
   EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
-  EXPECT_EQ(19u, id2.Likes());
-  EXPECT_EQ(200u, id2.Downloads());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
   EXPECT_EQ(d2, id2.UploadDate());

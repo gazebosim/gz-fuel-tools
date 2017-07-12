@@ -61,9 +61,7 @@ TEST(JSONParser, ParseModels)
   EXPECT_TRUE(modelIt);
   EXPECT_EQ("car", modelIt->Identification().Name());
   EXPECT_EQ("I am a car", modelIt->Identification().Description());
-  EXPECT_EQ(5, modelIt->Identification().Downloads());
   EXPECT_EQ(1024, modelIt->Identification().FileSize());
-  EXPECT_EQ(3, modelIt->Identification().Likes());
   auto t = modelIt->Identification().ModifyDate();
   std::string str = std::asctime(gmtime(&t));
   EXPECT_EQ(str, "Mon Apr 23 18:25:43 2012\n");

@@ -59,17 +59,9 @@ namespace ignition
       /// \return Model description
       public: std::string Description() const;
 
-      /// \brief Returns the number of likes
-      /// \return Number of likes
-      public: unsigned int Likes() const;
-
       /// \brief Returns the file size of the model
       /// \return Model file size
       public: unsigned int FileSize() const;
-
-      /// \brief Returns the number of model downloads
-      /// \return Number of downloads
-      public: unsigned int Downloads() const;
 
       /// \brief Returns the upload date of the model
       /// \return Model upload date
@@ -102,14 +94,6 @@ namespace ignition
       /// \brief Set the file size of the model
       /// \return True if successful
       public: bool FileSize(const unsigned int _filesize);
-
-      /// \brief Set the number of model downloads
-      /// \return True if successful
-      public: bool Downloads(const unsigned int _downloads);
-
-      /// \brief Set the number of likes
-      /// \return True if successful
-      public: bool Likes(const unsigned int _likes);
 
       /// \brief Set the upload date
       /// \return True if successful

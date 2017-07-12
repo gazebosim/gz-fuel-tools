@@ -63,9 +63,6 @@ ModelIter JSONParser::ParseModels(const std::string &_json)
   Json::Value value;
   reader.parse(_json, value);
 
-//  Json::StyledWriter writer;
-//  std::string out = writer.write(value);
-
   std::vector<ModelIdentifier> ids;
   for (auto it = value.begin(); it != value.end(); ++it)
   {
@@ -73,9 +70,7 @@ ModelIter JSONParser::ParseModels(const std::string &_json)
     ModelIdentifier id;
     id.Name(model["name"].asString());
     id.Description(model["description"].asString());
-    id.Downloads(model["downloads"].asUInt());
     id.FileSize(model["filesize"].asUInt());
-    id.Likes(model["likes"].asUInt());
     id.Uuid(model["uuid"].asString());
     id.Category(model["category"].asString());
     id.ModifyDate(ParseDateTime(model["modify_date"].asString()));

@@ -37,12 +37,6 @@ class ignft::ModelIdentifierPrivate
   /// \brief FileSize of this model
   public: unsigned int fileSize = 0u;
 
-  /// \brief Number of model downloads
-  public: unsigned int downloads = 0u;
-
-  /// \brief Number of likes
-  public: unsigned int likes = 0u;
-
   /// \brief Model upload date
   public: std::time_t uploadDate;
 
@@ -104,18 +98,6 @@ unsigned int ModelIdentifier::FileSize() const
 }
 
 //////////////////////////////////////////////////
-unsigned int ModelIdentifier::Downloads() const
-{
-  return this->dataPtr->downloads;
-}
-
-//////////////////////////////////////////////////
-unsigned int ModelIdentifier::Likes() const
-{
-  return this->dataPtr->likes;
-}
-
-//////////////////////////////////////////////////
 std::time_t ModelIdentifier::UploadDate() const
 {
   return this->dataPtr->uploadDate;
@@ -166,20 +148,6 @@ bool ModelIdentifier::Description(const std::string &_desc)
 bool ModelIdentifier::FileSize(const unsigned int _fileSize)
 {
   this->dataPtr->fileSize = _fileSize;
-  return true;
-}
-
-//////////////////////////////////////////////////
-bool ModelIdentifier::Downloads(const unsigned int _downloads)
-{
-  this->dataPtr->downloads = _downloads;
-  return true;
-}
-
-//////////////////////////////////////////////////
-bool ModelIdentifier::Likes(const unsigned int _likes)
-{
-  this->dataPtr->likes = _likes;
   return true;
 }
 
