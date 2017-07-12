@@ -1,10 +1,9 @@
 include (${project_cmake_dir}/Utils.cmake)
 
-set (CMAKE_CXX_FLAGS "-fsanitize=address")
-
 set (sources
   ClientConfig.cc
   FuelClient.cc
+  JSONParser.cc
   LocalCache.cc
   Model.cc
   ModelIdentifier.cc
@@ -16,13 +15,19 @@ set (sources
 set (gtest_sources
   ClientConfig_TEST.cc
 #  FuelClient_TEST.cc
+  JSONParser_TEST.cc
   Model_TEST.cc
   ModelIdentifier_TEST.cc
   ModelIter_TEST.cc
   Result_TEST.cc
 )
 
-include_directories(${CMAKE_BINARY_DIR}/ ${CMAKE_BINARY_DIR}/test/)
+include_directories(
+  ${CMAKE_BINARY_DIR}/
+  ${CMAKE_BINARY_DIR}/test/
+  ${JsonCpp_INCLUDE_DIRS}
+)
+
 
 ign_build_tests(${gtest_sources})
 
@@ -37,6 +42,7 @@ endif()
 target_link_libraries(${libname}
   ${CURL_LIBRARIES}
   ${IGNITION-COMMON_LIBRARIES}
+  ${JsonCpp_LIBRARIES}
 )
 
 if(WIN32)

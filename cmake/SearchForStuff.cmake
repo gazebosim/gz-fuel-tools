@@ -28,6 +28,15 @@ if (NOT CURL_FOUND)
   BUILD_ERROR ("Missing: libcurl. Required for connection to model database.")
 endif()
 
+########################################
+# Find jsoncpp
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(JsonCpp jsoncpp)
+
+if (NOT JsonCpp_FOUND)
+  BUILD_ERROR ("Missing: libjsoncpp-dev. Required for parsing json data.")
+endif()
+
 ################################################################################
 # Ignition common
 find_package(ignition-common0 QUIET)
