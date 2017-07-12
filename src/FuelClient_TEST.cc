@@ -16,24 +16,56 @@
 */
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
+#include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/FuelClient.hh"
+#include "ignition/fuel-tools/REST.hh"
 
-namespace ignft = ignition::fuel_tools;
+
+namespace ignition
+{
+  namespace fuel_tools
+  {
+    class MockREST : public REST {
+      public: MOCK_CONST_METHOD6(Request, RESTResponse(const std::string &,
+          const std::string &, const std::string &,
+          const std::vector<std::string> &, const std::vector<std::string> &,
+          const std::string &));
+    };
+  }
+}
+
 using namespace ignition;
-using namespace ignft;
-
+using namespace fuel_tools;
 
 /////////////////////////////////////////////////
-/// \brief Nothing crashes
-TEST(FuelClient, ConstructorDoesNotCrash)
+RESTResponse MockREST(const std::string &, const std::string &,
+    const std::string &, const std::vector<std::string> &,
+    const std::vector<std::string> &, const std::string &)
 {
-  ClientConfig config;
-  FuelClient client(config);
+  RESTResponse response;
+  response.statusCode = 200;
+  response.data = "{}";
+  return response;
+}
+
+/////////////////////////////////////////////////
+/// \brief Fetch moels
+TEST(FuelClent, FetchModels)
+{
+  ignition::fuel_tools::ClientConfig conf;
+  conf.AddServer("http://localhost:8001/");
+
+  ignition::fuel_tools::MockREST rest;
+  ignition::fuel_tools::FuelClient client(conf, rest);
+  auto iter = client.Models();
+
 }
 
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
-  ::testing::InitGoogleTest(&argc, argv);
+  ::testing::InitGoogleMock(&argc, argv);
   return RUN_ALL_TESTS();
 }

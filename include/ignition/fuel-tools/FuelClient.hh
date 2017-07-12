@@ -22,6 +22,7 @@
 
 #include <ignition/fuel-tools/ClientConfig.hh>
 #include <ignition/fuel-tools/Helpers.hh>
+#include <ignition/fuel-tools/REST.hh>
 #include <ignition/fuel-tools/Result.hh>
 #include <ignition/fuel-tools/ModelIter.hh>
 
@@ -40,7 +41,7 @@ namespace ignition
       /// \brief Constructor accepts server and auth configuration
       /// \param[in] _config configuration about servers to connect to
       /// \remarks the client saves a copy of the config passed into it
-      public: FuelClient(const ClientConfig &_config);
+      public: FuelClient(const ClientConfig &_config, const REST &_rest=REST());
 
       /// \brief Destructor
       public: ~FuelClient();
