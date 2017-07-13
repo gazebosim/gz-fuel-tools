@@ -28,6 +28,7 @@ COMMANDS = { 'fuel' =>
   "                                                                        \n"\
   "Available Actions:                                                      \n"\
   "  list                     List available models                        \n"\
+  "  locate                   Print location on disk, downloading if needed\n"\
   "  pull                     Download a model                             \n"\
   "  push                     Upload a model                               \n"\
   "                                                                        \n"\
@@ -45,6 +46,17 @@ SUBCOMMANDS = { 'list' =>
   "  --url URL                URL of a server the resource comes from      \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n" +
+  COMMON_OPTIONS,
+                'locate' =>
+  "Locate where a resource is on disk, fetching if necessary               \n"\
+  "  ign fuel list [options]                                               \n"\
+  "                                                                        \n"\
+  "Required Flags:                                                         \n"\
+  "  --name NAME              Name of the resource                         \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  --owner OWNER            Owner of the resource                        \n"\
+  "  --url URL                URL of a server the resource comes from      \n" +
   COMMON_OPTIONS,
                 'push' =>
   "Upload simulation resources                                             \n"\
@@ -85,6 +97,7 @@ module FuelClient
   attach_function :listModels, [:string, :string, :string], :void
   attach_function :pushModel, [:string, :string, :string, :string], :void
   attach_function :pullModel, [:string, :string, :string], :void
+  attach_function :locateModel, [:string, :string, :string], :void
 end
 
 #
@@ -148,6 +161,11 @@ class Cmd
     case options['subcommand']
     when 'list'
       # no required flags
+    when 'locate'
+      if options['name'].length == 0
+        puts usage
+        exit -1
+      end
     when 'pull'
       if options['owner'].length == 0 or
         options['name'].length == 0
@@ -174,6 +192,8 @@ class Cmd
       case options['subcommand']
       when 'list'
         FuelClient.listModels options['name'], options['owner'], options['url']
+      when 'locate'
+        FuelClient.locateModel options['name'], options['owner'], options['url']
       when 'pull'
         FuelClient.pullModel options['name'], options['owner'], options['url']
       when 'push'

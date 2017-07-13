@@ -92,6 +92,35 @@ extern "C"
     }
   }
 
+  /// \brief Prints where a model is on disk, downloading it if necessary
+  /// \remarks if multiple models match, returns only the first one
+  /// \param[in] _name Name of the model (required)
+  /// \param[in] _owner Who owns the model (optional)
+  /// \param[in] _url URL to get the model from (optional)
+  void IGNITION_FUEL_TOOLS_VISIBLE locateModel(char *_name, char *_owner,
+      char *_url)
+  {
+    auto conf = getConfig();
+    ignition::fuel_tools::FuelClient client(conf);
+
+    ignition::fuel_tools::ModelIdentifier id;
+    id.Name(_name);
+    if (std::strlen(_owner))
+      id.Owner(_owner);
+    if (std::strlen(_url))
+      id.SourceURL(_url);
+    auto iter = client.Models(id);
+    if (!iter)
+    {
+      std::cerr << "Model not found\n";
+    }
+    else
+    {
+      iter->Fetch();
+      std::cout << iter->PathToModel() << "\n";
+    }
+  }
+
   /// \brief Download a model
   /// \param[in] _name Name of the model (required)
   /// \param[in] _owner Who owns the model (required)
