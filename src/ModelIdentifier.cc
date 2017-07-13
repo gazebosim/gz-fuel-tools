@@ -162,13 +162,19 @@ bool ModelIdentifier::Owner(const std::string &_name)
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifier::SourceURL(const std::string &_url)
+bool ModelIdentifier::SourceURL(const std::string &_url_orig)
 {
+  std::string url(_url_orig);
   bool success = false;
-  if (this->dataPtr->ValidURL(_url))
+  // Strip trailing slashes
+  while(!url.empty() && url.back() == '/')
+  {
+    url.pop_back();
+  }
+  if (this->dataPtr->ValidURL(url))
   {
     success = true;
-    this->dataPtr->source = _url;
+    this->dataPtr->source = url;
   }
   return success;
 }

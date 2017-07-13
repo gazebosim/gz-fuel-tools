@@ -48,6 +48,23 @@ TEST(ModelIdentifier, SetFields)
 }
 
 /////////////////////////////////////////////////
+/// \brief Unique Name
+TEST(ModelIdentifier, UniqueName)
+{
+  ModelIdentifier id;
+  id.Name("hello");
+  id.Owner("alice");
+  id.SourceURL("https://localhost:8001/");
+  EXPECT_EQ("https://localhost:8001/alice/hello", id.UniqueName());
+
+  id.SourceURL("https://localhost:8001");
+  EXPECT_EQ("https://localhost:8001/alice/hello", id.UniqueName());
+
+  id.SourceURL("https://localhost:8001//////////////////////////");
+  EXPECT_EQ("https://localhost:8001/alice/hello", id.UniqueName());
+}
+
+/////////////////////////////////////////////////
 /// \brief Copy constructor deep copies
 TEST(ModelIdentifier, CopyConstructorDeepCopy)
 {
