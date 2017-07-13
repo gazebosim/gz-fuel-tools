@@ -18,9 +18,6 @@
 
 #include <ignition/fuel-tools/FuelClient.hh>
 
-#include <ignition/fuel-tools/Zip.hh>
-
-
 int main()
 {
   ignition::fuel_tools::ClientConfig conf;
@@ -28,13 +25,6 @@ int main()
 
   ignition::fuel_tools::FuelClient client(conf);
   auto iter = client.Models();
-
-
-
-  // test unzip
-  ignition::fuel_tools::Zip::Extract("/tmp/zip/a.zip", "/tmp/zip/out");
-
-  ignition::fuel_tools::Zip::Compress("/tmp/zip/cordless_drill", "/tmp/zip/c.zip");
 
   return 0;
 }
