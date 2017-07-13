@@ -1,7 +1,7 @@
 set(TEST_TYPE "INTEGRATION")
 
 set(tests
-
+  zip.cc
 )
 
 include_directories(SYSTEM ${CMAKE_BINARY_DIR}/test/)

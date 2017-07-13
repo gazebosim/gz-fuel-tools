@@ -15,26 +15,28 @@
  *
 */
 
+#include <gtest/gtest.h>
 
-#include <ignition/fuel-tools/FuelClient.hh>
+#include "ignition/fuel-tools/Zip.hh"
 
-#include <ignition/fuel-tools/Zip.hh>
+namespace ignft = ignition::fuel_tools;
+using namespace ignition;
+using namespace ignft;
 
-
-int main()
+/////////////////////////////////////////////////
+/// \brief Test basic API
+TEST(Zip, Extract)
 {
-  ignition::fuel_tools::ClientConfig conf;
-  conf.AddServer("http://localhost:8001/");
+  // empty strings
+  EXPECT_FALSE(Zip::Extract("", ""));
 
-  ignition::fuel_tools::FuelClient client(conf);
-  auto iter = client.Models();
+  // invalid src and dst paths
+  EXPECT_FALSE(Zip::Extract("aaa.zip", "/tmp"));
+}
 
-
-
-  // test unzip
-  ignition::fuel_tools::Zip::Extract("/tmp/zip/a.zip", "/tmp/zip/out");
-
-  ignition::fuel_tools::Zip::Compress("/tmp/zip/cordless_drill", "/tmp/zip/c.zip");
-
-  return 0;
+//////////////////////////////////////////////////
+int main(int argc, char **argv)
+{
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
