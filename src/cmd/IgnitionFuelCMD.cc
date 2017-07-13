@@ -91,4 +91,42 @@ extern "C"
       printModels(client.Models(id));
     }
   }
+
+  /// \brief Download a model
+  /// \param[in] _name Name of the model (required)
+  /// \param[in] _owner Who owns the model (required)
+  /// \param[in] _url URL to get the model from (optional)
+  void IGNITION_FUEL_TOOLS_VISIBLE pullModel(char *_name, char *_owner,
+      char *_url)
+  {
+    auto conf = getConfig();
+    ignition::fuel_tools::FuelClient client(conf);
+
+    ignition::fuel_tools::ModelIdentifier id;
+    id.Name(_name);
+    id.Owner(_owner);
+    if (std::strlen(_url))
+      id.SourceURL(_url);
+
+    std::cerr << "TODO Download a model\n";
+  }
+
+  /// \brief upload a model
+  /// \param[in] _name Name of the model (required)
+  /// \param[in] _owner Who owns the model (required)
+  /// \param[in] _url URL to get the model from (required)
+  /// \param[in] _path only list models from this server (required)
+  void IGNITION_FUEL_TOOLS_VISIBLE pushModel(char *_name, char *_owner,
+      char *_url, char *_path)
+  {
+    auto conf = getConfig();
+    ignition::fuel_tools::FuelClient client(conf);
+
+    ignition::fuel_tools::ModelIdentifier id;
+    id.Name(_name);
+    id.Owner(_owner);
+    id.SourceURL(_url);
+
+    std::cerr << "TODO Upload a model\n";
+  }
 }

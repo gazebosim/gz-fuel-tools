@@ -83,6 +83,8 @@ module FuelClient
   ffi_lib "@IGN_FUEL_CMD_LIB_INSTALL_PATH@"
   attach_function :helloWorld, [], :void
   attach_function :listModels, [:string, :string, :string], :void
+  attach_function :pushModel, [:string, :string, :string, :string], :void
+  attach_function :pullModel, [:string, :string, :string], :void
 end
 
 #
@@ -147,16 +149,16 @@ class Cmd
     when 'list'
       # no required flags
     when 'pull'
-      if !options.key?('owner') or
-        !options.key?('name')
+      if options['owner'].length == 0 or
+        options['name'].length == 0
         puts usage
         exit -1
       end
     when 'push'
-      if !options.key?('url') or
-        !options.key?('owner') or
-        !options.key?('name') or
-        !options.key?('path')
+      if options['url'].length == 0 or
+        options['owner'].length == 0 or
+        options['name'].length == 0 or
+        options['path'].length == 0
         puts usage
         exit -1
       end
@@ -173,9 +175,10 @@ class Cmd
       when 'list'
         FuelClient.listModels options['name'], options['owner'], options['url']
       when 'pull'
-        puts "Pull!"
+        FuelClient.pullModel options['name'], options['owner'], options['url']
       when 'push'
-        puts "Push!"
+        FuelClient.pushModel options['name'], options['owner'], options['url'],
+          options['path']
       when 'hello'
         FuelClient.helloWorld
       end
