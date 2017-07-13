@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'ffi'
 require 'optparse'
 
 # Constants.
@@ -64,11 +65,20 @@ SUBCOMMANDS = { 'list' =>
   "Required Flags:                                                         \n"\
   "  --owner OWNER            Owner of the resource                        \n"\
   "  --name NAME              Name of the resource                         \n"\
-  "  --url URL             URL of a server the resource comes from         \n"\
   "                                                                        \n"\
-  "Available Options:                                                      \n" +
+  "Available Options:                                                      \n"\
+  "  --url URL             URL of a server the resource comes from         \n" +
   COMMON_OPTIONS,
 }
+
+#
+# Class for accessing C functions
+#
+module FuelClient
+  extend FFI::Library
+  ffi_lib "@IGN_FUEL_CMD_LIB_INSTALL_PATH@"
+  attach_function :helloWorld, [], :void
+end
 
 #
 # Class for the Ignition Fuel command line tools.
@@ -127,8 +137,7 @@ class Cmd
     when 'list'
       # no required flags
     when 'pull'
-      if !options.key?('url') or
-        !options.key?('owner') or
+      if !options.key?('owner') or
         !options.key?('name')
         puts usage
         exit -1
@@ -154,7 +163,7 @@ class Cmd
       when 'list'
         puts "List!"
       else
-        puts "Something else!"
+        FuelClient.helloWorld
       end
     rescue
       puts "Library error: Problem running [#{options['command']}]() "\
