@@ -67,7 +67,7 @@ void createLocal6(ClientConfig &_conf)
 
 
 /////////////////////////////////////////////////
-/// \brief Fetch moels
+/// \brief Iterate through all models in cache
 TEST(LocalCache, AllModels)
 {
   ClientConfig conf;
@@ -84,6 +84,48 @@ TEST(LocalCache, AllModels)
     ++iter;
   }
   EXPECT_EQ(6u, uniqueNames.size());
+}
+
+
+/////////////////////////////////////////////////
+/// \brief Get a specific model from cache
+TEST(LocalCache, MatchingModels)
+{
+  ClientConfig conf;
+  conf.CacheLocation(common::cwd());
+  createLocal6(conf);
+
+  ignition::fuel_tools::LocalCache cache(&conf);
+
+  ModelIdentifier am1;
+  am1.SourceURL("http://localhost:8001/");
+  am1.Owner("alice");
+  am1.Name("am1");
+  EXPECT_TRUE(cache.MatchingModel(am1));
+
+  ModelIdentifier tm2;
+  tm2.SourceURL("http://localhost:8001/");
+  tm2.Owner("trudy");
+  tm2.Name("tm2");
+  EXPECT_TRUE(cache.MatchingModel(tm2));
+
+  ModelIdentifier bogus1;
+  bogus1.SourceURL("http://localhost:8002/");
+  bogus1.Owner("trudy");
+  bogus1.Name("tm2");
+  EXPECT_FALSE(cache.MatchingModel(bogus1));
+
+  ModelIdentifier bogus2;
+  bogus2.SourceURL("http://localhost:8001/");
+  bogus2.Owner("tfudy");
+  bogus2.Name("tm2");
+  EXPECT_FALSE(cache.MatchingModel(bogus2));
+
+  ModelIdentifier bogus3;
+  bogus3.SourceURL("http://localhost:8001/");
+  bogus3.Owner("trudy");
+  bogus3.Name("tm3");
+  EXPECT_FALSE(cache.MatchingModel(bogus3));
 }
 
 //////////////////////////////////////////////////
