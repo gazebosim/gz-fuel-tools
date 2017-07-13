@@ -22,6 +22,7 @@
 
 #include <ignition/fuel-tools/ClientConfig.hh>
 #include <ignition/fuel-tools/Helpers.hh>
+#include <ignition/fuel-tools/LocalCache.hh>
 #include <ignition/fuel-tools/REST.hh>
 #include <ignition/fuel-tools/Result.hh>
 #include <ignition/fuel-tools/ModelIter.hh>
@@ -40,8 +41,13 @@ namespace ignition
     {
       /// \brief Constructor accepts server and auth configuration
       /// \param[in] _config configuration about servers to connect to
+      /// \param[in] _cache Test hook. Pointer to a local cache. The FuelClient
+      ///            will take ownership of the pointer and free it when
+      ///            destructed. If set to nullptr the client will instantiate
+      ///            it's own cache. 
       /// \remarks the client saves a copy of the config passed into it
-      public: FuelClient(const ClientConfig &_config, const REST &_rest=REST());
+      public: FuelClient(const ClientConfig &_config, const REST &_rest=REST(),
+                  LocalCache *_cache=nullptr);
 
       /// \brief Destructor
       public: ~FuelClient();
