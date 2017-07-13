@@ -25,13 +25,15 @@ using namespace ignft;
 
 /////////////////////////////////////////////////
 /// \brief Test basic API
-TEST(Zip, Extract)
+TEST(Zip, API)
 {
-  // empty strings
+  // Extract invalid paths
   EXPECT_FALSE(Zip::Extract("", ""));
-
-  // invalid src and dst paths
   EXPECT_FALSE(Zip::Extract("aaa.zip", "/tmp"));
+
+  // Compress invalid paths
+  EXPECT_FALSE(Zip::Extract("", ""));
+  EXPECT_FALSE(Zip::Compress("aaa", "aaa.zip"));
 }
 
 //////////////////////////////////////////////////

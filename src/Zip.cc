@@ -70,7 +70,6 @@ bool CompressFile(zip *_archive, const std::string &_file,
       return false;
     }
 
-    // if (zip_file_add(_archive, _entry.c_str(), source, ZIP_FL_OVERWRITE)
     if (zip_add(_archive, _entry.c_str(), source)
         < 0)
     {
