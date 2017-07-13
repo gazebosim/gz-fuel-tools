@@ -44,8 +44,12 @@ namespace ignition
       public: virtual ModelIter AllModels();
 
       /// \brief Get the first model matching an ID
-      /// \param[in] _id An id with at least one of name, owner, source
+      /// \param[in] _id An id with SourceURL, Owner, and Name all set
       public: virtual Model MatchingModel(const ModelIdentifier &_id);
+
+      /// \brief Get all models partially matching an ID
+      /// \param[in] _id An id with at least one of SourceURL, Owner, and Name
+      public: virtual ModelIter MatchingModels(const ModelIdentifier &_id);
 
       /// \brief Add a model from packed data to the local cache
       /// \param[in] _id A completely populated ID

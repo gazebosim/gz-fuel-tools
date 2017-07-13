@@ -142,6 +142,30 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
   return Model();
 }
 
+
+//////////////////////////////////////////////////
+ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
+{
+  if (_id.Name().empty() && _id.SourceURL().empty() && _id.Owner().empty())
+    return ModelIterFactory::Create();
+
+  std::vector<Model> models;
+  for (auto iter = this->AllModels(); iter; ++iter)
+  {
+    bool matches = true;
+    if (!_id.Name().empty() && _id.Name() != iter->Identification().Name())
+      matches = false;
+    if (!_id.Owner().empty() && _id.Owner() != iter->Identification().Owner())
+      matches = false;
+    if (!_id.SourceURL().empty()
+        && _id.SourceURL() != iter->Identification().SourceURL())
+      matches = false;
+    if (matches)
+      models.push_back(*iter);
+  }
+  return ModelIterFactory::Create(models);
+}
+
 //////////////////////////////////////////////////
 bool LocalCache::SaveModel(
     const ModelIdentifier &_id, const std::string &_data)

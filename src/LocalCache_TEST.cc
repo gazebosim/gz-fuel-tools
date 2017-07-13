@@ -66,6 +66,35 @@ void createLocal6(ClientConfig &_conf)
 }
 
 
+/// \brief Creates a directory structure in the build directory with 3 models
+void createLocal3(ClientConfig &_conf)
+{
+  if (common::exists("LocalCache_TEST3"))
+  {
+    common::removeAll("LocalCache_TEST3");
+  }
+  common::createDirectories("LocalCache_TEST3/alice/am1");
+  common::createDirectories("LocalCache_TEST3/bob/bm1");
+  common::createDirectories("LocalCache_TEST3/trudy/tm1");
+
+  std::ofstream fout("LocalCache_TEST3/alice/am1/model.config",
+      std::ofstream::trunc);
+  fout << "<?xml version=\"1.0\"?>";
+  fout.flush();
+  fout.close();
+
+  common::copyFile("LocalCache_TEST3/alice/am1/model.config",
+                   "LocalCache_TEST3/bob/bm1/model.config");
+  common::copyFile("LocalCache_TEST3/alice/am1/model.config",
+                   "LocalCache_TEST3/trudy/tm1/model.config");
+
+  ignition::fuel_tools::ServerConfig srv;
+  srv.URL("http://localhost:8007/");
+  srv.LocalName("LocalCache_TEST3");
+  _conf.AddServer(srv);
+}
+
+
 /////////////////////////////////////////////////
 /// \brief Iterate through all models in cache
 TEST(LocalCache, AllModels)
@@ -73,6 +102,7 @@ TEST(LocalCache, AllModels)
   ClientConfig conf;
   conf.CacheLocation(common::cwd());
   createLocal6(conf);
+  createLocal3(conf);
 
   ignition::fuel_tools::LocalCache cache(&conf);
 
@@ -83,13 +113,39 @@ TEST(LocalCache, AllModels)
     uniqueNames.insert(iter->Identification().UniqueName());
     ++iter;
   }
-  EXPECT_EQ(6u, uniqueNames.size());
+  EXPECT_EQ(9u, uniqueNames.size());
 }
 
 
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
 TEST(LocalCache, MatchingModels)
+{
+  ClientConfig conf;
+  conf.CacheLocation(common::cwd());
+  createLocal6(conf);
+  createLocal3(conf);
+
+  ignition::fuel_tools::LocalCache cache(&conf);
+
+  ModelIdentifier am1;
+  am1.Owner("alice");
+  am1.Name("am1");
+  auto iter = cache.MatchingModels(am1);
+
+  std::set<std::string> uniqueNames;
+  while (iter)
+  {
+    uniqueNames.insert(iter->Identification().UniqueName());
+    ++iter;
+  }
+  EXPECT_EQ(2u, uniqueNames.size());
+}
+
+
+/////////////////////////////////////////////////
+/// \brief Get a specific model from cache
+TEST(LocalCache, MatchingModel)
 {
   ClientConfig conf;
   conf.CacheLocation(common::cwd());

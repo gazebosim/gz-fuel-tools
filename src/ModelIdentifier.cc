@@ -180,6 +180,18 @@ bool ModelIdentifier::SourceURL(const std::string &_url_orig)
 }
 
 //////////////////////////////////////////////////
+std::string ModelIdentifier::Owner() const
+{
+  return this->dataPtr->owner;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::SourceURL() const
+{
+  return this->dataPtr->source;
+}
+
+//////////////////////////////////////////////////
 std::string ModelIdentifier::Description() const
 {
   return this->dataPtr->description;
