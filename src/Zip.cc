@@ -33,61 +33,50 @@ using namespace fuel_tools;
 
 
 /////////////////////////////////////////////////
-bool CompressFile(zip *_archive, const std::string &_filename,
+bool CompressFile(zip *_archive, const std::string &_file,
     const std::string &_entry)
 {
-  std::ifstream in(_filename.c_str(),
-      std::ifstream::ate | std::ifstream::binary);
-  auto end = in.tellg();
-
-  zip_source* source = zip_source_file(_archive, _filename.c_str(), 0, end);
-  if (!source)
+  std::string entry = ignition::common::basename(_file);
+  if (ignition::common::isDirectory(_file))
   {
-    ignerr << "Error adding file to zip: " << _filename << std::endl;
-    return false;
-  }
-
-  // if (zip_file_add(_archive, _entry.c_str(), source, ZIP_FL_OVERWRITE)
-  if (zip_add(_archive, _entry.c_str(), source)
-      < 0)
-  {
-    ignerr << "Error adding file to zip: " << _filename << std::endl;
-    zip_source_free(source);
-  }
-  return true;
-}
-
-/////////////////////////////////////////////////
-bool CompressDir(zip *_archive, const std::string &_dir,
-    const std::string &_entry)
-{
-  // if (zip_dir_add(_archive, entryName.c_str(), ZIP_FL_ENC_GUESS) < 0)
-  if (zip_add_dir(_archive, _entry.c_str()) < 0)
-  {
-    ignerr << "Error adding directory to zip: " << _dir << std::endl;
-    return false;
-  }
-
-  // iterate through the files in the directory and add to the zip archive
-  ignition::common::DirIter endIt;
-  for (ignition::common::DirIter dirIt(_dir); dirIt != endIt; ++dirIt)
-  {
-    std::string filename = *dirIt;
-    std::string entryName = _entry + "/" + ignition::common::basename(filename);
-
-    if (ignition::common::isDirectory(filename))
+    if (zip_add_dir(_archive, _entry.c_str()) < 0)
     {
-      if (!CompressDir(_archive, filename, entryName))
+      ignerr << "Error adding directory to zip: " << _file << std::endl;
+      return false;
+    }
+
+    ignition::common::DirIter endIt;
+    for (ignition::common::DirIter dirIt(_file); dirIt != endIt; ++dirIt)
+    {
+      std::string file = *dirIt;
+      std::string entryName = _entry + "/" + ignition::common::basename(file);
+
+      if (!CompressFile(_archive, file, entryName))
       {
-        ignerr << "Error compressing directory: " << filename << std::endl;
+        ignerr << "Error compressing file: " << file << std::endl;
       }
     }
-    else if (ignition::common::isFile(filename))
+  }
+  else if (ignition::common::isFile(_file))
+  {
+    std::ifstream in(_file.c_str(),
+        std::ifstream::ate | std::ifstream::binary);
+    auto end = in.tellg();
+
+    zip_source* source = zip_source_file(_archive, _file.c_str(), 0, end);
+    if (!source)
     {
-      if (!CompressFile(_archive, filename, entryName))
-      {
-        ignerr << "Error compressing file: " << filename << std::endl;
-      }
+      ignerr << "Error adding file to zip: " << _file << std::endl;
+      return false;
+    }
+
+    // if (zip_file_add(_archive, _entry.c_str(), source, ZIP_FL_OVERWRITE)
+    if (zip_add(_archive, _entry.c_str(), source)
+        < 0)
+    {
+      ignerr << "Error adding file to zip: " << _file << std::endl;
+      zip_source_free(source);
+      return false;
     }
   }
   return true;
@@ -111,21 +100,10 @@ bool Zip::Compress(const std::string &_src, const std::string &_dst)
   }
 
   std::string entry = ignition::common::basename(_src);
-  if (ignition::common::isDirectory(_src))
+  if (!CompressFile(archive, _src, entry))
   {
-    if (!CompressDir(archive, _src, entry))
-    {
-      ignerr << "Error compressing directory: " << _src << std::endl;
-      return false;
-    }
-  }
-  else if (ignition::common::isFile(_src))
-  {
-    if (!CompressFile(archive, _src, entry))
-    {
-      ignerr << "Error compressing file: " << _src << std::endl;
-      return false;
-    }
+    ignerr << "Error compressing file: " << _src << std::endl;
+    return false;
   }
 
   zip_close(archive);
@@ -142,7 +120,6 @@ bool Zip::Extract(const std::string &_src,
     return false;
   }
 
-  char buf[100];
   int err;
   zip *archive = zip_open(_src.c_str(), 0, &err);
   if (!archive)
@@ -160,9 +137,9 @@ bool Zip::Extract(const std::string &_src,
       continue;
     }
 
+    // check if it's a directory
     std::string dst = _dst + "/" + sb.name;
-    int nameLen = strlen(sb.name);
-    if (sb.name[nameLen - 1] == '/')
+    if (dst[dst.size() - 1] == '/')
     {
       ignition::common::createDirectory(dst);
     }
@@ -176,19 +153,16 @@ bool Zip::Extract(const std::string &_src,
       }
 
       std::ofstream file(dst);
-      long unsigned int sum = 0;
-      bool stop = false;
-      while (sum < sb.size && !stop)
-      {
-        int len = zip_fread(zf, buf, 100);
-        if (len < 0)
-        {
-          ignerr << "Error reading " << sb.name << std::endl;
-          stop = true;
-        }
-        file << buf;
-        sum += len;
-      }
+      int readSize = sb.size;
+      char *buf = new char[readSize + 1];
+      int len = zip_fread(zf, buf, readSize);
+      // zip_fread seams to read more than requested resulting in garbage data
+      // at the end so append '\0'
+      buf[readSize] = '\0';
+      if (len < 0)
+        ignerr << "Error reading " << sb.name << std::endl;
+      file << buf;
+      delete[] buf;
       file.close();
       zip_fclose(zf);
     }
