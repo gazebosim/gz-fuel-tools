@@ -15,14 +15,80 @@
  *
 */
 
+#include <cstdlib>
+#include <cstring>
 #include <iostream>
 
 #include <ignition/fuel-tools/Helpers.hh>
+#include <ignition/fuel-tools/FuelClient.hh>
+
+
+/// \brief Read a config file from disk
+ignition::fuel_tools::ClientConfig IGNITION_FUEL_TOOLS_HIDDEN getConfig()
+{
+  // TODO READ config file, don't hardcode this
+  ignition::fuel_tools::ClientConfig conf;
+  ignition::fuel_tools::ServerConfig srv;
+  srv.URL("http://localhost:8001/");
+  srv.LocalName("local");
+  conf.AddServer(srv);
+
+  if(const char* env_p = std::getenv("IGN_FUEL_CACHE"))
+    conf.CacheLocation(env_p);
+  else
+  {
+    // TODO Get home directory
+    conf.CacheLocation("~/.ignition/fuel/");
+  }
+  return conf;
+}
+
+/// \brief Print models from a ModelIter to stdout
+void IGNITION_FUEL_TOOLS_HIDDEN printModels(
+    ignition::fuel_tools::ModelIter _iter)
+{
+  // print out the models
+  while (_iter)
+  {
+    std::cout << _iter->Identification().UniqueName() << "\n";
+    ++_iter;
+  }
+}
 
 extern "C"
 {
+  /// \brief Prints "Hello World!\n" to STDOUT
   void IGNITION_FUEL_TOOLS_VISIBLE helloWorld()
   {
     std::cout << "Hello world!\n";
+  }
+
+  /// \brief Lists Models
+  /// \param[in] _name only list models with this name
+  /// \param[in] _owner only list models from this owner
+  /// \param[in] _url only list models from this server
+  void IGNITION_FUEL_TOOLS_VISIBLE listModels(char *_name, char *_owner,
+      char *_url)
+  {
+    auto conf = getConfig();
+    ignition::fuel_tools::FuelClient client(conf);
+
+    if (!std::strlen(_name) && !std::strlen(_owner) && !std::strlen(_url))
+    {
+      // All models
+      printModels(client.Models());
+    }
+    else
+    {
+      // Get some models
+      ignition::fuel_tools::ModelIdentifier id;
+      if (std::strlen(_name))
+        id.Name(_name);
+      if (std::strlen(_owner))
+        id.Owner(_owner);
+      if (std::strlen(_url))
+        id.SourceURL(_url);
+      printModels(client.Models(id));
+    }
   }
 }

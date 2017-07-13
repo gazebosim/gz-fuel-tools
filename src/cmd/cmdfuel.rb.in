@@ -69,6 +69,10 @@ SUBCOMMANDS = { 'list' =>
   "Available Options:                                                      \n"\
   "  --url URL             URL of a server the resource comes from         \n" +
   COMMON_OPTIONS,
+                'hello' =>
+  "check if library is working                                             \n"\
+  "Available Options:                                                      \n" +
+  COMMON_OPTIONS,
 }
 
 #
@@ -78,6 +82,7 @@ module FuelClient
   extend FFI::Library
   ffi_lib "@IGN_FUEL_CMD_LIB_INSTALL_PATH@"
   attach_function :helloWorld, [], :void
+  attach_function :listModels, [:string, :string, :string], :void
 end
 
 #
@@ -94,7 +99,12 @@ class Cmd
   # Return a structure describing the options.
   #
   def parse(args)
-    options = {}
+    options = {
+      'url' => '',
+      'path' => '',
+      'owner' => '',
+      'name' => '',
+    }
 
     usage = COMMANDS[args[0]]
 
@@ -161,8 +171,12 @@ class Cmd
     begin
       case options['subcommand']
       when 'list'
-        puts "List!"
-      else
+        FuelClient.listModels options['name'], options['owner'], options['url']
+      when 'pull'
+        puts "Pull!"
+      when 'push'
+        puts "Push!"
+      when 'hello'
         FuelClient.helloWorld
       end
     rescue
