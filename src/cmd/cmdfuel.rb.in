@@ -14,31 +14,61 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'json'
-require 'net/http'
-require 'open3'
 require 'optparse'
-require 'tempfile'
-require 'yaml'
 
 # Constants.
 COMMON_OPTIONS =
-  "  -h [ --help ]              Print this help message.\n"\
-  "                                                    \n"\
-  "  --force-version <VERSION>  Use a specific library version.\n"\
-  "                                                    \n"\
-  '  --versions                 Show the available versions.'
+  "  -h [ --help ]              Print this help message.                   \n"\
+  "                                                                        \n"\
+
 COMMANDS = { 'fuel' =>
-                       "Manage simulation resources.\n\n"\
-                       "  ign fuel [options]\n\n"\
-                       "Options:\n\n"\
-                       "  -d [ --dst ] arg           Destination directory.\n"\
-                       "  -i [ --install ] arg       Install a resource.\n"\
-                       "  -r [ --remote ] arg        Remote server.\n"\
-                       "  -s [ --search ] arg        Search for a resource.\n"\
-                       "  -u [ --upload ] arg        Upload a resource.\n"\
-                       "                                                 \n\n" +
-                       COMMON_OPTIONS }
+  "Manage simulation resources.                                            \n"\
+  "  ign fuel [action] [options]                                           \n"\
+  "                                                                        \n"\
+  "Available Actions:                                                      \n"\
+  "  list                     List available models                        \n"\
+  "  pull                     Download a model                             \n"\
+  "  push                     Upload a model                               \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n" +
+  COMMON_OPTIONS
+}
+
+SUBCOMMANDS = { 'list' =>
+  "List simulation resources                                               \n"\
+  "  ign fuel list [options]                                               \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  --owner OWNER            Owner of the resource                        \n"\
+  "  --name NAME              Name of the resource                         \n"\
+  "  --url URL                URL of a server the resource comes from      \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n" +
+  COMMON_OPTIONS,
+                'push' =>
+  "Upload simulation resources                                             \n"\
+  "  ign fuel push [options] --url URL --owner OWNER --name NAME --path PATH\n"\
+  "                                                                        \n"\
+  "Required Flags:                                                         \n"\
+  "  --owner OWNER            Owner of the resource                        \n"\
+  "  --name NAME              Name of the resource                         \n"\
+  "  --url URL             URL of a server the resource comes from         \n"\
+  "  --path PATH           PATH to resource on disk                        \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n" +
+  COMMON_OPTIONS,
+                'pull' =>
+  "Download simulation resources                                           \n"\
+  "  ign fuel pull [options] --url URL --owner OWNER --name NAME           \n"\
+  "                                                                        \n"\
+  "Required Flags:                                                         \n"\
+  "  --owner OWNER            Owner of the resource                        \n"\
+  "  --name NAME              Name of the resource                         \n"\
+  "  --url URL             URL of a server the resource comes from         \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n" +
+  COMMON_OPTIONS,
+}
 
 #
 # Class for the Ignition Fuel command line tools.
@@ -48,31 +78,6 @@ class Cmd
   # Constructor.
   #
   def initialize
-    conf_file = '/home/caguero/.ignition/fuel/.sources.yaml'
-    conf_file = ENV['IGN_FUEL_CONFIG_PATH'] if ENV.key?('IGN_FUEL_CONFIG_PATH')
-
-    ## Sanity check: The configuration file should exist.
-    unless File.exist?(conf_file)
-      puts "Unable to find configuration file in [#{conf_file}]\n"
-      exit(-1)
-    end
-
-    # Read the configuration file.
-    @yml = YAML.load_file(conf_file)
-
-    # Sanity check: Verify that the content of the file is YAML.
-    unless @yml && @yml.is_a?(Hash)
-      puts "File [#{conf_file}] does not contain a valid YAML format\n"
-      exit(-1)
-    end
-
-    # Read configuration.
-    raise "['servers:'] not found" unless @yml.key?('servers')
-    servers = @yml['servers']
-    raise 'No servers found' if servers.empty?
-
-    # puts "#{servers}"
-    raise "['install_dir:'] not found" unless @yml.key?('install_dir')
   end
 
   #
@@ -83,51 +88,60 @@ class Cmd
 
     usage = COMMANDS[args[0]]
 
-    # Read the command line arguments.
+    if !SUBCOMMANDS.key?(args[1])
+      puts usage
+      exit -1
+    else
+      usage = SUBCOMMANDS[args[1]]
+    end
+
     opt_parser = OptionParser.new do |opts|
       opts.banner = usage
 
-      opts.on('-h', '--help', 'Print this help message') do
+      opts.on('-h', '--help') do
         puts usage
-        exit(0)
+        exit
       end
-
-      opts.on('--dst FOLDER", "-d FOLDER') do |folder|
-        options['dst'] = folder
+      opts.on('--url SERVER') do |server|
+        options['url'] = server
       end
-
-      opts.on('--remote SERVER", "-r SERVER') do |server|
-        options['remote'] = server
+      opts.on('--owner OWNER') do |owner|
+        options['owner'] = owner
       end
-
-      opts.on('--install RESOURCE", "-i RESOURCE') do |resource|
-        options['install'] = resource
+      opts.on('--name NAME') do |name|
+        options['name'] = name
       end
-
-      opts.on('--search RESOURCE", "-s RESOURCE') do |resource|
-        options['search'] = resource
+      opts.on('--PATH NAME') do |path|
+        options['path'] = path
       end
+    end # opt_parser do
 
-      opts.on('--upload RESOURCE", "-u RESOURCE') do |resource|
-        options['upload'] = resource
+
+    opt_parser.parse!(args)
+
+    options['command'] = args[0]
+    options['subcommand'] = args[1]
+
+    # check required flags
+    case options['subcommand']
+    when 'list'
+      # no required flags
+    when 'pull'
+      if !options.key?('url') or
+        !options.key?('owner') or
+        !options.key?('name')
+        puts usage
+        exit -1
+      end
+    when 'push'
+      if !options.key?('url') or
+        !options.key?('owner') or
+        !options.key?('name') or
+        !options.key?('path')
+        puts usage
+        exit -1
       end
     end
-    begin
-      opt_parser.parse!(args)
-    rescue
-      puts usage
-      exit(-1)
-    end
-
-    # Check that there is at least one command and there is a plugin that knows
-    # how to handle it.
-    if ARGV.empty? || !COMMANDS.key?(ARGV[0]) ||
-       options.empty?
-      puts usage
-      exit(-1)
-    end
-
-    options['command'] = ARGV[0]
 
     options
   end # parse()
@@ -135,174 +149,16 @@ class Cmd
   def execute(args)
     options = parse(args)
 
-    # puts 'Parsed:'
-    # puts options
-
     begin
-      case options['command']
-      when 'fuel'
-        if options.key?('search')
-          @yml['servers'].each do |name, details|
-            query_string = 'q=' + options['search'] +
-                           '&mode=prefix&types=["folder"]'
-            host = details['url']
-            uri_string = host + '/api/v1/resource/search?' + query_string
-            uri = URI.parse(uri_string)
-            http = Net::HTTP.new(uri.host, uri.port)
-            request = Net::HTTP::Get.new(uri.request_uri)
-            response = http.request(request)
-            if response.code != '200'
-              puts 'Error in request'
-              exit(-1)
-            end
-            json_output = JSON.parse(response.body)
-            json_output['folder'].each do |resource|
-              id = resource['_id']
-              # Query Girder to get the path of each resource.
-              uri_string = host + '/api/v1/resource/' + id +
-                           '/path?type=folder'
-              uri = URI(uri_string)
-              http = Net::HTTP.new(uri.host, uri.port)
-              request = Net::HTTP::Get.new(uri.request_uri)
-              response = http.request(request)
-              if response.code != '200'
-                puts 'Error in request'
-                exit(-1)
-              end
-              # Remove the quotes around the returned paths.
-              puts host + response.body.delete('"')
-            end
-          end
-        elsif options.key?('install')
-          @yml['servers'].each do |name, details|
-            query_string = 'q=' + options['install'] +
-                           '&mode=prefix&types=["folder"]'
-            host = details['url']
-            uri_string = host + '/api/v1/resource/search?' + query_string
-            uri = URI.parse(uri_string)
-            http = Net::HTTP.new(uri.host, uri.port)
-            request = Net::HTTP::Get.new(uri.request_uri)
-            response = http.request(request)
-            if response.code != '200'
-              puts 'Error in request'
-              exit(-1)
-            end
-            json_output = JSON.parse(response.body)
-            json_output['folder'].each do |resource|
-              id = resource['_id']
-              # Query Girder to get the path of each resource.
-              uri_string = host + '/api/v1/resource/' + id +
-                           '/path?type=folder'
-              uri = URI(uri_string)
-              http = Net::HTTP.new(uri.host, uri.port)
-              request = Net::HTTP::Get.new(uri.request_uri)
-              response = http.request(request)
-              if response.code != '200'
-                puts 'Error in request'
-                exit(-1)
-              end
-              # Remove the quotes around the returned paths.
-              remote_path = response.body.delete('"')
-
-              subfolder = ''
-              details['types'].each do |type, path|
-                if remote_path.include? path
-                  subfolder = type
-                  break
-                end
-              end
-              break if subfolder.empty?
-
-              ## Query Girder to download each resource.
-              uri_string = host + '/api/v1/folder/' + id +
-                           '/download'
-              uri = URI(uri_string)
-              http = Net::HTTP.new(uri.host, uri.port)
-              request = Net::HTTP::Get.new(uri.request_uri)
-              response = http.request(request)
-              if response.code != '200'
-                puts 'Error in request'
-                exit(-1)
-              end
-              dst = @yml['install_dir']
-              temp_file = Tempfile.new(options['install'])
-              temp_file.write(response.body)
-              temp_file.close
-              dst_dir = dst + '/' + name + '/' + subfolder
-              `mkdir -p #{dst_dir}`
-              `unzip -o #{temp_file.path} -d #{dst_dir}`
-              temp_file.unlink
-            end
-          end
-        elsif options.key?('upload')
-          if !options.key?('dst') || !options.key?('remote')
-            puts COMMANDS[args[0]]
-            exit (-1)
-          end
-
-          # Sanity check: Verify that the directory exists.
-          dir = options['upload']
-          if !File.directory?(dir)
-            puts "The resource #{dir} is not a valid directory"
-            exit(-1)
-          end
-
-          # Sanity check: Verify that the destination server exists.
-          remote_server = options['remote']
-          if !@yml['servers'].key?(remote_server)
-            puts "Unknown remote server [#{remote_server}]"
-            exit(-1)
-          end
-
-          # Sanity check: Verify that the configuration has an api key for this
-          # server.
-          remote_server = @yml['servers'][remote_server]
-          host = remote_server['url']
-          if !remote_server.key?('api_key')
-            puts "No api_key in configuration file for [#{remote_server}]"
-            exit(-1)
-          end
-          api_key = remote_server['api_key']
-
-          # Sanity check: Verify that the destination folder exists.
-          uri_string = host + '/api/v1/resource/lookup?path=' + options['dst'] +
-                       '&test=false'
-          puts uri_string
-          uri = URI(uri_string)
-          http = Net::HTTP.new(uri.host, uri.port)
-          request = Net::HTTP::Get.new(uri.request_uri)
-          response = http.request(request)
-          if response.code != '200'
-            puts 'Destination directory does not exist'
-            exit(-1)
-          end
-
-          json_output = JSON.parse(response.body)
-          id = json_output['_id']
-          command = "girder-cli --api-url #{host}/api/v1 --api-key #{api_key} "\
-                    "upload #{id} #{dir}"
-
-          puts command
-          stdout_str, stderr_str, status = Open3.capture3(command)
-
-          unless status.exitstatus == 0
-            puts "[#{options[:asset]}] Nonexisten asset"
-            exit -1
-          end
-
-          puts stdout_str
-
-        else
-          puts 'Command error: I do not have an implementation '\
-               'for this command.'
-        end
+      case options['subcommand']
+      when 'list'
+        puts "List!"
       else
-        puts 'Command error: I do not have an implementation for '\
-             "command [ign #{options['command']}]."
+        puts "Something else!"
       end
     rescue
       puts "Library error: Problem running [#{options['command']}]() "\
            "from @IGN_LIBRARY_NAME@."
-    end
-  end
-end
+    end # begin
+  end # execute
+end # class
