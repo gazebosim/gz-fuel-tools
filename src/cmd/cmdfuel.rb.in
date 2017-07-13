@@ -49,7 +49,7 @@ SUBCOMMANDS = { 'list' =>
   COMMON_OPTIONS,
                 'locate' =>
   "Locate where a resource is on disk, fetching if necessary               \n"\
-  "  ign fuel list [options]                                               \n"\
+  "  ign fuel locate [options]                                             \n"\
   "                                                                        \n"\
   "Required Flags:                                                         \n"\
   "  --name NAME              Name of the resource                         \n"\
