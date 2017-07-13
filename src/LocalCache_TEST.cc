@@ -21,6 +21,16 @@
 #include <set>
 #include <ignition/common/Filesystem.hh>
 #include "ignition/fuel-tools/LocalCache.hh"
+#include "ignition/fuel-tools/test_config.h"
+
+
+#ifdef _WIN32
+#include <direct.h>
+#define ChangeDirectory _chdir
+#else
+#include "unistd.h"
+#define ChangeDirectory chdir
+#endif
 
 
 namespace ignft = ignition::fuel_tools;
@@ -187,6 +197,7 @@ TEST(LocalCache, MatchingModel)
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
+  ChangeDirectory(PROJECT_BINARY_PATH);
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
