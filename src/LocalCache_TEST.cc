@@ -21,7 +21,7 @@
 #include <set>
 #include <ignition/common/Filesystem.hh>
 #include "ignition/fuel-tools/LocalCache.hh"
-#include "ignition/fuel-tools/test_config.h"
+#include "test_config.h"
 
 
 #ifdef _WIN32

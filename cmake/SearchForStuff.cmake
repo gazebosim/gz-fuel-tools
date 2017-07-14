@@ -37,6 +37,14 @@ if (NOT JsonCpp_FOUND)
   BUILD_ERROR ("Missing: libjsoncpp-dev. Required for parsing json data.")
 endif()
 
+########################################
+# Find libzip
+pkg_check_modules(libzip libzip)
+
+if (NOT libzip_FOUND)
+  BUILD_ERROR ("Missing: libzip-dev. Required for parsing compressing files.")
+endif()
+
 ################################################################################
 # Ignition common
 find_package(ignition-common0 QUIET)
