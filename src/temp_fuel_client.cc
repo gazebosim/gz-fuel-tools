@@ -18,7 +18,6 @@
 
 #include <ignition/fuel-tools/FuelClient.hh>
 
-
 int main()
 {
   ignition::fuel_tools::ClientConfig conf;
@@ -26,5 +25,6 @@ int main()
 
   ignition::fuel_tools::FuelClient client(conf);
   auto iter = client.Models();
+
   return 0;
 }

@@ -37,6 +37,26 @@ if (NOT JsonCpp_FOUND)
   BUILD_ERROR ("Missing: libjsoncpp-dev. Required for parsing json data.")
 endif()
 
+########################################
+# Find libzip
+pkg_check_modules(libzip libzip)
+
+if (NOT libzip_FOUND)
+  BUILD_ERROR ("Missing: libzip-dev. Required for parsing compressing files.")
+endif()
+
+################################################################################
+# Ignition common
+find_package(ignition-common0 QUIET)
+if (NOT ignition-common0_FOUND)
+  BUILD_ERROR ("Missing: Ignition Common (libignition-common0-dev)")
+else()
+  message (STATUS "Found Ignition Common")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-COMMON_CXX_FLAGS}")
+  include_directories(${IGNITION-COMMON_INCLUDE_DIRS})
+  link_directories(${IGNITION-COMMON_LIBRARY_DIRS})
+endif()
+
 #################################################
 # Macro to check for visibility capability in compiler
 # Original idea from: https://gitorious.org/ferric-cmake-stuff/
