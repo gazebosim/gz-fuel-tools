@@ -21,7 +21,7 @@
 #include <set>
 #include <ignition/common/Filesystem.hh>
 #include "ignition/fuel-tools/LocalCache.hh"
-#include "ignition/fuel-tools/test_config.h"
+#include "test_config.h"
 
 
 #ifdef _WIN32
@@ -109,6 +109,7 @@ void createLocal3(ClientConfig &_conf)
 /// \brief Iterate through all models in cache
 TEST(LocalCache, AllModels)
 {
+  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   ClientConfig conf;
   conf.CacheLocation(common::cwd());
   createLocal6(conf);
@@ -131,6 +132,7 @@ TEST(LocalCache, AllModels)
 /// \brief Get a specific model from cache
 TEST(LocalCache, MatchingModels)
 {
+  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   ClientConfig conf;
   conf.CacheLocation(common::cwd());
   createLocal6(conf);
@@ -157,6 +159,7 @@ TEST(LocalCache, MatchingModels)
 /// \brief Get a specific model from cache
 TEST(LocalCache, MatchingModel)
 {
+  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   ClientConfig conf;
   conf.CacheLocation(common::cwd());
   createLocal6(conf);
@@ -197,7 +200,6 @@ TEST(LocalCache, MatchingModel)
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
-  ChangeDirectory(PROJECT_BINARY_PATH);
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

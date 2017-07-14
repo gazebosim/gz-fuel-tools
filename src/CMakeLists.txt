@@ -10,6 +10,7 @@ set (sources
   ModelIter.cc
   REST.cc
   Result.cc
+  Zip.cc
 )
 
 set (gtest_sources
@@ -21,6 +22,7 @@ set (gtest_sources
   ModelIdentifier_TEST.cc
   ModelIter_TEST.cc
   Result_TEST.cc
+  Zip_TEST.cc
 )
 
 include_directories(
@@ -44,6 +46,7 @@ target_link_libraries(${libname}
   ${CURL_LIBRARIES}
   ${IGNITION-COMMON_LIBRARIES}
   ${jsoncpp_LIBRARIES}
+  ${libzip_LIBRARIES}
 )
 
 if(WIN32)
