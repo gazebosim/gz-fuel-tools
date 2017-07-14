@@ -17,8 +17,6 @@
 
 #include <curl/curl.h>
 #include <iostream>
-#include <string>
-#include <vector>
 
 #include "ignition/fuel-tools/REST.hh"
 
@@ -66,10 +64,12 @@ size_t WriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
 }
 
 /////////////////////////////////////////////////
-RESTResponse REST::Request(const std::string &_httpMethod,
+RESTResponse REST::Request(Protocol _protocol,
     const std::string &_url, const std::string &_path,
     const std::vector<std::string> &_queryStrings,
-    const std::vector<std::string> &_headers, const std::string &_data) const
+    const std::vector<std::string> &_headers,
+    const std::string &_data,
+    const std::map<std::string, std::string> &_form) const
 {
   RESTResponse res;
 
@@ -111,21 +111,33 @@ RESTResponse REST::Request(const std::string &_httpMethod,
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
 
+  struct curl_httppost *formpost = nullptr;
   // Send the request.
-  if (_httpMethod == "GET")
+  if (_protocol == REST::GET)
   {
     // no need to do anything
   }
-  else if (_httpMethod == "POST")
+  else if (_protocol == REST::POST)
   {
-    // enable POST
     curl_easy_setopt(curl, CURLOPT_POST, 1);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, _data.c_str());
   }
-  else if (_httpMethod == "DELETE")
+  else if (_protocol == REST::POST_FORM)
+  {
+    struct curl_httppost *lastptr = nullptr;
+    for (auto it : _form)
+    {
+      curl_formadd(&formpost,
+                   &lastptr,
+                   CURLFORM_COPYNAME, it.first.c_str(),
+                   CURLFORM_COPYCONTENTS, it.second.c_str(),
+                   CURLFORM_END);
+    }
+    curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
+  }
+  else if (_protocol == REST::DELETE)
   {
     curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, _data.c_str());
   }
   else
   {
@@ -146,6 +158,9 @@ RESTResponse REST::Request(const std::string &_httpMethod,
 
   // Update the data.
   res.data = responseData;
+
+  if (formpost)
+    curl_formfree(formpost);
 
   // free the headers
   curl_slist_free_all(headers);

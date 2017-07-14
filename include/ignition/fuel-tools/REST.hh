@@ -17,6 +17,7 @@
 #ifndef IGNITION_FUEL_TOOLS_REST_HH_
 #define IGNITION_FUEL_TOOLS_REST_HH_
 
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -40,6 +41,16 @@ namespace ignition
     /// \brief A helper class for making REST requests.
     class IGNITION_FUEL_TOOLS_VISIBLE REST
     {
+      public: enum Protocol
+      {
+        GET,
+        POST,
+        DELETE,
+        PUT,
+        PATCH,
+        POST_FORM
+      };
+
       /// \brief Trigger a REST request.
       /// \param[in] _httpMethod The HTTP method. Use all uppercase letters.
       ///            E.g.: "GET"
@@ -52,11 +63,15 @@ namespace ignition
       /// \param[in] _headers All the headers to be included in the HTTP request
       ///            E.g.: {"Accept: application/json"}
       /// \param[in] _data Data to be included in the HTTP request.
-      public: virtual RESTResponse Request(const std::string &_httpMethod,
+      /// \param[in] _form multi-part / form data to be used with
+      ///            Protocol::POST_FORM
+      public: virtual RESTResponse Request(Protocol _protocol,
           const std::string &_url, const std::string &_path,
           const std::vector<std::string> &_queryStrings,
           const std::vector<std::string> &_headers,
-          const std::string &_data) const;
+          const std::string &_data,
+          const std::map<std::string, std::string> &_form =
+          std::map<std::string, std::string>()) const;
     };
   }
 }

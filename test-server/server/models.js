@@ -2,6 +2,8 @@
 
 const express = require('express')
 const router = express.Router();
+const multer = require('multer')
+let upload = multer()
 
 let models = []
 
@@ -41,9 +43,15 @@ exports.setRoutes = function (app) {
   })
 
 
-  router.post('/models', (req, res) => {
+  router.post('/models', upload.single('data'), (req, res) => {
+    // meta data
     const m = req.body
-    models.push(m)
+     models.push(m)
+
+    // file will be in req.file
+    if (req.file)
+      console.log('upload success!')
+
     res.jsonp(m)
   })
 

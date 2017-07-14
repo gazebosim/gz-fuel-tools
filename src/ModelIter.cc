@@ -144,7 +144,6 @@ IterRESTIds::~IterRESTIds()
 //////////////////////////////////////////////////
 IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
     const std::string &_api)
-  : rest(_rest), config(_config)
 {
   // TODO fetch from all servers and combine result, not just one server
   auto servers = this->config->Servers();
@@ -154,13 +153,13 @@ IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
     return;
   }
 
-  std::string protocol = "GET";
+  REST::Protocol protocol = REST::GET;
   this->serverURL = servers.front().URL();
   std::string path = _api;
   std::vector<std::string> headers =  {"Accept: application/json"};
 
   RESTResponse resp = this->rest->Request(
-      "GET", this->serverURL, path, {}, headers, "");
+      protocol, this->serverURL, path, {}, headers, "");
 
   if (resp.statusCode != 200)
   {

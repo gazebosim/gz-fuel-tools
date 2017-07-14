@@ -106,9 +106,10 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
       }
     }
   }
-  catch (const Json::LogicError &error)
+//  catch (const Json::LogicError &error)
+  catch (...)
   {
-    ignerr << "Bad response from server: [" << error.what() << "]\n";
+//    ignerr << "Bad response from server: [" << error.what() << "]\n";
   }
 
   return ids;
