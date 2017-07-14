@@ -171,6 +171,12 @@ IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
   this->ids = JSONParser::ParseModels(resp.data);
   this->idIter = this->ids.begin();
 
+  // make first model
+  std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
+  ptr->id = *(this->idIter);
+  ptr->id.SourceURL(this->serverURL);
+  this->model = Model(ptr);
+
   igndbg << "Got response [" << resp.data << "]\n";
 }
 
