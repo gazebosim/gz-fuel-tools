@@ -27,8 +27,48 @@ namespace ignition
 {
   namespace fuel_tools
   {
+    /// \brief forward declaration
+    class ServerConfigPrivate;
+
     /// \brief Forward Declaration
     class ClientConfigPrivate;
+
+    /// \brief Describes options needed for a server
+    class IGNITION_FUEL_TOOLS_VISIBLE ServerConfig
+    {
+      /// \brief constructor
+      public: ServerConfig();
+
+      /// \brief copy constructor
+      public: ServerConfig(const ServerConfig &_orig);
+
+      /// \brief Assignment operator overload
+      public: void operator=(const ServerConfig &_orig);
+
+      /// \brief destructor
+      public: ~ServerConfig();
+
+      /// \brief get the URL to access the server
+      public: std::string URL() const;
+
+      /// \brief set the URL of this server
+      public: void URL(const std::string &_url);
+
+      /// \brief get folder name for server on disk
+      public: std::string LocalName() const;
+
+      /// \brief set folder name for server on disk
+      public: void LocalName(const std::string &_name);
+
+      /// \brief Get the API key to auth with the server
+      public: std::string APIKey() const;
+
+      /// \brief Set the API key to auth with the server
+      public: void APIKey(const std::string &_key);
+
+      /// \brief PIMPL
+      private: std::unique_ptr<ServerConfigPrivate> dataPtr;
+    };
 
     /// \brief High level interface to ignition fuel
     ///
@@ -46,13 +86,20 @@ namespace ignition
       /// \brief destructor
       public: ~ClientConfig();
 
-      /// \brief List URI of servers the client will connect to
-      /// \return The list of server URIs.
-      public: std::vector<std::string> Servers() const;
+      /// \brief List of servers the client will connect to
+      /// \return The list of servers
+      public: std::vector<ServerConfig> Servers() const;
 
       /// \brief Add a server to the list
-      /// \param[in] The base URL of the server
-      public: void AddServer(const std::string &_url);
+      /// \param[in] _srv The server config
+      public: void AddServer(const ServerConfig &_srv);
+
+      /// \brief Where are models and stuff stored locally?
+      public: std::string CacheLocation() const;
+
+      /// \brief Set where models and stuff are saved
+      /// \param[in] _path path on disk where models are saved
+      public: void CacheLocation(const std::string &_path);
 
       /// \brief PIMPL
       private: std::unique_ptr<ClientConfigPrivate> dataPtr;

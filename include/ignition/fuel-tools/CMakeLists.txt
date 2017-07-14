@@ -3,6 +3,7 @@ include (${project_cmake_dir}/Utils.cmake)
 set (headers
   ClientConfig.hh
   FuelClient.hh
+  LocalCache.hh
   ModelIter.hh
   ModelIdentifier.hh
   Model.hh

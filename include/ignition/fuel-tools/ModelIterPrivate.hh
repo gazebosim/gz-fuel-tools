@@ -30,41 +30,81 @@ namespace ignition
     /// \brief forward declaration
     class ModelIter;
 
-    /// \brief forward declaration
-    class ModelIterFactory;
-
     /// \brief Private class, do not include or instantiate
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIterFactory
     {
       /// \brief Create a model iterator from a vector of model identifiers
       /// \param[in] _ids Model identifiers
       public: static ModelIter Create(std::vector<ModelIdentifier> _ids);
+
+      /// \brief Create a model iterator from a vector of models
+      /// \param[in] _ids Models
+      public: static ModelIter Create(std::vector<Model> _models);
+
+      /// \brief Create a model iterator that is empty
+      public: static ModelIter Create();
     };
 
     /// \brief Private class, do not include or instantiate
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIterPrivate
     {
-      friend ModelIter;
+      /// \brief destructor
+      public: virtual ~ModelIterPrivate();
 
-      friend ModelIterFactory;
+      /// \brief Advance iterator to next model
+      public: virtual void Next() = 0;
 
-      // TODO Page? What's being requested?
-
-      /// \brief creates an iterator where all ids are known now
-      /// \param[in] _ids The ids this iterator should move through
-      private: ModelIterPrivate(std::vector<ModelIdentifier> _ids);
-
-      /// \brief default constructor
-      private: ModelIterPrivate();
-
-      /// \brief Model identifiers that have been requested
-      private: std::vector<ModelIdentifier> ids;
-
-      /// \brief where the current iterator is in the list of ids
-      private: std::vector<ModelIdentifier>::iterator idIter;
+      /// \brief true if this iterator has reach the end
+      public: virtual bool HasReachedEnd() = 0;
 
       /// \brief current model for returning references
-      private: Model model;
+      public: Model model;
+    };
+
+    /// \brief class for iterating through model ids where all are known
+    ///        in advance
+    class IGNITION_FUEL_TOOLS_VISIBLE IterIds : public ModelIterPrivate
+    {
+      /// \brief constructor
+      public: IterIds(std::vector<ModelIdentifier> _ids);
+
+      /// \brief destructor
+      public: virtual ~IterIds();
+
+      /// \brief Advance iterator to next model
+      public: virtual void Next() override;
+
+      /// \brief true if this iterator has reach the end
+      public: virtual bool HasReachedEnd() override;
+
+      /// \brief Model identifiers that have been requested
+      protected: std::vector<ModelIdentifier> ids;
+
+      /// \brief where the current iterator is in the list of ids
+      protected: std::vector<ModelIdentifier>::iterator idIter;
+    };
+
+    /// \brief class for iterating through model ids where all are known
+    ///        in advance
+    class IGNITION_FUEL_TOOLS_VISIBLE IterModels: public ModelIterPrivate
+    {
+      /// \brief constructor
+      public: IterModels(std::vector<Model> _models);
+
+      /// \brief destructor
+      public: virtual ~IterModels();
+
+      /// \brief Advance iterator to next model
+      public: virtual void Next() override;
+
+      /// \brief true if this iterator has reach the end
+      public: virtual bool HasReachedEnd() override;
+
+      /// \brief Models to iterator through
+      protected: std::vector<Model> models;
+
+      /// \brief where the current iterator is in the list of models
+      protected: std::vector<Model>::iterator modelIter;
     };
   }
 }

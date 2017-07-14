@@ -15,16 +15,45 @@
  *
 */
 
-
+#include <ignition/common/Console.hh>
 #include <ignition/fuel-tools/FuelClient.hh>
+#include <ignition/fuel-tools/LocalCache.hh>
 
 int main()
 {
+  ignition::common::Console::SetVerbosity(4);
+
   ignition::fuel_tools::ClientConfig conf;
-  conf.AddServer("http://localhost:8001/");
+  ignition::fuel_tools::ServerConfig srv;
+  srv.URL("http://localhost:8001/");
+  srv.LocalName("local");
+  conf.AddServer(srv);
+
+  conf.CacheLocation("/build/ign-fuel-tools");
 
   ignition::fuel_tools::FuelClient client(conf);
   auto iter = client.Models();
 
+  // TODO LocalCache should be used inside FuelClient
+  ignition::fuel_tools::LocalCache cache(&conf);
+
+  auto localIter = cache.AllModels();
+  while (localIter)
+  {
+    ignmsg << "Model: " << localIter->Identification().Name() << "\n";
+    ++localIter;
+  }
+
+  ignition::fuel_tools::ModelIdentifier someId;
+  someId.SourceURL("http://localhost:8001/");
+  someId.Owner("alice");
+  someId.Name("am2");
+  auto model = cache.MatchingModel(someId);
+  if (model)
+  {
+    ignmsg << "Found model: " << model.Identification().UniqueName() << "\n";
+  }
+
+  ignmsg << "exiting\n";
   return 0;
 }

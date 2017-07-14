@@ -23,7 +23,7 @@ using namespace ignition;
 using namespace ignft;
 
 //////////////////////////////////////////////////
-Model::Model() : dataPtr(new ModelPrivate)
+Model::Model() : dataPtr(nullptr)
 {
 }
 
@@ -34,29 +34,44 @@ Model::Model(std::shared_ptr<ModelPrivate> _dptr)
 }
 
 //////////////////////////////////////////////////
+Model::operator bool()
+{
+  return this->dataPtr.get() != nullptr;
+}
+
+//////////////////////////////////////////////////
 ModelIdentifier Model::Identification()
 {
-  return this->dataPtr->id;
+  if (this->dataPtr)
+    return this->dataPtr->id;
+  return ModelIdentifier();
 }
 
 //////////////////////////////////////////////////
 Result Model::Fetch()
 {
-  if (this->PathToModel().empty())
+  if (this->dataPtr)
   {
-    // TODO look for models on servers
-    return Result(Result::FETCH_ERROR);
+    if (this->PathToModel().empty())
+    {
+      // TODO look for models on servers
+      return Result(Result::FETCH_ERROR);
+    }
+    return Result(Result::FETCH_ALREADY_EXISTS);
   }
-  return Result(Result::FETCH_ALREADY_EXISTS);
+  return Result(Result::UNKNOWN);
 }
 
 //////////////////////////////////////////////////
 std::string Model::PathToModel()
 {
-  if (this->dataPtr->pathOnDisk.empty())
+  if (this->dataPtr)
   {
-    // TODO check if model is in cache, store path
+    if (this->dataPtr->pathOnDisk.empty())
+    {
+      // TODO check if model is in cache, store path
+    }
+    return this->dataPtr->pathOnDisk;
   }
-  return this->dataPtr->pathOnDisk;
+  return "";
 }
-

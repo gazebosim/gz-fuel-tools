@@ -36,11 +36,12 @@ TEST(ClientConfig, InitiallyNoServers)
 TEST(ClientConfig, ServersCanBeAdded)
 {
   ClientConfig config;
-  const std::string srvURL("asdf");
-  config.AddServer(srvURL);
+  ServerConfig srv;
+  srv.URL("asdf");
+  config.AddServer(srv);
 
   ASSERT_EQ(1u, config.Servers().size());
-  EXPECT_EQ(srvURL, config.Servers().front());
+  EXPECT_EQ(std::string("asdf"), config.Servers().front().URL());
 }
 
 //////////////////////////////////////////////////

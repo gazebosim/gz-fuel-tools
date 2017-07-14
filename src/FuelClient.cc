@@ -17,7 +17,7 @@
 
 #include <iostream>
 
-
+#include <ignition/common/Console.hh>
 #include <ignition/fuel-tools/FuelClient.hh>
 #include <ignition/fuel-tools/JSONParser.hh>
 #include <ignition/fuel-tools/REST.hh>
@@ -37,15 +37,24 @@ class ignft::FuelClientPrivate
 
   /// \brief RESTful client
   public: REST rest;
+
+  /// \brief Local Cache
+  public: std::shared_ptr<LocalCache> cache;
 };
 
 
 //////////////////////////////////////////////////
-FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest)
+FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
+    LocalCache *_cache)
   : dataPtr(new FuelClientPrivate)
 {
   this->dataPtr->config = _config;
   this->dataPtr->rest = _rest;
+
+  if (nullptr == _cache)
+    this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
+  else
+    this->dataPtr->cache.reset(_cache);
 }
 
 //////////////////////////////////////////////////
@@ -60,11 +69,11 @@ ModelIter FuelClient::Models()
   auto servers = this->dataPtr->config.Servers();
   if (servers.empty())
   {
-    return ModelIterFactory::Create({});
+    return ModelIterFactory::Create();
   }
 
   std::string protocol = "GET";
-  auto serverURL = servers.front();
+  auto serverURL = servers.front().URL();
   std::string path = "/1.0/models";
   std::vector<std::string> headers =  {"Accept: application/json"};
 
@@ -73,11 +82,12 @@ ModelIter FuelClient::Models()
 
   if (resp.statusCode != 200)
   {
-    // TODO throw Result complaining of bad response from server?
-    return ModelIterFactory::Create({});
+    // Return just the cached models instead
+    ignwarn << "Failed to fetch models from server, returning cached models\n";
+    return this->dataPtr->cache->AllModels();
   }
 
-  std::cerr << "Got response [" << resp.data << "]\n";
+  igndbg << "Got response [" << resp.data << "]\n";
 
   return JSONParser::ParseModels(resp.data);
 }
@@ -85,7 +95,14 @@ ModelIter FuelClient::Models()
 //////////////////////////////////////////////////
 ModelIter FuelClient::Models(const ModelIdentifier &_id)
 {
-  // Todo Return ModelIter set to fetch models matching ModelIdentifier
+  // Check local cache first
+  ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
+  if (localIter)
+    return localIter;
+
+  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+  // Todo try to fetch model directly from a server
+  return ModelIterFactory::Create();
 }
 
 //////////////////////////////////////////////////

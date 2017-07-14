@@ -28,8 +28,7 @@ using namespace ignft;
 TEST(ModelIdentifier, SetFields)
 {
   ModelIdentifier id;
-  id.Name("Hello");
-  id.UniqueName("World");
+  id.Name("hello");
   id.Category("test");
   id.Uuid("lllooo000ooolll");
   id.FileSize(2048u);
@@ -40,8 +39,7 @@ TEST(ModelIdentifier, SetFields)
   std::time(&d2);
   id.UploadDate(d2);
 
-  EXPECT_EQ(std::string("Hello"), id.Name());
-  EXPECT_EQ(std::string("World"), id.UniqueName());
+  EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id.Uuid());
   EXPECT_EQ(2048u, id.FileSize());
@@ -50,12 +48,28 @@ TEST(ModelIdentifier, SetFields)
 }
 
 /////////////////////////////////////////////////
+/// \brief Unique Name
+TEST(ModelIdentifier, UniqueName)
+{
+  ModelIdentifier id;
+  id.Name("hello");
+  id.Owner("alice");
+  id.SourceURL("https://localhost:8001/");
+  EXPECT_EQ("https://localhost:8001/alice/hello", id.UniqueName());
+
+  id.SourceURL("https://localhost:8001");
+  EXPECT_EQ("https://localhost:8001/alice/hello", id.UniqueName());
+
+  id.SourceURL("https://localhost:8001//////////////////////////");
+  EXPECT_EQ("https://localhost:8001/alice/hello", id.UniqueName());
+}
+
+/////////////////////////////////////////////////
 /// \brief Copy constructor deep copies
 TEST(ModelIdentifier, CopyConstructorDeepCopy)
 {
   ModelIdentifier id;
-  id.Name("Hello");
-  id.UniqueName("World");
+  id.Name("hello");
   id.Category("test");
   id.Uuid("lllooo000ooolll");
   id.FileSize(2048u);
@@ -67,20 +81,16 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
   id.UploadDate(d2);
 
   ModelIdentifier id2(id);
-  EXPECT_EQ(std::string("Hello"), id2.Name());
-  EXPECT_EQ(std::string("World"), id2.UniqueName());
+  EXPECT_EQ(std::string("hello"), id2.Name());
   EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
   EXPECT_EQ(d2, id2.UploadDate());
 
-  id2.Name("Hello2");
-  id2.UniqueName("World2");
-  EXPECT_EQ(std::string("Hello"), id.Name());
-  EXPECT_EQ(std::string("World"), id.UniqueName());
-  EXPECT_EQ(std::string("Hello2"), id2.Name());
-  EXPECT_EQ(std::string("World2"), id2.UniqueName());
+  id2.Name("hello2");
+  EXPECT_EQ(std::string("hello"), id.Name());
+  EXPECT_EQ(std::string("hello2"), id2.Name());
 }
 
 /////////////////////////////////////////////////
@@ -88,8 +98,7 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
 TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
 {
   ModelIdentifier id;
-  id.Name("Hello");
-  id.UniqueName("World");
+  id.Name("hello");
   id.Category("test");
   id.Uuid("lllooo000ooolll");
   id.FileSize(2048u);
@@ -102,8 +111,7 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
 
   ModelIdentifier id2(id);
   id2 = id;
-  EXPECT_EQ(std::string("Hello"), id2.Name());
-  EXPECT_EQ(std::string("World"), id2.UniqueName());
+  EXPECT_EQ(std::string("hello"), id2.Name());
   EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
@@ -111,12 +119,9 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
   EXPECT_EQ(d2, id2.UploadDate());
 
 
-  id2.Name("Hello2");
-  id2.UniqueName("World2");
-  EXPECT_EQ(std::string("Hello"), id.Name());
-  EXPECT_EQ(std::string("World"), id.UniqueName());
-  EXPECT_EQ(std::string("Hello2"), id2.Name());
-  EXPECT_EQ(std::string("World2"), id2.UniqueName());
+  id2.Name("hello2");
+  EXPECT_EQ(std::string("hello"), id.Name());
+  EXPECT_EQ(std::string("hello2"), id2.Name());
 }
 
 //////////////////////////////////////////////////
