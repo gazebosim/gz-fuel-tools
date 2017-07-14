@@ -26,7 +26,7 @@ set (gtest_sources
 include_directories(
   ${CMAKE_BINARY_DIR}/
   ${CMAKE_BINARY_DIR}/test/
-  ${JsonCpp_INCLUDE_DIRS}
+  ${jsoncpp_INCLUDE_DIRS}
 )
 
 
@@ -43,7 +43,7 @@ endif()
 target_link_libraries(${libname}
   ${CURL_LIBRARIES}
   ${IGNITION-COMMON_LIBRARIES}
-  ${JsonCpp_LIBRARIES}
+  ${jsoncpp_LIBRARIES}
 )
 
 if(WIN32)

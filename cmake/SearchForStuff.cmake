@@ -31,7 +31,7 @@ endif()
 ########################################
 # Find jsoncpp
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(JsonCpp jsoncpp)
+pkg_check_modules(jsoncpp jsoncpp)
 
 if (NOT JsonCpp_FOUND)
   BUILD_ERROR ("Missing: libjsoncpp-dev. Required for parsing json data.")
