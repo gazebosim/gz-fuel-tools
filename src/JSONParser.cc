@@ -21,7 +21,7 @@
 
 #include <json/json.h>
 
-
+#include <ignition/common/Console.hh>
 #include "ignition/fuel-tools/ModelIterPrivate.hh"
 #include "ignition/fuel-tools/JSONParser.hh"
 
@@ -59,23 +59,30 @@ std::time_t ParseDateTime(const std::string &_datetime)
 /////////////////////////////////////////////////
 ModelIter JSONParser::ParseModels(const std::string &_json)
 {
+  std::vector<ModelIdentifier> ids;
   Json::Reader reader;
   Json::Value value;
   reader.parse(_json, value);
 
-  std::vector<ModelIdentifier> ids;
-  for (auto it = value.begin(); it != value.end(); ++it)
+  try
   {
-    Json::Value model = *it;
-    ModelIdentifier id;
-    id.Name(model["name"].asString());
-    id.Description(model["description"].asString());
-    id.FileSize(model["filesize"].asUInt());
-    id.Uuid(model["uuid"].asString());
-    id.Category(model["category"].asString());
-    id.ModifyDate(ParseDateTime(model["modify_date"].asString()));
-    id.UploadDate(ParseDateTime(model["upload_date"].asString()));
-    ids.push_back(id);
+    for (auto it = value.begin(); it != value.end(); ++it)
+    {
+      Json::Value model = *it;
+      ModelIdentifier id;
+      id.Name(model["name"].asString());
+      id.Description(model["description"].asString());
+      id.FileSize(model["filesize"].asUInt());
+      id.Uuid(model["uuid"].asString());
+      id.Category(model["category"].asString());
+      id.ModifyDate(ParseDateTime(model["modify_date"].asString()));
+      id.UploadDate(ParseDateTime(model["upload_date"].asString()));
+      ids.push_back(id);
+    }
+  }
+  catch (const Json::LogicError &error)
+  {
+    ignerr << "Bad response from server: [" << error.what() << "]\n";
   }
 
   return ModelIterFactory::Create(ids);
