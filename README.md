@@ -16,7 +16,7 @@ cd build
 cmake ../
 make
 make test
-sudo make install
+make install
 ```
 
 ## Examples
