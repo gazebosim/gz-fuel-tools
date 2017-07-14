@@ -65,31 +65,16 @@ FuelClient::~FuelClient()
 //////////////////////////////////////////////////
 ModelIter FuelClient::Models()
 {
-  // TODO fetch from all servers and combine result, not just one server
-  auto servers = this->dataPtr->config.Servers();
-  if (servers.empty())
+  ModelIter iter = ModelIterFactory::Create(this->dataPtr->rest,
+      this->dataPtr->config, "/1.0/models");
+
+  if (!iter)
   {
-    return ModelIterFactory::Create();
-  }
-
-  std::string protocol = "GET";
-  auto serverURL = servers.front().URL();
-  std::string path = "/1.0/models";
-  std::vector<std::string> headers =  {"Accept: application/json"};
-
-  RESTResponse resp = this->dataPtr->rest.Request(
-      "GET", serverURL, path, {}, headers, "");
-
-  if (resp.statusCode != 200)
-  {
-    // Return just the cached models instead
+    // Return just the cached models
     ignwarn << "Failed to fetch models from server, returning cached models\n";
     return this->dataPtr->cache->AllModels();
   }
-
-  igndbg << "Got response [" << resp.data << "]\n";
-
-  return JSONParser::ParseModels(resp.data);
+  return iter;
 }
 
 //////////////////////////////////////////////////

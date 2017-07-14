@@ -31,8 +31,8 @@ ignition::fuel_tools::ClientConfig IGNITION_FUEL_TOOLS_HIDDEN getConfig()
   // TODO READ config file, don't hardcode this
   ignition::fuel_tools::ClientConfig conf;
   ignition::fuel_tools::ServerConfig srv;
-  srv.URL("http://localhost:8001/");
-  srv.LocalName("local");
+  srv.URL("https://staging-api.ignitionfuel.org/");
+  srv.LocalName("staging_ignitionfuel");
   conf.AddServer(srv);
 
   if(const char *cacheLoc = std::getenv("IGN_FUEL_CACHE"))

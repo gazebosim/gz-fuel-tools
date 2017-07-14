@@ -47,12 +47,16 @@ namespace ignition
     class IterIds;
 
     /// \brief Forward declaration
+    class IterRESTIds;
+
+    /// \brief Forward declaration
     class ModelIterTest;
 
     /// \brief Defines how to identify a model
     class IGNITION_FUEL_TOOLS_VISIBLE Model
     {
       friend IterIds;
+      friend IterRESTIds;
       friend ModelIter;
       friend ModelIterPrivate;
       friend ModelIterTest;

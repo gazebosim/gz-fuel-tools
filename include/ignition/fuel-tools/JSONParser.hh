@@ -29,8 +29,9 @@ namespace ignition
     {
       /// \brief Parse a model array JSON string and return a model iterator
       /// \param[in] _json JSON string containing an array of models
-      /// \return Model iterator
-      public: static ModelIter ParseModels(const std::string &_json);
+      /// \return vector of model identifiers
+      public: static std::vector<ModelIdentifier> ParseModels(
+                  const std::string &_json);
 
       /// \brief Build a model iterator from a JSON string
       /// \param[in] _modelIt A model iterator containing only one model

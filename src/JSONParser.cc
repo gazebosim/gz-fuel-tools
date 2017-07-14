@@ -21,8 +21,7 @@
 
 #include <json/json.h>
 
-
-#include "ignition/fuel-tools/ModelIterPrivate.hh"
+#include <ignition/common/Console.hh>
 #include "ignition/fuel-tools/JSONParser.hh"
 
 using namespace ignition;
@@ -57,28 +56,62 @@ std::time_t ParseDateTime(const std::string &_datetime)
 }
 
 /////////////////////////////////////////////////
-ModelIter JSONParser::ParseModels(const std::string &_json)
+std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
 {
+  std::vector<ModelIdentifier> ids;
   Json::Reader reader;
   Json::Value value;
   reader.parse(_json, value);
 
-  std::vector<ModelIdentifier> ids;
-  for (auto it = value.begin(); it != value.end(); ++it)
+  try
   {
-    Json::Value model = *it;
-    ModelIdentifier id;
-    id.Name(model["name"].asString());
-    id.Description(model["description"].asString());
-    id.FileSize(model["filesize"].asUInt());
-    id.Uuid(model["uuid"].asString());
-    id.Category(model["category"].asString());
-    id.ModifyDate(ParseDateTime(model["modify_date"].asString()));
-    id.UploadDate(ParseDateTime(model["upload_date"].asString()));
-    ids.push_back(id);
+    if (!value.isObject() || !value.isMember("models"))
+    {
+      ignerr << "JSON response is not an object with key 'models'\n";
+    }
+    else
+    {
+      Json::Value models = value["models"];
+      if (!models.isArray())
+      {
+        ignerr << "rsp['models'] is not an array\n";
+      }
+      else
+      {
+        for (auto modelIt = models.begin(); modelIt != models.end(); ++ modelIt)
+        {
+          Json::Value model = *modelIt;
+          if (!model.isObject())
+          {
+            ignerr << "Model isn't a json object!\n";
+            break;
+          }
+          ModelIdentifier id;
+
+          if (model.isMember("name"))
+            id.Name(model["name"].asString());
+          if (model.isMember("owner"))
+            id.Owner(model["owner"].asString());
+          else
+            id.Owner("anonymous");
+          if (model.isMember("uuid"))
+            id.Uuid(model["uuid"].asString());
+          if (model.isMember("updatedAt"))
+            id.ModifyDate(ParseDateTime(model["updatedAt"].asString()));
+          if (model.isMember("createdAt"))
+            id.UploadDate(ParseDateTime(model["createdAt"].asString()));
+
+          ids.push_back(id);
+        }
+      }
+    }
+  }
+  catch (const Json::LogicError &error)
+  {
+    ignerr << "Bad response from server: [" << error.what() << "]\n";
   }
 
-  return ModelIterFactory::Create(ids);
+  return ids;
 }
 
 /////////////////////////////////////////////////
