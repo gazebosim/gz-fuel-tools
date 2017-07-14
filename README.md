@@ -42,6 +42,23 @@ $ ign fuel pull --owner bob --name traffic_signal
 TODO Download a model
 ```
 
+** C++ Get List models **
+```
+  // Create a ClientConfig, TODO create this from a yaml file
+  ignition::fuel_tools::ClientConfig conf;
+  ignition::fuel_tools::ServerConfig srv;
+  srv.URL("https://ignitionfuel.org/");
+  srv.LocalName("ignitionfuel");
+  conf.AddServer(srv);
+  
+  ignition::fuel_tools::FuelClient client(conf);
+  ignition::fuel_tools::ModelIter iter = client.Models();
+  while (iter)
+  {
+    std::cout << "Got model: " << iter->Identification().Name() << "\n";
+  }
+```
+
 ## Dependencies
 On ubuntu run
 ```
