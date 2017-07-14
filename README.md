@@ -10,7 +10,7 @@ interacting with Ignition Fuel servers.
 ## Dependencies
 On ubuntu run
 ```
-sudo apt install ruby-ffi libzip-dev libcurl-dev
+sudo apt install ruby-ffi libzip-dev libcurl-dev libjsoncpp-dev
 ```
 
 ## Continuous integration
