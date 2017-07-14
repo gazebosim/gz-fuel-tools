@@ -22,7 +22,6 @@
 #include <json/json.h>
 
 #include <ignition/common/Console.hh>
-#include "ignition/fuel-tools/ModelIterPrivate.hh"
 #include "ignition/fuel-tools/JSONParser.hh"
 
 using namespace ignition;
@@ -57,7 +56,7 @@ std::time_t ParseDateTime(const std::string &_datetime)
 }
 
 /////////////////////////////////////////////////
-ModelIter JSONParser::ParseModels(const std::string &_json)
+std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
 {
   std::vector<ModelIdentifier> ids;
   Json::Reader reader;
@@ -112,7 +111,7 @@ ModelIter JSONParser::ParseModels(const std::string &_json)
     ignerr << "Bad response from server: [" << error.what() << "]\n";
   }
 
-  return ModelIterFactory::Create(ids);
+  return ids;
 }
 
 /////////////////////////////////////////////////

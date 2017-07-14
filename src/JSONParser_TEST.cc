@@ -36,16 +36,17 @@ TEST(JSONParser, ParseModels)
   << "\"name\":\"car\","
   << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\"}]}";
 
-  auto modelIt = JSONParser::ParseModels(tmpJsonStr.str());
-  EXPECT_TRUE(modelIt);
-  EXPECT_EQ("car", modelIt->Identification().Name());
-  auto t = modelIt->Identification().ModifyDate();
+  auto modelIds = JSONParser::ParseModels(tmpJsonStr.str());
+  EXPECT_EQ(1, modelIds.size());
+  auto model = modelIds.front();
+  EXPECT_EQ("car", model.Name());
+  auto t = model.ModifyDate();
   std::string str = std::asctime(gmtime(&t));
   EXPECT_EQ(str, "Mon Apr 23 18:25:43 2012\n");
-  t = modelIt->Identification().UploadDate();
+  t = model.UploadDate();
   str = std::asctime(gmtime(&t));
   EXPECT_EQ(str, "Sat Apr 21 19:25:44 2012\n");
-  EXPECT_EQ("3d3112d9-02b2-4b28-8d2f-f03be00a5a26", modelIt->Identification().Uuid());
+  EXPECT_EQ("3d3112d9-02b2-4b28-8d2f-f03be00a5a26", model.Uuid());
 }
 
 /////////////////////////////////////////////////
