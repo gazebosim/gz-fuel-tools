@@ -7,6 +7,41 @@ interacting with Ignition Fuel servers.
 
   [http://bitbucket.org/ignitionrobotics/ign-fuel-tools](http://bitbucket.org/ignitionrobotics/ign-fuel-tools)
 
+## Examples
+
+** List all models **
+```
+$ ign fuel list | head
+https://ignitionfuel.org/anonymous/test_model_595389531
+https://ignitionfuel.org/anonymous/test_model_122023392
+https://ignitionfuel.org/anonymous/test_model_429486665
+https://ignitionfuel.org/anonymous/test_model_887243621
+https://ignitionfuel.org/anonymous/test_model_084900530
+https://ignitionfuel.org/anonymous/test_model_240061059
+https://ignitionfuel.org/anonymous/test_model_464734097
+https://ignitionfuel.org/anonymous/test_model_658598990
+https://ignitionfuel.org/anonymous/test_model_834617935
+https://ignitionfuel.org/anonymous/test_model_380348669
+```
+
+** Find a model on disk **
+```
+$ ign fuel locate --name am1
+/home/developer/.ignition/fuel/staging_ignitionfuel/alice/am1
+```
+
+** TODO: Upload **
+```
+$ ign fuel push --owner trudy --name car --url https://ignitionfuel.org/ --path models/car
+TODO Upload a model
+```
+
+** TODO: Download**
+```
+$ ign fuel pull --owner bob --name traffic_signal
+TODO Download a model
+```
+
 ## Dependencies
 On ubuntu run
 ```
