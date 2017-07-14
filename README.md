@@ -7,6 +7,18 @@ interacting with Ignition Fuel servers.
 
   [http://bitbucket.org/ignitionrobotics/ign-fuel-tools](http://bitbucket.org/ignitionrobotics/ign-fuel-tools)
 
+# Building and installing
+
+```
+cd ign-fuel-tools
+mkdir build
+cd build
+cmake ../
+make
+make test
+sudo make install
+```
+
 ## Examples
 
 ** List all models **
