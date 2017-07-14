@@ -19,6 +19,8 @@
 #include <cstring>
 #include <iostream>
 
+#include <ignition/common/Console.hh>
+#include <ignition/common/Filesystem.hh>
 #include <ignition/fuel-tools/Helpers.hh>
 #include <ignition/fuel-tools/FuelClient.hh>
 
@@ -33,12 +35,29 @@ ignition::fuel_tools::ClientConfig IGNITION_FUEL_TOOLS_HIDDEN getConfig()
   srv.LocalName("staging_ignitionfuel");
   conf.AddServer(srv);
 
-  if(const char* env_p = std::getenv("IGN_FUEL_CACHE"))
-    conf.CacheLocation(env_p);
+  if(const char *cacheLoc = std::getenv("IGN_FUEL_CACHE"))
+    conf.CacheLocation(cacheLoc);
   else
   {
-    // TODO Get home directory
-    conf.CacheLocation("~/.ignition/fuel/");
+    std::string home = "";
+#if _WIN32
+    const char *drive = std::getenv("HOMEDRIVE");
+    const char *path = std::getenv("HOMEPATH");
+
+    if (drive && path)
+      home = ignition::common::joinPaths(drive, path);
+#else
+    const char *homeLoc = std::getenv("HOME");
+
+    if (homeLoc)
+      home = homeLoc;
+#endif
+    conf.CacheLocation(ignition::common::joinPaths(home, ".ignition", "fuel"));
+  }
+  if (!ignition::common::isDirectory(conf.CacheLocation()))
+  {
+    ignwarn << "[" << conf.CacheLocation() << "] doesn't exist, creating\n";
+    ignition::common::createDirectories(conf.CacheLocation());
   }
   return conf;
 }
@@ -61,6 +80,18 @@ extern "C"
   void IGNITION_FUEL_TOOLS_VISIBLE helloWorld()
   {
     std::cout << "Hello world!\n";
+  }
+
+  /// \brief Prints "Hello World!\n" to STDOUT
+  /// \param[in] _level [0-4] Verbosity level
+  void IGNITION_FUEL_TOOLS_VISIBLE verbosity(int _level)
+  {
+    if (_level < 0 || _level > 4)
+    {
+      std::cerr << "Invalid verbosity level\n";
+      std::exit(-1);
+    }
+    ignition::common::Console::SetVerbosity(_level);
   }
 
   /// \brief Lists Models
