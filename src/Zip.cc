@@ -49,7 +49,8 @@ bool CompressFile(zip *_archive, const std::string &_file,
     for (ignition::common::DirIter dirIt(_file); dirIt != endIt; ++dirIt)
     {
       std::string file = *dirIt;
-      std::string entryName = _entry + "/" + ignition::common::basename(file);
+      std::string entryName = ignition::common::joinPaths(_entry,
+          ignition::common::basename(file));
 
       if (!CompressFile(_archive, file, entryName))
       {
@@ -86,7 +87,7 @@ bool Zip::Compress(const std::string &_src, const std::string &_dst)
 {
   if (!ignition::common::exists(_src))
   {
-    ignerr << "Archive does not exist: " << _src << std::endl;
+    ignerr << "Directory does not exist: " << _src << std::endl;
     return false;
   }
 
@@ -102,6 +103,7 @@ bool Zip::Compress(const std::string &_src, const std::string &_dst)
   if (!CompressFile(archive, _src, entry))
   {
     ignerr << "Error compressing file: " << _src << std::endl;
+    zip_close(archive);
     return false;
   }
 
@@ -115,7 +117,7 @@ bool Zip::Extract(const std::string &_src,
 {
   if (!ignition::common::exists(_src))
   {
-    ignerr << "Source directory does not exist: " << _src << std::endl;
+    ignerr << "Source archive does not exist: " << _src << std::endl;
     return false;
   }
 
@@ -137,8 +139,8 @@ bool Zip::Extract(const std::string &_src,
     }
 
     // check if it's a directory
-    std::string dst = _dst + "/" + sb.name;
-    if (dst[dst.size() - 1] == '/')
+    std::string dst = ignition::common::joinPaths(_dst, sb.name);
+    if (dst[dst.size() - 1] == '/' || dst[dst.size() - 1] == '\\')
     {
       ignition::common::createDirectory(dst);
     }
