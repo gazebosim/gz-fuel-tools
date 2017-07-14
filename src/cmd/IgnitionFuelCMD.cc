@@ -70,6 +70,18 @@ extern "C"
     std::cout << "Hello world!\n";
   }
 
+  /// \brief Prints "Hello World!\n" to STDOUT
+  /// \param[in] _level [0-4] Verbosity level
+  void IGNITION_FUEL_TOOLS_VISIBLE verbosity(int _level)
+  {
+    if (_level < 0 || _level > 4)
+    {
+      std::cerr << "Invalid verbosity level\n";
+      std::exit(-1);
+    }
+    ignition::common::Console::SetVerbosity(_level);
+  }
+
   /// \brief Lists Models
   /// \param[in] _name only list models with this name
   /// \param[in] _owner only list models from this owner

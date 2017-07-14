@@ -20,6 +20,7 @@ require 'optparse'
 # Constants.
 COMMON_OPTIONS =
   "  -h [ --help ]              Print this help message.                   \n"\
+  "  -v [ --verbose ] LEVEL     Set verbosity level 0-4                    \n"\
   "                                                                        \n"\
 
 COMMANDS = { 'fuel' =>
@@ -98,6 +99,7 @@ module FuelClient
   attach_function :pushModel, [:string, :string, :string, :string], :void
   attach_function :pullModel, [:string, :string, :string], :void
   attach_function :locateModel, [:string, :string, :string], :void
+  attach_function :verbosity, [:int], :void
 end
 
 #
@@ -119,6 +121,7 @@ class Cmd
       'path' => '',
       'owner' => '',
       'name' => '',
+      'verbose' => 0,
     }
 
     usage = COMMANDS[args[0]]
@@ -146,8 +149,11 @@ class Cmd
       opts.on('--name NAME') do |name|
         options['name'] = name
       end
-      opts.on('--PATH NAME') do |path|
+      opts.on('--path NAME') do |path|
         options['path'] = path
+      end
+      opts.on('-v LEVEL', '--verbose LEVEL', OptionParser::DecimalInteger) do |level|
+        options['verbose'] = level
       end
     end # opt_parser do
 
@@ -187,6 +193,8 @@ class Cmd
 
   def execute(args)
     options = parse(args)
+
+    FuelClient.verbosity options['verbose']
 
     begin
       case options['subcommand']
