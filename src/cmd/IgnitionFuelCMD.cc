@@ -35,12 +35,24 @@ ignition::fuel_tools::ClientConfig IGNITION_FUEL_TOOLS_HIDDEN getConfig()
   srv.LocalName("local");
   conf.AddServer(srv);
 
-  if(const char* env_p = std::getenv("IGN_FUEL_CACHE"))
-    conf.CacheLocation(env_p);
+  if(const char *cacheLoc = std::getenv("IGN_FUEL_CACHE"))
+    conf.CacheLocation(cacheLoc);
   else
   {
-    // TODO Get home directory
-    conf.CacheLocation("~/.ignition/fuel/");
+    std::string home = "";
+#if _WIN32
+    const char *drive = std::getenv("HOMEDRIVE");
+    const char *path = std::getenv("HOMEPATH");
+
+    if (drive && path)
+      home = ignition::common::joinPaths(drive, path);
+#else
+    const char *homeLoc = std::getenv("HOME");
+
+    if (homeLoc)
+      home = homeLoc;
+#endif
+    conf.CacheLocation(ignition::common::joinPaths(home, ".ignition", "fuel"));
   }
   if (!ignition::common::isDirectory(conf.CacheLocation()))
   {
