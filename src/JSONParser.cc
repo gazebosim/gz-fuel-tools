@@ -92,7 +92,9 @@ ModelIter JSONParser::ParseModels(const std::string &_json)
           if (model.isMember("name"))
             id.Name(model["name"].asString());
           if (model.isMember("owner"))
-            id.Name(model["owner"].asString());
+            id.Owner(model["owner"].asString());
+          else
+            id.Owner("anonymous");
           if (model.isMember("uuid"))
             id.Uuid(model["uuid"].asString());
           if (model.isMember("updatedAt"))
