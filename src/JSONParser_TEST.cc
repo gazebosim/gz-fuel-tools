@@ -37,7 +37,7 @@ TEST(JSONParser, ParseModels)
   << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\"}]}";
 
   auto modelIds = JSONParser::ParseModels(tmpJsonStr.str());
-  EXPECT_EQ(1, modelIds.size());
+  EXPECT_EQ(1u, modelIds.size());
   auto model = modelIds.front();
   EXPECT_EQ("car", model.Name());
   auto t = model.ModifyDate();

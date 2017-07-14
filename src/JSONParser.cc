@@ -113,7 +113,7 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
 #else
   catch (const Json::LogicError &error)
   {
-    std::string what = ": [" + error.what() + "]";
+    std::string what = ": [" + std::string(error.what()) + "]";
 #endif
     ignerr << "Bad response from server" << what << "\n";
   }
