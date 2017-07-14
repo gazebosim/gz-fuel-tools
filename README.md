@@ -42,18 +42,6 @@ $ ign fuel locate --name am1
 /home/developer/.ignition/fuel/staging_ignitionfuel/alice/am1
 ```
 
-** TODO: Upload **
-```
-$ ign fuel push --owner trudy --name car --url https://ignitionfuel.org/ --path models/car
-TODO Upload a model
-```
-
-** TODO: Download**
-```
-$ ign fuel pull --owner bob --name traffic_signal
-TODO Download a model
-```
-
 ** C++ Get List models **
 ```
   // Create a ClientConfig, TODO create this from a yaml file
@@ -69,6 +57,22 @@ TODO Download a model
   {
     std::cout << "Got model: " << iter->Identification().Name() << "\n";
   }
+```
+
+## TODO
+
+See issues beginning with [Fuel backend] in the title. Here are two examples.
+
+** TODO: Upload **
+```
+$ ign fuel push --owner trudy --name car --url https://ignitionfuel.org/ --path models/car
+TODO Upload a model
+```
+
+** TODO: Download**
+```
+$ ign fuel pull --owner bob --name traffic_signal
+TODO Download a model
 ```
 
 ## Dependencies
