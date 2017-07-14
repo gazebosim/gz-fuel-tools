@@ -19,6 +19,8 @@
 #include <cstring>
 #include <iostream>
 
+#include <ignition/common/Console.hh>
+#include <ignition/common/Filesystem.hh>
 #include <ignition/fuel-tools/Helpers.hh>
 #include <ignition/fuel-tools/FuelClient.hh>
 
@@ -39,6 +41,11 @@ ignition::fuel_tools::ClientConfig IGNITION_FUEL_TOOLS_HIDDEN getConfig()
   {
     // TODO Get home directory
     conf.CacheLocation("~/.ignition/fuel/");
+  }
+  if (!ignition::common::isDirectory(conf.CacheLocation()))
+  {
+    ignwarn << "[" << conf.CacheLocation() << "] doesn't exist, creating\n";
+    ignition::common::createDirectories(conf.CacheLocation());
   }
   return conf;
 }
