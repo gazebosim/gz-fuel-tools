@@ -19,6 +19,10 @@ make test
 make install
 ```
 
+Make sure `IGN_CONFIG_PATH` is set to the right install location`ign fuel` will work.
+Default is `/usr/local/share/ignition`.
+
+
 ## Examples
 
 ** List all models **
