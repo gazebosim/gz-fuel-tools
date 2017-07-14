@@ -66,18 +66,43 @@ ModelIter JSONParser::ParseModels(const std::string &_json)
 
   try
   {
-    for (auto it = value.begin(); it != value.end(); ++it)
+    if (!value.isObject() || !value.isMember("models"))
     {
-      Json::Value model = *it;
-      ModelIdentifier id;
-      id.Name(model["name"].asString());
-      id.Description(model["description"].asString());
-      id.FileSize(model["filesize"].asUInt());
-      id.Uuid(model["uuid"].asString());
-      id.Category(model["category"].asString());
-      id.ModifyDate(ParseDateTime(model["modify_date"].asString()));
-      id.UploadDate(ParseDateTime(model["upload_date"].asString()));
-      ids.push_back(id);
+      ignerr << "JSON response is not an object with key 'models'\n";
+    }
+    else
+    {
+      Json::Value models = value["models"];
+      if (!models.isArray())
+      {
+        ignerr << "rsp['models'] is not an array\n";
+      }
+      else
+      {
+        for (auto modelIt = models.begin(); modelIt != models.end(); ++ modelIt)
+        {
+          Json::Value model = *modelIt;
+          if (!model.isObject())
+          {
+            ignerr << "Model isn't a json object!\n";
+            break;
+          }
+          ModelIdentifier id;
+
+          if (model.isMember("name"))
+            id.Name(model["name"].asString());
+          if (model.isMember("owner"))
+            id.Name(model["owner"].asString());
+          if (model.isMember("uuid"))
+            id.Uuid(model["uuid"].asString());
+          if (model.isMember("updatedAt"))
+            id.ModifyDate(ParseDateTime(model["updatedAt"].asString()));
+          if (model.isMember("createdAt"))
+            id.UploadDate(ParseDateTime(model["createdAt"].asString()));
+
+          ids.push_back(id);
+        }
+      }
     }
   }
   catch (const Json::LogicError &error)

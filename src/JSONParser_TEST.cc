@@ -30,45 +30,22 @@ using namespace ignft;
 TEST(JSONParser, ParseModels)
 {
   std::stringstream tmpJsonStr;
-  tmpJsonStr
-  << "["
-  << "  {"
-  << "    \"category\" : \"transportation\","
-  << "    \"description\" : \"I am a car\","
-  << "    \"downloads\" : 5,"
-  << "    \"filesize\" : 1024,"
-  << "    \"images\" : ["
-  << "      {"
-  << "       \"id\" : \"222\","
-  << "       \"url\" : \"car_image_url\""
-  << "      }"
-  << "    ],"
-  << "    \"likes\" : 3,"
-  << "    \"modify_date\" : \"2012-04-23T18:25:43.511Z\","
-  << "    \"name\" : \"car\","
-  << "    \"tags\" : ["
-  << "      {"
-  << "        \"id\" : \"111\","
-  << "        \"name\" : \"car_tag_name\""
-  << "      }"
-  << "    ],"
-  << "    \"upload_date\" : \"2012-04-21T19:25:44.511Z\","
-  << "    \"uuid\" : \"1234-abcd\""
-  << "  }"
-  << "]";
+  tmpJsonStr << "{\"models\":["
+  << "{\"id\":1,\"createdAt\":\"2012-04-21T19:25:44.511Z\","
+  << "\"updatedAt\":\"2012-04-23T18:25:43.511Z\","
+  << "\"name\":\"car\","
+  << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\"}]}";
 
   auto modelIt = JSONParser::ParseModels(tmpJsonStr.str());
   EXPECT_TRUE(modelIt);
   EXPECT_EQ("car", modelIt->Identification().Name());
-  EXPECT_EQ("I am a car", modelIt->Identification().Description());
-  EXPECT_EQ(1024, modelIt->Identification().FileSize());
   auto t = modelIt->Identification().ModifyDate();
   std::string str = std::asctime(gmtime(&t));
   EXPECT_EQ(str, "Mon Apr 23 18:25:43 2012\n");
   t = modelIt->Identification().UploadDate();
   str = std::asctime(gmtime(&t));
   EXPECT_EQ(str, "Sat Apr 21 19:25:44 2012\n");
-  EXPECT_EQ("1234-abcd", modelIt->Identification().Uuid());
+  EXPECT_EQ("3d3112d9-02b2-4b28-8d2f-f03be00a5a26", modelIt->Identification().Uuid());
 }
 
 /////////////////////////////////////////////////
