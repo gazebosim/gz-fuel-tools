@@ -25,7 +25,7 @@ int main()
 
   ignition::fuel_tools::ClientConfig conf;
   ignition::fuel_tools::ServerConfig srv;
-  srv.URL("https://api-staging:ignition-fuel.org/");
+  srv.URL("https://staging-api.ignitionfuel.org/");
   srv.LocalName("local");
   conf.AddServer(srv);
 
