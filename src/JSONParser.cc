@@ -111,6 +111,7 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
   {
     std::string what;
 #else
+  catch (const Json::LogicError &error)
   {
     std::string what = ": [" + std::string(error.what()) + "]";
 #endif
