@@ -114,7 +114,9 @@ RESTResponse REST::Request(Protocol _protocol,
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
 
+  std::ifstream ifs;
   struct curl_httppost *formpost = nullptr;
+
   // Send the request.
   if (_protocol == REST::GET)
   {
@@ -141,7 +143,7 @@ RESTResponse REST::Request(Protocol _protocol,
         // file upload
         std::string path = value.substr(1);
         std::string filename = ignition::common::basename(path);
-        std::ifstream ifs(path, std::ios::binary);
+        ifs.open(path, std::ios::binary);
         std::filebuf* pbuf = ifs.rdbuf();
         std::size_t size = pbuf->pubseekoff(0, ifs.end, ifs.in);
         curl_formadd(&formpost,
@@ -197,5 +199,8 @@ RESTResponse REST::Request(Protocol _protocol,
 
   // Cleaning.
   curl_easy_cleanup(curl);
+
+  if (ifs.is_open())
+    ifs.close();
   return res;
 }
