@@ -46,7 +46,9 @@ exports.setRoutes = function (app) {
   router.post('/models', upload.single('data'), (req, res) => {
     // meta data
     const m = req.body
-     models.push(m)
+    models.push(m)
+
+    console.log('body :' + JSON.stringify(m));
 
     // file will be in req.file
     if (req.file)

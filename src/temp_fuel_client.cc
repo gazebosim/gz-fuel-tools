@@ -54,8 +54,7 @@ int main()
     ignmsg << "Found model: " << model.Identification().UniqueName() << "\n";
   }
 
-
-  // test upload
+  // test file upload
   std::ofstream fout("dummy.zip");
   fout << "dummy file";
   fout.flush();
@@ -65,7 +64,6 @@ int main()
       ignition::fuel_tools::REST::POST_FORM;
   std::vector<std::string> headers =
       {"Accept: application/json", "content-type: multipart/form-data"};
-
   std::map<std::string, std::string> form;
   form["name"] = "box";
   form["data"] = "@dummy.zip";
@@ -73,7 +71,7 @@ int main()
   ignition::fuel_tools::RESTResponse resp = rest.Request(
       protocol, "http://localhost:8001/", "1.0/models", {}, headers, "",
       form);
-  std::cerr << "status: " << resp.statusCode << std::endl;
+  ignmsg << "file update status: " << resp.statusCode << std::endl;
   ignition::common::removeAll("dummy.zip");
 
   ignmsg << "exiting\n";

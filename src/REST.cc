@@ -18,6 +18,8 @@
 #include <curl/curl.h>
 #include <iostream>
 
+#include <ignition/common/Console.hh>
+
 #include "ignition/fuel-tools/REST.hh"
 
 using namespace ignition;
@@ -96,7 +98,7 @@ RESTResponse REST::Request(Protocol _protocol,
     headers = curl_slist_append(headers, header.c_str());
     if (!headers)
     {
-      std::cerr << "[REST::Request()]: Error processing header.\n  ["
+      ignerr << "[REST::Request()]: Error processing header.\n  ["
                 << header.c_str() << "]" << std::endl;
 
       // cleanup
@@ -104,6 +106,7 @@ RESTResponse REST::Request(Protocol _protocol,
       return res;
     }
   }
+
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
   std::string responseData;
@@ -125,14 +128,41 @@ RESTResponse REST::Request(Protocol _protocol,
   else if (_protocol == REST::POST_FORM)
   {
     struct curl_httppost *lastptr = nullptr;
-    for (auto it : _form)
+    for (const auto &it : _form)
     {
-      curl_formadd(&formpost,
-                   &lastptr,
-                   CURLFORM_COPYNAME, it.first.c_str(),
-                   CURLFORM_COPYCONTENTS, it.second.c_str(),
-                   CURLFORM_END);
+      std::string key = it.first;
+      std::string value = it.second;
+
+      // follow same convention as curl cmdline tool
+      // field starting with @ indicates path to file to upload
+      // others are standard fields to describe the file
+      if (!value.empty() && value[0] == '@')
+      {
+        // file upload
+        std::string path = value.substr(1);
+        std::string filename = ignition::common::basename(path);
+        std::ifstream ifs(path, std::ios::binary);
+        std::filebuf* pbuf = ifs.rdbuf();
+        std::size_t size = pbuf->pubseekoff(0, ifs.end, ifs.in);
+        curl_formadd(&formpost,
+                     &lastptr,
+                     CURLFORM_COPYNAME, key.c_str(),
+                     CURLFORM_BUFFER, filename.c_str(),
+                     CURLFORM_BUFFERPTR, pbuf,
+                     CURLFORM_BUFFERLENGTH, size,
+                     CURLFORM_END);
+      }
+      else
+      {
+        // standard key:value fields
+        curl_formadd(&formpost,
+                     &lastptr,
+                     CURLFORM_COPYNAME, key.c_str(),
+                     CURLFORM_COPYCONTENTS, value.c_str(),
+                     CURLFORM_END);
+       }
     }
+
     curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
   }
   else if (_protocol == REST::DELETE)
@@ -141,7 +171,7 @@ RESTResponse REST::Request(Protocol _protocol,
   }
   else
   {
-    std::cerr << "Unsupported method" << std::endl;
+    ignerr << "Unsupported method" << std::endl;
 
     // Cleanup.
     curl_slist_free_all(headers);
@@ -151,7 +181,7 @@ RESTResponse REST::Request(Protocol _protocol,
 
   CURLcode success = curl_easy_perform(curl);
   if (success != CURLE_OK)
-    std::cerr << "Error in REST request" << std::endl;
+    ignerr << "Error in REST request" << std::endl;
 
   // Update the status code.
   curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &res.statusCode);

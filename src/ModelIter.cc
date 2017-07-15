@@ -144,6 +144,7 @@ IterRESTIds::~IterRESTIds()
 //////////////////////////////////////////////////
 IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
     const std::string &_api)
+    : config(_config), rest(_rest)
 {
   // TODO fetch from all servers and combine result, not just one server
   auto servers = this->config->Servers();

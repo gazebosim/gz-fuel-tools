@@ -106,10 +106,15 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
       }
     }
   }
-//  catch (const Json::LogicError &error)
+#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
   catch (...)
   {
-//    ignerr << "Bad response from server: [" << error.what() << "]\n";
+    std::string what;
+#else
+  {
+    std::string what = ": [" + std::string(error.what()) + "]";
+#endif
+    ignerr << "Bad response from server" << what << "\n";
   }
 
   return ids;
