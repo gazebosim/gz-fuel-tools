@@ -19,9 +19,10 @@
 #define IGNITION_FUEL_TOOLS_CLIENTCONFIG_HH_
 
 #include <memory>
+#include <string>
 #include <vector>
 
-#include <ignition/fuel-tools/Helpers.hh>
+#include "ignition/fuel-tools/Helpers.hh"
 
 namespace ignition
 {

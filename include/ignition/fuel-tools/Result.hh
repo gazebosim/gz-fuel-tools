@@ -19,7 +19,8 @@
 #define IGNITION_FUEL_TOOLS_RESULT_HH_
 
 #include <memory>
-#include <ignition/fuel-tools/Helpers.hh>
+
+#include "ignition/fuel-tools/Helpers.hh"
 
 namespace ignition
 {

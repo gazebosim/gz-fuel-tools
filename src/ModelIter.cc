@@ -156,19 +156,31 @@ IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
 
   std::string protocol = "GET";
   this->serverURL = servers.front().URL();
-  std::string path = _api;
+  int page = 1;
   std::vector<std::string> headers =  {"Accept: application/json"};
+  RESTResponse resp;
+  std::vector<ModelIdentifier> modelIds;
+  this->ids.clear();
 
-  RESTResponse resp = this->rest->Request(
-      "GET", this->serverURL, path, {}, headers, "");
-
-  if (resp.statusCode != 200)
+  do
   {
-    this->idIter = this->ids.end();
-    return;
-  }
+    // Prepare the request with the next page.
+    std::string queryStrPage = "?page=" + std::to_string(page);
+    std::string path = _api + queryStrPage;
+    ++page;
 
-  this->ids = JSONParser::ParseModels(resp.data);
+    // Fire the request.
+    resp = this->rest->Request("GET", this->serverURL, path, {}, headers, "");
+
+    // Parse the response.
+    modelIds = JSONParser::ParseModels(resp.data);
+
+    // Add the vector of models to the list.
+    this->ids.insert(std::end(this->ids), std::begin(modelIds),
+      std::end(modelIds));
+  } while (!modelIds.empty());
+
+
   this->idIter = this->ids.begin();
 
   // make first model

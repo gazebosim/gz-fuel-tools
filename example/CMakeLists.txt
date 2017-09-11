@@ -6,7 +6,11 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-RNDF_CXX_FLAGS}")
 include_directories(${IGNITION-FUEL-TOOLS_INCLUDE_DIRS})
 link_directories(${IGNITION-FUEL-TOOLS_LIBRARY_DIRS})
 
+MESSAGE(STATUS "Headers: ${IGNITION-FUEL-TOOLS_INCLUDE_DIRS}")
+
 # Generate examples
+add_executable(modelList modelList.cc)
+target_link_libraries(modelList ${IGNITION-FUEL-TOOLS_LIBRARIES})
 
 if (MSVC)
 

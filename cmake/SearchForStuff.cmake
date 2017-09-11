@@ -30,15 +30,14 @@ endif()
 
 ########################################
 # Find jsoncpp
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(jsoncpp jsoncpp)
-
-if (NOT JsonCpp_FOUND)
+find_package(jsoncpp REQUIRED)
+if (NOT jsoncpp_FOUND)
   BUILD_ERROR ("Missing: libjsoncpp-dev. Required for parsing json data.")
 endif()
 
 ########################################
 # Find libzip
+find_package(PkgConfig REQUIRED)
 pkg_check_modules(libzip libzip)
 
 if (NOT libzip_FOUND)

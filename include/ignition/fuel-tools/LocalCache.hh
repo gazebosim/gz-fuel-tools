@@ -19,9 +19,9 @@
 #define IGNITION_FUEL_TOOLS_LOCALCACHE_HH_
 
 #include <memory>
-#include <ignition/fuel-tools/ClientConfig.hh>
-#include <ignition/fuel-tools/Helpers.hh>
-#include <ignition/fuel-tools/ModelIter.hh>
+#include "ignition/fuel-tools/ClientConfig.hh"
+#include "ignition/fuel-tools/Helpers.hh"
+#include "ignition/fuel-tools/ModelIter.hh"
 
 namespace ignition
 {

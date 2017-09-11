@@ -268,7 +268,7 @@ else (build_errors)
   configure_file (${project_cmake_dir}/config.hh.in
     ${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/config.hh)
   ign_install_includes(
-    ${PROJECT_NAME}${PROJECT_MAJOR_VERSION}/${PROJECT_NAME}
+    ${IGN_PROJECT_NAME}${PROJECT_MAJOR_VERSION}/ignition/${IGN_PROJECT_NAME}
     ${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/config.hh)
 
   include_directories(

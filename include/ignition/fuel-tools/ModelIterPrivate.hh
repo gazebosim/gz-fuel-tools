@@ -20,8 +20,8 @@
 
 #include <vector>
 
-#include <ignition/fuel-tools/Model.hh>
-#include <ignition/fuel-tools/ModelIdentifier.hh>
+#include "ignition/fuel-tools/Model.hh"
+#include "ignition/fuel-tools/ModelIdentifier.hh"
 
 namespace ignition
 {

@@ -3,11 +3,16 @@ include (${project_cmake_dir}/Utils.cmake)
 set (headers
   ClientConfig.hh
   FuelClient.hh
+  Helpers.hh
+  JSONParser.hh
   LocalCache.hh
-  ModelIter.hh
-  ModelIdentifier.hh
   Model.hh
+  ModelIdentifier.hh
+  ModelIter.hh
+  Model.hh
+  REST.hh
   Result.hh
+  Zip.hh
 )
 
 #################################################

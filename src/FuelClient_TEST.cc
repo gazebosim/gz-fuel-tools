@@ -51,7 +51,7 @@ RESTResponse MockREST(const std::string &, const std::string &,
 }
 
 /////////////////////////////////////////////////
-/// \brief Fetch moels
+/// \brief Fetch models
 TEST(FuelClent, FetchModels)
 {
   ignition::fuel_tools::ClientConfig conf;
