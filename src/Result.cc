@@ -15,8 +15,7 @@
  *
 */
 
-#include <vector>
-#include <ignition/fuel-tools/Result.hh>
+#include "ignition/fuel-tools/Result.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;

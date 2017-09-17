@@ -16,12 +16,14 @@
 */
 
 #include <iostream>
-
+#include <memory>
 #include <ignition/common/Console.hh>
 
+#include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/FuelClient.hh"
 #include "ignition/fuel-tools/JSONParser.hh"
 #include "ignition/fuel-tools/LocalCache.hh"
+#include "ignition/fuel-tools/ModelIdentifier.hh"
 #include "ignition/fuel-tools/REST.hh"
 #include "ignition/fuel-tools/ModelIterPrivate.hh"
 
@@ -97,10 +99,30 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     const ModelIdentifier &_id)
 {
   // TODO Upload a model and return an Result
+  return Result(Result::UPLOAD_ERROR);
 }
 
 //////////////////////////////////////////////////
 Result FuelClient::DeleteModel(const ModelIdentifier &_id)
 {
   // TODO Delete a model and return a Result
+  return Result(Result::DELETE_ERROR);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadModel(const ModelIdentifier &_id)
+{
+  ignition::fuel_tools::REST rest;
+  RESTResponse resp;
+
+  auto servers = this->dataPtr->config.Servers();
+  auto serverURL = servers.front().URL();
+  auto path = "/1.0/" + _id.Owner() + "/models/" + _id.Name() + ".zip";
+
+  resp = rest.Request("GET", serverURL, path, {}, {}, "");
+
+  ignition::fuel_tools::LocalCache cache(&this->dataPtr->config);
+  cache.SaveModel(_id, resp.data, true);
+
+  return Result(Result::FETCH);
 }

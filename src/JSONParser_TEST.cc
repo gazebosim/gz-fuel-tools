@@ -30,11 +30,11 @@ using namespace ignft;
 TEST(JSONParser, ParseModels)
 {
   std::stringstream tmpJsonStr;
-  tmpJsonStr << "{\"models\":["
+  tmpJsonStr << "["
   << "{\"id\":1,\"createdAt\":\"2012-04-21T19:25:44.511Z\","
   << "\"updatedAt\":\"2012-04-23T18:25:43.511Z\","
   << "\"name\":\"car\","
-  << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\"}]}";
+  << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\"}]";
 
   auto modelIds = JSONParser::ParseModels(tmpJsonStr.str());
   EXPECT_EQ(1u, modelIds.size());

@@ -84,6 +84,10 @@ namespace ignition
       /// \return Result of the delete operation
       public: Result DeleteModel(const ModelIdentifier &_id);
 
+      /// \brief Download a model from ignition fuel
+      /// \return Result of the download operation
+      public: Result DownloadModel(const ModelIdentifier &_id);
+
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;
     };

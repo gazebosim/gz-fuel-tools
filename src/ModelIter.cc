@@ -15,14 +15,19 @@
  *
 */
 
+#include <memory>
+#include <string>
 #include <vector>
 #include <ignition/common/Console.hh>
-#include <ignition/fuel-tools/ClientConfig.hh>
-#include <ignition/fuel-tools/JSONParser.hh>
-#include <ignition/fuel-tools/ModelIter.hh>
-#include <ignition/fuel-tools/ModelIterPrivate.hh>
-#include <ignition/fuel-tools/ModelPrivate.hh>
-#include <ignition/fuel-tools/REST.hh>
+
+#include "ignition/fuel-tools/ClientConfig.hh"
+#include "ignition/fuel-tools/JSONParser.hh"
+#include "ignition/fuel-tools/Model.hh"
+#include "ignition/fuel-tools/ModelIdentifier.hh"
+#include "ignition/fuel-tools/ModelIter.hh"
+#include "ignition/fuel-tools/ModelIterPrivate.hh"
+#include "ignition/fuel-tools/ModelPrivate.hh"
+#include "ignition/fuel-tools/REST.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;

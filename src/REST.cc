@@ -111,6 +111,15 @@ RESTResponse REST::Request(const std::string &_httpMethod,
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
 
+  char errbuf[CURL_ERROR_SIZE];
+  // provide a buffer to store errors in
+  curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
+  // set the error buffer as empty before performing a request
+  errbuf[0] = 0;
+
+  // Set the default value: do not prove that SSL certificate is authentic
+  curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+
   // Send the request.
   if (_httpMethod == "GET")
   {
@@ -139,7 +148,16 @@ RESTResponse REST::Request(const std::string &_httpMethod,
 
   CURLcode success = curl_easy_perform(curl);
   if (success != CURLE_OK)
+  {
     std::cerr << "Error in REST request" << std::endl;
+    size_t len = strlen(errbuf);
+    fprintf(stderr, "\nlibcurl: (%d) ", success);
+    if(len)
+      fprintf(stderr, "%s%s", errbuf,
+              ((errbuf[len - 1] != '\n') ? "\n" : ""));
+    else
+      fprintf(stderr, "%s\n", curl_easy_strerror(success));
+  }
 
   // Update the status code.
   curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &res.statusCode);

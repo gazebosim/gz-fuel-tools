@@ -20,7 +20,10 @@
 #include <fstream>
 #include <set>
 #include <ignition/common/Filesystem.hh>
+
+#include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/LocalCache.hh"
+
 #include "test_config.h"
 
 
