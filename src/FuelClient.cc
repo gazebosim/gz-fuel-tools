@@ -115,14 +115,23 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id)
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
 
+  // ToDo: Check all servers.
   auto servers = this->dataPtr->config.Servers();
+  if (servers.empty())
+  {
+    ignerr << "No servers found" << std::endl;
+    return Result(Result::FETCH_ERROR);
+  }
+
   auto serverURL = servers.front().URL();
   auto path = "/1.0/" + _id.Owner() + "/models/" + _id.Name() + ".zip";
 
   resp = rest.Request("GET", serverURL, path, {}, {}, "");
+  if (resp.statusCode != 200)
+    return Result(Result::FETCH_ERROR);
 
-  ignition::fuel_tools::LocalCache cache(&this->dataPtr->config);
-  cache.SaveModel(_id, resp.data, true);
+  if (!this->dataPtr->cache->SaveModel(_id, resp.data, true))
+    return Result(Result::FETCH_ERROR);
 
   return Result(Result::FETCH);
 }

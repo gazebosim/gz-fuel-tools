@@ -117,6 +117,7 @@ RESTResponse REST::Request(const std::string &_httpMethod,
   // set the error buffer as empty before performing a request
   errbuf[0] = 0;
 
+  // ToDo: Set this option to 0 only when using localhost.
   // Set the default value: do not prove that SSL certificate is authentic
   curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 
