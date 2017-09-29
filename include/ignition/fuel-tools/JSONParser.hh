@@ -27,6 +27,13 @@ namespace ignition
     /// \brief A helper class for making REST requests.
     class IGNITION_FUEL_TOOLS_VISIBLE JSONParser
     {
+
+      /// \brief Parse a model JSON string and return a model iterator
+      /// \param[in] _json JSON string containing a model
+      /// \return a model identifiers
+      public: static ModelIdentifier ParseModel(
+                  const std::string &_json);
+
       /// \brief Parse a model array JSON string and return a model iterator
       /// \param[in] _json JSON string containing an array of models
       /// \return vector of model identifiers

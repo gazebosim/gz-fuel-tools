@@ -13,6 +13,9 @@ target_link_libraries(modelList ${IGNITION-FUEL-TOOLS_LIBRARIES})
 add_executable(modelDownload modelDownload.cc)
 target_link_libraries(modelDownload ${IGNITION-FUEL-TOOLS_LIBRARIES})
 
+add_executable(modelDetail modelDetail.cc)
+target_link_libraries(modelDetail ${IGNITION-FUEL-TOOLS_LIBRARIES})
+
 if (MSVC)
 
   # Don't pull in the Windows min/max macros

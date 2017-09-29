@@ -56,6 +56,50 @@ std::time_t ParseDateTime(const std::string &_datetime)
 }
 
 /////////////////////////////////////////////////
+ModelIdentifier JSONParser::ParseModel(const std::string &_json)
+{
+  ModelIdentifier id;
+  Json::Reader reader;
+  Json::Value model;
+  reader.parse(_json, model);
+
+  try
+  {
+    if (!model.isObject())
+    {
+      ignerr << "Model isn't a json object!\n";
+      return id;
+    }
+
+    if (model.isMember("name"))
+      id.Name(model["name"].asString());
+    if (model.isMember("owner"))
+      id.Owner(model["owner"].asString());
+    else
+      id.Owner("anonymous");
+    if (model.isMember("uuid"))
+      id.Uuid(model["uuid"].asString());
+    if (model.isMember("updatedAt"))
+      id.ModifyDate(ParseDateTime(model["updatedAt"].asString()));
+    if (model.isMember("createdAt"))
+      id.UploadDate(ParseDateTime(model["createdAt"].asString()));
+  }
+#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
+  catch (...)
+  {
+    std::string what;
+#else
+  catch (const Json::LogicError &error)
+  {
+    std::string what = ": [" + std::string(error.what()) + "]";
+#endif
+    ignerr << "Bad response from server" << what << "\n";
+  }
+
+  return id;
+}
+
+/////////////////////////////////////////////////
 std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
 {
   std::vector<ModelIdentifier> ids;

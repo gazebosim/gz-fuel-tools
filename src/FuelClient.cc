@@ -67,6 +67,33 @@ FuelClient::~FuelClient()
 }
 
 //////////////////////////////////////////////////
+Result FuelClient::ModelDetails(const ModelIdentifier &_id,
+  ModelIdentifier &_model) const
+{
+  ignition::fuel_tools::REST rest;
+  RESTResponse resp;
+
+  // ToDo: Check all servers.
+  auto servers = this->dataPtr->config.Servers();
+  if (servers.empty())
+  {
+    ignerr << "No servers found" << std::endl;
+    return Result(Result::FETCH_ERROR);
+  }
+
+  auto serverURL = servers.front().URL();
+  auto path = "/1.0/" + _id.Owner() + "/models/" + _id.Name();
+
+  resp = rest.Request("GET", serverURL, path, {}, {}, "");
+  if (resp.statusCode != 200)
+    return Result(Result::FETCH_ERROR);
+
+  _model = JSONParser::ParseModel(resp.data);
+
+  return Result(Result::FETCH);
+}
+
+//////////////////////////////////////////////////
 ModelIter FuelClient::Models()
 {
   ModelIter iter = ModelIterFactory::Create(this->dataPtr->rest,
@@ -82,17 +109,21 @@ ModelIter FuelClient::Models()
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models(const ModelIdentifier &_id)
-{
-  // Check local cache first
-  ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
-  if (localIter)
-    return localIter;
-
-  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
-  // Todo try to fetch model directly from a server
-  return ModelIterFactory::Create();
-}
+//ModelIter FuelClient::Models(const ModelIdentifier &_id)
+//{
+//  // Check local cache first
+//  ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
+//  if (localIter)
+//    return localIter;
+//
+//  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+//
+//  // Todo try to fetch model directly from a server
+//  auto path = "/1.0/" + _id.Owner() + "/models/" + _id.Name();
+//
+//  return ModelIterFactory::Create(this->dataPtr->rest,
+//      this->dataPtr->config, path);
+//}
 
 //////////////////////////////////////////////////
 Result FuelClient::UploadModel(const std::string &_pathToModelDir,
