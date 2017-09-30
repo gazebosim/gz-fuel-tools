@@ -10,7 +10,10 @@ pipelines:
     - step:
         script: # Modify the commands below to build your repository.
           - apt-get update
-          - apt-get -y install cmake pkg-config cppcheck doxygen ruby-ronn mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev
+          - apt-get -y install
+            cmake pkg-config python cppcheck doxygen ruby-ronn
+            mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev
+            lcov curl
           # Install Ignition Math.
           - hg clone https://bitbucket.org/ignitionrobotics/ign-math -b ign-math3
           - cd ign-math
@@ -19,6 +22,10 @@ pipelines:
           - make -j4 install
           - cd ../..
           # Install Ignition Common
+          - apt-get -y install
+            uuid-dev libavcodec-dev libavdevice-dev libavformat-dev
+            libavutil-dev libfreeimage-dev libgts-dev libswscale-dev
+            libtinyxml2-dev
           - hg clone https://bitbucket.org/ignitionrobotics/ign-common
           - cd ign-common
           - mkdir build && cd build
