@@ -65,6 +65,9 @@ class ignft::ModelIdentifierPrivate
 //////////////////////////////////////////////////
 bool ModelIdentifierPrivate::ValidName(const std::string &_name)
 {
+  // ToDo: Enable name validation when model names are prepared for this.
+  return true;
+
   bool valid = true;
   if (_name.empty())
     valid = false;

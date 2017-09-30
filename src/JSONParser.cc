@@ -60,49 +60,41 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
 {
   std::vector<ModelIdentifier> ids;
   Json::Reader reader;
-  Json::Value value;
-  reader.parse(_json, value);
+  Json::Value models;
+  reader.parse(_json, models);
 
   try
   {
-    if (!value.isObject() || !value.isMember("models"))
+    if (!models.isArray())
     {
-      ignerr << "JSON response is not an object with key 'models'\n";
+      ignerr << "JSON response is not an array\n";
     }
     else
     {
-      Json::Value models = value["models"];
-      if (!models.isArray())
+      for (auto modelIt = models.begin(); modelIt != models.end(); ++modelIt)
       {
-        ignerr << "rsp['models'] is not an array\n";
-      }
-      else
-      {
-        for (auto modelIt = models.begin(); modelIt != models.end(); ++ modelIt)
+        Json::Value model = *modelIt;
+        if (!model.isObject())
         {
-          Json::Value model = *modelIt;
-          if (!model.isObject())
-          {
-            ignerr << "Model isn't a json object!\n";
-            break;
-          }
-          ModelIdentifier id;
-
-          if (model.isMember("name"))
-            id.Name(model["name"].asString());
-          if (model.isMember("owner"))
-            id.Owner(model["owner"].asString());
-          else
-            id.Owner("anonymous");
-          if (model.isMember("uuid"))
-            id.Uuid(model["uuid"].asString());
-          if (model.isMember("updatedAt"))
-            id.ModifyDate(ParseDateTime(model["updatedAt"].asString()));
-          if (model.isMember("createdAt"))
-            id.UploadDate(ParseDateTime(model["createdAt"].asString()));
-
-          ids.push_back(id);
+          ignerr << "Model isn't a json object!\n";
+          break;
         }
+        ModelIdentifier id;
+
+        if (model.isMember("name"))
+          id.Name(model["name"].asString());
+        if (model.isMember("owner"))
+          id.Owner(model["owner"].asString());
+        else
+          id.Owner("anonymous");
+        if (model.isMember("uuid"))
+          id.Uuid(model["uuid"].asString());
+        if (model.isMember("updatedAt"))
+          id.ModifyDate(ParseDateTime(model["updatedAt"].asString()));
+        if (model.isMember("createdAt"))
+          id.UploadDate(ParseDateTime(model["createdAt"].asString()));
+
+        ids.push_back(id);
       }
     }
   }

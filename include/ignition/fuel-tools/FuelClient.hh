@@ -19,21 +19,22 @@
 #define IGNITION_FUEL_TOOLS_FUELCLIENT_HH_
 
 #include <memory>
+#include <string>
 
-#include <ignition/fuel-tools/ClientConfig.hh>
-#include <ignition/fuel-tools/Helpers.hh>
-#include <ignition/fuel-tools/LocalCache.hh>
-#include <ignition/fuel-tools/REST.hh>
-#include <ignition/fuel-tools/Result.hh>
-#include <ignition/fuel-tools/ModelIter.hh>
-
+#include "ignition/fuel-tools/Helpers.hh"
+#include "ignition/fuel-tools/ModelIter.hh"
+#include "ignition/fuel-tools/REST.hh"
+#include "ignition/fuel-tools/Result.hh"
 
 namespace ignition
 {
   namespace fuel_tools
   {
     /// \brief Forward Declaration
+    class ClientConfig;
     class FuelClientPrivate;
+    class LocalCache;
+    class ModelIdentifier;
 
     /// \brief High level interface to ignition fuel
     ///
@@ -44,10 +45,11 @@ namespace ignition
       /// \param[in] _cache Test hook. Pointer to a local cache. The FuelClient
       ///            will take ownership of the pointer and free it when
       ///            destructed. If set to nullptr the client will instantiate
-      ///            it's own cache. 
+      ///            it's own cache.
       /// \remarks the client saves a copy of the config passed into it
-      public: FuelClient(const ClientConfig &_config, const REST &_rest=REST(),
-                  LocalCache *_cache=nullptr);
+      public: FuelClient(const ClientConfig &_config,
+                         const REST &_rest=REST(),
+                         LocalCache *_cache=nullptr);
 
       /// \brief Destructor
       public: ~FuelClient();
@@ -76,7 +78,7 @@ namespace ignition
       /// \param[in] _id An identifier to assign to this new model
       /// \return Result of the upload operation
       public: Result UploadModel(const std::string &_pathToModelDir,
-                  const ModelIdentifier &_id);
+                                 const ModelIdentifier &_id);
 
       /// \brief Remove a model from ignition fuel
       /// \return Result of the delete operation

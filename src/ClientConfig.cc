@@ -15,6 +15,10 @@
  *
 */
 
+#include <ignition/common/Console.hh>
+#include <ignition/common/Filesystem.hh>
+#include <ignition/common/Util.hh>
+
 #include <ignition/fuel-tools/ClientConfig.hh>
 
 namespace ignft = ignition::fuel_tools;
@@ -108,6 +112,16 @@ void ServerConfig::APIKey(const std::string &_key)
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
+  std::string ignFuelPath = "";
+  if (ignition::common::env("IGN_FUEL_PATH", ignFuelPath))
+  {
+    if (!ignition::common::isDirectory(ignFuelPath))
+    {
+      ignerr << "[" << ignFuelPath << "] is not a directory" << std::endl;
+      return;
+    }
+    this->CacheLocation(ignFuelPath);
+  }
 }
 
 //////////////////////////////////////////////////

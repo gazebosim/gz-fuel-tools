@@ -15,28 +15,19 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_MODELPRIVATE_HH_
-#define IGNITION_FUEL_TOOLS_MODELPRIVATE_HH_
+#include <iostream>
+#include <ignition/fuel-tools.hh>
 
-#include <memory>
-
-#include "ignition/fuel-tools/Helpers.hh"
-
-
-namespace ignition
+int main(int argc, char **argv)
 {
-  namespace fuel_tools
-  {
-    /// \brief Private class, do not use
-    class IGNITION_FUEL_TOOLS_VISIBLE ModelPrivate
-    {
-      /// \brief How this model is ID'd
-      public: ModelIdentifier id;
+  // Create a ClientConfig, TODO create this from a yaml file
+  ignition::fuel_tools::ClientConfig conf;
+  ignition::fuel_tools::ServerConfig srv;
+  srv.URL("https://staging-api.ignitionfuel.org");
+  srv.LocalName("ignitionfuel");
+  conf.AddServer(srv);
 
-      /// \brief Where this model is on disk
-      public: std::string pathOnDisk;
-    };
-  }
+  ignition::fuel_tools::FuelClient client(conf);
+  for (auto iter = client.Models(); iter; ++iter)
+    std::cout << iter->Identification().Name() << std::endl;
 }
-
-#endif

@@ -18,10 +18,12 @@
 #include <iostream>
 
 #include <ignition/common/Console.hh>
-#include <ignition/fuel-tools/FuelClient.hh>
-#include <ignition/fuel-tools/JSONParser.hh>
-#include <ignition/fuel-tools/REST.hh>
-#include <ignition/fuel-tools/ModelIterPrivate.hh>
+
+#include "ignition/fuel-tools/FuelClient.hh"
+#include "ignition/fuel-tools/JSONParser.hh"
+#include "ignition/fuel-tools/LocalCache.hh"
+#include "ignition/fuel-tools/REST.hh"
+#include "ignition/fuel-tools/ModelIterPrivate.hh"
 
 
 namespace ignft = ignition::fuel_tools;
