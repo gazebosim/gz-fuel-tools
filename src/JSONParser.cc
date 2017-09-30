@@ -58,43 +58,12 @@ std::time_t ParseDateTime(const std::string &_datetime)
 /////////////////////////////////////////////////
 ModelIdentifier JSONParser::ParseModel(const std::string &_json)
 {
-  ModelIdentifier id;
   Json::Reader reader;
   Json::Value model;
+  ModelIdentifier id;
+
   reader.parse(_json, model);
-
-  try
-  {
-    if (!model.isObject())
-    {
-      ignerr << "Model isn't a json object!\n";
-      return id;
-    }
-
-    if (model.isMember("name"))
-      id.Name(model["name"].asString());
-    if (model.isMember("owner"))
-      id.Owner(model["owner"].asString());
-    else
-      id.Owner("anonymous");
-    if (model.isMember("uuid"))
-      id.Uuid(model["uuid"].asString());
-    if (model.isMember("updatedAt"))
-      id.ModifyDate(ParseDateTime(model["updatedAt"].asString()));
-    if (model.isMember("createdAt"))
-      id.UploadDate(ParseDateTime(model["createdAt"].asString()));
-  }
-#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
-  catch (...)
-  {
-    std::string what;
-#else
-  catch (const Json::LogicError &error)
-  {
-    std::string what = ": [" + std::string(error.what()) + "]";
-#endif
-    ignerr << "Bad response from server" << what << "\n";
-  }
+  ParseModelImpl(model, id);
 
   return id;
 }
@@ -107,40 +76,53 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
   Json::Value models;
   reader.parse(_json, models);
 
+  if (!models.isArray())
+  {
+    ignerr << "JSON response is not an array\n";
+  }
+  else
+  {
+    for (auto modelIt = models.begin(); modelIt != models.end(); ++modelIt)
+    {
+      Json::Value model = *modelIt;
+      ModelIdentifier id;
+      if (!ParseModelImpl(model, id))
+      {
+        ignerr << "Model isn't a json object!\n";
+        break;
+      }
+
+      ids.push_back(id);
+    }
+  }
+
+  return ids;
+}
+
+/////////////////////////////////////////////////
+bool JSONParser::ParseModelImpl(
+  const Json::Value &_json, ModelIdentifier &_model)
+{
   try
   {
-    if (!models.isArray())
+    if (!_json.isObject())
     {
-      ignerr << "JSON response is not an array\n";
+      ignerr << "Model isn't a json object!\n";
+      return false;
     }
+
+    if (_json.isMember("name"))
+      _model.Name(_json["name"].asString());
+    if (_json.isMember("owner"))
+      _model.Owner(_json["owner"].asString());
     else
-    {
-      for (auto modelIt = models.begin(); modelIt != models.end(); ++modelIt)
-      {
-        Json::Value model = *modelIt;
-        if (!model.isObject())
-        {
-          ignerr << "Model isn't a json object!\n";
-          break;
-        }
-        ModelIdentifier id;
-
-        if (model.isMember("name"))
-          id.Name(model["name"].asString());
-        if (model.isMember("owner"))
-          id.Owner(model["owner"].asString());
-        else
-          id.Owner("anonymous");
-        if (model.isMember("uuid"))
-          id.Uuid(model["uuid"].asString());
-        if (model.isMember("updatedAt"))
-          id.ModifyDate(ParseDateTime(model["updatedAt"].asString()));
-        if (model.isMember("createdAt"))
-          id.UploadDate(ParseDateTime(model["createdAt"].asString()));
-
-        ids.push_back(id);
-      }
-    }
+      _model.Owner("anonymous");
+    if (_json.isMember("uuid"))
+      _model.Uuid(_json["uuid"].asString());
+    if (_json.isMember("updatedAt"))
+      _model.ModifyDate(ParseDateTime(_json["updatedAt"].asString()));
+    if (_json.isMember("createdAt"))
+      _model.UploadDate(ParseDateTime(_json["createdAt"].asString()));
   }
 #if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
   catch (...)
@@ -152,9 +134,10 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
     std::string what = ": [" + std::string(error.what()) + "]";
 #endif
     ignerr << "Bad response from server" << what << "\n";
+    return false;
   }
 
-  return ids;
+  return true;
 }
 
 /////////////////////////////////////////////////

@@ -20,6 +20,11 @@
 
 #include "ignition/fuel-tools/ModelIter.hh"
 
+namespace Json
+{
+  class Value;
+}
+
 namespace ignition
 {
   namespace fuel_tools
@@ -39,6 +44,10 @@ namespace ignition
       /// \return vector of model identifiers
       public: static std::vector<ModelIdentifier> ParseModels(
                   const std::string &_json);
+
+      /// \brief ToDo.
+      private: static bool ParseModelImpl(
+                  const Json::Value &_json, ModelIdentifier &_model);
 
       /// \brief Build a model iterator from a JSON string
       /// \param[in] _modelIt A model iterator containing only one model

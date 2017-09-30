@@ -112,9 +112,30 @@ void ServerConfig::APIKey(const std::string &_key)
   this->dataPtr->key = _key;
 }
 
+/////////////////////////////////////////////////
+/// \brief Get home directory.
+/// \return Home directory or empty string if home wasn't found.
+/// \ToDo: Move this function to ignition::common::Filesystem
+std::string homePath()
+{
+  std::string homePath;
+#ifndef _WIN32
+  ignition::common::env("HOME", homePath);
+#else
+  ignition::common::env("HOMEPATH", homePath);
+#endif
+
+  return homePath;
+}
+
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
+  /// \brief The path containing the default cache location.
+  const std::string kDefaultCacheLocation = ignition::common::joinPaths(
+    homePath(), ".ignition", "fuel", "models");
+  this->CacheLocation(kDefaultCacheLocation);
+
   std::string ignFuelPath = "";
   if (ignition::common::env("IGN_FUEL_PATH", ignFuelPath))
   {
