@@ -15,14 +15,41 @@
  *
 */
 
+#include <gflags/gflags.h>
 #include <ignition/fuel-tools.hh>
+
+DEFINE_bool(h, false, "Show help");
+DEFINE_string(m, "", "Model name");
+DEFINE_string(o, "anonymous", "Owner name");
+DEFINE_string(s, "https://localhost:4430", "Server name");
 
 int main(int argc, char **argv)
 {
+  // Simple usage.
+  std::string usage("Download a model.");
+  usage += " Usage:\n  ./modelDownload <options>\n\n";
+  usage += "  Example:\n\t ./modelDownload -s https://localhost:4430 "
+           " -o anonymous -m Beer";
+
+  gflags::SetUsageMessage(usage);
+
+  // Parse command line arguments.
+  gflags::ParseCommandLineNonHelpFlags(&argc, &argv, true);
+
+  // Show help, if specified.
+  if (FLAGS_h || FLAGS_m == "")
+  {
+    gflags::SetCommandLineOptionWithMode("help", "false",
+        gflags::SET_FLAGS_DEFAULT);
+    gflags::SetCommandLineOptionWithMode("helpshort", "true",
+        gflags::SET_FLAGS_DEFAULT);
+  }
+  gflags::HandleCommandLineHelpFlags();
+
   // Create a ClientConfig, TODO create this from a yaml file
   ignition::fuel_tools::ClientConfig conf;
   ignition::fuel_tools::ServerConfig srv;
-  srv.URL("https://localhost:4430");
+  srv.URL(FLAGS_s);
   srv.LocalName("ignitionfuel");
   conf.AddServer(srv);
 
@@ -32,8 +59,8 @@ int main(int argc, char **argv)
 
   // Set the properties of the model that we want to download.
   ignition::fuel_tools::ModelIdentifier modelIdentifier;
-  modelIdentifier.Owner("anonymous");
-  modelIdentifier.Name("Beer");
+  modelIdentifier.Owner(FLAGS_o);
+  modelIdentifier.Name(FLAGS_m);
 
   // Fetch the model.
   auto result = client.DownloadModel(modelIdentifier);
