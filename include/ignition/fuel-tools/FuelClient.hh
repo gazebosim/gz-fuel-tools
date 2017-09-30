@@ -42,6 +42,7 @@ namespace ignition
     {
       /// \brief Constructor accepts server and auth configuration
       /// \param[in] _config configuration about servers to connect to
+      /// \param[in] _rest a REST request.
       /// \param[in] _cache Test hook. Pointer to a local cache. The FuelClient
       ///            will take ownership of the pointer and free it when
       ///            destructed. If set to nullptr the client will instantiate
