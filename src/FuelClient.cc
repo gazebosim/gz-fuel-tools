@@ -70,7 +70,7 @@ FuelClient::~FuelClient()
 ModelIter FuelClient::Models()
 {
   ModelIter iter = ModelIterFactory::Create(this->dataPtr->rest,
-      this->dataPtr->config, "/1.0/models");
+      this->dataPtr->config, "/1.0/", "models");
 
   if (!iter)
   {
@@ -124,9 +124,9 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id)
   }
 
   auto serverURL = servers.front().URL();
-  auto path = "/1.0/" + _id.Owner() + "/models/" + _id.Name() + ".zip";
+  auto path = _id.Owner() + "/models/" + _id.Name() + ".zip";
 
-  resp = rest.Request("GET", serverURL, path, {}, {}, "");
+  resp = rest.Request("GET", serverURL, "/1.0/", path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
