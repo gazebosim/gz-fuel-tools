@@ -18,6 +18,10 @@
 #ifndef IGNITION_FUEL_TOOLS_JSONPARSER_HH_
 #define IGNITION_FUEL_TOOLS_JSONPARSER_HH_
 
+#include <string>
+#include <vector>
+
+#include "ignition/fuel-tools/ModelIdentifier.hh"
 #include "ignition/fuel-tools/ModelIter.hh"
 
 namespace Json
@@ -33,9 +37,9 @@ namespace ignition
     class IGNITION_FUEL_TOOLS_VISIBLE JSONParser
     {
 
-      /// \brief Parse a model JSON string and return a model iterator
+      /// \brief Parse a model JSON string and return a model identifier
       /// \param[in] _json JSON string containing a model
-      /// \return a model identifiers
+      /// \return a model identifier
       public: static ModelIdentifier ParseModel(
                   const std::string &_json);
 
@@ -45,7 +49,10 @@ namespace ignition
       public: static std::vector<ModelIdentifier> ParseModels(
                   const std::string &_json);
 
-      /// \brief ToDo.
+      /// \brief Parse a json object as a model.
+      /// \param[in] _json JSON object containing a single model
+      /// \param[out] _model a model identifier after parsing the JSON
+      /// \return True if the parsing succeed or false otherwise
       private: static bool ParseModelImpl(
                   const Json::Value &_json, ModelIdentifier &_model);
 

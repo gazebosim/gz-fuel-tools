@@ -110,21 +110,22 @@ ModelIter FuelClient::Models()
 }
 
 //////////////////////////////////////////////////
-//ModelIter FuelClient::Models(const ModelIdentifier &_id)
-//{
-//  // Check local cache first
-//  ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
-//  if (localIter)
-//    return localIter;
-//
-//  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
-//
-//  // Todo try to fetch model directly from a server
-//  auto path = "/1.0/" + _id.Owner() + "/models/" + _id.Name();
-//
-//  return ModelIterFactory::Create(this->dataPtr->rest,
-//      this->dataPtr->config, path);
-//}
+ModelIter FuelClient::Models(const ModelIdentifier &_id)
+{
+  // Check local cache first
+  ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
+  if (localIter)
+    return localIter;
+
+  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+
+  // Todo try to fetch model directly from a server
+  auto version = "/1.0/";
+  auto path = _id.Owner() + "/models/" + _id.Name();
+
+  return ModelIterFactory::Create(this->dataPtr->rest,
+      this->dataPtr->config, version, path);
+}
 
 //////////////////////////////////////////////////
 Result FuelClient::UploadModel(const std::string &_pathToModelDir,

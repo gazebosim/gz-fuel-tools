@@ -55,13 +55,11 @@ namespace ignition
       /// \brief Destructor
       public: ~FuelClient();
 
-      /// \brief Returns models matching a given identifying criteria
+      /// \brief Fetch the details of a model.
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
-      /// \remarks It's not yet clear if model names are unique, so this API
-      ///          allows the posibility of getting multiple models with the
-      ///          same name.
-      /// \return An iterator of models with names matching the criteria
+      /// \param[out] _model The requested model
+      /// \return Result of the fetch operation.
       public: Result ModelDetails(const ModelIdentifier &_id,
                                   ModelIdentifier &_model) const;
 
