@@ -77,7 +77,7 @@ RESTResponse REST::Request(const std::string &_httpMethod,
     return res;
 
   std::string url = JoinURL(_url, _version);
-  url = JoinURL(_url, _path);
+  url = JoinURL(url, _path);
 
   // Process query strings.
   if (!_queryStrings.empty())
