@@ -45,7 +45,7 @@ namespace ignition
 
       /// \brief Create a model iter that will make REST api calls
       public: static ModelIter Create(REST &_rest, ClientConfig &_conf,
-          const std::string &_api);
+          const std::string &_version, const std::string &_api);
 
       /// \brief Create a model iterator that is empty
       public: static ModelIter Create();
@@ -119,7 +119,7 @@ namespace ignition
     {
       /// \brief constructor
       public: IterRESTIds(REST *_rest, ClientConfig *_confi,
-                  const std::string &_api);
+                  const std::string &_version, const std::string &_api);
 
       /// \brief destructor
       public: virtual ~IterRESTIds();

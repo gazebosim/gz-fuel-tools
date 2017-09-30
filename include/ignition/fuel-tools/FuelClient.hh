@@ -42,6 +42,7 @@ namespace ignition
     {
       /// \brief Constructor accepts server and auth configuration
       /// \param[in] _config configuration about servers to connect to
+      /// \param[in] _rest a REST request.
       /// \param[in] _cache Test hook. Pointer to a local cache. The FuelClient
       ///            will take ownership of the pointer and free it when
       ///            destructed. If set to nullptr the client will instantiate
@@ -83,6 +84,10 @@ namespace ignition
       /// \brief Remove a model from ignition fuel
       /// \return Result of the delete operation
       public: Result DeleteModel(const ModelIdentifier &_id);
+
+      /// \brief Download a model from ignition fuel
+      /// \return Result of the download operation
+      public: Result DownloadModel(const ModelIdentifier &_id);
 
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;

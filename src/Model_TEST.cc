@@ -22,7 +22,6 @@ namespace ignft = ignition::fuel_tools;
 using namespace ignition;
 using namespace ignft;
 
-
 /////////////////////////////////////////////////
 /// \brief Nothing crashes
 TEST(Model, ConstructorDoesNotCrash)

@@ -15,14 +15,19 @@
  *
 */
 
+#include <memory>
+#include <string>
 #include <vector>
 #include <ignition/common/Console.hh>
-#include <ignition/fuel-tools/ClientConfig.hh>
-#include <ignition/fuel-tools/JSONParser.hh>
-#include <ignition/fuel-tools/ModelIter.hh>
-#include <ignition/fuel-tools/ModelIterPrivate.hh>
-#include <ignition/fuel-tools/ModelPrivate.hh>
-#include <ignition/fuel-tools/REST.hh>
+
+#include "ignition/fuel-tools/ClientConfig.hh"
+#include "ignition/fuel-tools/JSONParser.hh"
+#include "ignition/fuel-tools/Model.hh"
+#include "ignition/fuel-tools/ModelIdentifier.hh"
+#include "ignition/fuel-tools/ModelIter.hh"
+#include "ignition/fuel-tools/ModelIterPrivate.hh"
+#include "ignition/fuel-tools/ModelPrivate.hh"
+#include "ignition/fuel-tools/REST.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
@@ -51,9 +56,10 @@ ModelIter ModelIterFactory::Create(std::vector<Model> _models)
 
 //////////////////////////////////////////////////
 ModelIter ModelIterFactory::Create(REST &_rest, ClientConfig &_conf,
-    const std::string &_api)
+    const std::string &_version, const std::string &_api)
 {
-  std::unique_ptr<ModelIterPrivate> priv(new IterRESTIds(&_rest, &_conf, _api));
+  std::unique_ptr<ModelIterPrivate> priv(new IterRESTIds(
+    &_rest, &_conf, _version, _api));
   return std::move(ModelIter(std::move(priv)));
 }
 
@@ -143,7 +149,7 @@ IterRESTIds::~IterRESTIds()
 
 //////////////////////////////////////////////////
 IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
-    const std::string &_api)
+    const std::string &_version, const std::string &_api)
   : rest(_rest), config(_config)
 {
   // TODO fetch from all servers and combine result, not just one server
@@ -170,7 +176,8 @@ IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
     ++page;
 
     // Fire the request.
-    resp = this->rest->Request("GET", this->serverURL, path, {}, headers, "");
+    resp = this->rest->Request(
+      "GET", this->serverURL, _version, path, {}, headers, "");
 
     // Parse the response.
     modelIds = JSONParser::ParseModels(resp.data);

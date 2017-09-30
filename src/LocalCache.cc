@@ -15,12 +15,18 @@
  *
 */
 
+#include <fstream>
+#include <memory>
+#include <string>
 #include <vector>
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
-#include <ignition/fuel-tools/LocalCache.hh>
-#include <ignition/fuel-tools/ModelIterPrivate.hh>
-#include <ignition/fuel-tools/ModelPrivate.hh>
+
+#include "ignition/fuel-tools/ClientConfig.hh"
+#include "ignition/fuel-tools/LocalCache.hh"
+#include "ignition/fuel-tools/ModelIterPrivate.hh"
+#include "ignition/fuel-tools/ModelPrivate.hh"
+#include "ignition/fuel-tools/Zip.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
@@ -31,8 +37,7 @@ class ignft::LocalCachePrivate
 {
   /// \brief return all models in a given directory
   /// \param[in] _path A directory for the local server cache
-  public: std::vector<Model> ModelsInServer(
-              const std::string &_path) const;
+  public: std::vector<Model> ModelsInServer(const std::string &_path) const;
 
   /// \brief return all models in a given Owner directory
   public: std::vector<Model> ModelsInPath(const std::string &_path);
@@ -168,9 +173,39 @@ ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
 
 //////////////////////////////////////////////////
 bool LocalCache::SaveModel(
-    const ModelIdentifier &_id, const std::string &_data)
+  const ModelIdentifier &_id, const std::string &_data, const bool _overwrite)
 {
-  // TODO
-  // Does this model exist?
+  auto cacheLocation = this->dataPtr->config->CacheLocation();
+  auto modelDir = common::joinPaths(cacheLocation, _id.Owner(), _id.Name());
+
   // Is it already in the cache?
+  if (common::isDirectory(modelDir) && !_overwrite)
+  {
+    ignerr << "Directory [" << modelDir << "] already exists" << std::endl;
+    return false;
+  }
+
+  // Create the model directory.
+  if (!common::createDirectories(modelDir))
+  {
+    ignerr << "Unable to create directory [" << modelDir << "]" << std::endl;
+  }
+
+  auto zipFile = common::joinPaths(modelDir, _id.Name() + ".zip");
+  std::ofstream ofs(zipFile, std::ofstream::out);
+  ofs << _data;
+  ofs.close();
+
+  if (!Zip::Extract(zipFile, modelDir))
+  {
+    ignerr << "Unable to unzip [" << zipFile << "]" << std::endl;
+    return false;
+  }
+
+  if (!common::removeDirectoryOrFile(zipFile))
+  {
+    ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
+  }
+
+  return true;
 }

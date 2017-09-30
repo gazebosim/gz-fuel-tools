@@ -63,7 +63,7 @@ namespace ignition
       friend LocalCache;
       friend LocalCachePrivate;
 
-      /// \brief Protected Constructor
+      /// \brief Default constructor
       public: Model();
 
       /// \brief Protected constructor

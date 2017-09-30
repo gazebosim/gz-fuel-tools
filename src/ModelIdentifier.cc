@@ -15,8 +15,10 @@
  *
 */
 
+#include <string>
 #include <vector>
-#include <ignition/fuel-tools/ModelIdentifier.hh>
+
+#include "ignition/fuel-tools/ModelIdentifier.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
