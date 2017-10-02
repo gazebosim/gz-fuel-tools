@@ -42,6 +42,7 @@ pipelines:
           # Build examples
           - cd ../example
           - mkdir build && cd build
+          - cmake ..
           - make -j4
           - cd ../..
           # ToDo: Fix all style errors.

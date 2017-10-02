@@ -25,24 +25,24 @@ need to [disable the Windows firewall](http://windows.microsoft.com/en-us/window
 
         "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
 
-1. Clone Ignition RNDF:
+1. Clone Ignition Fuel-Tools:
 
-        hg clone https://bitbucket.org/ignitionrobotics/ign-rndf
-        cd ign-rndf
+        hg clone https://bitbucket.org/ignitionrobotics/ign-fuel-tools
+        cd ign-fuel-tools
         mkdir build
 
 1. In the Windows Command Prompt, configure and build:
 
-	    cd ign-rndf\build
+	    cd ign-fuel-tools\build
         ..\configure
         nmake install
 
 
-    You should now have an installation of Ignition RNDF in ign-ws/ign-rndf/build/install.
+    You should now have an installation of Ignition Fuel-Tools in ign-ws/ign-fuel-tools/build/install.
 
 ## Run tests
 
 1. In the Windows Command Prompt, run the test suite:
 
-    cd ign-rndf\build
+    cd ign-fuel-tools\build
     ctest
