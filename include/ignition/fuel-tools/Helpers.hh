@@ -22,10 +22,10 @@
 #include <cstring>
 #include <string>
 
-/// \def IGNITION_RNDF_VISIBLE
+/// \def IGNITION_FUEL_TOOLS_VISIBLE
 /// Use to represent "symbol visible" if supported
 
-/// \def IGNITION_RNDF_HIDDEN
+/// \def IGNITION_FUEL_TOOLS_HIDDEN
 /// Use to represent "symbol hidden" if supported
 
 #if defined BUILDING_STATIC_LIBS
