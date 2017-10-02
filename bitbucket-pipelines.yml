@@ -12,7 +12,7 @@ pipelines:
           - apt-get update
           - apt-get -y install
             cmake pkg-config python cppcheck doxygen ruby-ronn
-            mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev
+            mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev
             lcov curl
           # Install Ignition Math.
           - hg clone https://bitbucket.org/ignitionrobotics/ign-math -b ign-math3
