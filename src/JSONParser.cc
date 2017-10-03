@@ -123,6 +123,20 @@ bool JSONParser::ParseModelImpl(
       _model.ModifyDate(ParseDateTime(_json["updatedAt"].asString()));
     if (_json.isMember("createdAt"))
       _model.UploadDate(ParseDateTime(_json["createdAt"].asString()));
+    if (_json.isMember("description"))
+      _model.Description(_json["description"].asString());
+    if (_json.isMember("likes"))
+      _model.Likes(_json["likes"].asUInt());
+    if (_json.isMember("downloads"))
+      _model.Downloads(_json["downloads"].asUInt());
+    if (_json.isMember("filesize"))
+      _model.FileSize(_json["filesize"].asUInt());
+    if (_json.isMember("license_name"))
+      _model.LicenseName(_json["license_name"].asString());
+    if (_json.isMember("license_url"))
+      _model.LicenseURL(_json["license_url"].asString());
+    if (_json.isMember("license_image"))
+      _model.LicenseImageURL(_json["license_image"].asString());
   }
 #if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
   catch (...)

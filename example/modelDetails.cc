@@ -55,8 +55,6 @@ int main(int argc, char **argv)
   srv.LocalName("ignitionfuel");
   conf.AddServer(srv);
 
-  // Remember to set your IGN_FUEL_PATH.
-  // E.g.: export IGN_FUEL_PATH=~/.ignition/fuel/models
   ignition::fuel_tools::FuelClient client(conf);
 
   // Set the properties of the model that we want to download.
@@ -73,5 +71,11 @@ int main(int argc, char **argv)
   {
     std::cout << "Name: " << model.Name() << std::endl;
     std::cout << "Owner: " << model.Owner() << std::endl;
+    std::cout << "Description: " << model.Description() << std::endl;
+    std::cout << "Likes: " << model.Likes() << std::endl;
+    std::cout << "Downloads: " << model.Downloads() << std::endl;
+    std::cout << "License name: " << model.LicenseName() << std::endl;
+    std::cout << "License URL: " << model.LicenseURL() << std::endl;
+    std::cout << "License image URL: " << model.LicenseImageURL() << std::endl;
   }
 }
