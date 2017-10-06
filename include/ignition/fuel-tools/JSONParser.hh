@@ -56,6 +56,12 @@ namespace ignition
       private: static bool ParseModelImpl(
                   const Json::Value &_json, ModelIdentifier &_model);
 
+      /// \brief Parse the list of tags contained in a model.
+      /// \param[in] _json JSON representation of the model.
+      /// \return The list of tags.
+      private: static std::vector<std::string> ParseTags(
+                  const Json::Value &_json);
+
       /// \brief Build a model iterator from a JSON string
       /// \param[in] _modelIt A model iterator containing only one model
       /// \return A JSON string representing a single model

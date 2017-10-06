@@ -15,7 +15,6 @@
  *
 */
 
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -53,6 +52,37 @@ std::time_t ParseDateTime(const std::string &_datetime)
   // 0 - standard time, 1, daylight saving, -1 unknown
   tm.tm_isdst = -1;
   return timegm(&tm);
+}
+
+/////////////////////////////////////////////////
+std::vector<std::string> JSONParser::ParseTags(const Json::Value &_json)
+{
+  std::vector<std::string> tags;
+  if (!_json.isArray())
+  {
+    ignerr << "JSON tags are not an array\n";
+    return tags;
+  }
+
+  try
+  {
+    for (auto tagIt = _json.begin(); tagIt != _json.end(); ++tagIt)
+      tags.push_back(tagIt->asString());
+  }
+#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
+  catch (...)
+  {
+    std::string what;
+#else
+  catch (const Json::LogicError &error)
+  {
+    std::string what = ": [" + std::string(error.what()) + "]";
+#endif
+    ignerr << "Exception parsing tags" << what << "\n";
+    return std::vector<std::string>();
+  }
+
+  return tags;
 }
 
 /////////////////////////////////////////////////
@@ -137,6 +167,8 @@ bool JSONParser::ParseModelImpl(
       _model.LicenseURL(_json["license_url"].asString());
     if (_json.isMember("license_image"))
       _model.LicenseImageURL(_json["license_image"].asString());
+    if (_json.isMember("tags"))
+      _model.Tags(ParseTags(_json["tags"]));
   }
 #if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
   catch (...)
