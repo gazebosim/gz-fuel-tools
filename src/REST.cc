@@ -154,9 +154,11 @@ RESTResponse REST::Request(const std::string &_httpMethod,
     std::cerr << "Error in REST request" << std::endl;
     size_t len = strlen(errbuf);
     fprintf(stderr, "\nlibcurl: (%d) ", success);
-    if(len)
+    if (len)
+    {
       fprintf(stderr, "%s%s", errbuf,
               ((errbuf[len - 1] != '\n') ? "\n" : ""));
+    }
     else
       fprintf(stderr, "%s\n", curl_easy_strerror(success));
   }

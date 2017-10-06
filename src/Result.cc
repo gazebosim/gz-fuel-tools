@@ -55,7 +55,7 @@ Result::Result(const Result &_orig) : dataPtr(new ResultPrivate)
 //////////////////////////////////////////////////
 Result::operator bool() const
 {
-  switch(this->dataPtr->type)
+  switch (this->dataPtr->type)
   {
     case DELETE:
     case FETCH:

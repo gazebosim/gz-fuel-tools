@@ -17,23 +17,22 @@
 
 #include <gtest/gtest.h>
 #include <cstdio>
-
-/// \brief Forward Declaration
-class ModelIterTestFixture;
+#include <string>
 
 #include "ignition/fuel-tools/ModelIter.hh"
 #include "ignition/fuel-tools/ModelIterPrivate.hh"
 #include "ignition/fuel-tools/ModelPrivate.hh"
 
-
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
+using namespace fuel_tools;
 
 namespace ignition
 {
   namespace fuel_tools
   {
+    /// \brief Forward Declaration
+    class ModelIterTestFixture;
+
     /// \brief Class to misuse friendship
     class ModelIterTest
     {
@@ -49,9 +48,9 @@ namespace ignition
           {
             ModelIdentifier id;
             char buf[10];
-            std::sprintf(buf, "model%d", i);
+            std::snprintf(buf, sizeof(buf), "model%d", i);
             std::string name = buf;
-            std::sprintf(buf, "owner%d", i);
+            std::snprintf(buf, sizeof(buf), "owner%d", i);
             std::string owner = buf;
             id.Name(name);
             id.Owner(owner);
@@ -68,9 +67,9 @@ namespace ignition
           {
             ModelIdentifier id;
             char buf[10];
-            std::sprintf(buf, "model%d", i);
+            std::snprintf(buf, sizeof(buf), "model%d", i);
             std::string name = buf;
-            std::sprintf(buf, "owner%d", i);
+            std::snprintf(buf, sizeof(buf), "owner%d", i);
             std::string owner = buf;
 
             std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);

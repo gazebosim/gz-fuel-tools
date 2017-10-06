@@ -45,5 +45,5 @@ pipelines:
           - cmake ..
           - make -j4
           - cd ../..
-          # ToDo: Fix all style errors.
-          # sh tools/code_check.sh
+          # Style checker
+          - sh tools/code_check.sh

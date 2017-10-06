@@ -49,8 +49,8 @@ namespace ignition
       ///            it's own cache.
       /// \remarks the client saves a copy of the config passed into it
       public: FuelClient(const ClientConfig &_config,
-                         const REST &_rest=REST(),
-                         LocalCache *_cache=nullptr);
+                         const REST &_rest = REST(),
+                         LocalCache *_cache = nullptr);
 
       /// \brief Destructor
       public: ~FuelClient();

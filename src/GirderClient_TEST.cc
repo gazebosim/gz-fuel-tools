@@ -15,9 +15,11 @@
  *
 */
 
+#include <gtest/gtest.h>
+
 #include <string>
 #include <vector>
-#include <gtest/gtest.h>
+
 #include "ignition/fuel-tools/GirderClient.hh"
 
 using namespace ignition;

@@ -18,6 +18,7 @@
 #ifndef IGNITION_FUEL_TOOLS_MODELITERPRIVATE_HH_
 #define IGNITION_FUEL_TOOLS_MODELITERPRIVATE_HH_
 
+#include <string>
 #include <vector>
 
 #include "ignition/fuel-tools/Model.hh"
@@ -72,7 +73,7 @@ namespace ignition
     class IGNITION_FUEL_TOOLS_VISIBLE IterIds : public ModelIterPrivate
     {
       /// \brief constructor
-      public: IterIds(std::vector<ModelIdentifier> _ids);
+      public: explicit IterIds(std::vector<ModelIdentifier> _ids);
 
       /// \brief destructor
       public: virtual ~IterIds();
@@ -95,7 +96,7 @@ namespace ignition
     class IGNITION_FUEL_TOOLS_VISIBLE IterModels: public ModelIterPrivate
     {
       /// \brief constructor
-      public: IterModels(std::vector<Model> _models);
+      public: explicit IterModels(std::vector<Model> _models);
 
       /// \brief destructor
       public: virtual ~IterModels();

@@ -19,6 +19,8 @@
 #define IGNITION_FUEL_TOOLS_MODEL_HH_
 
 #include <memory>
+#include <string>
+
 #include "ignition/fuel-tools/Helpers.hh"
 #include "ignition/fuel-tools/Result.hh"
 #include "ignition/fuel-tools/ModelIdentifier.hh"
@@ -67,7 +69,7 @@ namespace ignition
       public: Model();
 
       /// \brief Protected constructor
-      protected: Model(std::shared_ptr<ModelPrivate> _dptr);
+      protected: explicit Model(std::shared_ptr<ModelPrivate> _dptr);
 
       /// \brief Copy constructor
       public: Model(const Model &_orig) = default;
