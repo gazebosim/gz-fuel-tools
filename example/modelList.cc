@@ -15,9 +15,10 @@
  *
 */
 
+#include <gflags/gflags.h>
+
 #include <iostream>
 
-#include <gflags/gflags.h>
 #include <ignition/fuel-tools.hh>
 
 DEFINE_bool(h, false, "Show help");

@@ -20,11 +20,10 @@
 #include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel-tools/Zip.hh"
-#include "test_config.h"
+#include "test/test_config.h"
 
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
+using namespace fuel_tools;
 
 /////////////////////////////////////////////////
 // Test compressing files in a directory into a zip archive

@@ -15,10 +15,10 @@
  *
 */
 
+#include <json/json.h>
+
 #include <string>
 #include <vector>
-
-#include <json/json.h>
 
 #include <ignition/common/Console.hh>
 #include "ignition/fuel-tools/JSONParser.hh"
@@ -33,7 +33,7 @@ using namespace fuel_tools;
 /////////////////////////////////////////////////
 std::time_t ParseDateTime(const std::string &_datetime)
 {
-  int y,M,d,h,m;
+  int y, M, d, h, m;
   float s;
   sscanf(_datetime.c_str(), "%d-%d-%dT%d:%d:%fZ", &y, &M, &d, &h, &m, &s);
   std::tm tm;
@@ -48,7 +48,7 @@ std::time_t ParseDateTime(const std::string &_datetime)
   // 0-59
   tm.tm_min = m;
   // 0-61 (0-60 in C++11)
-  tm.tm_sec = (int)s;
+  tm.tm_sec = static_cast<int>(s);
   // 0 - standard time, 1, daylight saving, -1 unknown
   tm.tm_isdst = -1;
   return timegm(&tm);

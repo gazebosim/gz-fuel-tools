@@ -39,7 +39,7 @@ namespace ignition
     {
       /// \brief Constructor
       /// \param[in] _config The configuration for the client
-      public: LocalCache(const ClientConfig *_config);
+      public: explicit LocalCache(const ClientConfig *_config);
 
       /// \brief destructor
       public: virtual ~LocalCache();

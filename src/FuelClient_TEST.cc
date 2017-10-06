@@ -60,7 +60,6 @@ TEST(FuelClent, FetchModels)
   ignition::fuel_tools::MockREST rest;
   ignition::fuel_tools::FuelClient client(conf, rest);
   auto iter = client.Models();
-
 }
 
 //////////////////////////////////////////////////

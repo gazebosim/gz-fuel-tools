@@ -19,10 +19,10 @@
 #define IGNITION_FUEL_TOOLS_MODELIDENTIFIER_HH_
 
 // #include <array>
-// #include <cstdint>
-
+#include <cstdint>
 #include <ctime>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "ignition/fuel-tools/Helpers.hh"
@@ -44,7 +44,7 @@ namespace ignition
       public: ModelIdentifier(const ModelIdentifier &_orig);
 
       /// \brief Assignment operator
-      public: void operator=(const ModelIdentifier &_orig);
+      public: ModelIdentifier &operator=(const ModelIdentifier &_orig);
 
       /// \brief Equality operator
       public: bool operator==(const ModelIdentifier &_rhs) const;

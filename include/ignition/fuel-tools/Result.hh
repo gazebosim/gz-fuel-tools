@@ -19,6 +19,7 @@
 #define IGNITION_FUEL_TOOLS_RESULT_HH_
 
 #include <memory>
+#include <string>
 
 #include "ignition/fuel-tools/Helpers.hh"
 
@@ -82,7 +83,7 @@ namespace ignition
       public: ResultType Type() const;
 
       /// \brief protected constructor
-      public: Result(const ResultType _type);
+      public: explicit Result(const ResultType _type);
 
       /// \brief copy constructor
       public: Result(const Result &_orig);

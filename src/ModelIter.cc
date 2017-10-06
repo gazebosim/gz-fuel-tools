@@ -150,7 +150,7 @@ IterRESTIds::~IterRESTIds()
 //////////////////////////////////////////////////
 IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
     const std::string &_version, const std::string &_api)
-  : rest(_rest), config(_config)
+  : config(_config), rest(_rest)
 {
   // TODO fetch from all servers and combine result, not just one server
   auto servers = this->config->Servers();
@@ -160,7 +160,6 @@ IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
     return;
   }
 
-  std::string protocol = "GET";
   this->serverURL = servers.front().URL();
   int page = 1;
   std::vector<std::string> headers =  {"Accept: application/json"};
@@ -229,7 +228,7 @@ ModelIter::ModelIter(std::unique_ptr<ModelIterPrivate> _dptr)
 }
 
 //////////////////////////////////////////////////
-ModelIter::ModelIter(ModelIter &&_old)
+ModelIter::ModelIter(ModelIter && _old)
 {
   this->dataPtr.reset(_old.dataPtr.release());
 }

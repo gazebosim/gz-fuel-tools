@@ -60,15 +60,16 @@ ServerConfig::ServerConfig() : dataPtr (new ServerConfigPrivate)
 
 //////////////////////////////////////////////////
 ServerConfig::ServerConfig(const ServerConfig &_orig)
- : dataPtr(new ServerConfigPrivate)
+  : dataPtr(new ServerConfigPrivate)
 {
   *(this->dataPtr) = *(_orig.dataPtr);
 }
 
 //////////////////////////////////////////////////
-void ServerConfig::operator=(const ServerConfig &_orig)
+ServerConfig &ServerConfig::operator=(const ServerConfig &_orig)
 {
   *(this->dataPtr) = *(_orig.dataPtr);
+  return *this;
 }
 
 //////////////////////////////////////////////////
@@ -150,7 +151,7 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig(const ClientConfig &_copy)
- : dataPtr(new ClientConfigPrivate)
+  : dataPtr(new ClientConfigPrivate)
 {
   *(this->dataPtr) = *(_copy.dataPtr);
 }
