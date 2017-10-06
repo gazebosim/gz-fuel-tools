@@ -46,11 +46,11 @@ TEST(JSONParser, ParseModels)
   EXPECT_EQ("car", model.Name());
   auto t = model.ModifyDate();
   char buffer[100];
-  std::strftime(buffer, sizeof(buffer), "%F %T", localtime(&t));
-  EXPECT_EQ(std::string(buffer), "2012-04-23 11:25:43");
+  std::strftime(buffer, sizeof(buffer), "%F %T", gmtime(&t));
+  EXPECT_EQ("2012-04-23 18:25:43", std::string(buffer));
   t = model.UploadDate();
-  std::strftime(buffer, sizeof(buffer), "%F %T", localtime(&t));
-  EXPECT_EQ(std::string(buffer), "2012-04-21 12:25:44");
+  std::strftime(buffer, sizeof(buffer), "%F %T", gmtime(&t));
+  EXPECT_EQ("2012-04-21 19:25:44", std::string(buffer));
   EXPECT_EQ("3d3112d9-02b2-4b28-8d2f-f03be00a5a26", model.Uuid());
 }
 
