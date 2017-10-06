@@ -18,10 +18,11 @@
 #ifndef IGNITION_FUEL_TOOLS_MODELITERPRIVATE_HH_
 #define IGNITION_FUEL_TOOLS_MODELITERPRIVATE_HH_
 
+#include <string>
 #include <vector>
 
-#include <ignition/fuel-tools/Model.hh>
-#include <ignition/fuel-tools/ModelIdentifier.hh>
+#include "ignition/fuel-tools/Model.hh"
+#include "ignition/fuel-tools/ModelIdentifier.hh"
 
 namespace ignition
 {
@@ -45,7 +46,7 @@ namespace ignition
 
       /// \brief Create a model iter that will make REST api calls
       public: static ModelIter Create(REST &_rest, ClientConfig &_conf,
-          const std::string &_api);
+          const std::string &_version, const std::string &_api);
 
       /// \brief Create a model iterator that is empty
       public: static ModelIter Create();
@@ -72,7 +73,7 @@ namespace ignition
     class IGNITION_FUEL_TOOLS_VISIBLE IterIds : public ModelIterPrivate
     {
       /// \brief constructor
-      public: IterIds(std::vector<ModelIdentifier> _ids);
+      public: explicit IterIds(std::vector<ModelIdentifier> _ids);
 
       /// \brief destructor
       public: virtual ~IterIds();
@@ -95,7 +96,7 @@ namespace ignition
     class IGNITION_FUEL_TOOLS_VISIBLE IterModels: public ModelIterPrivate
     {
       /// \brief constructor
-      public: IterModels(std::vector<Model> _models);
+      public: explicit IterModels(std::vector<Model> _models);
 
       /// \brief destructor
       public: virtual ~IterModels();
@@ -119,7 +120,7 @@ namespace ignition
     {
       /// \brief constructor
       public: IterRESTIds(REST *_rest, ClientConfig *_confi,
-                  const std::string &_api);
+                  const std::string &_version, const std::string &_api);
 
       /// \brief destructor
       public: virtual ~IterRESTIds();

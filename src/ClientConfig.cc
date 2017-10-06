@@ -15,7 +15,14 @@
  *
 */
 
-#include <ignition/fuel-tools/ClientConfig.hh>
+#include <string>
+#include <vector>
+
+#include <ignition/common/Console.hh>
+#include <ignition/common/Filesystem.hh>
+#include <ignition/common/Util.hh>
+
+#include "ignition/fuel-tools/ClientConfig.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
@@ -53,15 +60,16 @@ ServerConfig::ServerConfig() : dataPtr (new ServerConfigPrivate)
 
 //////////////////////////////////////////////////
 ServerConfig::ServerConfig(const ServerConfig &_orig)
- : dataPtr(new ServerConfigPrivate)
+  : dataPtr(new ServerConfigPrivate)
 {
   *(this->dataPtr) = *(_orig.dataPtr);
 }
 
 //////////////////////////////////////////////////
-void ServerConfig::operator=(const ServerConfig &_orig)
+ServerConfig &ServerConfig::operator=(const ServerConfig &_orig)
 {
   *(this->dataPtr) = *(_orig.dataPtr);
+  return *this;
 }
 
 //////////////////////////////////////////////////
@@ -105,14 +113,45 @@ void ServerConfig::APIKey(const std::string &_key)
   this->dataPtr->key = _key;
 }
 
+/////////////////////////////////////////////////
+/// \brief Get home directory.
+/// \return Home directory or empty string if home wasn't found.
+/// \ToDo: Move this function to ignition::common::Filesystem
+std::string homePath()
+{
+  std::string homePath;
+#ifndef _WIN32
+  ignition::common::env("HOME", homePath);
+#else
+  ignition::common::env("HOMEPATH", homePath);
+#endif
+
+  return homePath;
+}
+
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
+  /// \brief The path containing the default cache location.
+  const std::string kDefaultCacheLocation = ignition::common::joinPaths(
+    homePath(), ".ignition", "fuel", "models");
+  this->CacheLocation(kDefaultCacheLocation);
+
+  std::string ignFuelPath = "";
+  if (ignition::common::env("IGN_FUEL_PATH", ignFuelPath))
+  {
+    if (!ignition::common::isDirectory(ignFuelPath))
+    {
+      ignerr << "[" << ignFuelPath << "] is not a directory" << std::endl;
+      return;
+    }
+    this->CacheLocation(ignFuelPath);
+  }
 }
 
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig(const ClientConfig &_copy)
- : dataPtr(new ClientConfigPrivate)
+  : dataPtr(new ClientConfigPrivate)
 {
   *(this->dataPtr) = *(_copy.dataPtr);
 }

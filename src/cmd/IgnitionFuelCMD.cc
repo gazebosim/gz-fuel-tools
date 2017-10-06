@@ -21,8 +21,10 @@
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
-#include <ignition/fuel-tools/Helpers.hh>
-#include <ignition/fuel-tools/FuelClient.hh>
+
+#include "ignition/fuel-tools/ClientConfig.hh"
+#include "ignition/fuel-tools/Helpers.hh"
+#include "ignition/fuel-tools/FuelClient.hh"
 
 
 /// \brief Read a config file from disk
@@ -35,7 +37,7 @@ ignition::fuel_tools::ClientConfig IGNITION_FUEL_TOOLS_HIDDEN getConfig()
   srv.LocalName("staging_ignitionfuel");
   conf.AddServer(srv);
 
-  if(const char *cacheLoc = std::getenv("IGN_FUEL_CACHE"))
+  if (const char *cacheLoc = std::getenv("IGN_FUEL_CACHE"))
     conf.CacheLocation(cacheLoc);
   else
   {

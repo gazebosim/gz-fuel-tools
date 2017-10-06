@@ -16,12 +16,11 @@
 */
 
 #include <sys/stat.h>
+#include <zip.h>
 
 #include <iostream>
 #include <fstream>
 #include <string>
-
-#include <zip.h>
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
@@ -36,7 +35,6 @@ using namespace fuel_tools;
 bool CompressFile(zip *_archive, const std::string &_file,
     const std::string &_entry)
 {
-  std::string entry = ignition::common::basename(_file);
   if (ignition::common::isDirectory(_file))
   {
     if (zip_add_dir(_archive, _entry.c_str()) < 0)

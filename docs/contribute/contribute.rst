@@ -22,7 +22,7 @@ working on it?
 
   Check the `issue tracker <https://bitbucket.org/ignitionrobotics/ign-fuel-tools>`_.
 
-2. `Fork Ignition RNDF <https://bitbucket.org/ignitionrobotics/ign-fuel-tools/fork>`_.
+2. `Fork Ignition Fuel-Tools <https://bitbucket.org/ignitionrobotics/ign-fuel-tools/fork>`_.
 This will create your own personal copy of the project. All of your development
 should take place in your fork.
 
@@ -203,7 +203,7 @@ coverage, and time constraints. Try to write as complete of a test suite as
 possible, and use the coverage analysis tools as guide. If you have trouble
 writing a test please ask for help in your pull request.
 
-Ignition RNDF has a build target called ``make coverage`` that will produce a
+Ignition Fuel-Tools has a build target called ``make coverage`` that will produce a
 code coverage report. You'll need `lcov
 <http://ltp.sourceforge.net/coverage/lcov.php>`_  installed.
 

@@ -15,8 +15,8 @@
  *
 */
 
-#include "ignition/rndf/Helpers.hh"
-#include "ignition/rndf/test_config.h"
+#include "ignition/fuel-tools/Helpers.hh"
+#include "ignition/fuel-tools/test_config.h"
 #include "gtest/gtest.h"
 
 //////////////////////////////////////////////////

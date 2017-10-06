@@ -20,23 +20,22 @@
 #include <fstream>
 #include <set>
 #include <ignition/common/Filesystem.hh>
-#include "ignition/fuel-tools/LocalCache.hh"
-#include "test_config.h"
 
+#include "ignition/fuel-tools/ClientConfig.hh"
+#include "ignition/fuel-tools/LocalCache.hh"
+
+#include "test/test_config.h"
 
 #ifdef _WIN32
 #include <direct.h>
 #define ChangeDirectory _chdir
 #else
-#include "unistd.h"
+#include <unistd.h>
 #define ChangeDirectory chdir
 #endif
 
-
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
-
+using namespace fuel_tools;
 
 /// \brief Creates a directory structure in the build directory with 6 models
 void createLocal6(ClientConfig &_conf)

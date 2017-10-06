@@ -19,9 +19,10 @@
 #define IGNITION_FUEL_TOOLS_CLIENTCONFIG_HH_
 
 #include <memory>
+#include <string>
 #include <vector>
 
-#include <ignition/fuel-tools/Helpers.hh>
+#include "ignition/fuel-tools/Helpers.hh"
 
 namespace ignition
 {
@@ -43,7 +44,7 @@ namespace ignition
       public: ServerConfig(const ServerConfig &_orig);
 
       /// \brief Assignment operator overload
-      public: void operator=(const ServerConfig &_orig);
+      public: ServerConfig &operator=(const ServerConfig &_orig);
 
       /// \brief destructor
       public: ~ServerConfig();

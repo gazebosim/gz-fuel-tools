@@ -19,23 +19,27 @@
 #define IGNITION_FUEL_TOOLS_LOCALCACHE_HH_
 
 #include <memory>
-#include <ignition/fuel-tools/ClientConfig.hh>
-#include <ignition/fuel-tools/Helpers.hh>
-#include <ignition/fuel-tools/ModelIter.hh>
+#include <string>
+
+#include "ignition/fuel-tools/Helpers.hh"
+#include "ignition/fuel-tools/Model.hh"
+#include "ignition/fuel-tools/ModelIter.hh"
 
 namespace ignition
 {
   namespace fuel_tools
   {
     /// \brief Forward declaration
+    class ClientConfig;
     class LocalCachePrivate;
+    class ModelIdentifier;
 
     /// \brief Class for managing stuff in the local cache
     class IGNITION_FUEL_TOOLS_VISIBLE LocalCache
     {
       /// \brief Constructor
       /// \param[in] _config The configuration for the client
-      public: LocalCache(const ClientConfig *_config);
+      public: explicit LocalCache(const ClientConfig *_config);
 
       /// \brief destructor
       public: virtual ~LocalCache();
@@ -53,9 +57,12 @@ namespace ignition
 
       /// \brief Add a model from packed data to the local cache
       /// \param[in] _id A completely populated ID
+      /// \param[in] _data Compressed content of the model
+      /// \param[in] _overwrite Overwrite model if already exists.
       /// \returns true if the model was successfully added to the local cache
       public: virtual bool SaveModel(
-                  const ModelIdentifier &_id, const std::string &_data);
+          const ModelIdentifier &_id, const std::string &_data,
+          const bool _overwrite);
 
       private: std::shared_ptr<LocalCachePrivate> dataPtr;
     };

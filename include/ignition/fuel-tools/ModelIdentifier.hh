@@ -19,11 +19,13 @@
 #define IGNITION_FUEL_TOOLS_MODELIDENTIFIER_HH_
 
 // #include <array>
-// #include <cstdint>
-
+#include <cstdint>
 #include <ctime>
 #include <memory>
-#include <ignition/fuel-tools/Helpers.hh>
+#include <string>
+#include <vector>
+
+#include "ignition/fuel-tools/Helpers.hh"
 
 namespace ignition
 {
@@ -42,7 +44,7 @@ namespace ignition
       public: ModelIdentifier(const ModelIdentifier &_orig);
 
       /// \brief Assignment operator
-      public: void operator=(const ModelIdentifier &_orig);
+      public: ModelIdentifier &operator=(const ModelIdentifier &_orig);
 
       /// \brief Equality operator
       public: bool operator==(const ModelIdentifier &_rhs) const;
@@ -106,6 +108,30 @@ namespace ignition
       /// \return Model uuid
       public: std::string Uuid() const;
 
+      /// \brief Returns the number of "likes" for the model
+      /// \return Number of "likes"
+      public: uint32_t Likes() const;
+
+      /// \brief Returns the number of downloads for the model
+      /// \return Number of downloads
+      public: uint32_t Downloads() const;
+
+      /// \brief Returns the license name
+      /// \return License name
+      public: std::string LicenseName() const;
+
+      /// \brief Returns the license URL
+      /// \return License URL
+      public: std::string LicenseURL() const;
+
+      /// \brief Returns the license image URL
+      /// \return License image URL
+      public: std::string LicenseImageURL() const;
+
+      /// \brief Returns the collection of tags
+      /// \return the collection of tags
+      public: std::vector<std::string> Tags() const;
+
       /// \brief Set the description of the model
       /// \return True if successful
       public: bool Description(const std::string &_desc);
@@ -129,6 +155,36 @@ namespace ignition
       /// \brief Set the uuid of the model
       /// \return True if successful
       public: bool Uuid(const std::string &_uuid);
+
+      /// \brief Set the number of "likes" of the model
+      /// \param[in] _likes Number of "likes"
+      /// \return True if successful
+      public: bool Likes(const uint32_t _likes);
+
+      /// \brief Set the number of downloads of the model
+      /// \param[in] _downloads Number of downloads
+      /// \return True if successful
+      public: bool Downloads(const uint32_t _downloads);
+
+      /// \brief Set the license name of the model
+      /// \param[in] _name The name
+      /// \return True if successful
+      public: bool LicenseName(const std::string &_name);
+
+      /// \brief Set the license URL of the model
+      /// \param[in] _url The URL
+      /// \return True if successful
+      public: bool LicenseURL(const std::string &_url);
+
+      /// \brief Set the license image URL of the model
+      /// \param[in] _url The URL
+      /// \return True if successful
+      public: bool LicenseImageURL(const std::string &_url);
+
+      /// \brief Set the list of tags of the model
+      /// \param[in] _tags The tags
+      /// \return True if successful
+      public: bool Tags(const std::vector<std::string> &_tags);
 
       // /// \brief returns a SHA 2 256 hash of the model
       // /// \remarks fulfills versioning requirement

@@ -15,8 +15,10 @@
  *
 */
 
+#include <string>
 #include <vector>
-#include <ignition/fuel-tools/ModelIdentifier.hh>
+
+#include "ignition/fuel-tools/ModelIdentifier.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
@@ -59,12 +61,33 @@ class ignft::ModelIdentifierPrivate
 
   /// \brief UUID of this model
   public: std::string uuid;
+
+  /// \brief Number of "likes"
+  public: uint32_t likes;
+
+  /// \brief Number of downloads
+  public: uint32_t downloads;
+
+  /// \brief The license name
+  public: std::string licenseName;
+
+  /// \brief License URL
+  public: std::string licenseURL;
+
+  /// \brief License image URL
+  public: std::string licenseImageURL;
+
+  /// \brief Collection of tags
+  public: std::vector<std::string> tags;
 };
 
 
 //////////////////////////////////////////////////
 bool ModelIdentifierPrivate::ValidName(const std::string &_name)
 {
+  // ToDo: Enable name validation when model names are prepared for this.
+  return true;
+
   bool valid = true;
   if (_name.empty())
     valid = false;
@@ -107,9 +130,10 @@ ModelIdentifier::ModelIdentifier(const ModelIdentifier &_orig)
 }
 
 //////////////////////////////////////////////////
-void ModelIdentifier::operator=(const ModelIdentifier &_orig)
+ModelIdentifier &ModelIdentifier::operator=(const ModelIdentifier &_orig)
 {
   this->dataPtr.reset(new ModelIdentifierPrivate(*(_orig.dataPtr.get())));
+  return *this;
 }
 
 //////////////////////////////////////////////////
@@ -167,7 +191,7 @@ bool ModelIdentifier::SourceURL(const std::string &_url_orig)
   std::string url(_url_orig);
   bool success = false;
   // Strip trailing slashes
-  while(!url.empty() && url.back() == '/')
+  while (!url.empty() && url.back() == '/')
   {
     url.pop_back();
   }
@@ -228,6 +252,42 @@ std::string ModelIdentifier::Uuid() const
 }
 
 //////////////////////////////////////////////////
+uint32_t ModelIdentifier::Likes() const
+{
+  return this->dataPtr->likes;
+}
+
+//////////////////////////////////////////////////
+uint32_t ModelIdentifier::Downloads() const
+{
+  return this->dataPtr->downloads;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::LicenseName() const
+{
+  return this->dataPtr->licenseName;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::LicenseURL() const
+{
+  return this->dataPtr->licenseURL;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::LicenseImageURL() const
+{
+  return this->dataPtr->licenseImageURL;
+}
+
+//////////////////////////////////////////////////
+std::vector<std::string> ModelIdentifier::Tags() const
+{
+  return this->dataPtr->tags;
+}
+
+//////////////////////////////////////////////////
 bool ModelIdentifier::Description(const std::string &_desc)
 {
   this->dataPtr->description = _desc;
@@ -269,3 +329,44 @@ bool ModelIdentifier::Uuid(const std::string &_uuid)
   return true;
 }
 
+//////////////////////////////////////////////////
+bool ModelIdentifier::Likes(const uint32_t _likes)
+{
+  this->dataPtr->likes = _likes;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::Downloads(const uint32_t _downloads)
+{
+  this->dataPtr->downloads = _downloads;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::LicenseName(const std::string &_name)
+{
+  this->dataPtr->licenseName = _name;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::LicenseURL(const std::string &_url)
+{
+  this->dataPtr->licenseURL = _url;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::LicenseImageURL(const std::string &_url)
+{
+  this->dataPtr->licenseImageURL = _url;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::Tags(const std::vector<std::string> &_tags)
+{
+  this->dataPtr->tags = _tags;
+  return true;
+}

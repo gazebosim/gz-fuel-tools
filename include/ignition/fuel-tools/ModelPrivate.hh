@@ -18,9 +18,10 @@
 #ifndef IGNITION_FUEL_TOOLS_MODELPRIVATE_HH_
 #define IGNITION_FUEL_TOOLS_MODELPRIVATE_HH_
 
-#include <memory>
-#include <ignition/fuel-tools/Helpers.hh>
+#include <string>
 
+#include "ignition/fuel-tools/Helpers.hh"
+#include "ignition/fuel-tools/ModelIdentifier.hh"
 
 namespace ignition
 {

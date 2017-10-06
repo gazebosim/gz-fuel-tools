@@ -56,6 +56,8 @@ namespace ignition
       ///            E.g.: "GET"
       /// \param[in] _url The url to request.
       ///            E.g.: "http://localhost:8000/"
+      /// \param[in] _version The protocol version.
+      ///            E.g.: "1.0"
       /// \param[in] _path The path to request.
       ///            E.g.: "collection"
       /// \param[in] _queryStrings All the query strings to be requested.
@@ -65,8 +67,10 @@ namespace ignition
       /// \param[in] _data Data to be included in the HTTP request.
       /// \param[in] _form multi-part / form data to be used with
       ///            Protocol::POST_FORM
-      public: virtual RESTResponse Request(Protocol _protocol,
-          const std::string &_url, const std::string &_path,
+      public: virtual RESTResponse Request(const Protocol _protocol,
+          const std::string &_url,
+          const std::string &_version,
+          const std::string &_path,
           const std::vector<std::string> &_queryStrings,
           const std::vector<std::string> &_headers,
           const std::string &_data,

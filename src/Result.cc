@@ -15,8 +15,7 @@
  *
 */
 
-#include <vector>
-#include <ignition/fuel-tools/Result.hh>
+#include "ignition/fuel-tools/Result.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
@@ -56,7 +55,7 @@ Result::Result(const Result &_orig) : dataPtr(new ResultPrivate)
 //////////////////////////////////////////////////
 Result::operator bool() const
 {
-  switch(this->dataPtr->type)
+  switch (this->dataPtr->type)
   {
     case DELETE:
     case FETCH:

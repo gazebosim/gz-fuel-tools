@@ -22,7 +22,6 @@ namespace ignft = ignition::fuel_tools;
 using namespace ignition;
 using namespace ignft;
 
-
 /////////////////////////////////////////////////
 /// \brief Create a request object with a type and check that it
 TEST(Result, TypeCanBeSet)
@@ -51,7 +50,6 @@ TEST(Result, ReadableStringsHaveLength)
   EXPECT_FALSE(Result(Result::UPLOAD_ERROR).ReadableResult().empty());
 }
 
-
 //////////////////////////////////////////////////
 /// \brief Check that operator bool returns true for successfull cases
 TEST(Result, TrueOnSuccess)
@@ -68,7 +66,6 @@ TEST(Result, TrueOnSuccess)
   EXPECT_FALSE(Result(Result::UPLOAD_ALREADY_EXISTS));
   EXPECT_FALSE(Result(Result::UPLOAD_ERROR));
 }
-
 
 //////////////////////////////////////////////////
 int main(int argc, char **argv)

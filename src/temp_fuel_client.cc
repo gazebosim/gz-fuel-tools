@@ -16,6 +16,7 @@
 */
 
 #include <ignition/common/Console.hh>
+#include <ignition/fuel-tools/ClientConfig.hh>
 #include <ignition/fuel-tools/FuelClient.hh>
 #include <ignition/fuel-tools/LocalCache.hh>
 
@@ -69,7 +70,7 @@ int main()
   form["data"] = "@dummy.zip";
   ignition::fuel_tools::REST rest;
   ignition::fuel_tools::RESTResponse resp = rest.Request(
-      protocol, "http://localhost:8001/", "1.0/models", {}, headers, "",
+      protocol, "http://localhost:8001", "/1.0/", "models", {}, headers, "",
       form);
   ignmsg << "file update status: " << resp.statusCode << std::endl;
   ignition::common::removeAll("dummy.zip");

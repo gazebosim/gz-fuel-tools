@@ -15,14 +15,19 @@
  *
 */
 
+#include <memory>
+#include <string>
 #include <vector>
 #include <ignition/common/Console.hh>
-#include <ignition/fuel-tools/ClientConfig.hh>
-#include <ignition/fuel-tools/JSONParser.hh>
-#include <ignition/fuel-tools/ModelIter.hh>
-#include <ignition/fuel-tools/ModelIterPrivate.hh>
-#include <ignition/fuel-tools/ModelPrivate.hh>
-#include <ignition/fuel-tools/REST.hh>
+
+#include "ignition/fuel-tools/ClientConfig.hh"
+#include "ignition/fuel-tools/JSONParser.hh"
+#include "ignition/fuel-tools/Model.hh"
+#include "ignition/fuel-tools/ModelIdentifier.hh"
+#include "ignition/fuel-tools/ModelIter.hh"
+#include "ignition/fuel-tools/ModelIterPrivate.hh"
+#include "ignition/fuel-tools/ModelPrivate.hh"
+#include "ignition/fuel-tools/REST.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
@@ -51,9 +56,10 @@ ModelIter ModelIterFactory::Create(std::vector<Model> _models)
 
 //////////////////////////////////////////////////
 ModelIter ModelIterFactory::Create(REST &_rest, ClientConfig &_conf,
-    const std::string &_api)
+    const std::string &_version, const std::string &_api)
 {
-  std::unique_ptr<ModelIterPrivate> priv(new IterRESTIds(&_rest, &_conf, _api));
+  std::unique_ptr<ModelIterPrivate> priv(new IterRESTIds(
+    &_rest, &_conf, _version, _api));
   return std::move(ModelIter(std::move(priv)));
 }
 
@@ -143,8 +149,8 @@ IterRESTIds::~IterRESTIds()
 
 //////////////////////////////////////////////////
 IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
-    const std::string &_api)
-    : config(_config), rest(_rest)
+    const std::string &_version, const std::string &_api)
+  : config(_config), rest(_rest)
 {
   // TODO fetch from all servers and combine result, not just one server
   auto servers = this->config->Servers();
@@ -156,19 +162,32 @@ IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
 
   REST::Protocol protocol = REST::GET;
   this->serverURL = servers.front().URL();
-  std::string path = _api;
+  int page = 1;
   std::vector<std::string> headers =  {"Accept: application/json"};
+  RESTResponse resp;
+  std::vector<ModelIdentifier> modelIds;
+  this->ids.clear();
 
-  RESTResponse resp = this->rest->Request(
-      protocol, this->serverURL, path, {}, headers, "");
-
-  if (resp.statusCode != 200)
+  do
   {
-    this->idIter = this->ids.end();
-    return;
-  }
+    // Prepare the request with the next page.
+    std::string queryStrPage = "?page=" + std::to_string(page);
+    std::string path = _api + queryStrPage;
+    ++page;
 
-  this->ids = JSONParser::ParseModels(resp.data);
+    // Fire the request.
+    resp = this->rest->Request(
+      protocol, this->serverURL, _version, path, {}, headers, "");
+
+    // Parse the response.
+    modelIds = JSONParser::ParseModels(resp.data);
+
+    // Add the vector of models to the list.
+    this->ids.insert(std::end(this->ids), std::begin(modelIds),
+      std::end(modelIds));
+  } while (!modelIds.empty());
+
+
   this->idIter = this->ids.begin();
 
   // make first model
@@ -210,7 +229,7 @@ ModelIter::ModelIter(std::unique_ptr<ModelIterPrivate> _dptr)
 }
 
 //////////////////////////////////////////////////
-ModelIter::ModelIter(ModelIter &&_old)
+ModelIter::ModelIter(ModelIter && _old)
 {
   this->dataPtr.reset(_old.dataPtr.release());
 }
