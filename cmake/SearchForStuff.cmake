@@ -9,6 +9,10 @@ include (${project_cmake_dir}/Ronn2Man.cmake)
 add_manpage_target()
 
 ########################################
+# Find PkgConfig
+find_package(PkgConfig REQUIRED)
+
+########################################
 # Find libcurl
 find_package(CURL)
 if (CURL_FOUND)
@@ -30,7 +34,6 @@ endif()
 
 ########################################
 # Find jsoncpp
-find_package(PkgConfig REQUIRED)
 pkg_check_modules(jsoncpp jsoncpp)
 if (NOT jsoncpp_FOUND)
   BUILD_ERROR ("Missing: libjsoncpp-dev. Required for parsing json data.")
@@ -38,7 +41,6 @@ endif()
 
 ########################################
 # Find libzip
-find_package(PkgConfig REQUIRED)
 pkg_check_modules(libzip libzip)
 
 if (NOT libzip_FOUND)

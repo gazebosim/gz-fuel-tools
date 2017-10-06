@@ -91,20 +91,11 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
   return models;
 }
 
-
 //////////////////////////////////////////////////
 LocalCache::LocalCache(const ClientConfig *_config)
   : dataPtr(new LocalCachePrivate)
 {
-  if (common::isDirectory(_config->CacheLocation()))
-  {
-    this->dataPtr->config = _config;
-  }
-  else
-  {
-    ignerr << "Cache location does not exist [" << _config->CacheLocation()
-      << "]\n";
-  }
+  this->dataPtr->config = _config;
 }
 
 //////////////////////////////////////////////////

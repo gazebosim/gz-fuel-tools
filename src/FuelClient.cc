@@ -67,6 +67,34 @@ FuelClient::~FuelClient()
 }
 
 //////////////////////////////////////////////////
+Result FuelClient::ModelDetails(const ModelIdentifier &_id,
+  ModelIdentifier &_model) const
+{
+  ignition::fuel_tools::REST rest;
+  RESTResponse resp;
+
+  // ToDo: Check all servers.
+  auto servers = this->dataPtr->config.Servers();
+  if (servers.empty())
+  {
+    ignerr << "No servers found" << std::endl;
+    return Result(Result::FETCH_ERROR);
+  }
+
+  auto serverURL = servers.front().URL();
+  auto version = "/1.0";
+  auto path = _id.Owner() + "/models/" + _id.Name();
+
+  resp = rest.Request("GET", serverURL, version, path, {}, {}, "");
+  if (resp.statusCode != 200)
+    return Result(Result::FETCH_ERROR);
+
+  _model = JSONParser::ParseModel(resp.data);
+
+  return Result(Result::FETCH);
+}
+
+//////////////////////////////////////////////////
 ModelIter FuelClient::Models()
 {
   ModelIter iter = ModelIterFactory::Create(this->dataPtr->rest,
@@ -90,8 +118,13 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id)
     return localIter;
 
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+
   // Todo try to fetch model directly from a server
-  return ModelIterFactory::Create();
+  auto version = "/1.0/";
+  auto path = _id.Owner() + "/models/" + _id.Name();
+
+  return ModelIterFactory::Create(this->dataPtr->rest,
+      this->dataPtr->config, version, path);
 }
 
 //////////////////////////////////////////////////

@@ -18,7 +18,16 @@
 #ifndef IGNITION_FUEL_TOOLS_JSONPARSER_HH_
 #define IGNITION_FUEL_TOOLS_JSONPARSER_HH_
 
+#include <string>
+#include <vector>
+
+#include "ignition/fuel-tools/ModelIdentifier.hh"
 #include "ignition/fuel-tools/ModelIter.hh"
+
+namespace Json
+{
+  class Value;
+}
 
 namespace ignition
 {
@@ -27,11 +36,31 @@ namespace ignition
     /// \brief A helper class for making REST requests.
     class IGNITION_FUEL_TOOLS_VISIBLE JSONParser
     {
+
+      /// \brief Parse a model JSON string and return a model identifier
+      /// \param[in] _json JSON string containing a model
+      /// \return a model identifier
+      public: static ModelIdentifier ParseModel(
+                  const std::string &_json);
+
       /// \brief Parse a model array JSON string and return a model iterator
       /// \param[in] _json JSON string containing an array of models
       /// \return vector of model identifiers
       public: static std::vector<ModelIdentifier> ParseModels(
                   const std::string &_json);
+
+      /// \brief Parse a json object as a model.
+      /// \param[in] _json JSON object containing a single model
+      /// \param[out] _model a model identifier after parsing the JSON
+      /// \return True if the parsing succeed or false otherwise
+      private: static bool ParseModelImpl(
+                  const Json::Value &_json, ModelIdentifier &_model);
+
+      /// \brief Parse the list of tags contained in a model.
+      /// \param[in] _json JSON representation of the model.
+      /// \return The list of tags.
+      private: static std::vector<std::string> ParseTags(
+                  const Json::Value &_json);
 
       /// \brief Build a model iterator from a JSON string
       /// \param[in] _modelIt A model iterator containing only one model
