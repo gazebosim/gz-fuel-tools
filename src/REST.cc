@@ -68,7 +68,7 @@ size_t WriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
 }
 
 /////////////////////////////////////////////////
-RESTResponse REST::Request(Protocol _protocol,
+RESTResponse REST::Request(Method _method,
     const std::string &_url, const std::string &_version,
     const std::string &_path, const std::vector<std::string> &_queryStrings,
     const std::vector<std::string> &_headers, const std::string &_data,
@@ -130,16 +130,16 @@ RESTResponse REST::Request(Protocol _protocol,
   struct curl_httppost *formpost = nullptr;
 
   // Send the request.
-  if (_protocol == REST::GET)
+  if (_method == REST::GET)
   {
     // no need to do anything
   }
-  else if (_protocol == REST::POST)
+  else if (_method == REST::POST)
   {
     curl_easy_setopt(curl, CURLOPT_POST, 1);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, _data.c_str());
   }
-  else if (_protocol == REST::POST_FORM)
+  else if (_method == REST::POST_FORM)
   {
     struct curl_httppost *lastptr = nullptr;
     for (const auto &it : _form)
@@ -179,7 +179,7 @@ RESTResponse REST::Request(Protocol _protocol,
 
     curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
   }
-  else if (_protocol == REST::DELETE)
+  else if (_method == REST::DELETE)
   {
     curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
   }

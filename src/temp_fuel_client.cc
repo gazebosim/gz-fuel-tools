@@ -61,7 +61,7 @@ int main()
   fout.flush();
   fout.close();
 
-  ignition::fuel_tools::REST::Protocol protocol =
+  ignition::fuel_tools::REST::Method method =
       ignition::fuel_tools::REST::POST_FORM;
   std::vector<std::string> headers =
       {"Accept: application/json", "content-type: multipart/form-data"};
@@ -70,7 +70,7 @@ int main()
   form["data"] = "@dummy.zip";
   ignition::fuel_tools::REST rest;
   ignition::fuel_tools::RESTResponse resp = rest.Request(
-      protocol, "http://localhost:8001", "/1.0/", "models", {}, headers, "",
+      method, "http://localhost:8001", "/1.0/", "models", {}, headers, "",
       form);
   ignmsg << "file update status: " << resp.statusCode << std::endl;
   ignition::common::removeAll("dummy.zip");

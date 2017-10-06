@@ -160,7 +160,7 @@ IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
     return;
   }
 
-  REST::Protocol protocol = REST::GET;
+  REST::Method method = REST::GET;
   this->serverURL = servers.front().URL();
   int page = 1;
   std::vector<std::string> headers =  {"Accept: application/json"};
@@ -177,7 +177,7 @@ IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
 
     // Fire the request.
     resp = this->rest->Request(
-      protocol, this->serverURL, _version, path, {}, headers, "");
+      method, this->serverURL, _version, path, {}, headers, "");
 
     // Parse the response.
     modelIds = JSONParser::ParseModels(resp.data);
