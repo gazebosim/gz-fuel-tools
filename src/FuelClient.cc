@@ -85,7 +85,7 @@ Result FuelClient::ModelDetails(const ModelIdentifier &_id,
   auto version = "/1.0";
   auto path = _id.Owner() + "/models/" + _id.Name();
 
-  resp = rest.Request("GET", serverURL, version, path, {}, {}, "");
+  resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
@@ -159,7 +159,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id)
   auto serverURL = servers.front().URL();
   auto path = _id.Owner() + "/models/" + _id.Name() + ".zip";
 
-  resp = rest.Request("GET", serverURL, "/1.0/", path, {}, {}, "");
+  resp = rest.Request(REST::GET, serverURL, "/1.0/", path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 

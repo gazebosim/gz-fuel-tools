@@ -132,10 +132,10 @@ namespace ignition
       public: virtual bool HasReachedEnd() override;
 
       /// \brief Client configuration
-      public: ClientConfig *config;
+      public: ClientConfig *config = nullptr;
 
       /// \brief RESTful client
-      public: REST *rest;
+      public: REST *rest = nullptr;
 
       /// \brief Current server URL
       public: std::string serverURL;

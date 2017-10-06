@@ -20,6 +20,8 @@
 #include <string>
 #include <vector>
 
+#include <ignition/common/Console.hh>
+
 #include "ignition/fuel-tools/REST.hh"
 
 using namespace ignition;
@@ -66,10 +68,11 @@ size_t WriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
 }
 
 /////////////////////////////////////////////////
-RESTResponse REST::Request(const std::string &_httpMethod,
+RESTResponse REST::Request(Method _method,
     const std::string &_url, const std::string &_version,
     const std::string &_path, const std::vector<std::string> &_queryStrings,
-    const std::vector<std::string> &_headers, const std::string &_data) const
+    const std::vector<std::string> &_headers, const std::string &_data,
+    const std::map<std::string, std::string> &_form) const
 {
   RESTResponse res;
 
@@ -97,7 +100,7 @@ RESTResponse REST::Request(const std::string &_httpMethod,
     headers = curl_slist_append(headers, header.c_str());
     if (!headers)
     {
-      std::cerr << "[REST::Request()]: Error processing header.\n  ["
+      ignerr << "[REST::Request()]: Error processing header.\n  ["
                 << header.c_str() << "]" << std::endl;
 
       // cleanup
@@ -105,6 +108,7 @@ RESTResponse REST::Request(const std::string &_httpMethod,
       return res;
     }
   }
+
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
   std::string responseData;
@@ -122,25 +126,66 @@ RESTResponse REST::Request(const std::string &_httpMethod,
   // Set the default value: do not prove that SSL certificate is authentic
   curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 
+  std::ifstream ifs;
+  struct curl_httppost *formpost = nullptr;
+
   // Send the request.
-  if (_httpMethod == "GET")
+  if (_method == REST::GET)
   {
     // no need to do anything
   }
-  else if (_httpMethod == "POST")
+  else if (_method == REST::POST)
   {
-    // enable POST
     curl_easy_setopt(curl, CURLOPT_POST, 1);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, _data.c_str());
   }
-  else if (_httpMethod == "DELETE")
+  else if (_method == REST::POST_FORM)
+  {
+    struct curl_httppost *lastptr = nullptr;
+    for (const auto &it : _form)
+    {
+      std::string key = it.first;
+      std::string value = it.second;
+
+      // follow same convention as curl cmdline tool
+      // field starting with @ indicates path to file to upload
+      // others are standard fields to describe the file
+      if (!value.empty() && value[0] == '@')
+      {
+        // file upload
+        std::string path = value.substr(1);
+        std::string filename = ignition::common::basename(path);
+        ifs.open(path, std::ios::binary);
+        std::filebuf* pbuf = ifs.rdbuf();
+        std::size_t size = pbuf->pubseekoff(0, ifs.end, ifs.in);
+        curl_formadd(&formpost,
+                     &lastptr,
+                     CURLFORM_COPYNAME, key.c_str(),
+                     CURLFORM_BUFFER, filename.c_str(),
+                     CURLFORM_BUFFERPTR, pbuf,
+                     CURLFORM_BUFFERLENGTH, size,
+                     CURLFORM_END);
+      }
+      else
+      {
+        // standard key:value fields
+        curl_formadd(&formpost,
+                     &lastptr,
+                     CURLFORM_COPYNAME, key.c_str(),
+                     CURLFORM_COPYCONTENTS, value.c_str(),
+                     CURLFORM_END);
+       }
+    }
+
+    curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
+  }
+  else if (_method == REST::DELETE)
   {
     curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, _data.c_str());
   }
   else
   {
-    std::cerr << "Unsupported method" << std::endl;
+    ignerr << "Unsupported method" << std::endl;
 
     // Cleanup.
     curl_slist_free_all(headers);
@@ -151,7 +196,7 @@ RESTResponse REST::Request(const std::string &_httpMethod,
   CURLcode success = curl_easy_perform(curl);
   if (success != CURLE_OK)
   {
-    std::cerr << "Error in REST request" << std::endl;
+    ignerr << "Error in REST request" << std::endl;
     size_t len = strlen(errbuf);
     fprintf(stderr, "\nlibcurl: (%d) ", success);
     if (len)
@@ -169,10 +214,16 @@ RESTResponse REST::Request(const std::string &_httpMethod,
   // Update the data.
   res.data = responseData;
 
+  if (formpost)
+    curl_formfree(formpost);
+
   // free the headers
   curl_slist_free_all(headers);
 
   // Cleaning.
   curl_easy_cleanup(curl);
+
+  if (ifs.is_open())
+    ifs.close();
   return res;
 }

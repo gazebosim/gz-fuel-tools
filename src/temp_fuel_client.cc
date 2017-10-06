@@ -26,11 +26,11 @@ int main()
 
   ignition::fuel_tools::ClientConfig conf;
   ignition::fuel_tools::ServerConfig srv;
-  srv.URL("http://localhost:8001/");
+  srv.URL("https://staging-api.ignitionfuel.org/");
   srv.LocalName("local");
   conf.AddServer(srv);
 
-  conf.CacheLocation("/build/ign-fuel-tools");
+  conf.CacheLocation("/tmp/ign-fuel-tools");
 
   ignition::fuel_tools::FuelClient client(conf);
   auto iter = client.Models();
@@ -54,6 +54,26 @@ int main()
   {
     ignmsg << "Found model: " << model.Identification().UniqueName() << "\n";
   }
+
+  // test file upload
+  std::ofstream fout("dummy.zip");
+  fout << "dummy file";
+  fout.flush();
+  fout.close();
+
+  ignition::fuel_tools::REST::Method method =
+      ignition::fuel_tools::REST::POST_FORM;
+  std::vector<std::string> headers =
+      {"Accept: application/json", "content-type: multipart/form-data"};
+  std::map<std::string, std::string> form;
+  form["name"] = "box";
+  form["data"] = "@dummy.zip";
+  ignition::fuel_tools::REST rest;
+  ignition::fuel_tools::RESTResponse resp = rest.Request(
+      method, "http://localhost:8001", "/1.0/", "models", {}, headers, "",
+      form);
+  ignmsg << "file update status: " << resp.statusCode << std::endl;
+  ignition::common::removeAll("dummy.zip");
 
   ignmsg << "exiting\n";
   return 0;
