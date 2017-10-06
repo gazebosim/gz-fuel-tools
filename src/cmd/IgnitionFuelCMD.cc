@@ -37,7 +37,7 @@ ignition::fuel_tools::ClientConfig IGNITION_FUEL_TOOLS_HIDDEN getConfig()
   srv.LocalName("staging_ignitionfuel");
   conf.AddServer(srv);
 
-  if(const char *cacheLoc = std::getenv("IGN_FUEL_CACHE"))
+  if (const char *cacheLoc = std::getenv("IGN_FUEL_CACHE"))
     conf.CacheLocation(cacheLoc);
   else
   {

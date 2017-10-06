@@ -15,9 +15,10 @@
  *
 */
 
+#include <gflags/gflags.h>
+
 #include <iostream>
 
-#include <gflags/gflags.h>
 #include <ignition/fuel-tools.hh>
 
 DEFINE_bool(h, false, "Show help");
@@ -78,7 +79,7 @@ int main(int argc, char **argv)
     std::cout << "License URL: " << model.LicenseURL() << std::endl;
     std::cout << "License image URL: " << model.LicenseImageURL() << std::endl;
     std::cout << "Tags: " << std::endl;
-    for (auto const &tag: model.Tags())
+    for (auto const &tag : model.Tags())
       std::cout << "  " << tag << std::endl;
   }
 }

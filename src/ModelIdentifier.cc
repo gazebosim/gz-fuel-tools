@@ -130,9 +130,10 @@ ModelIdentifier::ModelIdentifier(const ModelIdentifier &_orig)
 }
 
 //////////////////////////////////////////////////
-void ModelIdentifier::operator=(const ModelIdentifier &_orig)
+ModelIdentifier &ModelIdentifier::operator=(const ModelIdentifier &_orig)
 {
   this->dataPtr.reset(new ModelIdentifierPrivate(*(_orig.dataPtr.get())));
+  return *this;
 }
 
 //////////////////////////////////////////////////
@@ -190,7 +191,7 @@ bool ModelIdentifier::SourceURL(const std::string &_url_orig)
   std::string url(_url_orig);
   bool success = false;
   // Strip trailing slashes
-  while(!url.empty() && url.back() == '/')
+  while (!url.empty() && url.back() == '/')
   {
     url.pop_back();
   }

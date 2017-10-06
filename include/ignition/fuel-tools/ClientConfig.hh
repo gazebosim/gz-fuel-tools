@@ -44,7 +44,7 @@ namespace ignition
       public: ServerConfig(const ServerConfig &_orig);
 
       /// \brief Assignment operator overload
-      public: void operator=(const ServerConfig &_orig);
+      public: ServerConfig &operator=(const ServerConfig &_orig);
 
       /// \brief destructor
       public: ~ServerConfig();
