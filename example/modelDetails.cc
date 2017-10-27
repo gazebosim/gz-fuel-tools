@@ -71,6 +71,8 @@ int main(int argc, char **argv)
   if (result)
   {
     std::cout << "Name: " << model.Name() << std::endl;
+    std::cout << "Source URL: " << model.SourceURL() << std::endl;
+    std::cout << "Unique name: " << model.UniqueName() << std::endl;
     std::cout << "Owner: " << model.Owner() << std::endl;
     std::cout << "Description: " << model.Description() << std::endl;
     std::cout << "Likes: " << model.Likes() << std::endl;

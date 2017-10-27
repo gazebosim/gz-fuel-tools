@@ -55,6 +55,10 @@ namespace ignition
       /// \brief Destructor
       public: ~FuelClient();
 
+      /// \brief Get a mutable reference to the client configuration.
+      /// \return Mutable reference to the client configuration.
+      public: ClientConfig &Config();
+
       /// \brief Fetch the details of a model.
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement

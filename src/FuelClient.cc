@@ -67,6 +67,12 @@ FuelClient::~FuelClient()
 }
 
 //////////////////////////////////////////////////
+ClientConfig &FuelClient::Config()
+{
+  return this->dataPtr->config;
+}
+
+//////////////////////////////////////////////////
 Result FuelClient::ModelDetails(const ModelIdentifier &_id,
   ModelIdentifier &_model) const
 {
@@ -89,7 +95,7 @@ Result FuelClient::ModelDetails(const ModelIdentifier &_id,
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
-  _model = JSONParser::ParseModel(resp.data);
+  _model = JSONParser::ParseModel(resp.data, serverURL);
 
   return Result(Result::FETCH);
 }

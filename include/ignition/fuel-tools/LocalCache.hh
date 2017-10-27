@@ -61,9 +61,11 @@ namespace ignition
       /// \param[in] _overwrite Overwrite model if already exists.
       /// \returns true if the model was successfully added to the local cache
       public: virtual bool SaveModel(
-          const ModelIdentifier &_id, const std::string &_data,
+          const ModelIdentifier &_id,
+          const std::string &_data,
           const bool _overwrite);
 
+      /// \brief Internal data.
       private: std::shared_ptr<LocalCachePrivate> dataPtr;
     };
   }

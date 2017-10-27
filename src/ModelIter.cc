@@ -163,7 +163,7 @@ IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
   REST::Method method = REST::GET;
   this->serverURL = servers.front().URL();
   int page = 1;
-  std::vector<std::string> headers =  {"Accept: application/json"};
+  std::vector<std::string> headers = {"Accept: application/json"};
   RESTResponse resp;
   std::vector<ModelIdentifier> modelIds;
   this->ids.clear();
@@ -179,8 +179,14 @@ IterRESTIds::IterRESTIds(REST *_rest, ClientConfig *_config,
     resp = this->rest->Request(
       method, this->serverURL, _version, path, {}, headers, "");
 
+    // ToDo: resp.statusCode should return != 200 when the page requested does
+    // not exist. When this happens we should stop without calling ParseModels()
+    // https://bitbucket.org/ignitionrobotics/ign-fuelserver/issues/7
+    if (resp.data == "null\n")
+      break;
+
     // Parse the response.
-    modelIds = JSONParser::ParseModels(resp.data);
+    modelIds = JSONParser::ParseModels(resp.data, this->serverURL);
 
     // Add the vector of models to the list.
     this->ids.insert(std::end(this->ids), std::begin(modelIds),

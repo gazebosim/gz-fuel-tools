@@ -86,7 +86,8 @@ std::vector<std::string> JSONParser::ParseTags(const Json::Value &_json)
 }
 
 /////////////////////////////////////////////////
-ModelIdentifier JSONParser::ParseModel(const std::string &_json)
+ModelIdentifier JSONParser::ParseModel(const std::string &_json,
+  const std::string &_serverURL)
 {
   Json::Reader reader;
   Json::Value model;
@@ -95,11 +96,15 @@ ModelIdentifier JSONParser::ParseModel(const std::string &_json)
   reader.parse(_json, model);
   ParseModelImpl(model, id);
 
+  // Adding the server used to retrieve the model.
+  id.SourceURL(_serverURL);
+
   return id;
 }
 
 /////////////////////////////////////////////////
-std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
+std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json,
+  const std::string &_serverURL)
 {
   std::vector<ModelIdentifier> ids;
   Json::Reader reader;
@@ -121,6 +126,9 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json)
         ignerr << "Model isn't a json object!\n";
         break;
       }
+
+      // Adding the server used to retrieve the model.
+      id.SourceURL(_serverURL);
 
       ids.push_back(id);
     }
