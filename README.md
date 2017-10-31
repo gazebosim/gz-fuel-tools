@@ -100,7 +100,8 @@ Check [here](http://ignition-fuel-tools.readthedocs.io/en/default/).
 ## Roadmap
 
 * Create a YAML configuration file and parse it as part of the ClientConfig class.
----
+
+~~~
 # The list of asset sources.
 sources:
   osrf_local:
@@ -113,7 +114,7 @@ sources:
 
   local:
     url: file:///home/caguero/.ignition/fuel/
-
+~~~
 * Create the notion of "asset repository" or similar. An asset repository abstracts an entity that can store assets. It can be local or remote. This is the interface for "asset repository":
     * List(category). 
         E.g.: localRepository.List("models")
