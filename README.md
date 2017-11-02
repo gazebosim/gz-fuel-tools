@@ -7,6 +7,10 @@ interacting with Ignition Fuel servers.
 
   [http://bitbucket.org/ignitionrobotics/ign-fuel-tools](http://bitbucket.org/ignitionrobotics/ign-fuel-tools)
 
+Test coverage reports are available at Codecov:
+
+[![codecov](https://codecov.io/bb/ignitionrobotics/ign-fuel-tools/branch/default/graph/badge.svg)](https://codecov.io/bb/ignitionrobotics/ign-fuel-tools)
+
 # Building and installing
 
 ```
@@ -54,7 +58,7 @@ $ ign fuel locate --name am1
   srv.URL("https://ignitionfuel.org/");
   srv.LocalName("ignitionfuel");
   conf.AddServer(srv);
-  
+
   ignition::fuel_tools::FuelClient client(conf);
   ignition::fuel_tools::ModelIter iter = client.Models();
   while (iter)
