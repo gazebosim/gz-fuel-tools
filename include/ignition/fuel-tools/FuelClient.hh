@@ -94,10 +94,12 @@ namespace ignition
                                  const ModelIdentifier &_id);
 
       /// \brief Remove a model from ignition fuel
+      /// \param[in] _id The model identifier.
       /// \return Result of the delete operation
       public: Result DeleteModel(const ModelIdentifier &_id);
 
       /// \brief Download a model from ignition fuel
+      /// \param[in] _id The model identifier.
       /// \return Result of the download operation
       public: Result DownloadModel(const ModelIdentifier &_id);
 

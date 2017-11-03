@@ -65,23 +65,26 @@ int main(int argc, char **argv)
 
   // Fetch the model details.
   ignition::fuel_tools::ModelIdentifier model;
-  auto result = client.ModelDetails(modelIdentifier, model);
+  if (!client.ModelDetails(modelIdentifier, model))
+  {
+    std::cerr << "Unable to get model information" << std::endl;
+    return -1;
+  }
 
   // Show model details.
-  if (result)
-  {
-    std::cout << "Name: " << model.Name() << std::endl;
-    std::cout << "Source URL: " << model.SourceURL() << std::endl;
-    std::cout << "Unique name: " << model.UniqueName() << std::endl;
-    std::cout << "Owner: " << model.Owner() << std::endl;
-    std::cout << "Description: " << model.Description() << std::endl;
-    std::cout << "Likes: " << model.Likes() << std::endl;
-    std::cout << "Downloads: " << model.Downloads() << std::endl;
-    std::cout << "License name: " << model.LicenseName() << std::endl;
-    std::cout << "License URL: " << model.LicenseURL() << std::endl;
-    std::cout << "License image URL: " << model.LicenseImageURL() << std::endl;
-    std::cout << "Tags: " << std::endl;
-    for (auto const &tag : model.Tags())
-      std::cout << "  " << tag << std::endl;
-  }
+  std::cout << "Name: " << model.Name() << std::endl;
+  std::cout << "Source URL: " << model.SourceURL() << std::endl;
+  std::cout << "Unique name: " << model.UniqueName() << std::endl;
+  std::cout << "Owner: " << model.Owner() << std::endl;
+  std::cout << "Description: " << model.Description() << std::endl;
+  std::cout << "Likes: " << model.Likes() << std::endl;
+  std::cout << "Downloads: " << model.Downloads() << std::endl;
+  std::cout << "License name: " << model.LicenseName() << std::endl;
+  std::cout << "License URL: " << model.LicenseURL() << std::endl;
+  std::cout << "License image URL: " << model.LicenseImageURL() << std::endl;
+  std::cout << "Tags: " << std::endl;
+  for (auto const &tag : model.Tags())
+    std::cout << "  " << tag << std::endl;
+
+  return 0;
 }
