@@ -17,6 +17,8 @@
 
 #include <iostream>
 #include <memory>
+#include <string>
+
 #include <ignition/common/Console.hh>
 #include <ignition/common/URI.hh>
 
