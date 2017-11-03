@@ -18,6 +18,7 @@
 #include <iostream>
 #include <memory>
 #include <ignition/common/Console.hh>
+#include <ignition/common/URI.hh>
 
 #include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/FuelClient.hh"
@@ -173,4 +174,67 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id)
     return Result(Result::FETCH_ERROR);
 
   return Result(Result::FETCH);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadModel(const std::string &_modelURL,
+  std::string &_path)
+{
+  ignition::common::URI uri(_modelURL);
+  if (!uri.Valid())
+    return Result(Result::FETCH_ERROR);
+
+  auto path = uri.Path().Str();
+
+  // Remove the server.
+  auto posDelim = path.find("/");
+  if (posDelim == std::string::npos)
+    return Result(Result::FETCH_ERROR);
+  auto server = path.substr(0, posDelim);
+  path = path.substr(posDelim + 1, path.size() - 1);
+
+  // Remove the API version.
+  posDelim = path.find("/");
+  if (posDelim == std::string::npos)
+    return Result(Result::FETCH_ERROR);
+  path = path.substr(posDelim + 1, path.size() - 1);
+
+  // Get the owner.
+  posDelim = path.find("/");
+  if (posDelim == std::string::npos)
+    return Result(Result::FETCH_ERROR);
+  auto owner = path.substr(0, posDelim);
+  path = path.substr(posDelim + 1, path.size() - 1);
+
+  // Remove "models".
+  posDelim = path.find("/");
+  if (posDelim == std::string::npos)
+    return Result(Result::FETCH_ERROR);
+  auto modelsDelim = path.substr(0, posDelim);
+  if (modelsDelim != "models")
+    return Result(Result::FETCH_ERROR);
+  path = path.substr(posDelim + 1, path.size() - 1);
+
+  // Get the model name.
+  posDelim = path.rfind("/");
+  if (posDelim != std::string::npos)
+  {
+    if (posDelim != path.size())
+      return Result(Result::FETCH_ERROR);
+
+    // Remove the trailing slash.
+    path.pop_back();
+  }
+
+  auto model = path;
+
+  ModelIdentifier id;
+  id.Owner(owner);
+  id.Name(model);
+
+  auto result = this->DownloadModel(id);
+  if (result)
+    _path = this->Config().CacheLocation() + "/" + owner + "/" + model;
+
+  return result;
 }

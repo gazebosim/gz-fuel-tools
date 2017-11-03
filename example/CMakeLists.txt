@@ -6,6 +6,18 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-FUEL-TOOLS_CXX_FLAGS}")
 include_directories(${IGNITION-FUEL-TOOLS_INCLUDE_DIRS})
 link_directories(${IGNITION-FUEL-TOOLS_LIBRARY_DIRS})
 
+################################################################################
+# Ignition common
+find_package(ignition-common0 QUIET)
+if (NOT ignition-common0_FOUND)
+  BUILD_ERROR ("Missing: Ignition Common (libignition-common0-dev)")
+else()
+  message (STATUS "Found Ignition Common")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-COMMON_CXX_FLAGS}")
+  include_directories(${IGNITION-COMMON_INCLUDE_DIRS})
+  link_directories(${IGNITION-COMMON_LIBRARY_DIRS})
+endif()
+
 # GFlags
 find_library(gflags_LIBRARIES NAMES gflags)
 find_path(gflags_INCLUDE_DIRS gflags/gflags.h ENV CPATH)
@@ -19,16 +31,19 @@ endif()
 add_executable(modelList modelList.cc)
 target_link_libraries(modelList
                       ${IGNITION-FUEL-TOOLS_LIBRARIES}
+                      ${IGNITION-COMMON_LIBRARIES}
                       ${gflags_LIBRARIES})
 
 add_executable(modelDownload modelDownload.cc)
 target_link_libraries(modelDownload
                       ${IGNITION-FUEL-TOOLS_LIBRARIES}
+                      ${IGNITION-COMMON_LIBRARIES}
                       ${gflags_LIBRARIES})
 
 add_executable(modelDetails modelDetails.cc)
 target_link_libraries(modelDetails
                       ${IGNITION-FUEL-TOOLS_LIBRARIES}
+                      ${IGNITION-COMMON_LIBRARIES}
                       ${gflags_LIBRARIES})
 
 if (MSVC)

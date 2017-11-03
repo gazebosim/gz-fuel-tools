@@ -15,7 +15,10 @@
  *
 */
 
+#include <iostream>
+
 #include <gflags/gflags.h>
+#include <ignition/common/URI.hh>
 #include <ignition/fuel-tools.hh>
 
 DEFINE_bool(h, false, "Show help");
@@ -64,4 +67,11 @@ int main(int argc, char **argv)
 
   // Fetch the model.
   auto result = client.DownloadModel(modelIdentifier);
+  if (!result)
+  {
+    std::cerr << "Unable to download model" << std::endl;
+    return -1;
+  }
+
+  return 0;
 }
