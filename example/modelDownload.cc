@@ -49,11 +49,10 @@ int main(int argc, char **argv)
   }
   gflags::HandleCommandLineHelpFlags();
 
-  // Create a ClientConfig, TODO create this from a yaml file
-  ignition::fuel_tools::ClientConfig conf;
   ignition::fuel_tools::ServerConfig srv;
   srv.URL(FLAGS_s);
   srv.LocalName("ignitionfuel");
+  ignition::fuel_tools::ClientConfig conf;
   conf.AddServer(srv);
 
   // Remember to set your IGN_FUEL_PATH.
@@ -66,7 +65,7 @@ int main(int argc, char **argv)
   modelIdentifier.Name(FLAGS_m);
 
   // Fetch the model.
-  if (!client.DownloadModel(modelIdentifier))
+  if (!client.DownloadModel(srv, modelIdentifier))
   {
     std::cerr << "Unable to download model" << std::endl;
     return -1;

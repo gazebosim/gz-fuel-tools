@@ -31,6 +31,7 @@ namespace ignition
     /// \brief forward declaration
     class ModelIter;
     class ClientConfig;
+    class ServerConfig;
     class REST;
 
     /// \brief Private class, do not include or instantiate
@@ -45,8 +46,9 @@ namespace ignition
       public: static ModelIter Create(std::vector<Model> _models);
 
       /// \brief Create a model iter that will make REST api calls
-      public: static ModelIter Create(REST &_rest, ClientConfig &_conf,
-          const std::string &_version, const std::string &_api);
+      public: static ModelIter Create(REST &_rest,
+                                      ServerConfig &_server,
+                                      const std::string &_api);
 
       /// \brief Create a model iterator that is empty
       public: static ModelIter Create();
@@ -119,8 +121,9 @@ namespace ignition
     class IGNITION_FUEL_TOOLS_VISIBLE IterRESTIds: public ModelIterPrivate
     {
       /// \brief constructor
-      public: IterRESTIds(REST *_rest, ClientConfig *_confi,
-                  const std::string &_version, const std::string &_api);
+      public: IterRESTIds(REST *_rest,
+                          ServerConfig *_server,
+                          const std::string &_api);
 
       /// \brief destructor
       public: virtual ~IterRESTIds();
@@ -132,13 +135,10 @@ namespace ignition
       public: virtual bool HasReachedEnd() override;
 
       /// \brief Client configuration
-      public: ClientConfig *config = nullptr;
+      public: ServerConfig *config = nullptr;
 
       /// \brief RESTful client
       public: REST *rest = nullptr;
-
-      /// \brief Current server URL
-      public: std::string serverURL;
 
       /// \brief Model identifiers in the current page
       protected: std::vector<ModelIdentifier> ids;

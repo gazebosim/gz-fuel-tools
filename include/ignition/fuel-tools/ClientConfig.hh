@@ -67,6 +67,14 @@ namespace ignition
       /// \brief Set the API key to auth with the server
       public: void APIKey(const std::string &_key);
 
+      /// \brief Get the protocol version used with this server.
+      /// \return The version. E.g.: "1.0".
+      public: std::string Version() const;
+
+      /// \brief Set the protocol version used with this server.
+      /// \param[in] _version The version. E.g.: "1.0".
+      public: void Version(const std::string &_version);
+
       /// \brief PIMPL
       private: std::unique_ptr<ServerConfigPrivate> dataPtr;
     };

@@ -49,11 +49,10 @@ int main(int argc, char **argv)
   }
   gflags::HandleCommandLineHelpFlags();
 
-  // Create a ClientConfig, TODO create this from a yaml file
-  ignition::fuel_tools::ClientConfig conf;
+  // Create a ClientConfig.
   ignition::fuel_tools::ServerConfig srv;
   srv.URL(FLAGS_s);
-  srv.LocalName("ignitionfuel");
+  ignition::fuel_tools::ClientConfig conf;
   conf.AddServer(srv);
 
   ignition::fuel_tools::FuelClient client(conf);
@@ -65,7 +64,7 @@ int main(int argc, char **argv)
 
   // Fetch the model details.
   ignition::fuel_tools::ModelIdentifier model;
-  if (!client.ModelDetails(modelIdentifier, model))
+  if (!client.ModelDetails(srv, modelIdentifier, model))
   {
     std::cerr << "Unable to get model information" << std::endl;
     return -1;
@@ -73,7 +72,7 @@ int main(int argc, char **argv)
 
   // Show model details.
   std::cout << "Name: " << model.Name() << std::endl;
-  std::cout << "Source URL: " << model.SourceURL() << std::endl;
+  std::cout << "Source URL: " << model.Server().URL() << std::endl;
   std::cout << "Unique name: " << model.UniqueName() << std::endl;
   std::cout << "Owner: " << model.Owner() << std::endl;
   std::cout << "Description: " << model.Description() << std::endl;

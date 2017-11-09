@@ -165,32 +165,38 @@ TEST(LocalCache, MatchingModel)
 
   ignition::fuel_tools::LocalCache cache(&conf);
 
+  ignition::fuel_tools::ServerConfig srv1;
+  srv1.URL("http://localhost:8001/");
+
+  ignition::fuel_tools::ServerConfig srv2;
+  srv2.URL("http://localhost:8002/");
+
   ModelIdentifier am1;
-  am1.SourceURL("http://localhost:8001/");
+  am1.Server(srv1);
   am1.Owner("alice");
   am1.Name("am1");
   EXPECT_TRUE(cache.MatchingModel(am1));
 
   ModelIdentifier tm2;
-  tm2.SourceURL("http://localhost:8001/");
+  tm2.Server(srv1);
   tm2.Owner("trudy");
   tm2.Name("tm2");
   EXPECT_TRUE(cache.MatchingModel(tm2));
 
   ModelIdentifier bogus1;
-  bogus1.SourceURL("http://localhost:8002/");
+  bogus1.Server(srv2);
   bogus1.Owner("trudy");
   bogus1.Name("tm2");
   EXPECT_FALSE(cache.MatchingModel(bogus1));
 
   ModelIdentifier bogus2;
-  bogus2.SourceURL("http://localhost:8001/");
+  bogus2.Server(srv1);
   bogus2.Owner("tfudy");
   bogus2.Name("tm2");
   EXPECT_FALSE(cache.MatchingModel(bogus2));
 
   ModelIdentifier bogus3;
-  bogus3.SourceURL("http://localhost:8001/");
+  bogus3.Server(srv1);
   bogus3.Owner("trudy");
   bogus3.Name("tm3");
   EXPECT_FALSE(cache.MatchingModel(bogus3));
