@@ -7,6 +7,10 @@ interacting with Ignition Fuel servers.
 
   [http://bitbucket.org/ignitionrobotics/ign-fuel-tools](http://bitbucket.org/ignitionrobotics/ign-fuel-tools)
 
+Test coverage reports are available at Codecov:
+
+[![codecov](https://codecov.io/bb/ignitionrobotics/ign-fuel-tools/branch/default/graph/badge.svg)](https://codecov.io/bb/ignitionrobotics/ign-fuel-tools)
+
 # Building and installing
 
 ```
@@ -54,7 +58,7 @@ $ ign fuel locate --name am1
   srv.URL("https://ignitionfuel.org/");
   srv.LocalName("ignitionfuel");
   conf.AddServer(srv);
-  
+
   ignition::fuel_tools::FuelClient client(conf);
   ignition::fuel_tools::ModelIter iter = client.Models();
   while (iter)
@@ -95,3 +99,68 @@ Please refer to the [Bitbucket Pipelines](https://bitbucket.org/ignitionrobotics
 Check [here](http://ignition-fuel-tools.readthedocs.io/en/default/).
 
 [![Documentation Status](https://readthedocs.org/projects/ignition-fuel-tools/badge/?version=default)](https://readthedocs.org/projects/ignition-fuel-tools/?badge=default)
+
+
+## Roadmap
+
+* Create a YAML configuration file and parse it as part of the ClientConfig class.
+
+~~~
+# The list of asset sources.
+sources:
+  osrf_local:
+    url: https://localhost:8080
+    api_key: r1CJIKTadlpS1IWt9jivf2sqGJAkbvSQoIMIubrn
+
+  osrf_public:
+    url: https://staging-api.ignitionfuel.org
+    api_key: sdfpWzZZbdixQ3zZbzxQzG4WPRlMT6DgUthvsfZ7
+
+  local:
+    url: file:///home/caguero/.ignition/fuel/
+~~~
+* Create the notion of "asset repository" or similar. An asset repository abstracts an entity that can store assets. It can be local or remote. This is the interface for "asset repository":
+    * List(category). 
+        E.g.: localRepository.List("models")
+        remote1Repository.List("models")
+    * Details(assetIdentifier). 
+        E.g.: Modeldentifier model;
+        model.Owner("the_owner");
+        model.Name("the_name");
+        localRepository.Details(model)
+        remote1Repository.Details(model)
+    * Create(assetIdentifier, path_to_the_asset). 
+        E.g.: Modeldentifier model;
+        model.Owner("the_owner");
+        model.Name("the_name");
+        localRepository.Create(model, path_to_the_asset)
+        remote1Repository.Create(model, path_to_the_asset)
+    * Delete(assetIdentifier). 
+        E.g.: Modeldentifier model;
+        model.Owner("the_owner");
+        model.Name("the_name");
+        localRepository.Delete(model)
+        remote1Repository.Delete(model)
+     * CopyTo(assetIdentifier, dst_repository).
+        E.g.: Modeldentifier model;
+        model.Owner("the_owner");
+        model.Name("the_name");
+        localRepository.CopyTo(model, remote1Repository)
+        remote1Repository.CopyTo(model, localRepository)
+    * "LocalRepository" and "RemoteRepository" should implement this interface.
+    (Most of the pieces are there, we just need to refactor the code a bit).
+
+* Think about how to detect when new versions of remote models have been uploaded.
+    * Idea of a hash.
+
+* Add ignition fuel command line utilities for:
+    * list
+    * detail
+    * create
+    * delete
+    * copyTo
+
+* How to test the client library:
+    * Directly against the real backend (staging?)
+    * Clone, and compile a local backend?
+    * Mocking the backend has the problem of not being in sync with the real backend and missing potential issues.

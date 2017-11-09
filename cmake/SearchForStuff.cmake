@@ -44,7 +44,7 @@ endif()
 pkg_check_modules(libzip libzip)
 
 if (NOT libzip_FOUND)
-  BUILD_ERROR ("Missing: libzip-dev. Required for parsing compressing files.")
+  BUILD_ERROR ("Missing: libzip-dev. Required for parsing compressed files.")
 endif()
 
 ################################################################################

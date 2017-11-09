@@ -34,9 +34,11 @@ pipelines:
           - cd ../..
           # Ignition Fuel Tools
           - mkdir build && cd build
-          - cmake ..
+          - cmake .. -DCMAKE_BUILD_TYPE=coverage
           - make -j4
           - make test ARGS="-VV"
+          - make coverage
+          - bash <(curl -s https://codecov.io/bash)
           - make doc
           - make install
           # Build examples
