@@ -55,13 +55,13 @@ TEST(ModelIdentifier, UniqueName)
   id.Name("hello");
   id.Owner("alice");
   id.SourceURL("https://localhost:8001/");
-  EXPECT_EQ("https://localhost:8001/alice/hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
 
   id.SourceURL("https://localhost:8001");
-  EXPECT_EQ("https://localhost:8001/alice/hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
 
   id.SourceURL("https://localhost:8001//////////////////////////");
-  EXPECT_EQ("https://localhost:8001/alice/hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
 }
 
 /////////////////////////////////////////////////

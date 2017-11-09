@@ -151,8 +151,8 @@ ModelIdentifier::~ModelIdentifier()
 std::string ModelIdentifier::UniqueName() const
 {
   return this->dataPtr->source
-    + '/' + this->dataPtr->owner
-    + '/' + this->dataPtr->name;
+    + "/1.0/"    + this->dataPtr->owner
+    + "/models/" + this->dataPtr->name;
 }
 
 //////////////////////////////////////////////////
