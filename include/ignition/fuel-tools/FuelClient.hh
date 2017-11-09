@@ -105,6 +105,7 @@ namespace ignition
 
       /// \brief Download a model from ignition fuel
       /// \param[in] _modelURL The unique URL of the model to download
+      /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
       /// \param[out] _path Path where the model was downloaded
       /// \return Result of the download operation
       public: Result DownloadModel(const std::string &_modelURL,
