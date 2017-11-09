@@ -16,13 +16,13 @@
 */
 
 #include <gtest/gtest.h>
+#include <string>
+
 #include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/ModelIdentifier.hh"
 
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
-
+using namespace fuel_tools;
 
 /////////////////////////////////////////////////
 /// \brief Fields can be set

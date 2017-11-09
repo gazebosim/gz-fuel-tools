@@ -38,7 +38,6 @@ namespace ignition
     class ServerConfig;
 
     /// \brief High level interface to ignition fuel
-    ///
     class IGNITION_FUEL_TOOLS_VISIBLE FuelClient
     {
       /// \brief Constructor accepts server and auth configuration
@@ -79,7 +78,7 @@ namespace ignition
       ///          right now this iterator stores a list of names internally.
       /// \param[in] _server The server to request the operation.
       /// \return A model iterator
-      public: ModelIter Models(ServerConfig &_server);
+      public: ModelIter Models(const ServerConfig &_server);
 
       /// \brief Returns models matching a given identifying criteria
       /// \param[in] _server The server to request the operation.
@@ -89,13 +88,13 @@ namespace ignition
       ///          allows the posibility of getting multiple models with the
       ///          same name.
       /// \return An iterator of models with names matching the criteria
-      public: ModelIter Models(ServerConfig &_server,
+      public: ModelIter Models(const ServerConfig &_server,
                                const ModelIdentifier &_id);
 
       /// \brief Upload a directory as a new model
+      /// \param[in] _server The server to request the operation.
       /// \param[in] _pathToModelDir a path to a directory containing a model
       /// \param[in] _id An identifier to assign to this new model
-      /// \param[in] _server The server to request the operation.
       /// \return Result of the upload operation
       public: Result UploadModel(const ServerConfig &_server,
                                  const std::string &_pathToModelDir,

@@ -20,6 +20,7 @@
 #include <ignition/fuel-tools/FuelClient.hh>
 #include <ignition/fuel-tools/LocalCache.hh>
 
+//////////////////////////////////////////////////
 int main()
 {
   ignition::common::Console::SetVerbosity(4);

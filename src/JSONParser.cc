@@ -16,11 +16,10 @@
 */
 
 #include <json/json.h>
-
 #include <string>
 #include <vector>
-
 #include <ignition/common/Console.hh>
+
 #include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/JSONParser.hh"
 

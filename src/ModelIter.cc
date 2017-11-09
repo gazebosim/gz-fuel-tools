@@ -29,14 +29,29 @@
 #include "ignition/fuel-tools/ModelPrivate.hh"
 #include "ignition/fuel-tools/REST.hh"
 
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
+using namespace fuel_tools;
 
 //////////////////////////////////////////////////
-ModelIter ModelIterFactory::Create(std::vector<ModelIdentifier> _ids)
+ModelIter ModelIterFactory::Create(const std::vector<ModelIdentifier> &_ids)
 {
   std::unique_ptr<ModelIterPrivate> priv(new IterIds(_ids));
+  return std::move(ModelIter(std::move(priv)));
+}
+
+//////////////////////////////////////////////////
+ModelIter ModelIterFactory::Create(const std::vector<Model> &_models)
+{
+  std::unique_ptr<ModelIterPrivate> priv(new IterModels(_models));
+  return std::move(ModelIter(std::move(priv)));
+}
+
+//////////////////////////////////////////////////
+ModelIter ModelIterFactory::Create(const REST &_rest,
+    const ServerConfig &_server, const std::string &_api)
+{
+  std::unique_ptr<ModelIterPrivate> priv(new IterRESTIds(
+    _rest, _server, _api));
   return std::move(ModelIter(std::move(priv)));
 }
 
@@ -44,22 +59,6 @@ ModelIter ModelIterFactory::Create(std::vector<ModelIdentifier> _ids)
 ModelIter ModelIterFactory::Create()
 {
   std::unique_ptr<ModelIterPrivate> priv(new IterIds({}));
-  return std::move(ModelIter(std::move(priv)));
-}
-
-//////////////////////////////////////////////////
-ModelIter ModelIterFactory::Create(std::vector<Model> _models)
-{
-  std::unique_ptr<ModelIterPrivate> priv(new IterModels(_models));
-  return std::move(ModelIter(std::move(priv)));
-}
-
-//////////////////////////////////////////////////
-ModelIter ModelIterFactory::Create(REST &_rest, ServerConfig &_server,
-    const std::string &_api)
-{
-  std::unique_ptr<ModelIterPrivate> priv(new IterRESTIds(
-    &_rest, &_server, _api));
   return std::move(ModelIter(std::move(priv)));
 }
 
@@ -148,7 +147,7 @@ IterRESTIds::~IterRESTIds()
 }
 
 //////////////////////////////////////////////////
-IterRESTIds::IterRESTIds(REST *_rest, ServerConfig *_config,
+IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
     const std::string &_api)
   : config(_config), rest(_rest)
 {
@@ -168,8 +167,8 @@ IterRESTIds::IterRESTIds(REST *_rest, ServerConfig *_config,
     ++page;
 
     // Fire the request.
-    resp = this->rest->Request(
-      method, this->config->URL(), _config->Version(), path, {}, headers, "");
+    resp = this->rest.Request(method, this->config.URL(),
+      this->config.Version(), path, {}, headers, "");
 
     // ToDo: resp.statusCode should return != 200 when the page requested does
     // not exist. When this happens we should stop without calling ParseModels()
@@ -178,7 +177,7 @@ IterRESTIds::IterRESTIds(REST *_rest, ServerConfig *_config,
       break;
 
     // Parse the response.
-    modelIds = JSONParser::ParseModels(resp.data, *this->config);
+    modelIds = JSONParser::ParseModels(resp.data, this->config);
 
     // Add the vector of models to the list.
     this->ids.insert(std::end(this->ids), std::begin(modelIds),
@@ -193,7 +192,7 @@ IterRESTIds::IterRESTIds(REST *_rest, ServerConfig *_config,
   // make first model
   std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
   ptr->id = *(this->idIter);
-  ptr->id.Server(*this->config);
+  ptr->id.Server(this->config);
   this->model = Model(ptr);
 
   igndbg << "Got response [" << resp.data << "]\n";
@@ -210,7 +209,7 @@ void IterRESTIds::Next()
   {
     std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
     ptr->id = *(this->idIter);
-    ptr->id.Server(*this->config);
+    ptr->id.Server(this->config);
     this->model = Model(ptr);
   }
   // TODO request next page if api is paginated

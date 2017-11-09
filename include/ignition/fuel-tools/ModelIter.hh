@@ -18,7 +18,6 @@
 #ifndef IGNITION_FUEL_TOOLS_MODELITER_HH_
 #define IGNITION_FUEL_TOOLS_MODELITER_HH_
 
-#include <array>
 #include <memory>
 
 #include "ignition/fuel-tools/Helpers.hh"
@@ -29,12 +28,9 @@ namespace ignition
   namespace fuel_tools
   {
     /// \brief forward declaration
-    class ModelIterPrivate;
-
-    class ModelIterFactory;
-
-    /// \brief forward declaration
     class FuelClient;
+    class ModelIterPrivate;
+    class ModelIterFactory;
 
     /// \brief class for iterating through models
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIter
@@ -47,6 +43,7 @@ namespace ignition
       /// \brief Move constructor
       public: ModelIter(ModelIter && _old);
 
+      /// \brief Default destructor.
       public: ~ModelIter();
 
       /// \return false once the iterator is one past the end of the models

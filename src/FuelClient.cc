@@ -24,17 +24,14 @@
 #include "ignition/fuel-tools/JSONParser.hh"
 #include "ignition/fuel-tools/LocalCache.hh"
 #include "ignition/fuel-tools/ModelIdentifier.hh"
-#include "ignition/fuel-tools/REST.hh"
 #include "ignition/fuel-tools/ModelIterPrivate.hh"
+#include "ignition/fuel-tools/REST.hh"
 
-
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
-
+using namespace fuel_tools;
 
 /// \brief Private Implementation
-class ignft::FuelClientPrivate
+class ignition::fuel_tools::FuelClientPrivate
 {
   /// \brief Client configuration
   public: ClientConfig config;
@@ -45,7 +42,6 @@ class ignft::FuelClientPrivate
   /// \brief Local Cache
   public: std::shared_ptr<LocalCache> cache;
 };
-
 
 //////////////////////////////////////////////////
 FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
@@ -93,7 +89,7 @@ Result FuelClient::ModelDetails(const ServerConfig &_server,
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models(ServerConfig &_server)
+ModelIter FuelClient::Models(const ServerConfig &_server)
 {
   ModelIter iter = ModelIterFactory::Create(this->dataPtr->rest,
       _server, "models");
@@ -108,7 +104,8 @@ ModelIter FuelClient::Models(ServerConfig &_server)
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models(ServerConfig &_server, const ModelIdentifier &_id)
+ModelIter FuelClient::Models(const ServerConfig &_server,
+  const ModelIdentifier &_id)
 {
   // Check local cache first
   ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);

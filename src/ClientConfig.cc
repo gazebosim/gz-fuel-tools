@@ -17,7 +17,6 @@
 
 #include <string>
 #include <vector>
-
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
@@ -56,7 +55,8 @@ class ignition::fuel_tools::ServerConfigPrivate
 };
 
 //////////////////////////////////////////////////
-ServerConfig::ServerConfig() : dataPtr (new ServerConfigPrivate)
+ServerConfig::ServerConfig()
+  : dataPtr (new ServerConfigPrivate)
 {
 }
 

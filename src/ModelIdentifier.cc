@@ -21,12 +21,10 @@
 #include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/ModelIdentifier.hh"
 
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
+using namespace fuel_tools;
 
-
-class ignft::ModelIdentifierPrivate
+class ignition::fuel_tools::ModelIdentifierPrivate
 {
   /// \brief returns true if name follows rules
   /// \param[in] _name Name to validate
@@ -82,7 +80,6 @@ class ignft::ModelIdentifierPrivate
   public: std::vector<std::string> tags;
 };
 
-
 //////////////////////////////////////////////////
 bool ModelIdentifierPrivate::ValidName(const std::string &_name)
 {
@@ -110,7 +107,6 @@ bool ModelIdentifierPrivate::ValidName(const std::string &_name)
   }
   return valid;
 }
-
 
 //////////////////////////////////////////////////
 bool ModelIdentifierPrivate::ValidURL(const std::string &_name)

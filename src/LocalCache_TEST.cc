@@ -19,6 +19,7 @@
 
 #include <fstream>
 #include <set>
+#include <string>
 #include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel-tools/ClientConfig.hh"
@@ -74,7 +75,6 @@ void createLocal6(ClientConfig &_conf)
   _conf.AddServer(srv);
 }
 
-
 /// \brief Creates a directory structure in the build directory with 3 models
 void createLocal3(ClientConfig &_conf)
 {
@@ -103,7 +103,6 @@ void createLocal3(ClientConfig &_conf)
   _conf.AddServer(srv);
 }
 
-
 /////////////////////////////////////////////////
 /// \brief Iterate through all models in cache
 TEST(LocalCache, AllModels)
@@ -125,7 +124,6 @@ TEST(LocalCache, AllModels)
   }
   EXPECT_EQ(9u, uniqueNames.size());
 }
-
 
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
