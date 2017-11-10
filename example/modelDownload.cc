@@ -49,6 +49,7 @@ int main(int argc, char **argv)
   }
   gflags::HandleCommandLineHelpFlags();
 
+  // Create a ClientConfig
   ignition::fuel_tools::ServerConfig srv;
   srv.URL(FLAGS_s);
   srv.LocalName("ignitionfuel");

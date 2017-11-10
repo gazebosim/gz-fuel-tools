@@ -17,6 +17,9 @@
 
 #include <iostream>
 #include <memory>
+#include <regex>
+#include <string>
+
 #include <ignition/common/Console.hh>
 
 #include "ignition/fuel-tools/ClientConfig.hh"
@@ -33,6 +36,22 @@ using namespace fuel_tools;
 /// \brief Private Implementation
 class ignition::fuel_tools::FuelClientPrivate
 {
+  /// \brief A model URL.
+  /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
+  public: std::string kModelURLRegexStr =
+    // Method
+    "^([^\\/\\W]+):\\/\\/"
+    // Server
+    "([^\\/\\s]+)\\/+"
+    // Version
+    "([^\\/\\s]+)\\/+"
+    // Owner
+    "([^\\/\\s]+)\\/+"
+    // "models"
+    "models\\/+"
+    // Name
+    "([^\\/\\s]+)\\/*";
+
   /// \brief Client configuration
   public: ClientConfig config;
 
@@ -41,6 +60,9 @@ class ignition::fuel_tools::FuelClientPrivate
 
   /// \brief Local Cache
   public: std::shared_ptr<LocalCache> cache;
+
+  /// \brief Regex to parse Ignition Fuel URLs.
+  public: std::unique_ptr<std::regex> urlModelRegex;
 };
 
 //////////////////////////////////////////////////
@@ -55,6 +77,9 @@ FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
     this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
   else
     this->dataPtr->cache.reset(_cache);
+
+  this->dataPtr->urlModelRegex.reset(new std::regex(
+    this->dataPtr->kModelURLRegexStr));
 }
 
 //////////////////////////////////////////////////
@@ -155,4 +180,33 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
     return Result(Result::FETCH_ERROR);
 
   return Result(Result::FETCH);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadModel(const std::string &_modelURL,
+  std::string &_path)
+{
+  std::smatch match;
+  if (!std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex))
+    return Result(Result::FETCH_ERROR);
+
+  assert(match.size() == 6);
+
+  std::string method = match[1];
+  std::string server = match[2];
+  std::string owner = match[4];
+  std::string name = match[5];
+
+  ModelIdentifier id;
+  id.Owner(owner);
+  id.Name(name);
+
+  ServerConfig srv;
+  srv.URL(method + "://" + server);
+
+  auto result = this->DownloadModel(srv, id);
+  if (result)
+    _path = this->Config().CacheLocation() + "/" + owner + "/" + name;
+
+  return result;
 }
