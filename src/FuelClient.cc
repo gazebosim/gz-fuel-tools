@@ -17,10 +17,10 @@
 
 #include <iostream>
 #include <memory>
+#include <regex>
 #include <string>
 
 #include <ignition/common/Console.hh>
-#include <ignition/common/URI.hh>
 
 #include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/FuelClient.hh"
@@ -39,6 +39,22 @@ using namespace ignft;
 /// \brief Private Implementation
 class ignft::FuelClientPrivate
 {
+  /// \brief A model URL.
+  /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
+  public: std::string kModelURLRegexStr =
+    // Method
+    "^([^\\/\\W]+):\\/\\/"
+    // Server
+    "([^\\/\\s]+)\\/+"
+    // Version
+    "([^\\/\\s]+)\\/+"
+    // Owner
+    "([^\\/\\s]+)\\/+"
+    // "models"
+    "models\\/+"
+    // Name
+    "([^\\/\\s]+)\\/*";
+
   /// \brief Client configuration
   public: ClientConfig config;
 
@@ -47,6 +63,9 @@ class ignft::FuelClientPrivate
 
   /// \brief Local Cache
   public: std::shared_ptr<LocalCache> cache;
+
+  /// \brief Regex to parse Ignition Fuel URLs.
+  public: std::unique_ptr<std::regex> urlModelRegex;
 };
 
 
@@ -62,6 +81,9 @@ FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
     this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
   else
     this->dataPtr->cache.reset(_cache);
+
+  this->dataPtr->urlModelRegex.reset(new std::regex(
+    this->dataPtr->kModelURLRegexStr));
 }
 
 //////////////////////////////////////////////////
@@ -182,61 +204,22 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id)
 Result FuelClient::DownloadModel(const std::string &_modelURL,
   std::string &_path)
 {
-  ignition::common::URI uri(_modelURL);
-  if (!uri.Valid())
+  std::smatch match;
+  if (!std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex))
     return Result(Result::FETCH_ERROR);
 
-  auto path = uri.Path().Str();
+  assert(match.size() == 6);
 
-  // Remove the server.
-  auto posDelim = path.find("/");
-  if (posDelim == std::string::npos)
-    return Result(Result::FETCH_ERROR);
-  auto server = path.substr(0, posDelim);
-  path = path.substr(posDelim + 1, path.size() - 1);
-
-  // Remove the API version.
-  posDelim = path.find("/");
-  if (posDelim == std::string::npos)
-    return Result(Result::FETCH_ERROR);
-  path = path.substr(posDelim + 1, path.size() - 1);
-
-  // Get the owner.
-  posDelim = path.find("/");
-  if (posDelim == std::string::npos)
-    return Result(Result::FETCH_ERROR);
-  auto owner = path.substr(0, posDelim);
-  path = path.substr(posDelim + 1, path.size() - 1);
-
-  // Remove "models".
-  posDelim = path.find("/");
-  if (posDelim == std::string::npos)
-    return Result(Result::FETCH_ERROR);
-  auto modelsDelim = path.substr(0, posDelim);
-  if (modelsDelim != "models")
-    return Result(Result::FETCH_ERROR);
-  path = path.substr(posDelim + 1, path.size() - 1);
-
-  // Get the model name.
-  posDelim = path.rfind("/");
-  if (posDelim != std::string::npos)
-  {
-    if (posDelim != path.size())
-      return Result(Result::FETCH_ERROR);
-
-    // Remove the trailing slash.
-    path.pop_back();
-  }
-
-  auto model = path;
+  std::string owner = match[4];
+  std::string name = match[5];
 
   ModelIdentifier id;
   id.Owner(owner);
-  id.Name(model);
+  id.Name(name);
 
   auto result = this->DownloadModel(id);
   if (result)
-    _path = this->Config().CacheLocation() + "/" + owner + "/" + model;
+    _path = this->Config().CacheLocation() + "/" + owner + "/" + name;
 
   return result;
 }
