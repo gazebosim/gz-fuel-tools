@@ -116,7 +116,7 @@ ModelIter LocalCache::AllModels()
       auto srvModels = this->dataPtr->ModelsInServer(path);
       for (auto &mod : srvModels)
       {
-        mod.dataPtr->id.SourceURL(server.URL());
+        mod.dataPtr->id.Server(server);
       }
       models.insert(models.end(), srvModels.begin(), srvModels.end());
     }
@@ -142,7 +142,7 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
 //////////////////////////////////////////////////
 ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
 {
-  if (_id.Name().empty() && _id.SourceURL().empty() && _id.Owner().empty())
+  if (_id.Name().empty() && _id.Server().URL().empty() && _id.Owner().empty())
     return ModelIterFactory::Create();
 
   std::vector<Model> models;
@@ -153,8 +153,8 @@ ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
       matches = false;
     if (!_id.Owner().empty() && _id.Owner() != iter->Identification().Owner())
       matches = false;
-    if (!_id.SourceURL().empty()
-        && _id.SourceURL() != iter->Identification().SourceURL())
+    if (!_id.Server().URL().empty() &&
+        _id.Server().URL() != iter->Identification().Server().URL())
       matches = false;
     if (matches)
       models.push_back(*iter);

@@ -20,20 +20,21 @@
 #include <ignition/fuel-tools/FuelClient.hh>
 #include <ignition/fuel-tools/LocalCache.hh>
 
+//////////////////////////////////////////////////
 int main()
 {
   ignition::common::Console::SetVerbosity(4);
 
-  ignition::fuel_tools::ClientConfig conf;
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("https://staging-api.ignitionfuel.org/");
-  srv.LocalName("local");
+  srv.LocalName("staging");
+  ignition::fuel_tools::ClientConfig conf;
   conf.AddServer(srv);
 
   conf.CacheLocation("/tmp/ign-fuel-tools");
 
   ignition::fuel_tools::FuelClient client(conf);
-  auto iter = client.Models();
+  auto iter = client.Models(srv);
 
   // TODO LocalCache should be used inside FuelClient
   ignition::fuel_tools::LocalCache cache(&conf);
@@ -45,8 +46,12 @@ int main()
     ++localIter;
   }
 
+  ignition::fuel_tools::ServerConfig srv2;
+  srv2.URL("http://localhost:8001/");
+  srv2.LocalName("local");
+
   ignition::fuel_tools::ModelIdentifier someId;
-  someId.SourceURL("http://localhost:8001/");
+  someId.Server(srv2);
   someId.Owner("alice");
   someId.Name("am2");
   auto model = cache.MatchingModel(someId);

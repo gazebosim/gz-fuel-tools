@@ -16,11 +16,11 @@
 */
 
 #include <json/json.h>
-
 #include <string>
 #include <vector>
-
 #include <ignition/common/Console.hh>
+
+#include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/JSONParser.hh"
 
 using namespace ignition;
@@ -87,7 +87,7 @@ std::vector<std::string> JSONParser::ParseTags(const Json::Value &_json)
 
 /////////////////////////////////////////////////
 ModelIdentifier JSONParser::ParseModel(const std::string &_json,
-  const std::string &_serverURL)
+  const ServerConfig &_server)
 {
   Json::Reader reader;
   Json::Value model;
@@ -97,14 +97,14 @@ ModelIdentifier JSONParser::ParseModel(const std::string &_json,
   ParseModelImpl(model, id);
 
   // Adding the server used to retrieve the model.
-  id.SourceURL(_serverURL);
+  id.Server(_server);
 
   return id;
 }
 
 /////////////////////////////////////////////////
 std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json,
-  const std::string &_serverURL)
+  const ServerConfig &_server)
 {
   std::vector<ModelIdentifier> ids;
   Json::Reader reader;
@@ -128,7 +128,7 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json,
       }
 
       // Adding the server used to retrieve the model.
-      id.SourceURL(_serverURL);
+      id.Server(_server);
 
       ids.push_back(id);
     }

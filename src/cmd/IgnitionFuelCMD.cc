@@ -31,10 +31,10 @@
 ignition::fuel_tools::ClientConfig IGNITION_FUEL_TOOLS_HIDDEN getConfig()
 {
   // TODO READ config file, don't hardcode this
-  ignition::fuel_tools::ClientConfig conf;
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("https://staging-api.ignitionfuel.org/");
   srv.LocalName("staging_ignitionfuel");
+  ignition::fuel_tools::ClientConfig conf;
   conf.AddServer(srv);
 
   if (const char *cacheLoc = std::getenv("IGN_FUEL_CACHE"))
@@ -103,13 +103,19 @@ extern "C"
   void IGNITION_FUEL_TOOLS_VISIBLE listModels(char *_name, char *_owner,
       char *_url)
   {
+    if (!_url)
+      return;
+
     auto conf = getConfig();
     ignition::fuel_tools::FuelClient client(conf);
+
+    ignition::fuel_tools::ServerConfig srv;
+    srv.URL(_url);
 
     if (!std::strlen(_name) && !std::strlen(_owner) && !std::strlen(_url))
     {
       // All models
-      printModels(client.Models());
+      printModels(client.Models(srv));
     }
     else
     {
@@ -120,8 +126,8 @@ extern "C"
       if (std::strlen(_owner))
         id.Owner(_owner);
       if (std::strlen(_url))
-        id.SourceURL(_url);
-      printModels(client.Models(id));
+        id.Server(srv);
+      printModels(client.Models(srv, id));
     }
   }
 
@@ -133,25 +139,28 @@ extern "C"
   void IGNITION_FUEL_TOOLS_VISIBLE locateModel(char *_name, char *_owner,
       char *_url)
   {
+    if (!_name || !_owner || !_url)
+      return;
+
     auto conf = getConfig();
     ignition::fuel_tools::FuelClient client(conf);
 
+    ignition::fuel_tools::ServerConfig srv;
+    srv.URL(_url);
+
     ignition::fuel_tools::ModelIdentifier id;
     id.Name(_name);
-    if (std::strlen(_owner))
-      id.Owner(_owner);
-    if (std::strlen(_url))
-      id.SourceURL(_url);
-    auto iter = client.Models(id);
+    id.Owner(_owner);
+    id.Server(srv);
+    auto iter = client.Models(srv, id);
     if (!iter)
     {
       std::cerr << "Model not found\n";
+      return;
     }
-    else
-    {
-      iter->Fetch();
-      std::cout << iter->PathToModel() << "\n";
-    }
+
+    iter->Fetch();
+    std::cout << iter->PathToModel() << std::endl;
   }
 
   /// \brief Download a model
@@ -161,14 +170,16 @@ extern "C"
   void IGNITION_FUEL_TOOLS_VISIBLE pullModel(char *_name, char *_owner,
       char *_url)
   {
-    auto conf = getConfig();
-    ignition::fuel_tools::FuelClient client(conf);
+    if (!_name || !_owner || !_url)
+      return;
+
+    ignition::fuel_tools::ServerConfig srv;
+    srv.URL(_url);
 
     ignition::fuel_tools::ModelIdentifier id;
     id.Name(_name);
     id.Owner(_owner);
-    if (std::strlen(_url))
-      id.SourceURL(_url);
+    id.Server(srv);
 
     std::cerr << "TODO Download a model\n";
   }
@@ -181,13 +192,16 @@ extern "C"
   void IGNITION_FUEL_TOOLS_VISIBLE pushModel(char *_name, char *_owner,
       char *_url, char *_path)
   {
-    auto conf = getConfig();
-    ignition::fuel_tools::FuelClient client(conf);
+    if (!_name || !_owner || !_url || !_path)
+      return;
+
+    ignition::fuel_tools::ServerConfig srv;
+    srv.URL(_url);
 
     ignition::fuel_tools::ModelIdentifier id;
     id.Name(_name);
     id.Owner(_owner);
-    id.SourceURL(_url);
+    id.Server(srv);
 
     std::cerr << "TODO Upload a model\n";
   }

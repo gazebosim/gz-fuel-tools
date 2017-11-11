@@ -24,6 +24,7 @@
 DEFINE_bool(h, false, "Show help");
 DEFINE_string(s, "https://localhost:4430", "Server name");
 
+//////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
   // Simple usage.
@@ -46,14 +47,13 @@ int main(int argc, char **argv)
   }
   gflags::HandleCommandLineHelpFlags();
 
-  // Create a ClientConfig, TODO create this from a yaml file
-  ignition::fuel_tools::ClientConfig conf;
+  // Create a ClientConfig.
   ignition::fuel_tools::ServerConfig srv;
   srv.URL(FLAGS_s);
-  srv.LocalName("ignitionfuel");
+  ignition::fuel_tools::ClientConfig conf;
   conf.AddServer(srv);
 
   ignition::fuel_tools::FuelClient client(conf);
-  for (auto iter = client.Models(); iter; ++iter)
+  for (auto iter = client.Models(srv); iter; ++iter)
     std::cout << iter->Identification().Name() << std::endl;
 }

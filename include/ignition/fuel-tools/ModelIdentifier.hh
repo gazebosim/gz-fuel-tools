@@ -33,6 +33,7 @@ namespace ignition
   {
     /// \brief Forward Declaration
     class ModelIdentifierPrivate;
+    class ServerConfig;
 
     /// \brief Defines how to identify a model
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIdentifier
@@ -57,12 +58,12 @@ namespace ignition
       public: std::string Name() const;
 
       /// \brief Returns owner to attribute model to
-      /// \return Model name
+      /// \return Owner name
       public: std::string Owner() const;
 
-      /// \brief Returns server to retrieve model from
-      /// \return Model name
-      public: std::string SourceURL() const;
+      /// \brief Returns server information to retrieve model from
+      /// \return Server information
+      public: ServerConfig &Server() const;
 
       /// \brief Returns a unique name for the model
       /// \remarks this is Server/Owner/Name
@@ -80,9 +81,9 @@ namespace ignition
       public: bool Owner(const std::string &_name);
 
       /// \brief Set the server from which this model comes
-      /// \param[in] _name The name to set. Must be a valid https URL
+      /// \param[in] _server The server to retrieve the model from
       /// \return true if successful
-      public: bool SourceURL(const std::string &_name);
+      public: bool Server(const ServerConfig &_server);
 
       /// \brief Returns the description of the model
       /// \return Model description

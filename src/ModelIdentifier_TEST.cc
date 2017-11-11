@@ -16,12 +16,13 @@
 */
 
 #include <gtest/gtest.h>
+#include <string>
+
+#include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/ModelIdentifier.hh"
 
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
-
+using namespace fuel_tools;
 
 /////////////////////////////////////////////////
 /// \brief Fields can be set
@@ -51,16 +52,25 @@ TEST(ModelIdentifier, SetFields)
 /// \brief Unique Name
 TEST(ModelIdentifier, UniqueName)
 {
+  ignition::fuel_tools::ServerConfig srv1;
+  srv1.URL("http://localhost:8001/");
+
+  ignition::fuel_tools::ServerConfig srv2;
+  srv1.URL("http://localhost:8001");
+
+  ignition::fuel_tools::ServerConfig srv3;
+  srv1.URL("https://localhost:8001//////////////////////////");
+
   ModelIdentifier id;
   id.Name("hello");
   id.Owner("alice");
-  id.SourceURL("https://localhost:8001/");
+  id.Server(srv1);
   EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
 
-  id.SourceURL("https://localhost:8001");
+  id.Server(srv2);
   EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
 
-  id.SourceURL("https://localhost:8001//////////////////////////");
+  id.Server(srv3);
   EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
 }
 

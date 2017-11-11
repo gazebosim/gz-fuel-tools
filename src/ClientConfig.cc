@@ -17,22 +17,20 @@
 
 #include <string>
 #include <vector>
-
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
 
 #include "ignition/fuel-tools/ClientConfig.hh"
 
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
+using namespace fuel_tools;
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class ignft::ClientConfigPrivate
+class ignition::fuel_tools::ClientConfigPrivate
 {
-  /// \brief A list of servers;
+  /// \brief A list of servers.
   public: std::vector<ServerConfig> servers;
 
   /// \brief a path on disk to where data is cached
@@ -41,7 +39,7 @@ class ignft::ClientConfigPrivate
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class ignft::ServerConfigPrivate
+class ignition::fuel_tools::ServerConfigPrivate
 {
   /// \brief URL to reach server
   public: std::string url;
@@ -51,10 +49,14 @@ class ignft::ServerConfigPrivate
 
   /// \brief A key to auth with the server
   public: std::string key;
+
+  /// \brief The protocol version used when talking with this server.
+  public: std::string version = "1.0";
 };
 
 //////////////////////////////////////////////////
-ServerConfig::ServerConfig() : dataPtr (new ServerConfigPrivate)
+ServerConfig::ServerConfig()
+  : dataPtr (new ServerConfigPrivate)
 {
 }
 
@@ -86,7 +88,12 @@ std::string ServerConfig::URL() const
 //////////////////////////////////////////////////
 void ServerConfig::URL(const std::string &_url)
 {
-  this->dataPtr->url = _url;
+  // Strip trailing slashes
+  std::string url = _url;
+  while (!url.empty() && url.back() == '/')
+    url.pop_back();
+
+  this->dataPtr->url = url;
 }
 
 //////////////////////////////////////////////////
@@ -111,6 +118,18 @@ std::string ServerConfig::APIKey() const
 void ServerConfig::APIKey(const std::string &_key)
 {
   this->dataPtr->key = _key;
+}
+
+//////////////////////////////////////////////////
+std::string ServerConfig::Version() const
+{
+  return this->dataPtr->version;
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::Version(const std::string &_version)
+{
+  this->dataPtr->version = _version;
 }
 
 /////////////////////////////////////////////////

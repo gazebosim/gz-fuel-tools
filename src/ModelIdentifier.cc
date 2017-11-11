@@ -18,14 +18,13 @@
 #include <string>
 #include <vector>
 
+#include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/ModelIdentifier.hh"
 
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
+using namespace fuel_tools;
 
-
-class ignft::ModelIdentifierPrivate
+class ignition::fuel_tools::ModelIdentifierPrivate
 {
   /// \brief returns true if name follows rules
   /// \param[in] _name Name to validate
@@ -41,8 +40,8 @@ class ignft::ModelIdentifierPrivate
   /// \brief owner who this model is attributed to
   public: std::string owner;
 
-  /// \brief source of this model
-  public: std::string source;
+  /// \brief Server of this model
+  public: ServerConfig server;
 
   /// \brief Description of this model
   public: std::string description;
@@ -81,7 +80,6 @@ class ignft::ModelIdentifierPrivate
   public: std::vector<std::string> tags;
 };
 
-
 //////////////////////////////////////////////////
 bool ModelIdentifierPrivate::ValidName(const std::string &_name)
 {
@@ -110,7 +108,6 @@ bool ModelIdentifierPrivate::ValidName(const std::string &_name)
   return valid;
 }
 
-
 //////////////////////////////////////////////////
 bool ModelIdentifierPrivate::ValidURL(const std::string &_name)
 {
@@ -119,7 +116,8 @@ bool ModelIdentifierPrivate::ValidURL(const std::string &_name)
 }
 
 //////////////////////////////////////////////////
-ModelIdentifier::ModelIdentifier() : dataPtr(new ModelIdentifierPrivate)
+ModelIdentifier::ModelIdentifier()
+  : dataPtr(new ModelIdentifierPrivate)
 {
 }
 
@@ -150,9 +148,10 @@ ModelIdentifier::~ModelIdentifier()
 //////////////////////////////////////////////////
 std::string ModelIdentifier::UniqueName() const
 {
-  return this->dataPtr->source
-    + "/1.0/"    + this->dataPtr->owner
-    + "/models/" + this->dataPtr->name;
+  return this->dataPtr->server.URL()     + "/"        +
+         this->dataPtr->server.Version() + "/"        +
+         this->dataPtr->owner            + "/models/" +
+         this->dataPtr->name;
 }
 
 //////////////////////////////////////////////////
@@ -186,20 +185,12 @@ bool ModelIdentifier::Owner(const std::string &_name)
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifier::SourceURL(const std::string &_url_orig)
+bool ModelIdentifier::Server(const ServerConfig &_server)
 {
-  std::string url(_url_orig);
-  bool success = false;
-  // Strip trailing slashes
-  while (!url.empty() && url.back() == '/')
-  {
-    url.pop_back();
-  }
-  if (this->dataPtr->ValidURL(url))
-  {
-    success = true;
-    this->dataPtr->source = url;
-  }
+  bool success = this->dataPtr->ValidURL(_server.URL());
+  if (success)
+    this->dataPtr->server = _server;
+
   return success;
 }
 
@@ -210,9 +201,9 @@ std::string ModelIdentifier::Owner() const
 }
 
 //////////////////////////////////////////////////
-std::string ModelIdentifier::SourceURL() const
+ServerConfig &ModelIdentifier::Server() const
 {
-  return this->dataPtr->source;
+  return this->dataPtr->server;
 }
 
 //////////////////////////////////////////////////

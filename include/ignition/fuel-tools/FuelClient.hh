@@ -35,9 +35,9 @@ namespace ignition
     class FuelClientPrivate;
     class LocalCache;
     class ModelIdentifier;
+    class ServerConfig;
 
     /// \brief High level interface to ignition fuel
-    ///
     class IGNITION_FUEL_TOOLS_VISIBLE FuelClient
     {
       /// \brief Constructor accepts server and auth configuration
@@ -60,11 +60,13 @@ namespace ignition
       public: ClientConfig &Config();
 
       /// \brief Fetch the details of a model.
+      /// \param[in] _server The server to request the operation.
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \param[out] _model The requested model
       /// \return Result of the fetch operation.
-      public: Result ModelDetails(const ModelIdentifier &_id,
+      public: Result ModelDetails(const ServerConfig &_server,
+                                  const ModelIdentifier &_id,
                                   ModelIdentifier &_model) const;
 
       /// \brief Returns an iterator that can return names of models
@@ -74,34 +76,43 @@ namespace ignition
       ///          iterator may fetch more names if code continues to request
       ///          it. The initial API appears to return all of the models, so
       ///          right now this iterator stores a list of names internally.
+      /// \param[in] _server The server to request the operation.
       /// \return A model iterator
-      public: ModelIter Models();
+      public: ModelIter Models(const ServerConfig &_server);
 
       /// \brief Returns models matching a given identifying criteria
+      /// \param[in] _server The server to request the operation.
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \remarks It's not yet clear if model names are unique, so this API
       ///          allows the posibility of getting multiple models with the
       ///          same name.
       /// \return An iterator of models with names matching the criteria
-      public: ModelIter Models(const ModelIdentifier &_id);
+      public: ModelIter Models(const ServerConfig &_server,
+                               const ModelIdentifier &_id);
 
       /// \brief Upload a directory as a new model
+      /// \param[in] _server The server to request the operation.
       /// \param[in] _pathToModelDir a path to a directory containing a model
       /// \param[in] _id An identifier to assign to this new model
       /// \return Result of the upload operation
-      public: Result UploadModel(const std::string &_pathToModelDir,
+      public: Result UploadModel(const ServerConfig &_server,
+                                 const std::string &_pathToModelDir,
                                  const ModelIdentifier &_id);
 
       /// \brief Remove a model from ignition fuel
+      /// \param[in] _server The server to request the operation.
       /// \param[in] _id The model identifier.
       /// \return Result of the delete operation
-      public: Result DeleteModel(const ModelIdentifier &_id);
+      public: Result DeleteModel(const ServerConfig &_server,
+                                 const ModelIdentifier &_id);
 
       /// \brief Download a model from ignition fuel
+      /// \param[in] _server The server to request the operation.
       /// \param[in] _id The model identifier.
       /// \return Result of the download operation
-      public: Result DownloadModel(const ModelIdentifier &_id);
+      public: Result DownloadModel(const ServerConfig &_server,
+                                   const ModelIdentifier &_id);
 
       /// \brief Download a model from ignition fuel
       /// \param[in] _modelURL The unique URL of the model to download

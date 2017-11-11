@@ -19,6 +19,7 @@
 #include <cstdio>
 #include <string>
 
+#include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/ModelIter.hh"
 #include "ignition/fuel-tools/ModelIterPrivate.hh"
 #include "ignition/fuel-tools/ModelPrivate.hh"
@@ -43,6 +44,9 @@ namespace ignition
 
       public: static ModelIter ModelIterThreeModelIds()
         {
+          ignition::fuel_tools::ServerConfig srv;
+          srv.URL("https://ignitionrobotics.org");
+
           std::vector<ModelIdentifier> ids;
           for (int i = 0; i < 3; i++)
           {
@@ -54,7 +58,7 @@ namespace ignition
             std::string owner = buf;
             id.Name(name);
             id.Owner(owner);
-            id.SourceURL("https://ignitionrobotics.org");
+            id.Server(srv);
             ids.push_back(id);
           }
           return ModelIterFactory::Create(ids);
@@ -62,6 +66,9 @@ namespace ignition
 
       public: static ModelIter ModelIterThreeModels()
         {
+          ignition::fuel_tools::ServerConfig srv;
+          srv.URL("https://ignitionrobotics.org");
+
           std::vector<Model> models;
           for (int i = 0; i < 3; i++)
           {
@@ -75,7 +82,7 @@ namespace ignition
             std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
             ptr->id.Name(name);
             ptr->id.Owner(owner);
-            ptr->id.SourceURL("https://ignitionrobotics.org");
+            ptr->id.Server(srv);
 
             models.push_back(Model(ptr));
           }

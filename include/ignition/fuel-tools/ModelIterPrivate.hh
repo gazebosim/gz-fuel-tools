@@ -21,8 +21,10 @@
 #include <string>
 #include <vector>
 
+#include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/Model.hh"
 #include "ignition/fuel-tools/ModelIdentifier.hh"
+#include "ignition/fuel-tools/REST.hh"
 
 namespace ignition
 {
@@ -30,23 +32,25 @@ namespace ignition
   {
     /// \brief forward declaration
     class ModelIter;
-    class ClientConfig;
-    class REST;
 
     /// \brief Private class, do not include or instantiate
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIterFactory
     {
       /// \brief Create a model iterator from a vector of model identifiers
       /// \param[in] _ids Model identifiers
-      public: static ModelIter Create(std::vector<ModelIdentifier> _ids);
+      public: static ModelIter Create(const std::vector<ModelIdentifier> &_ids);
 
       /// \brief Create a model iterator from a vector of models
       /// \param[in] _ids Models
-      public: static ModelIter Create(std::vector<Model> _models);
+      public: static ModelIter Create(const std::vector<Model> &_models);
 
       /// \brief Create a model iter that will make REST api calls
-      public: static ModelIter Create(REST &_rest, ClientConfig &_conf,
-          const std::string &_version, const std::string &_api);
+      /// \param[in] _rest a REST request
+      /// \param[in] _server The server to request the operation
+      /// \param[in] _api The path to request
+      public: static ModelIter Create(const REST &_rest,
+                                      const ServerConfig &_server,
+                                      const std::string &_api);
 
       /// \brief Create a model iterator that is empty
       public: static ModelIter Create();
@@ -119,8 +123,9 @@ namespace ignition
     class IGNITION_FUEL_TOOLS_VISIBLE IterRESTIds: public ModelIterPrivate
     {
       /// \brief constructor
-      public: IterRESTIds(REST *_rest, ClientConfig *_confi,
-                  const std::string &_version, const std::string &_api);
+      public: IterRESTIds(const REST &_rest,
+                          const ServerConfig &_server,
+                          const std::string &_api);
 
       /// \brief destructor
       public: virtual ~IterRESTIds();
@@ -132,13 +137,10 @@ namespace ignition
       public: virtual bool HasReachedEnd() override;
 
       /// \brief Client configuration
-      public: ClientConfig *config = nullptr;
+      public: ServerConfig config;
 
       /// \brief RESTful client
-      public: REST *rest = nullptr;
-
-      /// \brief Current server URL
-      public: std::string serverURL;
+      public: REST rest;
 
       /// \brief Model identifiers in the current page
       protected: std::vector<ModelIdentifier> ids;

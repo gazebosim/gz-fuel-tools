@@ -27,17 +27,14 @@
 #include "ignition/fuel-tools/JSONParser.hh"
 #include "ignition/fuel-tools/LocalCache.hh"
 #include "ignition/fuel-tools/ModelIdentifier.hh"
-#include "ignition/fuel-tools/REST.hh"
 #include "ignition/fuel-tools/ModelIterPrivate.hh"
+#include "ignition/fuel-tools/REST.hh"
 
-
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
-
+using namespace fuel_tools;
 
 /// \brief Private Implementation
-class ignft::FuelClientPrivate
+class ignition::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL.
   /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
@@ -68,7 +65,6 @@ class ignft::FuelClientPrivate
   public: std::unique_ptr<std::regex> urlModelRegex;
 };
 
-
 //////////////////////////////////////////////////
 FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
     LocalCache *_cache)
@@ -98,38 +94,30 @@ ClientConfig &FuelClient::Config()
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::ModelDetails(const ModelIdentifier &_id,
-  ModelIdentifier &_model) const
+Result FuelClient::ModelDetails(const ServerConfig &_server,
+  const ModelIdentifier &_id, ModelIdentifier &_model) const
 {
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
 
-  // ToDo: Check all servers.
-  auto servers = this->dataPtr->config.Servers();
-  if (servers.empty())
-  {
-    ignerr << "No servers found" << std::endl;
-    return Result(Result::FETCH_ERROR);
-  }
-
-  auto serverURL = servers.front().URL();
-  auto version = "/1.0";
+  auto serverURL = _server.URL();
+  auto version = _server.Version();
   auto path = _id.Owner() + "/models/" + _id.Name();
 
   resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
-  _model = JSONParser::ParseModel(resp.data, serverURL);
+  _model = JSONParser::ParseModel(resp.data, _server);
 
   return Result(Result::FETCH);
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models()
+ModelIter FuelClient::Models(const ServerConfig &_server)
 {
   ModelIter iter = ModelIterFactory::Create(this->dataPtr->rest,
-      this->dataPtr->config, "/1.0/", "models");
+      _server, "models");
 
   if (!iter)
   {
@@ -141,7 +129,8 @@ ModelIter FuelClient::Models()
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models(const ModelIdentifier &_id)
+ModelIter FuelClient::Models(const ServerConfig &_server,
+  const ModelIdentifier &_id)
 {
   // Check local cache first
   ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
@@ -151,46 +140,39 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id)
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
   // Todo try to fetch model directly from a server
-  auto version = "/1.0/";
   auto path = _id.Owner() + "/models/" + _id.Name();
 
-  return ModelIterFactory::Create(this->dataPtr->rest,
-      this->dataPtr->config, version, path);
+  return ModelIterFactory::Create(this->dataPtr->rest, _server, path);
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::UploadModel(const std::string &_pathToModelDir,
-    const ModelIdentifier &_id)
+Result FuelClient::UploadModel(const ServerConfig &_server,
+  const std::string &_pathToModelDir, const ModelIdentifier &_id)
 {
   // TODO Upload a model and return an Result
   return Result(Result::UPLOAD_ERROR);
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DeleteModel(const ModelIdentifier &_id)
+Result FuelClient::DeleteModel(const ServerConfig &_server,
+  const ModelIdentifier &_id)
 {
   // TODO Delete a model and return a Result
   return Result(Result::DELETE_ERROR);
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DownloadModel(const ModelIdentifier &_id)
+Result FuelClient::DownloadModel(const ServerConfig &_server,
+  const ModelIdentifier &_id)
 {
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
 
-  // ToDo: Check all servers.
-  auto servers = this->dataPtr->config.Servers();
-  if (servers.empty())
-  {
-    ignerr << "No servers found" << std::endl;
-    return Result(Result::FETCH_ERROR);
-  }
-
-  auto serverURL = servers.front().URL();
+  auto serverURL = _server.URL();
+  auto version = _server.Version();
   auto path = _id.Owner() + "/models/" + _id.Name() + ".zip";
 
-  resp = rest.Request(REST::GET, serverURL, "/1.0/", path, {}, {}, "");
+  resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
@@ -210,6 +192,8 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
 
   assert(match.size() == 6);
 
+  std::string method = match[1];
+  std::string server = match[2];
   std::string owner = match[4];
   std::string name = match[5];
 
@@ -217,7 +201,10 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
   id.Owner(owner);
   id.Name(name);
 
-  auto result = this->DownloadModel(id);
+  ServerConfig srv;
+  srv.URL(method + "://" + server);
+
+  auto result = this->DownloadModel(srv, id);
   if (result)
     _path = this->Config().CacheLocation() + "/" + owner + "/" + name;
 

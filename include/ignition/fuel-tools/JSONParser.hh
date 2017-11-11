@@ -33,26 +33,28 @@ namespace ignition
 {
   namespace fuel_tools
   {
+    class ServerConfig;
+
     /// \brief A helper class for making REST requests.
     class IGNITION_FUEL_TOOLS_VISIBLE JSONParser
     {
       /// \brief Parse a model JSON string and return a model identifier
       /// \param[in] _json JSON string containing a model.
-      /// \param[in] _serverURL The URL of the server sending the JSON.
+      /// \param[in] _server The server sending the JSON.
       /// This information is populated into some fields of the model.
       /// \return a model identifier
       public: static ModelIdentifier ParseModel(
                   const std::string &_json,
-                  const std::string &_serverURL);
+                  const ServerConfig &_server);
 
       /// \brief Parse a model array JSON string and return a model iterator
       /// \param[in] _json JSON string containing an array of models
-      /// \param[in] _serverURL The URL of the server sending the JSON.
+      /// \param[in] _server The server sending the JSON.
       /// This information is populated into some fields of the models.
       /// \return vector of model identifiers
       public: static std::vector<ModelIdentifier> ParseModels(
                   const std::string &_json,
-                  const std::string &_serverURL);
+                  const ServerConfig &_server);
 
       /// \brief Parse a json object as a model.
       /// \param[in] _json JSON object containing a single model
