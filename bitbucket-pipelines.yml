@@ -14,6 +14,13 @@ pipelines:
             cmake pkg-config python cppcheck doxygen ruby-ronn
             mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev
             lcov curl
+          # Install Ignition CMake
+          - hg clone https://bitbucket.org/ignitionrobotics/ign-cmake -b default
+          - cd ign-cmake
+          - mkdir build && cd build
+          - cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+          - make -j4 install
+          - cd ../..
           # Install Ignition Math.
           - hg clone https://bitbucket.org/ignitionrobotics/ign-math -b ign-math3
           - cd ign-math
