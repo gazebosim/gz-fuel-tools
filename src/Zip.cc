@@ -141,16 +141,17 @@ bool Zip::Extract(const std::string &_src,
 
     // Create intermediate directories if needed.
     std::string dirname = dst;
-#ifdef _WIN32
-    auto delim = "\\"
-#else
-    auto delim = "/";
-#endif
-    auto pos = dirname.rfind(delim);
+
+    auto pos = dirname.rfind(ignition::common::separator(""));
     if (pos != std::string::npos && pos != dirname.size() - 1)
       dirname.erase(pos);
 
-    ignition::common::createDirectories(dirname);
+    if (!ignition::common::createDirectories(dirname))
+    {
+      ignerr << "Error creating directory [" << dirname << "]. "
+             << "Do you have the right permissions?" << std::endl;
+      return false;
+    }
 
     // Create and write the files.
     zip_file * zf = zip_fopen_index(archive, i, 0);
