@@ -28,7 +28,7 @@
 #include <string>
 
 /////////////////////////////////////////////////
-bool create_and_switch_to_temp_dir(std::string &_new_temp_path)
+bool createAndSwitchToTempDir(std::string &_newTempPath)
 {
   std::string tmppath;
   const char *tmp = getenv("TMPDIR");
@@ -59,13 +59,13 @@ bool create_and_switch_to_temp_dir(std::string &_new_temp_path)
     return false;
   }
 
-  _new_temp_path = std::string(resolved);
+  _newTempPath = std::string(resolved);
 
   return true;
 }
 
 /////////////////////////////////////////////////
-bool create_new_empty_file(const std::string &_filename)
+bool createNewEmptyFile(const std::string &_filename)
 {
   int fd = open(_filename.c_str(), O_RDWR | O_CREAT, 0644);
   if (fd < 0)
@@ -78,27 +78,6 @@ bool create_new_empty_file(const std::string &_filename)
   return true;
 }
 
-/////////////////////////////////////////////////
-bool create_new_file_symlink(const std::string &_symlink,
-                             const std::string &_target)
-{
-  return symlink(_target.c_str(), _symlink.c_str()) == 0;
-}
-
-/////////////////////////////////////////////////
-bool create_new_dir_symlink(const std::string &_symlink,
-                            const std::string &_target)
-{
-  return symlink(_target.c_str(), _symlink.c_str()) == 0;
-}
-
-/////////////////////////////////////////////////
-bool create_new_file_hardlink(const std::string &_hardlink,
-                              const std::string &_target)
-{
-  return link(_target.c_str(), _hardlink.c_str()) == 0;
-}
-
 #else
 #include <windows.h>
 #include <winnt.h>
@@ -106,15 +85,15 @@ bool create_new_file_hardlink(const std::string &_hardlink,
 #include "PrintWindowsSystemWarning.hh"
 
 /////////////////////////////////////////////////
-bool create_and_switch_to_temp_dir(std::string &_new_temp_path)
+bool createAndSwitchToTempDir(std::string &_newTempPath)
 {
-  char temp_path[MAX_PATH + 1];
-  DWORD path_len = ::GetTempPathA(MAX_PATH, temp_path);
-  if (path_len >= MAX_PATH || path_len <= 0)
+  char tempPath[MAX_PATH + 1];
+  DWORD pathLen = ::GetTempPathA(MAX_PATH, tempPath);
+  if (pathLen >= MAX_PATH || pathLen <= 0)
   {
     return false;
   }
-  std::string path_to_create(temp_path);
+  std::string pathToCreate(tempPath);
   srand(static_cast<uint32_t>(time(nullptr)));
 
   for (int count = 0; count < 50; ++count)
@@ -122,21 +101,21 @@ bool create_and_switch_to_temp_dir(std::string &_new_temp_path)
     // Try creating a new temporary directory with a randomly generated name.
     // If the one we chose exists, keep trying another path name until we reach
     // some limit.
-    std::string new_dir_name;
-    new_dir_name.append(std::to_string(::GetCurrentProcessId()));
-    new_dir_name.push_back('_');
+    std::string newDirName;
+    newDirName.append(std::to_string(::GetCurrentProcessId()));
+    newDirName.push_back('_');
     // On Windows, rand_r() doesn't exist as an alternative to rand(), so the
     // cpplint warning is spurious.  This program is not multi-threaded, so
     // it is safe to suppress the threadsafe_fn warning here.
-    new_dir_name.append(
+    newDirName.append(
        std::to_string(rand()    // NOLINT(runtime/threadsafe_fn)
                       % ((int16_t)0x7fff)));
 
-    path_to_create += new_dir_name;
-    if (::CreateDirectoryA(path_to_create.c_str(), nullptr))
+    pathToCreate += newDirName;
+    if (::CreateDirectoryA(pathToCreate.c_str(), nullptr))
     {
-      _new_temp_path = path_to_create;
-      return ::SetCurrentDirectoryA(_new_temp_path.c_str()) != 0;
+      _newTempPath = pathToCreate;
+      return ::SetCurrentDirectoryA(_newTempPath.c_str()) != 0;
     }
   }
 
@@ -144,7 +123,7 @@ bool create_and_switch_to_temp_dir(std::string &_new_temp_path)
 }
 
 /////////////////////////////////////////////////
-bool create_new_empty_file(const std::string &_filename)
+bool createNewEmptyFile(const std::string &_filename)
 {
   return ::CreateFileA(_filename.c_str(),
                        FILE_READ_DATA,
@@ -153,46 +132,6 @@ bool create_new_empty_file(const std::string &_filename)
                        OPEN_ALWAYS,
                        0,
                        nullptr) != INVALID_HANDLE_VALUE;
-}
-
-/////////////////////////////////////////////////
-bool create_new_file_symlink(const std::string &_symlink,
-                             const std::string &_target)
-{
-  const bool linked = ::CreateSymbolicLinkA(
-        _symlink.c_str(), _target.c_str(), 0);
-
-  if (!linked)
-  {
-    ignition::common::PrintWindowsSystemWarning(
-          "Failed to create file symlink from [" + _target
-          + "] to [" + _symlink + "]");
-  }
-
-  return linked;
-}
-
-/////////////////////////////////////////////////
-bool create_new_dir_symlink(const std::string &_symlink,
-                            const std::string &_target)
-{
-  const bool linked = ::CreateSymbolicLinkA(_symlink.c_str(), _target.c_str(),
-                                            SYMBOLIC_LINK_FLAG_DIRECTORY);
-  if (!linked)
-  {
-    ignition::common::PrintWindowsSystemWarning(
-          "Failed to create directory symlink from [" + _target
-          + "] to [" + _symlink + "]");
-  }
-
-  return linked;
-}
-
-/////////////////////////////////////////////////
-bool create_new_file_hardlink(const std::string &_hardlink,
-                              const std::string &_target)
-{
-  return ::CreateHardLinkA(_hardlink.c_str(), _target.c_str(), nullptr) == TRUE;
 }
 
 #endif
@@ -222,11 +161,11 @@ TEST(Zip, API)
 TEST(Zip, CompressAndExtract)
 {
   std::string newTempDir;
-  ASSERT_TRUE(create_and_switch_to_temp_dir(newTempDir));
+  ASSERT_TRUE(createAndSwitchToTempDir(newTempDir));
   auto d = ignition::common::joinPaths(newTempDir, "d1", "d2");
   ASSERT_TRUE(ignition::common::createDirectories(d));
   auto f = ignition::common::joinPaths(d, "new_file");
-  ASSERT_TRUE(create_new_empty_file(f));
+  ASSERT_TRUE(createNewEmptyFile(f));
   EXPECT_TRUE(ignition::common::exists(f));
 
   // Compress.
