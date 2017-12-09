@@ -138,33 +138,42 @@ bool Zip::Extract(const std::string &_src,
 
     // check if it's a directory
     std::string dst = ignition::common::joinPaths(_dst, sb.name);
-    if (dst[dst.size() - 1] == '/' || dst[dst.size() - 1] == '\\')
-    {
-      ignition::common::createDirectory(dst);
-    }
-    else
-    {
-      zip_file * zf = zip_fopen_index(archive, i, 0);
-      if (!zf)
-      {
-        ignerr << "Error opening: " << sb.name << std::endl;
-        continue;
-      }
 
-      std::ofstream file(dst);
-      int readSize = sb.size;
-      char *buf = new char[readSize + 1];
-      int len = zip_fread(zf, buf, readSize);
-      // zip_fread seams to read more than requested resulting in garbage data
-      // at the end so append '\0'
-      buf[readSize] = '\0';
-      if (len < 0)
-        ignerr << "Error reading " << sb.name << std::endl;
-      file << buf;
-      delete[] buf;
-      file.close();
-      zip_fclose(zf);
+    // Create intermediate directories if needed.
+    std::string dirname = dst;
+
+    auto pos = dirname.rfind(ignition::common::separator(""));
+    if (pos != std::string::npos && pos != dirname.size() - 1)
+      dirname.erase(pos);
+
+    if (!ignition::common::createDirectories(dirname))
+    {
+      ignerr << "Error creating directory [" << dirname << "]. "
+             << "Do you have the right permissions?" << std::endl;
+      return false;
     }
+
+    // Create and write the files.
+    zip_file * zf = zip_fopen_index(archive, i, 0);
+    if (!zf)
+    {
+      ignerr << "Error opening: " << sb.name << std::endl;
+      continue;
+    }
+
+    std::ofstream file(dst);
+    int readSize = sb.size;
+    char *buf = new char[readSize + 1];
+    int len = zip_fread(zf, buf, readSize);
+    // zip_fread seams to read more than requested resulting in garbage data
+    // at the end so append '\0'
+    buf[readSize] = '\0';
+    if (len < 0)
+      ignerr << "Error reading " << sb.name << std::endl;
+    file << buf;
+    delete[] buf;
+    file.close();
+    zip_fclose(zf);
   }
 
   if (zip_close(archive) < 0)
