@@ -32,7 +32,6 @@ namespace ignft = ignition::fuel_tools;
 using namespace ignition;
 using namespace ignft;
 
-
 class ignft::LocalCachePrivate
 {
   /// \brief return all models in a given directory
