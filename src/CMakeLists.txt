@@ -29,6 +29,7 @@ include_directories(
   ${CMAKE_BINARY_DIR}/
   ${CMAKE_BINARY_DIR}/test/
   ${jsoncpp_INCLUDE_DIRS}
+  ${libzip_INCLUDE_DIRS}
 )
 
 
