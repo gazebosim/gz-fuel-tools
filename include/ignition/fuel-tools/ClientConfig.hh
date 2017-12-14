@@ -95,6 +95,10 @@ namespace ignition
       /// \brief destructor
       public: ~ClientConfig();
 
+      /// \brief Load the YAML configuration file.
+      /// \return True if the configuration was loaded correctly.
+      public: bool LoadConfig();
+
       /// \brief List of servers the client will connect to
       /// \return The list of servers
       public: std::vector<ServerConfig> Servers() const;

@@ -47,6 +47,17 @@ if (NOT libzip_FOUND)
   BUILD_ERROR ("Missing: libzip-dev. Required for parsing compressed files.")
 endif()
 
+########################################
+# Find libyaml-cpp
+find_package(yaml-cpp QUIET)
+if (NOT yaml-cpp_FOUND)
+  BUILD_ERROR ("Missing: libyaml-cpp")
+else()
+  message (STATUS "Found libyaml-cpp")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${YAML_CPP_CXX_FLAGS}")
+  include_directories(${YAML_CPP_INCLUDE_DIRS})
+endif()
+
 ################################################################################
 # Ignition common
 find_package(ignition-common0 QUIET)

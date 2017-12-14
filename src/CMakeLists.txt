@@ -32,7 +32,6 @@ include_directories(
   ${libzip_INCLUDE_DIRS}
 )
 
-
 ign_build_tests(${gtest_sources})
 
 set (libname ${PROJECT_NAME_LOWER}${PROJECT_MAJOR_VERSION})
@@ -48,6 +47,7 @@ target_link_libraries(${libname}
   ${IGNITION-COMMON_LIBRARIES}
   ${jsoncpp_LIBRARIES}
   ${libzip_LIBRARIES}
+  ${YAML_CPP_LIBRARIES}
 )
 
 if(WIN32)

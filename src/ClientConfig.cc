@@ -20,11 +20,17 @@
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
+#include <yaml-cpp/yaml.h>
 
 #include "ignition/fuel-tools/ClientConfig.hh"
+#include "ignition/fuel-tools/config.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
+
+// Constants.
+static const std::string initialConfigFile = ignition::common::joinPaths(
+    IGNITION_FUEL_INITIAL_CONFIG_PATH, "config.yaml");
 
 //////////////////////////////////////////////////
 /// \brief Private data class
@@ -33,8 +39,11 @@ class ignition::fuel_tools::ClientConfigPrivate
   /// \brief A list of servers.
   public: std::vector<ServerConfig> servers;
 
-  /// \brief a path on disk to where data is cached
+  /// \brief a path on disk to where data is cached.
   public: std::string cacheLocation;
+
+  /// \brief The path where the configuration file is located.
+  public: std::string configPath;
 };
 
 //////////////////////////////////////////////////
@@ -151,6 +160,27 @@ std::string homePath()
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
+  this->dataPtr->configPath = ignition::common::joinPaths(
+    homePath(), ".ignition", "fuel", "config.yaml");
+
+  // If the custom config file doesn't exist, we create it.
+  if (!ignition::common::exists(this->dataPtr->configPath))
+  {
+    if (!ignition::common::copyFile(
+          initialConfigFile, this->dataPtr->configPath))
+    {
+      std::cerr << "Error copying default configuration file from ["
+                << initialConfigFile << "] to [" << this->dataPtr->configPath
+                << "]" << std::endl;
+    }
+  }
+
+  if (!this->LoadConfig())
+  {
+    ignerr << "Error loading configuration file [" << this->dataPtr->configPath
+           << std::endl;
+  }
+
   /// \brief The path containing the default cache location.
   const std::string kDefaultCacheLocation = ignition::common::joinPaths(
     homePath(), ".ignition", "fuel", "models");
@@ -186,6 +216,58 @@ ClientConfig &ClientConfig::operator=(const ClientConfig &_rhs)
 //////////////////////////////////////////////////
 ClientConfig::~ClientConfig()
 {
+}
+
+//////////////////////////////////////////////////
+bool ClientConfig::LoadConfig()
+{
+  // Sanity check: Verify that the configuration file exists.
+  if (!ignition::common::exists(this->dataPtr->configPath))
+    return false;
+
+  YAML::Node config = YAML::LoadFile(this->dataPtr->configPath);
+  if (config["servers"])
+  {
+    auto servers = config["servers"];
+    for (auto it = servers.begin(); it != servers.end(); ++it)
+    {
+      auto server = *it;
+      if (!server["name"])
+      {
+        ignerr << "Missing [name] key. Ignoring server." << std::endl;
+        continue;
+      }
+      auto name = server["name"].as<std::string>();
+      if (!server["url"])
+      {
+        ignerr << "Missing [url] key. Ignoring server." << std::endl;
+        continue;
+      }
+      auto url = server["url"].as<std::string>();
+
+      ServerConfig newServer;
+      newServer.LocalName(name);
+      newServer.URL(url);
+      this->AddServer(newServer);
+    }
+
+    if (config["cache"])
+    {
+      auto cache = config["cache"];
+      if (cache["path"])
+      {
+        auto path = cache["path"].as<std::string>();
+        this->CacheLocation(path);
+      }
+      else
+      {
+        ignerr << "Missing [path] key in [cache] section. Ignoring cache."
+               << std::endl;
+      }
+    }
+  }
+
+  return true;
 }
 
 //////////////////////////////////////////////////

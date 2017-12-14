@@ -268,10 +268,10 @@ else (build_errors)
   ########################################
   # Write the config.hh file
   configure_file (${project_cmake_dir}/config.hh.in
-    ${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/config.hh)
+    ${PROJECT_BINARY_DIR}/include/ignition/${IGN_PROJECT_NAME}/config.hh)
   ign_install_includes(
     ${IGN_PROJECT_NAME}${PROJECT_MAJOR_VERSION}/ignition/${IGN_PROJECT_NAME}
-    ${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/config.hh)
+    ${PROJECT_BINARY_DIR}/include/ignition/${IGN_PROJECT_NAME}/config.hh)
 
   include_directories(
     ${PROJECT_SOURCE_DIR}/include

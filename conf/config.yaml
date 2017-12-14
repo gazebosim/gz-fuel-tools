@@ -1,0 +1,11 @@
+---
+# The list of servers.
+servers:
+  - osrf:
+      url: api.ignitionfuel.org
+
+  # another_server:
+  # url: https://myserver
+
+# cache:
+#   path: /tmp/ignition/fuel
