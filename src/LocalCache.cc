@@ -166,7 +166,8 @@ bool LocalCache::SaveModel(
   const ModelIdentifier &_id, const std::string &_data, const bool _overwrite)
 {
   auto cacheLocation = this->dataPtr->config->CacheLocation();
-  auto modelDir = common::joinPaths(cacheLocation, _id.Owner(), _id.Name());
+  auto modelDir = common::joinPaths(
+    cacheLocation, "models", _id.Owner(), _id.Name());
 
   // Is it already in the cache?
   if (common::isDirectory(modelDir) && !_overwrite)

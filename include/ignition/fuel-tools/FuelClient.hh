@@ -40,6 +40,9 @@ namespace ignition
     /// \brief High level interface to ignition fuel
     class IGNITION_FUEL_TOOLS_VISIBLE FuelClient
     {
+      /// \brief Default constructor.
+      public: FuelClient();
+
       /// \brief Constructor accepts server and auth configuration
       /// \param[in] _config configuration about servers to connect to
       /// \param[in] _rest a REST request.

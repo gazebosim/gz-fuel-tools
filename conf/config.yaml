@@ -1,11 +1,14 @@
 ---
 # The list of servers.
 servers:
-  - osrf:
-      url: api.ignitionfuel.org
+  -
+    name: osrf
+    url: https://api.ignitionfuel.org
 
-  # another_server:
-  # url: https://myserver
+  # -
+    # name: another_server
+    # url: https://myserver
 
+# Where are the assets stored in disk.
 # cache:
 #   path: /tmp/ignition/fuel

@@ -69,6 +69,15 @@ class ignition::fuel_tools::FuelClientPrivate
 };
 
 //////////////////////////////////////////////////
+FuelClient::FuelClient()
+  : dataPtr(new FuelClientPrivate)
+{
+  this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
+  this->dataPtr->urlModelRegex.reset(new std::regex(
+    this->dataPtr->kModelURLRegexStr));
+}
+
+//////////////////////////////////////////////////
 FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
     LocalCache *_cache)
   : dataPtr(new FuelClientPrivate)

@@ -15,12 +15,12 @@
  *
 */
 
+#include <yaml-cpp/yaml.h>
 #include <string>
 #include <vector>
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
-#include <yaml-cpp/yaml.h>
 
 #include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/config.hh"
@@ -181,11 +181,6 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
            << std::endl;
   }
 
-  /// \brief The path containing the default cache location.
-  const std::string kDefaultCacheLocation = ignition::common::joinPaths(
-    homePath(), ".ignition", "fuel", "models");
-  this->CacheLocation(kDefaultCacheLocation);
-
   std::string ignFuelPath = "";
   if (ignition::common::env("IGN_FUEL_PATH", ignFuelPath))
   {
@@ -226,45 +221,77 @@ bool ClientConfig::LoadConfig()
     return false;
 
   YAML::Node config = YAML::LoadFile(this->dataPtr->configPath);
-  if (config["servers"])
+
+  try
   {
-    auto servers = config["servers"];
-    for (auto it = servers.begin(); it != servers.end(); ++it)
+    // Server configuration.
+    if (config["servers"])
     {
-      auto server = *it;
-      if (!server["name"])
+      auto servers = config["servers"];
+      for (auto it = servers.begin(); it != servers.end(); ++it)
       {
-        ignerr << "Missing [name] key. Ignoring server." << std::endl;
-        continue;
-      }
-      auto name = server["name"].as<std::string>();
-      if (!server["url"])
-      {
-        ignerr << "Missing [url] key. Ignoring server." << std::endl;
-        continue;
-      }
-      auto url = server["url"].as<std::string>();
+        auto server = *it;
+        if (!server["name"])
+        {
+          ignerr << "Missing [name] key. Ignoring server." << std::endl;
+          continue;
+        }
+        auto name = server["name"].as<std::string>();
+        if (!server["url"])
+        {
+          ignerr << "Missing [url] key. Ignoring server." << std::endl;
+          continue;
+        }
+        auto url = server["url"].as<std::string>();
 
-      ServerConfig newServer;
-      newServer.LocalName(name);
-      newServer.URL(url);
-      this->AddServer(newServer);
-    }
+        // Sanity check: Make sure that the URL is not already stored.
+        bool repeated = false;
+        for (auto const savedServer : this->Servers())
+        {
+          if (savedServer.LocalName() == name)
+          {
+            ignerr << "Server [" << name << "] already exists. Ignoring server"
+                   << std::endl;
+            repeated = true;
+            break;
+          }
+          if (savedServer.URL() == url)
+          {
+            ignerr << "URL [" << url << "] already exists. Ignoring server"
+                   << std::endl;
+            repeated = true;
+            break;
+          }
+        }
+        if (repeated)
+          continue;
 
-    if (config["cache"])
-    {
-      auto cache = config["cache"];
-      if (cache["path"])
-      {
-        auto path = cache["path"].as<std::string>();
-        this->CacheLocation(path);
+        ServerConfig newServer;
+        newServer.LocalName(name);
+        newServer.URL(url);
+        this->AddServer(newServer);
       }
-      else
+
+      // Cache configuration.
+      std::string cacheLocation = ignition::common::joinPaths(
+        homePath(), ".ignition", "fuel");
+      if (config["cache"])
       {
-        ignerr << "Missing [path] key in [cache] section. Ignoring cache."
-               << std::endl;
+        auto cache = config["cache"];
+        if (cache["path"])
+          cacheLocation = cache["path"].as<std::string>();
+        else
+        {
+          ignerr << "Missing [path] key in [cache] section. Ignoring cache."
+                 << std::endl;
+        }
       }
+      this->CacheLocation(cacheLocation);
     }
+  }
+  catch (const std::exception& e)
+  {
+    return false;
   }
 
   return true;
