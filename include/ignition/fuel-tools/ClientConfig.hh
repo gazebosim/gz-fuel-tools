@@ -96,8 +96,16 @@ namespace ignition
       public: ~ClientConfig();
 
       /// \brief Load the YAML configuration file.
+      /// If SetConfigPath() is not used, this function will try to load the
+      /// default configuration path.
       /// \return True if the configuration was loaded correctly.
+      /// \sa SetConfigPath
       public: bool LoadConfig();
+
+      /// \brief Set the location of the configuration file.
+      /// \param[in] _path Path to the configuration file.
+      /// \sa LoadConfig
+      public: void SetConfigPath(const std::string &_path);
 
       /// \brief List of servers the client will connect to
       /// \return The list of servers
@@ -113,6 +121,10 @@ namespace ignition
       /// \brief Set where models and stuff are saved
       /// \param[in] _path path on disk where models are saved
       public: void CacheLocation(const std::string &_path);
+
+      /// \brief Get the default path where the configuration file is located.
+      /// \return the default configuration path.
+      public: std::string &DefaultConfigPath();
 
       /// \brief PIMPL
       private: std::unique_ptr<ClientConfigPrivate> dataPtr;

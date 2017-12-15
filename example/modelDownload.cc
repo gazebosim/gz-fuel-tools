@@ -55,6 +55,7 @@ int main(int argc, char **argv)
   srv.URL(FLAGS_s);
   srv.LocalName("ignitionfuel");
   ignition::fuel_tools::ClientConfig conf;
+  conf.LoadConfig();
   conf.AddServer(srv);
 
   // Remember to set your IGN_FUEL_PATH.

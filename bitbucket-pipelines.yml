@@ -13,7 +13,7 @@ pipelines:
           - apt-get -y install
             cmake pkg-config python cppcheck doxygen ruby-ronn
             mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev
-            lcov curl
+            lcov curl libyaml-cpp-dev
           # Install Ignition CMake
           - hg clone https://bitbucket.org/ignitionrobotics/ign-cmake -b default
           - cd ign-cmake

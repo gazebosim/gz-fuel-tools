@@ -160,27 +160,6 @@ std::string homePath()
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
-  this->dataPtr->configPath = ignition::common::joinPaths(
-    homePath(), ".ignition", "fuel", "config.yaml");
-
-  // If the custom config file doesn't exist, we create it.
-  if (!ignition::common::exists(this->dataPtr->configPath))
-  {
-    if (!ignition::common::copyFile(
-          initialConfigFile, this->dataPtr->configPath))
-    {
-      std::cerr << "Error copying default configuration file from ["
-                << initialConfigFile << "] to [" << this->dataPtr->configPath
-                << "]" << std::endl;
-    }
-  }
-
-  if (!this->LoadConfig())
-  {
-    ignerr << "Error loading configuration file [" << this->dataPtr->configPath
-           << std::endl;
-  }
-
   std::string ignFuelPath = "";
   if (ignition::common::env("IGN_FUEL_PATH", ignFuelPath))
   {
@@ -216,6 +195,25 @@ ClientConfig::~ClientConfig()
 //////////////////////////////////////////////////
 bool ClientConfig::LoadConfig()
 {
+  // SetConfigPath() wasn't used. Using the default one.
+  if (this->dataPtr->configPath.empty())
+  {
+    this->dataPtr->configPath = ignition::common::joinPaths(
+      homePath(), ".ignition", "fuel", "config.yaml");
+
+    // If the custom config file doesn't exist, we create it.
+    if (!ignition::common::exists(this->dataPtr->configPath))
+    {
+      if (!ignition::common::copyFile(
+            initialConfigFile, this->dataPtr->configPath))
+      {
+        std::cerr << "Error copying default configuration file from ["
+                  << initialConfigFile << "] to [" << this->dataPtr->configPath
+                  << "]" << std::endl;
+      }
+    }
+  }
+
   // Sanity check: Verify that the configuration file exists.
   if (!ignition::common::exists(this->dataPtr->configPath))
     return false;
@@ -286,15 +284,27 @@ bool ClientConfig::LoadConfig()
                  << std::endl;
         }
       }
-      this->CacheLocation(cacheLocation);
+
+      // Do not overwrite the cache location if IGN_FUEL_PATH is set.
+      std::string ignFuelPath = "";
+      if (!ignition::common::env("IGN_FUEL_PATH", ignFuelPath))
+        this->CacheLocation(cacheLocation);
     }
   }
   catch (const std::exception& e)
   {
+    ignerr << "Error loading configuration file [" << this->dataPtr->configPath
+           << std::endl;
     return false;
   }
 
   return true;
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::SetConfigPath(const std::string &_path)
+{
+  this->dataPtr->configPath = _path;
 }
 
 //////////////////////////////////////////////////
