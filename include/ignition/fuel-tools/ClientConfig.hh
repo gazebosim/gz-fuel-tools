@@ -122,10 +122,6 @@ namespace ignition
       /// \param[in] _path path on disk where models are saved
       public: void CacheLocation(const std::string &_path);
 
-      /// \brief Get the default path where the configuration file is located.
-      /// \return the default configuration path.
-      public: std::string &DefaultConfigPath();
-
       /// \brief PIMPL
       private: std::unique_ptr<ClientConfigPrivate> dataPtr;
     };
