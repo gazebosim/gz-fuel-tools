@@ -76,11 +76,11 @@ TEST(JSONParser, BuildModel)
   std::stringstream tmpJsonStr;
   tmpJsonStr
     << "{\n"
-    << "   \"category\" : \"building\",\n"
-    << "   \"description\" : \"affordable\",\n"
-    << "   \"name\" : \"house\",\n"
-    << "   \"uuid\" : \"1234-0093asdf\"\n"
-    << "}\n";
+    << "\t\"category\" : \"building\",\n"
+    << "\t\"description\" : \"affordable\",\n"
+    << "\t\"name\" : \"house\",\n"
+    << "\t\"uuid\" : \"1234-0093asdf\"\n"
+    << "}";
   EXPECT_EQ(tmpJsonStr.str(), jsonStr);
 }
 

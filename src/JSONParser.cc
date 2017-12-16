@@ -89,11 +89,13 @@ std::vector<std::string> JSONParser::ParseTags(const Json::Value &_json)
 ModelIdentifier JSONParser::ParseModel(const std::string &_json,
   const ServerConfig &_server)
 {
-  Json::Reader reader;
+  Json::CharReaderBuilder reader;
   Json::Value model;
   ModelIdentifier id;
+  std::istringstream iss(_json);
+  JSONCPP_STRING errs;
 
-  reader.parse(_json, model);
+  Json::parseFromStream(reader, iss, &model, &errs);
   ParseModelImpl(model, id);
 
   // Adding the server used to retrieve the model.
@@ -107,9 +109,12 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json,
   const ServerConfig &_server)
 {
   std::vector<ModelIdentifier> ids;
-  Json::Reader reader;
+  Json::CharReaderBuilder reader;
   Json::Value models;
-  reader.parse(_json, models);
+  std::istringstream iss(_json);
+  JSONCPP_STRING errs;
+
+  Json::parseFromStream(reader, iss, &models, &errs);
 
   if (!models.isArray())
   {
@@ -204,6 +209,6 @@ std::string JSONParser::BuildModel(ModelIter _modelIt)
   value["category"] = id.Category();
   value["uuid"] = id.Uuid();
 
-  Json::StyledWriter writer;
-  return writer.write(value);
+  Json::StreamWriterBuilder builder;
+  return Json::writeString(builder, value);
 }
