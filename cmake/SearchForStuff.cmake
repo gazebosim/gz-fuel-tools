@@ -48,14 +48,10 @@ if (NOT libzip_FOUND)
 endif()
 
 ########################################
-# Find libyaml-cpp
-find_package(yaml-cpp QUIET)
-if (NOT yaml-cpp_FOUND)
-  BUILD_ERROR ("Missing: libyaml-cpp")
-else()
-  message (STATUS "Found libyaml-cpp")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${YAML_CPP_CXX_FLAGS}")
-  include_directories(${YAML_CPP_INCLUDE_DIRS})
+# Find libyaml
+pkg_check_modules(libyaml yaml-0.1)
+if (NOT libyaml_FOUND)
+  BUILD_ERROR ("Missing: libyaml-dev")
 endif()
 
 ################################################################################

@@ -15,7 +15,9 @@
  *
 */
 
-#include <yaml-cpp/yaml.h>
+#include <yaml.h>
+#include <cstdio>
+#include <stack>
 #include <string>
 #include <vector>
 #include <ignition/common/Console.hh>
@@ -207,9 +209,9 @@ bool ClientConfig::LoadConfig()
       if (!ignition::common::copyFile(
             initialConfigFile, this->dataPtr->configPath))
       {
-        std::cerr << "Error copying default configuration file from ["
-                  << initialConfigFile << "] to [" << this->dataPtr->configPath
-                  << "]" << std::endl;
+        ignerr << "Error copying default configuration file from ["
+               << initialConfigFile << "] to [" << this->dataPtr->configPath
+               << "]" << std::endl;
       }
     }
   }
@@ -218,87 +220,186 @@ bool ClientConfig::LoadConfig()
   if (!ignition::common::exists(this->dataPtr->configPath))
     return false;
 
-  YAML::Node config = YAML::LoadFile(this->dataPtr->configPath);
-
-  try
+  FILE *fh = fopen(this->dataPtr->configPath.c_str(), "r");
+  if (!fh)
   {
-    // Server configuration.
-    if (config["servers"])
+    ignerr << "Failed to open file [" << this->dataPtr->configPath
+           << "]" << std::endl;
+  }
+
+  // Initialize parser.
+  yaml_parser_t parser;
+  if (!yaml_parser_initialize(&parser))
+    ignerr << "Failed to initialize parser" << std::endl;
+
+  // Set input file.
+  yaml_parser_set_input_file(&parser, fh);
+
+  bool res = true;
+  yaml_event_t event;
+  std::stack<std::string> tokens;
+  tokens.push("root");
+  std::string serverName = "";
+  std::string serverURL = "";
+  std::string cacheLocationConfig = "";
+
+  do
+  {
+    if (!yaml_parser_parse(&parser, &event))
     {
-      auto servers = config["servers"];
-      for (auto it = servers.begin(); it != servers.end(); ++it)
-      {
-        auto server = *it;
-        if (!server["name"])
-        {
-          ignerr << "Missing [name] key. Ignoring server." << std::endl;
-          continue;
-        }
-        auto name = server["name"].as<std::string>();
-        if (!server["url"])
-        {
-          ignerr << "Missing [url] key. Ignoring server." << std::endl;
-          continue;
-        }
-        auto url = server["url"].as<std::string>();
+      ignerr << "Parser error [" << parser.error << "]" << std::endl;
+      res = false;
+      break;
+    }
 
-        // Sanity check: Make sure that the URL is not already stored.
-        bool repeated = false;
-        for (auto const savedServer : this->Servers())
+    switch (event.type)
+    {
+      case YAML_NO_EVENT:
+      // Stream start/end.
+      case YAML_STREAM_START_EVENT:
+      case YAML_STREAM_END_EVENT:
+      // Block delimeters.
+      case YAML_DOCUMENT_START_EVENT:
+      case YAML_DOCUMENT_END_EVENT:
+      case YAML_SEQUENCE_START_EVENT:
+        break;
+      case YAML_SEQUENCE_END_EVENT:
+        if (!tokens.empty())
+          tokens.pop();
+        break;
+      case YAML_MAPPING_START_EVENT:
+        if (!tokens.empty() && tokens.top() == "servers")
         {
-          if (savedServer.LocalName() == name)
+          tokens.push("server");
+          serverName = "";
+          serverURL = "";
+        }
+        break;
+      case YAML_MAPPING_END_EVENT:
+        if (!tokens.empty() && tokens.top() == "cache")
+        {
+          if (cacheLocationConfig.empty())
           {
-            ignerr << "Server [" << name << "] already exists. Ignoring server"
-                   << std::endl;
-            repeated = true;
-            break;
-          }
-          if (savedServer.URL() == url)
-          {
-            ignerr << "URL [" << url << "] already exists. Ignoring server"
-                   << std::endl;
-            repeated = true;
-            break;
+            ignerr << "[path] parameter is required for a cache" << std::endl;
+            res = false;
           }
         }
-        if (repeated)
-          continue;
+        else if (!tokens.empty() && tokens.top() == "server")
+        {
+          if (!serverName.empty() && !serverURL.empty())
+          {
+            // Sanity check: Make sure that the server is not already stored.
+            bool repeated = false;
+            for (auto const savedServer : this->Servers())
+            {
+              if (savedServer.LocalName() == serverName)
+              {
+                ignerr << "Server [" << serverName << "] already exists. "
+                       << "Ignoring server" << std::endl;
+                repeated = true;
+                res = false;
+                break;
+              }
+              if (savedServer.URL() == serverURL)
+              {
+                ignerr << "URL [" << serverURL << "] already exists. "
+                       << "Ignoring server" << std::endl;
+                repeated = true;
+                res = false;
+                break;
+              }
+            }
+            if (!repeated)
+            {
+              // Add the new server.
+              ServerConfig newServer;
+              newServer.LocalName(serverName);
+              newServer.URL(serverURL);
+              this->AddServer(newServer);
+            }
+          }
+          else
+          {
+            if (serverName.empty())
+            {
+              ignerr << "[name] parameter is required for a server"
+                     << std::endl;
+            }
+            if (serverURL.empty())
+            {
+              ignerr << "[url] parameter is required for a server"
+                        << std::endl;
+            }
+            res = false;
+          }
+        }
 
-        ServerConfig newServer;
-        newServer.LocalName(name);
-        newServer.URL(url);
-        this->AddServer(newServer);
-      }
-
-      // Cache configuration.
-      std::string cacheLocation = ignition::common::joinPaths(
-        homePath(), ".ignition", "fuel");
-      if (config["cache"])
-      {
-        auto cache = config["cache"];
-        if (cache["path"])
-          cacheLocation = cache["path"].as<std::string>();
+        if (!tokens.empty())
+          tokens.pop();
+        break;
+      // Data .
+      case YAML_ALIAS_EVENT:
+        break;
+      case YAML_SCALAR_EVENT:
+        if (!tokens.empty() && tokens.top() == "name")
+        {
+          std::string name(
+            reinterpret_cast<const char *>(event.data.scalar.value));
+          serverName = name;
+          tokens.pop();
+        }
+        else if (!tokens.empty() && tokens.top() == "url")
+        {
+          std::string url(
+            reinterpret_cast<const char *>(event.data.scalar.value));
+          serverURL = url;
+          tokens.pop();
+        }
+        else if (!tokens.empty() && tokens.top() == "path")
+        {
+          std::string path(
+            reinterpret_cast<const char *>(event.data.scalar.value));
+          cacheLocationConfig = path;
+          tokens.pop();
+        }
         else
         {
-          ignerr << "Missing [path] key in [cache] section. Ignoring cache."
-                 << std::endl;
+          std::string key(
+            reinterpret_cast<const char *>(event.data.scalar.value));
+          if (!key.empty())
+            tokens.push(key);
         }
+
+        break;
+      default:
+      {
+        ignerr << "Unknown event type [" << event.type << "]" << std::endl;
+        res = false;
       }
-
-      // Do not overwrite the cache location if IGN_FUEL_PATH is set.
-      std::string ignFuelPath = "";
-      if (!ignition::common::env("IGN_FUEL_PATH", ignFuelPath))
-        this->CacheLocation(cacheLocation);
     }
-  }
-  catch (const std::exception& e)
-  {
-    ignerr << "Error loading configuration file [" << this->dataPtr->configPath
-           << std::endl;
-    return false;
-  }
 
-  return true;
+    if (event.type != YAML_STREAM_END_EVENT)
+      yaml_event_delete(&event);
+  } while (event.type != YAML_STREAM_END_EVENT);
+
+  // Default cache path.
+  std::string cacheLocation = ignition::common::joinPaths(
+    homePath(), ".ignition", "fuel");
+
+  // The user wants to overwrite the default cache path.
+  if (!cacheLocationConfig.empty())
+    cacheLocation = cacheLocationConfig;
+
+  // Do not overwrite the cache location if IGN_FUEL_PATH is set.
+  std::string ignFuelPath = "";
+  if (!ignition::common::env("IGN_FUEL_PATH", ignFuelPath))
+    this->CacheLocation(cacheLocation);
+
+  // Cleanup.
+  yaml_parser_delete(&parser);
+  fclose(fh);
+
+  return res;
 }
 
 //////////////////////////////////////////////////

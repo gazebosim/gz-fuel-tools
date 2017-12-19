@@ -108,7 +108,7 @@ TEST(ClientConfig, CustomConfiguration)
       << std::endl;
 
   config.SetConfigPath(testPath);
-  config.LoadConfig();
+  EXPECT_TRUE(config.LoadConfig());
 
   ASSERT_EQ(2u, config.Servers().size());
   EXPECT_EQ("https://api.ignitionfuel.org",
@@ -117,6 +117,171 @@ TEST(ClientConfig, CustomConfiguration)
     config.Servers().back().URL());
 
   EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
+
+  // Remove the configuration file.
+  ignition::common::removeFile(testPath);
+}
+
+/////////////////////////////////////////////////
+/// \brief We can load custom settings in a configuration file.
+TEST(ClientConfig, RepeatedServerConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    name: osrf"                         << std::endl
+      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << ""                                       << std::endl
+      << "  -"                                    << std::endl
+      << "    name: another_server"               << std::endl
+      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << ""                                       << std::endl
+      << "# Where are the assets stored in disk." << std::endl
+      << "cache:"                                 << std::endl
+      << "  path: /tmp/ignition/fuel"             << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  ignition::common::removeFile(testPath);
+}
+
+/////////////////////////////////////////////////
+/// \brief We can load custom settings in a configuration file.
+TEST(ClientConfig, EmptyServerConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    name: "                             << std::endl
+      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  ignition::common::removeFile(testPath);
+}
+
+/////////////////////////////////////////////////
+/// \brief We can load custom settings in a configuration file.
+TEST(ClientConfig, EmptyServerURLConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    name: osrf"                         << std::endl
+      << "    url: "                              << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  ignition::common::removeFile(testPath);
+}
+
+/////////////////////////////////////////////////
+/// \brief We can load custom settings in a configuration file.
+TEST(ClientConfig, NoCachePathConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"    << std::endl
+      << "cache:" << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  ignition::common::removeFile(testPath);
+}
+
+/////////////////////////////////////////////////
+/// \brief We can load custom settings in a configuration file.
+TEST(ClientConfig, EmptyCachePathConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"     << std::endl
+      << "cache:"  << std::endl
+      << "  path:" << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  ignition::common::removeFile(testPath);
+}
+
+/////////////////////////////////////////////////
+/// \brief We can load custom settings in a configuration file.
+TEST(ClientConfig, RepeatedServerURLConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    name: osrf"                         << std::endl
+      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << ""                                       << std::endl
+      << "  -"                                    << std::endl
+      << "    name: osrf"                         << std::endl
+      << "    url: https://myserver"              << std::endl
+      << ""                                       << std::endl
+      << "# Where are the assets stored in disk." << std::endl
+      << "cache:"                                 << std::endl
+      << "  path: /tmp/ignition/fuel"             << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
 
   // Remove the configuration file.
   ignition::common::removeFile(testPath);

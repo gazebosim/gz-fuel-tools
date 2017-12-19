@@ -30,6 +30,7 @@ include_directories(
   ${CMAKE_BINARY_DIR}/test/
   ${jsoncpp_INCLUDE_DIRS}
   ${libzip_INCLUDE_DIRS}
+  ${libyaml_INCLUDEDIR}
 )
 
 ign_build_tests(${gtest_sources})
@@ -47,7 +48,7 @@ target_link_libraries(${libname}
   ${IGNITION-COMMON_LIBRARIES}
   ${jsoncpp_LIBRARIES}
   ${libzip_LIBRARIES}
-  ${YAML_CPP_LIBRARIES}
+  ${libyaml_LIBRARIES}
 )
 
 if(WIN32)
