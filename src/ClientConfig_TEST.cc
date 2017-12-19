@@ -123,7 +123,41 @@ TEST(ClientConfig, CustomConfiguration)
 }
 
 /////////////////////////////////////////////////
-/// \brief We can load custom settings in a configuration file.
+/// \brief A server contains an already used name.
+TEST(ClientConfig, RepeatedServerURLConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    name: osrf"                         << std::endl
+      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << ""                                       << std::endl
+      << "  -"                                    << std::endl
+      << "    name: osrf"                         << std::endl
+      << "    url: https://myserver"              << std::endl
+      << ""                                       << std::endl
+      << "# Where are the assets stored in disk." << std::endl
+      << "cache:"                                 << std::endl
+      << "  path: /tmp/ignition/fuel"             << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  ignition::common::removeFile(testPath);
+}
+
+/////////////////////////////////////////////////
+/// \brief A server contains an already used URL.
 TEST(ClientConfig, RepeatedServerConfiguration)
 {
   ClientConfig config;
@@ -157,8 +191,33 @@ TEST(ClientConfig, RepeatedServerConfiguration)
 }
 
 /////////////////////////////////////////////////
-/// \brief We can load custom settings in a configuration file.
-TEST(ClientConfig, EmptyServerConfiguration)
+/// \brief A server without name is not valid.
+TEST(ClientConfig, NoServerNameConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  ignition::common::removeFile(testPath);
+}
+
+/////////////////////////////////////////////////
+/// \brief A server with an empty name is not valid.
+TEST(ClientConfig, EmptyServerNameConfiguration)
 {
   ClientConfig config;
 
@@ -183,7 +242,32 @@ TEST(ClientConfig, EmptyServerConfiguration)
 }
 
 /////////////////////////////////////////////////
-/// \brief We can load custom settings in a configuration file.
+/// \brief A server without URL is not valid.
+TEST(ClientConfig, NoServerURLConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    name: osrf"  << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  ignition::common::removeFile(testPath);
+}
+
+/////////////////////////////////////////////////
+/// \brief A server with an empty URL is not valid.
 TEST(ClientConfig, EmptyServerURLConfiguration)
 {
   ClientConfig config;
@@ -209,7 +293,7 @@ TEST(ClientConfig, EmptyServerURLConfiguration)
 }
 
 /////////////////////////////////////////////////
-/// \brief We can load custom settings in a configuration file.
+/// \brief The "cache" option requires to set "path".
 TEST(ClientConfig, NoCachePathConfiguration)
 {
   ClientConfig config;
@@ -231,7 +315,7 @@ TEST(ClientConfig, NoCachePathConfiguration)
 }
 
 /////////////////////////////////////////////////
-/// \brief We can load custom settings in a configuration file.
+/// \brief The path parameter cannot be empty.
 TEST(ClientConfig, EmptyCachePathConfiguration)
 {
   ClientConfig config;
@@ -244,40 +328,6 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
   ofs << "---"     << std::endl
       << "cache:"  << std::endl
       << "  path:" << std::endl
-      << std::endl;
-
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
-
-  // Remove the configuration file.
-  ignition::common::removeFile(testPath);
-}
-
-/////////////////////////////////////////////////
-/// \brief We can load custom settings in a configuration file.
-TEST(ClientConfig, RepeatedServerURLConfiguration)
-{
-  ClientConfig config;
-
-  // Create a temporary file with the configuration.
-  std::ofstream ofs;
-  std::string testPath = "test_conf.yaml";
-  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
-
-  ofs << "---"                                    << std::endl
-      << "# The list of servers."                 << std::endl
-      << "servers:"                               << std::endl
-      << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
-      << ""                                       << std::endl
-      << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
-      << "    url: https://myserver"              << std::endl
-      << ""                                       << std::endl
-      << "# Where are the assets stored in disk." << std::endl
-      << "cache:"                                 << std::endl
-      << "  path: /tmp/ignition/fuel"             << std::endl
       << std::endl;
 
   config.SetConfigPath(testPath);
