@@ -119,7 +119,7 @@ TEST(ClientConfig, CustomConfiguration)
   EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
 
   // Remove the configuration file.
-  ignition::common::removeFile(testPath);
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
 }
 
 /////////////////////////////////////////////////
@@ -153,7 +153,7 @@ TEST(ClientConfig, RepeatedServerURLConfiguration)
   EXPECT_FALSE(config.LoadConfig());
 
   // Remove the configuration file.
-  ignition::common::removeFile(testPath);
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
 }
 
 /////////////////////////////////////////////////
@@ -187,7 +187,7 @@ TEST(ClientConfig, RepeatedServerConfiguration)
   EXPECT_FALSE(config.LoadConfig());
 
   // Remove the configuration file.
-  ignition::common::removeFile(testPath);
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
 }
 
 /////////////////////////////////////////////////
@@ -212,7 +212,7 @@ TEST(ClientConfig, NoServerNameConfiguration)
   EXPECT_FALSE(config.LoadConfig());
 
   // Remove the configuration file.
-  ignition::common::removeFile(testPath);
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
 }
 
 /////////////////////////////////////////////////
@@ -238,7 +238,7 @@ TEST(ClientConfig, EmptyServerNameConfiguration)
   EXPECT_FALSE(config.LoadConfig());
 
   // Remove the configuration file.
-  ignition::common::removeFile(testPath);
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
 }
 
 /////////////////////////////////////////////////
@@ -263,7 +263,7 @@ TEST(ClientConfig, NoServerURLConfiguration)
   EXPECT_FALSE(config.LoadConfig());
 
   // Remove the configuration file.
-  ignition::common::removeFile(testPath);
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
 }
 
 /////////////////////////////////////////////////
@@ -289,7 +289,7 @@ TEST(ClientConfig, EmptyServerURLConfiguration)
   EXPECT_FALSE(config.LoadConfig());
 
   // Remove the configuration file.
-  ignition::common::removeFile(testPath);
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
 }
 
 /////////////////////////////////////////////////
@@ -311,7 +311,7 @@ TEST(ClientConfig, NoCachePathConfiguration)
   EXPECT_FALSE(config.LoadConfig());
 
   // Remove the configuration file.
-  ignition::common::removeFile(testPath);
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
 }
 
 /////////////////////////////////////////////////
@@ -334,7 +334,7 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
   EXPECT_FALSE(config.LoadConfig());
 
   // Remove the configuration file.
-  ignition::common::removeFile(testPath);
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
 }
 
 //////////////////////////////////////////////////

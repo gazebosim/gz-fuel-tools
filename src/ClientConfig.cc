@@ -163,7 +163,7 @@ std::string homePath()
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
   std::string ignFuelPath = "";
-  if (ignition::common::env("IGN_FUEL_PATH", ignFuelPath))
+  if (ignition::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
   {
     if (!ignition::common::isDirectory(ignFuelPath))
     {
@@ -212,25 +212,35 @@ bool ClientConfig::LoadConfig()
         ignerr << "Error copying default configuration file from ["
                << initialConfigFile << "] to [" << this->dataPtr->configPath
                << "]" << std::endl;
+        return false;
       }
     }
   }
 
   // Sanity check: Verify that the configuration file exists.
   if (!ignition::common::exists(this->dataPtr->configPath))
+  {
+    ignerr << "Unable to find configuration file in  ["
+           << this->dataPtr->configPath << "]" << std::endl;
     return false;
+  }
 
   FILE *fh = fopen(this->dataPtr->configPath.c_str(), "r");
   if (!fh)
   {
     ignerr << "Failed to open file [" << this->dataPtr->configPath
            << "]" << std::endl;
+    return false;
   }
 
   // Initialize parser.
   yaml_parser_t parser;
   if (!yaml_parser_initialize(&parser))
+  {
     ignerr << "Failed to initialize parser" << std::endl;
+    fclose(fh);
+    return false;
+  }
 
   // Set input file.
   yaml_parser_set_input_file(&parser, fh);
@@ -390,9 +400,14 @@ bool ClientConfig::LoadConfig()
   if (!cacheLocationConfig.empty())
     cacheLocation = cacheLocationConfig;
 
-  // Do not overwrite the cache location if IGN_FUEL_PATH is set.
+  // Do not overwrite the cache location if IGN_FUEL_CACHE_PATH is set.
   std::string ignFuelPath = "";
-  if (!ignition::common::env("IGN_FUEL_PATH", ignFuelPath))
+  if (ignition::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
+  {
+    ignwarn << "IGN_FUEL_CACHE_PATH is set to [" << ignFuelPath << "]. The "
+            << "path in the configuration file will be ignored" << std::endl;
+  }
+  else
     this->CacheLocation(cacheLocation);
 
   // Cleanup.
