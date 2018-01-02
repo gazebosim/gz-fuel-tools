@@ -158,16 +158,16 @@ ModelIter FuelClient::Models(const ServerConfig &_server,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::UploadModel(const ServerConfig &_server,
-  const std::string &_pathToModelDir, const ModelIdentifier &_id)
+Result FuelClient::UploadModel(const ServerConfig &/*_server*/,
+  const std::string &/*_pathToModelDir*/, const ModelIdentifier &/*_id*/)
 {
   // TODO Upload a model and return an Result
   return Result(Result::UPLOAD_ERROR);
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DeleteModel(const ServerConfig &_server,
-  const ModelIdentifier &_id)
+Result FuelClient::DeleteModel(const ServerConfig &/*_server*/,
+  const ModelIdentifier &/*_id*/)
 {
   // TODO Delete a model and return a Result
   return Result(Result::DELETE_ERROR);
