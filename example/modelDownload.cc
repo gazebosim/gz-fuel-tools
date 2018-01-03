@@ -55,10 +55,11 @@ int main(int argc, char **argv)
   srv.URL(FLAGS_s);
   srv.LocalName("ignitionfuel");
   ignition::fuel_tools::ClientConfig conf;
+  conf.LoadConfig();
   conf.AddServer(srv);
 
-  // Remember to set your IGN_FUEL_PATH.
-  // E.g.: export IGN_FUEL_PATH=~/.ignition/fuel/models
+  // Remember to set your IGN_FUEL_CACHE_PATH.
+  // E.g.: export IGN_FUEL_CACHE_PATH=~/.ignition/fuel/models
   ignition::fuel_tools::FuelClient client(conf);
 
   // Set the properties of the model that we want to download.

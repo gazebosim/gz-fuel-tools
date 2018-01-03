@@ -20,3 +20,7 @@ configure_file(
 
 # Install the yaml configuration files in an unversioned location.
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fuel${PROJECT_MAJOR_VERSION}.yaml DESTINATION ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/ignition/)
+
+# Install config.yaml
+install (FILES config.yaml DESTINATION
+  ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/ignition/${IGN_PROJECT_NAME}/)

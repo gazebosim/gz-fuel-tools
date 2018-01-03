@@ -47,6 +47,13 @@ if (NOT libzip_FOUND)
   BUILD_ERROR ("Missing: libzip-dev. Required for parsing compressed files.")
 endif()
 
+########################################
+# Find libyaml
+pkg_check_modules(libyaml yaml-0.1)
+if (NOT libyaml_FOUND)
+  BUILD_ERROR ("Missing: libyaml-dev")
+endif()
+
 ################################################################################
 # Ignition common
 find_package(ignition-common0 QUIET)

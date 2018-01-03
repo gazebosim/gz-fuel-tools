@@ -44,6 +44,9 @@
 #include "gtest/gtest.h"
 #include "ignition/fuel-tools/Helpers.hh"
 
+#define TEST_IGNITION_FUEL_INITIAL_CONFIG_PATH \
+  "${CMAKE_SOURCE_DIR}/conf/config.yaml"
+
 #if (_MSC_VER >= 1400) // Visual Studio 2005
   #include <sstream>
 

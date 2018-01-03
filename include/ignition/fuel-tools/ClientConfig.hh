@@ -95,6 +95,18 @@ namespace ignition
       /// \brief destructor
       public: ~ClientConfig();
 
+      /// \brief Load the YAML configuration file.
+      /// If SetConfigPath() is not used, this function will try to load the
+      /// default configuration path.
+      /// \return True if the configuration was loaded correctly.
+      /// \sa SetConfigPath
+      public: bool LoadConfig();
+
+      /// \brief Set the location of the configuration file.
+      /// \param[in] _path Path to the configuration file.
+      /// \sa LoadConfig
+      public: void SetConfigPath(const std::string &_path);
+
       /// \brief List of servers the client will connect to
       /// \return The list of servers
       public: std::vector<ServerConfig> Servers() const;

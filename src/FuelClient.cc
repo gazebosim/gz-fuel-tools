@@ -63,7 +63,19 @@ class ignition::fuel_tools::FuelClientPrivate
 
   /// \brief Regex to parse Ignition Fuel URLs.
   public: std::unique_ptr<std::regex> urlModelRegex;
+
+  /// \brief The path where the configuration file is located.
+  public: std::string configPath;
 };
+
+//////////////////////////////////////////////////
+FuelClient::FuelClient()
+  : dataPtr(new FuelClientPrivate)
+{
+  this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
+  this->dataPtr->urlModelRegex.reset(new std::regex(
+    this->dataPtr->kModelURLRegexStr));
+}
 
 //////////////////////////////////////////////////
 FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
