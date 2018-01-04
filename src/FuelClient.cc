@@ -21,6 +21,7 @@
 #include <string>
 
 #include <ignition/common/Console.hh>
+#include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel-tools/ClientConfig.hh"
 #include "ignition/fuel-tools/FuelClient.hh"
@@ -114,7 +115,7 @@ Result FuelClient::ModelDetails(const ServerConfig &_server,
 
   auto serverURL = _server.URL();
   auto version = _server.Version();
-  auto path = _id.Owner() + "/models/" + _id.Name();
+  auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
   resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
@@ -152,7 +153,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server,
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
   // Todo try to fetch model directly from a server
-  auto path = _id.Owner() + "/models/" + _id.Name();
+  auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
   return ModelIterFactory::Create(this->dataPtr->rest, _server, path);
 }
@@ -182,7 +183,8 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
 
   auto serverURL = _server.URL();
   auto version = _server.Version();
-  auto path = _id.Owner() + "/models/" + _id.Name() + ".zip";
+  auto path = ignition::common::joinPaths(_id.Owner(), "models",
+    _id.Name() + ".zip");
 
   resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
@@ -218,7 +220,10 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
 
   auto result = this->DownloadModel(srv, id);
   if (result)
-    _path = this->Config().CacheLocation() + "/" + owner + "/" + name;
+  {
+    _path = ignition::common::joinPaths(this->Config().CacheLocation(),
+      "models", owner, name);
+  }
 
   return result;
 }
