@@ -15,6 +15,7 @@
  *
 */
 
+#include <algorithm>
 #include <iostream>
 #include <memory>
 #include <regex>
@@ -221,6 +222,8 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
   auto result = this->DownloadModel(srv, id);
   if (result)
   {
+    // Convert name to lowercase.
+    std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     _path = ignition::common::joinPaths(this->Config().CacheLocation(),
       "models", owner, name);
   }

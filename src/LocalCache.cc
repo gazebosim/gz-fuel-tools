@@ -15,6 +15,7 @@
  *
 */
 
+#include <algorithm>
 #include <fstream>
 #include <memory>
 #include <string>
@@ -166,8 +167,10 @@ bool LocalCache::SaveModel(
   const ModelIdentifier &_id, const std::string &_data, const bool _overwrite)
 {
   auto cacheLocation = this->dataPtr->config->CacheLocation();
+  std::string name = _id.Name();
+  std::transform(name.begin(), name.end(), name.begin(), ::tolower);
   auto modelDir = common::joinPaths(
-    cacheLocation, "models", _id.Owner(), _id.Name());
+    cacheLocation, "models", _id.Owner(), name);
 
   // Is it already in the cache?
   if (common::isDirectory(modelDir) && !_overwrite)
