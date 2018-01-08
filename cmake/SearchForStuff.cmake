@@ -64,10 +64,12 @@ if (NOT ignition-common0_FOUND)
   endif()
 endif()
   
-message (STATUS "Found Ignition Common")
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-COMMON_CXX_FLAGS}")
-include_directories(${IGNITION-COMMON_INCLUDE_DIRS})
-link_directories(${IGNITION-COMMON_LIBRARY_DIRS})
+if (ignition-common0_FOUND OR ignition-common1_FOUND)
+  message (STATUS "Found Ignition Common")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-COMMON_CXX_FLAGS}")
+  include_directories(${IGNITION-COMMON_INCLUDE_DIRS})
+  link_directories(${IGNITION-COMMON_LIBRARY_DIRS})
+endif()
 
 #################################################
 # Macro to check for visibility capability in compiler
