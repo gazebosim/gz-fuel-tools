@@ -1,44 +1,22 @@
-# This is a sample build configuration for C++.
-# Check our guides at https://confluence.atlassian.com/x/VYk8Lw for more examples.
-# Only use spaces to indent your .yml configuration.
-# -----
-# You can specify a custom docker image from Docker Hub as your build environment.
 image: ubuntu:xenial
 
 pipelines:
   default:
     - step:
-        script: # Modify the commands below to build your repository.
+        script:
+          # Dependencies
+          - echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable xenial main" > /etc/apt/sources.list.d/gazebo-stable.list
+          - apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys D2486D2DD83DB69272AFE98867170598AF249743
           - apt-get update
           - apt-get -y install
             cmake pkg-config python cppcheck doxygen ruby-ronn
             mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev
             lcov curl libyaml-dev
-          # Install Ignition CMake
-          - hg clone https://bitbucket.org/ignitionrobotics/ign-cmake -b default
-          - cd ign-cmake
-          - mkdir build && cd build
-          - cmake -DCMAKE_INSTALL_PREFIX=/usr ..
-          - make -j4 install
-          - cd ../..
-          # Install Ignition Math.
-          - hg clone https://bitbucket.org/ignitionrobotics/ign-math -b ign-math4
-          - cd ign-math
-          - mkdir build && cd build
-          - cmake -DCMAKE_INSTALL_PREFIX=/usr ..
-          - make -j4 install
-          - cd ../..
-          # Install Ignition Common
-          - apt-get -y install
-            uuid-dev libavcodec-dev libavdevice-dev libavformat-dev
-            libavutil-dev libfreeimage-dev libgts-dev libswscale-dev
-            libtinyxml2-dev
-          - hg clone https://bitbucket.org/ignitionrobotics/ign-common
-          - cd ign-common
-          - mkdir build && cd build
-          - cmake -DCMAKE_INSTALL_PREFIX=/usr ..
-          - make -j4 install
-          - cd ../..
+            libignition-cmake-dev
+            libignition-math4-dev
+            libignition-common-dev
+          # Style checker first - fail fast
+          - sh tools/code_check.sh
           # Ignition Fuel Tools
           - mkdir build && cd build
           - cmake .. -DCMAKE_BUILD_TYPE=coverage
@@ -53,6 +31,3 @@ pipelines:
           - mkdir build && cd build
           - cmake ..
           - make -j4
-          - cd ../..
-          # Style checker
-          - sh tools/code_check.sh
