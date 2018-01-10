@@ -56,9 +56,9 @@ endif()
 
 ################################################################################
 # Ignition common
-find_package(ignition-common0 QUIET)
-if (NOT ignition-common0_FOUND)
-  BUILD_ERROR ("Missing: Ignition Common (libignition-common0-dev)")
+find_package(ignition-common1 QUIET)
+if (NOT ignition-common1_FOUND)
+  BUILD_ERROR ("Missing: Ignition Common (libignition-common-dev)")
 else()
   message (STATUS "Found Ignition Common")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-COMMON_CXX_FLAGS}")
