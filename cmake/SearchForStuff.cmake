@@ -61,9 +61,9 @@ if (NOT ignition-common1_FOUND)
   BUILD_ERROR ("Missing: Ignition Common (libignition-common-dev)")
 else()
   message (STATUS "Found Ignition Common")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-COMMON_CXX_FLAGS}")
-  include_directories(${IGNITION-COMMON_INCLUDE_DIRS})
-  link_directories(${IGNITION-COMMON_LIBRARY_DIRS})
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ignition-common1_CXX_FLAGS}")
+  include_directories(${ignition-common1_INCLUDE_DIRS})
+  link_directories(${ignition-common1_LIBRARY_DIRS})
 endif()
 
 #################################################
