@@ -200,8 +200,18 @@ bool ClientConfig::LoadConfig()
   // SetConfigPath() wasn't used. Using the default one.
   if (this->dataPtr->configPath.empty())
   {
+    auto configDir = ignition::common::joinPaths(
+      homePath(), ".ignition", "fuel");
+    if (!ignition::common::exists(configDir) &&
+        !ignition::common::createDirectories(configDir))
+    {
+      ignerr << "Error creating default configuration directory ["
+             << configDir << "]" << std::endl;
+      return false;
+    }
+
     this->dataPtr->configPath = ignition::common::joinPaths(
-      homePath(), ".ignition", "fuel", "config.yaml");
+      configDir, "config.yaml");
 
     // If the custom config file doesn't exist, we create it.
     if (!ignition::common::exists(this->dataPtr->configPath))
