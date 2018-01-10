@@ -23,11 +23,11 @@
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 
-#include "ignition/fuel-tools/ClientConfig.hh"
-#include "ignition/fuel-tools/LocalCache.hh"
-#include "ignition/fuel-tools/ModelIterPrivate.hh"
-#include "ignition/fuel-tools/ModelPrivate.hh"
-#include "ignition/fuel-tools/Zip.hh"
+#include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/LocalCache.hh"
+#include "ignition/fuel_tools/ModelIterPrivate.hh"
+#include "ignition/fuel_tools/ModelPrivate.hh"
+#include "ignition/fuel_tools/Zip.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;

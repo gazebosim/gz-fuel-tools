@@ -18,8 +18,8 @@
 #include <gtest/gtest.h>
 #include <string>
 
-#include "ignition/fuel-tools/ClientConfig.hh"
-#include "ignition/fuel-tools/ModelIdentifier.hh"
+#include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/ModelIdentifier.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

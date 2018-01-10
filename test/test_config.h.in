@@ -42,7 +42,7 @@
 #endif
 
 #include "gtest/gtest.h"
-#include "ignition/fuel-tools/Helpers.hh"
+#include "ignition/fuel_tools/Helpers.hh"
 
 #define TEST_IGNITION_FUEL_INITIAL_CONFIG_PATH \
   "${CMAKE_SOURCE_DIR}/conf/config.yaml"

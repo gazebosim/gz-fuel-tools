@@ -1,1 +1,1 @@
-add_subdirectory(fuel-tools)
+add_subdirectory(fuel_tools)

@@ -20,14 +20,14 @@
 #include <vector>
 #include <ignition/common/Console.hh>
 
-#include "ignition/fuel-tools/ClientConfig.hh"
-#include "ignition/fuel-tools/JSONParser.hh"
-#include "ignition/fuel-tools/Model.hh"
-#include "ignition/fuel-tools/ModelIdentifier.hh"
-#include "ignition/fuel-tools/ModelIter.hh"
-#include "ignition/fuel-tools/ModelIterPrivate.hh"
-#include "ignition/fuel-tools/ModelPrivate.hh"
-#include "ignition/fuel-tools/REST.hh"
+#include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/JSONParser.hh"
+#include "ignition/fuel_tools/Model.hh"
+#include "ignition/fuel_tools/ModelIdentifier.hh"
+#include "ignition/fuel_tools/ModelIter.hh"
+#include "ignition/fuel_tools/ModelIterPrivate.hh"
+#include "ignition/fuel_tools/ModelPrivate.hh"
+#include "ignition/fuel_tools/REST.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

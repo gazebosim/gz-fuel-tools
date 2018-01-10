@@ -1,71 +1,30 @@
-include (${project_cmake_dir}/Utils.cmake)
+# Turn on C++11 support for the library.
+set(CMAKE_CXX_STANDARD 11)
 
-set (sources
-  ClientConfig.cc
-  FuelClient.cc
-  JSONParser.cc
-  LocalCache.cc
-  Model.cc
-  ModelIdentifier.cc
-  ModelIter.cc
-  REST.cc
-  Result.cc
-  Zip.cc
+# Collect source files into the "sources" variable and unit test files into the
+# "gtest_sources" variable.
+ign_get_libsources_and_unittests(sources gtest_sources)
+
+# Create the library target.
+ign_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})
+
+# Link the libraries that we always need.
+target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
+  PUBLIC
+    ignition-common1::ignition-common1
+    ${jsoncpp_LIBRARIES}
+    ${CURL_LIBRARIES}
+    ZIP::ZIP
+    YAML::YAML
+  PRIVATE
 )
 
-set (gtest_sources
-  ClientConfig_TEST.cc
-#  FuelClient_TEST.cc
-  JSONParser_TEST.cc
-  LocalCache_TEST.cc
-  Model_TEST.cc
-  ModelIdentifier_TEST.cc
-  ModelIter_TEST.cc
-  Result_TEST.cc
-  Zip_TEST.cc
-)
+# Create installation instructions for the library target. This must be called
+# in the same scope that the target is created.
+ign_install_library()
 
-include_directories(
-  ${CMAKE_BINARY_DIR}/
-  ${CMAKE_BINARY_DIR}/test/
-  ${jsoncpp_INCLUDE_DIRS}
-  ${libzip_INCLUDE_DIRS}
-  ${libyaml_INCLUDEDIR}
-)
+# Build the unit tests.
+ign_build_tests(TYPE UNIT SOURCES ${gtest_sources})
 
-ign_build_tests(${gtest_sources})
-
-set (libname ${PROJECT_NAME_LOWER}${PROJECT_MAJOR_VERSION})
-
-if (UNIX)
-  ign_add_library(${libname} ${sources})
-elseif(WIN32)
-  add_library(${libname} STATIC ${sources})
-endif()
-
-target_link_libraries(${libname}
-  ${CURL_LIBRARIES}
-  ${IGNITION-COMMON_LIBRARIES}
-  ${jsoncpp_LIBRARIES}
-  ${libzip_LIBRARIES}
-  ${libyaml_LIBRARIES}
-)
-
-if(WIN32)
-  target_link_libraries(${libname}
-    ws2_32 Iphlpapi
-  )
-else()
-  target_link_libraries(${libname}
-  )
-endif()
-
-add_executable(temp_fuel_client
-  temp_fuel_client.cc
-)
-target_link_libraries(temp_fuel_client ${libname})
-
-
-ign_install_library(${libname})
-
-add_subdirectory(cmd)
+# Command line support.
+# add_subdirectory(cmd)

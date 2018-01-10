@@ -20,8 +20,8 @@
 #include <vector>
 #include <ignition/common/Console.hh>
 
-#include "ignition/fuel-tools/ClientConfig.hh"
-#include "ignition/fuel-tools/JSONParser.hh"
+#include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/JSONParser.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

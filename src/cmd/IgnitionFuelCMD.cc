@@ -22,9 +22,9 @@
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 
-#include "ignition/fuel-tools/ClientConfig.hh"
-#include "ignition/fuel-tools/Helpers.hh"
-#include "ignition/fuel-tools/FuelClient.hh"
+#include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/Helpers.hh"
+#include "ignition/fuel_tools/FuelClient.hh"
 
 
 /// \brief Read a config file from disk

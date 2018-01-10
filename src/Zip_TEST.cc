@@ -138,7 +138,7 @@ bool createNewEmptyFile(const std::string &_filename)
 
 #include <gtest/gtest.h>
 #include <ignition/common/Filesystem.hh>
-#include "ignition/fuel-tools/Zip.hh"
+#include "ignition/fuel_tools/Zip.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

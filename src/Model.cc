@@ -18,10 +18,10 @@
 #include <memory>
 #include <string>
 
-#include "ignition/fuel-tools/Model.hh"
-#include "ignition/fuel-tools/ModelIdentifier.hh"
-#include "ignition/fuel-tools/ModelPrivate.hh"
-#include "ignition/fuel-tools/Result.hh"
+#include "ignition/fuel_tools/Model.hh"
+#include "ignition/fuel_tools/ModelIdentifier.hh"
+#include "ignition/fuel_tools/ModelPrivate.hh"
+#include "ignition/fuel_tools/Result.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;

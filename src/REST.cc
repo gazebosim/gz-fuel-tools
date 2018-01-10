@@ -22,7 +22,7 @@
 
 #include <ignition/common/Console.hh>
 
-#include "ignition/fuel-tools/REST.hh"
+#include "ignition/fuel_tools/REST.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

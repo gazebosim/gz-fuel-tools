@@ -15,7 +15,7 @@
  *
 */
 
-#include "ignition/fuel-tools/Result.hh"
+#include "ignition/fuel_tools/Result.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;

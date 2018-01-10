@@ -22,8 +22,8 @@
 #include <string>
 #include <ignition/common/Filesystem.hh>
 
-#include "ignition/fuel-tools/ClientConfig.hh"
-#include "ignition/fuel-tools/LocalCache.hh"
+#include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/LocalCache.hh"
 
 #include "test/test_config.h"
 
