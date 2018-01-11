@@ -34,21 +34,15 @@ ign_find_package(CURL REQUIRED)
 
 #--------------------------------------
 # Find jsoncpp
-#ign_find_package(jsoncpp REQUIRED)
-
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(jsoncpp jsoncpp)
-include_directories(
-  ${jsoncpp_INCLUDE_DIRS}
-)
-
-#--------------------------------------
-# Find libzip
-ign_find_package(ZIP REQUIRED)
+ign_find_package(JSONCPP REQUIRED)
 
 #--------------------------------------
 # Find libyaml
 ign_find_package(YAML REQUIRED)
+
+#--------------------------------------
+# Find libzip
+ign_find_package(ZIP REQUIRED)
 
 #--------------------------------------
 # Find ignition-common

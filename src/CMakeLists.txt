@@ -12,8 +12,8 @@ ign_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
     ignition-common1::ignition-common1
-    ${jsoncpp_LIBRARIES}
-    ${CURL_LIBRARIES}
+    JSONCPP::JSONCPP
+    CURL::CURL
     ZIP::ZIP
     YAML::YAML
   PRIVATE
