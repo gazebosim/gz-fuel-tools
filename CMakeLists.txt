@@ -16,13 +16,11 @@ find_package(ignition-cmake0 REQUIRED)
 #============================================================================
 ign_configure_project()
 
-
 #============================================================================
 # Set project-specific options
 #============================================================================
 
-# ignition-cmake currently has no options that are unique to it
-
+# ignition-fuel-tools currently has no options that are unique to it
 
 #============================================================================
 # Search for project-specific dependencies

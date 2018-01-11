@@ -12,11 +12,11 @@ ign_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
     ignition-common1::ignition-common1
+  PRIVATE
     JSONCPP::JSONCPP
     CURL::CURL
     ZIP::ZIP
     YAML::YAML
-  PRIVATE
 )
 
 # Create installation instructions for the library target. This must be called
@@ -27,4 +27,4 @@ ign_install_library()
 ign_build_tests(TYPE UNIT SOURCES ${gtest_sources})
 
 # Command line support.
-# add_subdirectory(cmd)
+add_subdirectory(cmd)

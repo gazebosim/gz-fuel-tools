@@ -16,6 +16,7 @@
 */
 
 #include <curl/curl.h>
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <vector>
