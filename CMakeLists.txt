@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5.1 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(ignition-fuel_tools0 VERSION 0.1.4)
+project(ignition-fuel-tools0 VERSION 0.1.4)
 
 #============================================================================
 # Find ignition-cmake
