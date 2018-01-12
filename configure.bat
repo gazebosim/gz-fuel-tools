@@ -5,7 +5,7 @@
 
 :: Install dependencies
 call %win_lib% :download_unzip_install jsoncpp-1.8.4-vc15-x64-dll-MD.zip
-call %win_lib% :install_ign_project ign-common ign-common1
+call %win_lib% :install_ign_project ign-common find_json_update
 
 :: Set configuration variables
 @set build_type=Release
