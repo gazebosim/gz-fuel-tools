@@ -11,10 +11,10 @@ ign_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})
 # Link the libraries that we always need.
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
+    ignition-common1::ignition-common1
   PRIVATE
     curl::curl
-    ignition-common1::ignition-common1
-    JSONCPP::JSONCPP
+    ${JSONCPP_TARGET}
     YAML::YAML
     ZIP::ZIP
 )
