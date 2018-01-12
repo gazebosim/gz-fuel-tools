@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
 # Find the Ignition Fuel Tools library
-find_package(ignition-fuel-tools0 QUIET REQUIRED)
+find_package(ignition-fuel_tools0 QUIET REQUIRED)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-FUEL-TOOLS_CXX_FLAGS}")
-include_directories(${IGNITION-FUEL-TOOLS_INCLUDE_DIRS})
-link_directories(${IGNITION-FUEL-TOOLS_LIBRARY_DIRS})
+include_directories(${IGNITION-FUEL_TOOLS_INCLUDE_DIRS})
+link_directories(${IGNITION-FUEL_TOOLS_LIBRARY_DIRS})
 
 # GFlags
 find_library(gflags_LIBRARIES NAMES gflags)
@@ -18,17 +18,17 @@ endif()
 # Generate examples
 add_executable(modelList modelList.cc)
 target_link_libraries(modelList
-                      ${IGNITION-FUEL-TOOLS_LIBRARIES}
+                      ${IGNITION-FUEL_TOOLS_LIBRARIES}
                       ${gflags_LIBRARIES})
 
 add_executable(modelDownload modelDownload.cc)
 target_link_libraries(modelDownload
-                      ${IGNITION-FUEL-TOOLS_LIBRARIES}
+                      ${IGNITION-FUEL_TOOLS_LIBRARIES}
                       ${gflags_LIBRARIES})
 
 add_executable(modelDetails modelDetails.cc)
 target_link_libraries(modelDetails
-                      ${IGNITION-FUEL-TOOLS_LIBRARIES}
+                      ${IGNITION-FUEL_TOOLS_LIBRARIES}
                       ${gflags_LIBRARIES})
 
 if (MSVC)
