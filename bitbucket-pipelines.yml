@@ -27,7 +27,7 @@ pipelines:
           - cd ../..
           # Ignition Fuel Tools
           - mkdir build && cd build
-          - cmake .. -DCMAKE_BUILD_TYPE=coverage -DCMAKE_INSTALL_PREFIX=/usr
+          - cmake .. -DCMAKE_BUILD_TYPE=coverage
           - make -j4
           - make test ARGS="-VV"
           - make coverage
