@@ -22,7 +22,7 @@ pipelines:
           - cd ign-cmake
           - mkdir build
           - cd build
-          - cmake ..
+          - cmake .. -DBUILD_TESTING=Off
           - make install
           - cd ../..
           # Ignition Fuel Tools
