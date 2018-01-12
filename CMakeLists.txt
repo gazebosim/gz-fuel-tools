@@ -28,23 +28,23 @@ ign_configure_project()
 
 #--------------------------------------
 # Find libcurl
-ign_find_package(CURL REQUIRED)
+ign_find_package(IgnCURL REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find jsoncpp
-ign_find_package(JSONCPP REQUIRED)
+ign_find_package(JSONCPP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find libyaml
-ign_find_package(YAML REQUIRED)
+ign_find_package(YAML REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find libzip
-ign_find_package(ZIP REQUIRED)
+ign_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find ignition-common
-ign_find_package(ignition-common1 REQUIRED)
+ign_find_package(ignition-common1 REQUIRED PRIVATE)
 
 #============================================================================
 # Configure the build
