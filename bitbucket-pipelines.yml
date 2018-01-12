@@ -22,12 +22,12 @@ pipelines:
           - cd ign-cmake
           - mkdir build
           - cd build
-          - cmake .. -DBUILD_TESTING=Off -DCMAKE_INSTALL_PREFIX=/usr
+          - cmake .. -DBUILD_TESTING=Off
           - make install
           - cd ../..
           # Ignition Fuel Tools
           - mkdir build && cd build
-          - cmake .. -DCMAKE_BUILD_TYPE=coverage
+          - cmake .. -DCMAKE_BUILD_TYPE=coverage -DCMAKE_INSTALL_PREFIX=/usr
           - make -j4
           - make test ARGS="-VV"
           - make coverage
