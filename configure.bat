@@ -4,6 +4,7 @@
 
 
 :: Install dependencies
+call %win_lib% :download_unzip_install curl-7.57.0-vc15-x64-dll-MD.zip
 call %win_lib% :download_unzip_install jsoncpp-1.8.4-vc15-x64-dll-MD.zip
 call %win_lib% :install_ign_project ign-common ign-common1
 
