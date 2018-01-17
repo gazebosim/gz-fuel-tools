@@ -17,14 +17,6 @@ pipelines:
             libignition-common-dev
           # Style checker first - fail fast
           - sh tools/code_check.sh
-          # Ignition cmake
-          - hg clone http://bitbucket.org/ignitionrobotics/ign-cmake -b fuel-tools
-          - cd ign-cmake
-          - mkdir build
-          - cd build
-          - cmake .. -DBUILD_TESTING=Off
-          - make install
-          - cd ../..
           # Ignition Fuel Tools
           - mkdir build && cd build
           - cmake .. -DCMAKE_BUILD_TYPE=coverage
