@@ -18,6 +18,8 @@
 // All these helper functions have been copied from
 // https://bitbucket.org/ignitionrobotics/ign-common/raw/default/src/Filesystem_TEST.cc
 
+#include <string>
+
 #ifndef _WIN32
 #include <fcntl.h>
 #include <limits.h>
@@ -25,7 +27,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <string>
 
 /////////////////////////////////////////////////
 bool createAndSwitchToTempDir(std::string &_newTempPath)
@@ -81,8 +82,8 @@ bool createNewEmptyFile(const std::string &_filename)
 #else
 #include <windows.h>
 #include <winnt.h>
+#include <time.h>
 #include <cstdint>
-#include "PrintWindowsSystemWarning.hh"
 
 /////////////////////////////////////////////////
 bool createAndSwitchToTempDir(std::string &_newTempPath)
