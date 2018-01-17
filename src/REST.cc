@@ -16,6 +16,11 @@
 */
 
 #include <curl/curl.h>
+#ifdef _WIN32
+// DELETE is defined in winnt.h and causes a problem with REST::DELETE
+#undef DELETE
+#endif
+
 #include <cstring>
 #include <iostream>
 #include <string>
