@@ -20,7 +20,7 @@
 #include <string>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
-#include "ignition/fuel-tools/ClientConfig.hh"
+#include "ignition/fuel_tools/ClientConfig.hh"
 #include "test/test_config.h"
 
 using namespace ignition;

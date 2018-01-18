@@ -14,9 +14,12 @@
  * limitations under the License.
  *
 */
+#ifndef IGNITION_FUEL_TOOLS_ZIP_HH_
+#define IGNITION_FUEL_TOOLS_ZIP_HH_
 
-#include <cstdlib>
+#include <memory>
 #include <string>
+#include <vector>
 
 #include "ignition/fuel_tools/Helpers.hh"
 
@@ -24,22 +27,22 @@ namespace ignition
 {
   namespace fuel_tools
   {
-    //////////////////////////////////////////////////
-    bool env(const std::string &_name, std::string &_value)
+    /// \brief A helper class for making REST requests.
+    class IGNITION_FUEL_TOOLS_VISIBLE Zip
     {
-      char *v;
-#ifdef _MSC_VER
-      size_t sz = 0;
-      _dupenv_s(&v, &sz, _name.c_str());
-#else
-      v = std::getenv(_name.c_str());
-#endif
-      if (v)
-      {
-        _value = v;
-        return true;
-      }
-      return false;
-    }
+      /// \brief Compress a file or directory
+      /// \param[in] _src Path to file or directory to compress
+      /// \param[in] _dst Output compressed file path
+      public: static bool Compress(const std::string &_src,
+          const std::string &_dst);
+
+      /// \brief Extract a compressed file
+      /// \param[in] _src Path to compressed file
+      /// \param[in] _dst Output extracted file path
+      public: static bool Extract(const std::string &_src,
+          const std::string &_dst);
+    };
   }
 }
+
+#endif

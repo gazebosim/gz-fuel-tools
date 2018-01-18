@@ -22,10 +22,10 @@
 #include <string>
 #include <vector>
 
-#include "ignition/fuel-tools/ClientConfig.hh"
-#include "ignition/fuel-tools/JSONParser.hh"
-#include "ignition/fuel-tools/ModelIter.hh"
-#include "ignition/fuel-tools/ModelIterPrivate.hh"
+#include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/JSONParser.hh"
+#include "ignition/fuel_tools/ModelIter.hh"
+#include "ignition/fuel_tools/ModelIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

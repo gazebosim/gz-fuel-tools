@@ -81,8 +81,9 @@ bool createNewEmptyFile(const std::string &_filename)
 #else
 #include <windows.h>
 #include <winnt.h>
+#include <time.h>
 #include <cstdint>
-#include "PrintWindowsSystemWarning.hh"
+#include <string>  // NOLINT
 
 /////////////////////////////////////////////////
 bool createAndSwitchToTempDir(std::string &_newTempPath)
@@ -138,7 +139,7 @@ bool createNewEmptyFile(const std::string &_filename)
 
 #include <gtest/gtest.h>
 #include <ignition/common/Filesystem.hh>
-#include "ignition/fuel-tools/Zip.hh"
+#include "ignition/fuel_tools/Zip.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

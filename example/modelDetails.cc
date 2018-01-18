@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-#include <ignition/fuel-tools.hh>
+#include <ignition/fuel_tools.hh>
 
 DEFINE_bool(h, false, "Show help");
 DEFINE_string(m, "", "Model name");

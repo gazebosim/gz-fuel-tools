@@ -15,23 +15,28 @@
  *
 */
 
-#include <gtest/gtest.h>
-#include "ignition/fuel_tools/Model.hh"
+#ifndef IGNITION_FUEL_TOOLS_MODELPRIVATE_HH_
+#define IGNITION_FUEL_TOOLS_MODELPRIVATE_HH_
 
-namespace ignft = ignition::fuel_tools;
-using namespace ignition;
-using namespace ignft;
+#include <string>
 
-/////////////////////////////////////////////////
-/// \brief Nothing crashes
-TEST(Model, ConstructorDoesNotCrash)
+#include "ignition/fuel_tools/Helpers.hh"
+#include "ignition/fuel_tools/ModelIdentifier.hh"
+
+namespace ignition
 {
-  Model model;
+  namespace fuel_tools
+  {
+    /// \brief Private class, do not use
+    class IGNITION_FUEL_TOOLS_VISIBLE ModelPrivate
+    {
+      /// \brief How this model is ID'd
+      public: ModelIdentifier id;
+
+      /// \brief Where this model is on disk
+      public: std::string pathOnDisk;
+    };
+  }
 }
 
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
+#endif

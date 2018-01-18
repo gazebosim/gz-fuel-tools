@@ -42,7 +42,7 @@
 #endif
 
 #include "gtest/gtest.h"
-#include "ignition/fuel-tools/Helpers.hh"
+#include "ignition/fuel_tools/Helpers.hh"
 
 #define TEST_IGNITION_FUEL_INITIAL_CONFIG_PATH \
   "${CMAKE_SOURCE_DIR}/conf/config.yaml"
@@ -88,7 +88,7 @@ namespace testing
   {
 #ifdef _WIN32
     std::tr2::sys::path base_path(str1);
-    return base_path /= str2;
+    return (base_path /= str2).string();
 #else
     // Ugly as hell but trying to avoid boost::filesystem
     return str1 + "/" + str2;

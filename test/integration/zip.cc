@@ -19,7 +19,7 @@
 
 #include <ignition/common/Filesystem.hh>
 
-#include "ignition/fuel-tools/Zip.hh"
+#include "ignition/fuel_tools/Zip.hh"
 #include "test/test_config.h"
 
 using namespace ignition;

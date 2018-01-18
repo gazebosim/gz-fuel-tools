@@ -15,8 +15,8 @@
  *
 */
 
-#include "ignition/fuel-tools/Helpers.hh"
-#include "ignition/fuel-tools/test_config.h"
+#include "ignition/fuel_tools/Helpers.hh"
+#include "test/test_config.h"
 #include "gtest/gtest.h"
 
 //////////////////////////////////////////////////
@@ -28,13 +28,13 @@ TEST(HelpersTest, env)
 
   // Check that an unknown environment variable returns false.
   std::string value;
-  EXPECT_FALSE(ignition::env(name, value));
+  EXPECT_FALSE(ignition::fuel_tools::env(name, value));
 
   // Create a random environment variable and give it its name as value.
   setenv(name.c_str(), name.c_str(), 1);
 
   // Check that we find the environment variable and the value is correct.
-  EXPECT_TRUE(ignition::env(name, value));
+  EXPECT_TRUE(ignition::fuel_tools::env(name, value));
   EXPECT_EQ(name, value);
 }
 

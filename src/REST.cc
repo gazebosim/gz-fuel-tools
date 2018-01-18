@@ -16,13 +16,19 @@
 */
 
 #include <curl/curl.h>
+#ifdef _WIN32
+// DELETE is defined in winnt.h and causes a problem with REST::DELETE
+#undef DELETE
+#endif
+
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <vector>
 
 #include <ignition/common/Console.hh>
 
-#include "ignition/fuel-tools/REST.hh"
+#include "ignition/fuel_tools/REST.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

@@ -25,7 +25,7 @@
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 
-#include "ignition/fuel-tools/Zip.hh"
+#include "ignition/fuel_tools/Zip.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
