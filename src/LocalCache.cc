@@ -196,10 +196,10 @@ bool LocalCache::SaveModel(
     return false;
   }
 
-  if (!common::removeDirectoryOrFile(zipFile))
-  {
-    ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
-  }
+  // if (!common::removeDirectoryOrFile(zipFile))
+  // {
+  //   ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
+  // }
 
   return true;
 }

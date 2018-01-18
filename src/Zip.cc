@@ -163,14 +163,14 @@ bool Zip::Extract(const std::string &_src,
 
     std::ofstream file(dst);
     int readSize = sb.size;
-    char *buf = new char[readSize + 1];
+    char *buf = new char[readSize];
     int len = zip_fread(zf, buf, readSize);
-    // zip_fread seams to read more than requested resulting in garbage data
-    // at the end so append '\0'
-    buf[readSize] = '\0';
+
     if (len < 0)
       ignerr << "Error reading " << sb.name << std::endl;
-    file << buf;
+    else
+      file.write(buf, len);
+
     delete[] buf;
     file.close();
     zip_fclose(zf);
