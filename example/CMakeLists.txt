@@ -16,20 +16,26 @@ else()
 endif()
 
 # Generate examples
-add_executable(modelList modelList.cc)
-target_link_libraries(modelList
-                      ${IGNITION-FUEL_TOOLS_LIBRARIES}
-                      ${gflags_LIBRARIES})
+if (EXISTS "${CMAKE_SOURCE_DIR}/modelList.cc")
+  add_executable(modelList modelList.cc)
+  target_link_libraries(modelList
+                        ${IGNITION-FUEL_TOOLS_LIBRARIES}
+                        ${gflags_LIBRARIES})
+endif()
 
-add_executable(modelDownload modelDownload.cc)
-target_link_libraries(modelDownload
-                      ${IGNITION-FUEL_TOOLS_LIBRARIES}
-                      ${gflags_LIBRARIES})
+if (EXISTS "${CMAKE_SOURCE_DIR}/modelDownload.cc")
+  add_executable(modelDownload modelDownload.cc)
+  target_link_libraries(modelDownload
+                        ${IGNITION-FUEL_TOOLS_LIBRARIES}
+                        ${gflags_LIBRARIES})
+endif()
 
-add_executable(modelDetails modelDetails.cc)
-target_link_libraries(modelDetails
-                      ${IGNITION-FUEL_TOOLS_LIBRARIES}
-                      ${gflags_LIBRARIES})
+if (EXISTS "${CMAKE_SOURCE_DIR}/modelDetails.cc")
+  add_executable(modelDetails modelDetails.cc)
+  target_link_libraries(modelDetails
+                        ${IGNITION-FUEL_TOOLS_LIBRARIES}
+                        ${gflags_LIBRARIES})
+endif()
 
 if (MSVC)
 
