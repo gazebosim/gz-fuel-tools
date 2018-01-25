@@ -12,7 +12,7 @@ Ignition Fuel Tools accepts a YAML file with the following syntax:
 # The list of servers.
 servers:
   -
-    name: osrf
+    name: openrobotics
     url: https://api.ignitionfuel.org
 
   # -
