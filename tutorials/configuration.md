@@ -81,7 +81,7 @@ make
 And now the fun part, execute it:
 
 ```
-./modelDownload -c /tmp/my_config.yaml -o caguero -m Beer
+./modelDownload -c /tmp/my_config.yaml -o my_user_name -m Beer
 ```
 
 Verify that you have the model in `/tmp/ignition/fuel/models/`, as you
