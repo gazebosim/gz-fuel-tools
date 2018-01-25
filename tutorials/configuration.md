@@ -43,7 +43,7 @@ Create a file `/tmp/my_config.yaml` with the following content:
 # The list of servers.
 servers:
   -
-    name: osrf
+    name: openrobotics
     url: https://api.ignitionfuel.org
 
 # Where are the assets stored in disk.
@@ -51,7 +51,7 @@ cache:
   path: /tmp/ignition/fuel
 ```
 
-Now, let's use a program that downloads a model from the server set in the
+Now, let's use a program that downloads a model from a server in the
 configuration file. Let's start by creating a directory for storing all files:
 
 ```
