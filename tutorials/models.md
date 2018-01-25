@@ -70,7 +70,7 @@ example:
 ### Walkthrough
 
 This example contains some boilerplate to parse command line arguments and load
-some configuration. Refer to the [configuration tutorial](https://ignitionrobotics.org/tutorials/fuel-tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_configuration.html)
+some configuration. Refer to the [configuration tutorial](https://ignitionrobotics.org/tutorials/fuel_tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_configuration.html)
 for details about this part of the code. Let's focus on the relevant code for
 listing models:
 
@@ -122,7 +122,7 @@ Here's an example:
 ### Walkthrough
 
 This example contains some boilerplate to parse command line arguments and load
-some configuration. Refer to the [configuration tutorial](https://ignitionrobotics.org/tutorials/fuel-tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_configuration.html)
+some configuration. Refer to the [configuration tutorial](https://ignitionrobotics.org/tutorials/fuel_tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_configuration.html)
 for details about this part of the code. Let's focus on the relevant code for
 getting details of a model:
 
@@ -173,7 +173,7 @@ Verify that you have the model in `$HOME/.ignition/fuel/models/`.
 ### Walkthrough
 
 This example contains some boilerplate to parse command line arguments and load
-some configuration. Refer to the [configuration tutorial](https://ignitionrobotics.org/tutorials/fuel-tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_configuration.html)
+some configuration. Refer to the [configuration tutorial](https://ignitionrobotics.org/tutorials/fuel_tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_configuration.html)
 for details about this part of the code. Let's focus on the relevant code for
 download a model:
 
