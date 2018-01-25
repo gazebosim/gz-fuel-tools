@@ -22,7 +22,9 @@
 #include <ignition/fuel_tools.hh>
 
 DEFINE_bool(h, false, "Show help");
-DEFINE_string(s, "https://localhost:4430", "Server name");
+
+DEFINE_string(c, "", "Config file");
+DEFINE_string(s, "", "Server name");
 
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
@@ -30,7 +32,10 @@ int main(int argc, char **argv)
   // Simple usage.
   std::string usage("List all models.");
   usage += " Usage:\n  ./modelList <options>\n\n";
-  usage += "  Example:\n\t ./modelList -s https://localhost:4430";
+  usage += "  Example:\n"
+           "\t ./modelList\n"
+           "\t ./modelList -s https://localhost:4430"
+           "\t ./modelList -c /tmp/my_config.yaml\n";
 
   gflags::SetUsageMessage(usage);
 
@@ -47,13 +52,47 @@ int main(int argc, char **argv)
   }
   gflags::HandleCommandLineHelpFlags();
 
-  // Create a ClientConfig.
-  ignition::fuel_tools::ServerConfig srv;
-  srv.URL(FLAGS_s);
-  ignition::fuel_tools::ClientConfig conf;
-  conf.AddServer(srv);
+  if (FLAGS_c != "" && FLAGS_s != "")
+  {
+    std::cerr << "Please, do not use -c <config_file> and -s <server> together."
+              << std::endl;
+    return -1;
+  }
 
+  // Setup ClientConfig.
+  ignition::fuel_tools::ClientConfig conf;
+
+  if (FLAGS_s != "")
+  {
+    // The user specified a Fuel server via command line.
+    ignition::fuel_tools::ServerConfig srv;
+    srv.URL(FLAGS_s);
+    srv.LocalName("ignitionfuel");
+
+    // Add the extra Fuel server.
+    conf.AddServer(srv);
+  }
+  else
+  {
+    if (FLAGS_c != "")
+      conf.SetConfigPath(FLAGS_c);
+
+    if (!conf.LoadConfig())
+    {
+      std::cerr << "Error loading configuration file [" << FLAGS_c << "]"
+                << std::endl;
+      return -1;
+    }
+  }
+
+  // Instantiate the FuelClient object with the configuration.
   ignition::fuel_tools::FuelClient client(conf);
-  for (auto iter = client.Models(srv); iter; ++iter)
-    std::cout << iter->Identification().Name() << std::endl;
+
+  for (const auto &server : client.Config().Servers())
+  {
+    std::cout << "[" << server.URL() << "]\n\n";
+    for (auto iter = client.Models(server); iter; ++iter)
+      std::cout << "  " << iter->Identification().Name() << "\n";
+    std::cout << std::endl;
+  }
 }
