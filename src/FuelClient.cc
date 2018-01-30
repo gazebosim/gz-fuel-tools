@@ -23,6 +23,7 @@
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
+#include <ignition/common/Util.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
@@ -52,7 +53,7 @@ class ignition::fuel_tools::FuelClientPrivate
     // "models"
     "models\\/+"
     // Name
-    "([^\\/\\s]+)\\/*";
+    "([^\\/]+)\\/*";
 
   /// \brief Client configuration
   public: ClientConfig config;
@@ -203,7 +204,9 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
 {
   std::smatch match;
   if (!std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex))
+  {
     return Result(Result::FETCH_ERROR);
+  }
 
   assert(match.size() == 6);
 
@@ -224,6 +227,7 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
   {
     // Convert name to lowercase.
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+    name = common::replaceAll(name, " ", "_");
     _path = ignition::common::joinPaths(this->Config().CacheLocation(),
       "models", owner, name);
   }
