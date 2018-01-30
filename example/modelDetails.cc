@@ -106,7 +106,8 @@ int main(int argc, char **argv)
     std::cout << "  Downloads: " << model.Downloads() << std::endl;
     std::cout << "  License name: " << model.LicenseName() << std::endl;
     std::cout << "  License URL: " << model.LicenseURL() << std::endl;
-    std::cout << "  License image URL: " << model.LicenseImageURL() << std::endl;
+    std::cout << "  License image URL: " << model.LicenseImageURL()
+        << std::endl;
     std::cout << "  Tags: " << std::endl;
     for (auto const &tag : model.Tags())
       std::cout << "  " << tag << std::endl;
