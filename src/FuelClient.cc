@@ -204,9 +204,7 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
 {
   std::smatch match;
   if (!std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex))
-  {
     return Result(Result::FETCH_ERROR);
-  }
 
   assert(match.size() == 6);
 
