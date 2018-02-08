@@ -244,6 +244,11 @@ ModelIter::operator bool()
   return !this->dataPtr->HasReachedEnd();
 }
 
+ModelIter::operator bool() const
+{
+  return !this->dataPtr->HasReachedEnd();
+}
+
 //////////////////////////////////////////////////
 ModelIter &ModelIter::operator++()
 {
