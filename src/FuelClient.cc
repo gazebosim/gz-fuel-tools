@@ -199,12 +199,12 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DownloadModel(const std::string &_modelURL,
-  std::string &_path)
+bool FuelClient::ParseModelURL(const std::string &_modelURL,
+  ServerConfig &_srv, ModelIdentifier &_id)
 {
   std::smatch match;
   if (!std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex))
-    return Result(Result::FETCH_ERROR);
+    return false;
 
   assert(match.size() == 6);
 
@@ -213,17 +213,31 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
   std::string owner = match[4];
   std::string name = match[5];
 
-  ModelIdentifier id;
-  id.Owner(owner);
-  id.Name(name);
+  _id.Owner(owner);
+  _id.Name(name);
 
+  _srv.URL(method + "://" + server);
+
+  return true;
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadModel(const std::string &_modelURL,
+  std::string &_path)
+{
+  ModelIdentifier id;
   ServerConfig srv;
-  srv.URL(method + "://" + server);
+  if (!this->ParseModelURL(_modelURL, srv, id))
+  {
+    return Result(Result::FETCH_ERROR);
+  }
 
   auto result = this->DownloadModel(srv, id);
   if (result)
   {
     // Convert name to lowercase.
+    std::string name = id.Name();
+    std::string owner = id.Owner();
     std::transform(name.begin(), name.end(), name.begin(), ::tolower);
     name = common::replaceAll(name, " ", "_");
     _path = ignition::common::joinPaths(this->Config().CacheLocation(),
