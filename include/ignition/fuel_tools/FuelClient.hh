@@ -118,12 +118,21 @@ namespace ignition
                                    const ModelIdentifier &_id);
 
       /// \brief Download a model from ignition fuel
-      /// \param[in] _modelURL The unique URL of the model to download
+      /// \param[in] _modelURL The unique URL of the model to download.
       /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
-      /// \param[out] _path Path where the model was downloaded
-      /// \return Result of the download operation
+      /// \param[out] _path Path where the model was downloaded.
+      /// \return Result of the download operation.
       public: Result DownloadModel(const std::string &_modelURL,
                                    std::string &_path);
+
+      /// \brief Parse server and model identifer from model URL.
+      /// \param[in] _modelURL The unique URL of the model to download.
+      /// \param[out] _server The server to request the operation.
+      /// \param[out] _id The model identifier.
+      /// \return True if parsed successfully.
+      public: bool ParseModelURL(const std::string &_modelURL,
+                                 ServerConfig &_srv,
+                                 ModelIdentifier &_id);
 
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;
