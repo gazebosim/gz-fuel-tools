@@ -206,7 +206,8 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
   if (!std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex))
     return false;
 
-  assert(match.size() == 6);
+  if (match.size() != 6u)
+    return false;
 
   std::string method = match[1];
   std::string server = match[2];
