@@ -43,7 +43,7 @@ class ignition::fuel_tools::FuelClientPrivate
   /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
   public: std::string kModelURLRegexStr =
     // Method
-    "^([^\\/\\W]+):\\/\\/"
+    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
     "([^\\/\\s]+)\\/+"
     // Version
