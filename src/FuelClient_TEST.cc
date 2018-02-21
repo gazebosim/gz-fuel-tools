@@ -36,6 +36,9 @@ TEST(FuelClient, ParseModelURL)
   EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
   EXPECT_EQ(id.Owner(), "german");
   EXPECT_EQ(id.Name(), "Cardboard Box");
+
+  // bad URL
+  EXPECT_FALSE(client.ParseModelURL("bad url", srv, id));
 }
 
 //////////////////////////////////////////////////
