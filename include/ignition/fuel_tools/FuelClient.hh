@@ -127,7 +127,7 @@ namespace ignition
 
       /// \brief Parse server and model identifer from model URL.
       /// \param[in] _modelURL The unique URL of the model to download.
-      /// \param[out] _server The server to request the operation.
+      /// \param[out] _srv The server to request the operation.
       /// \param[out] _id The model identifier.
       /// \return True if parsed successfully.
       public: bool ParseModelURL(const std::string &_modelURL,
