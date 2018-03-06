@@ -24,7 +24,8 @@
 /// \return C-string representing the version. Ex.: 0.1.2
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion();
 
-/// \brief External hook to execute 'ign fuel list' from the command line.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE void listModels();
+/// \brief External hook to execute 'ign fuel list -t model' from the command line.
+/// \param[in] _url Optional server URL
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE void listModels(const char *_url = nullptr);
 
 #endif

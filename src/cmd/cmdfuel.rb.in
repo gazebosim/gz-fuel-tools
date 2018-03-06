@@ -39,13 +39,11 @@ COMMON_OPTIONS =
 
 COMMANDS = { 'fuel' =>
   "Manage simulation resources.                                            \n"\
+  "                                                                        \n"\
   "  ign fuel [action] [options]                                           \n"\
   "                                                                        \n"\
   "Available Actions:                                                      \n"\
   "  list                     List available models                        \n"\
-  "  locate                   Print location on disk, downloading if needed\n"\
-  "  pull                     Download a model                             \n"\
-  "  push                     Upload a model                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n" +
   COMMON_OPTIONS
@@ -53,51 +51,15 @@ COMMANDS = { 'fuel' =>
 
 SUBCOMMANDS = { 'list' =>
   "List simulation resources                                               \n"\
+  "                                                                        \n"\
   "  ign fuel list [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
-  "  --owner OWNER            Owner of the resource                        \n"\
-  "  --name NAME              Name of the resource                         \n"\
-  "  --url URL                URL of a server the resource comes from      \n"\
+  "  -t [--type] arg          Resource type (i.e. model). Required.        \n"\
+  "  -u [--url] arg           URL of a server the resource comes from,     \n"\
+  "                           if unspecified, it will be taken from        \n"\
+  "                           config.yaml.                                 \n"\
   "                                                                        \n"\
-  "Available Options:                                                      \n" +
-  COMMON_OPTIONS,
-                'locate' =>
-  "Locate where a resource is on disk, fetching if necessary               \n"\
-  "  ign fuel locate [options]                                             \n"\
-  "                                                                        \n"\
-  "Required Flags:                                                         \n"\
-  "  --name NAME              Name of the resource                         \n"\
-  "                                                                        \n"\
-  "Available Options:                                                      \n"\
-  "  --owner OWNER            Owner of the resource                        \n"\
-  "  --url URL                URL of a server the resource comes from      \n" +
-  COMMON_OPTIONS,
-                'push' =>
-  "Upload simulation resources                                             \n"\
-  "  ign fuel push [options] --url URL --owner OWNER --name NAME --path PATH\n"\
-  "                                                                        \n"\
-  "Required Flags:                                                         \n"\
-  "  --owner OWNER            Owner of the resource                        \n"\
-  "  --name NAME              Name of the resource                         \n"\
-  "  --url URL             URL of a server the resource comes from         \n"\
-  "  --path PATH           PATH to resource on disk                        \n"\
-  "                                                                        \n"\
-  "Available Options:                                                      \n" +
-  COMMON_OPTIONS,
-                'pull' =>
-  "Download simulation resources                                           \n"\
-  "  ign fuel pull [options] --url URL --owner OWNER --name NAME           \n"\
-  "                                                                        \n"\
-  "Required Flags:                                                         \n"\
-  "  --owner OWNER            Owner of the resource                        \n"\
-  "  --name NAME              Name of the resource                         \n"\
-  "                                                                        \n"\
-  "Available Options:                                                      \n"\
-  "  --url URL             URL of a server the resource comes from         \n" +
-  COMMON_OPTIONS,
-                'hello' =>
-  "check if library is working                                             \n"\
   "Available Options:                                                      \n" +
   COMMON_OPTIONS,
 }
@@ -113,10 +75,6 @@ class Cmd
   def parse(args)
     options = {
       'url' => '',
-      'path' => '',
-      'owner' => '',
-      'name' => '',
-      'verbose' => 0,
     }
 
     usage = COMMANDS[args[0]]
@@ -135,20 +93,11 @@ class Cmd
         puts usage
         exit
       end
-      opts.on('--url SERVER') do |server|
+      opts.on('-u [URL]', '--url', String, 'Server URL') do |server|
         options['url'] = server
       end
-      opts.on('--owner OWNER') do |owner|
-        options['owner'] = owner
-      end
-      opts.on('--name NAME') do |name|
-        options['name'] = name
-      end
-      opts.on('--path NAME') do |path|
-        options['path'] = path
-      end
-      opts.on('-v LEVEL', '--verbose LEVEL', OptionParser::DecimalInteger) do |level|
-        options['verbose'] = level
+      opts.on('-t [TYPE]', '--type', String, 'Resource type') do |type|
+        options['type'] = type
       end
     end # opt_parser do
 
@@ -160,7 +109,15 @@ class Cmd
     # check required flags
     case options['subcommand']
     when 'list'
-      # no required flags
+      # Resource type
+      if !options.key?('type')
+        puts "Missing resource type (e.g. --type model)."
+        exit(-1)
+      end
+      if options['type'] != 'model'
+        puts "Only model resources currently supported (e.g. --type model)."
+        exit(-1)
+      end
     end
 
     options
@@ -200,8 +157,8 @@ class Cmd
     begin
       case options['subcommand']
       when 'list'
-        Importer.extern 'void listModels()'
-        Importer.listModels
+        Importer.extern 'void listModels(const char *)'
+        Importer.listModels(options['url'])
       end
     rescue
       puts "Library error: Problem running [#{options['command']}]() "\
