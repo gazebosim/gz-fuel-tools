@@ -46,13 +46,6 @@ ign_find_package(ZIP REQUIRED PRIVATE)
 # Find ignition-common
 ign_find_package(ignition-common1 REQUIRED PRIVATE)
 
-#--------------------------------------
-# Find ignition-tools
-ign_find_package(ignition-tools QUIET)
-if (ignition-tools_FOUND)
-  set (HAVE_IGN_TOOLS TRUE)
-endif()
-
 #============================================================================
 # Configure the build
 #============================================================================
