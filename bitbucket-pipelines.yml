@@ -31,6 +31,8 @@ pipelines:
           - cmake .. -DCMAKE_BUILD_TYPE=coverage
           - make -j4
           - make install
+          - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+          - env | grep LIBRARY
           # Command line tool
           - ign fuel list -t model
           # Test
