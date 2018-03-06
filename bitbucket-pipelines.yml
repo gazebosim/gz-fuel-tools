@@ -31,14 +31,16 @@ pipelines:
           - cmake .. -DCMAKE_BUILD_TYPE=coverage
           - make -j4
           - make install
+          # Command line tool
+          - ign fuel list -t model
+          # Test
           - make test ARGS="-VV"
           - make coverage
           - bash <(curl -s https://codecov.io/bash)
+          # Documentation
           - make doc
           # Build examples
           - cd ../example
           - mkdir build && cd build
           - cmake ..
           - make -j4
-          # Command line tool
-          - ign fuel list -t model
