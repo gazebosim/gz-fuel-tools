@@ -15,18 +15,17 @@ pipelines:
             libignition-cmake-dev
             libignition-math4-dev
             libignition-common-dev
-            libignition-tools-dev
           # Style checker first - fail fast
           - sh tools/code_check.sh
           # Ignition Fuel Tools
           - mkdir build && cd build
           - cmake .. -DCMAKE_BUILD_TYPE=coverage
           - make -j4
-          - make install
           - make test ARGS="-VV"
           - make coverage
           - bash <(curl -s https://codecov.io/bash)
           - make doc
+          - make install
           # Build examples
           - cd ../example
           - mkdir build && cd build
