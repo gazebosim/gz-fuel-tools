@@ -15,8 +15,8 @@ pipelines:
             libignition-cmake-dev
             libignition-math4-dev
             libignition-common-dev
+            ruby-dev
           # Ignition tools
-          - apt -y install ruby-dev
           - hg clone http://bitbucket.org/ignitionrobotics/ign-tools -b default
           - cd ign-tools
           - mkdir build
@@ -40,3 +40,5 @@ pipelines:
           - mkdir build && cd build
           - cmake ..
           - make -j4
+          # Command line tool
+          - ign fuel list -t model
