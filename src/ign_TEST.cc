@@ -49,36 +49,37 @@ std::string custom_exec_str(std::string _cmd)
 TEST(CmdLine, Help)
 {
   auto output = custom_exec_str("ign fuel --help");
-  EXPECT_NE(output.find("list"), std::string::npos);
+  EXPECT_NE(output.find("list"), std::string::npos) << output;
 
   output = custom_exec_str("ign fuel -h");
-  EXPECT_NE(output.find("list"), std::string::npos);
+  EXPECT_NE(output.find("list"), std::string::npos) << output;
 
   output = custom_exec_str("ign fuel");
-  EXPECT_NE(output.find("list"), std::string::npos);
+  EXPECT_NE(output.find("list"), std::string::npos) << output;
 }
 
 /////////////////////////////////////////////////
 TEST(CmdLine, ModelListFail)
 {
   auto output = custom_exec_str("ign fuel list");
-  EXPECT_NE(output.find("Missing resource type"), std::string::npos);
+  EXPECT_NE(output.find("Missing resource type"), std::string::npos) << output;
 
   output = custom_exec_str("ign fuel list -t banana");
-  EXPECT_NE(output.find("Only model resources"), std::string::npos);
+  EXPECT_NE(output.find("Only model resources"), std::string::npos) << output;
 
   output = custom_exec_str("ign fuel list -t model -u fake_url");
-  EXPECT_NE(output.find("0 owners"), std::string::npos);
-  EXPECT_NE(output.find("0 models"), std::string::npos);
+  EXPECT_NE(output.find("0 owners"), std::string::npos) << output;
+  EXPECT_NE(output.find("0 models"), std::string::npos) << output;
 }
 
 /////////////////////////////////////////////////
 TEST(CmdLine, ModelListConfigServer)
 {
   auto output = custom_exec_str("ign fuel list -t model");
-  EXPECT_NE(output.find("https://api.ignitionfuel.org"), std::string::npos);
-  EXPECT_NE(output.find("owners"), std::string::npos);
-  EXPECT_NE(output.find("models"), std::string::npos);
+  EXPECT_NE(output.find("https://api.ignitionfuel.org"), std::string::npos)
+      << output;
+  EXPECT_NE(output.find("owners"), std::string::npos) << output;
+  EXPECT_NE(output.find("models"), std::string::npos) << output;
 }
 
 /////////////////////////////////////////////////
@@ -86,10 +87,11 @@ TEST(CmdLine, ModelListCustomServer)
 {
   auto output = custom_exec_str(
       "ign fuel list -t model -u https://staging-api.ignitionfuel.org");
-  EXPECT_EQ(output.find("https://api.ignitionfuel.org"), std::string::npos);
+  EXPECT_EQ(output.find("https://api.ignitionfuel.org"), std::string::npos)
+      << output;
   EXPECT_NE(output.find("https://staging-api.ignitionfuel.org"),
-      std::string::npos);
-  EXPECT_NE(output.find("owners"), std::string::npos);
-  EXPECT_NE(output.find("models"), std::string::npos);
+      std::string::npos) << output;
+  EXPECT_NE(output.find("owners"), std::string::npos) << output;
+  EXPECT_NE(output.find("models"), std::string::npos) << output;
 }
 
