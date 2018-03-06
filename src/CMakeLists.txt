@@ -1,6 +1,36 @@
-# Collect source files into the "sources" variable and unit test files into the
-# "gtest_sources" variable.
-ign_get_libsources_and_unittests(sources gtest_sources)
+set (sources
+  ClientConfig.cc
+  FuelClient.cc
+  Helpers.cc
+  ign.cc
+  JSONParser.cc
+  LocalCache.cc
+  Model.cc
+  ModelIdentifier.cc
+  ModelIter.cc
+  REST.cc
+  Result.cc
+  Zip.cc
+)
+
+set (gtest_sources
+  ClientConfig_TEST.cc
+  FuelClient_TEST.cc
+  Helpers_TEST.cc
+  JSONParser_TEST.cc
+  LocalCache_TEST.cc
+  ModelIdentifier_TEST.cc
+  ModelIter_TEST.cc
+  Model_TEST.cc
+  Result_TEST.cc
+  Zip_TEST.cc
+)
+
+if (HAVE_IGN_TOOLS)
+  set (gtest_sources ${gtest_sources}
+    ign_TEST.cc
+  )
+endif()
 
 # Create the library target.
 ign_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})
