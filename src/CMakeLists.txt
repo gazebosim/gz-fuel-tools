@@ -60,7 +60,5 @@ ign_build_tests(TYPE UNIT
                 LIB_DEPS ignition-common1::ignition-common1
 )
 
-set_tests_properties(${TEST_TYPE}_ign_src_TEST PROPERTIES TIMEOUT 10000)
-
 # Command line support.
 add_subdirectory(cmd)
