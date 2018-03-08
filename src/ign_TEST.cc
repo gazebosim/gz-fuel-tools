@@ -21,6 +21,7 @@
 
 #include <string>
 
+#include "ignition/fuel_tools/config.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
 
 /////////////////////////////////////////////////
@@ -45,29 +46,41 @@ std::string custom_exec_str(std::string _cmd)
   return result;
 }
 
+auto g_version = std::string(strdup(IGNITION_FUEL_TOOLS_VERSION_FULL));
+
+/////////////////////////////////////////////////
+TEST(CmdLine, Versions)
+{
+  auto output = custom_exec_str("ign fuel --versions");
+  EXPECT_NE(output.find(g_version), std::string::npos) << output;
+}
+
 /////////////////////////////////////////////////
 TEST(CmdLine, Help)
 {
-  auto output = custom_exec_str("ign fuel --help");
+  auto output = custom_exec_str("ign fuel --force-version " + g_version +
+      " --help");
   EXPECT_NE(output.find("list"), std::string::npos) << output;
 
-  output = custom_exec_str("ign fuel -h");
+  output = custom_exec_str("ign fuel --force-version " + g_version + " -h");
   EXPECT_NE(output.find("list"), std::string::npos) << output;
 
-  output = custom_exec_str("ign fuel");
+  output = custom_exec_str("ign fuel --force-version " + g_version);
   EXPECT_NE(output.find("list"), std::string::npos) << output;
 }
 
 /////////////////////////////////////////////////
 TEST(CmdLine, ModelListFail)
 {
-  auto output = custom_exec_str("ign fuel list");
+  auto output = custom_exec_str("ign fuel list --force-version " + g_version);
   EXPECT_NE(output.find("Missing resource type"), std::string::npos) << output;
 
-  output = custom_exec_str("ign fuel list -t banana");
+  output = custom_exec_str("ign fuel list --force-version " + g_version +
+      " -t banana");
   EXPECT_NE(output.find("Only model resources"), std::string::npos) << output;
 
-  output = custom_exec_str("ign fuel list -t model -u fake_url");
+  output = custom_exec_str("ign fuel list --force-version " + g_version +
+      " -t model -u fake_url");
   EXPECT_NE(output.find("0 owners"), std::string::npos) << output;
   EXPECT_NE(output.find("0 models"), std::string::npos) << output;
 }
@@ -75,7 +88,8 @@ TEST(CmdLine, ModelListFail)
 /////////////////////////////////////////////////
 TEST(CmdLine, ModelListConfigServer)
 {
-  auto output = custom_exec_str("ign fuel list -t model");
+  auto output = custom_exec_str("ign fuel list --force-version " + g_version +
+      " -t model");
   EXPECT_NE(output.find("https://api.ignitionfuel.org"), std::string::npos)
       << output;
   EXPECT_NE(output.find("owners"), std::string::npos) << output;
@@ -85,8 +99,8 @@ TEST(CmdLine, ModelListConfigServer)
 /////////////////////////////////////////////////
 TEST(CmdLine, ModelListCustomServer)
 {
-  auto output = custom_exec_str(
-      "ign fuel list -t model -u https://staging-api.ignitionfuel.org");
+  auto output = custom_exec_str("ign fuel list --force-version " + g_version +
+      " -t model -u https://staging-api.ignitionfuel.org");
   EXPECT_EQ(output.find("https://api.ignitionfuel.org"), std::string::npos)
       << output;
   EXPECT_NE(output.find("https://staging-api.ignitionfuel.org"),

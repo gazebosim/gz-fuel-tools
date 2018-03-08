@@ -20,9 +20,9 @@
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/config.hh"
+#include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/ign.hh"
-#include "ignition/fuel_tools/FuelClient.hh"
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
