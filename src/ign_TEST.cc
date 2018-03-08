@@ -86,26 +86,30 @@ TEST(CmdLine, ModelListFail)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelListConfigServer)
+TEST(CmdLine, ModelListConfigServerUgly)
 {
   auto output = custom_exec_str("ign fuel list --force-version " + g_version +
       " -t model");
-  EXPECT_NE(output.find("https://api.ignitionfuel.org"), std::string::npos)
+  EXPECT_NE(output.find("https://api.ignitionfuel.org/1.0/"), std::string::npos)
       << output;
-  EXPECT_NE(output.find("owners"), std::string::npos) << output;
-  EXPECT_NE(output.find("models"), std::string::npos) << output;
+  EXPECT_EQ(output.find("owners"), std::string::npos) << output;
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelListCustomServer)
+TEST(CmdLine, ModelListCustomServerPretty)
 {
   auto output = custom_exec_str("ign fuel list --force-version " + g_version +
-      " -t model -u https://staging-api.ignitionfuel.org");
-  EXPECT_EQ(output.find("https://api.ignitionfuel.org"), std::string::npos)
-      << output;
+      " -t model -u https://staging-api.ignitionfuel.org --pretty");
+
   EXPECT_NE(output.find("https://staging-api.ignitionfuel.org"),
       std::string::npos) << output;
   EXPECT_NE(output.find("owners"), std::string::npos) << output;
   EXPECT_NE(output.find("models"), std::string::npos) << output;
+
+  EXPECT_EQ(output.find("https://api.ignitionfuel.org"), std::string::npos)
+      << output;
+  EXPECT_EQ(output.find("https://staging-api.ignitionfuel.org/1.0/"),
+      std::string::npos) << output;
 }
+
 

@@ -27,8 +27,9 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion();
 /// \brief External hook to execute 'ign fuel list -t model' from the command
 /// line.
 /// \param[in] _url Optional server URL.
-/// \return True if successful.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE bool listModels(
-    const char *_url = nullptr);
+/// \param[in] _pretty 'true' for human readable output.
+/// \return 1 if successful, 0 if not.
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(
+    const char *_url = nullptr, const char *_pretty = "false");
 
 #endif

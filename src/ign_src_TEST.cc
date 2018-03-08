@@ -74,7 +74,7 @@ TEST(CmdLine, ModelListFail)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelListConfigServer)
+TEST(CmdLine, ModelListConfigServerUgly)
 {
   std::stringstream stdOutBuffer;
   std::stringstream stdErrBuffer;
@@ -99,22 +99,25 @@ TEST(CmdLine, ModelListConfigServer)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelListCustomServer)
+TEST(CmdLine, ModelListCustomServerPretty)
 {
   std::stringstream stdOutBuffer;
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  EXPECT_TRUE(listModels("https://staging-api.ignitionfuel.org"));
+  EXPECT_TRUE(listModels("https://staging-api.ignitionfuel.org", "true"));
 
-  EXPECT_EQ(stdOutBuffer.str().find("https://api.ignitionfuel.org"),
-      std::string::npos) << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("https://staging-api.ignitionfuel.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("owners"), std::string::npos)
       << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("models"), std::string::npos)
       << stdOutBuffer.str();
+
+  EXPECT_EQ(stdOutBuffer.str().find("https://api.ignitionfuel.org"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_EQ(stdOutBuffer.str().find("https://staging-api.ignitionfuel.org/1.0/"),
+      std::string::npos) << stdOutBuffer.str();
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();

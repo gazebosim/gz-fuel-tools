@@ -15,6 +15,8 @@
  *
 */
 
+#include <curl/curl.h>
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 
@@ -25,15 +27,99 @@
 #include "ignition/fuel_tools/ign.hh"
 
 //////////////////////////////////////////////////
+/// \brief Print resources in a human readable manner
+/// \param[in] _serverConfig Server configuration
+/// \param[in] _resourceMap Key is owner name, value is vector of resources
+/// \param[in] _resourceType Type, such as "models"
+extern "C" void prettyPrint(
+    const ignition::fuel_tools::ServerConfig _serverConfig,
+    std::map<std::string, std::vector<std::string>> _resourceMap,
+    const std::string &_resourceType)
+{
+  unsigned int ownerCount{0};
+  unsigned int resourceCount{0};
+  std::cout << "\033[92m\033[1m" << _serverConfig.URL() << "\033[39m\033[0m"
+            << std::endl;
+  for (auto owner = _resourceMap.begin(); owner != _resourceMap.end(); ++owner)
+  {
+    ownerCount++;
+
+    // Owner indentation
+    bool lastOwner = owner == std::prev(_resourceMap.end());
+    if (lastOwner)
+      std::cout << "└──";
+    else
+      std::cout << "├──";
+
+    // Owner name
+    std::cout << " \033[93m\033[1m" << owner->first << "\033[39m\033[0m"
+              << std::endl;
+
+    // Resources
+    for (auto resource = owner->second.begin(); resource != owner->second.end();
+        ++resource)
+    {
+      resourceCount++;
+
+      // Resource indentation
+      if (lastOwner)
+        std::cout << "    ";
+      else
+        std::cout << "│   ";
+
+      if (resource == std::prev(owner->second.end()))
+        std::cout << "└── ";
+      else
+        std::cout << "├── ";
+
+      // Resource name
+      std::cout << *resource << std::endl;
+    }
+  }
+
+  std::cout << "\033[36m" << ownerCount << " owners, " << resourceCount
+            << " " << _resourceType << "\033[39m" << std::endl;
+}
+
+//////////////////////////////////////////////////
+/// \brief Print resources in a machine readable manner
+/// \param[in] _serverConfig Server configuration
+/// \param[in] _resourceMap Key is owner name, value is vector of resources
+/// \param[in] _resourceType Type, such as "models"
+extern "C" void uglyPrint(
+    const ignition::fuel_tools::ServerConfig _serverConfig,
+    std::map<std::string, std::vector<std::string>> _resourceMap,
+    const std::string &_resourceType)
+{
+  CURL *curl = curl_easy_init();
+  for (auto owner = _resourceMap.begin(); owner != _resourceMap.end(); ++owner)
+  {
+    for (auto resource : owner->second)
+    {
+      char *encodedRes= curl_easy_escape(curl, resource.c_str(), resource.size());
+
+      std::cout << _serverConfig.URL() << "/" << _serverConfig.Version() << "/"
+                << owner->first << "/" << _resourceType << "/"
+                << std::string(encodedRes) << std::endl;
+    }
+  }
+}
+
+//////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 {
   return strdup(IGNITION_FUEL_TOOLS_VERSION_FULL);
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE bool listModels(const char *_url)
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
+    const char *_pretty)
 {
   std::string url{_url};
+  std::string prettyStr{_pretty};
+  std::transform(prettyStr.begin(), prettyStr.end(),
+                 prettyStr.begin(), ::tolower);
+  bool pretty = prettyStr == "true";
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
@@ -53,8 +139,11 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE bool listModels(const char *_url)
   // Get models
   for (auto server : conf.Servers())
   {
-    std::cout << "Fetching model list from " << server.URL() << "..."
-              << std::endl;
+    if (pretty)
+    {
+      std::cout << "Fetching model list from " << server.URL() << "..."
+                << std::endl;
+    }
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -72,8 +161,11 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE bool listModels(const char *_url)
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
         endTime - startTime);
 
-    std::cout << "Received model list (took " << duration.count() << "ms)."
-              << std::endl;
+    if (pretty)
+    {
+      std::cout << "Received model list (took " << duration.count() << "ms)."
+                << std::endl;
+    }
 
     // Rearrange by user
     // key: user name
@@ -86,49 +178,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE bool listModels(const char *_url)
     }
 
     // Print all models
-    unsigned int ownerCount{0};
-    unsigned int modelCount{0};
-    std::cout << "\033[92m\033[1m" << server.URL() << "\033[39m\033[0m"
-              << std::endl;
-    for (auto owner = modelsMap.begin(); owner != modelsMap.end(); ++owner)
-    {
-      ownerCount++;
-
-      // Owner indentation
-      bool lastOwner = owner == std::prev(modelsMap.end());
-      if (lastOwner)
-        std::cout << "└──";
-      else
-        std::cout << "├──";
-
-      // Owner name
-      std::cout << " \033[93m\033[1m" << owner->first << "\033[39m\033[0m"
-                << std::endl;
-
-      // Models
-      for (auto model = owner->second.begin(); model != owner->second.end();
-          ++model)
-      {
-        modelCount++;
-
-        // Model indentation
-        if (lastOwner)
-          std::cout << "    ";
-        else
-          std::cout << "│   ";
-
-        if (model == std::prev(owner->second.end()))
-          std::cout << "└── ";
-        else
-          std::cout << "├── ";
-
-        // Model name
-        std::cout << *model << std::endl;
-      }
-    }
-
-    std::cout << "\033[36m" << ownerCount << " owners, " << modelCount
-              << " models\033[39m" << std::endl;
+    if (pretty)
+      prettyPrint(server, modelsMap, "models");
+    else
+      uglyPrint(server, modelsMap, "models");
   }
 
   return true;
