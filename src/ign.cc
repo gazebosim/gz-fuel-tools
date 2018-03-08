@@ -96,7 +96,8 @@ extern "C" void uglyPrint(
   {
     for (auto resource : owner->second)
     {
-      char *encodedRes= curl_easy_escape(curl, resource.c_str(), resource.size());
+      auto encodedRes =
+          curl_easy_escape(curl, resource.c_str(), resource.size());
 
       std::cout << _serverConfig.URL() << "/" << _serverConfig.Version() << "/"
                 << owner->first << "/" << _resourceType << "/"

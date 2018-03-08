@@ -116,8 +116,9 @@ TEST(CmdLine, ModelListCustomServerPretty)
 
   EXPECT_EQ(stdOutBuffer.str().find("https://api.ignitionfuel.org"),
       std::string::npos) << stdOutBuffer.str();
-  EXPECT_EQ(stdOutBuffer.str().find("https://staging-api.ignitionfuel.org/1.0/"),
-      std::string::npos) << stdOutBuffer.str();
+  EXPECT_EQ(stdOutBuffer.str().find(
+      "https://staging-api.ignitionfuel.org/1.0/"), std::string::npos)
+      << stdOutBuffer.str();
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
