@@ -158,7 +158,9 @@ class Cmd
       case options['subcommand']
       when 'list'
         Importer.extern 'void listModels(const char *)'
-        Importer.listModels(options['url'])
+        if not Importer.listModels(options['url'])
+          exit(-1)
+        end
       end
     rescue
       puts "Library error: Problem running [#{options['command']}]() "\

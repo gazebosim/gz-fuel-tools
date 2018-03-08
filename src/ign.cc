@@ -31,7 +31,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE void listModels(const char *_url)
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE bool listModels(const char *_url)
 {
   std::string url{_url};
 
@@ -59,6 +59,14 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE void listModels(const char *_url)
     auto startTime = std::chrono::high_resolution_clock::now();
 
     auto iter = client.Models(server);
+
+    if (!iter)
+    {
+      std::cout <<
+          "Either failed to fetch model list, or server has no models yet."
+          << std::endl;
+      return false;
+    }
 
     auto endTime = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -122,5 +130,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE void listModels(const char *_url)
     std::cout << "\033[36m" << ownerCount << " owners, " << modelCount
               << " models\033[39m" << std::endl;
   }
+
+  return true;
 }
 

@@ -81,8 +81,8 @@ TEST(CmdLine, ModelListFail)
 
   output = custom_exec_str("ign fuel list --force-version " + g_version +
       " -t model -u fake_url");
-  EXPECT_NE(output.find("0 owners"), std::string::npos) << output;
-  EXPECT_NE(output.find("0 models"), std::string::npos) << output;
+  EXPECT_NE(output.find("failed to fetch model list"), std::string::npos)
+      << output;
 }
 
 /////////////////////////////////////////////////

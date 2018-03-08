@@ -63,12 +63,10 @@ TEST(CmdLine, ModelListFail)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  listModels("fake_url");
+  EXPECT_FALSE(listModels("fake_url"));
 
-  EXPECT_NE(stdOutBuffer.str().find("0 owners"), std::string::npos)
-      << stdOutBuffer.str();
-  EXPECT_NE(stdOutBuffer.str().find("0 models"), std::string::npos)
-      << stdOutBuffer.str();
+  EXPECT_NE(stdOutBuffer.str().find("failed to fetch model list"),
+      std::string::npos) << stdOutBuffer.str();
   EXPECT_TRUE(stdErrBuffer.str().empty());
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
@@ -82,9 +80,9 @@ TEST(CmdLine, ModelListConfigServer)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  listModels("");
+  EXPECT_TRUE(listModels(""));
 
-// FIXME: This fails on pipelines with:
+// FIXME, issue #43: This fails on pipelines with:
 // [Err] [ClientConfig.cc:222] Error copying default configuration file from
 //   [/usr/local/share/ignition/fuel_tools//config.yaml] to
 //   [/root/.ignition/fuel/config.yaml]
@@ -107,7 +105,7 @@ TEST(CmdLine, ModelListCustomServer)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  listModels("https://staging-api.ignitionfuel.org");
+  EXPECT_TRUE(listModels("https://staging-api.ignitionfuel.org"));
 
   EXPECT_EQ(stdOutBuffer.str().find("https://api.ignitionfuel.org"),
       std::string::npos) << stdOutBuffer.str();
