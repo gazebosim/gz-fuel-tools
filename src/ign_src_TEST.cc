@@ -80,7 +80,7 @@ TEST(CmdLine, ModelListConfigServerUgly)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  EXPECT_TRUE(listModels(""));
+  EXPECT_TRUE(listModels("", "true"));
 
 // FIXME, issue #43: This fails on pipelines with:
 // [Err] [ClientConfig.cc:222] Error copying default configuration file from
@@ -105,7 +105,7 @@ TEST(CmdLine, ModelListCustomServerPretty)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  EXPECT_TRUE(listModels("https://staging-api.ignitionfuel.org", "true"));
+  EXPECT_TRUE(listModels("https://staging-api.ignitionfuel.org"));
 
   EXPECT_NE(stdOutBuffer.str().find("https://staging-api.ignitionfuel.org"),
       std::string::npos) << stdOutBuffer.str();

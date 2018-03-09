@@ -89,7 +89,7 @@ TEST(CmdLine, ModelListFail)
 TEST(CmdLine, ModelListConfigServerUgly)
 {
   auto output = custom_exec_str("ign fuel list --force-version " + g_version +
-      " -t model");
+      " -t model --raw");
   EXPECT_NE(output.find("https://api.ignitionfuel.org/1.0/"), std::string::npos)
       << output;
   EXPECT_EQ(output.find("owners"), std::string::npos) << output;
@@ -99,7 +99,7 @@ TEST(CmdLine, ModelListConfigServerUgly)
 TEST(CmdLine, ModelListCustomServerPretty)
 {
   auto output = custom_exec_str("ign fuel list --force-version " + g_version +
-      " -t model -u https://staging-api.ignitionfuel.org --pretty");
+      " -t model -u https://staging-api.ignitionfuel.org");
 
   EXPECT_NE(output.find("https://staging-api.ignitionfuel.org"),
       std::string::npos) << output;

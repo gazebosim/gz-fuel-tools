@@ -114,13 +114,13 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
-    const char *_pretty)
+    const char *_raw)
 {
   std::string url{_url};
-  std::string prettyStr{_pretty};
-  std::transform(prettyStr.begin(), prettyStr.end(),
-                 prettyStr.begin(), ::tolower);
-  bool pretty = prettyStr == "true";
+  std::string rawStr{_raw};
+  std::transform(rawStr.begin(), rawStr.end(),
+                 rawStr.begin(), ::tolower);
+  bool pretty = rawStr != "true";
 
   // Client
   ignition::fuel_tools::ClientConfig conf;

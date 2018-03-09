@@ -59,7 +59,7 @@ SUBCOMMANDS = { 'list' =>
   "  -u [--url] arg           URL of a server the resource comes from,     \n"\
   "                           if unspecified, it will be taken from        \n"\
   "                           config.yaml.                                 \n"\
-  "  -p [--pretty]            Human friendly output.                       \n"\
+  "  -r [--raw]               Machine-friendly output.                     \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n" +
   COMMON_OPTIONS,
@@ -76,7 +76,7 @@ class Cmd
   def parse(args)
     options = {
       'url' => '',
-      'pretty' => 'false',
+      'raw' => 'false',
     }
 
     usage = COMMANDS[args[0]]
@@ -101,8 +101,8 @@ class Cmd
       opts.on('-t [TYPE]', '--type', String, 'Resource type') do |type|
         options['type'] = type
       end
-      opts.on('-p', '--pretty', 'Human readable') do
-        options['pretty'] = 'true'
+      opts.on('-r', '--raw', 'Machine readable') do
+        options['raw'] = 'true'
       end
     end # opt_parser do
 
@@ -163,7 +163,7 @@ class Cmd
       case options['subcommand']
       when 'list'
         Importer.extern 'int listModels(const char *, const char *)'
-        if not Importer.listModels(options['url'], options['pretty'])
+        if not Importer.listModels(options['url'], options['raw'])
           exit(-1)
         end
       end
