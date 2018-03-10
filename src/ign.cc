@@ -20,6 +20,8 @@
 #include <chrono>
 #include <iostream>
 
+#include <ignition/common/Console.hh>
+
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/config.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
@@ -186,5 +188,92 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
   }
 
   return true;
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModelsByOwner(const char *_url,
+    const char *_owner, const char *_raw)
+{
+  std::string url{_url};
+  std::string owner{_owner};
+  std::string rawStr{_raw};
+  std::transform(rawStr.begin(), rawStr.end(),
+                 rawStr.begin(), ::tolower);
+  bool pretty = rawStr != "true";
+
+  // Client
+  ignition::fuel_tools::ClientConfig conf;
+  if (!url.empty())
+  {
+    ignition::fuel_tools::ServerConfig serverConf;
+    serverConf.URL(url);
+    conf.AddServer(serverConf);
+  }
+  else
+  {
+    conf.LoadConfig();
+  }
+
+  // Filter
+  ignition::fuel_tools::ModelIdentifier modelId;
+  modelId.Owner(owner);
+
+  ignition::fuel_tools::FuelClient client(conf);
+
+  // Get models
+  for (auto server : conf.Servers())
+  {
+    if (pretty)
+    {
+      std::cout << "Fetching model list from " << server.URL() << "..."
+                << std::endl;
+    }
+
+    auto startTime = std::chrono::high_resolution_clock::now();
+
+    auto iter = client.Models(server, modelId);
+
+    if (!iter)
+    {
+      std::cout <<
+          "Either failed to fetch model list, or server has no models yet."
+          << std::endl;
+      return false;
+    }
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+        endTime - startTime);
+
+    if (pretty)
+    {
+      std::cout << "Received model list (took " << duration.count() << "ms)."
+                << std::endl;
+    }
+
+    // Rearrange by user
+    // key: user name
+    // value: vector of model names
+    std::map<std::string, std::vector<std::string>> modelsMap;
+    for (; iter; ++iter)
+    {
+      modelsMap[iter->Identification().Owner()].push_back(
+          iter->Identification().Name());
+    }
+
+    // Print all models
+    if (pretty)
+      prettyPrint(server, modelsMap, "models");
+    else
+      uglyPrint(server, modelsMap, "models");
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbose(const char *_verbosity)
+{
+  ignition::common::Console::SetVerbosity(std::atoi(_verbosity));
 }
 

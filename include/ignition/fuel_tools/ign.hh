@@ -24,6 +24,11 @@
 /// \return C-string representing the version. Ex.: 0.1.2
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion();
 
+/// \brief Set verbosity level
+/// \param[in] _verbosity 0 to 4
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(
+    const char *_verbosity);
+
 /// \brief External hook to execute 'ign fuel list -t model' from the command
 /// line.
 /// \param[in] _url Optional server URL.
@@ -31,5 +36,15 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion();
 /// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(
     const char *_url = nullptr, const char *_raw = "false");
+
+/// \brief External hook to execute 'ign fuel list -t model' from the command
+/// line.
+/// \param[in] _url Optional server URL.
+/// \param[in] _owner Optional owner name
+/// \param[in] _raw 'true' for machine readable output.
+/// \return 1 if successful, 0 if not.
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModelsByOwner(
+    const char *_url = nullptr, const char *_owner = nullptr,
+    const char *_raw = "false");
 
 #endif

@@ -155,7 +155,12 @@ ModelIter FuelClient::Models(const ServerConfig &_server,
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
   // Todo try to fetch model directly from a server
-  auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
+  // Note: ign-fuel-server doesn't like URLs ending in /
+  std::string path;
+  if (!_id.Name().empty())
+    path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
+  else
+    path = ignition::common::joinPaths(_id.Owner(), "models");
 
   return ModelIterFactory::Create(this->dataPtr->rest, _server, path);
 }
