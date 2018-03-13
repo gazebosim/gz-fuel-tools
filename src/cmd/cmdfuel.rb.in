@@ -80,6 +80,7 @@ class Cmd
   def parse(args)
     options = {
       'url' => '',
+      'owner' => '',
       'raw' => 'false',
     }
 
@@ -181,18 +182,11 @@ class Cmd
       case options['subcommand']
       when 'list'
         # All models
-        if not options.key?('owner')
-          Importer.extern 'int listModels(const char *, const char *)'
-          if not Importer.listModels(options['url'], options['raw'])
-            exit(-1)
-          end
-        else
-          Importer.extern 'int listModelsByOwner(const char *, const char *, const char *)'
-          if not Importer.listModelsByOwner(options['url'],
-                                            options['owner'],
-                                            options['raw'])
-            exit(-1)
-          end
+        Importer.extern 'int listModels(const char *, const char *, const char *)'
+        if not Importer.listModels(options['url'],
+                                   options['owner'],
+                                   options['raw'])
+          exit(-1)
         end
       end
     rescue
