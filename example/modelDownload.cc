@@ -22,9 +22,11 @@
 #include <ignition/fuel_tools.hh>
 
 DEFINE_bool(h, false, "Show help");
+
+DEFINE_string(c, "", "Config file");
 DEFINE_string(m, "", "Model name");
 DEFINE_string(o, "anonymous", "Owner name");
-DEFINE_string(s, "https://localhost:4430", "Server name");
+DEFINE_string(s, "", "Server name");
 
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
@@ -32,8 +34,10 @@ int main(int argc, char **argv)
   // Simple usage.
   std::string usage("Download a model.");
   usage += " Usage:\n  ./modelDownload <options>\n\n";
-  usage += "  Example:\n\t ./modelDownload -s https://localhost:4430 "
-           " -o anonymous -m Beer";
+  usage += "  Examples:\n"
+           "\t ./modelDownload -o caguero -m Beer\n"
+           "\t ./modelDownload -s https://localhost:4430 -o caguero -m Beer\n"
+           "\t ./modelDownload -c /tmp/my_config.yaml -o caguero -m Beer\n";
 
   gflags::SetUsageMessage(usage);
 
@@ -50,16 +54,31 @@ int main(int argc, char **argv)
   }
   gflags::HandleCommandLineHelpFlags();
 
-  // Create a ClientConfig
-  ignition::fuel_tools::ServerConfig srv;
-  srv.URL(FLAGS_s);
-  srv.LocalName("ignitionfuel");
+  // Setup ClientConfig.
   ignition::fuel_tools::ClientConfig conf;
-  conf.LoadConfig();
-  conf.AddServer(srv);
 
-  // Remember to set your IGN_FUEL_CACHE_PATH.
-  // E.g.: export IGN_FUEL_CACHE_PATH=~/.ignition/fuel/models
+  if (FLAGS_s != "")
+  {
+    // The user specified a Fuel server via command line.
+    ignition::fuel_tools::ServerConfig srv;
+    srv.URL(FLAGS_s);
+    srv.LocalName("ignitionfuel");
+
+    // Add the extra Fuel server.
+    conf.AddServer(srv);
+  }
+
+  if (FLAGS_c != "")
+    conf.SetConfigPath(FLAGS_c);
+
+  if (!conf.LoadConfig())
+  {
+    std::cerr << "Error loading configuration file [" << FLAGS_c << "]"
+              << std::endl;
+    return -1;
+  }
+
+  // Instantiate the FuelClient object with the configuration.
   ignition::fuel_tools::FuelClient client(conf);
 
   // Set the properties of the model that we want to download.
@@ -68,11 +87,12 @@ int main(int argc, char **argv)
   modelIdentifier.Name(FLAGS_m);
 
   // Fetch the model.
-  if (!client.DownloadModel(srv, modelIdentifier))
+  for (const auto &server : client.Config().Servers())
   {
-    std::cerr << "Unable to download model" << std::endl;
-    return -1;
+    if (client.DownloadModel(server, modelIdentifier))
+      return 0;
   }
 
-  return 0;
+  std::cerr << "Unable to download model" << std::endl;
+  return -1;
 }

@@ -168,7 +168,7 @@ IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
 
     // Fire the request.
     resp = this->rest.Request(method, this->config.URL(),
-      this->config.Version(), path, {}, headers, "");
+      this->config.Version(), path, {queryStrPage}, headers, "");
 
     // Reset the query string
     queryStrPage = "";

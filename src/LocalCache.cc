@@ -22,6 +22,7 @@
 #include <vector>
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
+#include <ignition/common/Util.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
@@ -169,6 +170,7 @@ bool LocalCache::SaveModel(
   auto cacheLocation = this->dataPtr->config->CacheLocation();
   std::string name = _id.Name();
   std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+  name = common::replaceAll(name, " ", "_");
   auto modelDir = common::joinPaths(
     cacheLocation, "models", _id.Owner(), name);
 

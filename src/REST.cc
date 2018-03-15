@@ -112,7 +112,10 @@ RESTResponse REST::Request(Method _method,
     return res;
 
   std::string url = JoinURL(_url, _version);
-  url = JoinURL(url, _path);
+
+  CURL *curl = curl_easy_init();
+  char *encodedPath= curl_easy_escape(curl, _path.c_str(), _path.size());
+  url = JoinURL(url, encodedPath);
 
   // Process query strings.
   if (!_queryStrings.empty())
@@ -122,8 +125,6 @@ RESTResponse REST::Request(Method _method,
       url += queryString + "&";
     url.pop_back();
   }
-
-  CURL *curl = curl_easy_init();
 
   // Process headers.
   struct curl_slist *headers = nullptr;
@@ -256,6 +257,9 @@ RESTResponse REST::Request(Method _method,
 
   if (formpost)
     curl_formfree(formpost);
+
+  // free encoded path char*
+  curl_free(encodedPath);
 
   // free the headers
   curl_slist_free_all(headers);
