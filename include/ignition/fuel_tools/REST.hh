@@ -82,7 +82,12 @@ namespace ignition
           const std::map<std::string, std::string> &_form =
           std::map<std::string, std::string>()) const;
 
+      /// \brief Set the user agent name.
+      /// \param[in] _agent User agent name.
       public: void SetUserAgent(const std::string &_agent);
+
+      /// \brief Get the user agent name.
+      /// \return Name of the user agent.
       public: const std::string &UserAgent() const;
     };
   }

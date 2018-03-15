@@ -95,7 +95,12 @@ namespace ignition
       /// \brief destructor
       public: ~ClientConfig();
 
+      /// \brief Set the user agent name.
+      /// \param[in] _agent User agent name.
       public: void SetUserAgent(const std::string &_agent);
+
+      /// \brief Get the user agent name.
+      /// \return Name of the user agent.
       public: const std::string &UserAgent() const;
 
       /// \brief Load the YAML configuration file.
