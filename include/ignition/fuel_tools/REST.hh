@@ -36,6 +36,11 @@ namespace ignition
 
       /// \brief The data received.
       public: std::string data;
+
+      /// \brief Map of headers where the key is the header type.
+      /// For example, a raw header of the form "Content-Type: json" would
+      /// use "Content-Type" as a key and "json" as the key's data.
+      public: std::map<std::string, std::string> headers;
     };
 
     /// \brief A helper class for making REST requests.
