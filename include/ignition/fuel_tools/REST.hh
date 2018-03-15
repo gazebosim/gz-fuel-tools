@@ -81,6 +81,9 @@ namespace ignition
           const std::string &_data,
           const std::map<std::string, std::string> &_form =
           std::map<std::string, std::string>()) const;
+
+      public: void SetUserAgent(const std::string &_agent);
+      public: const std::string &UserAgent() const;
     };
   }
 }

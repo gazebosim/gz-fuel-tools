@@ -95,6 +95,9 @@ namespace ignition
       /// \brief destructor
       public: ~ClientConfig();
 
+      public: void SetUserAgent(const std::string &_agent);
+      public: const std::string &UserAgent() const;
+
       /// \brief Load the YAML configuration file.
       /// If SetConfigPath() is not used, this function will try to load the
       /// default configuration path.

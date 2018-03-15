@@ -33,6 +33,7 @@
 using namespace ignition;
 using namespace fuel_tools;
 
+static std::string gUserAgent;
 
 //////////////////////////////////////////////////
 std::string JoinURL(const std::string &_base,
@@ -140,7 +141,7 @@ RESTResponse REST::Request(Method _method,
     }
   }
 
-  curl_easy_setopt(curl, CURLOPT_USERAGENT, "IgntionFuelTools");
+  curl_easy_setopt(curl, CURLOPT_USERAGENT, gUserAgent);
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
   std::string responseData;
@@ -265,4 +266,16 @@ RESTResponse REST::Request(Method _method,
   if (ifs.is_open())
     ifs.close();
   return res;
+}
+
+/////////////////////////////////////////////////
+void REST::SetUserAgent(const std::string &_agent)
+{
+  gUserAgent = _agent;
+}
+
+/////////////////////////////////////////////////
+const std::string &REST::UserAgent() const
+{
+  return gUserAgent;
 }

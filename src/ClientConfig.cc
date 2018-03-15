@@ -46,6 +46,8 @@ class ignition::fuel_tools::ClientConfigPrivate
 
   /// \brief The path where the configuration file is located.
   public: std::string configPath;
+
+  public: std::string userAgent = "IgnitionFuelTools";
 };
 
 //////////////////////////////////////////////////
@@ -455,4 +457,16 @@ std::string ClientConfig::CacheLocation() const
 void ClientConfig::CacheLocation(const std::string &_path)
 {
   this->dataPtr->cacheLocation = _path;
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::SetUserAgent(const std::string &_agent)
+{
+  this->dataPtr->userAgent = _agent;
+}
+
+//////////////////////////////////////////////////
+const std::string &ClientConfig::UserAgent() const
+{
+  return this->dataPtr->userAgent;
 }

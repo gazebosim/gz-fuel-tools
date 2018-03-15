@@ -52,6 +52,7 @@ int main(int argc, char **argv)
   srv.URL(FLAGS_s);
   ignition::fuel_tools::ClientConfig conf;
   conf.AddServer(srv);
+  conf.SetUserAgent("ExampleModelList");
 
   ignition::fuel_tools::FuelClient client(conf);
   for (auto iter = client.Models(srv); iter; ++iter)
