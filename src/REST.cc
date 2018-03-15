@@ -142,7 +142,7 @@ RESTResponse REST::Request(Method _method,
     }
   }
 
-  curl_easy_setopt(curl, CURLOPT_USERAGENT, gUserAgent);
+  curl_easy_setopt(curl, CURLOPT_USERAGENT, gUserAgent.c_str());
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
   std::string responseData;
