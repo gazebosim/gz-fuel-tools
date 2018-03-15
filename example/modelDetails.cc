@@ -22,9 +22,11 @@
 #include <ignition/fuel_tools.hh>
 
 DEFINE_bool(h, false, "Show help");
+
+DEFINE_string(c, "", "Config file");
 DEFINE_string(m, "", "Model name");
 DEFINE_string(o, "anonymous", "Owner name");
-DEFINE_string(s, "https://localhost:4430", "Server name");
+DEFINE_string(s, "", "Server name");
 
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
@@ -32,8 +34,10 @@ int main(int argc, char **argv)
   // Simple usage.
   std::string usage("Show details of a model.");
   usage += " Usage:\n  ./modelDetails <options>\n\n";
-  usage += "  Example:\n\t ./modelDetails -s https://localhost:4430 "
-           " -o anonymous -m Beer";
+  usage += "  Example:\n"
+           "\t ./modelDetails -o anonymous -m Beer"
+           "\t ./modelDetails -s https://localhost:4430 -o anonymous -m Beer"
+           "\t ./modelDetails -c /tmp/my_config.yaml -o anonymous -m Beer";
 
   gflags::SetUsageMessage(usage);
 
@@ -50,41 +54,64 @@ int main(int argc, char **argv)
   }
   gflags::HandleCommandLineHelpFlags();
 
-  // Create a ClientConfig.
-  ignition::fuel_tools::ServerConfig srv;
-  srv.URL(FLAGS_s);
+  // Setup ClientConfig.
   ignition::fuel_tools::ClientConfig conf;
-  conf.AddServer(srv);
 
+  if (FLAGS_s != "")
+  {
+    // The user specified a Fuel server via command line.
+    ignition::fuel_tools::ServerConfig srv;
+    srv.URL(FLAGS_s);
+    srv.LocalName("ignitionfuel");
+
+    // Add the extra Fuel server.
+    conf.AddServer(srv);
+  }
+
+  if (FLAGS_c != "")
+    conf.SetConfigPath(FLAGS_c);
+
+  if (!conf.LoadConfig())
+  {
+    std::cerr << "Error loading configuration file [" << FLAGS_c << "]"
+              << std::endl;
+    return -1;
+  }
+
+  // Instantiate the FuelClient object with the configuration.
   ignition::fuel_tools::FuelClient client(conf);
 
-  // Set the properties of the model that we want to download.
+  // Set the properties of the model that we want to search.
   ignition::fuel_tools::ModelIdentifier modelIdentifier;
   modelIdentifier.Owner(FLAGS_o);
   modelIdentifier.Name(FLAGS_m);
 
   // Fetch the model details.
-  ignition::fuel_tools::ModelIdentifier model;
-  if (!client.ModelDetails(srv, modelIdentifier, model))
+  for (const auto &server : client.Config().Servers())
   {
-    std::cerr << "Unable to get model information" << std::endl;
-    return -1;
-  }
+    ignition::fuel_tools::ModelIdentifier model;
+    if (!client.ModelDetails(server, modelIdentifier, model))
+      continue;
 
-  // Show model details.
-  std::cout << "Name: " << model.Name() << std::endl;
-  std::cout << "Source URL: " << model.Server().URL() << std::endl;
-  std::cout << "Unique name: " << model.UniqueName() << std::endl;
-  std::cout << "Owner: " << model.Owner() << std::endl;
-  std::cout << "Description: " << model.Description() << std::endl;
-  std::cout << "Likes: " << model.Likes() << std::endl;
-  std::cout << "Downloads: " << model.Downloads() << std::endl;
-  std::cout << "License name: " << model.LicenseName() << std::endl;
-  std::cout << "License URL: " << model.LicenseURL() << std::endl;
-  std::cout << "License image URL: " << model.LicenseImageURL() << std::endl;
-  std::cout << "Tags: " << std::endl;
-  for (auto const &tag : model.Tags())
-    std::cout << "  " << tag << std::endl;
+    // Show server.
+    std::cout << "[" << server.URL() << "]\n\n";
+
+    // Show model details.
+    std::cout << "  Name: " << model.Name() << std::endl;
+    std::cout << "  Source URL: " << model.Server().URL() << std::endl;
+    std::cout << "  Unique name: " << model.UniqueName() << std::endl;
+    std::cout << "  Owner: " << model.Owner() << std::endl;
+    std::cout << "  Description: " << model.Description() << std::endl;
+    std::cout << "  Likes: " << model.Likes() << std::endl;
+    std::cout << "  Downloads: " << model.Downloads() << std::endl;
+    std::cout << "  License name: " << model.LicenseName() << std::endl;
+    std::cout << "  License URL: " << model.LicenseURL() << std::endl;
+    std::cout << "  License image URL: " << model.LicenseImageURL()
+        << std::endl;
+    std::cout << "  Tags: " << std::endl;
+    for (auto const &tag : model.Tags())
+      std::cout << "  " << tag << std::endl;
+  }
 
   return 0;
 }

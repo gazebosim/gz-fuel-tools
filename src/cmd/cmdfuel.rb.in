@@ -14,24 +14,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'ffi'
+# We use 'dl' for Ruby <= 1.9.x and 'fiddle' for Ruby >= 2.0.x
+if RUBY_VERSION.split('.')[0] < '2'
+  require 'dl'
+  require 'dl/import'
+  include DL
+else
+  require 'fiddle'
+  require 'fiddle/import'
+  include Fiddle
+end
+
 require 'optparse'
 
 # Constants.
+LIBRARY_NAME = '@IGN_LIBRARY_NAME@'
+LIBRARY_VERSION = '@PROJECT_VERSION_FULL@'
 COMMON_OPTIONS =
-  "  -h [ --help ]              Print this help message.                   \n"\
-  "  -v [ --verbose ] LEVEL     Set verbosity level 0-4                    \n"\
-  "                                                                        \n"\
+               "  -h [ --help ]              Print this help message.\n"\
+               "                                                    \n"        +
+               "  --force-version <VERSION>  Use a specific library version.\n"\
+               "                                                    \n"        +
+               '  --versions                 Show the available versions.'
 
 COMMANDS = { 'fuel' =>
   "Manage simulation resources.                                            \n"\
+  "                                                                        \n"\
   "  ign fuel [action] [options]                                           \n"\
   "                                                                        \n"\
   "Available Actions:                                                      \n"\
   "  list                     List available models                        \n"\
-  "  locate                   Print location on disk, downloading if needed\n"\
-  "  pull                     Download a model                             \n"\
-  "  push                     Upload a model                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n" +
   COMMON_OPTIONS
@@ -39,78 +51,24 @@ COMMANDS = { 'fuel' =>
 
 SUBCOMMANDS = { 'list' =>
   "List simulation resources                                               \n"\
+  "                                                                        \n"\
   "  ign fuel list [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
-  "  --owner OWNER            Owner of the resource                        \n"\
-  "  --name NAME              Name of the resource                         \n"\
-  "  --url URL                URL of a server the resource comes from      \n"\
+  "  -t [--type] arg          Resource type (i.e. model). Required.        \n"\
+  "  -u [--url] arg           URL of a server the resource comes from,     \n"\
+  "                           if unspecified, it will be taken from        \n"\
+  "                           config.yaml.                                 \n"\
+  "  -r [--raw]               Machine-friendly output.                     \n"\
   "                                                                        \n"\
-  "Available Options:                                                      \n" +
-  COMMON_OPTIONS,
-                'locate' =>
-  "Locate where a resource is on disk, fetching if necessary               \n"\
-  "  ign fuel locate [options]                                             \n"\
-  "                                                                        \n"\
-  "Required Flags:                                                         \n"\
-  "  --name NAME              Name of the resource                         \n"\
-  "                                                                        \n"\
-  "Available Options:                                                      \n"\
-  "  --owner OWNER            Owner of the resource                        \n"\
-  "  --url URL                URL of a server the resource comes from      \n" +
-  COMMON_OPTIONS,
-                'push' =>
-  "Upload simulation resources                                             \n"\
-  "  ign fuel push [options] --url URL --owner OWNER --name NAME --path PATH\n"\
-  "                                                                        \n"\
-  "Required Flags:                                                         \n"\
-  "  --owner OWNER            Owner of the resource                        \n"\
-  "  --name NAME              Name of the resource                         \n"\
-  "  --url URL             URL of a server the resource comes from         \n"\
-  "  --path PATH           PATH to resource on disk                        \n"\
-  "                                                                        \n"\
-  "Available Options:                                                      \n" +
-  COMMON_OPTIONS,
-                'pull' =>
-  "Download simulation resources                                           \n"\
-  "  ign fuel pull [options] --url URL --owner OWNER --name NAME           \n"\
-  "                                                                        \n"\
-  "Required Flags:                                                         \n"\
-  "  --owner OWNER            Owner of the resource                        \n"\
-  "  --name NAME              Name of the resource                         \n"\
-  "                                                                        \n"\
-  "Available Options:                                                      \n"\
-  "  --url URL             URL of a server the resource comes from         \n" +
-  COMMON_OPTIONS,
-                'hello' =>
-  "check if library is working                                             \n"\
   "Available Options:                                                      \n" +
   COMMON_OPTIONS,
 }
 
 #
-# Class for accessing C functions
-#
-module FuelClient
-  extend FFI::Library
-  ffi_lib "@IGN_FUEL_CMD_LIB_INSTALL_PATH@"
-  attach_function :helloWorld, [], :void
-  attach_function :listModels, [:string, :string, :string], :void
-  attach_function :pushModel, [:string, :string, :string, :string], :void
-  attach_function :pullModel, [:string, :string, :string], :void
-  attach_function :locateModel, [:string, :string, :string], :void
-  attach_function :verbosity, [:int], :void
-end
-
-#
 # Class for the Ignition Fuel command line tools.
 #
 class Cmd
-  #
-  # Constructor.
-  #
-  def initialize
-  end
 
   #
   # Return a structure describing the options.
@@ -118,10 +76,7 @@ class Cmd
   def parse(args)
     options = {
       'url' => '',
-      'path' => '',
-      'owner' => '',
-      'name' => '',
-      'verbose' => 0,
+      'raw' => 'false',
     }
 
     usage = COMMANDS[args[0]]
@@ -140,23 +95,16 @@ class Cmd
         puts usage
         exit
       end
-      opts.on('--url SERVER') do |server|
+      opts.on('-u [URL]', '--url', String, 'Server URL') do |server|
         options['url'] = server
       end
-      opts.on('--owner OWNER') do |owner|
-        options['owner'] = owner
+      opts.on('-t [TYPE]', '--type', String, 'Resource type') do |type|
+        options['type'] = type
       end
-      opts.on('--name NAME') do |name|
-        options['name'] = name
-      end
-      opts.on('--path NAME') do |path|
-        options['path'] = path
-      end
-      opts.on('-v LEVEL', '--verbose LEVEL', OptionParser::DecimalInteger) do |level|
-        options['verbose'] = level
+      opts.on('-r', '--raw', 'Machine readable') do
+        options['raw'] = 'true'
       end
     end # opt_parser do
-
 
     opt_parser.parse!(args)
 
@@ -166,25 +114,14 @@ class Cmd
     # check required flags
     case options['subcommand']
     when 'list'
-      # no required flags
-    when 'locate'
-      if options['name'].length == 0
-        puts usage
-        exit -1
+      # Resource type
+      if !options.key?('type')
+        puts "Missing resource type (e.g. --type model)."
+        exit(-1)
       end
-    when 'pull'
-      if options['owner'].length == 0 or
-        options['name'].length == 0
-        puts usage
-        exit -1
-      end
-    when 'push'
-      if options['url'].length == 0 or
-        options['owner'].length == 0 or
-        options['name'].length == 0 or
-        options['path'].length == 0
-        puts usage
-        exit -1
+      if options['type'] != 'model'
+        puts "Only model resources currently supported (e.g. --type model)."
+        exit(-1)
       end
     end
 
@@ -194,24 +131,44 @@ class Cmd
   def execute(args)
     options = parse(args)
 
-    FuelClient.verbosity options['verbose']
+    # Read the plugin that handles the command.
+    plugin = LIBRARY_NAME
+    conf_version = LIBRARY_VERSION
+
+    begin
+      Importer.dlload plugin
+    rescue DLError
+      puts "Library error: [#{plugin}] not found."
+      exit(-1)
+    end
+
+    # Read the library version.
+    Importer.extern 'char* ignitionVersion()'
+    begin
+      plugin_version = Importer.ignitionVersion.to_s
+    rescue DLError
+      puts "Library error: Problem running 'ignitionVersion()' from #{plugin}."
+      exit(-1)
+    end
+
+    # Sanity check: Verify that the version of the yaml file matches the version
+    # of the library that we are using.
+    unless plugin_version.eql? conf_version
+      puts "Error: Version mismatch. Your configuration file version is
+            [#{conf_version}] but #{plugin} version is [#{plugin_version}]."
+      exit(-1)
+    end
 
     begin
       case options['subcommand']
       when 'list'
-        FuelClient.listModels options['name'], options['owner'], options['url']
-      when 'locate'
-        FuelClient.locateModel options['name'], options['owner'], options['url']
-      when 'pull'
-        FuelClient.pullModel options['name'], options['owner'], options['url']
-      when 'push'
-        FuelClient.pushModel options['name'], options['owner'], options['url'],
-          options['path']
-      when 'hello'
-        FuelClient.helloWorld
+        Importer.extern 'int listModels(const char *, const char *)'
+        if not Importer.listModels(options['url'], options['raw'])
+          exit(-1)
+        end
       end
     rescue
-      puts "Library error: Problem running [#{options['command']}]() "\
+      puts "Library error: Problem running [#{options['subcommand']}]() "\
            "from @IGN_LIBRARY_NAME@."
     end # begin
   end # execute
