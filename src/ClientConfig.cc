@@ -47,6 +47,7 @@ class ignition::fuel_tools::ClientConfigPrivate
   /// \brief The path where the configuration file is located.
   public: std::string configPath = "";
 
+  /// \brief Name of the user agent.
   public: std::string userAgent =
           "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
 };
