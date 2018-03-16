@@ -64,6 +64,61 @@ TEST(FuelClient, ModelDownload)
   EXPECT_EQ(Result::FETCH_ERROR, result.Type());
 }
 
+/////////////////////////////////////////////////
+TEST(FuelClient, ModelDetails)
+{
+  FuelClient client;
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+  ModelIdentifier model;
+
+  Result result = client.ModelDetails(serverConfig, modelId, model);
+  EXPECT_EQ(Result::FETCH_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, Models)
+{
+  FuelClient client;
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+  ModelIter iter = client.Models(serverConfig, modelId);
+  EXPECT_FALSE(iter);
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, DownloadModel)
+{
+  FuelClient client;
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+
+  Result result = client.DownloadModel(serverConfig, modelId);
+  EXPECT_EQ(Result::FETCH_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, DeleteModel)
+{
+  FuelClient client;
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+
+  Result result = client.DeleteModel(serverConfig, modelId);
+  EXPECT_EQ(Result::DELETE_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, UploadModel)
+{
+  FuelClient client;
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+
+  Result result = client.UploadModel(serverConfig, "path", modelId);
+  EXPECT_EQ(Result::UPLOAD_ERROR, result.Type());
+}
+
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {

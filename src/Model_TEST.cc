@@ -27,6 +27,11 @@ using namespace ignft;
 TEST(Model, ConstructorDoesNotCrash)
 {
   Model model;
+  Result result = model.Fetch();
+  EXPECT_EQ(Result::UNKNOWN, result.Type());
+
+  std::string path = model.PathToModel();
+  EXPECT_TRUE(path.empty());
 }
 
 //////////////////////////////////////////////////
