@@ -41,6 +41,29 @@ TEST(FuelClient, ParseModelURL)
   EXPECT_FALSE(client.ParseModelURL("bad url", srv, id));
 }
 
+/////////////////////////////////////////////////
+TEST(FuelClient, Config)
+{
+  FuelClient client;
+  ClientConfig &config = client.Config();
+
+  // Check a few values. More client config tests in ClientConfig_TEST
+  EXPECT_FALSE(config.UserAgent().empty());
+  EXPECT_TRUE(config.CacheLocation().empty());
+  EXPECT_TRUE(config.Servers().empty());
+}
+
+/////////////////////////////////////////////////
+/// \brief Expect model download to fail with lack of server
+TEST(FuelClient, ModelDownload)
+{
+  FuelClient client;
+
+  std::string path;
+  Result result = client.DownloadModel("bad", path);
+  EXPECT_EQ(Result::FETCH_ERROR, result.Type());
+}
+
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {

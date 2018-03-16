@@ -42,10 +42,10 @@ class ignition::fuel_tools::ClientConfigPrivate
   public: std::vector<ServerConfig> servers;
 
   /// \brief a path on disk to where data is cached.
-  public: std::string cacheLocation;
+  public: std::string cacheLocation = "";
 
   /// \brief The path where the configuration file is located.
-  public: std::string configPath;
+  public: std::string configPath = "";
 
   public: std::string userAgent =
           "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
@@ -62,7 +62,7 @@ class ignition::fuel_tools::ServerConfigPrivate
   public: std::string localName;
 
   /// \brief A key to auth with the server
-  public: std::string key;
+  public: std::string key = "";
 
   /// \brief The protocol version used when talking with this server.
   public: std::string version = "1.0";
@@ -129,9 +129,15 @@ std::string ServerConfig::APIKey() const
 }
 
 //////////////////////////////////////////////////
-void ServerConfig::APIKey(const std::string &_key)
+void ServerConfig::SetAPIKey(const std::string &_key)
 {
   this->dataPtr->key = _key;
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::APIKey(const std::string &_key)
+{
+  this->SetAPIKey(_key);
 }
 
 //////////////////////////////////////////////////

@@ -65,6 +65,11 @@ namespace ignition
       public: std::string APIKey() const;
 
       /// \brief Set the API key to auth with the server
+      /// \param[in] _key New API key.
+      public: void SetAPIKey(const std::string &_key);
+
+      /// \brief Set the API key to auth with the server
+      /// \todo deprecate this function.
       public: void APIKey(const std::string &_key);
 
       /// \brief Get the protocol version used with this server.
