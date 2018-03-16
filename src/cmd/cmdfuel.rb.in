@@ -62,8 +62,8 @@ SUBCOMMANDS = { 'list' =>
   "                           config.yaml.                                 \n"\
   "  -r [--raw]               Machine-friendly output.                     \n"\
   "  -v [ --verbose ] [arg]   Adjust the level of console output (0~4).    \n"\
-  "                           If no argument is provided, the level is set \n"\
-  "                           to 4.                                        \n"\
+  "                           The default verbosity is 1, use -v without   \n"\
+  "                           arguments for level 3.                       \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n" +
   COMMON_OPTIONS,
@@ -79,6 +79,7 @@ class Cmd
   #
   def parse(args)
     options = {
+      'verbose' => '1',
       'url' => '',
       'owner' => '',
       'raw' => 'false',
@@ -114,7 +115,7 @@ class Cmd
       end
       opts.on('-v [verbose]', '--verbose [verbose]', String,
           'Adjust level of console output') do |v|
-        options['verbose'] = v || '4'
+        options['verbose'] = v || '3'
       end
     end # opt_parser do
 
@@ -181,7 +182,6 @@ class Cmd
 
       case options['subcommand']
       when 'list'
-        # All models
         Importer.extern 'int listModels(const char *, const char *, const char *)'
         if not Importer.listModels(options['url'],
                                    options['owner'],

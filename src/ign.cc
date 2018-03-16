@@ -115,8 +115,8 @@ extern "C" void uglyPrint(
 
 //////////////////////////////////////////////////
 /// \brief Fill a map with all models from a server
-/// \param[in] _client
-/// \param[in] _server
+/// \param[in] _client Fuel client
+/// \param[in] _server Server configuration
 /// \param[out] _resourceMap Key is owner name, value is vector of resources
 /// \return True if successful
 extern "C" bool getAllModels(
@@ -148,9 +148,9 @@ extern "C" bool getAllModels(
 
 //////////////////////////////////////////////////
 /// \brief Fill a map with all models from an owner
-/// \param[in] _client
-/// \param[in] _server
-/// \param[in] _modelId
+/// \param[in] _client Fuel client
+/// \param[in] _server Server configuration
+/// \param[in] _modelId Identifier for models to be returned
 /// \param[out] _resourceMap Key is owner name, value is vector of resources
 /// \return True if successful
 extern "C" bool getOwnerModels(
