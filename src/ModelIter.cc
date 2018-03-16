@@ -162,13 +162,13 @@ IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
   do
   {
     // Prepare the request with the next page.
-    std::string queryStrPage = "?page=" + std::to_string(page);
-    std::string path = _api + queryStrPage;
+    std::string queryStrPage = "page=" + std::to_string(page);
+    std::string path = _api;
     ++page;
 
     // Fire the request.
     resp = this->rest.Request(method, this->config.URL(),
-      this->config.Version(), path, {}, headers, "");
+      this->config.Version(), path, {queryStrPage}, headers, "");
 
     // ToDo: resp.statusCode should return != 200 when the page requested does
     // not exist. When this happens we should stop without calling ParseModels()
