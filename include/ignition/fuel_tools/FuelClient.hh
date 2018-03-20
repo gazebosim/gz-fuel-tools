@@ -110,20 +110,30 @@ namespace ignition
       public: Result DeleteModel(const ServerConfig &_server,
                                  const ModelIdentifier &_id);
 
-      /// \brief Download a model from ignition fuel
+      /// \brief Download a model from ignition fuel. This will override an
+      /// existing local copy of the model.
       /// \param[in] _server The server to request the operation.
       /// \param[in] _id The model identifier.
       /// \return Result of the download operation
       public: Result DownloadModel(const ServerConfig &_server,
                                    const ModelIdentifier &_id);
 
-      /// \brief Download a model from ignition fuel
+      /// \brief Download a model from ignition fuel. This will override an
+      /// existing local copy of the model.
       /// \param[in] _modelURL The unique URL of the model to download.
       /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
       /// \param[out] _path Path where the model was downloaded.
       /// \return Result of the download operation.
       public: Result DownloadModel(const std::string &_modelURL,
                                    std::string &_path);
+
+      /// \brief Check if a model is already present in the local cache.
+      /// \param[in] _modelURL The unique URL of the model on a Fuel server.
+      /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
+      /// \param[out] _path Local path where the model can be found.
+      /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
+      public: Result CachedModel(const std::string &_modelURL,
+                                 std::string &_path);
 
       /// \brief Parse server and model identifer from model URL.
       /// \param[in] _modelURL The unique URL of the model to download.

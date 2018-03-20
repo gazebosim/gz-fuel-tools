@@ -16,12 +16,46 @@
 */
 
 #include <gtest/gtest.h>
+#include <fstream>
+#include <ignition/common/Filesystem.hh>
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/ClientConfig.hh"
+
+#include "test/test_config.h"
+
+#ifdef _WIN32
+#include <direct.h>
+#define ChangeDirectory _chdir
+#else
+#include <unistd.h>
+#define ChangeDirectory chdir
+#endif
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
 using namespace ignft;
+
+/// \brief Creates a directory structure in the build directory with 3 models
+/// Taken from LocalCache_TEST
+void createLocal1(ClientConfig &_conf)
+{
+  if (common::exists("LocalCache_TEST1"))
+  {
+    common::removeAll("LocalCache_TEST1");
+  }
+  common::createDirectories("LocalCache_TEST1/alice/my_model");
+
+  std::ofstream fout("LocalCache_TEST1/alice/my_model/model.config",
+      std::ofstream::trunc);
+  fout << "<?xml version=\"1.0\"?>";
+  fout.flush();
+  fout.close();
+
+  ignition::fuel_tools::ServerConfig srv;
+  srv.URL("http://localhost:8007/");
+  srv.LocalName("LocalCache_TEST1");
+  _conf.AddServer(srv);
+}
 
 /////////////////////////////////////////////////
 /// \brief Nothing crashes
@@ -39,6 +73,30 @@ TEST(FuelClient, ParseModelURL)
 
   // bad URL
   EXPECT_FALSE(client.ParseModelURL("bad url", srv, id));
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, CachedModel)
+{
+  // Configure to use binary path as cache and populate it
+  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  ClientConfig config;
+  config.CacheLocation(common::cwd());
+  createLocal1(config);
+
+  // Create client
+  FuelClient client(config);
+  EXPECT_EQ(config.CacheLocation(), client.Config().CacheLocation());
+
+  // Check cached model
+  std::string url{
+    "https://this-doesnt-affect-the-cache.com/1.0/alice/models/My ModeL"};
+  std::string path;
+  EXPECT_TRUE(client.CachedModel(url, path));
+  EXPECT_EQ(common::cwd() + "/models/alice/my_model", path);
+
+  url =
+    "https://this-doesnt-affect-the-cache.com/1.0/SomeOwner/models/Some Model";
 }
 
 //////////////////////////////////////////////////

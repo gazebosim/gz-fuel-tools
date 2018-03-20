@@ -226,6 +226,7 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
 Result FuelClient::DownloadModel(const std::string &_modelURL,
   std::string &_path)
 {
+  // Get data from URL
   ModelIdentifier id;
   ServerConfig srv;
   if (!this->ParseModelURL(_modelURL, srv, id))
@@ -233,9 +234,11 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
     return Result(Result::FETCH_ERROR);
   }
 
+  // Download
   auto result = this->DownloadModel(srv, id);
   if (result)
   {
+    // TODO: Move path construction to a single common place
     // Convert name to lowercase.
     std::string name = id.Name();
     std::string owner = id.Owner();
@@ -247,3 +250,34 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
 
   return result;
 }
+
+//////////////////////////////////////////////////
+Result FuelClient::CachedModel(const std::string &_modelURL,
+  std::string &_path)
+{
+  // Get data from URL
+  ModelIdentifier id;
+  ServerConfig srv;
+  if (!this->ParseModelURL(_modelURL, srv, id))
+  {
+    return Result(Result::FETCH_ERROR);
+  }
+
+  // Make sure model identifier is machine-readable
+  // FIXME: It feels hacky to adapt the model name every time
+  auto name = id.Name();
+  std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+  name = common::replaceAll(name, " ", "_");
+  id.Name(name);
+
+  // Check local cache
+  auto modelIter = this->dataPtr->cache->MatchingModel(id);
+  if (modelIter)
+  {
+    _path = modelIter.PathToModel();
+    return Result(Result::FETCH_ALREADY_EXISTS);
+  }
+
+  return Result(Result::FETCH_ERROR);
+}
+
