@@ -56,22 +56,22 @@ TEST(ModelIdentifier, UniqueName)
   srv1.URL("http://localhost:8001/");
 
   ignition::fuel_tools::ServerConfig srv2;
-  srv1.URL("http://localhost:8001");
+  srv2.URL("http://localhost:8002");
 
   ignition::fuel_tools::ServerConfig srv3;
-  srv1.URL("https://localhost:8001//////////////////////////");
+  srv3.URL("https://localhost:8003//////////////////////////");
 
   ModelIdentifier id;
   id.Name("hello");
   id.Owner("alice");
   id.Server(srv1);
-  EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
+  EXPECT_EQ("http://localhost:8001/alice/models/hello", id.UniqueName());
 
   id.Server(srv2);
-  EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
+  EXPECT_EQ("http://localhost:8002/alice/models/hello", id.UniqueName());
 
   id.Server(srv3);
-  EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8003/alice/models/hello", id.UniqueName());
 }
 
 /////////////////////////////////////////////////
