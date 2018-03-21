@@ -25,6 +25,8 @@ pipelines:
           - cmake ..
           - make -j4 install
           - cd ../..
+          # Make sure ign-tools can find installed libs
+          - export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
           # Ignition Fuel Tools
           - mkdir build && cd build
           - cmake .. -DCMAKE_BUILD_TYPE=coverage
