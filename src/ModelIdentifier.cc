@@ -149,7 +149,6 @@ ModelIdentifier::~ModelIdentifier()
 std::string ModelIdentifier::UniqueName() const
 {
   return this->dataPtr->server.URL()     + "/"        +
-         this->dataPtr->server.Version() + "/"        +
          this->dataPtr->owner            + "/models/" +
          this->dataPtr->name;
 }
