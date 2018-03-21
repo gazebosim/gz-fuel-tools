@@ -22,7 +22,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/fuel${PROJECT_VERSION_MAJOR}.yaml DEST
 # Install config.yaml
 # Deprecated: Installing on unversioned directory for backwards compatibility,
 # remove on ign-fuel-tools2
-#install (FILES config.yaml DESTINATION
-#  ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/ignition/${IGN_DESIGNATION}/)
+install (FILES config.yaml DESTINATION
+  ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/ignition/${IGN_DESIGNATION}/)
 install (FILES config.yaml DESTINATION
   ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/ignition/${IGN_DESIGNATION}${PROJECT_VERSION_MAJOR}/)
