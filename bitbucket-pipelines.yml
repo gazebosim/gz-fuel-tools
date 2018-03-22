@@ -17,15 +17,25 @@ pipelines:
             libignition-common-dev
           # Style checker first - fail fast
           - sh tools/code_check.sh
+          # Ignition tools
+          - hg clone http://bitbucket.org/ignitionrobotics/ign-tools -b default
+          - cd ign-tools
+          - mkdir build
+          - cd build
+          - cmake ..
+          - make -j4 install
+          - cd ../..
+          # Make sure ign-tools can find installed libs
+          - export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
           # Ignition Fuel Tools
           - mkdir build && cd build
           - cmake .. -DCMAKE_BUILD_TYPE=coverage
           - make -j4
+          - make install
           - make test ARGS="-VV"
           - make coverage
           - bash <(curl -s https://codecov.io/bash)
           - make doc
-          - make install
           # Build examples
           - cd ../example
           - mkdir build && cd build
