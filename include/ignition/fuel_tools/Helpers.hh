@@ -18,6 +18,22 @@
 #ifndef IGNITION_FUEL_TOOLS_HELPERS_HH_
 #define IGNITION_FUEL_TOOLS_HELPERS_HH_
 
+#include <ignition/fuel_tools/Export.hh>
+
+namespace ignition
+{
+  namespace fuel_tools
+  {
+      /// \brief Find the environment variable '_name' and return its value.
+      /// \param[in] _name Name of the environment variable.
+      /// \param[out] _value Value if the variable was found.
+      /// \return True if the variable was found or false otherwise.
+      /// \deprecated Use ignition::common::env
+      bool IGNITION_FUEL_TOOLS_VISIBLE IGN_DEPRECATED(2.0)
+        env(const std::string &_name, std::string &_value);
+  }
+}
+
 // Use safer functions on Windows
 #ifdef _MSC_VER
   #define ign_strcat strcat_s
