@@ -53,7 +53,7 @@ namespace ignition
 
       /// \brief Get the URL to access the server.
       /// \deperecated See std::string Url() const.
-      public: std::string URL() const IGN_DEPRECATED(2.0);
+      public: std::string IGN_DEPRECATED(2.0) URL() const;
 
       /// \brief Get the URL to access the server.
       /// \return The URL of this server.
@@ -61,7 +61,7 @@ namespace ignition
 
       /// \brief Set the URL of this server.
       /// \deprecated See void SetUrl(const std::string &).
-      public: void URL(const std::string &_url) IGN_DEPRECATED(2.0);
+      public: void IGN_DEPRECATED(2.0) URL(const std::string &_url);
 
       /// \brief Set the URL of this server.
       /// \param[in] _url URL of this server.
@@ -74,7 +74,7 @@ namespace ignition
       /// \brief Set folder name for server on disk.
       /// \param[in] _name Folder name.
       /// \deprecated See void SetLocalName(const std::string &).
-      public: void LocalName(const std::string &_name) IGN_DEPRECATED(2.0);
+      public: void IGN_DEPRECATED(2.0) LocalName(const std::string &_name);
 
       /// \brief Set folder name for server on disk.
       /// \param[in] _name Folder name.
@@ -82,7 +82,7 @@ namespace ignition
 
       /// \brief Get the API key to auth with the server.
       /// \deprecated See std::string ApiKey() const.
-      public: std::string APIKey() const IGN_DEPRECATED(2.0);
+      public: std::string IGN_DEPRECATED(2.0) APIKey() const;
 
       /// \brief Get the API key to auth with the server.
       /// \return The API key.
@@ -90,7 +90,7 @@ namespace ignition
 
       /// \brief Set the API key to auth with the server.
       /// \deprecated See void SetApiKey(const std::string &_key).
-      public: void APIKey(const std::string &_key) IGN_DEPRECATED(2.0);
+      public: void IGN_DEPRECATED(2.0) APIKey(const std::string &_key);
 
       /// \brief Set the API key to auth with the server.
       /// \param[in] _key The API key.
@@ -103,7 +103,7 @@ namespace ignition
       /// \brief Set the protocol version used with this server.
       /// \param[in] _version The version. E.g.: "1.0".
       /// \deprecated See void SetVersion(const std::string &_version).
-      public: void Version(const std::string &_version) IGN_DEPRECATED(2.0);
+      public: void IGN_DEPRECATED(2.0) Version(const std::string &_version);
 
       /// \brief Set the protocol version used with this server.
       /// \param[in] _version The version. E.g.: "1.0".
@@ -158,7 +158,7 @@ namespace ignition
       /// \brief Set where models and stuff are saved.
       /// \param[in] _path path on disk where models are saved
       /// \deprecated See void CacheLocation(const std::string &_path)
-      public: void CacheLocation(const std::string &_path) IGN_DEPRECATED(2.0);
+      public: void IGN_DEPRECATED(2.0) CacheLocation(const std::string &_path);
 
       /// \brief Set where models and stuff are saved.
       /// \param[in] _path path on disk where models are saved.
