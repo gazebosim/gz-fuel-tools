@@ -14,23 +14,31 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_FUEL_TOOLS_RESTDEPRECATED_HH_
-#define IGNITION_FUEL_TOOLS_RESTDEPRECATED_HH_
+#ifndef IGNITION_FUEL_TOOLS_REST_HH_
+#define IGNITION_FUEL_TOOLS_REST_HH_
 
 #include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "ignition/fuel_tools/Helpers.hh"
+#include "ignition/fuel_tools/Export.hh"
+
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+#include "ignition/fuel_tools/REST.hh"
+#ifndef _WIN32
+# pragma GCC diagnostic pop
+#endif
 
 namespace ignition
 {
   namespace fuel_tools
   {
     /// \brief Stores a response to a RESTful request
-    /// \deprecated See RestResponse
-    struct IGNITION_FUEL_TOOLS_VISIBLE IGN_DEPRECATED(2.0) RESTResponse
+    struct IGNITION_FUEL_TOOLS_VISIBLE RestResponse
     {
       /// \brief The returned status code. E.g.: 200
       public: int statusCode = 0;
@@ -39,23 +47,34 @@ namespace ignition
       public: std::string data = "";
     };
 
-    /// \brief A helper class for making REST requests.
-    /// \deprecated See Rest
-    class IGNITION_FUEL_TOOLS_VISIBLE IGN_DEPRECATED(2.0) REST
+    /// \brief the types of HTTP methods
+    enum class HttpMethod
     {
-      public: enum Method
-      {
-        GET,
-        POST,
-        DELETE,
-        PUT,
-        PATCH,
-        POST_FORM
-      };
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
+      /// \brief Get method.
+      GET,
+
+      /// \brief Post method.
+      POST,
+
+      /// \brief Delete method.
+      DELETE,
+
+      /// \brief Put method.
+      PUT,
+
+      /// \brief Patch method.
+      PATCH,
+
+      /// \brief Patch method.
+      POST_FORM
+    };
+
+    /// \brief A helper class for making REST requests.
+    class IGNITION_FUEL_TOOLS_VISIBLE Rest
+    {
+      /// \brief Default constructor.
+      public: Rest() = default;
+
       /// \brief Trigger a REST request.
       /// \param[in] _method The HTTP method. Use all uppercase letters.
       ///            E.g.: "GET"
@@ -72,7 +91,7 @@ namespace ignition
       /// \param[in] _data Data to be included in the HTTP request.
       /// \param[in] _form multi-part / form data to be used with
       ///            Method::POST_FORM
-      public: virtual RESTResponse Request(const Method _method,
+      public: virtual RestResponse Request(const HttpMethod _method,
           const std::string &_url,
           const std::string &_version,
           const std::string &_path,
@@ -81,6 +100,18 @@ namespace ignition
           const std::string &_data,
           const std::map<std::string, std::string> &_form =
           std::map<std::string, std::string>()) const;
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+      /// \brief Copy REST constructor.
+      /// \param[in] _deprecated REST to copy.
+      public: explicit Rest(const REST &_deprecated);
+
+      /// \brief Copy REST operator constructor.
+      /// \param[in] _deprecated REST to copy.
+      /// \return Reference to this.
+      public: Rest &operator=(const REST &_deprecated);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif

@@ -32,6 +32,7 @@
 #include "ignition/fuel_tools/ModelIdentifier.hh"
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/REST.hh"
+#include "ignition/fuel_tools/Rest.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
@@ -59,7 +60,7 @@ class ignition::fuel_tools::FuelClientPrivate
   public: ClientConfig config;
 
   /// \brief RESTful client
-  public: REST rest;
+  public: Rest rest;
 
   /// \brief Local Cache
   public: std::shared_ptr<LocalCache> cache;
@@ -81,7 +82,31 @@ FuelClient::FuelClient()
 }
 
 //////////////////////////////////////////////////
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
+    LocalCache *_cache)
+  : dataPtr(new FuelClientPrivate)
+{
+  this->dataPtr->config = _config;
+  this->dataPtr->rest = _rest;
+
+  if (nullptr == _cache)
+    this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
+  else
+    this->dataPtr->cache.reset(_cache);
+
+  this->dataPtr->urlModelRegex.reset(new std::regex(
+    this->dataPtr->kModelURLRegexStr));
+}
+#ifndef _WIN32
+# pragma GCC diagnostic pop
+#endif
+
+//////////////////////////////////////////////////
+FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
     LocalCache *_cache)
   : dataPtr(new FuelClientPrivate)
 {
@@ -112,14 +137,14 @@ ClientConfig &FuelClient::Config()
 Result FuelClient::ModelDetails(const ServerConfig &_server,
   const ModelIdentifier &_id, ModelIdentifier &_model) const
 {
-  ignition::fuel_tools::REST rest;
-  RESTResponse resp;
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
 
   auto serverURL = _server.URL();
   auto version = _server.Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
-  resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
+  resp = rest.Request(HttpMethod::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
@@ -180,15 +205,15 @@ Result FuelClient::DeleteModel(const ServerConfig &/*_server*/,
 Result FuelClient::DownloadModel(const ServerConfig &_server,
   const ModelIdentifier &_id)
 {
-  ignition::fuel_tools::REST rest;
-  RESTResponse resp;
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
 
   auto serverURL = _server.URL();
   auto version = _server.Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models",
     _id.Name() + ".zip");
 
-  resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
+  resp = rest.Request(HttpMethod::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 

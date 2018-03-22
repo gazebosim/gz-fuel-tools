@@ -30,28 +30,15 @@ namespace ignition
 {
   namespace fuel_tools
   {
-    /// \brief Forward Declaration
+    // Forward Declaration
     class ModelPrivate;
-
-    /// \brief Forward declaration
     class ModelIter;
-
-    /// \brief Forward declaration
     class ModelIterPrivate;
-
-    /// \brief forward declaration
     class LocalCache;
-
-    /// \brief forward declaration
     class LocalCachePrivate;
-
-    /// \brief Forward declaration
     class IterIds;
-
-    /// \brief Forward declaration
     class IterRESTIds;
-
-    /// \brief Forward declaration
+    class IterRestIds;
     class ModelIterTest;
 
     /// \brief Defines how to identify a model
@@ -59,6 +46,7 @@ namespace ignition
     {
       friend IterIds;
       friend IterRESTIds;
+      friend IterRestIds;
       friend ModelIter;
       friend ModelIterPrivate;
       friend ModelIterTest;

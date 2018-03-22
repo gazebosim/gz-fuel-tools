@@ -17,7 +17,7 @@
 
 #include <curl/curl.h>
 #ifdef _WIN32
-// DELETE is defined in winnt.h and causes a problem with REST::DELETE
+// DELETE is defined in winnt.h and causes a problem with HttpMethod::DELETE
 #undef DELETE
 #endif
 
@@ -28,19 +28,14 @@
 
 #include <ignition/common/Console.hh>
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-
-#include "ignition/fuel_tools/REST.hh"
+#include "ignition/fuel_tools/Rest.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
 
 
 //////////////////////////////////////////////////
-std::string JoinURL(const std::string &_base,
+std::string RestJoinUrl(const std::string &_base,
     const std::string &_more)
 {
   if (_base.empty())
@@ -67,7 +62,7 @@ std::string JoinURL(const std::string &_base,
 }
 
 /////////////////////////////////////////////////
-size_t WriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
+size_t RestWriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
     void *_userp)
 {
   std::string *str = static_cast<std::string*>(_userp);
@@ -79,22 +74,22 @@ size_t WriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
 }
 
 /////////////////////////////////////////////////
-RESTResponse REST::Request(Method _method,
+RestResponse Rest::Request(HttpMethod _method,
     const std::string &_url, const std::string &_version,
     const std::string &_path, const std::vector<std::string> &_queryStrings,
     const std::vector<std::string> &_headers, const std::string &_data,
     const std::map<std::string, std::string> &_form) const
 {
-  RESTResponse res;
+  RestResponse res;
 
   if (_url.empty())
     return res;
 
-  std::string url = JoinURL(_url, _version);
+  std::string url = RestJoinUrl(_url, _version);
 
   CURL *curl = curl_easy_init();
   char *encodedPath= curl_easy_escape(curl, _path.c_str(), _path.size());
-  url = JoinURL(url, encodedPath);
+  url = RestJoinUrl(url, encodedPath);
 
   // Process query strings.
   if (!_queryStrings.empty())
@@ -112,7 +107,7 @@ RESTResponse REST::Request(Method _method,
     headers = curl_slist_append(headers, header.c_str());
     if (!headers)
     {
-      ignerr << "[REST::Request()]: Error processing header.\n  ["
+      ignerr << "[Rest::Request()]: Error processing header.\n  ["
                 << header.c_str() << "]" << std::endl;
 
       // cleanup
@@ -125,7 +120,7 @@ RESTResponse REST::Request(Method _method,
 
   std::string responseData;
   curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, RestWriteMemoryCallback);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
 
   char errbuf[CURL_ERROR_SIZE];
@@ -142,16 +137,16 @@ RESTResponse REST::Request(Method _method,
   struct curl_httppost *formpost = nullptr;
 
   // Send the request.
-  if (_method == REST::GET)
+  if (_method == HttpMethod::GET)
   {
     // no need to do anything
   }
-  else if (_method == REST::POST)
+  else if (_method == HttpMethod::POST)
   {
     curl_easy_setopt(curl, CURLOPT_POST, 1);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, _data.c_str());
   }
-  else if (_method == REST::POST_FORM)
+  else if (_method == HttpMethod::POST_FORM)
   {
     struct curl_httppost *lastptr = nullptr;
     for (const auto &it : _form)
@@ -191,7 +186,7 @@ RESTResponse REST::Request(Method _method,
 
     curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
   }
-  else if (_method == REST::DELETE)
+  else if (_method == HttpMethod::DELETE)
   {
     curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
   }
@@ -208,7 +203,7 @@ RESTResponse REST::Request(Method _method,
   CURLcode success = curl_easy_perform(curl);
   if (success != CURLE_OK)
   {
-    ignerr << "Error in REST request" << std::endl;
+    ignerr << "Error in Rest request" << std::endl;
     size_t len = strlen(errbuf);
     fprintf(stderr, "\nlibcurl: (%d) ", success);
     if (len)
@@ -242,7 +237,21 @@ RESTResponse REST::Request(Method _method,
     ifs.close();
   return res;
 }
+
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+/////////////////////////////////////////////////
+Rest::Rest(const REST &/*_deprecated*/)
+{
+}
+
+/////////////////////////////////////////////////
+Rest &Rest::operator=(const REST &/*_deprecated*/)
+{
+  return *this;
+}
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
-
