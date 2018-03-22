@@ -56,9 +56,9 @@ namespace ignition
             std::string name = buf;
             std::snprintf(buf, sizeof(buf), "owner%d", i);
             std::string owner = buf;
-            id.Name(name);
-            id.Owner(owner);
-            id.Server(srv);
+            id.SetName(name);
+            id.SetOwner(owner);
+            id.SetServer(srv);
             ids.push_back(id);
           }
           return ModelIterFactory::Create(ids);
@@ -80,9 +80,9 @@ namespace ignition
             std::string owner = buf;
 
             std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
-            ptr->id.Name(name);
-            ptr->id.Owner(owner);
-            ptr->id.Server(srv);
+            ptr->id.SetName(name);
+            ptr->id.SetOwner(owner);
+            ptr->id.SetServer(srv);
 
             models.push_back(Model(ptr));
           }

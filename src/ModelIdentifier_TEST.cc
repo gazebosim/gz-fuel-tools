@@ -29,16 +29,16 @@ using namespace fuel_tools;
 TEST(ModelIdentifier, SetFields)
 {
   ModelIdentifier id;
-  id.Name("hello");
-  id.Category("test");
-  id.Uuid("lllooo000ooolll");
-  id.FileSize(2048u);
+  id.SetName("hello");
+  id.SetCategory("test");
+  id.SetUuid("lllooo000ooolll");
+  id.SetFileSize(2048u);
   std::time_t d1;
   std::time(&d1);
-  id.ModifyDate(d1);
+  id.SetModifyDate(d1);
   std::time_t d2;
   std::time(&d2);
-  id.UploadDate(d2);
+  id.SetUploadDate(d2);
 
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("test"), id.Category());
@@ -62,15 +62,15 @@ TEST(ModelIdentifier, UniqueName)
   srv1.URL("https://localhost:8001//////////////////////////");
 
   ModelIdentifier id;
-  id.Name("hello");
-  id.Owner("alice");
-  id.Server(srv1);
+  id.SetName("hello");
+  id.SetOwner("alice");
+  id.SetServer(srv1);
   EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
 
-  id.Server(srv2);
+  id.SetServer(srv2);
   EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
 
-  id.Server(srv3);
+  id.SetServer(srv3);
   EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
 }
 
@@ -79,16 +79,16 @@ TEST(ModelIdentifier, UniqueName)
 TEST(ModelIdentifier, CopyConstructorDeepCopy)
 {
   ModelIdentifier id;
-  id.Name("hello");
-  id.Category("test");
-  id.Uuid("lllooo000ooolll");
-  id.FileSize(2048u);
+  id.SetName("hello");
+  id.SetCategory("test");
+  id.SetUuid("lllooo000ooolll");
+  id.SetFileSize(2048u);
   std::time_t d1;
   std::time(&d1);
-  id.ModifyDate(d1);
+  id.SetModifyDate(d1);
   std::time_t d2;
   std::time(&d2);
-  id.UploadDate(d2);
+  id.SetUploadDate(d2);
 
   ModelIdentifier id2(id);
   EXPECT_EQ(std::string("hello"), id2.Name());
@@ -98,7 +98,7 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
   EXPECT_EQ(d1, id2.ModifyDate());
   EXPECT_EQ(d2, id2.UploadDate());
 
-  id2.Name("hello2");
+  id2.SetName("hello2");
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("hello2"), id2.Name());
 }
@@ -108,16 +108,16 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
 TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
 {
   ModelIdentifier id;
-  id.Name("hello");
-  id.Category("test");
-  id.Uuid("lllooo000ooolll");
-  id.FileSize(2048u);
+  id.SetName("hello");
+  id.SetCategory("test");
+  id.SetUuid("lllooo000ooolll");
+  id.SetFileSize(2048u);
   std::time_t d1;
   std::time(&d1);
-  id.ModifyDate(d1);
+  id.SetModifyDate(d1);
   std::time_t d2;
   std::time(&d2);
-  id.UploadDate(d2);
+  id.SetUploadDate(d2);
 
   ModelIdentifier id2(id);
   id2 = id;
@@ -129,7 +129,7 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
   EXPECT_EQ(d2, id2.UploadDate());
 
 
-  id2.Name("hello2");
+  id2.SetName("hello2");
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("hello2"), id2.Name());
 }

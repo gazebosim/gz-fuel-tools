@@ -65,10 +65,10 @@ TEST(JSONParser, BuildModel)
 {
   std::vector<ModelIdentifier> ids;
   ModelIdentifier id;
-  id.Name("house");
-  id.Category("building");
-  id.Description("affordable");
-  id.Uuid("1234-0093asdf");
+  id.SetName("house");
+  id.SetCategory("building");
+  id.SetDescription("affordable");
+  id.SetUuid("1234-0093asdf");
   ids.push_back(id);
 
   std::string jsonStr = JSONParser::BuildModel(ModelIterFactory::Create(ids));
