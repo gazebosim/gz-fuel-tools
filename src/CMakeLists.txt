@@ -9,7 +9,7 @@ set (sources
   ModelIdentifier.cc
   ModelIter.cc
   REST.cc
-  Rest.cc
+  RestClient.cc
   Result.cc
   Zip.cc
 )

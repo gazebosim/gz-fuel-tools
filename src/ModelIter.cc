@@ -27,7 +27,7 @@
 #include "ignition/fuel_tools/ModelIter.hh"
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/ModelPrivate.hh"
-#include "ignition/fuel_tools/Rest.hh"
+#include "ignition/fuel_tools/RestClient.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

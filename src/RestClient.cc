@@ -28,7 +28,7 @@
 
 #include <ignition/common/Console.hh>
 
-#include "ignition/fuel_tools/Rest.hh"
+#include "ignition/fuel_tools/RestClient.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

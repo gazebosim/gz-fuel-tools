@@ -25,7 +25,7 @@
 #include "ignition/fuel_tools/Model.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
 #include "ignition/fuel_tools/REST.hh"
-#include "ignition/fuel_tools/Rest.hh"
+#include "ignition/fuel_tools/RestClient.hh"
 
 namespace ignition
 {

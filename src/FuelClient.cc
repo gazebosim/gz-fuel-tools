@@ -32,7 +32,7 @@
 #include "ignition/fuel_tools/ModelIdentifier.hh"
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/REST.hh"
-#include "ignition/fuel_tools/Rest.hh"
+#include "ignition/fuel_tools/RestClient.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
