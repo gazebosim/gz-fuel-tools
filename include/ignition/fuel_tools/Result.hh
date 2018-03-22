@@ -31,67 +31,69 @@ namespace ignition
     class ResultPrivate;
     class Model;
 
-    /// \brief Class describing a result of an operation
+    /// Result type.
+    enum class ResultType
+    {
+      /// \brief Uninitialized type.
+      UNKNOWN = 0,
+
+      /// \brief Delete successful.
+      DELETE,
+
+      /// \brief Model not found.
+      DELETE_NOT_FOUND,
+
+      /// \brief Delete failed. Other errors.
+      /// \sa ReadableResult
+      DELETE_ERROR,
+
+      /// \brief Fetch successful.
+      FETCH,
+
+      /// \brief Model already exists.
+      FETCH_ALREADY_EXISTS,
+
+      /// \brief Model not found.
+      FETCH_NOT_FOUND,
+
+      /// \brief Fetch failed. Other errors.
+      /// \sa ReadableResult
+      FETCH_ERROR,
+
+      /// \brief Upload successful.
+      UPLOAD,
+
+      /// \brief Model already exists.
+      UPLOAD_ALREADY_EXISTS,
+
+      /// \brief Upload failed. Other errors.
+      /// \sa ReadableResult
+      UPLOAD_ERROR
+    };
+
+    /// \brief Class describing a result of an operation.
     class IGNITION_FUEL_TOOLS_VISIBLE Result
     {
-      friend Model;
-
-      /// Result type
-      public: enum ResultType
-      {
-        /// \brief Uninitialized type
-        UNKNOWN = 0,
-
-        /// \brief Delete successful.
-        DELETE,
-
-        /// \brief Model not found.
-        DELETE_NOT_FOUND,
-
-        /// \brief Delete failed. Other errors.
-        /// \sa ReadableResult
-        DELETE_ERROR,
-
-        /// \brief Fetch successful.
-        FETCH,
-
-        /// \brief Model already exists.
-        FETCH_ALREADY_EXISTS,
-
-        /// \brief Model not found.
-        FETCH_NOT_FOUND,
-
-        /// \brief Fetch failed. Other errors.
-        /// \sa ReadableResult
-        FETCH_ERROR,
-
-        /// \brief Upload successful.
-        UPLOAD,
-
-        /// \brief Model already exists.
-        UPLOAD_ALREADY_EXISTS,
-
-        /// \brief Upload failed. Other errors.
-        /// \sa ReadableResult
-        UPLOAD_ERROR
-      };
-
-      /// \brief Destructor
+      /// \brief Destructor.
       public: ~Result();
-
-      /// \brief Get the type of result
-      public: ResultType Type() const;
 
       /// \brief protected constructor
       public: explicit Result(const ResultType _type);
 
-      /// \brief copy constructor
+      /// \brief Copy constructor.
+      /// \param[in] _orig Result to copy.
       public: Result(const Result &_orig);
 
-      /// \brief operator bool returns true if operation was successful
+      /// \brief Get the type of result
+      /// \return The type of result.
+      public: ResultType Type() const;
+
+      /// \brief Operator bool returns true if operation was successful.
+      /// \return True if the operation was successful.
       public: virtual operator bool() const;
 
-      /// \brief Get human readable result string
+      /// \brief Get human readable result string.
+      /// \return The result string.
       public: virtual std::string ReadableResult() const;
 
       /// brief Pointer to private data

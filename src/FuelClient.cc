@@ -121,11 +121,11 @@ Result FuelClient::ModelDetails(const ServerConfig &_server,
 
   resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
-    return Result(Result::FETCH_ERROR);
+    return Result(ResultType::FETCH_ERROR);
 
   _model = JSONParser::ParseModel(resp.data, _server);
 
-  return Result(Result::FETCH);
+  return Result(ResultType::FETCH);
 }
 
 //////////////////////////////////////////////////
@@ -165,7 +165,7 @@ Result FuelClient::UploadModel(const ServerConfig &/*_server*/,
   const std::string &/*_pathToModelDir*/, const ModelIdentifier &/*_id*/)
 {
   // TODO Upload a model and return an Result
-  return Result(Result::UPLOAD_ERROR);
+  return Result(ResultType::UPLOAD_ERROR);
 }
 
 //////////////////////////////////////////////////
@@ -173,7 +173,7 @@ Result FuelClient::DeleteModel(const ServerConfig &/*_server*/,
   const ModelIdentifier &/*_id*/)
 {
   // TODO Delete a model and return a Result
-  return Result(Result::DELETE_ERROR);
+  return Result(ResultType::DELETE_ERROR);
 }
 
 //////////////////////////////////////////////////
@@ -190,12 +190,12 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
 
   resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
-    return Result(Result::FETCH_ERROR);
+    return Result(ResultType::FETCH_ERROR);
 
   if (!this->dataPtr->cache->SaveModel(_id, resp.data, true))
-    return Result(Result::FETCH_ERROR);
+    return Result(ResultType::FETCH_ERROR);
 
-  return Result(Result::FETCH);
+  return Result(ResultType::FETCH);
 }
 
 //////////////////////////////////////////////////
@@ -230,7 +230,7 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
   ServerConfig srv;
   if (!this->ParseModelURL(_modelURL, srv, id))
   {
-    return Result(Result::FETCH_ERROR);
+    return Result(ResultType::FETCH_ERROR);
   }
 
   auto result = this->DownloadModel(srv, id);

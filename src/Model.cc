@@ -60,11 +60,11 @@ Result Model::Fetch()
     if (this->PathToModel().empty())
     {
       // TODO look for models on servers
-      return Result(Result::FETCH_ERROR);
+      return Result(ResultType::FETCH_ERROR);
     }
-    return Result(Result::FETCH_ALREADY_EXISTS);
+    return Result(ResultType::FETCH_ALREADY_EXISTS);
   }
-  return Result(Result::UNKNOWN);
+  return Result(ResultType::UNKNOWN);
 }
 
 //////////////////////////////////////////////////

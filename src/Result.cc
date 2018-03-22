@@ -25,7 +25,7 @@ using namespace ignft;
 class ignft::ResultPrivate
 {
   /// \brief a type of result
-  public: Result::ResultType type = Result::UNKNOWN;
+  public: ResultType type = ResultType::UNKNOWN;
 };
 
 
@@ -35,13 +35,13 @@ Result::~Result()
 }
 
 //////////////////////////////////////////////////
-Result::ResultType Result::Type() const
+ResultType Result::Type() const
 {
   return this->dataPtr->type;
 }
 
 //////////////////////////////////////////////////
-Result::Result(const Result::ResultType _type) : dataPtr(new ResultPrivate)
+Result::Result(const ResultType _type) : dataPtr(new ResultPrivate)
 {
   this->dataPtr->type = _type;
 }
@@ -57,10 +57,10 @@ Result::operator bool() const
 {
   switch (this->dataPtr->type)
   {
-    case DELETE:
-    case FETCH:
-    case FETCH_ALREADY_EXISTS:
-    case UPLOAD:
+    case ResultType::DELETE:
+    case ResultType::FETCH:
+    case ResultType::FETCH_ALREADY_EXISTS:
+    case ResultType::UPLOAD:
       return true;
     default:
       return false;
@@ -72,27 +72,27 @@ std::string Result::ReadableResult() const
 {
   switch (this->dataPtr->type)
   {
-    case DELETE:
+    case ResultType::DELETE:
       return "Successfully deleted";
-    case FETCH:
+    case ResultType::FETCH:
       return "Successfully fetched from server";
-    case FETCH_ALREADY_EXISTS:
+    case ResultType::FETCH_ALREADY_EXISTS:
       return "Already in cache, did not fetch from server";
-    case UPLOAD:
+    case ResultType::UPLOAD:
       return "Successfully uploaded to server";
-    case DELETE_NOT_FOUND:
+    case ResultType::DELETE_NOT_FOUND:
       return "Could not delete, model not found";
-    case DELETE_ERROR:
+    case ResultType::DELETE_ERROR:
       return "Delete failed. Other errors";
-    case FETCH_NOT_FOUND:
+    case ResultType::FETCH_NOT_FOUND:
         return "Model not found";
-    case FETCH_ERROR:
+    case ResultType::FETCH_ERROR:
         return "Fetch failed. Other errors";
-    case UPLOAD_ALREADY_EXISTS:
+    case ResultType::UPLOAD_ALREADY_EXISTS:
         return "Model already exists";
-    case UPLOAD_ERROR:
+    case ResultType::UPLOAD_ERROR:
         return "Upload failed. Other errors";
-    case UNKNOWN:
+    case ResultType::UNKNOWN:
     default:
       return "Unknown result";
   }
