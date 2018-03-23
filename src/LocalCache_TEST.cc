@@ -45,29 +45,29 @@ void createLocal6(ClientConfig &_conf)
   {
     common::removeAll("LocalCache_TEST6");
   }
-  common::createDirectories("LocalCache_TEST6/alice/am1");
-  common::createDirectories("LocalCache_TEST6/alice/am2");
-  common::createDirectories("LocalCache_TEST6/bob/bm1");
-  common::createDirectories("LocalCache_TEST6/bob/bm2");
-  common::createDirectories("LocalCache_TEST6/trudy/tm1");
-  common::createDirectories("LocalCache_TEST6/trudy/tm2");
+  common::createDirectories("LocalCache_TEST6/alice/models/am1");
+  common::createDirectories("LocalCache_TEST6/alice/models/am2");
+  common::createDirectories("LocalCache_TEST6/bob/models/bm1");
+  common::createDirectories("LocalCache_TEST6/bob/models/bm2");
+  common::createDirectories("LocalCache_TEST6/trudy/models/tm1");
+  common::createDirectories("LocalCache_TEST6/trudy/models/tm2");
 
-  std::ofstream fout("LocalCache_TEST6/alice/am1/model.config",
+  std::ofstream fout("LocalCache_TEST6/alice/models/am1/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/alice/am2/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/bob/bm1/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/bob/bm2/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/trudy/tm1/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/trudy/tm2/model.config");
+  common::copyFile("LocalCache_TEST6/alice/models/am1/model.config",
+                   "LocalCache_TEST6/alice/models/am2/model.config");
+  common::copyFile("LocalCache_TEST6/alice/models/am1/model.config",
+                   "LocalCache_TEST6/bob/models/bm1/model.config");
+  common::copyFile("LocalCache_TEST6/alice/models/am1/model.config",
+                   "LocalCache_TEST6/bob/models/bm2/model.config");
+  common::copyFile("LocalCache_TEST6/alice/models/am1/model.config",
+                   "LocalCache_TEST6/trudy/models/tm1/model.config");
+  common::copyFile("LocalCache_TEST6/alice/models/am1/model.config",
+                   "LocalCache_TEST6/trudy/models/tm2/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8001/");
@@ -82,20 +82,20 @@ void createLocal3(ClientConfig &_conf)
   {
     common::removeAll("LocalCache_TEST3");
   }
-  common::createDirectories("LocalCache_TEST3/alice/am1");
-  common::createDirectories("LocalCache_TEST3/bob/bm1");
-  common::createDirectories("LocalCache_TEST3/trudy/tm1");
+  common::createDirectories("LocalCache_TEST3/alice/models/am1");
+  common::createDirectories("LocalCache_TEST3/bob/models/bm1");
+  common::createDirectories("LocalCache_TEST3/trudy/models/tm1");
 
-  std::ofstream fout("LocalCache_TEST3/alice/am1/model.config",
+  std::ofstream fout("LocalCache_TEST3/alice/models/am1/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile("LocalCache_TEST3/alice/am1/model.config",
-                   "LocalCache_TEST3/bob/bm1/model.config");
-  common::copyFile("LocalCache_TEST3/alice/am1/model.config",
-                   "LocalCache_TEST3/trudy/tm1/model.config");
+  common::copyFile("LocalCache_TEST3/alice/models/am1/model.config",
+                   "LocalCache_TEST3/bob/models/bm1/model.config");
+  common::copyFile("LocalCache_TEST3/alice/models/am1/model.config",
+                   "LocalCache_TEST3/trudy/models/tm1/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8007/");
@@ -123,10 +123,13 @@ TEST(LocalCache, AllModels)
     ++iter;
   }
   EXPECT_EQ(9u, uniqueNames.size());
+
+  EXPECT_NE(uniqueNames.end(), uniqueNames.find(
+      "http://localhost:8001/alice/models/am1"));
 }
 
 /////////////////////////////////////////////////
-/// \brief Get a specific model from cache
+/// \brief Get all models that match some fields
 TEST(LocalCache, MatchingModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
@@ -145,6 +148,9 @@ TEST(LocalCache, MatchingModels)
   std::set<std::string> uniqueNames;
   while (iter)
   {
+    EXPECT_EQ("alice", iter->Identification().Owner());
+    EXPECT_EQ("am1", iter->Identification().Name());
+
     uniqueNames.insert(iter->Identification().UniqueName());
     ++iter;
   }
@@ -173,7 +179,12 @@ TEST(LocalCache, MatchingModel)
   am1.Server(srv1);
   am1.Owner("alice");
   am1.Name("am1");
-  EXPECT_TRUE(cache.MatchingModel(am1));
+  auto am1Model = cache.MatchingModel(am1);
+  ASSERT_TRUE(am1Model);
+  EXPECT_EQ("alice", am1Model.Identification().Owner());
+  EXPECT_EQ("am1", am1Model.Identification().Name());
+  EXPECT_EQ("http://localhost:8001", am1Model.Identification().Server().URL());
+  EXPECT_EQ("LocalCache_TEST6", am1Model.Identification().Server().LocalName());
 
   ModelIdentifier tm2;
   tm2.Server(srv1);
