@@ -66,7 +66,7 @@ namespace ignition
       public: ServerConfig &Server() const;
 
       /// \brief Returns a unique name for the model
-      /// \remarks this is Server/Owner/Name
+      /// \remarks this is Server/Owner/models/Name
       /// \return Unique model name
       public: std::string UniqueName() const;
 
