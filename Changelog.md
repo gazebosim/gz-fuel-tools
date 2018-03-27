@@ -7,4 +7,9 @@
    a 404 is hit. Also added a mechanism to set the user agent
     * [Pull request 46](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/46)
 
-## Ignition Fuel Tools 0.x
+1. List models from command line
+    * [Pull request 43](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/43)
+    * [Pull request 48](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/48)
+
+## Ignition Fuel Tools 0.x.x
+
