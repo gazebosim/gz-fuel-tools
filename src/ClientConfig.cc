@@ -86,6 +86,17 @@ ServerConfig &ServerConfig::operator=(const ServerConfig &_orig)
 }
 
 //////////////////////////////////////////////////
+std::string ServerConfig::DebugString() const
+{
+  std::stringstream out;
+  out << "URL: " << this->URL() << std::endl
+      << "Local name: " << this->LocalName() << std::endl
+      << "Version: " << this->Version() << std::endl
+      << "API key: " << this->APIKey() << std::endl;
+  return out.str();
+}
+
+//////////////////////////////////////////////////
 ServerConfig::~ServerConfig()
 {
 }

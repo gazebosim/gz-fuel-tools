@@ -43,9 +43,9 @@ void createLocal1(ClientConfig &_conf)
   {
     common::removeAll("LocalCache_TEST1");
   }
-  common::createDirectories("LocalCache_TEST1/alice/my_model");
+  common::createDirectories("LocalCache_TEST1/alice/models/My Model");
 
-  std::ofstream fout("LocalCache_TEST1/alice/my_model/model.config",
+  std::ofstream fout("LocalCache_TEST1/alice/models/My Model/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
@@ -68,6 +68,7 @@ TEST(FuelClient, ParseModelURL)
     "https://api.ignitionfuel.org/1.0/german/models/Cardboard Box";
   EXPECT_TRUE(client.ParseModelURL(modelURL, srv, id));
   EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
+  EXPECT_EQ(srv.Version(), "1.0");
   EXPECT_EQ(id.Owner(), "german");
   EXPECT_EQ(id.Name(), "Cardboard Box");
 
@@ -90,13 +91,10 @@ TEST(FuelClient, CachedModel)
 
   // Check cached model
   std::string url{
-    "https://this-doesnt-affect-the-cache.com/1.0/alice/models/My ModeL"};
+    "http://localhost:8007/1.0/alice/models/My Model"};
   std::string path;
   EXPECT_TRUE(client.CachedModel(url, path));
-  EXPECT_EQ(common::cwd() + "/models/alice/my_model", path);
-
-  url =
-    "https://this-doesnt-affect-the-cache.com/1.0/SomeOwner/models/Some Model";
+  EXPECT_EQ(common::cwd() + "/LocalCache_TEST1/alice/models/My Model", path);
 }
 
 //////////////////////////////////////////////////

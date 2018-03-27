@@ -15,6 +15,7 @@
  *
 */
 
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -359,4 +360,31 @@ bool ModelIdentifier::Tags(const std::vector<std::string> &_tags)
 {
   this->dataPtr->tags = _tags;
   return true;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::DebugString() const
+{
+  std::stringstream out;
+  out << "Name: " << this->Name() << std::endl
+      << "Owner: " << this->Owner() << std::endl
+      << "Unique name: " << this->UniqueName() << std::endl
+      << "Description: " << this->Description() << std::endl
+      << "File size: " << this->FileSize() << std::endl
+      << "Upload date: " << this->UploadDate() << std::endl
+      << "UUID: " << this->Uuid() << std::endl
+      << "Likes: " << this->Likes() << std::endl
+      << "Downloads: " << this->Downloads() << std::endl
+      << "License name: " << this->LicenseName() << std::endl
+      << "License URL: " << this->LicenseURL() << std::endl
+      << "License image URL: " << this->LicenseImageURL() << std::endl
+      << "- Tags: " << std::endl;
+
+  for (auto t : this->Tags())
+    out << t << std::endl;
+
+  out << "-" << std::endl
+      << "- Server: " << std::endl << this->Server().DebugString() << "-"
+      << std::endl;;
+  return out.str();
 }

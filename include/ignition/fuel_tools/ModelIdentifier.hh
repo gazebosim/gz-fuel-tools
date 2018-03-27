@@ -103,6 +103,7 @@ namespace ignition
 
       /// \brief Returns the category of the model
       /// \return Model category
+      /// \deprecate TODO: fuelserver doesn't have categories
       public: std::string Category() const;
 
       /// \brief Returns the uuid of the model
@@ -195,6 +196,10 @@ namespace ignition
       // /// \param[in] _hash a 256 bit SHA 2 hash
       // /// \returns true if successful
       // public: bool SHA_256(const std::array<std::uint8_t, 32> &_hash);
+
+      /// \brief Returns a string with model information.
+      /// \return Model information
+      public: std::string DebugString() const;
 
       /// \brief PIMPL
       private: std::unique_ptr<ModelIdentifierPrivate> dataPtr;

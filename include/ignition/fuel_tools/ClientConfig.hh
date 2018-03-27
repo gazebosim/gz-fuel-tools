@@ -43,9 +43,6 @@ namespace ignition
       /// \brief copy constructor
       public: ServerConfig(const ServerConfig &_orig);
 
-      /// \brief Assignment operator overload
-      public: ServerConfig &operator=(const ServerConfig &_orig);
-
       /// \brief destructor
       public: ~ServerConfig();
 
@@ -74,6 +71,13 @@ namespace ignition
       /// \brief Set the protocol version used with this server.
       /// \param[in] _version The version. E.g.: "1.0".
       public: void Version(const std::string &_version);
+
+      /// \brief Returns a string with server information.
+      /// \return Server information
+      public: std::string DebugString() const;
+
+      /// \brief Assignment operator overload
+      public: ServerConfig &operator=(const ServerConfig &_orig);
 
       /// \brief PIMPL
       private: std::unique_ptr<ServerConfigPrivate> dataPtr;

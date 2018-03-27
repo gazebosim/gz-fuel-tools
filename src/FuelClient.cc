@@ -180,18 +180,28 @@ Result FuelClient::DeleteModel(const ServerConfig &/*_server*/,
 Result FuelClient::DownloadModel(const ServerConfig &_server,
   const ModelIdentifier &_id)
 {
+  // Server config
+  if (_server.URL().empty() || _server.LocalName().empty() ||
+      _server.Version().empty())
+  {
+    ignerr << "Can't download model, server configuration incomplete: "
+          << std::endl << _server.DebugString() << std::endl;
+    return Result(Result::FETCH_ERROR);
+  }
+
+  // Local path
+  auto path = ignition::common::joinPaths(_server.LocalName(), _id.Owner(),
+      "models", _id.Name() + ".zip");
+
+  // Request
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
-
-  auto serverURL = _server.URL();
-  auto version = _server.Version();
-  auto path = ignition::common::joinPaths(_id.Owner(), "models",
-    _id.Name() + ".zip");
-
-  resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
+  resp = rest.Request(REST::GET, _server.URL(), _server.Version(), path, {},
+      {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
+  // Save
   if (!this->dataPtr->cache->SaveModel(_id, resp.data, true))
     return Result(Result::FETCH_ERROR);
 
@@ -211,6 +221,7 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
 
   std::string method = match[1];
   std::string server = match[2];
+  std::string version = match[3];
   std::string owner = match[4];
   std::string name = match[5];
 
@@ -218,6 +229,9 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
   _id.Name(name);
 
   _srv.URL(method + "://" + server);
+  _srv.Version(version);
+
+  _id.Server(_srv);
 
   return true;
 }
@@ -262,13 +276,6 @@ Result FuelClient::CachedModel(const std::string &_modelURL,
   {
     return Result(Result::FETCH_ERROR);
   }
-
-  // Make sure model identifier is machine-readable
-  // FIXME: It feels hacky to adapt the model name every time
-  auto name = id.Name();
-  std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-  name = common::replaceAll(name, " ", "_");
-  id.Name(name);
 
   // Check local cache
   auto modelIter = this->dataPtr->cache->MatchingModel(id);
