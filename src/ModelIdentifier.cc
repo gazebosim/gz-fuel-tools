@@ -377,7 +377,8 @@ std::string ModelIdentifier::AsString(const std::string &_prefix) const
       << _prefix << "Downloads: " << this->Downloads() << std::endl
       << _prefix << "License name: " << this->LicenseName() << std::endl
       << _prefix << "License URL: " << this->LicenseURL() << std::endl
-      << _prefix << "License image URL: " << this->LicenseImageURL() << std::endl
+      << _prefix << "License image URL: " << this->LicenseImageURL()
+      << std::endl
       << _prefix << "Tags: " << std::endl;
 
   for (auto t : this->Tags())
