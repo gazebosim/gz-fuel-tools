@@ -207,7 +207,7 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
   }
 
   // Local path
-  auto path = ignition::common::joinPaths(_server.LocalName(), _id.Owner(),
+  auto path = ignition::common::joinPaths(_id.Owner(),
       "models", _id.Name() + ".zip");
 
   // Request

@@ -170,12 +170,16 @@ ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
 bool LocalCache::SaveModel(
   const ModelIdentifier &_id, const std::string &_data, const bool _overwrite)
 {
+  if (_id.Server().LocalName().empty() || _id.Owner().empty() || _id.Name().empty())
+  {
+    ignerr << "Incomplete model identifier, failed to save model." << std::endl
+           << _id.AsString();
+    return false;
+  }
+
   auto cacheLocation = this->dataPtr->config->CacheLocation();
-  std::string name = _id.Name();
-  std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-  name = common::replaceAll(name, " ", "_");
   auto modelDir = common::joinPaths(
-    cacheLocation, "models", _id.Owner(), name);
+    cacheLocation, _id.Server().LocalName(), _id.Owner(), "models", _id.Name());
 
   // Is it already in the cache?
   if (common::isDirectory(modelDir) && !_overwrite)
