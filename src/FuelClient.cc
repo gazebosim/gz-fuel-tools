@@ -55,6 +55,21 @@ class ignition::fuel_tools::FuelClientPrivate
     // Name
     "([^\\/]+)\\/*";
 
+  /// \brief A model unique name, which is the same as the URL but without the
+  /// API version.
+  /// E.g.: https://api.ignitionfuel.org/caguero/models/Beer
+  public: std::string kModelUniqueNameRegexStr =
+    // Method
+    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
+    // Server
+    "([^\\/\\s]+)\\/+"
+    // Owner
+    "([^\\/\\s]+)\\/+"
+    // "models"
+    "models\\/+"
+    // Name
+    "([^\\/]+)\\/*";
+
   /// \brief Client configuration
   public: ClientConfig config;
 
@@ -64,8 +79,11 @@ class ignition::fuel_tools::FuelClientPrivate
   /// \brief Local Cache
   public: std::shared_ptr<LocalCache> cache;
 
-  /// \brief Regex to parse Ignition Fuel URLs.
+  /// \brief Regex to parse Ignition Fuel model URLs.
   public: std::unique_ptr<std::regex> urlModelRegex;
+
+  /// \brief Regex to parse Ignition Fuel model unique names.
+  public: std::unique_ptr<std::regex> uniqueNameModelRegex;
 
   /// \brief The path where the configuration file is located.
   public: std::string configPath;
@@ -73,11 +91,8 @@ class ignition::fuel_tools::FuelClientPrivate
 
 //////////////////////////////////////////////////
 FuelClient::FuelClient()
-  : dataPtr(new FuelClientPrivate)
+  : FuelClient(ClientConfig(), REST(), nullptr)
 {
-  this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
-  this->dataPtr->urlModelRegex.reset(new std::regex(
-    this->dataPtr->kModelURLRegexStr));
 }
 
 //////////////////////////////////////////////////
@@ -95,6 +110,8 @@ FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelURLRegexStr));
+  this->dataPtr->uniqueNameModelRegex.reset(new std::regex(
+    this->dataPtr->kModelUniqueNameRegexStr));
 }
 
 //////////////////////////////////////////////////
@@ -213,24 +230,61 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
   ServerConfig &_srv, ModelIdentifier &_id)
 {
   std::smatch match;
-  if (!std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex))
+  std::string scheme;
+  std::string server;
+  std::string version;
+  std::string owner;
+  std::string name;
+
+  // Try URL first
+  if (std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex) &&
+      match.size() == 6u)
+  {
+    scheme = match[1];
+    server = match[2];
+    version = match[3];
+    owner = match[4];
+    name = match[5];
+  }
+  // Then try unique name
+  else if (std::regex_match(_modelURL, match,
+      *this->dataPtr->uniqueNameModelRegex) && match.size() == 5u)
+  {
+    scheme = match[1];
+    server = match[2];
+    owner = match[3];
+    name = match[4];
+  }
+  else
     return false;
 
-  if (match.size() != 6u)
-    return false;
+  // Get remaining server information, such as local name, from config
+  _srv.URL(scheme + "://" + server);
+  _srv.Version(version);
+  for (const auto &s : this->dataPtr->config.Servers())
+  {
+    if (s.URL() == _srv.URL())
+    {
+      if (!version.empty() && s.Version() != _srv.Version())
+      {
+        ignwarn << "Requested server API version [" << version
+                << "] for server [" << s.URL() << "], but will use ["
+                << s.Version() << "] as given in the config file."
+                << std::endl;
+      }
+      _srv = s;
+      break;
+    }
+  }
 
-  std::string method = match[1];
-  std::string server = match[2];
-  std::string version = match[3];
-  std::string owner = match[4];
-  std::string name = match[5];
+  if (_srv.LocalName().empty() || _srv.Version().empty())
+  {
+    ignwarn << "Server configuration is incomplete:" << std::endl
+            << _srv.AsString();
+  }
 
   _id.Owner(owner);
   _id.Name(name);
-
-  _srv.URL(method + "://" + server);
-  _srv.Version(version);
-
   _id.Server(_srv);
 
   return true;
@@ -252,14 +306,8 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
   auto result = this->DownloadModel(srv, id);
   if (result)
   {
-    // TODO: Move path construction to a single common place
-    // Convert name to lowercase.
-    std::string name = id.Name();
-    std::string owner = id.Owner();
-    std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-    name = common::replaceAll(name, " ", "_");
     _path = ignition::common::joinPaths(this->Config().CacheLocation(),
-      "models", owner, name);
+      srv.LocalName(), id.Owner(), "models", id.Name());
   }
 
   return result;
