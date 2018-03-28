@@ -17,6 +17,7 @@
 
 #include <gtest/gtest.h>
 #include <string>
+#include <ignition/common/Console.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
@@ -132,6 +133,55 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
   id2.Name("hello2");
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("hello2"), id2.Name());
+}
+
+/////////////////////////////////////////////////
+TEST(ModelIdentifier, AsString)
+{
+  common::Console::SetVerbosity(4);
+  {
+    ModelIdentifier id;
+    std::string str =
+        "Name: \n"\
+        "Owner: \n"\
+        "Unique name: //models/\n"
+        "Description: \n"
+        "File size: 0\n"
+        "Upload date: 0\n"
+        "UUID: \n"
+        "Likes: 0\n"
+        "Downloads: 0\n"
+        "License name: \n"
+        "License URL: \n"
+        "License image URL: \n"
+        "Tags: \n"
+        "Server:\n"
+        "  URL: \n"
+        "  Local name: \n"
+        "  Version: 1.0\n"
+        "  API key: \n";
+    EXPECT_EQ(str, id.AsString());
+  }
+
+  {
+    ModelIdentifier id;
+    id.Name("hello");
+    id.Uuid("lllooo000ooolll");
+    id.FileSize(2048u);
+    std::time_t d1;
+    std::time(&d1);
+    id.ModifyDate(d1);
+    std::time_t d2;
+    std::time(&d2);
+    id.UploadDate(d2);
+
+    auto str = id.AsString();
+    igndbg << str << std::endl;
+
+    EXPECT_NE(str.find("hello"), std::string::npos);
+    EXPECT_NE(str.find("lllooo000ooolll"), std::string::npos);
+    EXPECT_NE(str.find("2048"), std::string::npos);
+  }
 }
 
 //////////////////////////////////////////////////

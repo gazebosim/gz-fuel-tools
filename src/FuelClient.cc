@@ -185,7 +185,7 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
       _server.Version().empty())
   {
     ignerr << "Can't download model, server configuration incomplete: "
-          << std::endl << _server.DebugString() << std::endl;
+          << std::endl << _server.AsString() << std::endl;
     return Result(Result::FETCH_ERROR);
   }
 
