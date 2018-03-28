@@ -36,7 +36,8 @@ namespace ignft = ignition::fuel_tools;
 using namespace ignition;
 using namespace ignft;
 
-/// \brief Creates a directory structure in the build directory with 3 models
+//////////////////////////////////////////////////
+/// \brief Creates a directory structure in the build directory with 1 model
 /// Taken from LocalCache_TEST
 void createLocal1(ClientConfig &_conf)
 {
@@ -163,6 +164,72 @@ TEST(FuelClient, ParseModelURL)
 }
 
 /////////////////////////////////////////////////
+TEST(FuelClient, DownloadModel)
+{
+  // Configure to use binary path as cache
+  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  ClientConfig config;
+  config.LoadConfig();
+  config.CacheLocation(common::cwd() + "/cache_test");
+
+  // Create client
+  FuelClient client(config);
+  EXPECT_EQ(config.CacheLocation(), client.Config().CacheLocation());
+
+  // Download model from URL
+  {
+    std::string url{
+        "https://api.ignitionfuel.org/1.0/chapulina/models/Test box"};
+
+    // Check it is not cached
+    std::string cachedPath;
+    auto res1 = client.CachedModel(url, cachedPath);
+    EXPECT_FALSE(res1);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), res1);
+
+    // Download
+    std::string path;
+    auto res2 = client.DownloadModel(url, path);
+    EXPECT_TRUE(res2);
+    EXPECT_EQ(Result(Result::FETCH), res2);
+    EXPECT_EQ(common::cwd() +
+        "/cache_test/osrf/chapulina/models/Test box", path);
+    EXPECT_TRUE(common::exists("cache_test/osrf/chapulina/models/Test box"));
+    EXPECT_TRUE(common::exists(
+        "cache_test/osrf/chapulina/models/Test box/model.sdf"));
+    EXPECT_TRUE(common::exists(
+        "cache_test/osrf/chapulina/models/Test box/model.config"));
+
+    // Check it is cached
+    auto res3 = client.CachedModel(url, cachedPath);
+    EXPECT_TRUE(res3);
+    EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), res3);
+    EXPECT_EQ(path, cachedPath);
+  }
+
+  // Try using inexistent URL
+  {
+    std::string url{
+        "https://api.ignitionfuel.org/1.0/chapulina/models/Inexistent model"};
+    std::string path;
+    auto result = client.DownloadModel(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  // Try using bad URL
+  {
+    std::string url{"banana"};
+    std::string path;
+    auto result = client.DownloadModel(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  EXPECT_TRUE(common::removeAll("cache_test"));
+}
+
+/////////////////////////////////////////////////
 TEST(FuelClient, CachedModel)
 {
   // Configure to use binary path as cache and populate it
@@ -175,12 +242,35 @@ TEST(FuelClient, CachedModel)
   FuelClient client(config);
   EXPECT_EQ(config.CacheLocation(), client.Config().CacheLocation());
 
-  // Check cached model
-  std::string url{
-    "http://localhost:8007/1.0/alice/models/My Model"};
-  std::string path;
-  EXPECT_TRUE(client.CachedModel(url, path));
-  EXPECT_EQ(common::cwd() + "/LocalCache_TEST1/alice/models/My Model", path);
+  // Cached model
+  {
+    std::string url{"http://localhost:8007/1.0/alice/models/My Model"};
+    std::string path;
+    auto result = client.CachedModel(url, path);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(common::cwd() + "/LocalCache_TEST1/alice/models/My Model", path);
+  }
+
+  // Non-cached model
+  {
+    std::string url{"http://localhost:8007/1.0/alice/models/Banana"};
+    std::string path;
+    auto result = client.CachedModel(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  // Bad URL
+  {
+    std::string url{"banana"};
+    std::string path;
+    auto result = client.CachedModel(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  EXPECT_TRUE(common::removeAll("LocalCache_TEST1"));
 }
 
 //////////////////////////////////////////////////

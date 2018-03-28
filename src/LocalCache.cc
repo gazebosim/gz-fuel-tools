@@ -170,7 +170,8 @@ ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
 bool LocalCache::SaveModel(
   const ModelIdentifier &_id, const std::string &_data, const bool _overwrite)
 {
-  if (_id.Server().LocalName().empty() || _id.Owner().empty() || _id.Name().empty())
+  if (_id.Server().LocalName().empty() || _id.Owner().empty() ||
+      _id.Name().empty())
   {
     ignerr << "Incomplete model identifier, failed to save model." << std::endl
            << _id.AsString();
