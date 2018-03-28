@@ -74,8 +74,8 @@ TEST(FuelClient, ParseModelURL)
       "https://api.ignitionfuel.org/1.0/german/models/Cardboard Box"};
     EXPECT_TRUE(client.ParseModelURL(modelURL, srv, id));
 
-    EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
-    EXPECT_EQ(srv.Version(), "1.0");
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_TRUE(srv.LocalName().empty());
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
@@ -93,9 +93,9 @@ TEST(FuelClient, ParseModelURL)
       "https://api.ignitionfuel.org/1.0/german/models/Cardboard Box"};
     EXPECT_TRUE(client.ParseModelURL(modelURL, srv, id));
 
-    EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
-    EXPECT_EQ(srv.Version(), "1.0");
-    EXPECT_EQ(srv.LocalName(), "osrf");
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Server().LocalName(), "osrf");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
   }
@@ -112,9 +112,9 @@ TEST(FuelClient, ParseModelURL)
       "https://api.ignitionfuel.org/5.0/german/models/Cardboard Box"};
     EXPECT_TRUE(client.ParseModelURL(modelURL, srv, id));
 
-    EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
-    EXPECT_EQ(srv.Version(), "1.0");
-    EXPECT_EQ(srv.LocalName(), "osrf");
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Server().LocalName(), "osrf");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
   }
@@ -128,9 +128,9 @@ TEST(FuelClient, ParseModelURL)
       "https://api.ignitionfuel.org/german/models/Cardboard Box"};
     EXPECT_TRUE(client.ParseModelURL(modelUniqueName, srv, id));
 
-    EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
-    EXPECT_TRUE(srv.Version().empty());
-    EXPECT_TRUE(srv.LocalName().empty());
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_TRUE(id.Server().Version().empty());
+    EXPECT_TRUE(id.Server().LocalName().empty());
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
   }
@@ -147,9 +147,9 @@ TEST(FuelClient, ParseModelURL)
       "https://api.ignitionfuel.org/german/models/Cardboard Box"};
     EXPECT_TRUE(client.ParseModelURL(modelUniqueName, srv, id));
 
-    EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
-    EXPECT_EQ(srv.Version(), "1.0");
-    EXPECT_EQ(srv.LocalName(), "osrf");
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Server().LocalName(), "osrf");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
   }

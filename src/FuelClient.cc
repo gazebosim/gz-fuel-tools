@@ -126,21 +126,21 @@ ClientConfig &FuelClient::Config()
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::ModelDetails(const ServerConfig &_server,
+Result FuelClient::ModelDetails(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id, ModelIdentifier &_model) const
 {
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
 
-  auto serverURL = _server.URL();
-  auto version = _server.Version();
+  auto serverURL = _id.Server().URL();
+  auto version = _id.Server().Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
   resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
-  _model = JSONParser::ParseModel(resp.data, _server);
+  _model = JSONParser::ParseModel(resp.data, _id.Server());
 
   return Result(Result::FETCH);
 }
@@ -161,7 +161,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server)
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models(const ServerConfig &_server,
+ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id)
 {
   // Check local cache first
@@ -174,7 +174,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server,
   // Todo try to fetch model directly from a server
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
-  return ModelIterFactory::Create(this->dataPtr->rest, _server, path);
+  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
 }
 
 //////////////////////////////////////////////////
@@ -194,15 +194,15 @@ Result FuelClient::DeleteModel(const ServerConfig &/*_server*/,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DownloadModel(const ServerConfig &_server,
+Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id)
 {
   // Server config
-  if (_server.URL().empty() || _server.LocalName().empty() ||
-      _server.Version().empty())
+  if (_id.Server().URL().empty() || _id.Server().LocalName().empty() ||
+      _id.Server().Version().empty())
   {
     ignerr << "Can't download model, server configuration incomplete: "
-          << std::endl << _server.AsString() << std::endl;
+          << std::endl << _id.Server().AsString() << std::endl;
     return Result(Result::FETCH_ERROR);
   }
 
@@ -213,8 +213,8 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
   // Request
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
-  resp = rest.Request(REST::GET, _server.URL(), _server.Version(), path, {},
-      {}, "");
+  resp = rest.Request(REST::GET, _id.Server().URL(), _id.Server().Version(),
+      path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
@@ -227,7 +227,7 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
 
 //////////////////////////////////////////////////
 bool FuelClient::ParseModelURL(const std::string &_modelURL,
-  ServerConfig &_srv, ModelIdentifier &_id)
+  ServerConfig &/*_server*/, ModelIdentifier &_id)
 {
   std::smatch match;
   std::string scheme;
@@ -259,33 +259,34 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
     return false;
 
   // Get remaining server information, such as local name, from config
-  _srv.URL(scheme + "://" + server);
-  _srv.Version(version);
+  ServerConfig serverConfig;
+  serverConfig.URL(scheme + "://" + server);
+  serverConfig.Version(version);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.URL() == _srv.URL())
+    if (s.URL() == serverConfig.URL())
     {
-      if (!version.empty() && s.Version() != _srv.Version())
+      if (!version.empty() && s.Version() != serverConfig.Version())
       {
         ignwarn << "Requested server API version [" << version
                 << "] for server [" << s.URL() << "], but will use ["
                 << s.Version() << "] as given in the config file."
                 << std::endl;
       }
-      _srv = s;
+      serverConfig = s;
       break;
     }
   }
 
-  if (_srv.LocalName().empty() || _srv.Version().empty())
+  if (_id.Server().LocalName().empty() || _id.Server().Version().empty())
   {
     ignwarn << "Server configuration is incomplete:" << std::endl
-            << _srv.AsString();
+            << _id.Server().AsString();
   }
 
   _id.Owner(owner);
   _id.Name(name);
-  _id.Server(_srv);
+  _id.Server(serverConfig);
 
   return true;
 }
@@ -307,7 +308,7 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
   if (result)
   {
     _path = ignition::common::joinPaths(this->Config().CacheLocation(),
-      srv.LocalName(), id.Owner(), "models", id.Name());
+      id.Server().LocalName(), id.Owner(), "models", id.Name());
   }
 
   return result;
