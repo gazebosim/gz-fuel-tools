@@ -16,6 +16,7 @@
 */
 
 #include <gtest/gtest.h>
+#include <ignition/common/Console.hh>
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/ClientConfig.hh"
 
@@ -27,18 +28,104 @@ using namespace ignft;
 /// \brief Nothing crashes
 TEST(FuelClient, ParseModelURL)
 {
-  FuelClient client;
-  ServerConfig srv;
-  ModelIdentifier id;
-  const std::string modelURL =
-    "https://api.ignitionfuel.org/1.0/german/models/Cardboard Box";
-  EXPECT_TRUE(client.ParseModelURL(modelURL, srv, id));
-  EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
-  EXPECT_EQ(id.Owner(), "german");
-  EXPECT_EQ(id.Name(), "Cardboard Box");
+  common::Console::SetVerbosity(4);
 
-  // bad URL
-  EXPECT_FALSE(client.ParseModelURL("bad url", srv, id));
+  // URL - without client config
+  {
+    FuelClient client;
+    ServerConfig srv;
+    ModelIdentifier id;
+    const std::string modelURL{
+      "https://api.ignitionfuel.org/1.0/german/models/Cardboard Box"};
+    EXPECT_TRUE(client.ParseModelURL(modelURL, srv, id));
+
+    EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(srv.Version(), "1.0");
+    EXPECT_TRUE(srv.LocalName().empty());
+    EXPECT_EQ(id.Owner(), "german");
+    EXPECT_EQ(id.Name(), "Cardboard Box");
+  }
+
+  // URL - with client config
+  {
+    ClientConfig config;
+    config.LoadConfig();
+
+    FuelClient client(config);
+    ServerConfig srv;
+    ModelIdentifier id;
+    const std::string modelURL{
+      "https://api.ignitionfuel.org/1.0/german/models/Cardboard Box"};
+    EXPECT_TRUE(client.ParseModelURL(modelURL, srv, id));
+
+    EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(srv.Version(), "1.0");
+    EXPECT_EQ(srv.LocalName(), "osrf");
+    EXPECT_EQ(id.Owner(), "german");
+    EXPECT_EQ(id.Name(), "Cardboard Box");
+  }
+
+  // URL - version different from config
+  {
+    ClientConfig config;
+    config.LoadConfig();
+
+    FuelClient client(config);
+    ServerConfig srv;
+    ModelIdentifier id;
+    const std::string modelURL{
+      "https://api.ignitionfuel.org/5.0/german/models/Cardboard Box"};
+    EXPECT_TRUE(client.ParseModelURL(modelURL, srv, id));
+
+    EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(srv.Version(), "1.0");
+    EXPECT_EQ(srv.LocalName(), "osrf");
+    EXPECT_EQ(id.Owner(), "german");
+    EXPECT_EQ(id.Name(), "Cardboard Box");
+  }
+
+  // Unique name - without client config
+  {
+    FuelClient client;
+    ServerConfig srv;
+    ModelIdentifier id;
+    const std::string modelUniqueName{
+      "https://api.ignitionfuel.org/german/models/Cardboard Box"};
+    EXPECT_TRUE(client.ParseModelURL(modelUniqueName, srv, id));
+
+    EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
+    EXPECT_TRUE(srv.Version().empty());
+    EXPECT_TRUE(srv.LocalName().empty());
+    EXPECT_EQ(id.Owner(), "german");
+    EXPECT_EQ(id.Name(), "Cardboard Box");
+  }
+
+  // Unique name - with client config
+  {
+    ClientConfig config;
+    config.LoadConfig();
+
+    FuelClient client(config);
+    ServerConfig srv;
+    ModelIdentifier id;
+    const std::string modelUniqueName{
+      "https://api.ignitionfuel.org/german/models/Cardboard Box"};
+    EXPECT_TRUE(client.ParseModelURL(modelUniqueName, srv, id));
+
+    EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(srv.Version(), "1.0");
+    EXPECT_EQ(srv.LocalName(), "osrf");
+    EXPECT_EQ(id.Owner(), "german");
+    EXPECT_EQ(id.Name(), "Cardboard Box");
+  }
+
+  // Bad URL
+  {
+    FuelClient client;
+    ServerConfig srv;
+    ModelIdentifier id;
+    EXPECT_FALSE(client.ParseModelURL("bad url", srv, id));
+  }
 }
 
 //////////////////////////////////////////////////
