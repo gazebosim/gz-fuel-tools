@@ -18,7 +18,6 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
-#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
 #include "ignition/fuel_tools/ClientConfig.hh"
@@ -157,7 +156,6 @@ TEST(ClientConfig, RepeatedServerConfiguration)
 /// \brief A server without URL is not valid.
 TEST(ClientConfig, NoServerURLConfiguration)
 {
-  common::Console::SetVerbosity(4);
   ClientConfig config;
 
   // Create a temporary file with the configuration.
