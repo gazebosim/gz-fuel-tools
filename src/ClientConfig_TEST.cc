@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
+#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
 #include "ignition/fuel_tools/ClientConfig.hh"
@@ -95,11 +96,9 @@ TEST(ClientConfig, CustomConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
       << "    url: https://api.ignitionfuel.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    name: another_server"               << std::endl
       << "    url: https://myserver"              << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
@@ -123,40 +122,6 @@ TEST(ClientConfig, CustomConfiguration)
 }
 
 /////////////////////////////////////////////////
-/// \brief A server contains an already used name.
-TEST(ClientConfig, RepeatedServerURLConfiguration)
-{
-  ClientConfig config;
-
-  // Create a temporary file with the configuration.
-  std::ofstream ofs;
-  std::string testPath = "test_conf.yaml";
-  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
-
-  ofs << "---"                                    << std::endl
-      << "# The list of servers."                 << std::endl
-      << "servers:"                               << std::endl
-      << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
-      << ""                                       << std::endl
-      << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
-      << "    url: https://myserver"              << std::endl
-      << ""                                       << std::endl
-      << "# Where are the assets stored in disk." << std::endl
-      << "cache:"                                 << std::endl
-      << "  path: /tmp/ignition/fuel"             << std::endl
-      << std::endl;
-
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
-
-  // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
-}
-
-/////////////////////////////////////////////////
 /// \brief A server contains an already used URL.
 TEST(ClientConfig, RepeatedServerConfiguration)
 {
@@ -171,11 +136,9 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
       << "    url: https://api.ignitionfuel.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    name: another_server"               << std::endl
       << "    url: https://api.ignitionfuel.org"  << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
@@ -191,60 +154,10 @@ TEST(ClientConfig, RepeatedServerConfiguration)
 }
 
 /////////////////////////////////////////////////
-/// \brief A server without name is not valid.
-TEST(ClientConfig, NoServerNameConfiguration)
-{
-  ClientConfig config;
-
-  // Create a temporary file with the configuration.
-  std::ofstream ofs;
-  std::string testPath = "test_conf.yaml";
-  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
-
-  ofs << "---"                                    << std::endl
-      << "# The list of servers."                 << std::endl
-      << "servers:"                               << std::endl
-      << "  -"                                    << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
-      << std::endl;
-
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
-
-  // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
-}
-
-/////////////////////////////////////////////////
-/// \brief A server with an empty name is not valid.
-TEST(ClientConfig, EmptyServerNameConfiguration)
-{
-  ClientConfig config;
-
-  // Create a temporary file with the configuration.
-  std::ofstream ofs;
-  std::string testPath = "test_conf.yaml";
-  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
-
-  ofs << "---"                                    << std::endl
-      << "# The list of servers."                 << std::endl
-      << "servers:"                               << std::endl
-      << "  -"                                    << std::endl
-      << "    name: "                             << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
-      << std::endl;
-
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
-
-  // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
-}
-
-/////////////////////////////////////////////////
 /// \brief A server without URL is not valid.
 TEST(ClientConfig, NoServerURLConfiguration)
 {
+  common::Console::SetVerbosity(4);
   ClientConfig config;
 
   // Create a temporary file with the configuration.
@@ -256,7 +169,7 @@ TEST(ClientConfig, NoServerURLConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"  << std::endl
+      << "    banana: coconut"                           << std::endl
       << std::endl;
 
   config.SetConfigPath(testPath);
@@ -281,7 +194,6 @@ TEST(ClientConfig, EmptyServerURLConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
       << "    url: "                              << std::endl
       << std::endl;
 
