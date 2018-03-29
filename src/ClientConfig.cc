@@ -53,7 +53,7 @@ class ignition::fuel_tools::ClientConfigPrivate
 class ignition::fuel_tools::ServerConfigPrivate
 {
   /// \brief URL to reach server
-  public: std::string url;
+  public: common::URI url;
 
   /// \brief A key to auth with the server
   public: std::string key;
@@ -90,18 +90,25 @@ ServerConfig::~ServerConfig()
 //////////////////////////////////////////////////
 std::string ServerConfig::URL() const
 {
-  return this->dataPtr->url;
+  return this->dataPtr->url.Str();
 }
 
 //////////////////////////////////////////////////
 void ServerConfig::URL(const std::string &_url)
 {
-  // Strip trailing slashes
-  std::string url = _url;
-  while (!url.empty() && url.back() == '/')
-    url.pop_back();
+  this->SetUrl(common::URI(_url));
+}
 
-  this->dataPtr->url = url;
+//////////////////////////////////////////////////
+common::URI ServerConfig::Url() const
+{
+  return this->dataPtr->url;
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::SetUrl(const common::URI &_url)
+{
+  this->dataPtr->url = _url;
 }
 
 //////////////////////////////////////////////////

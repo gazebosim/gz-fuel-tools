@@ -22,6 +22,8 @@
 #include <string>
 #include <vector>
 
+#include <ignition/common/URI.hh>
+
 #include "ignition/fuel_tools/Helpers.hh"
 
 namespace ignition
@@ -54,6 +56,14 @@ namespace ignition
 
       /// \brief set the URL of this server
       public: void URL(const std::string &_url);
+
+      /// \brief Get the URL to access the server
+      /// \return Server URL
+      public: common::URI Url() const;
+
+      /// \brief Set the URL of this server
+      /// \param[in] Server URL
+      public: void SetUrl(const common::URI &_url);
 
       /// \brief get folder name for server on disk
       /// \deprecated Has no effect, will be deprecated on version 2
