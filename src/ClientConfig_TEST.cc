@@ -56,11 +56,11 @@ TEST(ClientConfig, ServersCanBeAdded)
 {
   ClientConfig config;
   ServerConfig srv;
-  srv.URL("asdf");
+  srv.URL("http://asdf");
   config.AddServer(srv);
 
   ASSERT_EQ(1u, config.Servers().size());
-  EXPECT_EQ(std::string("asdf"), config.Servers().front().URL());
+  EXPECT_EQ(std::string("http://asdf"), config.Servers().front().URL());
 }
 
 /////////////////////////////////////////////////
