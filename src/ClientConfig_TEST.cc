@@ -337,6 +337,46 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
   EXPECT_TRUE(ignition::common::removeFile(testPath));
 }
 
+/////////////////////////////////////////////////
+TEST(ServerConfig, Url)
+{
+  // Invalid URL string
+  {
+    ServerConfig srv;
+    srv.URL("asdf");
+    EXPECT_TRUE(srv.URL().empty());
+  }
+
+  // Valid URL
+  {
+    ServerConfig srv;
+    srv.URL("http://banana:8080");
+    EXPECT_EQ("http://banana:8080", srv.URL());
+    EXPECT_EQ("http", srv.Url().Scheme());
+    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
+  }
+
+  // Trailing /
+  {
+    ServerConfig srv;
+    srv.URL("http://banana:8080/");
+    EXPECT_EQ("http://banana:8080", srv.URL());
+  }
+
+  // Set from URI
+  {
+    auto url = common::URI();
+    url.SetScheme("http");
+    url.Path() = common::URIPath("banana:8080");
+
+    ServerConfig srv;
+    srv.SetUrl(url);
+    EXPECT_EQ("http://banana:8080", srv.URL());
+    EXPECT_EQ("http", srv.Url().Scheme());
+    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
+  }
+}
+
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
