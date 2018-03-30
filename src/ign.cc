@@ -118,7 +118,8 @@ extern "C" void uglyPrint(
 /// \param[in] _client Fuel client
 /// \param[in] _server Server configuration
 /// \param[out] _resourceMap Key is owner name, value is vector of resources
-/// \return True if successful
+/// \return True if successful, will fail if there's a server error or if the
+/// server has no models yet.
 extern "C" bool getAllModels(
     const ignition::fuel_tools::FuelClient &_client,
     const ignition::fuel_tools::ServerConfig &_server,
@@ -152,7 +153,8 @@ extern "C" bool getAllModels(
 /// \param[in] _server Server configuration
 /// \param[in] _modelId Identifier for models to be returned
 /// \param[out] _resourceMap Key is owner name, value is vector of resources
-/// \return True if successful
+/// \return True if successful, will fail if there's a server error or if the
+/// server has no models yet.
 extern "C" bool getOwnerModels(
     const ignition::fuel_tools::FuelClient &_client,
     const ignition::fuel_tools::ServerConfig &_server,
