@@ -41,7 +41,7 @@ class ignition::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL.
   /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
-  public: std::string kModelURLRegexStr =
+  public: const std::string kModelURLRegexStr{
     // Method
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
@@ -53,12 +53,12 @@ class ignition::fuel_tools::FuelClientPrivate
     // "models"
     "models\\/+"
     // Name
-    "([^\\/]+)\\/*";
+    "([^\\/]+)\\/*"};
 
   /// \brief A model unique name, which is the same as the URL but without the
   /// API version.
   /// E.g.: https://api.ignitionfuel.org/caguero/models/Beer
-  public: std::string kModelUniqueNameRegexStr =
+  public: const std::string kModelUniqueNameRegexStr{
     // Method
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
@@ -68,7 +68,7 @@ class ignition::fuel_tools::FuelClientPrivate
     // "models"
     "models\\/+"
     // Name
-    "([^\\/]+)\\/*";
+    "([^\\/]+)\\/*"};
 
   /// \brief Client configuration
   public: ClientConfig config;
