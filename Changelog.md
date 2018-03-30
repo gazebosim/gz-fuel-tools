@@ -16,6 +16,7 @@
 1. List models from command line
     * [Pull request 43](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/43)
     * [Pull request 48](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/48)
+    * [Pull request 44](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/44)
 
 1. Added const constructors for ModelIter and Model
     * [Pull request 42](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/42)

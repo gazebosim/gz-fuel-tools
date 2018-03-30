@@ -146,6 +146,21 @@ ModelIter FuelClient::Models(const ServerConfig &_server)
 }
 
 //////////////////////////////////////////////////
+ModelIter FuelClient::Models(const ServerConfig &_server) const
+{
+  ModelIter iter = ModelIterFactory::Create(this->dataPtr->rest,
+      _server, "models");
+
+  if (!iter)
+  {
+    // Return just the cached models
+    ignwarn << "Failed to fetch models from server, returning cached models\n";
+    return this->dataPtr->cache->AllModels();
+  }
+  return iter;
+}
+
+//////////////////////////////////////////////////
 ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id)
 {
@@ -157,7 +172,34 @@ ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
   // Todo try to fetch model directly from a server
-  auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
+  // Note: ign-fuel-server doesn't like URLs ending in /
+  std::string path;
+  if (!_id.Name().empty())
+    path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
+  else
+    path = ignition::common::joinPaths(_id.Owner(), "models");
+
+  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
+}
+
+//////////////////////////////////////////////////
+ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
+  const ModelIdentifier &_id) const
+{
+  // Check local cache first
+  ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
+  if (localIter)
+    return localIter;
+
+  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+
+  // Todo try to fetch model directly from a server
+  // Note: ign-fuel-server doesn't like URLs ending in /
+  std::string path;
+  if (!_id.Name().empty())
+    path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
+  else
+    path = ignition::common::joinPaths(_id.Owner(), "models");
 
   return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
 }

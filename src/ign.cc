@@ -25,6 +25,8 @@
 #include <chrono>
 #include <iostream>
 
+#include <ignition/common/Console.hh>
+
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/config.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
@@ -112,6 +114,76 @@ extern "C" void uglyPrint(
 }
 
 //////////////////////////////////////////////////
+/// \brief Fill a map with all models from a server
+/// \param[in] _client Fuel client
+/// \param[in] _server Server configuration
+/// \param[out] _resourceMap Key is owner name, value is vector of resources
+/// \return True if successful, will fail if there's a server error or if the
+/// server has no models yet.
+extern "C" bool getAllModels(
+    const ignition::fuel_tools::FuelClient &_client,
+    const ignition::fuel_tools::ServerConfig &_server,
+    std::map<std::string, std::vector<std::string>> &_resourceMap)
+{
+  auto iter = _client.Models(_server);
+
+  if (!iter)
+  {
+    std::cout <<
+        "Either failed to fetch model list, or server has no models yet."
+        << std::endl;
+    return false;
+  }
+
+  // Rearrange by user
+  // key: user name
+  // value: vector of model names
+  for (; iter; ++iter)
+  {
+    _resourceMap[iter->Identification().Owner()].push_back(
+        iter->Identification().Name());
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
+/// \brief Fill a map with all models from an owner
+/// \param[in] _client Fuel client
+/// \param[in] _modelId Identifier for models to be returned
+/// \param[out] _resourceMap Key is owner name, value is vector of resources
+/// \return True if successful, will fail if there's a server error or if the
+/// server has no models yet.
+extern "C" bool getOwnerModels(
+    const ignition::fuel_tools::FuelClient &_client,
+    const ignition::fuel_tools::ModelIdentifier &_modelId,
+    std::map<std::string, std::vector<std::string>> &_resourceMap)
+{
+  // Dummy server config not used, will be deprecated on version 2
+  ignition::fuel_tools::ServerConfig server;
+  auto iter = _client.Models(server, _modelId);
+
+  if (!iter)
+  {
+    std::cout <<
+        "Either failed to fetch model list, or server has no models yet."
+        << std::endl;
+    return false;
+  }
+
+  // Rearrange by user
+  // key: user name
+  // value: vector of model names
+  for (; iter; ++iter)
+  {
+    _resourceMap[iter->Identification().Owner()].push_back(
+        iter->Identification().Name());
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 {
   return strdup(IGNITION_FUEL_TOOLS_VERSION_FULL);
@@ -119,9 +191,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
-    const char *_raw)
+    const char *_owner, const char *_raw)
 {
   std::string url{_url};
+  std::string owner{_owner};
   std::string rawStr{_raw};
   std::transform(rawStr.begin(), rawStr.end(),
                  rawStr.begin(), ::tolower);
@@ -142,11 +215,18 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
 
+  // Filter
+  ignition::fuel_tools::ModelIdentifier modelId;
+  if (!owner.empty())
+    modelId.Owner(owner);
+
   ignition::fuel_tools::FuelClient client(conf);
 
   // Get models
   for (auto server : conf.Servers())
   {
+    modelId.Server(server);
+
     if (pretty)
     {
       std::cout << "Fetching model list from " << server.URL() << "..."
@@ -155,14 +235,18 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
-    auto iter = client.Models(server);
+    std::map<std::string, std::vector<std::string>> modelsMap;
 
-    if (!iter)
+    // All models
+    if (owner.empty())
     {
-      std::cout <<
-          "Either failed to fetch model list, or server has no models yet."
-          << std::endl;
-      return false;
+      if (!getAllModels(client, server, modelsMap))
+        return false;
+    }
+    else
+    {
+      if (!getOwnerModels(client, modelId, modelsMap))
+        return false;
     }
 
     auto endTime = std::chrono::high_resolution_clock::now();
@@ -175,16 +259,6 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
                 << std::endl;
     }
 
-    // Rearrange by user
-    // key: user name
-    // value: vector of model names
-    std::map<std::string, std::vector<std::string>> modelsMap;
-    for (; iter; ++iter)
-    {
-      modelsMap[iter->Identification().Owner()].push_back(
-          iter->Identification().Name());
-    }
-
     // Print all models
     if (pretty)
       prettyPrint(server, modelsMap, "models");
@@ -194,3 +268,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 
   return true;
 }
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbose(const char *_verbosity)
+{
+  ignition::common::Console::SetVerbosity(std::atoi(_verbosity));
+}
+
