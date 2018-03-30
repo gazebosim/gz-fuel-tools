@@ -14,5 +14,8 @@
     * [Pull request 43](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/43)
     * [Pull request 48](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/48)
 
+1. Added const constructors for ModelIter and Model
+    * [Pull request 42](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/42)
+
 ## Ignition Fuel Tools 0.x.x
 

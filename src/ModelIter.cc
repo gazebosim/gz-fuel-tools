@@ -265,6 +265,12 @@ ModelIter::operator bool()
 }
 
 //////////////////////////////////////////////////
+ModelIter::operator bool() const
+{
+  return !this->dataPtr->HasReachedEnd();
+}
+
+//////////////////////////////////////////////////
 ModelIter &ModelIter::operator++()
 {
   // TODO Request more data if there are more pages
