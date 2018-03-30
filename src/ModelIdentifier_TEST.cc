@@ -157,7 +157,6 @@ TEST(ModelIdentifier, AsString)
         "Tags: \n"
         "Server:\n"
         "  URL: \n"
-        "  Local name: \n"
         "  Version: 1.0\n"
         "  API key: \n";
     EXPECT_EQ(str, id.AsString());

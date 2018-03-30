@@ -160,7 +160,6 @@ std::string ServerConfig::AsString(const std::string &_prefix) const
 {
   std::stringstream out;
   out << _prefix << "URL: " << this->URL() << std::endl
-      << _prefix << "Local name: " << this->LocalName() << std::endl
       << _prefix << "Version: " << this->Version() << std::endl
       << _prefix << "API key: " << this->APIKey() << std::endl;
   return out.str();

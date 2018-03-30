@@ -284,7 +284,7 @@ TEST(ClientConfig, AsString)
 
   {
     ServerConfig server;
-    std::string str = "URL: \nLocal name: \nVersion: 1.0\nAPI key: \n";
+    std::string str = "URL: \nVersion: 1.0\nAPI key: \n";
     EXPECT_EQ(str, server.AsString());
   }
 
@@ -299,7 +299,7 @@ TEST(ClientConfig, AsString)
     igndbg << str << std::endl;
 
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
-    EXPECT_NE(str.find("local_name"), std::string::npos);
+    EXPECT_EQ(str.find("local_name"), std::string::npos);
     EXPECT_NE(str.find("2.0"), std::string::npos);
     EXPECT_NE(str.find("ABCD"), std::string::npos);
   }
