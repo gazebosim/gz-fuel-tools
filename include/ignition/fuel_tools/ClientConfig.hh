@@ -66,9 +66,11 @@ namespace ignition
       public: void SetUrl(const common::URI &_url);
 
       /// \brief get folder name for server on disk
+      /// \deprecated Has no effect, will be deprecated on version 2
       public: std::string LocalName() const;
 
       /// \brief set folder name for server on disk
+      /// \deprecated Has no effect, will be deprecated on version 2
       public: void LocalName(const std::string &_name);
 
       /// \brief Get the API key to auth with the server

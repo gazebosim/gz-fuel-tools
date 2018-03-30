@@ -41,65 +41,63 @@ using namespace fuel_tools;
 /// \brief Creates a directory structure in the build directory with 6 models
 void createLocal6(ClientConfig &_conf)
 {
-  if (common::exists("LocalCache_TEST6"))
+  if (common::exists("localhost:8001"))
   {
-    common::removeAll("LocalCache_TEST6");
+    common::removeAll("localhost:8001");
   }
-  common::createDirectories("LocalCache_TEST6/alice/am1");
-  common::createDirectories("LocalCache_TEST6/alice/am2");
-  common::createDirectories("LocalCache_TEST6/bob/bm1");
-  common::createDirectories("LocalCache_TEST6/bob/bm2");
-  common::createDirectories("LocalCache_TEST6/trudy/tm1");
-  common::createDirectories("LocalCache_TEST6/trudy/tm2");
+  common::createDirectories("localhost:8001/alice/am1");
+  common::createDirectories("localhost:8001/alice/am2");
+  common::createDirectories("localhost:8001/bob/bm1");
+  common::createDirectories("localhost:8001/bob/bm2");
+  common::createDirectories("localhost:8001/trudy/tm1");
+  common::createDirectories("localhost:8001/trudy/tm2");
 
-  std::ofstream fout("LocalCache_TEST6/alice/am1/model.config",
+  std::ofstream fout("localhost:8001/alice/am1/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/alice/am2/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/bob/bm1/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/bob/bm2/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/trudy/tm1/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/trudy/tm2/model.config");
+  common::copyFile("localhost:8001/alice/am1/model.config",
+                   "localhost:8001/alice/am2/model.config");
+  common::copyFile("localhost:8001/alice/am1/model.config",
+                   "localhost:8001/bob/bm1/model.config");
+  common::copyFile("localhost:8001/alice/am1/model.config",
+                   "localhost:8001/bob/bm2/model.config");
+  common::copyFile("localhost:8001/alice/am1/model.config",
+                   "localhost:8001/trudy/tm1/model.config");
+  common::copyFile("localhost:8001/alice/am1/model.config",
+                   "localhost:8001/trudy/tm2/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8001/");
-  srv.LocalName("LocalCache_TEST6");
   _conf.AddServer(srv);
 }
 
 /// \brief Creates a directory structure in the build directory with 3 models
 void createLocal3(ClientConfig &_conf)
 {
-  if (common::exists("LocalCache_TEST3"))
+  if (common::exists("localhost:8007"))
   {
-    common::removeAll("LocalCache_TEST3");
+    common::removeAll("localhost:8007");
   }
-  common::createDirectories("LocalCache_TEST3/alice/am1");
-  common::createDirectories("LocalCache_TEST3/bob/bm1");
-  common::createDirectories("LocalCache_TEST3/trudy/tm1");
+  common::createDirectories("localhost:8007/alice/am1");
+  common::createDirectories("localhost:8007/bob/bm1");
+  common::createDirectories("localhost:8007/trudy/tm1");
 
-  std::ofstream fout("LocalCache_TEST3/alice/am1/model.config",
+  std::ofstream fout("localhost:8007/alice/am1/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile("LocalCache_TEST3/alice/am1/model.config",
-                   "LocalCache_TEST3/bob/bm1/model.config");
-  common::copyFile("LocalCache_TEST3/alice/am1/model.config",
-                   "LocalCache_TEST3/trudy/tm1/model.config");
+  common::copyFile("localhost:8007/alice/am1/model.config",
+                   "localhost:8007/bob/bm1/model.config");
+  common::copyFile("localhost:8007/alice/am1/model.config",
+                   "localhost:8007/trudy/tm1/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8007/");
-  srv.LocalName("LocalCache_TEST3");
   _conf.AddServer(srv);
 }
 

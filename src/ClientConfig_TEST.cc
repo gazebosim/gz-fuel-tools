@@ -96,11 +96,9 @@ TEST(ClientConfig, CustomConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
       << "    url: https://api.ignitionfuel.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    name: another_server"               << std::endl
       << "    url: https://myserver"              << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
@@ -124,40 +122,6 @@ TEST(ClientConfig, CustomConfiguration)
 }
 
 /////////////////////////////////////////////////
-/// \brief A server contains an already used name.
-TEST(ClientConfig, RepeatedServerURLConfiguration)
-{
-  ClientConfig config;
-
-  // Create a temporary file with the configuration.
-  std::ofstream ofs;
-  std::string testPath = "test_conf.yaml";
-  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
-
-  ofs << "---"                                    << std::endl
-      << "# The list of servers."                 << std::endl
-      << "servers:"                               << std::endl
-      << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
-      << ""                                       << std::endl
-      << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
-      << "    url: https://myserver"              << std::endl
-      << ""                                       << std::endl
-      << "# Where are the assets stored in disk." << std::endl
-      << "cache:"                                 << std::endl
-      << "  path: /tmp/ignition/fuel"             << std::endl
-      << std::endl;
-
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
-
-  // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
-}
-
-/////////////////////////////////////////////////
 /// \brief A server contains an already used URL.
 TEST(ClientConfig, RepeatedServerConfiguration)
 {
@@ -172,67 +136,14 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
       << "    url: https://api.ignitionfuel.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    name: another_server"               << std::endl
       << "    url: https://api.ignitionfuel.org"  << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl
       << "  path: /tmp/ignition/fuel"             << std::endl
-      << std::endl;
-
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
-
-  // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
-}
-
-/////////////////////////////////////////////////
-/// \brief A server without name is not valid.
-TEST(ClientConfig, NoServerNameConfiguration)
-{
-  ClientConfig config;
-
-  // Create a temporary file with the configuration.
-  std::ofstream ofs;
-  std::string testPath = "test_conf.yaml";
-  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
-
-  ofs << "---"                                    << std::endl
-      << "# The list of servers."                 << std::endl
-      << "servers:"                               << std::endl
-      << "  -"                                    << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
-      << std::endl;
-
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
-
-  // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
-}
-
-/////////////////////////////////////////////////
-/// \brief A server with an empty name is not valid.
-TEST(ClientConfig, EmptyServerNameConfiguration)
-{
-  ClientConfig config;
-
-  // Create a temporary file with the configuration.
-  std::ofstream ofs;
-  std::string testPath = "test_conf.yaml";
-  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
-
-  ofs << "---"                                    << std::endl
-      << "# The list of servers."                 << std::endl
-      << "servers:"                               << std::endl
-      << "  -"                                    << std::endl
-      << "    name: "                             << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
       << std::endl;
 
   config.SetConfigPath(testPath);
@@ -257,7 +168,7 @@ TEST(ClientConfig, NoServerURLConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"  << std::endl
+      << "    banana: coconut"                           << std::endl
       << std::endl;
 
   config.SetConfigPath(testPath);
@@ -282,7 +193,6 @@ TEST(ClientConfig, EmptyServerURLConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
       << "    url: "                              << std::endl
       << std::endl;
 
@@ -374,7 +284,7 @@ TEST(ClientConfig, AsString)
 
   {
     ServerConfig server;
-    std::string str = "URL: \nLocal name: \nVersion: 1.0\nAPI key: \n";
+    std::string str = "URL: \nVersion: 1.0\nAPI key: \n";
     EXPECT_EQ(str, server.AsString());
   }
 
@@ -389,7 +299,7 @@ TEST(ClientConfig, AsString)
     igndbg << str << std::endl;
 
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
-    EXPECT_NE(str.find("local_name"), std::string::npos);
+    EXPECT_EQ(str.find("local_name"), std::string::npos);
     EXPECT_NE(str.find("2.0"), std::string::npos);
     EXPECT_NE(str.find("ABCD"), std::string::npos);
   }
