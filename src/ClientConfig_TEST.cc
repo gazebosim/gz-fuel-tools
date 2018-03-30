@@ -56,11 +56,11 @@ TEST(ClientConfig, ServersCanBeAdded)
 {
   ClientConfig config;
   ServerConfig srv;
-  srv.URL("asdf");
+  srv.SetUrl("asdf");
   config.AddServer(srv);
 
   ASSERT_EQ(1u, config.Servers().size());
-  EXPECT_EQ(std::string("asdf"), config.Servers().front().URL());
+  EXPECT_EQ(std::string("asdf"), config.Servers().front().Url());
 }
 
 /////////////////////////////////////////////////
@@ -73,7 +73,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
 
   ASSERT_EQ(1u, config.Servers().size());
   EXPECT_EQ("https://api.ignitionfuel.org",
-    config.Servers().front().URL());
+    config.Servers().front().Url());
 
   std::string defaultCacheLocation = ignition::common::joinPaths(
     homePath(), ".ignition", "fuel");
@@ -112,9 +112,9 @@ TEST(ClientConfig, CustomConfiguration)
 
   ASSERT_EQ(2u, config.Servers().size());
   EXPECT_EQ("https://api.ignitionfuel.org",
-    config.Servers().front().URL());
+    config.Servers().front().Url());
   EXPECT_EQ("https://myserver",
-    config.Servers().back().URL());
+    config.Servers().back().Url());
 
   EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
 
@@ -124,7 +124,7 @@ TEST(ClientConfig, CustomConfiguration)
 
 /////////////////////////////////////////////////
 /// \brief A server contains an already used name.
-TEST(ClientConfig, RepeatedServerURLConfiguration)
+TEST(ClientConfig, RepeatedServerUrlConfiguration)
 {
   ClientConfig config;
 
@@ -243,7 +243,7 @@ TEST(ClientConfig, EmptyServerNameConfiguration)
 
 /////////////////////////////////////////////////
 /// \brief A server without URL is not valid.
-TEST(ClientConfig, NoServerURLConfiguration)
+TEST(ClientConfig, NoServerUrlConfiguration)
 {
   ClientConfig config;
 
@@ -268,7 +268,7 @@ TEST(ClientConfig, NoServerURLConfiguration)
 
 /////////////////////////////////////////////////
 /// \brief A server with an empty URL is not valid.
-TEST(ClientConfig, EmptyServerURLConfiguration)
+TEST(ClientConfig, EmptyServerUrlConfiguration)
 {
   ClientConfig config;
 

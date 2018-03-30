@@ -34,39 +34,67 @@ namespace ignition
     /// \brief Forward Declaration
     class ClientConfigPrivate;
 
-    /// \brief Describes options needed for a server
+    /// \brief Describes options needed for a server.
     class IGNITION_FUEL_TOOLS_VISIBLE ServerConfig
     {
-      /// \brief constructor
+      /// \brief Constructor.
       public: ServerConfig();
 
-      /// \brief copy constructor
+      /// \brief Copy constructor.
+      /// \param[in] _orig The server config to copy.
       public: ServerConfig(const ServerConfig &_orig);
 
-      /// \brief Assignment operator overload
+      /// \brief Assignment operator overload.
+      /// \param[in] _orig The server config to copy.
       public: ServerConfig &operator=(const ServerConfig &_orig);
 
-      /// \brief destructor
+      /// \brief Destructor.
       public: ~ServerConfig();
 
-      /// \brief get the URL to access the server
-      public: std::string URL() const;
+      /// \brief Get the URL to access the server.
+      /// \deperecated See std::string Url() const.
+      public: std::string IGN_DEPRECATED(2.0) URL() const;
 
-      /// \brief set the URL of this server
-      public: void URL(const std::string &_url);
+      /// \brief Get the URL to access the server.
+      /// \return The URL of this server.
+      public: std::string Url() const;
 
-      /// \brief get folder name for server on disk
+      /// \brief Set the URL of this server.
+      /// \deprecated See void SetUrl(const std::string &).
+      public: void IGN_DEPRECATED(2.0) URL(const std::string &_url);
+
+      /// \brief Set the URL of this server.
+      /// \param[in] _url URL of this server.
+      public: void SetUrl(const std::string &_url);
+
+      /// \brief Get folder name for server on disk.
+      /// \return The local folder name.
       public: std::string LocalName() const;
 
-      /// \brief set folder name for server on disk
-      public: void LocalName(const std::string &_name);
+      /// \brief Set folder name for server on disk.
+      /// \param[in] _name Folder name.
+      /// \deprecated See void SetLocalName(const std::string &).
+      public: void IGN_DEPRECATED(2.0) LocalName(const std::string &_name);
 
-      /// \brief Get the API key to auth with the server
-      public: std::string APIKey() const;
+      /// \brief Set folder name for server on disk.
+      /// \param[in] _name Folder name.
+      public: void SetLocalName(const std::string &_name);
 
-      /// \brief Set the API key to auth with the server
-      /// \todo deprecate this function.
-      public: void APIKey(const std::string &_key);
+      /// \brief Get the API key to auth with the server.
+      /// \deprecated See std::string ApiKey() const.
+      public: std::string IGN_DEPRECATED(2.0) APIKey() const;
+
+      /// \brief Get the API key to auth with the server.
+      /// \return The API key.
+      public: std::string ApiKey() const;
+
+      /// \brief Set the API key to auth with the server.
+      /// \deprecated See void SetApiKey(const std::string &_key).
+      public: void IGN_DEPRECATED(2.0) APIKey(const std::string &_key);
+
+      /// \brief Set the API key to auth with the server.
+      /// \param[in] _key The API key.
+      public: void SetApiKey(const std::string &_key);
 
       /// \brief Get the protocol version used with this server.
       /// \return The version. E.g.: "1.0".
@@ -74,26 +102,33 @@ namespace ignition
 
       /// \brief Set the protocol version used with this server.
       /// \param[in] _version The version. E.g.: "1.0".
-      public: void Version(const std::string &_version);
+      /// \deprecated See void SetVersion(const std::string &_version).
+      public: void IGN_DEPRECATED(2.0) Version(const std::string &_version);
+
+      /// \brief Set the protocol version used with this server.
+      /// \param[in] _version The version. E.g.: "1.0".
+      public: void SetVersion(const std::string &_version);
 
       /// \brief PIMPL
       private: std::unique_ptr<ServerConfigPrivate> dataPtr;
     };
 
-    /// \brief High level interface to ignition fuel
+    /// \brief High level interface to ignition fuel.
     ///
     class IGNITION_FUEL_TOOLS_VISIBLE ClientConfig
     {
-      /// \brief constructor
+      /// \brief Constructor.
       public: ClientConfig();
 
-      /// \brief copy constructor
+      /// \brief Copy constructor.
+      /// \param[in] _copy ClientConfig to copy.
       public: ClientConfig(const ClientConfig &_copy);
 
-      /// \brief Assignment operator overload
+      /// \brief Assignment operator overload.
+      /// \param[in] _copy ClientConfig to copy.
       public: ClientConfig &operator=(const ClientConfig &_copy);
 
-      /// \brief destructor
+      /// \brief Destructor.
       public: ~ClientConfig();
 
       /// \brief Set the user agent name.
@@ -116,20 +151,26 @@ namespace ignition
       /// \sa LoadConfig
       public: void SetConfigPath(const std::string &_path);
 
-      /// \brief List of servers the client will connect to
-      /// \return The list of servers
+      /// \brief List of servers the client will connect to.
+      /// \return The list of servers.
       public: std::vector<ServerConfig> Servers() const;
 
-      /// \brief Add a server to the list
-      /// \param[in] _srv The server config
+      /// \brief Add a server to the list.
+      /// \param[in] _srv The server config.
       public: void AddServer(const ServerConfig &_srv);
 
       /// \brief Where are models and stuff stored locally?
+      /// \return The location where assets are stored locally.
       public: std::string CacheLocation() const;
 
-      /// \brief Set where models and stuff are saved
+      /// \brief Set where models and stuff are saved.
       /// \param[in] _path path on disk where models are saved
-      public: void CacheLocation(const std::string &_path);
+      /// \deprecated See void CacheLocation(const std::string &_path)
+      public: void IGN_DEPRECATED(2.0) CacheLocation(const std::string &_path);
+
+      /// \brief Set where models and stuff are saved.
+      /// \param[in] _path path on disk where models are saved.
+      public: void SetCacheLocation(const std::string &_path);
 
       /// \brief PIMPL
       private: std::unique_ptr<ClientConfigPrivate> dataPtr;

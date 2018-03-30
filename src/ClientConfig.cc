@@ -97,11 +97,23 @@ ServerConfig::~ServerConfig()
 //////////////////////////////////////////////////
 std::string ServerConfig::URL() const
 {
+  return this->Url();
+}
+
+//////////////////////////////////////////////////
+std::string ServerConfig::Url() const
+{
   return this->dataPtr->url;
 }
 
 //////////////////////////////////////////////////
 void ServerConfig::URL(const std::string &_url)
+{
+  this->SetUrl(_url);
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::SetUrl(const std::string &_url)
 {
   // Strip trailing slashes
   std::string url = _url;
@@ -120,17 +132,35 @@ std::string ServerConfig::LocalName() const
 //////////////////////////////////////////////////
 void ServerConfig::LocalName(const std::string &_name)
 {
+  this->SetLocalName(_name);
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::SetLocalName(const std::string &_name)
+{
   this->dataPtr->localName = _name;
 }
 
 //////////////////////////////////////////////////
 std::string ServerConfig::APIKey() const
 {
+  return this->ApiKey();
+}
+
+//////////////////////////////////////////////////
+std::string ServerConfig::ApiKey() const
+{
   return this->dataPtr->key;
 }
 
 //////////////////////////////////////////////////
 void ServerConfig::APIKey(const std::string &_key)
+{
+  this->SetApiKey(_key);
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::SetApiKey(const std::string &_key)
 {
   this->dataPtr->key = _key;
 }
@@ -143,6 +173,12 @@ std::string ServerConfig::Version() const
 
 //////////////////////////////////////////////////
 void ServerConfig::Version(const std::string &_version)
+{
+  this->SetVersion(_version);
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::SetVersion(const std::string &_version)
 {
   this->dataPtr->version = _version;
 }
@@ -174,7 +210,7 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
       ignerr << "[" << ignFuelPath << "] is not a directory" << std::endl;
       return;
     }
-    this->CacheLocation(ignFuelPath);
+    this->SetCacheLocation(ignFuelPath);
   }
 }
 
@@ -324,7 +360,7 @@ bool ClientConfig::LoadConfig()
                 res = false;
                 break;
               }
-              if (savedServer.URL() == serverURL)
+              if (savedServer.Url() == serverURL)
               {
                 ignerr << "URL [" << serverURL << "] already exists. "
                        << "Ignoring server" << std::endl;
@@ -337,8 +373,8 @@ bool ClientConfig::LoadConfig()
             {
               // Add the new server.
               ServerConfig newServer;
-              newServer.LocalName(serverName);
-              newServer.URL(serverURL);
+              newServer.SetLocalName(serverName);
+              newServer.SetUrl(serverURL);
               this->AddServer(newServer);
             }
           }
@@ -422,7 +458,7 @@ bool ClientConfig::LoadConfig()
             << "path in the configuration file will be ignored" << std::endl;
   }
   else
-    this->CacheLocation(cacheLocation);
+    this->SetCacheLocation(cacheLocation);
 
   // Cleanup.
   yaml_parser_delete(&parser);
@@ -457,6 +493,12 @@ std::string ClientConfig::CacheLocation() const
 
 //////////////////////////////////////////////////
 void ClientConfig::CacheLocation(const std::string &_path)
+{
+  this->SetCacheLocation(_path);
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::SetCacheLocation(const std::string &_path)
 {
   this->dataPtr->cacheLocation = _path;
 }
