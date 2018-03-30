@@ -23,5 +23,8 @@
 1. Use common::URI for server URL
     * [Pull request 59](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/59)
 
+1. Remove server local name
+    * [Pull request 58](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/58)
+
 ## Ignition Fuel Tools 0.x.x
 
