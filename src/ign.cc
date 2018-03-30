@@ -211,6 +211,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     conf.LoadConfig();
   }
 
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+
   // Filter
   ignition::fuel_tools::ModelIdentifier modelId;
   if (!owner.empty())

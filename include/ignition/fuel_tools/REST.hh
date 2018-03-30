@@ -36,6 +36,11 @@ namespace ignition
 
       /// \brief The data received.
       public: std::string data;
+
+      /// \brief Map of headers where the key is the header type.
+      /// For example, a raw header of the form "Content-Type: json" would
+      /// use "Content-Type" as a key and "json" as the key's data.
+      public: std::map<std::string, std::string> headers;
     };
 
     /// \brief A helper class for making REST requests.
@@ -76,6 +81,14 @@ namespace ignition
           const std::string &_data,
           const std::map<std::string, std::string> &_form =
           std::map<std::string, std::string>()) const;
+
+      /// \brief Set the user agent name.
+      /// \param[in] _agent User agent name.
+      public: void SetUserAgent(const std::string &_agent);
+
+      /// \brief Get the user agent name.
+      /// \return Name of the user agent.
+      public: const std::string &UserAgent() const;
     };
   }
 }

@@ -78,6 +78,7 @@ FuelClient::FuelClient()
   this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelURLRegexStr));
+  this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 }
 
 //////////////////////////////////////////////////
@@ -87,6 +88,7 @@ FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
 {
   this->dataPtr->config = _config;
   this->dataPtr->rest = _rest;
+  this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 
   if (nullptr == _cache)
     this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
