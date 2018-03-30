@@ -131,7 +131,7 @@ Result FuelClient::ModelDetails(const ServerConfig &_server,
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models(const ServerConfig &_server)
+ModelIter FuelClient::Models(const ServerConfig &_server) const
 {
   ModelIter iter = ModelIterFactory::Create(this->dataPtr->rest,
       _server, "models");
@@ -147,7 +147,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server)
 
 //////////////////////////////////////////////////
 ModelIter FuelClient::Models(const ServerConfig &_server,
-  const ModelIdentifier &_id)
+  const ModelIdentifier &_id) const
 {
   // Check local cache first
   ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);

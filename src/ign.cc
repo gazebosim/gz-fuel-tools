@@ -121,7 +121,7 @@ extern "C" void uglyPrint(
 /// \return True if successful, will fail if there's a server error or if the
 /// server has no models yet.
 extern "C" bool getAllModels(
-    ignition::fuel_tools::FuelClient &_client,
+    const ignition::fuel_tools::FuelClient &_client,
     const ignition::fuel_tools::ServerConfig &_server,
     std::map<std::string, std::vector<std::string>> &_resourceMap)
 {
@@ -156,7 +156,7 @@ extern "C" bool getAllModels(
 /// \return True if successful, will fail if there's a server error or if the
 /// server has no models yet.
 extern "C" bool getOwnerModels(
-    ignition::fuel_tools::FuelClient &_client,
+    const ignition::fuel_tools::FuelClient &_client,
     const ignition::fuel_tools::ServerConfig &_server,
     const ignition::fuel_tools::ModelIdentifier &_modelId,
     std::map<std::string, std::vector<std::string>> &_resourceMap)
