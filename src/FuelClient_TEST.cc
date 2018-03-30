@@ -201,7 +201,7 @@ TEST(FuelClient, DownloadModel)
     EXPECT_EQ(path, cachedPath);
   }
 
-  // Try using inexistent URL
+  // Try using nonexistent URL
   {
     std::string url{
         "https://api.ignitionfuel.org/1.0/chapulina/models/Inexistent model"};
