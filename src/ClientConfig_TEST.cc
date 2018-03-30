@@ -338,6 +338,30 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
 }
 
 /////////////////////////////////////////////////
+TEST(ClientConfig, UserAgent)
+{
+  ClientConfig config;
+  EXPECT_EQ("IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL,
+            config.UserAgent());
+
+  config.SetUserAgent("my_user_agent");
+  EXPECT_EQ("my_user_agent", config.UserAgent());
+}
+
+/////////////////////////////////////////////////
+TEST(ServerConfig, APIKey)
+{
+  ServerConfig config;
+  EXPECT_TRUE(config.APIKey().empty());
+
+  config.APIKey("my_api_key");
+  EXPECT_EQ("my_api_key", config.APIKey());
+
+  config.APIKey("my_other_api_key");
+  EXPECT_EQ("my_other_api_key", config.APIKey());
+}
+
+/////////////////////////////////////////////////
 TEST(ServerConfig, Url)
 {
   // Invalid URL string
@@ -383,4 +407,3 @@ int main(int argc, char **argv)
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

@@ -42,10 +42,14 @@ class ignition::fuel_tools::ClientConfigPrivate
   public: std::vector<ServerConfig> servers;
 
   /// \brief a path on disk to where data is cached.
-  public: std::string cacheLocation;
+  public: std::string cacheLocation = "";
 
   /// \brief The path where the configuration file is located.
-  public: std::string configPath;
+  public: std::string configPath = "";
+
+  /// \brief Name of the user agent.
+  public: std::string userAgent =
+          "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
 };
 
 //////////////////////////////////////////////////
@@ -59,7 +63,7 @@ class ignition::fuel_tools::ServerConfigPrivate
   public: std::string localName;
 
   /// \brief A key to auth with the server
-  public: std::string key;
+  public: std::string key = "";
 
   /// \brief The protocol version used when talking with this server.
   public: std::string version = "1.0";
@@ -462,4 +466,16 @@ std::string ClientConfig::CacheLocation() const
 void ClientConfig::CacheLocation(const std::string &_path)
 {
   this->dataPtr->cacheLocation = _path;
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::SetUserAgent(const std::string &_agent)
+{
+  this->dataPtr->userAgent = _agent;
+}
+
+//////////////////////////////////////////////////
+const std::string &ClientConfig::UserAgent() const
+{
+  return this->dataPtr->userAgent;
 }
