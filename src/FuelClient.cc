@@ -358,13 +358,13 @@ Result FuelClient::DownloadModel(const std::string &_modelURL,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::CachedModel(const std::string &_modelURL,
+Result FuelClient::CachedModel(const common::URI &_modelUrl,
   std::string &_path)
 {
   // Get data from URL
   ModelIdentifier id;
   ServerConfig srv;
-  if (!this->ParseModelURL(_modelURL, srv, id))
+  if (!this->ParseModelURL(_modelUrl.Str(), srv, id))
   {
     return Result(Result::FETCH_ERROR);
   }

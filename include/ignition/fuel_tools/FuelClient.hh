@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <string>
+#include <ignition/common/URI.hh>
 
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/ModelIter.hh"
@@ -156,11 +157,11 @@ namespace ignition
                                    std::string &_path);
 
       /// \brief Check if a model is already present in the local cache.
-      /// \param[in] _modelURL The unique URL of the model on a Fuel server.
+      /// \param[in] _modelUrl The unique URL of the model on a Fuel server.
       /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
       /// \param[out] _path Local path where the model can be found.
       /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
-      public: Result CachedModel(const std::string &_modelURL,
+      public: Result CachedModel(const common::URI &_modelUrl,
                                  std::string &_path);
 
       /// \brief Parse server and model identifer from model URL or unique name.

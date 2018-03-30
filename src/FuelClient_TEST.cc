@@ -171,7 +171,9 @@ TEST(FuelClient, DownloadModel)
 
   // Download model from URL
   {
-    std::string url{
+    igndbg << common::URI::Valid(
+        "https://api.ignitionfuel.org/1.0/chapulina/models/Test box");
+    common::URI url{
         "https://api.ignitionfuel.org/1.0/chapulina/models/Test box"};
 
     // Check it is not cached
@@ -182,7 +184,7 @@ TEST(FuelClient, DownloadModel)
 
     // Download
     std::string path;
-    auto res2 = client.DownloadModel(url, path);
+    auto res2 = client.DownloadModel(url.Str(), path);
     EXPECT_TRUE(res2);
     EXPECT_EQ(Result(Result::FETCH), res2);
     EXPECT_EQ(common::cwd() +
@@ -240,7 +242,7 @@ TEST(FuelClient, CachedModel)
 
   // Cached model
   {
-    std::string url{"http://localhost:8007/1.0/alice/models/My Model"};
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model"};
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
@@ -251,7 +253,7 @@ TEST(FuelClient, CachedModel)
 
   // Non-cached model
   {
-    std::string url{"http://localhost:8007/1.0/alice/models/Banana"};
+    common::URI url{"http://localhost:8007/1.0/alice/models/Banana"};
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_FALSE(result);
@@ -260,7 +262,7 @@ TEST(FuelClient, CachedModel)
 
   // Bad URL
   {
-    std::string url{"banana"};
+    common::URI url{"banana"};
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_FALSE(result);
