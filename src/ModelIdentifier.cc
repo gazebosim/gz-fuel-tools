@@ -276,6 +276,12 @@ uint32_t ModelIdentifier::LikeCount() const
 //////////////////////////////////////////////////
 uint32_t ModelIdentifier::Downloads() const
 {
+  return this->DownloadCount();
+}
+
+//////////////////////////////////////////////////
+uint32_t ModelIdentifier::DownloadCount() const
+{
   return this->dataPtr->downloads;
 }
 
@@ -403,11 +409,11 @@ bool ModelIdentifier::SetLikeCount(const uint32_t _likes)
 //////////////////////////////////////////////////
 bool ModelIdentifier::Downloads(const uint32_t _downloads)
 {
-  return this->SetDownloads(_downloads);
+  return this->SetDownloadCount(_downloads);
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifier::SetDownloads(const uint32_t _downloads)
+bool ModelIdentifier::SetDownloadCount(const uint32_t _downloads)
 {
   this->dataPtr->downloads = _downloads;
   return true;

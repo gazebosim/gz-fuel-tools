@@ -14,3 +14,6 @@
  
 1. Deprecated the accessor `ModelIdentifier::Likes` for `ModelIdentifier::LikeCount`, and the mutator `ModelIdentifier::Likes` for `ModelIdentifier::SetLikeCount`.
     * [Pull request #52](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/52)
+
+1. Deprecated the accessor `ModelIdentifier::Downloads` for `ModelIdentifier::DownloadCount`, and the mutator `ModelIdentifier::Downloads` for `ModelIdentifier::SetDownloadCount`.
+    * [Pull request #52](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/52)

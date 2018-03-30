@@ -144,7 +144,12 @@ namespace ignition
 
       /// \brief Returns the number of downloads for the model.
       /// \return Number of downloads.
-      public: uint32_t Downloads() const;
+      /// \deprecated See uint32_t DownloadCount() const;
+      public: uint32_t IGN_DEPRECATED(2.0) Downloads() const;
+
+      /// \brief Returns the number of downloads for the model.
+      /// \return Number of downloads.
+      public: uint32_t DownloadCount() const;
 
       /// \brief Returns the license name.
       /// \return License name.
@@ -240,13 +245,13 @@ namespace ignition
       /// \brief Set the number of downloads of the model.
       /// \param[in] _downloads Number of downloads.
       /// \return True if successful.
-      /// \deprecated See bool SetDownloads(const uint32_t _downloads).
+      /// \deprecated See bool SetDownloadCount(const uint32_t _downloads).
       public: bool IGN_DEPRECATED(2.0) Downloads(const uint32_t _downloads);
 
       /// \brief Set the number of downloads of the model.
       /// \param[in] _downloads Number of downloads.
       /// \return True if successful.
-      public: bool SetDownloads(const uint32_t _downloads);
+      public: bool SetDownloadCount(const uint32_t _downloads);
 
       /// \brief Set the license name of the model.
       /// \param[in] _name The name.
