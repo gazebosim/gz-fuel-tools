@@ -7,4 +7,5 @@
    function names have been changed from all-caps (e.g URL) to camel-case
    (eg. Url).
     * [Pull request #49](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/49)
+    * [Pull request #51](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/51)
  
