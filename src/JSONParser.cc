@@ -169,7 +169,7 @@ bool JSONParser::ParseModelImpl(
     if (_json.isMember("description"))
       _model.SetDescription(_json["description"].asString());
     if (_json.isMember("likes"))
-      _model.SetLikes(_json["likes"].asUInt());
+      _model.SetLikeCount(_json["likes"].asUInt());
     if (_json.isMember("downloads"))
       _model.SetDownloads(_json["downloads"].asUInt());
     if (_json.isMember("filesize"))

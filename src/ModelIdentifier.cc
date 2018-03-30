@@ -63,7 +63,7 @@ class ignition::fuel_tools::ModelIdentifierPrivate
   public: std::string uuid;
 
   /// \brief Number of "likes"
-  public: uint32_t likes;
+  public: uint32_t likeCount;
 
   /// \brief Number of downloads
   public: uint32_t downloads;
@@ -264,7 +264,13 @@ std::string ModelIdentifier::Uuid() const
 //////////////////////////////////////////////////
 uint32_t ModelIdentifier::Likes() const
 {
-  return this->dataPtr->likes;
+  return this->LikeCount();
+}
+
+//////////////////////////////////////////////////
+uint32_t ModelIdentifier::LikeCount() const
+{
+  return this->dataPtr->likeCount;
 }
 
 //////////////////////////////////////////////////
@@ -384,13 +390,13 @@ bool ModelIdentifier::SetUuid(const std::string &_uuid)
 //////////////////////////////////////////////////
 bool ModelIdentifier::Likes(const uint32_t _likes)
 {
-  return this->SetLikes(_likes);
+  return this->SetLikeCount(_likes);
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifier::SetLikes(const uint32_t _likes)
+bool ModelIdentifier::SetLikeCount(const uint32_t _likes)
 {
-  this->dataPtr->likes = _likes;
+  this->dataPtr->likeCount = _likes;
   return true;
 }
 

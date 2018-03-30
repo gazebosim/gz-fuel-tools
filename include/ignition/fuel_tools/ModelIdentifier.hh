@@ -112,8 +112,8 @@ namespace ignition
       /// \return Model description.
       public: std::string Description() const;
 
-      /// \brief Returns the file size of the model.
-      /// \return Model file size.
+      /// \brief Returns the file size of the model in bytes.
+      /// \return Model file size in bytes.
       public: unsigned int FileSize() const;
 
       /// \brief Returns the upload date of the model.
@@ -135,7 +135,12 @@ namespace ignition
 
       /// \brief Returns the number of "likes" for the model.
       /// \return Number of "likes".
-      public: uint32_t Likes() const;
+      /// \deprecated See uint32_t LikeCount() const
+      public: uint32_t IGN_DEPRECATED(2.0) Likes() const;
+
+      /// \brief Returns the number of "likes" for the model.
+      /// \return Number of "likes".
+      public: uint32_t LikeCount() const;
 
       /// \brief Returns the number of downloads for the model.
       /// \return Number of downloads.
@@ -182,8 +187,8 @@ namespace ignition
       /// \deprecated See bool SetFileSize(const unsigned int _filesize)
       public: bool IGN_DEPRECATED(2.0) FileSize(const unsigned int _filesize);
 
-      /// \brief Set the file size of the model.
-      /// \param[in] _filesize The model's file size.
+      /// \brief Set the file size of the model in bytes.
+      /// \param[in] _filesize The model's file size in bytes.
       /// \return True if successful.
       public: bool SetFileSize(const unsigned int _filesize);
 
@@ -224,13 +229,13 @@ namespace ignition
       /// \brief Set the number of "likes" of the model.
       /// \param[in] _likes Number of "likes".
       /// \return True if successful.
-      /// \deprecated See bool  SetLikes(const uint32_t _likes).
+      /// \deprecated See bool SetLikeCount(const uint32_t _likes).
       public: bool IGN_DEPRECATED(2.0) Likes(const uint32_t _likes);
 
       /// \brief Set the number of "likes" of the model.
       /// \param[in] _likes Number of "likes".
       /// \return True if successful.
-      public: bool SetLikes(const uint32_t _likes);
+      public: bool SetLikeCount(const uint32_t _likes);
 
       /// \brief Set the number of downloads of the model.
       /// \param[in] _downloads Number of downloads.
