@@ -143,7 +143,7 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
 //////////////////////////////////////////////////
 ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
 {
-  if (_id.Name().empty() && _id.Server().URL().empty() && _id.Owner().empty())
+  if (_id.Name().empty() && _id.Server().Url().empty() && _id.Owner().empty())
     return ModelIterFactory::Create();
 
   std::vector<Model> models;
@@ -154,8 +154,8 @@ ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
       matches = false;
     if (!_id.Owner().empty() && _id.Owner() != iter->Identification().Owner())
       matches = false;
-    if (!_id.Server().URL().empty() &&
-        _id.Server().URL() != iter->Identification().Server().URL())
+    if (!_id.Server().Url().empty() &&
+        _id.Server().Url() != iter->Identification().Server().Url())
       matches = false;
     if (matches)
       models.push_back(*iter);

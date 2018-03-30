@@ -149,7 +149,7 @@ ModelIdentifier::~ModelIdentifier()
 //////////////////////////////////////////////////
 std::string ModelIdentifier::UniqueName() const
 {
-  return this->dataPtr->server.URL()     + "/"        +
+  return this->dataPtr->server.Url()     + "/"        +
          this->dataPtr->server.Version() + "/"        +
          this->dataPtr->owner            + "/models/" +
          this->dataPtr->name;
@@ -206,7 +206,7 @@ bool ModelIdentifier::Server(const ServerConfig &_server)
 //////////////////////////////////////////////////
 bool ModelIdentifier::SetServer(const ServerConfig &_server)
 {
-  bool success = this->dataPtr->ValidUrl(_server.URL());
+  bool success = this->dataPtr->ValidUrl(_server.Url());
   if (success)
     this->dataPtr->server = _server;
 
