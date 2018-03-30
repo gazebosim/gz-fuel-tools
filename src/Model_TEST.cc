@@ -26,7 +26,12 @@ using namespace ignft;
 /// \brief Nothing crashes
 TEST(Model, ConstructorDoesNotCrash)
 {
+  const Model constModel;
+  EXPECT_FALSE(constModel);
+
   Model model;
+  EXPECT_FALSE(model);
+
   Result result = model.Fetch();
   EXPECT_EQ(Result::UNKNOWN, result.Type());
 
