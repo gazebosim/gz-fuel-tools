@@ -57,11 +57,11 @@ TEST(ClientConfig, ServersCanBeAdded)
 {
   ClientConfig config;
   ServerConfig srv;
-  srv.URL("asdf");
+  srv.URL("http://asdf");
   config.AddServer(srv);
 
   ASSERT_EQ(1u, config.Servers().size());
-  EXPECT_EQ(std::string("asdf"), config.Servers().front().URL());
+  EXPECT_EQ(std::string("http://asdf"), config.Servers().front().URL());
 }
 
 /////////////////////////////////////////////////
@@ -96,11 +96,9 @@ TEST(ClientConfig, CustomConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
       << "    url: https://api.ignitionfuel.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    name: another_server"               << std::endl
       << "    url: https://myserver"              << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
@@ -124,40 +122,6 @@ TEST(ClientConfig, CustomConfiguration)
 }
 
 /////////////////////////////////////////////////
-/// \brief A server contains an already used name.
-TEST(ClientConfig, RepeatedServerURLConfiguration)
-{
-  ClientConfig config;
-
-  // Create a temporary file with the configuration.
-  std::ofstream ofs;
-  std::string testPath = "test_conf.yaml";
-  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
-
-  ofs << "---"                                    << std::endl
-      << "# The list of servers."                 << std::endl
-      << "servers:"                               << std::endl
-      << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
-      << ""                                       << std::endl
-      << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
-      << "    url: https://myserver"              << std::endl
-      << ""                                       << std::endl
-      << "# Where are the assets stored in disk." << std::endl
-      << "cache:"                                 << std::endl
-      << "  path: /tmp/ignition/fuel"             << std::endl
-      << std::endl;
-
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
-
-  // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
-}
-
-/////////////////////////////////////////////////
 /// \brief A server contains an already used URL.
 TEST(ClientConfig, RepeatedServerConfiguration)
 {
@@ -172,67 +136,14 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
       << "    url: https://api.ignitionfuel.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    name: another_server"               << std::endl
       << "    url: https://api.ignitionfuel.org"  << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl
       << "  path: /tmp/ignition/fuel"             << std::endl
-      << std::endl;
-
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
-
-  // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
-}
-
-/////////////////////////////////////////////////
-/// \brief A server without name is not valid.
-TEST(ClientConfig, NoServerNameConfiguration)
-{
-  ClientConfig config;
-
-  // Create a temporary file with the configuration.
-  std::ofstream ofs;
-  std::string testPath = "test_conf.yaml";
-  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
-
-  ofs << "---"                                    << std::endl
-      << "# The list of servers."                 << std::endl
-      << "servers:"                               << std::endl
-      << "  -"                                    << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
-      << std::endl;
-
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
-
-  // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
-}
-
-/////////////////////////////////////////////////
-/// \brief A server with an empty name is not valid.
-TEST(ClientConfig, EmptyServerNameConfiguration)
-{
-  ClientConfig config;
-
-  // Create a temporary file with the configuration.
-  std::ofstream ofs;
-  std::string testPath = "test_conf.yaml";
-  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
-
-  ofs << "---"                                    << std::endl
-      << "# The list of servers."                 << std::endl
-      << "servers:"                               << std::endl
-      << "  -"                                    << std::endl
-      << "    name: "                             << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
       << std::endl;
 
   config.SetConfigPath(testPath);
@@ -257,7 +168,7 @@ TEST(ClientConfig, NoServerURLConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"  << std::endl
+      << "    banana: coconut"                           << std::endl
       << std::endl;
 
   config.SetConfigPath(testPath);
@@ -282,7 +193,6 @@ TEST(ClientConfig, EmptyServerURLConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    name: osrf"                         << std::endl
       << "    url: "                              << std::endl
       << std::endl;
 
@@ -339,6 +249,30 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
 }
 
 /////////////////////////////////////////////////
+TEST(ClientConfig, UserAgent)
+{
+  ClientConfig config;
+  EXPECT_EQ("IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL,
+            config.UserAgent());
+
+  config.SetUserAgent("my_user_agent");
+  EXPECT_EQ("my_user_agent", config.UserAgent());
+}
+
+/////////////////////////////////////////////////
+TEST(ServerConfig, APIKey)
+{
+  ServerConfig config;
+  EXPECT_TRUE(config.APIKey().empty());
+
+  config.APIKey("my_api_key");
+  EXPECT_EQ("my_api_key", config.APIKey());
+
+  config.APIKey("my_other_api_key");
+  EXPECT_EQ("my_other_api_key", config.APIKey());
+}
+
+/////////////////////////////////////////////////
 TEST(ClientConfig, AsString)
 {
   common::Console::SetVerbosity(4);
@@ -350,14 +284,13 @@ TEST(ClientConfig, AsString)
 
   {
     ServerConfig server;
-    std::string str = "URL: \nLocal name: \nVersion: 1.0\nAPI key: \n";
+    std::string str = "URL: \nVersion: 1.0\nAPI key: \n";
     EXPECT_EQ(str, server.AsString());
   }
 
   {
     ServerConfig srv;
     srv.URL("http://serverurl.com");
-    srv.LocalName("local_name");
     srv.Version("2.0");
     srv.APIKey("ABCD");
 
@@ -365,7 +298,7 @@ TEST(ClientConfig, AsString)
     igndbg << str << std::endl;
 
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
-    EXPECT_NE(str.find("local_name"), std::string::npos);
+    EXPECT_EQ(str.find("local_name"), std::string::npos);
     EXPECT_NE(str.find("2.0"), std::string::npos);
     EXPECT_NE(str.find("ABCD"), std::string::npos);
   }
@@ -388,10 +321,49 @@ TEST(ClientConfig, AsString)
   }
 }
 
+/////////////////////////////////////////////////
+TEST(ServerConfig, Url)
+{
+  // Invalid URL string
+  {
+    ServerConfig srv;
+    srv.URL("asdf");
+    EXPECT_TRUE(srv.URL().empty());
+  }
+
+  // Valid URL
+  {
+    ServerConfig srv;
+    srv.URL("http://banana:8080");
+    EXPECT_EQ("http://banana:8080", srv.URL());
+    EXPECT_EQ("http", srv.Url().Scheme());
+    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
+  }
+
+  // Trailing /
+  {
+    ServerConfig srv;
+    srv.URL("http://banana:8080/");
+    EXPECT_EQ("http://banana:8080", srv.URL());
+  }
+
+  // Set from URI
+  {
+    auto url = common::URI();
+    url.SetScheme("http");
+    url.Path() = common::URIPath("banana:8080");
+
+    ServerConfig srv;
+    srv.SetUrl(url);
+    EXPECT_EQ("http://banana:8080", srv.URL());
+    EXPECT_EQ("http", srv.Url().Scheme());
+    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
+  }
+}
+
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

@@ -117,7 +117,7 @@ ModelIter LocalCache::AllModels()
     for (auto &server : this->dataPtr->config->Servers())
     {
       std::string path = common::joinPaths(
-          this->dataPtr->config->CacheLocation(), server.LocalName());
+          this->dataPtr->config->CacheLocation(), server.Url().Path().Str());
       auto srvModels = this->dataPtr->ModelsInServer(path);
       for (auto &mod : srvModels)
       {
@@ -170,7 +170,7 @@ ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
 bool LocalCache::SaveModel(
   const ModelIdentifier &_id, const std::string &_data, const bool _overwrite)
 {
-  if (_id.Server().LocalName().empty() || _id.Owner().empty() ||
+  if (_id.Server().URL().empty() || _id.Owner().empty() ||
       _id.Name().empty())
   {
     ignerr << "Incomplete model identifier, failed to save model." << std::endl
@@ -179,8 +179,8 @@ bool LocalCache::SaveModel(
   }
 
   auto cacheLocation = this->dataPtr->config->CacheLocation();
-  auto modelDir = common::joinPaths(
-    cacheLocation, _id.Server().LocalName(), _id.Owner(), "models", _id.Name());
+  auto modelDir = common::joinPaths(cacheLocation,
+      _id.Server().Url().Path().Str(), _id.Owner(), "models", _id.Name());
 
   // Is it already in the cache?
   if (common::isDirectory(modelDir) && !_overwrite)

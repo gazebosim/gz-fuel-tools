@@ -22,6 +22,8 @@
 #include <string>
 #include <vector>
 
+#include <ignition/common/URI.hh>
+
 #include "ignition/fuel_tools/Helpers.hh"
 
 namespace ignition
@@ -55,16 +57,27 @@ namespace ignition
       /// \brief set the URL of this server
       public: void URL(const std::string &_url);
 
+      /// \brief Get the URL to access the server
+      /// \return Server URL
+      public: common::URI Url() const;
+
+      /// \brief Set the URL of this server
+      /// \param[in] Server URL
+      public: void SetUrl(const common::URI &_url);
+
       /// \brief get folder name for server on disk
+      /// \deprecated Has no effect, will be deprecated on version 2
       public: std::string LocalName() const;
 
       /// \brief set folder name for server on disk
+      /// \deprecated Has no effect, will be deprecated on version 2
       public: void LocalName(const std::string &_name);
 
       /// \brief Get the API key to auth with the server
       public: std::string APIKey() const;
 
       /// \brief Set the API key to auth with the server
+      /// \todo deprecate this function.
       public: void APIKey(const std::string &_key);
 
       /// \brief Get the protocol version used with this server.
@@ -99,6 +112,14 @@ namespace ignition
 
       /// \brief destructor
       public: ~ClientConfig();
+
+      /// \brief Set the user agent name.
+      /// \param[in] _agent User agent name.
+      public: void SetUserAgent(const std::string &_agent);
+
+      /// \brief Get the user agent name.
+      /// \return Name of the user agent.
+      public: const std::string &UserAgent() const;
 
       /// \brief Load the YAML configuration file.
       /// If SetConfigPath() is not used, this function will try to load the

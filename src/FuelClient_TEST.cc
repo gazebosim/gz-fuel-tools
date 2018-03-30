@@ -41,13 +41,10 @@ using namespace ignft;
 /// Taken from LocalCache_TEST
 void createLocal1(ClientConfig &_conf)
 {
-  if (common::exists("LocalCache_TEST1"))
-  {
-    common::removeAll("LocalCache_TEST1");
-  }
-  common::createDirectories("LocalCache_TEST1/alice/models/My Model");
+  common::createDirectories("test_cache/localhost:8007/alice/models/My Model");
 
-  std::ofstream fout("LocalCache_TEST1/alice/models/My Model/model.config",
+  std::ofstream fout(
+      "test_cache/localhost:8007/alice/models/My Model/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
@@ -55,7 +52,6 @@ void createLocal1(ClientConfig &_conf)
 
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8007/");
-  srv.LocalName("LocalCache_TEST1");
   _conf.AddServer(srv);
 }
 
@@ -76,7 +72,6 @@ TEST(FuelClient, ParseModelURL)
 
     EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_TRUE(srv.LocalName().empty());
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
   }
@@ -95,7 +90,6 @@ TEST(FuelClient, ParseModelURL)
 
     EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Server().LocalName(), "osrf");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
   }
@@ -114,7 +108,6 @@ TEST(FuelClient, ParseModelURL)
 
     EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Server().LocalName(), "osrf");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
   }
@@ -130,7 +123,6 @@ TEST(FuelClient, ParseModelURL)
 
     EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
     EXPECT_TRUE(id.Server().Version().empty());
-    EXPECT_TRUE(id.Server().LocalName().empty());
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
   }
@@ -149,7 +141,6 @@ TEST(FuelClient, ParseModelURL)
 
     EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Server().LocalName(), "osrf");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
   }
@@ -168,9 +159,11 @@ TEST(FuelClient, DownloadModel)
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  common::removeAll("test_cache");
+  common::createDirectories("test_cache");
   ClientConfig config;
   config.LoadConfig();
-  config.CacheLocation(common::cwd() + "/cache_test");
+  config.CacheLocation(common::cwd() + "/test_cache");
 
   // Create client
   FuelClient client(config);
@@ -193,12 +186,13 @@ TEST(FuelClient, DownloadModel)
     EXPECT_TRUE(res2);
     EXPECT_EQ(Result(Result::FETCH), res2);
     EXPECT_EQ(common::cwd() +
-        "/cache_test/osrf/chapulina/models/Test box", path);
-    EXPECT_TRUE(common::exists("cache_test/osrf/chapulina/models/Test box"));
+      "/test_cache/api.ignitionfuel.org/chapulina/models/Test box", path);
     EXPECT_TRUE(common::exists(
-        "cache_test/osrf/chapulina/models/Test box/model.sdf"));
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box"));
     EXPECT_TRUE(common::exists(
-        "cache_test/osrf/chapulina/models/Test box/model.config"));
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.sdf"));
+    EXPECT_TRUE(common::exists(
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.config"));
 
     // Check it is cached
     auto res3 = client.CachedModel(url, cachedPath);
@@ -225,17 +219,19 @@ TEST(FuelClient, DownloadModel)
     EXPECT_FALSE(result);
     EXPECT_EQ(Result(Result::FETCH_ERROR), result);
   }
-
-  EXPECT_TRUE(common::removeAll("cache_test"));
 }
 
 /////////////////////////////////////////////////
 TEST(FuelClient, CachedModel)
 {
+  common::Console::SetVerbosity(4);
+
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  common::removeAll("test_cache");
+  common::createDirectories("test_cache");
   ClientConfig config;
-  config.CacheLocation(common::cwd());
+  config.CacheLocation(common::cwd() + "/test_cache");
   createLocal1(config);
 
   // Create client
@@ -249,7 +245,8 @@ TEST(FuelClient, CachedModel)
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() + "/LocalCache_TEST1/alice/models/My Model", path);
+    EXPECT_EQ(common::cwd() + "/test_cache/localhost:8007/alice/models/My Model",
+        path);
   }
 
   // Non-cached model
@@ -269,8 +266,84 @@ TEST(FuelClient, CachedModel)
     EXPECT_FALSE(result);
     EXPECT_EQ(Result(Result::FETCH_ERROR), result);
   }
+}
 
-  EXPECT_TRUE(common::removeAll("LocalCache_TEST1"));
+/////////////////////////////////////////////////
+TEST(FuelClient, Config)
+{
+  FuelClient client;
+  ClientConfig &config = client.Config();
+
+  // Check a few values. More client config tests in ClientConfig_TEST
+  EXPECT_FALSE(config.UserAgent().empty());
+  EXPECT_TRUE(config.CacheLocation().empty());
+  EXPECT_TRUE(config.Servers().empty());
+}
+
+/////////////////////////////////////////////////
+/// \brief Expect model download to fail with lack of server
+TEST(FuelClient, ModelDownload)
+{
+  FuelClient client;
+
+  std::string path;
+  Result result = client.DownloadModel("bad", path);
+  EXPECT_EQ(Result::FETCH_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, ModelDetails)
+{
+  FuelClient client;
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+  ModelIdentifier model;
+
+  Result result = client.ModelDetails(serverConfig, modelId, model);
+  EXPECT_EQ(Result::FETCH_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, Models)
+{
+  FuelClient client;
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+  ModelIter iter = client.Models(serverConfig, modelId);
+  EXPECT_FALSE(iter);
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, DownloadModelFail)
+{
+  FuelClient client;
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+
+  Result result = client.DownloadModel(serverConfig, modelId);
+  EXPECT_EQ(Result::FETCH_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, DeleteModelFail)
+{
+  FuelClient client;
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+
+  Result result = client.DeleteModel(serverConfig, modelId);
+  EXPECT_EQ(Result::DELETE_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, UploadModelFail)
+{
+  FuelClient client;
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+
+  Result result = client.UploadModel(serverConfig, "path", modelId);
+  EXPECT_EQ(Result::UPLOAD_ERROR, result.Type());
 }
 
 //////////////////////////////////////////////////

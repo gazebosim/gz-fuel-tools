@@ -56,10 +56,14 @@ SUBCOMMANDS = { 'list' =>
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -t [--type] arg          Resource type (i.e. model). Required.        \n"\
+  "  -o [--owner] arg         Return only resources for given owner.       \n"\
   "  -u [--url] arg           URL of a server the resource comes from,     \n"\
   "                           if unspecified, it will be taken from        \n"\
   "                           config.yaml.                                 \n"\
   "  -r [--raw]               Machine-friendly output.                     \n"\
+  "  -v [ --verbose ] [arg]   Adjust the level of console output (0~4).    \n"\
+  "                           The default verbosity is 1, use -v without   \n"\
+  "                           arguments for level 3.                       \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n" +
   COMMON_OPTIONS,
@@ -75,7 +79,9 @@ class Cmd
   #
   def parse(args)
     options = {
+      'verbose' => '1',
       'url' => '',
+      'owner' => '',
       'raw' => 'false',
     }
 
@@ -101,8 +107,15 @@ class Cmd
       opts.on('-t [TYPE]', '--type', String, 'Resource type') do |type|
         options['type'] = type
       end
+      opts.on('-o [OWNER]', '--owner', String, 'Resource owner') do |owner|
+        options['owner'] = owner
+      end
       opts.on('-r', '--raw', 'Machine readable') do
         options['raw'] = 'true'
+      end
+      opts.on('-v [verbose]', '--verbose [verbose]', String,
+          'Adjust level of console output') do |v|
+        options['verbose'] = v || '3'
       end
     end # opt_parser do
 
@@ -160,10 +173,19 @@ class Cmd
     end
 
     begin
+
+      # Global configurations
+      if options.key?('verbose')
+        Importer.extern 'void cmdVerbose(const char *)'
+        Importer.cmdVerbose(options['verbose'])
+      end
+
       case options['subcommand']
       when 'list'
-        Importer.extern 'int listModels(const char *, const char *)'
-        if not Importer.listModels(options['url'], options['raw'])
+        Importer.extern 'int listModels(const char *, const char *, const char *)'
+        if not Importer.listModels(options['url'],
+                                   options['owner'],
+                                   options['raw'])
           exit(-1)
         end
       end
