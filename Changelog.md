@@ -20,5 +20,8 @@
 1. Added const constructors for ModelIter and Model
     * [Pull request 42](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/42)
 
+1. Use common::URI for server URL
+    * [Pull request 59](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/59)
+
 ## Ignition Fuel Tools 0.x.x
 
