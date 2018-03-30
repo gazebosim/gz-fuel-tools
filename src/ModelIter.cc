@@ -153,28 +153,48 @@ IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
 {
   REST::Method method = REST::GET;
   this->config = _config;
-  int page = 1;
   std::vector<std::string> headers = {"Accept: application/json"};
   RESTResponse resp;
   std::vector<ModelIdentifier> modelIds;
   this->ids.clear();
 
+  // Empty query string will get the first page of models.
+  std::string queryStrPage  = "";
+  std::string queryStrPageKey = "?page=";
   do
   {
     // Prepare the request with the next page.
-    std::string queryStrPage = "page=" + std::to_string(page);
-    std::string path = _api;
-    ++page;
+    std::string path = _api + queryStrPage;
 
     // Fire the request.
     resp = this->rest.Request(method, this->config.URL(),
       this->config.Version(), path, {queryStrPage}, headers, "");
 
-    // ToDo: resp.statusCode should return != 200 when the page requested does
-    // not exist. When this happens we should stop without calling ParseModels()
-    // https://bitbucket.org/ignitionrobotics/ign-fuelserver/issues/7
+    // Reset the query string
+    queryStrPage = "";
+
+    // Get the next page from the headers.
+    if (resp.headers.find("Link") != resp.headers.end())
+    {
+      std::vector<std::string> links = ignition::common::split(
+          resp.headers["Link"], ",");
+      for (const auto &l : links)
+      {
+        if (l.find("next") != std::string::npos)
+        {
+          auto start = l.find(queryStrPageKey);
+          auto end = l.find(">", start+1);
+          queryStrPage = l.substr(start, end-start);
+          break;
+        }
+      }
+    }
+
+    // Fallsafe - break if response code is invalid
     if (resp.data == "null\n" || resp.statusCode != 200)
+    {
       break;
+    }
 
     // Parse the response.
     modelIds = JSONParser::ParseModels(resp.data, this->config);
@@ -182,7 +202,7 @@ IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
     // Add the vector of models to the list.
     this->ids.insert(std::end(this->ids), std::begin(modelIds),
       std::end(modelIds));
-  } while (!modelIds.empty());
+  } while (!modelIds.empty() && !queryStrPage.empty());
 
   if (this->ids.empty())
     return;
