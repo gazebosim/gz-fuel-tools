@@ -95,11 +95,11 @@ TEST(JSONParser, ParseModel)
     << "\"tags\":[\"tag1\"]}";
 
   ServerConfig srv;
-  srv.URL("testServer");
+  srv.SetUrl("testServer");
 
   ModelIdentifier model = JSONParser::ParseModel(tmpJsonStr.str(), srv);
   EXPECT_EQ("car", model.Name());
-  EXPECT_EQ("testServer", model.Server().URL());
+  EXPECT_EQ("testServer", model.Server().Url());
   auto t = model.ModifyDate();
   char buffer[100];
   std::strftime(buffer, sizeof(buffer), "%F %T", gmtime(&t));

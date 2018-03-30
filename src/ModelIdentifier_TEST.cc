@@ -56,10 +56,10 @@ TEST(ModelIdentifier, UniqueName)
   srv1.SetUrl("http://localhost:8001/");
 
   ignition::fuel_tools::ServerConfig srv2;
-  srv2.Url("http://localhost:8002");
+  srv2.SetUrl("http://localhost:8002");
 
   ignition::fuel_tools::ServerConfig srv3;
-  srv3.Url("https://localhost:8003//////////////////////////");
+  srv3.SetUrl("https://localhost:8003//////////////////////////");
 
   ModelIdentifier id;
   id.Name("hello");

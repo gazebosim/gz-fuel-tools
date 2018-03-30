@@ -120,7 +120,7 @@ extern "C" void uglyPrint(
 /// \param[out] _resourceMap Key is owner name, value is vector of resources
 /// \return True if successful
 extern "C" bool getAllModels(
-    ignition::fuel_tools::FuelClient &_client,
+    const ignition::fuel_tools::FuelClient &_client,
     const ignition::fuel_tools::ServerConfig &_server,
     std::map<std::string, std::vector<std::string>> &_resourceMap)
 {
@@ -154,7 +154,7 @@ extern "C" bool getAllModels(
 /// \param[out] _resourceMap Key is owner name, value is vector of resources
 /// \return True if successful
 extern "C" bool getOwnerModels(
-    ignition::fuel_tools::FuelClient &_client,
+    const ignition::fuel_tools::FuelClient &_client,
     const ignition::fuel_tools::ServerConfig &_server,
     const ignition::fuel_tools::ModelIdentifier &_modelId,
     std::map<std::string, std::vector<std::string>> &_resourceMap)

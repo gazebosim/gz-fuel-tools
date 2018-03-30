@@ -352,13 +352,13 @@ TEST(ClientConfig, UserAgent)
 TEST(ServerConfig, APIKey)
 {
   ServerConfig config;
-  EXPECT_TRUE(config.APIKey().empty());
+  EXPECT_TRUE(config.ApiKey().empty());
 
-  config.APIKey("my_api_key");
-  EXPECT_EQ("my_api_key", config.APIKey());
+  config.SetApiKey("my_api_key");
+  EXPECT_EQ("my_api_key", config.ApiKey());
 
-  config.APIKey("my_other_api_key");
-  EXPECT_EQ("my_other_api_key", config.APIKey());
+  config.SetApiKey("my_other_api_key");
+  EXPECT_EQ("my_other_api_key", config.ApiKey());
 }
 
 //////////////////////////////////////////////////
