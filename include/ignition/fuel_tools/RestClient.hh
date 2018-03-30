@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_FUEL_TOOLS_REST_HH_
-#define IGNITION_FUEL_TOOLS_REST_HH_
+#ifndef IGNITION_FUEL_TOOLS_RESTCLIENT_HH_
+#define IGNITION_FUEL_TOOLS_RESTCLIENT_HH_
 
 #include <map>
 #include <memory>

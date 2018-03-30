@@ -119,7 +119,7 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
     this->dataPtr->cache.reset(_cache);
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
-    this->dataPtr->kModelURLRegexStr));
+    this->dataPtr->kModelUrlRegexStr));
 }
 
 //////////////////////////////////////////////////
