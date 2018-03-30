@@ -130,7 +130,7 @@ std::string ServerConfig::APIKey() const
 }
 
 //////////////////////////////////////////////////
-void ServerConfig::SetAPIKey(const std::string &_key)
+void ServerConfig::SetApiKey(const std::string &_key)
 {
   this->dataPtr->key = _key;
 }
@@ -138,7 +138,7 @@ void ServerConfig::SetAPIKey(const std::string &_key)
 //////////////////////////////////////////////////
 void ServerConfig::APIKey(const std::string &_key)
 {
-  this->SetAPIKey(_key);
+  this->SetApiKey(_key);
 }
 
 //////////////////////////////////////////////////

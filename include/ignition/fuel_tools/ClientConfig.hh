@@ -66,7 +66,7 @@ namespace ignition
 
       /// \brief Set the API key to auth with the server
       /// \param[in] _key New API key.
-      public: void SetAPIKey(const std::string &_key);
+      public: void SetApiKey(const std::string &_key);
 
       /// \brief Set the API key to auth with the server
       /// \todo deprecate this function.
