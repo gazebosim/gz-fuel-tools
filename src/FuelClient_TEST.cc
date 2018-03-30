@@ -192,7 +192,7 @@ TEST(FuelClient, DownloadModel)
     EXPECT_TRUE(common::exists(
       "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.sdf"));
     EXPECT_TRUE(common::exists(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.config"));
+     "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.config"));
 
     // Check it is cached
     auto res3 = client.CachedModel(url, cachedPath);
@@ -245,8 +245,8 @@ TEST(FuelClient, CachedModel)
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() + "/test_cache/localhost:8007/alice/models/My Model",
-        path);
+    EXPECT_EQ(common::cwd() +
+        "/test_cache/localhost:8007/alice/models/My Model", path);
   }
 
   // Non-cached model
