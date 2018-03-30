@@ -100,6 +100,13 @@ TEST(ModelIterTestFixture, FalseIfNoModels)
 }
 
 /////////////////////////////////////////////////
+TEST(ModelIterTestFixture, ConstBool)
+{
+  const ModelIter constIter = ModelIterTest::EmptyModelIter();
+  EXPECT_FALSE(constIter);
+}
+
+/////////////////////////////////////////////////
 /// \brief Iter should be ready to move if there are ids
 TEST(ModelIterTestFixture, TrueIfSomeModels)
 {
