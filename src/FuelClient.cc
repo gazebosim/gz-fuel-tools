@@ -88,18 +88,8 @@ FuelClient::FuelClient()
 #endif
 FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
     LocalCache *_cache)
-  : dataPtr(new FuelClientPrivate)
+  : FuelClient(_config, Rest(_rest), _cache)
 {
-  this->dataPtr->config = _config;
-  this->dataPtr->rest = _rest;
-
-  if (nullptr == _cache)
-    this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
-  else
-    this->dataPtr->cache.reset(_cache);
-
-  this->dataPtr->urlModelRegex.reset(new std::regex(
-    this->dataPtr->kModelUrlRegexStr));
 }
 #ifndef _WIN32
 # pragma GCC diagnostic pop
