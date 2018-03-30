@@ -102,6 +102,7 @@ FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
 {
   this->dataPtr->config = _config;
   this->dataPtr->rest = _rest;
+  this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 
   if (nullptr == _cache)
     this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
@@ -126,21 +127,21 @@ ClientConfig &FuelClient::Config()
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::ModelDetails(const ServerConfig &_server,
+Result FuelClient::ModelDetails(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id, ModelIdentifier &_model) const
 {
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
 
-  auto serverURL = _server.URL();
-  auto version = _server.Version();
+  auto serverURL = _id.Server().URL();
+  auto version = _id.Server().Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
   resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
-  _model = JSONParser::ParseModel(resp.data, _server);
+  _model = JSONParser::ParseModel(resp.data, _id.Server());
 
   return Result(Result::FETCH);
 }
@@ -161,7 +162,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server)
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models(const ServerConfig &_server,
+ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id)
 {
   // Check local cache first
@@ -174,7 +175,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server,
   // Todo try to fetch model directly from a server
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
-  return ModelIterFactory::Create(this->dataPtr->rest, _server, path);
+  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
 }
 
 //////////////////////////////////////////////////
@@ -194,14 +195,14 @@ Result FuelClient::DeleteModel(const ServerConfig &/*_server*/,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DownloadModel(const ServerConfig &_server,
+Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id)
 {
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
 
-  auto serverURL = _server.URL();
-  auto version = _server.Version();
+  auto serverURL = _id.Server().URL();
+  auto version = _id.Server().Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models",
     _id.Name() + ".zip");
 
@@ -217,7 +218,7 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
 
 //////////////////////////////////////////////////
 bool FuelClient::ParseModelURL(const std::string &_modelURL,
-  ServerConfig &_srv, ModelIdentifier &_id)
+  ServerConfig &/*_server*/, ModelIdentifier &_id)
 {
   std::smatch match;
   std::string scheme;
@@ -246,36 +247,38 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
     name = match[4];
   }
   else
+  {
+    ignerr << "Invalid URL [" << _modelURL << "]" << std::endl;
     return false;
+  }
 
-  // Get remaining server information, such as local name, from config
-  _srv.URL(scheme + "://" + server);
-  _srv.Version(version);
+  // Get remaining server information from config
+  _id.Server().URL(scheme + "://" + server);
+  _id.Server().Version(version);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.URL() == _srv.URL())
+    if (s.URL() == _id.Server().URL())
     {
-      if (!version.empty() && s.Version() != _srv.Version())
+      if (!version.empty() && s.Version() != _id.Server().Version())
       {
         ignwarn << "Requested server API version [" << version
                 << "] for server [" << s.URL() << "], but will use ["
                 << s.Version() << "] as given in the config file."
                 << std::endl;
       }
-      _srv = s;
+      _id.Server() = s;
       break;
     }
   }
 
-  if (_srv.LocalName().empty() || _srv.Version().empty())
+  if (_id.Server().Version().empty())
   {
     ignwarn << "Server configuration is incomplete:" << std::endl
-            << _srv.AsString();
+            << _id.Server().AsString();
   }
 
   _id.Owner(owner);
   _id.Name(name);
-  _id.Server(_srv);
 
   return true;
 }

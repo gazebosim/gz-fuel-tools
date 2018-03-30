@@ -113,7 +113,7 @@ ModelIter LocalCache::AllModels()
     for (auto &server : this->dataPtr->config->Servers())
     {
       std::string path = common::joinPaths(
-          this->dataPtr->config->CacheLocation(), server.LocalName());
+          this->dataPtr->config->CacheLocation(), server.Url().Path().Str());
       auto srvModels = this->dataPtr->ModelsInServer(path);
       for (auto &mod : srvModels)
       {

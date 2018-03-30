@@ -23,6 +23,7 @@ set (gtest_sources
   ModelIdentifier_TEST.cc
   ModelIter_TEST.cc
   Model_TEST.cc
+  REST_TEST.cc
   Result_TEST.cc
   Zip_TEST.cc
 )
@@ -44,11 +45,14 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
   PRIVATE
     curl::curl
-    ignition-common1::ignition-common1
+    ignition-common${IGN_COMMON_VER}::ignition-common${IGN_COMMON_VER}
     ${JSONCPP_TARGET}
     YAML::YAML
     ZIP::ZIP
 )
+
+ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
+  ignition-common${IGN_COMMON_VER}::ignition-common${IGN_COMMON_VER})
 
 # Create installation instructions for the library target. This must be called
 # in the same scope that the target is created.

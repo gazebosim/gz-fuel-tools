@@ -43,10 +43,14 @@ class ignition::fuel_tools::ClientConfigPrivate
   public: std::vector<ServerConfig> servers;
 
   /// \brief a path on disk to where data is cached.
-  public: std::string cacheLocation;
+  public: std::string cacheLocation = "";
 
   /// \brief The path where the configuration file is located.
-  public: std::string configPath;
+  public: std::string configPath = "";
+
+  /// \brief Name of the user agent.
+  public: std::string userAgent =
+          "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
 };
 
 //////////////////////////////////////////////////
@@ -54,13 +58,10 @@ class ignition::fuel_tools::ClientConfigPrivate
 class ignition::fuel_tools::ServerConfigPrivate
 {
   /// \brief URL to reach server
-  public: std::string url;
-
-  /// \brief Local directory server stuff is saved in
-  public: std::string localName;
+  public: common::URI url;
 
   /// \brief A key to auth with the server
-  public: std::string key;
+  public: std::string key = "";
 
   /// \brief The protocol version used when talking with this server.
   public: std::string version = "1.0";
@@ -94,30 +95,40 @@ ServerConfig::~ServerConfig()
 //////////////////////////////////////////////////
 std::string ServerConfig::URL() const
 {
-  return this->dataPtr->url;
+  return this->dataPtr->url.Str();
 }
 
 //////////////////////////////////////////////////
 void ServerConfig::URL(const std::string &_url)
 {
-  // Strip trailing slashes
-  std::string url = _url;
-  while (!url.empty() && url.back() == '/')
-    url.pop_back();
+  this->SetUrl(common::URI(_url));
+}
 
-  this->dataPtr->url = url;
+//////////////////////////////////////////////////
+common::URI ServerConfig::Url() const
+{
+  return this->dataPtr->url;
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::SetUrl(const common::URI &_url)
+{
+  this->dataPtr->url = _url;
 }
 
 //////////////////////////////////////////////////
 std::string ServerConfig::LocalName() const
 {
-  return this->dataPtr->localName;
+  ignwarn << "LocalName is not used and will be deprecated on version 2"
+          << std::endl;
+  return "";
 }
 
 //////////////////////////////////////////////////
-void ServerConfig::LocalName(const std::string &_name)
+void ServerConfig::LocalName(const std::string &/*_name*/)
 {
-  this->dataPtr->localName = _name;
+  ignwarn << "LocalName is not used and will be deprecated on version 2"
+          << std::endl;
 }
 
 //////////////////////////////////////////////////
@@ -149,7 +160,6 @@ std::string ServerConfig::AsString(const std::string &_prefix) const
 {
   std::stringstream out;
   out << _prefix << "URL: " << this->URL() << std::endl
-      << _prefix << "Local name: " << this->LocalName() << std::endl
       << _prefix << "Version: " << this->Version() << std::endl
       << _prefix << "API key: " << this->APIKey() << std::endl;
   return out.str();
@@ -271,7 +281,6 @@ bool ClientConfig::LoadConfig()
   yaml_event_t event;
   std::stack<std::string> tokens;
   tokens.push("root");
-  std::string serverName = "";
   std::string serverURL = "";
   std::string cacheLocationConfig = "";
 
@@ -303,7 +312,6 @@ bool ClientConfig::LoadConfig()
         if (!tokens.empty() && tokens.top() == "servers")
         {
           tokens.push("server");
-          serverName = "";
           serverURL = "";
         }
         break;
@@ -318,20 +326,12 @@ bool ClientConfig::LoadConfig()
         }
         else if (!tokens.empty() && tokens.top() == "server")
         {
-          if (!serverName.empty() && !serverURL.empty())
+          if (!serverURL.empty())
           {
             // Sanity check: Make sure that the server is not already stored.
             bool repeated = false;
             for (auto const savedServer : this->Servers())
             {
-              if (savedServer.LocalName() == serverName)
-              {
-                ignerr << "Server [" << serverName << "] already exists. "
-                       << "Ignoring server" << std::endl;
-                repeated = true;
-                res = false;
-                break;
-              }
               if (savedServer.URL() == serverURL)
               {
                 ignerr << "URL [" << serverURL << "] already exists. "
@@ -345,23 +345,14 @@ bool ClientConfig::LoadConfig()
             {
               // Add the new server.
               ServerConfig newServer;
-              newServer.LocalName(serverName);
               newServer.URL(serverURL);
               this->AddServer(newServer);
             }
           }
           else
           {
-            if (serverName.empty())
-            {
-              ignerr << "[name] parameter is required for a server"
-                     << std::endl;
-            }
-            if (serverURL.empty())
-            {
-              ignerr << "[url] parameter is required for a server"
-                        << std::endl;
-            }
+            ignerr << "[url] parameter is required for a server"
+                      << std::endl;
             res = false;
           }
         }
@@ -373,14 +364,7 @@ bool ClientConfig::LoadConfig()
       case YAML_ALIAS_EVENT:
         break;
       case YAML_SCALAR_EVENT:
-        if (!tokens.empty() && tokens.top() == "name")
-        {
-          std::string name(
-            reinterpret_cast<const char *>(event.data.scalar.value));
-          serverName = name;
-          tokens.pop();
-        }
-        else if (!tokens.empty() && tokens.top() == "url")
+        if (!tokens.empty() && tokens.top() == "url")
         {
           std::string url(
             reinterpret_cast<const char *>(event.data.scalar.value));
@@ -473,6 +457,18 @@ std::string ClientConfig::CacheLocation() const
 void ClientConfig::CacheLocation(const std::string &_path)
 {
   this->dataPtr->cacheLocation = _path;
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::SetUserAgent(const std::string &_agent)
+{
+  this->dataPtr->userAgent = _agent;
+}
+
+//////////////////////////////////////////////////
+const std::string &ClientConfig::UserAgent() const
+{
+  return this->dataPtr->userAgent;
 }
 
 //////////////////////////////////////////////////

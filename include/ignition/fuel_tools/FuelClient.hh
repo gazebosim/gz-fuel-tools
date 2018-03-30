@@ -63,7 +63,8 @@ namespace ignition
       public: ClientConfig &Config();
 
       /// \brief Fetch the details of a model.
-      /// \param[in] _server The server to request the operation.
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \param[out] _model The requested model
@@ -84,7 +85,8 @@ namespace ignition
       public: ModelIter Models(const ServerConfig &_server);
 
       /// \brief Returns models matching a given identifying criteria
-      /// \param[in] _server The server to request the operation.
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \remarks It's not yet clear if model names are unique, so this API
@@ -95,7 +97,8 @@ namespace ignition
                                const ModelIdentifier &_id);
 
       /// \brief Upload a directory as a new model
-      /// \param[in] _server The server to request the operation.
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
       /// \param[in] _pathToModelDir a path to a directory containing a model
       /// \param[in] _id An identifier to assign to this new model
       /// \return Result of the upload operation
@@ -104,14 +107,16 @@ namespace ignition
                                  const ModelIdentifier &_id);
 
       /// \brief Remove a model from ignition fuel
-      /// \param[in] _server The server to request the operation.
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
       /// \param[in] _id The model identifier.
       /// \return Result of the delete operation
       public: Result DeleteModel(const ServerConfig &_server,
                                  const ModelIdentifier &_id);
 
       /// \brief Download a model from ignition fuel
-      /// \param[in] _server The server to request the operation.
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
       /// \param[in] _id The model identifier.
       /// \return Result of the download operation
       public: Result DownloadModel(const ServerConfig &_server,
@@ -128,9 +133,8 @@ namespace ignition
       /// \brief Parse server and model identifer from model URL or unique name.
       /// \param[in] _modelURL The unique URL of a model. It may also be a
       /// unique name, which is a URL without the server version.
-      /// \param[out] _srv The server which contains the model. It may contain
-      /// incomplete information based on the passed URL and the current client
-      /// config.
+      /// \param[in] _server Deprecated: this will be ignored, get _id.Server()
+      /// instead.
       /// \param[out] _id The model identifier.
       /// \return True if parsed successfully.
       public: bool ParseModelURL(const std::string &_modelURL,

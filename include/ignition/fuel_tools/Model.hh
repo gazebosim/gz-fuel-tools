@@ -75,6 +75,9 @@ namespace ignition
       public: Model(const Model &_orig) = default;
 
       /// \brief Returns false if model was constructed via Model()
+      public: operator bool() const;
+
+      /// \brief Returns false if model was constructed via Model()
       public: operator bool();
 
       /// \brief returns information identifying the model
