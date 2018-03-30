@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Open Source Robotics Foundation
+ * Copyright (C) 2018 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,18 @@
 */
 
 #include <gtest/gtest.h>
-#include "ignition/fuel_tools/Model.hh"
-
-namespace ignft = ignition::fuel_tools;
-using namespace ignition;
-using namespace ignft;
+#include <string>
+#include "ignition/fuel_tools/REST.hh"
+#include "test/test_config.h"
 
 /////////////////////////////////////////////////
-/// \brief Nothing crashes
-TEST(Model, ConstructorDoesNotCrash)
+TEST(REST, UserAgent)
 {
-  Model model;
-  Result result = model.Fetch();
-  EXPECT_EQ(Result::UNKNOWN, result.Type());
+  ignition::fuel_tools::REST rest;
+  EXPECT_TRUE(rest.UserAgent().empty());
 
-  std::string path = model.PathToModel();
-  EXPECT_TRUE(path.empty());
+  rest.SetUserAgent("my_user_agent");
+  EXPECT_EQ("my_user_agent", rest.UserAgent());
 }
 
 //////////////////////////////////////////////////

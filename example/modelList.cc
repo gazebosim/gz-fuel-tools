@@ -61,6 +61,7 @@ int main(int argc, char **argv)
 
   // Setup ClientConfig.
   ignition::fuel_tools::ClientConfig conf;
+  conf.SetUserAgent("ExampleModelList");
 
   if (FLAGS_s != "")
   {
