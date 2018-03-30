@@ -354,7 +354,7 @@ TEST(ServerConfig, APIKey)
   ServerConfig config;
   EXPECT_TRUE(config.APIKey().empty());
 
-  config.SetAPIKey("my_api_key");
+  config.APIKey("my_api_key");
   EXPECT_EQ("my_api_key", config.APIKey());
 
   config.APIKey("my_other_api_key");
