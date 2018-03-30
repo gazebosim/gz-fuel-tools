@@ -70,8 +70,8 @@ void createLocal6(ClientConfig &_conf)
                    "LocalCache_TEST6/trudy/tm2/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
-  srv.URL("http://localhost:8001/");
-  srv.LocalName("LocalCache_TEST6");
+  srv.SetUrl("http://localhost:8001/");
+  srv.SetLocalName("LocalCache_TEST6");
   _conf.AddServer(srv);
 }
 
@@ -98,8 +98,8 @@ void createLocal3(ClientConfig &_conf)
                    "LocalCache_TEST3/trudy/tm1/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
-  srv.URL("http://localhost:8007/");
-  srv.LocalName("LocalCache_TEST3");
+  srv.SetUrl("http://localhost:8007/");
+  srv.SetLocalName("LocalCache_TEST3");
   _conf.AddServer(srv);
 }
 
@@ -109,7 +109,7 @@ TEST(LocalCache, AllModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   ClientConfig conf;
-  conf.CacheLocation(common::cwd());
+  conf.SetCacheLocation(common::cwd());
   createLocal6(conf);
   createLocal3(conf);
 
@@ -131,7 +131,7 @@ TEST(LocalCache, MatchingModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   ClientConfig conf;
-  conf.CacheLocation(common::cwd());
+  conf.SetCacheLocation(common::cwd());
   createLocal6(conf);
   createLocal3(conf);
 
@@ -158,16 +158,16 @@ TEST(LocalCache, MatchingModel)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   ClientConfig conf;
-  conf.CacheLocation(common::cwd());
+  conf.SetCacheLocation(common::cwd());
   createLocal6(conf);
 
   ignition::fuel_tools::LocalCache cache(&conf);
 
   ignition::fuel_tools::ServerConfig srv1;
-  srv1.URL("http://localhost:8001/");
+  srv1.SetUrl("http://localhost:8001/");
 
   ignition::fuel_tools::ServerConfig srv2;
-  srv2.URL("http://localhost:8002/");
+  srv2.SetUrl("http://localhost:8002/");
 
   ModelIdentifier am1;
   am1.Server(srv1);
