@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
+#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
 #include "ignition/fuel_tools/ClientConfig.hh"
@@ -248,6 +249,80 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
 }
 
 /////////////////////////////////////////////////
+TEST(ClientConfig, UserAgent)
+{
+  ClientConfig config;
+  EXPECT_EQ("IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL,
+            config.UserAgent());
+
+  config.SetUserAgent("my_user_agent");
+  EXPECT_EQ("my_user_agent", config.UserAgent());
+}
+
+/////////////////////////////////////////////////
+TEST(ServerConfig, APIKey)
+{
+  ServerConfig config;
+  EXPECT_TRUE(config.APIKey().empty());
+
+  config.APIKey("my_api_key");
+  EXPECT_EQ("my_api_key", config.APIKey());
+
+  config.APIKey("my_other_api_key");
+  EXPECT_EQ("my_other_api_key", config.APIKey());
+}
+
+/////////////////////////////////////////////////
+TEST(ClientConfig, AsString)
+{
+  common::Console::SetVerbosity(4);
+  {
+    ClientConfig client;
+    std::string str = "Config path: \nCache location: \nServers:\n";
+    EXPECT_EQ(str, client.AsString());
+  }
+
+  {
+    ServerConfig server;
+    std::string str = "URL: \nLocal name: \nVersion: 1.0\nAPI key: \n";
+    EXPECT_EQ(str, server.AsString());
+  }
+
+  {
+    ServerConfig srv;
+    srv.URL("http://serverurl.com");
+    srv.LocalName("local_name");
+    srv.Version("2.0");
+    srv.APIKey("ABCD");
+
+    auto str = srv.AsString();
+    igndbg << str << std::endl;
+
+    EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
+    EXPECT_NE(str.find("local_name"), std::string::npos);
+    EXPECT_NE(str.find("2.0"), std::string::npos);
+    EXPECT_NE(str.find("ABCD"), std::string::npos);
+  }
+
+  {
+    ClientConfig client;
+    client.SetConfigPath("config/path");
+    client.CacheLocation("cache/location");
+
+    ServerConfig srv;
+    srv.URL("http://serverurl.com");
+    client.AddServer(srv);
+
+    auto str = client.AsString();
+    igndbg << str << std::endl;
+
+    EXPECT_NE(str.find("config/path"), std::string::npos);
+    EXPECT_NE(str.find("cache/location"), std::string::npos);
+    EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
+  }
+}
+
+/////////////////////////////////////////////////
 TEST(ServerConfig, Url)
 {
   // Invalid URL string
@@ -293,4 +368,3 @@ int main(int argc, char **argv)
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

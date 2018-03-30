@@ -17,6 +17,7 @@
 
 #include <yaml.h>
 #include <cstdio>
+#include <sstream>
 #include <stack>
 #include <string>
 #include <vector>
@@ -42,10 +43,14 @@ class ignition::fuel_tools::ClientConfigPrivate
   public: std::vector<ServerConfig> servers;
 
   /// \brief a path on disk to where data is cached.
-  public: std::string cacheLocation;
+  public: std::string cacheLocation = "";
 
   /// \brief The path where the configuration file is located.
-  public: std::string configPath;
+  public: std::string configPath = "";
+
+  /// \brief Name of the user agent.
+  public: std::string userAgent =
+          "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
 };
 
 //////////////////////////////////////////////////
@@ -56,7 +61,7 @@ class ignition::fuel_tools::ServerConfigPrivate
   public: common::URI url;
 
   /// \brief A key to auth with the server
-  public: std::string key;
+  public: std::string key = "";
 
   /// \brief The protocol version used when talking with this server.
   public: std::string version = "1.0";
@@ -148,6 +153,17 @@ std::string ServerConfig::Version() const
 void ServerConfig::Version(const std::string &_version)
 {
   this->dataPtr->version = _version;
+}
+
+//////////////////////////////////////////////////
+std::string ServerConfig::AsString(const std::string &_prefix) const
+{
+  std::stringstream out;
+  out << _prefix << "URL: " << this->URL() << std::endl
+      << _prefix << "Local name: " << this->LocalName() << std::endl
+      << _prefix << "Version: " << this->Version() << std::endl
+      << _prefix << "API key: " << this->APIKey() << std::endl;
+  return out.str();
 }
 
 /////////////////////////////////////////////////
@@ -415,6 +431,12 @@ void ClientConfig::SetConfigPath(const std::string &_path)
 }
 
 //////////////////////////////////////////////////
+std::string ClientConfig::ConfigPath() const
+{
+  return this->dataPtr->configPath;
+}
+
+//////////////////////////////////////////////////
 std::vector<ServerConfig> ClientConfig::Servers() const
 {
   return this->dataPtr->servers;
@@ -436,4 +458,33 @@ std::string ClientConfig::CacheLocation() const
 void ClientConfig::CacheLocation(const std::string &_path)
 {
   this->dataPtr->cacheLocation = _path;
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::SetUserAgent(const std::string &_agent)
+{
+  this->dataPtr->userAgent = _agent;
+}
+
+//////////////////////////////////////////////////
+const std::string &ClientConfig::UserAgent() const
+{
+  return this->dataPtr->userAgent;
+}
+
+//////////////////////////////////////////////////
+std::string ClientConfig::AsString(const std::string &_prefix) const
+{
+  std::stringstream out;
+  out << _prefix << "Config path: " << this->ConfigPath() << std::endl
+      << _prefix << "Cache location: " << this->CacheLocation() << std::endl
+      << _prefix << "Servers:" << std::endl;
+
+  for (auto s : this->Servers())
+  {
+    out << _prefix << "  ---" << std::endl;
+    out << _prefix << s.AsString("  ");
+  }
+
+  return out.str();
 }

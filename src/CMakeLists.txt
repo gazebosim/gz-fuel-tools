@@ -23,6 +23,7 @@ set (gtest_sources
   ModelIdentifier_TEST.cc
   ModelIter_TEST.cc
   Model_TEST.cc
+  REST_TEST.cc
   Result_TEST.cc
   Zip_TEST.cc
 )

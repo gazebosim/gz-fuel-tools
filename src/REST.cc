@@ -33,6 +33,7 @@
 using namespace ignition;
 using namespace fuel_tools;
 
+static std::string gUserAgent;
 
 //////////////////////////////////////////////////
 std::string JoinURL(const std::string &_base,
@@ -59,6 +60,31 @@ std::string JoinURL(const std::string &_base,
     // Both have a slash
     return _base + _more.substr(1, _more.size() - 1);
   }
+}
+
+/////////////////////////////////////////////////
+size_t HeaderCallback(char *_ptr, size_t _size, size_t _nmemb, void *_userp)
+{
+  std::map<std::string, std::string> *map =
+    static_cast<std::map<std::string, std::string> *>(_userp);
+
+  _size *= _nmemb;
+
+  if (map)
+  {
+    std::string header(_ptr);
+    auto colonPos = header.find(":");
+
+    // Only store header information of the form
+    //     <type>: <data>
+    if (colonPos != std::string::npos)
+    {
+      map->insert(std::make_pair(header.substr(0, colonPos),
+                                 header.substr(colonPos+2)));
+    }
+  }
+
+  return _size;
 }
 
 /////////////////////////////////////////////////
@@ -116,12 +142,17 @@ RESTResponse REST::Request(Method _method,
     }
   }
 
+  curl_easy_setopt(curl, CURLOPT_USERAGENT, gUserAgent.c_str());
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
   std::string responseData;
+  std::map<std::string, std::string> headerData;
   curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
+
+  curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, HeaderCallback);
+  curl_easy_setopt(curl, CURLOPT_HEADERDATA, &headerData);
 
   char errbuf[CURL_ERROR_SIZE];
   // provide a buffer to store errors in
@@ -221,6 +252,9 @@ RESTResponse REST::Request(Method _method,
   // Update the data.
   res.data = responseData;
 
+  // Update the header data.
+  res.headers = headerData;
+
   if (formpost)
     curl_formfree(formpost);
 
@@ -236,4 +270,16 @@ RESTResponse REST::Request(Method _method,
   if (ifs.is_open())
     ifs.close();
   return res;
+}
+
+/////////////////////////////////////////////////
+void REST::SetUserAgent(const std::string &_agent)
+{
+  gUserAgent = _agent;
+}
+
+/////////////////////////////////////////////////
+const std::string &REST::UserAgent() const
+{
+  return gUserAgent;
 }

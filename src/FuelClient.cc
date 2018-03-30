@@ -78,6 +78,7 @@ FuelClient::FuelClient()
   this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelURLRegexStr));
+  this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 }
 
 //////////////////////////////////////////////////
@@ -87,6 +88,7 @@ FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
 {
   this->dataPtr->config = _config;
   this->dataPtr->rest = _rest;
+  this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 
   if (nullptr == _cache)
     this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
@@ -109,21 +111,21 @@ ClientConfig &FuelClient::Config()
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::ModelDetails(const ServerConfig &_server,
+Result FuelClient::ModelDetails(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id, ModelIdentifier &_model) const
 {
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
 
-  auto serverURL = _server.URL();
-  auto version = _server.Version();
+  auto serverURL = _id.Server().URL();
+  auto version = _id.Server().Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
   resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
-  _model = JSONParser::ParseModel(resp.data, _server);
+  _model = JSONParser::ParseModel(resp.data, _id.Server());
 
   return Result(Result::FETCH);
 }
@@ -144,7 +146,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server)
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models(const ServerConfig &_server,
+ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id)
 {
   // Check local cache first
@@ -157,7 +159,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server,
   // Todo try to fetch model directly from a server
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
-  return ModelIterFactory::Create(this->dataPtr->rest, _server, path);
+  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
 }
 
 //////////////////////////////////////////////////
@@ -177,14 +179,14 @@ Result FuelClient::DeleteModel(const ServerConfig &/*_server*/,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DownloadModel(const ServerConfig &_server,
+Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id)
 {
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
 
-  auto serverURL = _server.URL();
-  auto version = _server.Version();
+  auto serverURL = _id.Server().URL();
+  auto version = _id.Server().Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models",
     _id.Name() + ".zip");
 
@@ -200,7 +202,7 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
 
 //////////////////////////////////////////////////
 bool FuelClient::ParseModelURL(const std::string &_modelURL,
-  ServerConfig &_srv, ModelIdentifier &_id)
+  ServerConfig &/*_server*/, ModelIdentifier &_id)
 {
   std::smatch match;
   if (!std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex))
@@ -209,7 +211,7 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
   if (match.size() != 6u)
     return false;
 
-  std::string method = match[1];
+  std::string scheme = match[1];
   std::string server = match[2];
   std::string owner = match[4];
   std::string name = match[5];
@@ -217,7 +219,9 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
   _id.Owner(owner);
   _id.Name(name);
 
-  _srv.URL(method + "://" + server);
+  ServerConfig serverConfig;
+  serverConfig.URL(scheme + "://" + server);
+  _id.Server(serverConfig);
 
   return true;
 }
