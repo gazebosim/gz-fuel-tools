@@ -140,6 +140,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     conf.LoadConfig();
   }
 
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+
   ignition::fuel_tools::FuelClient client(conf);
 
   // Get models
@@ -192,4 +194,3 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 
   return true;
 }
-

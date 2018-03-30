@@ -84,6 +84,35 @@ TEST(JSONParser, BuildModel)
   EXPECT_EQ(tmpJsonStr.str(), jsonStr);
 }
 
+/////////////////////////////////////////////////
+TEST(JSONParser, ParseModel)
+{
+  std::stringstream tmpJsonStr;
+  tmpJsonStr << "{\"id\":1,\"createdAt\":\"2012-04-21T19:25:44.511Z\","
+    << "\"updatedAt\":\"2012-04-23T18:25:43.511Z\","
+    << "\"name\":\"car\","
+    << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\","
+    << "\"tags\":[\"tag1\"]}";
+
+  ServerConfig srv;
+  srv.URL("testServer");
+
+  ModelIdentifier model = JSONParser::ParseModel(tmpJsonStr.str(), srv);
+  EXPECT_EQ("car", model.Name());
+  EXPECT_EQ("testServer", model.Server().URL());
+  auto t = model.ModifyDate();
+  char buffer[100];
+  std::strftime(buffer, sizeof(buffer), "%F %T", gmtime(&t));
+  EXPECT_EQ("2012-04-23 18:25:43", std::string(buffer));
+  t = model.UploadDate();
+  std::strftime(buffer, sizeof(buffer), "%F %T", gmtime(&t));
+  EXPECT_EQ("2012-04-21 19:25:44", std::string(buffer));
+  EXPECT_EQ("3d3112d9-02b2-4b28-8d2f-f03be00a5a26", model.Uuid());
+
+  ASSERT_FALSE(model.Tags().empty());
+  EXPECT_EQ("tag1", model.Tags()[0]);
+}
+
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
