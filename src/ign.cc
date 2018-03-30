@@ -161,7 +161,10 @@ extern "C" bool getOwnerModels(
     const ignition::fuel_tools::ModelIdentifier &_modelId,
     std::map<std::string, std::vector<std::string>> &_resourceMap)
 {
-  auto iter = _client.Models(_server, _modelId);
+  // Copy the server information to modelId.
+  ignition::fuel_tools::ModelIdentifier modelId(_modelId);
+  modelId.Server(_server);
+  auto iter = _client.Models(_server, modelId);
 
   if (!iter)
   {

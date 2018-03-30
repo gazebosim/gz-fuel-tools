@@ -10,6 +10,9 @@
    a 404 is hit. Also added a mechanism to set the user agent
     * [Pull request 46](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/46)
 
+1. FuelClient: Don't use ServerConfig if there's ModelId
+    * [Pull request 56](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/56)
+
 1. List models from command line
     * [Pull request 43](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/43)
     * [Pull request 48](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/48)
@@ -17,6 +20,9 @@
 
 1. Added const constructors for ModelIter and Model
     * [Pull request 42](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/42)
+
+1. Use common::URI for server URL
+    * [Pull request 59](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/59)
 
 ## Ignition Fuel Tools 0.x.x
 
