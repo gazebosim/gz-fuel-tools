@@ -42,7 +42,7 @@ class ignition::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL.
   /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
-  public: std::string kModelURLRegexStr =
+  public: std::string kModelUrlRegexStr =
     // Method
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
@@ -78,7 +78,7 @@ FuelClient::FuelClient()
 {
   this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
   this->dataPtr->urlModelRegex.reset(new std::regex(
-    this->dataPtr->kModelURLRegexStr));
+    this->dataPtr->kModelUrlRegexStr));
 }
 
 //////////////////////////////////////////////////
@@ -99,7 +99,7 @@ FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
     this->dataPtr->cache.reset(_cache);
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
-    this->dataPtr->kModelURLRegexStr));
+    this->dataPtr->kModelUrlRegexStr));
 }
 #ifndef _WIN32
 # pragma GCC diagnostic pop
@@ -140,11 +140,11 @@ Result FuelClient::ModelDetails(const ServerConfig &_server,
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
-  auto serverURL = _server.URL();
+  auto serverUrl = _server.Url();
   auto version = _server.Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
-  resp = rest.Request(HttpMethod::GET, serverURL, version, path, {}, {}, "");
+  resp = rest.Request(HttpMethod::GET, serverUrl, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
@@ -208,12 +208,12 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
-  auto serverURL = _server.URL();
+  auto serverUrl = _server.Url();
   auto version = _server.Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models",
     _id.Name() + ".zip");
 
-  resp = rest.Request(HttpMethod::GET, serverURL, version, path, {}, {}, "");
+  resp = rest.Request(HttpMethod::GET, serverUrl, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
@@ -224,11 +224,11 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
 }
 
 //////////////////////////////////////////////////
-bool FuelClient::ParseModelURL(const std::string &_modelURL,
+bool FuelClient::ParseModelURL(const std::string &_modelUrl,
   ServerConfig &_srv, ModelIdentifier &_id)
 {
   std::smatch match;
-  if (!std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex))
+  if (!std::regex_match(_modelUrl, match, *this->dataPtr->urlModelRegex))
     return false;
 
   if (match.size() != 6u)
@@ -242,18 +242,18 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
   _id.Owner(owner);
   _id.Name(name);
 
-  _srv.URL(method + "://" + server);
+  _srv.SetUrl(method + "://" + server);
 
   return true;
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DownloadModel(const std::string &_modelURL,
+Result FuelClient::DownloadModel(const std::string &_modelUrl,
   std::string &_path)
 {
   ModelIdentifier id;
   ServerConfig srv;
-  if (!this->ParseModelURL(_modelURL, srv, id))
+  if (!this->ParseModelURL(_modelUrl, srv, id))
   {
     return Result(Result::FETCH_ERROR);
   }

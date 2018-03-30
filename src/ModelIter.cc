@@ -270,7 +270,7 @@ IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
     ++page;
 
     // Fire the request.
-    resp = this->rest.Request(method, this->config.URL(),
+    resp = this->rest.Request(method, this->config.Url(),
       this->config.Version(), path, {queryStrPage}, headers, "");
 
     // ToDo: resp.statusCode should return != 200 when the page requested does

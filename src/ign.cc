@@ -37,13 +37,13 @@
 /// \param[in] _resourceMap Key is owner name, value is vector of resources
 /// \param[in] _resourceType Type, such as "models"
 extern "C" void prettyPrint(
-    const ignition::fuel_tools::ServerConfig _serverConfig,
+    const ignition::fuel_tools::ServerConfig &_serverConfig,
     std::map<std::string, std::vector<std::string>> _resourceMap,
     const std::string &_resourceType)
 {
   unsigned int ownerCount{0};
   unsigned int resourceCount{0};
-  std::cout << "\033[92m\033[1m" << _serverConfig.URL() << "\033[39m\033[0m"
+  std::cout << "\033[92m\033[1m" << _serverConfig.Url() << "\033[39m\033[0m"
             << std::endl;
   for (auto owner = _resourceMap.begin(); owner != _resourceMap.end(); ++owner)
   {
@@ -92,7 +92,7 @@ extern "C" void prettyPrint(
 /// \param[in] _resourceMap Key is owner name, value is vector of resources
 /// \param[in] _resourceType Type, such as "models"
 extern "C" void uglyPrint(
-    const ignition::fuel_tools::ServerConfig _serverConfig,
+    const ignition::fuel_tools::ServerConfig &_serverConfig,
     std::map<std::string, std::vector<std::string>> _resourceMap,
     const std::string &_resourceType)
 {
@@ -104,7 +104,7 @@ extern "C" void uglyPrint(
       auto encodedRes =
           curl_easy_escape(curl, resource.c_str(), resource.size());
 
-      std::cout << _serverConfig.URL() << "/" << _serverConfig.Version() << "/"
+      std::cout << _serverConfig.Url() << "/" << _serverConfig.Version() << "/"
                 << owner->first << "/" << _resourceType << "/"
                 << std::string(encodedRes) << std::endl;
     }
@@ -132,7 +132,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
   if (!url.empty())
   {
     ignition::fuel_tools::ServerConfig serverConf;
-    serverConf.URL(url);
+    serverConf.SetUrl(url);
     conf.AddServer(serverConf);
   }
   else
@@ -147,7 +147,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
   {
     if (pretty)
     {
-      std::cout << "Fetching model list from " << server.URL() << "..."
+      std::cout << "Fetching model list from " << server.Url() << "..."
                 << std::endl;
     }
 
