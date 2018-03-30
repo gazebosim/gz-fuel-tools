@@ -74,11 +74,54 @@ namespace ignition
     /// \brief Class describing a result of an operation.
     class IGNITION_FUEL_TOOLS_VISIBLE Result
     {
+      /// Result type.
+      public: enum
+      {
+        /// \brief Uninitialized type.
+        UNKNOWN = 0,
+
+        /// \brief Delete successful.
+        DELETE,
+
+        /// \brief Model not found.
+        DELETE_NOT_FOUND,
+
+        /// \brief Delete failed. Other errors.
+        /// \sa ReadableResult
+        DELETE_ERROR,
+
+        /// \brief Fetch successful.
+        FETCH,
+
+        /// \brief Model already exists.
+        FETCH_ALREADY_EXISTS,
+
+        /// \brief Model not found.
+        FETCH_NOT_FOUND,
+
+        /// \brief Fetch failed. Other errors.
+        /// \sa ReadableResult
+        FETCH_ERROR,
+
+        /// \brief Upload successful.
+        UPLOAD,
+
+        /// \brief Model already exists.
+        UPLOAD_ALREADY_EXISTS,
+
+        /// \brief Upload failed. Other errors.
+        /// \sa ReadableResult
+        UPLOAD_ERROR
+      };
+
       /// \brief Destructor.
       public: ~Result();
 
       /// \brief protected constructor
       public: explicit Result(const ResultType _type);
+
+      /// \brief protected constructor
+      public: explicit IGN_DEPRECATED(2.0) Result(const int _type);
 
       /// \brief Copy constructor.
       /// \param[in] _orig Result to copy.

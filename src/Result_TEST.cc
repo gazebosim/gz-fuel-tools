@@ -37,6 +37,18 @@ TEST(Result, TypeCanBeSet)
 /// \brief Check that there are readable strings returned
 TEST(Result, ReadableStringsHaveLength)
 {
+  // Remove this when version 3 is released. Adding the word
+  // deprecated for grepping ease.
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  ignition::fuel_tools::Result r(Result::FETCH);
+#ifndef _WIN32
+# pragma GCC diagnostic pop
+#endif
+  // End of deprecation removal notice.
+
   EXPECT_FALSE(Result(ResultType::DELETE).ReadableResult().empty());
   EXPECT_FALSE(Result(ResultType::FETCH).ReadableResult().empty());
   EXPECT_FALSE(

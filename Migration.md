@@ -8,4 +8,7 @@
    (eg. Url).
     * [Pull request #49](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/49)
     * [Pull request #51](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/51)
- 
+
+1. ResultTypes have moved from a plain `enum` inside the `Result` class to
+   an `enum class ResultType` outside the `Result` class scope. 
+    * [Pull request #51](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/51/update-result-style/diff#chg-include/ignition/fuel_tools/Result.hh)

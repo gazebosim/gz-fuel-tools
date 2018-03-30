@@ -47,6 +47,49 @@ Result::Result(const ResultType _type) : dataPtr(new ResultPrivate)
 }
 
 //////////////////////////////////////////////////
+Result::Result(const int _type)
+: dataPtr(new ResultPrivate)
+{
+  switch (_type)
+  {
+    default:
+    case UNKNOWN:
+      this->dataPtr->type = ResultType::UNKNOWN;
+      break;
+    case DELETE:
+      this->dataPtr->type = ResultType::DELETE;
+      break;
+    case DELETE_NOT_FOUND:
+      this->dataPtr->type = ResultType::DELETE_NOT_FOUND;
+      break;
+    case DELETE_ERROR:
+      this->dataPtr->type = ResultType::DELETE_ERROR;
+      break;
+    case FETCH:
+      this->dataPtr->type = ResultType::FETCH;
+      break;
+    case FETCH_ALREADY_EXISTS:
+      this->dataPtr->type = ResultType::FETCH_ALREADY_EXISTS;
+      break;
+    case FETCH_NOT_FOUND:
+      this->dataPtr->type = ResultType::FETCH_NOT_FOUND;
+      break;
+    case FETCH_ERROR:
+      this->dataPtr->type = ResultType::FETCH_ERROR;
+      break;
+    case UPLOAD:
+      this->dataPtr->type = ResultType::UPLOAD;
+      break;
+    case UPLOAD_ALREADY_EXISTS:
+      this->dataPtr->type = ResultType::UPLOAD_ALREADY_EXISTS;
+      break;
+    case UPLOAD_ERROR:
+      this->dataPtr->type = ResultType::UPLOAD_ERROR;
+      break;
+  }
+}
+
+//////////////////////////////////////////////////
 Result::Result(const Result &_orig) : dataPtr(new ResultPrivate)
 {
   *(this->dataPtr) = *(_orig.dataPtr);
