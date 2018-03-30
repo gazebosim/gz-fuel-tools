@@ -196,6 +196,11 @@ namespace ignition
       // /// \returns true if successful
       // public: bool SHA_256(const std::array<std::uint8_t, 32> &_hash);
 
+      /// \brief Returns all the model information as a string.
+      /// \param[in] _prefix Optional prefix for every line of the string.
+      /// \return Model information string
+      public: std::string AsString(const std::string &_prefix = "") const;
+
       /// \brief PIMPL
       private: std::unique_ptr<ModelIdentifierPrivate> dataPtr;
     };

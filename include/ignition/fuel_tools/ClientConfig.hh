@@ -76,6 +76,11 @@ namespace ignition
       /// \param[in] _version The version. E.g.: "1.0".
       public: void Version(const std::string &_version);
 
+      /// \brief Returns all the server information as a string.
+      /// \param[in] _prefix Optional prefix for every line of the string.
+      /// \return Server information string
+      public: std::string AsString(const std::string &_prefix = "") const;
+
       /// \brief PIMPL
       private: std::unique_ptr<ServerConfigPrivate> dataPtr;
     };
@@ -114,7 +119,14 @@ namespace ignition
       /// \brief Set the location of the configuration file.
       /// \param[in] _path Path to the configuration file.
       /// \sa LoadConfig
+      /// \sa ConfigPath
       public: void SetConfigPath(const std::string &_path);
+
+      /// \brief Get the location of the configuration file.
+      /// \return Path to the configuration file.
+      /// \sa LoadConfig
+      /// \sa SetConfigPath
+      public: std::string ConfigPath() const;
 
       /// \brief List of servers the client will connect to
       /// \return The list of servers
@@ -130,6 +142,11 @@ namespace ignition
       /// \brief Set where models and stuff are saved
       /// \param[in] _path path on disk where models are saved
       public: void CacheLocation(const std::string &_path);
+
+      /// \brief Returns all the client information as a string.
+      /// \param[in] _prefix Optional prefix for every line of the string.
+      /// \return Client information string
+      public: std::string AsString(const std::string &_prefix = "") const;
 
       /// \brief PIMPL
       private: std::unique_ptr<ClientConfigPrivate> dataPtr;

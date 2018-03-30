@@ -17,6 +17,7 @@
 
 #include <yaml.h>
 #include <cstdio>
+#include <sstream>
 #include <stack>
 #include <string>
 #include <vector>
@@ -145,6 +146,17 @@ std::string ServerConfig::Version() const
 void ServerConfig::Version(const std::string &_version)
 {
   this->dataPtr->version = _version;
+}
+
+//////////////////////////////////////////////////
+std::string ServerConfig::AsString(const std::string &_prefix) const
+{
+  std::stringstream out;
+  out << _prefix << "URL: " << this->URL() << std::endl
+      << _prefix << "Local name: " << this->LocalName() << std::endl
+      << _prefix << "Version: " << this->Version() << std::endl
+      << _prefix << "API key: " << this->APIKey() << std::endl;
+  return out.str();
 }
 
 /////////////////////////////////////////////////
@@ -438,6 +450,12 @@ void ClientConfig::SetConfigPath(const std::string &_path)
 }
 
 //////////////////////////////////////////////////
+std::string ClientConfig::ConfigPath() const
+{
+  return this->dataPtr->configPath;
+}
+
+//////////////////////////////////////////////////
 std::vector<ServerConfig> ClientConfig::Servers() const
 {
   return this->dataPtr->servers;
@@ -471,4 +489,21 @@ void ClientConfig::SetUserAgent(const std::string &_agent)
 const std::string &ClientConfig::UserAgent() const
 {
   return this->dataPtr->userAgent;
+}
+
+//////////////////////////////////////////////////
+std::string ClientConfig::AsString(const std::string &_prefix) const
+{
+  std::stringstream out;
+  out << _prefix << "Config path: " << this->ConfigPath() << std::endl
+      << _prefix << "Cache location: " << this->CacheLocation() << std::endl
+      << _prefix << "Servers:" << std::endl;
+
+  for (auto s : this->Servers())
+  {
+    out << _prefix << "  ---" << std::endl;
+    out << _prefix << s.AsString("  ");
+  }
+
+  return out.str();
 }
