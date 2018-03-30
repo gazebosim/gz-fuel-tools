@@ -1,6 +1,7 @@
 set (sources
   ClientConfig.cc
   FuelClient.cc
+  Helpers.cc
   ign.cc
   JSONParser.cc
   LocalCache.cc
