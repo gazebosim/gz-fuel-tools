@@ -45,7 +45,7 @@ namespace ignition
       public: static ModelIter ModelIterThreeModelIds()
         {
           ignition::fuel_tools::ServerConfig srv;
-          srv.SetUrl("https://ignitionrobotics.org");
+          srv.URL("https://ignitionrobotics.org");
 
           std::vector<ModelIdentifier> ids;
           for (int i = 0; i < 3; i++)
@@ -67,7 +67,7 @@ namespace ignition
       public: static ModelIter ModelIterThreeModels()
         {
           ignition::fuel_tools::ServerConfig srv;
-          srv.SetUrl("https://ignitionrobotics.org");
+          srv.URL("https://ignitionrobotics.org");
 
           std::vector<Model> models;
           for (int i = 0; i < 3; i++)

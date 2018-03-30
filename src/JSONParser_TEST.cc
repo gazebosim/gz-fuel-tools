@@ -42,13 +42,13 @@ TEST(JSONParser, ParseModels)
     << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\"}]";
 
   ServerConfig srv;
-  srv.SetUrl("testServer");
+  srv.URL("testServer");
 
   auto modelIds = JSONParser::ParseModels(tmpJsonStr.str(), srv);
   EXPECT_EQ(1u, modelIds.size());
   auto model = modelIds.front();
   EXPECT_EQ("car", model.Name());
-  EXPECT_EQ("testServer", model.Server().Url());
+  EXPECT_EQ("testServer", model.Server().URL());
   auto t = model.ModifyDate();
   char buffer[100];
   std::strftime(buffer, sizeof(buffer), "%F %T", gmtime(&t));
@@ -95,11 +95,11 @@ TEST(JSONParser, ParseModel)
     << "\"tags\":[\"tag1\"]}";
 
   ServerConfig srv;
-  srv.SetUrl("testServer");
+  srv.URL("testServer");
 
   ModelIdentifier model = JSONParser::ParseModel(tmpJsonStr.str(), srv);
   EXPECT_EQ("car", model.Name());
-  EXPECT_EQ("testServer", model.Server().Url());
+  EXPECT_EQ("testServer", model.Server().URL());
   auto t = model.ModifyDate();
   char buffer[100];
   std::strftime(buffer, sizeof(buffer), "%F %T", gmtime(&t));

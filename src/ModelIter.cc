@@ -167,7 +167,7 @@ IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
     std::string path = _api + queryStrPage;
 
     // Fire the request.
-    resp = this->rest.Request(method, this->config.Url(),
+    resp = this->rest.Request(method, this->config.URL(),
       this->config.Version(), path, {queryStrPage}, headers, "");
 
     // Reset the query string

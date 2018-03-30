@@ -81,7 +81,7 @@ namespace ignition
       ///          right now this iterator stores a list of names internally.
       /// \param[in] _server The server to request the operation.
       /// \return A model iterator
-      public: ModelIter Models(const ServerConfig &_server) const;
+      public: ModelIter Models(const ServerConfig &_server);
 
       /// \brief Returns models matching a given identifying criteria
       /// \param[in] _server The server to request the operation.
@@ -92,7 +92,7 @@ namespace ignition
       ///          same name.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ServerConfig &_server,
-                               const ModelIdentifier &_id) const;
+                               const ModelIdentifier &_id);
 
       /// \brief Upload a directory as a new model
       /// \param[in] _server The server to request the operation.

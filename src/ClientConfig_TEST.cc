@@ -56,11 +56,11 @@ TEST(ClientConfig, ServersCanBeAdded)
 {
   ClientConfig config;
   ServerConfig srv;
-  srv.SetUrl("asdf");
+  srv.URL("asdf");
   config.AddServer(srv);
 
   ASSERT_EQ(1u, config.Servers().size());
-  EXPECT_EQ(std::string("asdf"), config.Servers().front().Url());
+  EXPECT_EQ(std::string("asdf"), config.Servers().front().URL());
 }
 
 /////////////////////////////////////////////////
@@ -73,7 +73,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
 
   ASSERT_EQ(1u, config.Servers().size());
   EXPECT_EQ("https://api.ignitionfuel.org",
-    config.Servers().front().Url());
+    config.Servers().front().URL());
 
   std::string defaultCacheLocation = ignition::common::joinPaths(
     homePath(), ".ignition", "fuel");
@@ -112,9 +112,9 @@ TEST(ClientConfig, CustomConfiguration)
 
   ASSERT_EQ(2u, config.Servers().size());
   EXPECT_EQ("https://api.ignitionfuel.org",
-    config.Servers().front().Url());
+    config.Servers().front().URL());
   EXPECT_EQ("https://myserver",
-    config.Servers().back().Url());
+    config.Servers().back().URL());
 
   EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
 
@@ -124,7 +124,7 @@ TEST(ClientConfig, CustomConfiguration)
 
 /////////////////////////////////////////////////
 /// \brief A server contains an already used name.
-TEST(ClientConfig, RepeatedServerUrlConfiguration)
+TEST(ClientConfig, RepeatedServerURLConfiguration)
 {
   ClientConfig config;
 
@@ -243,7 +243,7 @@ TEST(ClientConfig, EmptyServerNameConfiguration)
 
 /////////////////////////////////////////////////
 /// \brief A server without URL is not valid.
-TEST(ClientConfig, NoServerUrlConfiguration)
+TEST(ClientConfig, NoServerURLConfiguration)
 {
   ClientConfig config;
 
@@ -268,7 +268,7 @@ TEST(ClientConfig, NoServerUrlConfiguration)
 
 /////////////////////////////////////////////////
 /// \brief A server with an empty URL is not valid.
-TEST(ClientConfig, EmptyServerUrlConfiguration)
+TEST(ClientConfig, EmptyServerURLConfiguration)
 {
   ClientConfig config;
 
@@ -352,13 +352,13 @@ TEST(ClientConfig, UserAgent)
 TEST(ServerConfig, APIKey)
 {
   ServerConfig config;
-  EXPECT_TRUE(config.ApiKey().empty());
+  EXPECT_TRUE(config.APIKey().empty());
 
-  config.SetApiKey("my_api_key");
-  EXPECT_EQ("my_api_key", config.ApiKey());
+  config.APIKey("my_api_key");
+  EXPECT_EQ("my_api_key", config.APIKey());
 
-  config.SetApiKey("my_other_api_key");
-  EXPECT_EQ("my_other_api_key", config.ApiKey());
+  config.APIKey("my_other_api_key");
+  EXPECT_EQ("my_other_api_key", config.APIKey());
 }
 
 //////////////////////////////////////////////////

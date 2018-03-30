@@ -25,15 +25,15 @@ using namespace ignft;
 
 /////////////////////////////////////////////////
 /// \brief Nothing crashes
-TEST(FuelClient, ParseModelUrl)
+TEST(FuelClient, ParseModelURL)
 {
   FuelClient client;
   ServerConfig srv;
   ModelIdentifier id;
-  const std::string modelUrl =
+  const std::string modelURL =
     "https://api.ignitionfuel.org/1.0/german/models/Cardboard Box";
-  EXPECT_TRUE(client.ParseModelURL(modelUrl, srv, id));
-  EXPECT_EQ(srv.Url(), "https://api.ignitionfuel.org");
+  EXPECT_TRUE(client.ParseModelURL(modelURL, srv, id));
+  EXPECT_EQ(srv.URL(), "https://api.ignitionfuel.org");
   EXPECT_EQ(id.Owner(), "german");
   EXPECT_EQ(id.Name(), "Cardboard Box");
 
