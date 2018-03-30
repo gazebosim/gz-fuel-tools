@@ -68,17 +68,17 @@ namespace ignition
 
       /// \brief Returns information identifying the model.
       /// \return Information that can identify the model.
-      public: ModelIdentifier Identification();
+      public: ModelIdentifier Identification() const;
 
       /// \brief Make sure this model is in the local cache
       /// \remarks this downloads the model and saves it locally if necessary
       /// \returns The result of fetching
-      public: Result Fetch();
+      public: Result Fetch() const;
 
       /// \brief Returns a path to the model on disk if it is already
       /// cached.
       /// \returns path, or empty string if the model is not cached.
-      public: std::string PathToModel();
+      public: std::string PathToModel() const;
 
       /// \brief PIMPL
       private: std::shared_ptr<ModelPrivate> dataPtr;

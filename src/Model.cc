@@ -45,7 +45,7 @@ Model::operator bool()
 }
 
 //////////////////////////////////////////////////
-ModelIdentifier Model::Identification()
+ModelIdentifier Model::Identification() const
 {
   if (this->dataPtr)
     return this->dataPtr->id;
@@ -53,7 +53,7 @@ ModelIdentifier Model::Identification()
 }
 
 //////////////////////////////////////////////////
-Result Model::Fetch()
+Result Model::Fetch() const
 {
   if (this->dataPtr)
   {
@@ -68,7 +68,7 @@ Result Model::Fetch()
 }
 
 //////////////////////////////////////////////////
-std::string Model::PathToModel()
+std::string Model::PathToModel() const
 {
   if (this->dataPtr)
   {
