@@ -66,7 +66,6 @@ TEST(JSONParser, BuildModel)
   std::vector<ModelIdentifier> ids;
   ModelIdentifier id;
   id.SetName("house");
-  id.SetCategory("building");
   id.SetDescription("affordable");
   id.SetUuid("1234-0093asdf");
   ids.push_back(id);
@@ -76,7 +75,6 @@ TEST(JSONParser, BuildModel)
   std::stringstream tmpJsonStr;
   tmpJsonStr
     << "{\n"
-    << "\t\"category\" : \"building\",\n"
     << "\t\"description\" : \"affordable\",\n"
     << "\t\"name\" : \"house\",\n"
     << "\t\"uuid\" : \"1234-0093asdf\"\n"

@@ -206,7 +206,6 @@ std::string JSONParser::BuildModel(ModelIter _modelIt)
   Json::Value value;
   value["name"] = id.Name();
   value["description"] = id.Description();
-  value["category"] = id.Category();
   value["uuid"] = id.Uuid();
 
   Json::StreamWriterBuilder builder;

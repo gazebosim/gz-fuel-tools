@@ -30,7 +30,6 @@ TEST(ModelIdentifier, SetFields)
 {
   ModelIdentifier id;
   id.SetName("hello");
-  id.SetCategory("test");
   id.SetUuid("lllooo000ooolll");
   id.SetFileSize(2048u);
   std::time_t d1;
@@ -41,7 +40,6 @@ TEST(ModelIdentifier, SetFields)
   id.SetUploadDate(d2);
 
   EXPECT_EQ(std::string("hello"), id.Name());
-  EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id.Uuid());
   EXPECT_EQ(2048u, id.FileSize());
   EXPECT_EQ(d1, id.ModifyDate());
@@ -80,7 +78,6 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
 {
   ModelIdentifier id;
   id.SetName("hello");
-  id.SetCategory("test");
   id.SetUuid("lllooo000ooolll");
   id.SetFileSize(2048u);
   std::time_t d1;
@@ -92,7 +89,6 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
 
   ModelIdentifier id2(id);
   EXPECT_EQ(std::string("hello"), id2.Name());
-  EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
@@ -109,7 +105,6 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
 {
   ModelIdentifier id;
   id.SetName("hello");
-  id.SetCategory("test");
   id.SetUuid("lllooo000ooolll");
   id.SetFileSize(2048u);
   std::time_t d1;
@@ -122,7 +117,6 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
   ModelIdentifier id2(id);
   id2 = id;
   EXPECT_EQ(std::string("hello"), id2.Name());
-  EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());

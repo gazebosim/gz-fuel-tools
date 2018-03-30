@@ -126,7 +126,8 @@ namespace ignition
 
       /// \brief Returns the category of the model.
       /// \return Model category.
-      public: std::string Category() const;
+      /// \deprecated This concept is not relevant.
+      public: std::string IGN_DEPRECATED(2.0) Category() const;
 
       /// \brief Returns the uuid of the model.
       /// \return Model uuid.
@@ -207,13 +208,8 @@ namespace ignition
 
       /// \brief Set the category of the model.
       /// \return True if successful.
-      /// \deprecated See bool SetCategory(const std::string &_cat)
+      /// \deprecated This concept is not relevant.
       public: bool IGN_DEPRECATED(2.0) Category(const std::string &_cat);
-
-      /// \brief Set the category of the model.
-      /// \param[in] _cat The model's category.
-      /// \return True if successful.
-      public: bool SetCategory(const std::string &_cat);
 
       /// \brief Set the uuid of the model.
       /// \return True if successful.

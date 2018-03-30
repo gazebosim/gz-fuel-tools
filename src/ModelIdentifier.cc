@@ -364,12 +364,6 @@ bool ModelIdentifier::SetUploadDate(const std::time_t &_date)
 //////////////////////////////////////////////////
 bool ModelIdentifier::Category(const std::string &_cat)
 {
-  return this->SetCategory(_cat);
-}
-
-//////////////////////////////////////////////////
-bool ModelIdentifier::SetCategory(const std::string &_cat)
-{
   this->dataPtr->category = _cat;
   return true;
 }
