@@ -150,21 +150,18 @@ extern "C" bool getAllModels(
 //////////////////////////////////////////////////
 /// \brief Fill a map with all models from an owner
 /// \param[in] _client Fuel client
-/// \param[in] _server Server configuration
 /// \param[in] _modelId Identifier for models to be returned
 /// \param[out] _resourceMap Key is owner name, value is vector of resources
 /// \return True if successful, will fail if there's a server error or if the
 /// server has no models yet.
 extern "C" bool getOwnerModels(
     const ignition::fuel_tools::FuelClient &_client,
-    const ignition::fuel_tools::ServerConfig &_server,
     const ignition::fuel_tools::ModelIdentifier &_modelId,
     std::map<std::string, std::vector<std::string>> &_resourceMap)
 {
-  // Copy the server information to modelId.
-  ignition::fuel_tools::ModelIdentifier modelId(_modelId);
-  modelId.Server(_server);
-  auto iter = _client.Models(_server, modelId);
+  // Dummy server config not used, will be deprecated on version 2
+  ignition::fuel_tools::ServerConfig server;
+  auto iter = _client.Models(server, _modelId);
 
   if (!iter)
   {
@@ -228,6 +225,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
   // Get models
   for (auto server : conf.Servers())
   {
+    modelId.Server(server);
+
     if (pretty)
     {
       std::cout << "Fetching model list from " << server.URL() << "..."
@@ -246,7 +245,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     }
     else
     {
-      if (!getOwnerModels(client, server, modelId, modelsMap))
+      if (!getOwnerModels(client, modelId, modelsMap))
         return false;
     }
 
