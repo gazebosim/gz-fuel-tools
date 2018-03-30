@@ -12,3 +12,8 @@
 1. ResultTypes have moved from a plain `enum` inside the `Result` class to
    an `enum class ResultType` outside the `Result` class scope. 
     * [Pull request #51](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/51/update-result-style/diff#chg-include/ignition/fuel_tools/Result.hh)
+
+1. `ResultType Result::Type() const` now returns an `enum class`
+   instead of a plain `enum`. This should not affect you unless you have
+   been mapping `ResultType` to an `int`.
+    * [Pull request #51](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/51/update-result-style/diff#chg-include/ignition/fuel_tools/Result.hh)
