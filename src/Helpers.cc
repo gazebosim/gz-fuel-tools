@@ -20,6 +20,7 @@
 
 #include "ignition/fuel_tools/Helpers.hh"
 
+// This whole file is deprecated.
 namespace ignition
 {
   namespace fuel_tools

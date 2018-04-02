@@ -17,7 +17,6 @@ set (gtest_sources
   ClientConfig_TEST.cc
   FuelClient_TEST.cc
   ign_src_TEST.cc
-  Helpers_TEST.cc
   JSONParser_TEST.cc
   LocalCache_TEST.cc
   ModelIdentifier_TEST.cc

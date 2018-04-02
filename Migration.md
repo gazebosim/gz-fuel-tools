@@ -9,6 +9,9 @@
     * [Pull request #49](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/49)
     * [Pull request #52](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/52)
 
+1. Deprecated `env` function. Please use `igition::common::env`.
+    * [Pull request #50](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/50)
+
 1. Deprecated the `ModelIdentifier::Category` functions. The Category concept does not exist on fuelserver.
     * [Pull request #52](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/52)
  
