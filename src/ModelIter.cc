@@ -209,7 +209,7 @@ IterRestIds::IterRestIds(const Rest &_rest, const ServerConfig &_config,
   // make first model
   std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
   ptr->id = *(this->idIter);
-  ptr->id.Server(this->config);
+  ptr->id.SetServer(this->config);
   this->model = Model(ptr);
 
   igndbg << "Got response [" << resp.data << "]\n";
@@ -226,7 +226,7 @@ void IterRestIds::Next()
   {
     std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
     ptr->id = *(this->idIter);
-    ptr->id.Server(this->config);
+    ptr->id.SetServer(this->config);
     this->model = Model(ptr);
   }
   // TODO request next page if api is paginated
@@ -237,7 +237,6 @@ bool IterRestIds::HasReachedEnd()
 {
   return this->ids.empty() || this->idIter == this->ids.end();
 }
-
 
 #ifndef _WIN32
 # pragma GCC diagnostic push
@@ -295,7 +294,7 @@ IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
   // make first model
   std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
   ptr->id = *(this->idIter);
-  ptr->id.Server(this->config);
+  ptr->id.SetServer(this->config);
   this->model = Model(ptr);
 
   igndbg << "Got response [" << resp.data << "]\n";
@@ -312,7 +311,7 @@ void IterRESTIds::Next()
   {
     std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
     ptr->id = *(this->idIter);
-    ptr->id.Server(this->config);
+    ptr->id.SetServer(this->config);
     this->model = Model(ptr);
   }
   // TODO request next page if api is paginated

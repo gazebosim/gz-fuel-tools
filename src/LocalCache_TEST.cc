@@ -138,8 +138,8 @@ TEST(LocalCache, MatchingModels)
   ignition::fuel_tools::LocalCache cache(&conf);
 
   ModelIdentifier am1;
-  am1.Owner("alice");
-  am1.Name("am1");
+  am1.SetOwner("alice");
+  am1.SetName("am1");
   auto iter = cache.MatchingModels(am1);
 
   std::set<std::string> uniqueNames;
@@ -170,33 +170,33 @@ TEST(LocalCache, MatchingModel)
   srv2.SetUrl("http://localhost:8002/");
 
   ModelIdentifier am1;
-  am1.Server(srv1);
-  am1.Owner("alice");
-  am1.Name("am1");
+  am1.SetServer(srv1);
+  am1.SetOwner("alice");
+  am1.SetName("am1");
   EXPECT_TRUE(cache.MatchingModel(am1));
 
   ModelIdentifier tm2;
-  tm2.Server(srv1);
-  tm2.Owner("trudy");
-  tm2.Name("tm2");
+  tm2.SetServer(srv1);
+  tm2.SetOwner("trudy");
+  tm2.SetName("tm2");
   EXPECT_TRUE(cache.MatchingModel(tm2));
 
   ModelIdentifier bogus1;
-  bogus1.Server(srv2);
-  bogus1.Owner("trudy");
-  bogus1.Name("tm2");
+  bogus1.SetServer(srv2);
+  bogus1.SetOwner("trudy");
+  bogus1.SetName("tm2");
   EXPECT_FALSE(cache.MatchingModel(bogus1));
 
   ModelIdentifier bogus2;
-  bogus2.Server(srv1);
-  bogus2.Owner("tfudy");
-  bogus2.Name("tm2");
+  bogus2.SetServer(srv1);
+  bogus2.SetOwner("tfudy");
+  bogus2.SetName("tm2");
   EXPECT_FALSE(cache.MatchingModel(bogus2));
 
   ModelIdentifier bogus3;
-  bogus3.Server(srv1);
-  bogus3.Owner("trudy");
-  bogus3.Name("tm3");
+  bogus3.SetServer(srv1);
+  bogus3.SetOwner("trudy");
+  bogus3.SetName("tm3");
   EXPECT_FALSE(cache.MatchingModel(bogus3));
 }
 

@@ -229,8 +229,8 @@ bool FuelClient::ParseModelURL(const std::string &_modelUrl,
   std::string owner = match[4];
   std::string name = match[5];
 
-  _id.Owner(owner);
-  _id.Name(name);
+  _id.SetOwner(owner);
+  _id.SetName(name);
 
   _srv.SetUrl(method + "://" + server);
 
