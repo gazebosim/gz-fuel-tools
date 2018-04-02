@@ -54,13 +54,13 @@ namespace ignition
       /// \brief Default constructor
       public: Model();
 
-      /// \brief Protected constructor
-      /// \param[in] _dPtr Model private data to copy.
-      protected: explicit Model(std::shared_ptr<ModelPrivate> _dptr);
-
       /// \brief Copy constructor
       /// \param[in] _orig Model to copy.
       public: Model(const Model &_orig) = default;
+
+      /// \brief Protected constructor
+      /// \param[in] _dPtr Model private data to copy.
+      protected: explicit Model(std::shared_ptr<ModelPrivate> _dptr);
 
       /// \brief Returns false if model was constructed via Model().
       /// \return False if model was constructed via Model().

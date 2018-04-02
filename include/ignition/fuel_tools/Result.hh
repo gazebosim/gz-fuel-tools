@@ -117,10 +117,13 @@ namespace ignition
       /// \brief Destructor.
       public: ~Result();
 
-      /// \brief protected constructor
+      /// \brief Constructor
+      /// \param[in] _type Result type
       public: explicit Result(const ResultType _type);
 
-      /// \brief protected constructor
+      /// \brief Derecated constructor
+      /// \param[in] _type integer result type that maps to the enum in
+      /// the Result class.
       public: explicit IGN_DEPRECATED(2.0) Result(const int _type);
 
       /// \brief Copy constructor.
