@@ -45,7 +45,7 @@ Model::operator bool()
 }
 
 //////////////////////////////////////////////////
-ModelIdentifier Model::Identification()
+ModelIdentifier Model::Identification() const
 {
   if (this->dataPtr)
     return this->dataPtr->id;
@@ -53,22 +53,22 @@ ModelIdentifier Model::Identification()
 }
 
 //////////////////////////////////////////////////
-Result Model::Fetch()
+Result Model::Fetch() const
 {
   if (this->dataPtr)
   {
     if (this->PathToModel().empty())
     {
       // TODO look for models on servers
-      return Result(Result::FETCH_ERROR);
+      return Result(ResultType::FETCH_ERROR);
     }
-    return Result(Result::FETCH_ALREADY_EXISTS);
+    return Result(ResultType::FETCH_ALREADY_EXISTS);
   }
-  return Result(Result::UNKNOWN);
+  return Result(ResultType::UNKNOWN);
 }
 
 //////////////////////////////////////////////////
-std::string Model::PathToModel()
+std::string Model::PathToModel() const
 {
   if (this->dataPtr)
   {

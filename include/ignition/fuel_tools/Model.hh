@@ -30,31 +30,17 @@ namespace ignition
 {
   namespace fuel_tools
   {
-    /// \brief Forward Declaration
+    // Forward Declarations
     class ModelPrivate;
-
-    /// \brief Forward declaration
     class ModelIter;
-
-    /// \brief Forward declaration
     class ModelIterPrivate;
-
-    /// \brief forward declaration
     class LocalCache;
-
-    /// \brief forward declaration
     class LocalCachePrivate;
-
-    /// \brief Forward declaration
     class IterIds;
-
-    /// \brief Forward declaration
     class IterRESTIds;
-
-    /// \brief Forward declaration
     class ModelIterTest;
 
-    /// \brief Defines how to identify a model
+    /// \brief Defines how to identify a model.
     class IGNITION_FUEL_TOOLS_VISIBLE Model
     {
       friend IterIds;
@@ -68,26 +54,31 @@ namespace ignition
       /// \brief Default constructor
       public: Model();
 
-      /// \brief Protected constructor
-      protected: explicit Model(std::shared_ptr<ModelPrivate> _dptr);
-
       /// \brief Copy constructor
+      /// \param[in] _orig Model to copy.
       public: Model(const Model &_orig) = default;
 
-      /// \brief Returns false if model was constructed via Model()
+      /// \brief Protected constructor
+      /// \param[in] _dPtr Model private data to copy.
+      protected: explicit Model(std::shared_ptr<ModelPrivate> _dptr);
+
+      /// \brief Returns false if model was constructed via Model().
+      /// \return False if model was constructed via Model().
       public: operator bool();
 
-      /// \brief returns information identifying the model
-      public: ModelIdentifier Identification();
+      /// \brief Returns information identifying the model.
+      /// \return Information that can identify the model.
+      public: ModelIdentifier Identification() const;
 
       /// \brief Make sure this model is in the local cache
       /// \remarks this downloads the model and saves it locally if necessary
       /// \returns The result of fetching
-      public: Result Fetch();
+      public: Result Fetch() const;
 
-      /// \brief returns a path to the model on disk if it is already cached
+      /// \brief Returns a path to the model on disk if it is already
+      /// cached.
       /// \returns path, or empty string if the model is not cached.
-      public: std::string PathToModel();
+      public: std::string PathToModel() const;
 
       /// \brief PIMPL
       private: std::shared_ptr<ModelPrivate> dataPtr;

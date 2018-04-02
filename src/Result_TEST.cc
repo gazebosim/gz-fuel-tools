@@ -26,45 +26,59 @@ using namespace ignft;
 /// \brief Create a request object with a type and check that it
 TEST(Result, TypeCanBeSet)
 {
-  Result r1(Result::UPLOAD);
-  EXPECT_EQ(Result::UPLOAD, r1.Type());
+  Result r1(ResultType::UPLOAD);
+  EXPECT_EQ(ResultType::UPLOAD, r1.Type());
 
-  Result r2(Result::DELETE);
-  EXPECT_EQ(Result::DELETE, r2.Type());
+  Result r2(ResultType::DELETE);
+  EXPECT_EQ(ResultType::DELETE, r2.Type());
 }
 
 /////////////////////////////////////////////////
 /// \brief Check that there are readable strings returned
 TEST(Result, ReadableStringsHaveLength)
 {
-  EXPECT_FALSE(Result(Result::DELETE).ReadableResult().empty());
-  EXPECT_FALSE(Result(Result::FETCH).ReadableResult().empty());
-  EXPECT_FALSE(Result(Result::FETCH_ALREADY_EXISTS).ReadableResult().empty());
-  EXPECT_FALSE(Result(Result::UPLOAD).ReadableResult().empty());
-  EXPECT_FALSE(Result(Result::UNKNOWN).ReadableResult().empty());
-  EXPECT_FALSE(Result(Result::DELETE_NOT_FOUND).ReadableResult().empty());
-  EXPECT_FALSE(Result(Result::DELETE_ERROR).ReadableResult().empty());
-  EXPECT_FALSE(Result(Result::FETCH_NOT_FOUND).ReadableResult().empty());
-  EXPECT_FALSE(Result(Result::FETCH_ERROR).ReadableResult().empty());
-  EXPECT_FALSE(Result(Result::UPLOAD_ALREADY_EXISTS).ReadableResult().empty());
-  EXPECT_FALSE(Result(Result::UPLOAD_ERROR).ReadableResult().empty());
+  // Remove this when version 3 is released. Adding the word
+  // deprecated for grepping ease.
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  ignition::fuel_tools::Result r(Result::FETCH);
+#ifndef _WIN32
+# pragma GCC diagnostic pop
+#endif
+  // End of deprecation removal notice.
+
+  EXPECT_FALSE(Result(ResultType::DELETE).ReadableResult().empty());
+  EXPECT_FALSE(Result(ResultType::FETCH).ReadableResult().empty());
+  EXPECT_FALSE(
+      Result(ResultType::FETCH_ALREADY_EXISTS).ReadableResult().empty());
+  EXPECT_FALSE(Result(ResultType::UPLOAD).ReadableResult().empty());
+  EXPECT_FALSE(Result(ResultType::UNKNOWN).ReadableResult().empty());
+  EXPECT_FALSE(Result(ResultType::DELETE_NOT_FOUND).ReadableResult().empty());
+  EXPECT_FALSE(Result(ResultType::DELETE_ERROR).ReadableResult().empty());
+  EXPECT_FALSE(Result(ResultType::FETCH_NOT_FOUND).ReadableResult().empty());
+  EXPECT_FALSE(Result(ResultType::FETCH_ERROR).ReadableResult().empty());
+  EXPECT_FALSE(
+      Result(ResultType::UPLOAD_ALREADY_EXISTS).ReadableResult().empty());
+  EXPECT_FALSE(Result(ResultType::UPLOAD_ERROR).ReadableResult().empty());
 }
 
 //////////////////////////////////////////////////
 /// \brief Check that operator bool returns true for successfull cases
 TEST(Result, TrueOnSuccess)
 {
-  EXPECT_TRUE(Result(Result::DELETE));
-  EXPECT_TRUE(Result(Result::FETCH));
-  EXPECT_TRUE(Result(Result::FETCH_ALREADY_EXISTS));
-  EXPECT_TRUE(Result(Result::UPLOAD));
-  EXPECT_FALSE(Result(Result::UNKNOWN));
-  EXPECT_FALSE(Result(Result::DELETE_NOT_FOUND));
-  EXPECT_FALSE(Result(Result::DELETE_ERROR));
-  EXPECT_FALSE(Result(Result::FETCH_NOT_FOUND));
-  EXPECT_FALSE(Result(Result::FETCH_ERROR));
-  EXPECT_FALSE(Result(Result::UPLOAD_ALREADY_EXISTS));
-  EXPECT_FALSE(Result(Result::UPLOAD_ERROR));
+  EXPECT_TRUE(Result(ResultType::DELETE));
+  EXPECT_TRUE(Result(ResultType::FETCH));
+  EXPECT_TRUE(Result(ResultType::FETCH_ALREADY_EXISTS));
+  EXPECT_TRUE(Result(ResultType::UPLOAD));
+  EXPECT_FALSE(Result(ResultType::UNKNOWN));
+  EXPECT_FALSE(Result(ResultType::DELETE_NOT_FOUND));
+  EXPECT_FALSE(Result(ResultType::DELETE_ERROR));
+  EXPECT_FALSE(Result(ResultType::FETCH_NOT_FOUND));
+  EXPECT_FALSE(Result(ResultType::FETCH_ERROR));
+  EXPECT_FALSE(Result(ResultType::UPLOAD_ALREADY_EXISTS));
+  EXPECT_FALSE(Result(ResultType::UPLOAD_ERROR));
 }
 
 //////////////////////////////////////////////////
