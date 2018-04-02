@@ -75,8 +75,8 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
             {
               // Found a model!!!
               std::shared_ptr<ModelPrivate> modPriv(new ModelPrivate);
-              modPriv->id.Name(common::basename(*modIter));
-              modPriv->id.Owner(common::basename(*ownIter));
+              modPriv->id.SetName(common::basename(*modIter));
+              modPriv->id.SetOwner(common::basename(*ownIter));
               modPriv->pathOnDisk = modelPath;
               Model model(modPriv);
               models.push_back(model);
@@ -117,7 +117,7 @@ ModelIter LocalCache::AllModels()
       auto srvModels = this->dataPtr->ModelsInServer(path);
       for (auto &mod : srvModels)
       {
-        mod.dataPtr->id.Server(server);
+        mod.dataPtr->id.SetServer(server);
       }
       models.insert(models.end(), srvModels.begin(), srvModels.end());
     }
