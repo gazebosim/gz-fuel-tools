@@ -186,10 +186,11 @@ namespace ignition
       /// \brief destructor
       public: virtual ~IterRestIds();
 
-      /// \brief Advance iterator to next model
+      /// \brief Advance iterator to next model.
       public: virtual void Next() override;
 
-      /// \brief true if this iterator has reach the end
+      /// \brief True if this iterator has reach the end.
+      /// \return True if iterator has reached the end.
       public: virtual bool HasReachedEnd() override;
 
       /// \brief Client configuration

@@ -65,7 +65,7 @@ namespace ignition
       /// \brief Patch method.
       PATCH,
 
-      /// \brief Patch method.
+      /// \brief Post form method.
       POST_FORM
     };
 
