@@ -24,6 +24,7 @@
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/ModelIter.hh"
 #include "ignition/fuel_tools/REST.hh"
+#include "ignition/fuel_tools/RestClient.hh"
 #include "ignition/fuel_tools/Result.hh"
 
 namespace ignition
@@ -51,8 +52,29 @@ namespace ignition
       ///            destructed. If set to nullptr the client will instantiate
       ///            it's own cache.
       /// \remarks the client saves a copy of the config passed into it
+      /// \deprecated Use version that accepts a Rest object
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+      public: IGN_DEPRECATED(2.0) FuelClient(const ClientConfig &_config,
+                         const REST &_rest,
+                         LocalCache *_cache = nullptr);
+#ifndef _WIN32
+# pragma GCC diagnostic pop
+#endif
+
+      /// \brief Constructor accepts server and auth configuration
+      /// \param[in] _config configuration about servers to connect to
+      /// \param[in] _rest A REST request.
+      /// \param[in] _cache Test hook. Pointer to a local cache. The FuelClient
+      ///            will take ownership of the pointer and free it when
+      ///            destructed. If set to nullptr the client will instantiate
+      ///            it's own cache.
+      /// \remarks the client saves a copy of the config passed into it
+      /// \deprecated Use version that accepts a Rest object
       public: FuelClient(const ClientConfig &_config,
-                         const REST &_rest = REST(),
+                         const Rest &_rest = Rest(),
                          LocalCache *_cache = nullptr);
 
       /// \brief Destructor

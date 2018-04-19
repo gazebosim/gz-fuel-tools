@@ -2,7 +2,10 @@
 
 ### Modifications
 
-1. * All setters (functions that set class variables) have been prefixed
+1. Renamed the REST class to Rest. 
+    * [Pull request #53](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/53)
+
+1. All setters (functions that set class variables) have been prefixed
    with `Set` and existing functions deprecated. Acronyms within class and
    function names have been changed from all-caps (e.g URL) to camel-case
    (eg. Url).

@@ -38,6 +38,7 @@ namespace ignition
     class LocalCachePrivate;
     class IterIds;
     class IterRESTIds;
+    class IterRestIds;
     class ModelIterTest;
 
     /// \brief Defines how to identify a model.
@@ -45,6 +46,7 @@ namespace ignition
     {
       friend IterIds;
       friend IterRESTIds;
+      friend IterRestIds;
       friend ModelIter;
       friend ModelIterPrivate;
       friend ModelIterTest;
