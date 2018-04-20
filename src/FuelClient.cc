@@ -41,7 +41,7 @@ class ignition::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL.
   /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
-  public: const std::string kModelURLRegexStr{
+  public: const std::string kModelUrlRegexStr{
     // Method
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
@@ -110,7 +110,7 @@ FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
     this->dataPtr->cache.reset(_cache);
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
-    this->dataPtr->kModelURLRegexStr));
+    this->dataPtr->kModelUrlRegexStr));
   this->dataPtr->uniqueNameModelRegex.reset(new std::regex(
     this->dataPtr->kModelUniqueNameRegexStr));
 }
@@ -133,11 +133,11 @@ Result FuelClient::ModelDetails(const ServerConfig &/*_server*/,
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
 
-  auto serverURL = _id.Server().URL();
+  auto serverUrl = _id.Server().URL();
   auto version = _id.Server().Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
-  resp = rest.Request(REST::GET, serverURL, version, path, {}, {}, "");
+  resp = rest.Request(REST::GET, serverUrl, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
@@ -268,9 +268,21 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
 }
 
 //////////////////////////////////////////////////
-bool FuelClient::ParseModelURL(const std::string &_modelURL,
-  ServerConfig &/*_server*/, ModelIdentifier &_id)
+bool FuelClient::ParseModelURL(const std::string &_modelUrl,
+    ServerConfig &/*_server*/, ModelIdentifier &_id)
 {
+  return this->ParseModelUrl(common::URI(_modelUrl), _id);
+}
+
+//////////////////////////////////////////////////
+bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
+    ModelIdentifier &_id)
+{
+  if (!_modelUrl.Valid())
+    return false;
+
+  auto urlStr = _modelUrl.Str();
+
   std::smatch match;
   std::string scheme;
   std::string server;
@@ -279,7 +291,7 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
   std::string name;
 
   // Try URL first
-  if (std::regex_match(_modelURL, match, *this->dataPtr->urlModelRegex) &&
+  if (std::regex_match(urlStr, match, *this->dataPtr->urlModelRegex) &&
       match.size() == 6u)
   {
     scheme = match[1];
@@ -289,7 +301,7 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
     name = match[5];
   }
   // Then try unique name
-  else if (std::regex_match(_modelURL, match,
+  else if (std::regex_match(urlStr, match,
       *this->dataPtr->uniqueNameModelRegex) && match.size() == 5u)
   {
     scheme = match[1];
@@ -299,7 +311,7 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
   }
   else
   {
-    ignerr << "Invalid URL [" << _modelURL << "]" << std::endl;
+    ignerr << "Invalid URL [" << urlStr << "]" << std::endl;
     return false;
   }
 
@@ -335,18 +347,25 @@ bool FuelClient::ParseModelURL(const std::string &_modelURL,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DownloadModel(const std::string &_modelURL,
+Result FuelClient::DownloadModel(const std::string &_modelUrl,
+  std::string &_path)
+{
+  return this->DownloadModel(common::URI(_modelUrl), _path);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   std::string &_path)
 {
   // Get data from URL
   ModelIdentifier id;
-  ServerConfig srv;
-  if (!this->ParseModelURL(_modelURL, srv, id))
+  if (!this->ParseModelUrl(_modelUrl, id))
   {
     return Result(Result::FETCH_ERROR);
   }
 
   // Download
+  ServerConfig srv;
   auto result = this->DownloadModel(srv, id);
   if (result)
   {
