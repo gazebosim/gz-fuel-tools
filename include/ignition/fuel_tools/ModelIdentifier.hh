@@ -121,11 +121,11 @@ namespace ignition
       /// \return License name
       public: std::string LicenseName() const;
 
-      /// \brief Returns the license URL
+      /// \brief Returns the license URL as a string.
       /// \return License URL
       public: std::string LicenseURL() const;
 
-      /// \brief Returns the license image URL
+      /// \brief Returns the license image URL as a string.
       /// \return License image URL
       public: std::string LicenseImageURL() const;
 
@@ -174,12 +174,12 @@ namespace ignition
 
       /// \brief Set the license URL of the model
       /// \param[in] _url The URL
-      /// \return True if successful
+      /// \return True if successful, will fail if it's not a valid URL.
       public: bool LicenseURL(const std::string &_url);
 
       /// \brief Set the license image URL of the model
       /// \param[in] _url The URL
-      /// \return True if successful
+      /// \return True if successful, will fail if it's not a valid URL.
       public: bool LicenseImageURL(const std::string &_url);
 
       /// \brief Set the list of tags of the model
