@@ -3,6 +3,9 @@
 1. Add some AsString functions
     * [Pull request 54](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/54)
 
+1. Change cache directory structure and use it
+    * [Pull request 57](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/57)
+
 1. Remove server API version from model unique name
     * [Pull request 47](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/47)
 

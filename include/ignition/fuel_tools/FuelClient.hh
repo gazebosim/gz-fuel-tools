@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <string>
+#include <ignition/common/URI.hh>
 
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/ModelIter.hh"
@@ -137,7 +138,8 @@ namespace ignition
       public: Result DeleteModel(const ServerConfig &_server,
                                  const ModelIdentifier &_id);
 
-      /// \brief Download a model from ignition fuel
+      /// \brief Download a model from ignition fuel. This will override an
+      /// existing local copy of the model.
       /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
       /// instead.
       /// \param[in] _id The model identifier.
@@ -145,23 +147,60 @@ namespace ignition
       public: Result DownloadModel(const ServerConfig &_server,
                                    const ModelIdentifier &_id);
 
-      /// \brief Download a model from ignition fuel
-      /// \param[in] _modelURL The unique URL of the model to download.
+      /// \brief Download a model from ignition fuel. This will override an
+      /// existing local copy of the model.
+      ///
+      /// Obs: This will be deprecated on 2.0 in favor of function that accepts
+      /// common::URI.
+      ///
+      /// \param[in] _modelUrl The unique URL of the model to download.
       /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
       /// \param[out] _path Path where the model was downloaded.
       /// \return Result of the download operation.
-      public: Result DownloadModel(const std::string &_modelURL,
+      public: Result DownloadModel(const std::string &_modelUrl,
                                    std::string &_path);
 
+      /// \brief Download a model from ignition fuel. This will override an
+      /// existing local copy of the model.
+      /// \param[in] _modelUrl The unique URL of the model to download.
+      /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
+      /// \param[out] _path Path where the model was downloaded.
+      /// \return Result of the download operation.
+      public: Result DownloadModel(const common::URI &_modelUrl,
+                                   std::string &_path);
+
+      /// \brief Check if a model is already present in the local cache.
+      /// \param[in] _modelUrl The unique URL of the model on a Fuel server.
+      /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
+      /// \param[out] _path Local path where the model can be found.
+      /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
+      public: Result CachedModel(const common::URI &_modelUrl,
+                                 std::string &_path);
+
       /// \brief Parse server and model identifer from model URL or unique name.
-      /// \param[in] _modelURL The unique URL of a model. It may also be a
+      /// \param[in] _modelUrl The unique URL of a model. It may also be a
       /// unique name, which is a URL without the server version.
+      ///
+      /// Obs: This will be deprecated on 2.0 in favor of ParseModelUrl.
+      ///
       /// \param[in] _server Deprecated: this will be ignored, get _id.Server()
       /// instead.
-      /// \param[out] _id The model identifier.
+      /// \param[out] _id The model identifier. It may contain incomplete
+      /// information based on the passed URL and the current client
+      /// config.
       /// \return True if parsed successfully.
-      public: bool ParseModelURL(const std::string &_modelURL,
+      public: bool ParseModelURL(const std::string &_modelUrl,
                                  ServerConfig &_srv,
+                                 ModelIdentifier &_id);
+
+      /// \brief Parse server and model identifer from model URL or unique name.
+      /// \param[in] _modelUrl The unique URL of a model. It may also be a
+      /// unique name, which is a URL without the server version.
+      /// \param[out] _id The model identifier. It may contain incomplete
+      /// information based on the passed URL and the current client
+      /// config.
+      /// \return True if parsed successfully.
+      public: bool ParseModelUrl(const common::URI &_modelUrl,
                                  ModelIdentifier &_id);
 
       /// \brief PIMPL

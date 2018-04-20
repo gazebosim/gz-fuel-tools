@@ -291,7 +291,6 @@ TEST(ClientConfig, AsString)
   {
     ServerConfig srv;
     srv.URL("http://serverurl.com");
-    srv.LocalName("local_name");
     srv.Version("2.0");
     srv.APIKey("ABCD");
 

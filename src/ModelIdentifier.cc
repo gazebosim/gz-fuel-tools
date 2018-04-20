@@ -31,10 +31,6 @@ class ignition::fuel_tools::ModelIdentifierPrivate
   /// \param[in] _name Name to validate
   public: bool ValidName(const std::string &_name);
 
-  /// \brief returns true if URL follows rules
-  /// \param[in] _name Name to validate
-  public: bool ValidURL(const std::string &_URL);
-
   /// \brief a name given to this model by a user
   public: std::string name;
 
@@ -72,10 +68,10 @@ class ignition::fuel_tools::ModelIdentifierPrivate
   public: std::string licenseName;
 
   /// \brief License URL
-  public: std::string licenseURL;
+  public: common::URI licenseUrl;
 
   /// \brief License image URL
-  public: std::string licenseImageURL;
+  public: common::URI licenseImageUrl;
 
   /// \brief Collection of tags
   public: std::vector<std::string> tags;
@@ -107,13 +103,6 @@ bool ModelIdentifierPrivate::ValidName(const std::string &_name)
     }
   }
   return valid;
-}
-
-//////////////////////////////////////////////////
-bool ModelIdentifierPrivate::ValidURL(const std::string &_name)
-{
-  // TODO
-  return !_name.empty();
 }
 
 //////////////////////////////////////////////////
@@ -187,7 +176,7 @@ bool ModelIdentifier::Owner(const std::string &_name)
 //////////////////////////////////////////////////
 bool ModelIdentifier::Server(const ServerConfig &_server)
 {
-  bool success = this->dataPtr->ValidURL(_server.URL());
+  bool success = common::URI::Valid(_server.URL());
   if (success)
     this->dataPtr->server = _server;
 
@@ -263,13 +252,13 @@ std::string ModelIdentifier::LicenseName() const
 //////////////////////////////////////////////////
 std::string ModelIdentifier::LicenseURL() const
 {
-  return this->dataPtr->licenseURL;
+  return this->dataPtr->licenseUrl.Str();
 }
 
 //////////////////////////////////////////////////
 std::string ModelIdentifier::LicenseImageURL() const
 {
-  return this->dataPtr->licenseImageURL;
+  return this->dataPtr->licenseImageUrl.Str();
 }
 
 //////////////////////////////////////////////////
@@ -344,15 +333,13 @@ bool ModelIdentifier::LicenseName(const std::string &_name)
 //////////////////////////////////////////////////
 bool ModelIdentifier::LicenseURL(const std::string &_url)
 {
-  this->dataPtr->licenseURL = _url;
-  return true;
+  return this->dataPtr->licenseUrl.Parse(_url);
 }
 
 //////////////////////////////////////////////////
 bool ModelIdentifier::LicenseImageURL(const std::string &_url)
 {
-  this->dataPtr->licenseImageURL = _url;
-  return true;
+  return this->dataPtr->licenseImageUrl.Parse(_url);
 }
 
 //////////////////////////////////////////////////

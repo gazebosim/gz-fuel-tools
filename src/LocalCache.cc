@@ -40,7 +40,7 @@ class ignft::LocalCachePrivate
   /// \param[in] _path A directory for the local server cache
   public: std::vector<Model> ModelsInServer(const std::string &_path) const;
 
-  /// \brief return all models in a given Owner directory
+  /// \brief return all models in a given Owner/models directory
   public: std::vector<Model> ModelsInPath(const std::string &_path);
 
   /// \brief client configuration
@@ -55,39 +55,43 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
   if (!common::isDirectory(_path))
   {
     ignwarn << "Server directory does not exist [" << _path << "]\n";
+    return models;
   }
-  else
+
+  common::DirIter end;
+  common::DirIter ownIter(_path);
+  while (ownIter != end)
   {
-    common::DirIter end;
-    common::DirIter ownIter(_path);
-    while (ownIter != end)
+    if (!common::isDirectory(*ownIter))
     {
-      if (common::isDirectory(*ownIter))
-      {
-        // This is an owner directory, look for models
-        common::DirIter modIter(*ownIter);
-        while (modIter != end)
-        {
-          if (common::isDirectory(*modIter))
-          {
-            std::string modelPath = common::absPath(*modIter);
-            if (common::exists(common::joinPaths(modelPath, "model.config")))
-            {
-              // Found a model!!!
-              std::shared_ptr<ModelPrivate> modPriv(new ModelPrivate);
-              modPriv->id.Name(common::basename(*modIter));
-              modPriv->id.Owner(common::basename(*ownIter));
-              modPriv->pathOnDisk = modelPath;
-              Model model(modPriv);
-              models.push_back(model);
-              // ignmsg << "Found model [" << modelPath << "]\n";
-            }
-          }
-          ++modIter;
-        }
-      }
       ++ownIter;
+      continue;
     }
+
+    // This is an owner directory, look for models
+    common::DirIter modIter(common::joinPaths(*ownIter, "models"));
+    while (modIter != end)
+    {
+      if (!common::isDirectory(*modIter))
+      {
+        ++modIter;
+        continue;
+      }
+
+      std::string modelPath = common::absPath(*modIter);
+      if (common::exists(common::joinPaths(modelPath, "model.config")))
+      {
+        // Found a model!!!
+        std::shared_ptr<ModelPrivate> modPriv(new ModelPrivate);
+        modPriv->id.Name(common::basename(*modIter));
+        modPriv->id.Owner(common::basename(*ownIter));
+        modPriv->pathOnDisk = modelPath;
+        Model model(modPriv);
+        models.push_back(model);
+      }
+      ++modIter;
+    }
+    ++ownIter;
   }
   return models;
 }
@@ -139,7 +143,6 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
   return Model();
 }
 
-
 //////////////////////////////////////////////////
 ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
 {
@@ -167,12 +170,17 @@ ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
 bool LocalCache::SaveModel(
   const ModelIdentifier &_id, const std::string &_data, const bool _overwrite)
 {
+  if (_id.Server().URL().empty() || _id.Owner().empty() ||
+      _id.Name().empty())
+  {
+    ignerr << "Incomplete model identifier, failed to save model." << std::endl
+           << _id.AsString();
+    return false;
+  }
+
   auto cacheLocation = this->dataPtr->config->CacheLocation();
-  std::string name = _id.Name();
-  std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-  name = common::replaceAll(name, " ", "_");
-  auto modelDir = common::joinPaths(
-    cacheLocation, "models", _id.Owner(), name);
+  auto modelDir = common::joinPaths(cacheLocation,
+      _id.Server().Url().Path().Str(), _id.Owner(), "models", _id.Name());
 
   // Is it already in the cache?
   if (common::isDirectory(modelDir) && !_overwrite)
