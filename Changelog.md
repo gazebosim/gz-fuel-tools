@@ -23,6 +23,7 @@
     * [Pull request 43](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/43)
     * [Pull request 48](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/48)
     * [Pull request 44](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/44)
+    * [Pull request 45](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/45)
 
 1. Added const constructors for ModelIter and Model
     * [Pull request 42](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/42)
@@ -32,6 +33,9 @@
 
 1. Remove server local name
     * [Pull request 58](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/58)
+
+1. Encode url path before downloading models
+    * [Pull request 41](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/41)
 
 ## Ignition Fuel Tools 0.x.x
 
