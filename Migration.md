@@ -8,7 +8,7 @@
 
 ### Modifications
 
-1. Model unique name doesn't contain server API version version anymore, for example:
+1. Model unique name doesn't contain server API version anymore, for example:
     * **Old**: http://localhost:8001/1.0/alice/models/hello
     * **New**: http://localhost:8001/alice/models/hello
 
