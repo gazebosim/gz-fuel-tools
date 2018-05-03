@@ -120,10 +120,14 @@ RESTResponse REST::Request(Method _method,
   // Process query strings.
   if (!_queryStrings.empty())
   {
-    url += "?";
+    std::string fullQuery{"?"};
     for (auto const &queryString : _queryStrings)
-      url += queryString + "&";
-    url.pop_back();
+      fullQuery += queryString + "&";
+
+    fullQuery.pop_back();
+
+    if (fullQuery != "?")
+      url += fullQuery;
   }
 
   // Process headers.

@@ -134,6 +134,10 @@ TEST(CmdLine, ModelListCustomServerPrettyOwner)
   EXPECT_NE(stdOutBuffer.str().find("models"), std::string::npos)
       << stdOutBuffer.str();
 
+  // If pagination fails, we only get the first 20 models
+  EXPECT_EQ(stdOutBuffer.str().find("20 models"), std::string::npos)
+      << stdOutBuffer.str();
+
   EXPECT_EQ(stdOutBuffer.str().find("https://api.ignitionfuel.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_EQ(stdOutBuffer.str().find(
