@@ -160,15 +160,12 @@ IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
 
   // Empty query string will get the first page of models.
   std::string queryStrPage  = "";
-  std::string queryStrPageKey = "?page=";
+  std::string queryStrPageKey = "page=";
   do
   {
-    // Prepare the request with the next page.
-    std::string path = _api + queryStrPage;
-
     // Fire the request.
     resp = this->rest.Request(method, this->config.URL(),
-      this->config.Version(), path, {queryStrPage}, headers, "");
+      this->config.Version(), _api, {queryStrPage}, headers, "");
 
     // Reset the query string
     queryStrPage = "";
