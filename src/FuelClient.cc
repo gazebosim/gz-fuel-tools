@@ -155,8 +155,13 @@ ModelIter FuelClient::Models(const ServerConfig &_server)
   if (!iter)
   {
     // Return just the cached models
-    ignwarn << "Failed to fetch models from server, returning cached models\n";
-    return this->dataPtr->cache->AllModels();
+    ignwarn << "Failed to fetch models from server, returning cached models."
+            << std::endl << _server.AsString() << std::endl;
+
+    ModelIdentifier id;
+    id.Server(_server);
+
+    return this->dataPtr->cache->MatchingModels(id);
   }
   return iter;
 }
@@ -170,8 +175,13 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
   if (!iter)
   {
     // Return just the cached models
-    ignwarn << "Failed to fetch models from server, returning cached models\n";
-    return this->dataPtr->cache->AllModels();
+    ignwarn << "Failed to fetch models from server, returning cached models."
+            << std::endl << _server.AsString() << std::endl;
+
+    ModelIdentifier id;
+    id.Server(_server);
+
+    return this->dataPtr->cache->MatchingModels(id);
   }
   return iter;
 }
