@@ -177,6 +177,15 @@ namespace ignition
       public: Result CachedModel(const common::URI &_modelUrl,
                                  std::string &_path);
 
+      /// \brief Check if a file belonging to a model is already present in the
+      /// local cache.
+      /// \param[in] _fileUrl The unique URL of the file on a Fuel server. E.g.:
+      /// https://server.org/1.0/owner/models/model/files/meshes/mesh.dae
+      /// \param[out] _path Local path where the file can be found.
+      /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
+      public: Result CachedModelFile(const common::URI &_fileUrl,
+                                     std::string &_path);
+
       /// \brief Parse server and model identifer from model URL or unique name.
       /// \param[in] _modelUrl The unique URL of a model. It may also be a
       /// unique name, which is a URL without the server version.
@@ -193,7 +202,7 @@ namespace ignition
                                  ServerConfig &_srv,
                                  ModelIdentifier &_id);
 
-      /// \brief Parse server and model identifer from model URL or unique name.
+      /// \brief Parse model identifer from model URL or unique name.
       /// \param[in] _modelUrl The unique URL of a model. It may also be a
       /// unique name, which is a URL without the server version.
       /// \param[out] _id The model identifier. It may contain incomplete
@@ -202,6 +211,16 @@ namespace ignition
       /// \return True if parsed successfully.
       public: bool ParseModelUrl(const common::URI &_modelUrl,
                                  ModelIdentifier &_id);
+
+      /// \brief Parse model file identifer from model file URL.
+      /// \param[in] _modelUrl The unique URL of a model file. It may also be a
+      /// unique name, which is a URL without the server version.
+      /// \param[out] _id The model identifier. It may contain incomplete
+      /// information based on the passed URL and the current client
+      /// config.
+      /// \return True if parsed successfully.
+      public: bool ParseModelFileUrl(const common::URI &_modelFileUrl,
+                                     ModelIdentifier &_id, std::string &_filePath);
 
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;

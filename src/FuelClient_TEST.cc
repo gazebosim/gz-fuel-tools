@@ -155,6 +155,115 @@ TEST(FuelClient, ParseModelURL)
 }
 
 /////////////////////////////////////////////////
+TEST(FuelClient, ParseModelFileURL)
+{
+  common::Console::SetVerbosity(4);
+
+  // URL - without client config
+  {
+    FuelClient client;
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{
+      "https://api.ignitionfuel.org/1.0/openrobotics/models/Cordless Drill/\
+files/meshes/cordless_drill.dae"};
+    EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
+
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "Cordless Drill");
+    EXPECT_EQ(filePath, "meshes/cordless_drill.dae");
+  }
+
+  // URL - with client config
+  {
+    ClientConfig config;
+    config.LoadConfig();
+
+    FuelClient client(config);
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{
+      "https://api.ignitionfuel.org/1.0/openrobotics/models/Pine Tree/\
+files/materials/scripts/pine_tree.material"};
+    EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
+
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
+  }
+
+  // URL - version different from config
+  {
+    ClientConfig config;
+    config.LoadConfig();
+
+    FuelClient client(config);
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{
+      "https://api.ignitionfuel.org/5.0/openrobotics/models/Pine Tree/\
+files/model.sdf"};
+    EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
+
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(filePath, "model.sdf");
+  }
+
+  // Unique name - without client config
+  {
+    FuelClient client;
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{
+      "https://api.ignitionfuel.org/openrobotics/models/Pine Tree/\
+files/materials/scripts/pine_tree.material"};
+    EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
+
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_TRUE(id.Server().Version().empty());
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
+  }
+
+  // Unique name - with client config
+  {
+    ClientConfig config;
+    config.LoadConfig();
+
+    FuelClient client(config);
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{
+      "https://api.ignitionfuel.org/openrobotics/models/Pine Tree/\
+files/materials/scripts/pine_tree.material"};
+    EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
+
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
+  }
+
+  // Bad URL
+  {
+    FuelClient client;
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{"bad_url"};
+    EXPECT_FALSE(client.ParseModelFileUrl(modelUrl, id, filePath));
+  }
+}
+
+/////////////////////////////////////////////////
 TEST(FuelClient, DownloadModel)
 {
   // Configure to use binary path as cache

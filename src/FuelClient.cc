@@ -63,12 +63,52 @@ class ignition::fuel_tools::FuelClientPrivate
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
     "([^\\/\\s]+)\\/+"
+    // Version
+    "([^\\/\\s]+)\\/+"
     // Owner
     "([^\\/\\s]+)\\/+"
     // "models"
     "models\\/+"
-    // Name
+    // Model
     "([^\\/]+)\\/*"};
+
+  /// \brief A model file URL.
+  /// E.g.: https://server.org/1.0/owner/models/modelname/files/meshes/mesh.dae
+  public: const std::string kModelFileUrlRegexStr{
+    // Method
+    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
+    // Server
+    "([^\\/\\s]+)\\/+"
+    // Version
+    "([^\\/\\s]+)\\/+"
+    // Owner
+    "([^\\/\\s]+)\\/+"
+    // "models"
+    "models\\/+"
+    // Model
+    "([^\\/]+)\\/+"
+    // "files"
+    "files\\/+"
+    // File path
+    "(.*)"};
+
+  /// \brief A model file unique name, which is the same as the URL but without
+  /// the API version.
+  public: const std::string kModelFileUniqueNameRegexStr{
+    // Method
+    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
+    // Server
+    "([^\\/\\s]+)\\/+"
+    // Owner
+    "([^\\/\\s]+)\\/+"
+    // "models"
+    "models\\/+"
+    // Model
+    "([^\\/]+)\\/+"
+    // "files"
+    "files\\/+"
+    // File path
+    "(.*)"};
 
   /// \brief Client configuration
   public: ClientConfig config;
@@ -82,8 +122,14 @@ class ignition::fuel_tools::FuelClientPrivate
   /// \brief Regex to parse Ignition Fuel model URLs.
   public: std::unique_ptr<std::regex> urlModelRegex;
 
+  /// \brief Regex to parse Ignition Fuel model file URLs.
+  public: std::unique_ptr<std::regex> urlModelFileRegex;
+
   /// \brief Regex to parse Ignition Fuel model unique names.
   public: std::unique_ptr<std::regex> uniqueNameModelRegex;
+
+  /// \brief Regex to parse Ignition Fuel model file unique names.
+  public: std::unique_ptr<std::regex> uniqueNameModelFileRegex;
 
   /// \brief The path where the configuration file is located.
   public: std::string configPath;
@@ -111,8 +157,12 @@ FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelUrlRegexStr));
+  this->dataPtr->urlModelFileRegex.reset(new std::regex(
+    this->dataPtr->kModelFileUrlRegexStr));
   this->dataPtr->uniqueNameModelRegex.reset(new std::regex(
     this->dataPtr->kModelUniqueNameRegexStr));
+  this->dataPtr->uniqueNameModelFileRegex.reset(new std::regex(
+    this->dataPtr->kModelFileUniqueNameRegexStr));
 }
 
 //////////////////////////////////////////////////
@@ -357,6 +407,82 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
 }
 
 //////////////////////////////////////////////////
+bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
+    ModelIdentifier &_id, std::string &_filePath)
+{
+  if (!_fileUrl.Valid())
+    return false;
+
+  auto urlStr = _fileUrl.Str();
+
+  std::smatch match;
+  std::string scheme;
+  std::string server;
+  std::string version;
+  std::string owner;
+  std::string model;
+  std::string file;
+
+  // Try URL first
+  if (std::regex_match(urlStr, match, *this->dataPtr->urlModelFileRegex) &&
+      match.size() == 7u)
+  {
+    scheme = match[1];
+    server = match[2];
+    version = match[3];
+    owner = match[4];
+    model = match[5];
+    file = match[6];
+  }
+  // Then try unique name
+  else if (std::regex_match(urlStr, match,
+      *this->dataPtr->uniqueNameModelFileRegex) && match.size() == 6u)
+  {
+    scheme = match[1];
+    server = match[2];
+    owner = match[3];
+    model = match[4];
+    file = match[5];
+  }
+  else
+  {
+    ignerr << "Invalid URL [" << urlStr << "]" << std::endl;
+    return false;
+  }
+
+  // Get remaining server information from config
+  _id.Server().URL(scheme + "://" + server);
+  _id.Server().Version(version);
+  for (const auto &s : this->dataPtr->config.Servers())
+  {
+    if (s.URL() == _id.Server().URL())
+    {
+      if (!version.empty() && s.Version() != _id.Server().Version())
+      {
+        ignwarn << "Requested server API version [" << version
+                << "] for server [" << s.URL() << "], but will use ["
+                << s.Version() << "] as given in the config file."
+                << std::endl;
+      }
+      _id.Server() = s;
+      break;
+    }
+  }
+
+  if (_id.Server().Version().empty())
+  {
+    ignwarn << "Server configuration is incomplete:" << std::endl
+            << _id.Server().AsString();
+  }
+
+  _id.Owner(owner);
+  _id.Name(model);
+  _filePath = file;
+
+  return true;
+}
+
+//////////////////////////////////////////////////
 Result FuelClient::DownloadModel(const std::string &_modelUrl,
   std::string &_path)
 {
@@ -405,6 +531,29 @@ Result FuelClient::CachedModel(const common::URI &_modelUrl,
     _path = modelIter.PathToModel();
     return Result(Result::FETCH_ALREADY_EXISTS);
   }
+
+  return Result(Result::FETCH_ERROR);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::CachedModelFile(const common::URI &_fileUrl,
+  std::string &_path)
+{
+  // Get data from URL
+  ModelIdentifier id;
+  std::string filePath;
+  if (!this->ParseModelFileUrl(_fileUrl, id, filePath))
+  {
+    return Result(Result::FETCH_ERROR);
+  }
+
+  // Check local cache
+//  auto fileIter = this->dataPtr->cache->MatchingModelFile(id);
+//  if (filelIter)
+//  {
+//    _path = fileIter.PathToFile();
+//    return Result(Result::FETCH_ALREADY_EXISTS);
+//  }
 
   return Result(Result::FETCH_ERROR);
 }
