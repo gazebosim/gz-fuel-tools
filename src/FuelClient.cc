@@ -63,13 +63,11 @@ class ignition::fuel_tools::FuelClientPrivate
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
     "([^\\/\\s]+)\\/+"
-    // Version
-    "([^\\/\\s]+)\\/+"
     // Owner
     "([^\\/\\s]+)\\/+"
     // "models"
     "models\\/+"
-    // Model
+    // Name
     "([^\\/]+)\\/*"};
 
   /// \brief A model file URL.
@@ -543,17 +541,27 @@ Result FuelClient::CachedModelFile(const common::URI &_fileUrl,
   ModelIdentifier id;
   std::string filePath;
   if (!this->ParseModelFileUrl(_fileUrl, id, filePath))
-  {
     return Result(Result::FETCH_ERROR);
-  }
 
-  // Check local cache
-//  auto fileIter = this->dataPtr->cache->MatchingModelFile(id);
-//  if (filelIter)
-//  {
-//    _path = fileIter.PathToFile();
-//    return Result(Result::FETCH_ALREADY_EXISTS);
-//  }
+  if (filePath.empty())
+    return Result(Result::FETCH_ERROR);
+
+  // Look for model
+  auto modelIter = this->dataPtr->cache->MatchingModel(id);
+
+  if (!modelIter)
+    return Result(Result::FETCH_ERROR);
+
+  auto modelPath = modelIter.PathToModel();
+
+  // Check if file exists
+  filePath = common::joinPaths(modelPath, filePath);
+
+  if (common::exists(filePath))
+  {
+    _path = filePath;
+    return Result(Result::FETCH_ALREADY_EXISTS);
+  }
 
   return Result(Result::FETCH_ERROR);
 }

@@ -41,14 +41,34 @@ using namespace ignft;
 /// Taken from LocalCache_TEST
 void createLocal1(ClientConfig &_conf)
 {
-  common::createDirectories("test_cache/localhost:8007/alice/models/My Model");
+  common::createDirectories("test_cache/localhost:8007/alice/models/My Model/meshes");
 
-  std::ofstream fout(
-      "test_cache/localhost:8007/alice/models/My Model/model.config",
-      std::ofstream::trunc);
-  fout << "<?xml version=\"1.0\"?>";
-  fout.flush();
-  fout.close();
+  {
+    std::ofstream fout(
+        "test_cache/localhost:8007/alice/models/My Model/model.config",
+        std::ofstream::trunc);
+    fout << "<?xml version=\"1.0\"?>";
+    fout.flush();
+    fout.close();
+  }
+
+  {
+    std::ofstream fout(
+        "test_cache/localhost:8007/alice/models/My Model/model.sdf",
+        std::ofstream::trunc);
+    fout << "<?xml version=\"1.0\"?>";
+    fout.flush();
+    fout.close();
+  }
+
+  {
+    std::ofstream fout(
+        "test_cache/localhost:8007/alice/models/My Model/meshes/model.dae",
+        std::ofstream::trunc);
+    fout << "<?xml version=\"1.0\"?>";
+    fout.flush();
+    fout.close();
+  }
 
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8007/");
@@ -146,6 +166,14 @@ TEST(FuelClient, ParseModelURL)
   }
 
   // Bad URL
+  {
+    FuelClient client;
+    ServerConfig srv;
+    ModelIdentifier id;
+    EXPECT_FALSE(client.ParseModelURL("http://bad.url", srv, id));
+  }
+
+  // Not URL
   {
     FuelClient client;
     ServerConfig srv;
@@ -258,6 +286,15 @@ files/materials/scripts/pine_tree.material"};
     FuelClient client;
     ModelIdentifier id;
     std::string filePath;
+    const common::URI modelUrl{"http://bad.url"};
+    EXPECT_FALSE(client.ParseModelFileUrl(modelUrl, id, filePath));
+  }
+
+  // Not URL
+  {
+    FuelClient client;
+    ModelIdentifier id;
+    std::string filePath;
     const common::URI modelUrl{"bad_url"};
     EXPECT_FALSE(client.ParseModelFileUrl(modelUrl, id, filePath));
   }
@@ -280,8 +317,6 @@ TEST(FuelClient, DownloadModel)
 
   // Download model from URL
   {
-    igndbg << common::URI::Valid(
-        "https://api.ignitionfuel.org/1.0/chapulina/models/Test box");
     common::URI url{
         "https://api.ignitionfuel.org/1.0/chapulina/models/Test box"};
 
@@ -360,6 +395,31 @@ TEST(FuelClient, CachedModel)
         "/test_cache/localhost:8007/alice/models/My Model", path);
   }
 
+  // Cached model file
+  {
+    common::URI url{
+        "http://localhost:8007/1.0/alice/models/My Model/files/model.sdf"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(common::cwd() +
+        "/test_cache/localhost:8007/alice/models/My Model/model.sdf", path);
+  }
+
+  // Deeper cached model file
+  {
+    common::URI url{
+      "http://localhost:8007/1.0/alice/models/My Model/files/meshes/model.dae"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(common::cwd() +
+        "/test_cache/localhost:8007/alice/models/My Model/meshes/model.dae",
+        path);
+  }
+
   // Non-cached model
   {
     common::URI url{"http://localhost:8007/1.0/alice/models/Banana"};
@@ -369,11 +429,48 @@ TEST(FuelClient, CachedModel)
     EXPECT_EQ(Result(Result::FETCH_ERROR), result);
   }
 
-  // Bad URL
+  // Non-cached model (when looking for file)
+  {
+    common::URI url{"http://localhost:8007/1.0/alice/models/Banana/model.sdf"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  // Non-cached model file
+  {
+    common::URI url{
+      "http://localhost:8007/1.0/alice/models/My Model/files/meshes/banana.dae"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  // Model root URL to model file
+  {
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  // Bad model URL
   {
     common::URI url{"banana"};
     std::string path;
     auto result = client.CachedModel(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  // Bad model file URL
+  {
+    common::URI url{"banana"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
     EXPECT_FALSE(result);
     EXPECT_EQ(Result(Result::FETCH_ERROR), result);
   }
