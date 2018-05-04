@@ -218,9 +218,12 @@ namespace ignition
       /// \param[out] _id The model identifier. It may contain incomplete
       /// information based on the passed URL and the current client
       /// config.
+      /// \param[out] _filePath Path to the file from the model's root
+      /// directory, such as "meshes/mesh.dae" or "model.sdf".
       /// \return True if parsed successfully.
       public: bool ParseModelFileUrl(const common::URI &_modelFileUrl,
-                                     ModelIdentifier &_id, std::string &_filePath);
+                                     ModelIdentifier &_id,
+                                     std::string &_filePath);
 
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;
