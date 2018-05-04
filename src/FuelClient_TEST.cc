@@ -311,8 +311,26 @@ TEST(FuelClient, Models)
   FuelClient client;
   ServerConfig serverConfig;
   ModelIdentifier modelId;
-  ModelIter iter = client.Models(serverConfig, modelId);
-  EXPECT_FALSE(iter);
+
+  {
+    ModelIter iter = client.Models(serverConfig, modelId);
+    EXPECT_FALSE(iter);
+  }
+
+  {
+    ModelIter const iter = client.Models(serverConfig, modelId);
+    EXPECT_FALSE(iter);
+  }
+
+  {
+    ModelIter iter = client.Models(serverConfig);
+    EXPECT_FALSE(iter);
+  }
+
+  {
+    ModelIter const iter = client.Models(serverConfig);
+    EXPECT_FALSE(iter);
+  }
 }
 
 /////////////////////////////////////////////////
