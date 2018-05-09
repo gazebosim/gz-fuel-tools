@@ -26,6 +26,7 @@
 #include <iostream>
 
 #include <ignition/common/Console.hh>
+#include <ignition/common/URI.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/config.hh"
@@ -266,6 +267,52 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
       uglyPrint(server, modelsMap, "models");
   }
 
+  return true;
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
+{
+  std::string urlStr{_url};
+  ignition::common::URI url(urlStr);
+  if (!url.Valid())
+  {
+    std::cout << "Download failed: Malformed URL" << std::endl;
+    return false;
+  }
+
+  // Client
+  ignition::fuel_tools::ClientConfig conf;
+  conf.LoadConfig();
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+
+  ignition::fuel_tools::FuelClient client(conf);
+
+  // Model?
+  ignition::fuel_tools::ModelIdentifier model;
+  if (client.ParseModelUrl(url, model))
+  {
+    // Download
+    std::cout << "Downloading model: " << "\033[36m" << std::endl
+              << model.AsString("  ") << "\033[39m" << std::endl;
+
+    ignition::fuel_tools::ServerConfig srv;
+    auto result = client.DownloadModel(srv, model);
+
+    if (!result)
+    {
+      std::cout << "Download failed." << std::endl;
+      return false;
+    }
+  }
+  else
+  {
+    std::cout << "Invalid URL: only models can be downloaded so far."
+              << std::endl;
+    return false;
+  }
+
+  std::cout << "Download succeeded." << std::endl;
   return true;
 }
 

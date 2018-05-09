@@ -39,4 +39,11 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(
     const char *_url = nullptr, const char *_owner = "",
     const char *_raw = "false");
 
+/// \brief External hook to execute 'ign fuel download -u URL' from the command
+/// line.
+/// \param[in] _url Resource URL.
+/// \return 1 if successful, 0 if not.
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(
+    const char *_url = nullptr);
+
 #endif

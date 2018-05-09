@@ -68,6 +68,13 @@ namespace ignition
           const std::string &_data,
           const bool _overwrite);
 
+      /// \brief Update the symbolic link from the tip directory to the latest
+      /// available version directory under _path.
+      /// \param[in] _path Path which should contain one `tip` directory and
+      /// one or more numbered version directories.
+      /// \returns True if successful.
+      public: bool UpdateTipSymLink(const std::string &_path);
+
       /// \brief Internal data.
       private: std::shared_ptr<LocalCachePrivate> dataPtr;
     };

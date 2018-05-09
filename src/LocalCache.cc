@@ -15,6 +15,7 @@
  *
 */
 
+#include <stdio.h>
 #include <unistd.h>
 #include <algorithm>
 #include <fstream>
@@ -217,11 +218,22 @@ bool LocalCache::SaveModel(
     ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
   }
 
-  // Symlink to tip
+  ignmsg << "Saved model at:" << std::endl
+         << "  " << modelVersionedDir << "]" << std::endl;
 
-  common::DirIter endIter;
-  common::DirIter versionIter(modelRootDir);
+  this->UpdateTipSymLink(modelRootDir);
+
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool LocalCache::UpdateTipSymLink(const std::string &_path)
+{
   unsigned int highestVersion{0};
+
+  // Iterate over all subdirectories of _path and get the highest version
+  common::DirIter endIter;
+  common::DirIter versionIter(_path);
   while (versionIter != endIter)
   {
     if (!common::isDirectory(*versionIter))
@@ -248,14 +260,42 @@ bool LocalCache::SaveModel(
     ++versionIter;
   }
 
-  if (highestVersion != 0)
+  if (highestVersion == 0)
   {
-    auto modelTipDir = common::joinPaths(modelRootDir, "tip");
-    auto modelHighestDir =
-      common::joinPaths(modelRootDir, std::to_string(highestVersion));
-
-    symlink(modelTipDir.c_str(), modelHighestDir.c_str());
+    ignerr << "Failed to locate a numbered directory under [" << _path
+           << "], symbolic link not created." << std::endl;
+    return false;
   }
+
+  // Remove tip dir if it already exists
+  auto tipDir = common::joinPaths(_path, "tip");
+  if (common::isDirectory(tipDir))
+  {
+    // TODO: Move this to ign-common, removeAll / removeDirectoryOrFile are
+    // both failing to remove the symlink
+    if (remove(tipDir.c_str()) == -1)
+    {
+      ignerr << "Unable to remove directory [" << tipDir << "]" << std::endl;
+      return false;
+    }
+  }
+
+  // Create sym link
+  auto highestDir = common::joinPaths(_path, std::to_string(highestVersion));
+
+  if (!symlink(highestDir.c_str(), tipDir.c_str()))
+  {
+    ignmsg << "Failed to create a symbolic link from:" << std::endl
+           << "  " << tipDir << std::endl
+           <<"to:" << std::endl
+           << "  " << highestDir << std::endl;
+    return false;
+  }
+
+  ignmsg << "Created symbolic link from:" << std::endl
+         << "  " << tipDir << std::endl
+         <<"to:" << std::endl
+         << "  " << highestDir << std::endl;
 
   return true;
 }

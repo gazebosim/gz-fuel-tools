@@ -258,16 +258,17 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
     return Result(Result::FETCH_ERROR);
   }
 
-  // Local path
-  std::string path;
+  // Route
+  std::string route;
   if (_id.Version() == 0)
   {
-    path = ignition::common::joinPaths(_id.Owner(),
+    // Get tip if version is not set
+    route = ignition::common::joinPaths(_id.Owner(),
         "models", _id.Name() + ".zip");
   }
   else
   {
-    path = ignition::common::joinPaths(_id.Owner(),
+    route = ignition::common::joinPaths(_id.Owner(),
         "models", _id.Name(), std::to_string(_id.Version()),
         _id.Name() + ".zip");
   }
@@ -276,12 +277,24 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
   resp = rest.Request(REST::GET, _id.Server().URL(), _id.Server().Version(),
-      path, {}, {}, "");
+      route, {}, {}, "");
   if (resp.statusCode != 200)
+  {
+    ignerr << "Failed to download model." << std::endl
+           << "  Server: " << _id.Server().URL() << std::endl
+           << "  Route: " << route << std::endl
+           << "  REST response code: " << resp.statusCode << std::endl;
     return Result(Result::FETCH_ERROR);
+  }
+
+  // FIXME: hardcoding version 1 for now until we can get the model version
+  // from the header in case it is the tip
+  auto copy = _id;
+  if (copy.Version() == 0)
+    copy.SetVersion(1);
 
   // Save
-  if (!this->dataPtr->cache->SaveModel(_id, resp.data, true))
+  if (!this->dataPtr->cache->SaveModel(copy, resp.data, true))
     return Result(Result::FETCH_ERROR);
 
   return Result(Result::FETCH);

@@ -43,13 +43,18 @@ COMMANDS = { 'fuel' =>
   "  ign fuel [action] [options]                                           \n"\
   "                                                                        \n"\
   "Available Actions:                                                      \n"\
-  "  list                     List available models                        \n"\
+  "  list                     List available resources                     \n"\
+  "  download                 Download resources                           \n"\
   "                                                                        \n"\
-  "Available Options:                                                      \n" +
+  "Available Options:                                                      \n"\
+  "  -v [ --verbose ] [arg]   Adjust the level of console output (0~4).    \n"\
+  "                           The default verbosity is 1, use -v without   \n"\
+  "                           arguments for level 3.                       \n" +
   COMMON_OPTIONS
 }
 
-SUBCOMMANDS = { 'list' =>
+SUBCOMMANDS = {
+  'list' =>
   "List simulation resources                                               \n"\
   "                                                                        \n"\
   "  ign fuel list [options]                                               \n"\
@@ -60,12 +65,17 @@ SUBCOMMANDS = { 'list' =>
   "  -u [--url] arg           URL of a server the resource comes from,     \n"\
   "                           if unspecified, it will be taken from        \n"\
   "                           config.yaml.                                 \n"\
-  "  -r [--raw]               Machine-friendly output.                     \n"\
-  "  -v [ --verbose ] [arg]   Adjust the level of console output (0~4).    \n"\
-  "                           The default verbosity is 1, use -v without   \n"\
-  "                           arguments for level 3.                       \n"\
+  "  -r [--raw]               Machine-friendly output.                     \n" +
+  COMMON_OPTIONS,
+
+ 'download' =>
+  "Download simulation resources                                           \n"\
   "                                                                        \n"\
-  "Available Options:                                                      \n" +
+  "  ign fuel download [options]                                           \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  -u [--url] arg           Full resource URL, such as:                  \n"\
+  "                           https://api.ignitionfuel.org/1.0/openrobotics/models/Ambulance\n" +
   COMMON_OPTIONS,
 }
 
@@ -101,8 +111,8 @@ class Cmd
         puts usage
         exit
       end
-      opts.on('-u [URL]', '--url', String, 'Server URL') do |server|
-        options['url'] = server
+      opts.on('-u [URL]', '--url', String, 'Server URL') do |url|
+        options['url'] = url
       end
       opts.on('-t [TYPE]', '--type', String, 'Resource type') do |type|
         options['type'] = type
@@ -134,6 +144,11 @@ class Cmd
       end
       if options['type'] != 'model'
         puts "Only model resources currently supported (e.g. --type model)."
+        exit(-1)
+      end
+    when 'download'
+      if options['url'] == ''
+        puts "Missing resource URL (e.g. --url https://api.ignitionfuel.org/1.0/openrobotics/models/Ambulance)."
         exit(-1)
       end
     end
@@ -186,6 +201,11 @@ class Cmd
         if not Importer.listModels(options['url'],
                                    options['owner'],
                                    options['raw'])
+          exit(-1)
+        end
+      when 'download'
+        Importer.extern 'int downloadUrl(const char *)'
+        if not Importer.downloadUrl(options['url'])
           exit(-1)
         end
       end
