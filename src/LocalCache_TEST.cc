@@ -41,29 +41,29 @@ using namespace fuel_tools;
 /// \brief Creates a directory structure in the build directory with 6 models
 void createLocal6(ClientConfig &_conf)
 {
-  common::createDirectories("test_cache/localhost:8001/alice/models/am1");
-  common::createDirectories("test_cache/localhost:8001/alice/models/am2");
-  common::createDirectories("test_cache/localhost:8001/bob/models/bm1");
-  common::createDirectories("test_cache/localhost:8001/bob/models/bm2");
-  common::createDirectories("test_cache/localhost:8001/trudy/models/tm1");
-  common::createDirectories("test_cache/localhost:8001/trudy/models/tm2");
+  common::createDirectories("test_cache/localhost:8001/alice/models/am1/tip");
+  common::createDirectories("test_cache/localhost:8001/alice/models/am2/tip");
+  common::createDirectories("test_cache/localhost:8001/bob/models/bm1/tip");
+  common::createDirectories("test_cache/localhost:8001/bob/models/bm2/tip");
+  common::createDirectories("test_cache/localhost:8001/trudy/models/tm1/tip");
+  common::createDirectories("test_cache/localhost:8001/trudy/models/tm2/tip");
 
-  std::ofstream fout("test_cache/localhost:8001/alice/models/am1/model.config",
+  std::ofstream fout("test_cache/localhost:8001/alice/models/am1/tip/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile("test_cache/localhost:8001/alice/models/am1/model.config",
-                   "test_cache/localhost:8001/alice/models/am2/model.config");
-  common::copyFile("test_cache/localhost:8001/alice/models/am1/model.config",
-                   "test_cache/localhost:8001/bob/models/bm1/model.config");
-  common::copyFile("test_cache/localhost:8001/alice/models/am1/model.config",
-                   "test_cache/localhost:8001/bob/models/bm2/model.config");
-  common::copyFile("test_cache/localhost:8001/alice/models/am1/model.config",
-                   "test_cache/localhost:8001/trudy/models/tm1/model.config");
-  common::copyFile("test_cache/localhost:8001/alice/models/am1/model.config",
-                   "test_cache/localhost:8001/trudy/models/tm2/model.config");
+  common::copyFile("test_cache/localhost:8001/alice/models/am1/tip/model.config",
+                   "test_cache/localhost:8001/alice/models/am2/tip/model.config");
+  common::copyFile("test_cache/localhost:8001/alice/models/am1/tip/model.config",
+                   "test_cache/localhost:8001/bob/models/bm1/tip/model.config");
+  common::copyFile("test_cache/localhost:8001/alice/models/am1/tip/model.config",
+                   "test_cache/localhost:8001/bob/models/bm2/tip/model.config");
+  common::copyFile("test_cache/localhost:8001/alice/models/am1/tip/model.config",
+                   "test_cache/localhost:8001/trudy/models/tm1/tip/model.config");
+  common::copyFile("test_cache/localhost:8001/alice/models/am1/tip/model.config",
+                   "test_cache/localhost:8001/trudy/models/tm2/tip/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8001/");
@@ -73,20 +73,20 @@ void createLocal6(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 3 models
 void createLocal3(ClientConfig &_conf)
 {
-  common::createDirectories("test_cache/localhost:8007/alice/models/am1");
-  common::createDirectories("test_cache/localhost:8007/bob/models/bm1");
-  common::createDirectories("test_cache/localhost:8007/trudy/models/tm1");
+  common::createDirectories("test_cache/localhost:8007/alice/models/am1/tip");
+  common::createDirectories("test_cache/localhost:8007/bob/models/bm1/tip");
+  common::createDirectories("test_cache/localhost:8007/trudy/models/tm1/tip");
 
-  std::ofstream fout("test_cache/localhost:8007/alice/models/am1/model.config",
+  std::ofstream fout("test_cache/localhost:8007/alice/models/am1/tip/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile("test_cache/localhost:8007/alice/models/am1/model.config",
-                   "test_cache/localhost:8007/bob/models/bm1/model.config");
-  common::copyFile("test_cache/localhost:8007/alice/models/am1/model.config",
-                   "test_cache/localhost:8007/trudy/models/tm1/model.config");
+  common::copyFile("test_cache/localhost:8007/alice/models/am1/tip/model.config",
+                   "test_cache/localhost:8007/bob/models/bm1/tip/model.config");
+  common::copyFile("test_cache/localhost:8007/alice/models/am1/tip/model.config",
+                   "test_cache/localhost:8007/trudy/models/tm1/tip/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8007/");

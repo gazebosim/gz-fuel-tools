@@ -75,6 +75,9 @@ class ignition::fuel_tools::ModelIdentifierPrivate
 
   /// \brief Collection of tags
   public: std::vector<std::string> tags;
+
+  /// \brief Model version. Valid versions start from 1.
+  public: unsigned int version;
 };
 
 //////////////////////////////////////////////////
@@ -346,6 +349,22 @@ bool ModelIdentifier::LicenseImageURL(const std::string &_url)
 bool ModelIdentifier::Tags(const std::vector<std::string> &_tags)
 {
   this->dataPtr->tags = _tags;
+  return true;
+}
+
+//////////////////////////////////////////////////
+unsigned int ModelIdentifier::Version() const
+{
+  return this->dataPtr->version;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetVersion(const unsigned int _version)
+{
+  if (_version == 0)
+    return false;
+
+  this->dataPtr->version = _version;
   return true;
 }
 

@@ -41,10 +41,11 @@ using namespace ignft;
 /// Taken from LocalCache_TEST
 void createLocal1(ClientConfig &_conf)
 {
-  common::createDirectories("test_cache/localhost:8007/alice/models/My Model");
+  common::createDirectories(
+      "test_cache/localhost:8007/alice/models/My Model/tip");
 
   std::ofstream fout(
-      "test_cache/localhost:8007/alice/models/My Model/model.config",
+      "test_cache/localhost:8007/alice/models/My Model/tip/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
@@ -192,9 +193,11 @@ TEST(FuelClient, DownloadModel)
     EXPECT_TRUE(common::exists(
       "test_cache/api.ignitionfuel.org/chapulina/models/Test box"));
     EXPECT_TRUE(common::exists(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.sdf"));
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
+       "model.sdf"));
     EXPECT_TRUE(common::exists(
-     "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.config"));
+     "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
+     "model.config"));
 
     // Check it is cached
     auto res3 = client.CachedModel(url, cachedPath);
@@ -242,7 +245,7 @@ TEST(FuelClient, CachedModel)
 
   // Cached model
   {
-    common::URI url{"http://localhost:8007/1.0/alice/models/My Model"};
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip"};
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);

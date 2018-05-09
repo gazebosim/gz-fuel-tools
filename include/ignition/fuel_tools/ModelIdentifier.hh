@@ -187,6 +187,17 @@ namespace ignition
       /// \return True if successful
       public: bool Tags(const std::vector<std::string> &_tags);
 
+      /// \brief Returns the model's version. Versions are integers counting
+      /// from 1.
+      /// \return Model's version, zero if version is not set.
+      public: unsigned int Version() const;
+
+      /// \brief Set the model's version. Versions are intergers counting from
+      /// 1.
+      /// \param[in] _version The model's version
+      /// \return True if successful, will fail if _version is zero.
+      public: bool SetVersion(const unsigned int _version);
+
       // /// \brief returns a SHA 2 256 hash of the model
       // /// \remarks fulfills versioning requirement
       // public: std::array<std::uint8_t, 32> SHA_256() const;

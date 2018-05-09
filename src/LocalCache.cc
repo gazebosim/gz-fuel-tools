@@ -15,6 +15,7 @@
  *
 */
 
+#include <unistd.h>
 #include <algorithm>
 #include <fstream>
 #include <memory>
@@ -22,6 +23,7 @@
 #include <vector>
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
+#include <ignition/common/StringUtils.hh>
 #include <ignition/common/Util.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
@@ -78,8 +80,9 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
         continue;
       }
 
+      // Model should at a minimum have the tip version
       std::string modelPath = common::absPath(*modIter);
-      if (common::exists(common::joinPaths(modelPath, "model.config")))
+      if (common::exists(common::joinPaths(modelPath, "tip", "model.config")))
       {
         // Found a model!!!
         std::shared_ptr<ModelPrivate> modPriv(new ModelPrivate);
@@ -171,7 +174,7 @@ bool LocalCache::SaveModel(
   const ModelIdentifier &_id, const std::string &_data, const bool _overwrite)
 {
   if (_id.Server().URL().empty() || _id.Owner().empty() ||
-      _id.Name().empty())
+      _id.Name().empty() || _id.Version() == 0)
   {
     ignerr << "Incomplete model identifier, failed to save model." << std::endl
            << _id.AsString();
@@ -179,28 +182,31 @@ bool LocalCache::SaveModel(
   }
 
   auto cacheLocation = this->dataPtr->config->CacheLocation();
-  auto modelDir = common::joinPaths(cacheLocation,
+
+  auto modelRootDir = common::joinPaths(cacheLocation,
       _id.Server().Url().Path().Str(), _id.Owner(), "models", _id.Name());
+  auto modelVersionedDir = common::joinPaths(modelRootDir,
+      std::to_string(_id.Version()));
 
   // Is it already in the cache?
-  if (common::isDirectory(modelDir) && !_overwrite)
+  if (common::isDirectory(modelVersionedDir) && !_overwrite)
   {
-    ignerr << "Directory [" << modelDir << "] already exists" << std::endl;
+    ignerr << "Directory [" << modelVersionedDir << "] already exists" << std::endl;
     return false;
   }
 
   // Create the model directory.
-  if (!common::createDirectories(modelDir))
+  if (!common::createDirectories(modelVersionedDir))
   {
-    ignerr << "Unable to create directory [" << modelDir << "]" << std::endl;
+    ignerr << "Unable to create directory [" << modelVersionedDir << "]" << std::endl;
   }
 
-  auto zipFile = common::joinPaths(modelDir, _id.Name() + ".zip");
+  auto zipFile = common::joinPaths(modelVersionedDir, _id.Name() + ".zip");
   std::ofstream ofs(zipFile, std::ofstream::out);
   ofs << _data;
   ofs.close();
 
-  if (!Zip::Extract(zipFile, modelDir))
+  if (!Zip::Extract(zipFile, modelVersionedDir))
   {
     ignerr << "Unable to unzip [" << zipFile << "]" << std::endl;
     return false;
@@ -209,6 +215,46 @@ bool LocalCache::SaveModel(
   if (!common::removeDirectoryOrFile(zipFile))
   {
     ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
+  }
+
+  // Symlink to tip
+
+  common::DirIter endIter;
+  common::DirIter versionIter(modelRootDir);
+  unsigned int highestVersion{0};
+  while (versionIter != endIter)
+  {
+    if (!common::isDirectory(*versionIter))
+    {
+      ++versionIter;
+      continue;
+    }
+
+    auto parts = common::Split(*versionIter, *common::separator("").c_str());
+
+    unsigned int version{0};
+    try
+    {
+      version = std::stoi(parts.back());
+    }
+    catch(std::invalid_argument &_e)
+    {
+      ++versionIter;
+      continue;
+    }
+
+    highestVersion = version > highestVersion ? version : highestVersion;
+
+    ++versionIter;
+  }
+
+  if (highestVersion != 0)
+  {
+    auto modelTipDir = common::joinPaths(modelRootDir, "tip");
+    auto modelHighestDir =
+      common::joinPaths(modelRootDir, std::to_string(highestVersion));
+
+    symlink(modelTipDir.c_str(), modelHighestDir.c_str());
   }
 
   return true;

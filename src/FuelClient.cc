@@ -259,8 +259,18 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
   }
 
   // Local path
-  auto path = ignition::common::joinPaths(_id.Owner(),
-      "models", _id.Name() + ".zip");
+  std::string path;
+  if (_id.Version() == 0)
+  {
+    path = ignition::common::joinPaths(_id.Owner(),
+        "models", _id.Name() + ".zip");
+  }
+  else
+  {
+    path = ignition::common::joinPaths(_id.Owner(),
+        "models", _id.Name(), std::to_string(_id.Version()),
+        _id.Name() + ".zip");
+  }
 
   // Request
   ignition::fuel_tools::REST rest;
