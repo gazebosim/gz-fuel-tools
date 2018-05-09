@@ -271,9 +271,7 @@ bool LocalCache::UpdateTipSymLink(const std::string &_path)
   auto tipDir = common::joinPaths(_path, "tip");
   if (common::isDirectory(tipDir))
   {
-    // TODO: Move this to ign-common, removeAll / removeDirectoryOrFile are
-    // both failing to remove the symlink
-    if (remove(tipDir.c_str()) == -1)
+    if (!common::removeDirectory(tipDir.c_str()))
     {
       ignerr << "Unable to remove directory [" << tipDir << "]" << std::endl;
       return false;
