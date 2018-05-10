@@ -43,6 +43,8 @@ void createLocal1(ClientConfig &_conf)
 {
   common::createDirectories(
       "test_cache/localhost:8007/alice/models/My Model/tip");
+  common::createDirectories(
+      "test_cache/localhost:8007/alice/models/My Model/3");
 
   std::ofstream fout(
       "test_cache/localhost:8007/alice/models/My Model/tip/model.config",
@@ -50,6 +52,10 @@ void createLocal1(ClientConfig &_conf)
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
+
+  common::copyFile(
+      "test_cache/localhost:8007/alice/models/My Model/tip/model.config",
+      "test_cache/localhost:8007/alice/models/My Model/3/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8007/");
@@ -217,6 +223,7 @@ TEST(FuelClient, DownloadModel)
 
   // Download model from URL
   {
+    // Unversioned URL should get tip
     common::URI url{
         "https://api.ignitionfuel.org/1.0/chapulina/models/Test box"};
 
@@ -231,16 +238,22 @@ TEST(FuelClient, DownloadModel)
     auto res2 = client.DownloadModel(url.Str(), path);
     EXPECT_TRUE(res2);
     EXPECT_EQ(Result(Result::FETCH), res2);
+
+    // Check it was downloaded to `tip` (symlink to actual version)
     EXPECT_EQ(common::cwd() +
-      "/test_cache/api.ignitionfuel.org/chapulina/models/Test box", path);
+      "/test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip", path);
     EXPECT_TRUE(common::exists(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box"));
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip"));
     EXPECT_TRUE(common::exists(
       "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
        "model.sdf"));
     EXPECT_TRUE(common::exists(
      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
      "model.config"));
+
+    // Check it wasn't downloaded to model root directory
+    EXPECT_FALSE(common::exists(
+     "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.config"));
 
     // Check it is cached
     auto res3 = client.CachedModel(url, cachedPath);
@@ -286,7 +299,18 @@ TEST(FuelClient, CachedModel)
   FuelClient client(config);
   EXPECT_EQ(config.CacheLocation(), client.Config().CacheLocation());
 
-  // Cached model
+  // Cached model (no version)
+  {
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model"};
+    std::string path;
+    auto result = client.CachedModel(url, path);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(common::cwd() +
+        "/test_cache/localhost:8007/alice/models/My Model/tip", path);
+  }
+
+  // Cached model (tip)
   {
     common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip"};
     std::string path;
@@ -294,7 +318,18 @@ TEST(FuelClient, CachedModel)
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
     EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model", path);
+        "/test_cache/localhost:8007/alice/models/My Model/tip", path);
+  }
+
+  // Cached model (version number)
+  {
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/3"};
+    std::string path;
+    auto result = client.CachedModel(url, path);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(common::cwd() +
+        "/test_cache/localhost:8007/alice/models/My Model/3", path);
   }
 
   // Non-cached model

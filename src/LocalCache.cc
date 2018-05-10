@@ -81,17 +81,27 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
         continue;
       }
 
-      // Model should at a minimum have the tip version
-      std::string modelPath = common::absPath(*modIter);
-      if (common::exists(common::joinPaths(modelPath, "tip", "model.config")))
+      // Go through all versions
+      common::DirIter versionIter(common::absPath(*modIter));
+      while (versionIter != end)
       {
-        // Found a model!!!
-        std::shared_ptr<ModelPrivate> modPriv(new ModelPrivate);
-        modPriv->id.Name(common::basename(*modIter));
-        modPriv->id.Owner(common::basename(*ownIter));
-        modPriv->pathOnDisk = modelPath;
-        Model model(modPriv);
-        models.push_back(model);
+        if (!common::isDirectory(*versionIter))
+        {
+          ++versionIter;
+          continue;
+        }
+
+        if (common::exists(common::joinPaths(*versionIter, "model.config")))
+        {
+          std::shared_ptr<ModelPrivate> modPriv(new ModelPrivate);
+          modPriv->id.Name(common::basename(*modIter));
+          modPriv->id.Owner(common::basename(*ownIter));
+          modPriv->id.SetVersionStr(common::basename(*versionIter));
+          modPriv->pathOnDisk = common::absPath(*versionIter);
+          Model model(modPriv);
+          models.push_back(model);
+        }
+        ++versionIter;
       }
       ++modIter;
     }

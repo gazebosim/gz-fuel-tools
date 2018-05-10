@@ -19,6 +19,8 @@
 #include <string>
 #include <vector>
 
+#include <ignition/common/Filesystem.hh>
+
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
 
@@ -141,9 +143,10 @@ ModelIdentifier::~ModelIdentifier()
 //////////////////////////////////////////////////
 std::string ModelIdentifier::UniqueName() const
 {
-  return this->dataPtr->server.URL()     + "/"        +
-         this->dataPtr->owner            + "/models/" +
-         this->dataPtr->name;
+  return common::joinPaths(this->dataPtr->server.URL(),
+                           this->dataPtr->owner,
+                           this->dataPtr->name,
+                           this->VersionStr());
 }
 
 //////////////////////////////////////////////////
@@ -359,12 +362,38 @@ unsigned int ModelIdentifier::Version() const
 }
 
 //////////////////////////////////////////////////
+std::string ModelIdentifier::VersionStr() const
+{
+  std::string version = this->dataPtr->version == 0 ?
+      "tip" : std::to_string(this->dataPtr->version);
+  return version;
+}
+
+//////////////////////////////////////////////////
 bool ModelIdentifier::SetVersion(const unsigned int _version)
 {
-  if (_version == 0)
-    return false;
-
   this->dataPtr->version = _version;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetVersionStr(const std::string &_version)
+{
+  if (_version == "tip")
+  {
+    this->dataPtr->version = 0;
+    return true;
+  }
+
+  try
+  {
+    this->dataPtr->version = std::stoi(_version);
+  }
+  catch(std::invalid_argument &_e)
+  {
+    return false;
+  }
+
   return true;
 }
 
