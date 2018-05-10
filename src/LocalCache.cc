@@ -219,7 +219,7 @@ bool LocalCache::SaveModel(
   }
 
   ignmsg << "Saved model at:" << std::endl
-         << "  " << modelVersionedDir << "]" << std::endl;
+         << "  " << modelVersionedDir << std::endl;
 
   this->UpdateTipSymLink(modelRootDir);
 
@@ -281,7 +281,7 @@ bool LocalCache::UpdateTipSymLink(const std::string &_path)
   // Create sym link
   auto highestDir = common::joinPaths(_path, std::to_string(highestVersion));
 
-  if (!symlink(highestDir.c_str(), tipDir.c_str()))
+  if (symlink(highestDir.c_str(), tipDir.c_str()) != 0)
   {
     ignmsg << "Failed to create a symbolic link from:" << std::endl
            << "  " << tipDir << std::endl
