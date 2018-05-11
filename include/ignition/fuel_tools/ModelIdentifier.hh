@@ -209,7 +209,7 @@ namespace ignition
       /// \sa SetVersionStr
       public: bool SetVersion(const unsigned int _version);
 
-      /// \brief Set the model's version. Versions are intergers counting from
+      /// \brief Set the model's version. Versions are integers counting from
       /// 1 or "tip" for the latest version.
       /// \param[in] _version The model's version
       /// \return True if successful.
