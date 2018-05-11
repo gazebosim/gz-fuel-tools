@@ -1,9 +1,5 @@
 ## Ignition Fuel Tools 1.x.x (2018-XX-XX)
 
-
-
-## Ignition Fuel Tools 1.1.0 (2018-05-05)
-
 1. Get cached model resource file
     * [Pull request 63](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/63)
 
@@ -15,6 +11,9 @@
 
 1. Client return only relevant cached models
     * [Pull request 62](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/62)
+
+1. Model version support
+    * [Pull request 65](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/65)
 
 1. Remove server API version from model unique name
     * [Pull request 47](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/47)

@@ -19,6 +19,8 @@
 #include <string>
 #include <vector>
 
+#include <ignition/common/Filesystem.hh>
+
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
 
@@ -75,6 +77,9 @@ class ignition::fuel_tools::ModelIdentifierPrivate
 
   /// \brief Collection of tags
   public: std::vector<std::string> tags;
+
+  /// \brief Model version. Valid versions start from 1, 0 means the tip.
+  public: unsigned int version{0};
 };
 
 //////////////////////////////////////////////////
@@ -350,11 +355,54 @@ bool ModelIdentifier::Tags(const std::vector<std::string> &_tags)
 }
 
 //////////////////////////////////////////////////
+unsigned int ModelIdentifier::Version() const
+{
+  return this->dataPtr->version;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::VersionStr() const
+{
+  std::string version = this->dataPtr->version == 0 ?
+      "tip" : std::to_string(this->dataPtr->version);
+  return version;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetVersion(const unsigned int _version)
+{
+  this->dataPtr->version = _version;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetVersionStr(const std::string &_version)
+{
+  if (_version == "tip" || _version.empty())
+  {
+    this->dataPtr->version = 0;
+    return true;
+  }
+
+  try
+  {
+    this->dataPtr->version = std::stoi(_version);
+  }
+  catch(std::invalid_argument &_e)
+  {
+    return false;
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
 std::string ModelIdentifier::AsString(const std::string &_prefix) const
 {
   std::stringstream out;
   out << _prefix << "Name: " << this->Name() << std::endl
       << _prefix << "Owner: " << this->Owner() << std::endl
+      << _prefix << "Version: " << std::to_string(this->Version()) << std::endl
       << _prefix << "Unique name: " << this->UniqueName() << std::endl
       << _prefix << "Description: " << this->Description() << std::endl
       << _prefix << "File size: " << this->FileSize() << std::endl
@@ -372,6 +420,6 @@ std::string ModelIdentifier::AsString(const std::string &_prefix) const
     out << _prefix << "- " << t << std::endl;
 
   out << _prefix << "Server:" << std::endl
-      << _prefix << this->Server().AsString("  ");
+      << this->Server().AsString(_prefix + "  ");
   return out.str();
 }
