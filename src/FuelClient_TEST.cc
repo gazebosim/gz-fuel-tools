@@ -204,6 +204,14 @@ TEST(FuelClient, ParseModelURL)
       "https://api.ignitionfuel.org/99/german/models/Cardboard Box"};
     EXPECT_FALSE(client.ParseModelURL(url, srv, id));
   }
+  {
+    FuelClient client;
+    ServerConfig srv;
+    ModelIdentifier id;
+    const std::string url{
+      "https://api.ignitionfuel.org/2/2/german/models/Cardboard Box/banana"};
+    EXPECT_FALSE(client.ParseModelURL(url, srv, id));
+  }
 }
 
 /////////////////////////////////////////////////

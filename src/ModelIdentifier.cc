@@ -78,7 +78,7 @@ class ignition::fuel_tools::ModelIdentifierPrivate
   /// \brief Collection of tags
   public: std::vector<std::string> tags;
 
-  /// \brief Model version. Valid versions start from 1.
+  /// \brief Model version. Valid versions start from 1, 0 means the tip.
   public: unsigned int version{0};
 };
 
@@ -379,7 +379,7 @@ bool ModelIdentifier::SetVersion(const unsigned int _version)
 //////////////////////////////////////////////////
 bool ModelIdentifier::SetVersionStr(const std::string &_version)
 {
-  if (_version == "tip")
+  if (_version == "tip" || _version.empty())
   {
     this->dataPtr->version = 0;
     return true;

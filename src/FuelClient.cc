@@ -49,7 +49,7 @@ class ignition::fuel_tools::FuelClientPrivate
     // Server
     "([^\\/\\s]+)\\/+"
     // API Version
-    "([0-9]+[.][0-9]+)*\\/*"
+    "([0-9]+[.][0-9]+)?\\/*"
     // Owner
     "([^\\/\\s]+)\\/+"
     // "models"
@@ -306,7 +306,7 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   std::string apiVersion;
   std::string owner;
   std::string modelName;
-  unsigned int modelVersion{0};
+  std::string modelVersion;
 
   // Try URL first
   std::regex_match(urlStr, match, *this->dataPtr->urlModelRegex);
@@ -321,14 +321,7 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
     apiVersion = match[i++];
     owner = match[i++];
     modelName = match[i++];
-
-    try
-    {
-      modelVersion = std::stoi(match[i++]);
-    }
-    catch(std::invalid_argument &_e)
-    {
-    }
+    modelVersion = match[i++];
   }
   else
   {
@@ -363,7 +356,7 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
 
   _id.Owner(owner);
   _id.Name(modelName);
-  _id.SetVersion(modelVersion);
+  _id.SetVersionStr(modelVersion);
 
   return true;
 }

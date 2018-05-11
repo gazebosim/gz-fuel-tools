@@ -31,6 +31,8 @@ TEST(ModelIdentifier, SetFields)
 {
   ModelIdentifier id;
   id.Name("hello");
+  id.Owner("acai");
+  id.SetVersion(6);
   id.Category("test");
   id.Uuid("lllooo000ooolll");
   id.FileSize(2048u);
@@ -42,6 +44,8 @@ TEST(ModelIdentifier, SetFields)
   id.UploadDate(d2);
 
   EXPECT_EQ(std::string("hello"), id.Name());
+  EXPECT_EQ(std::string("acai"), id.Owner());
+  EXPECT_EQ(6u, id.Version());
   EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id.Uuid());
   EXPECT_EQ(2048u, id.FileSize());
@@ -81,6 +85,8 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
 {
   ModelIdentifier id;
   id.Name("hello");
+  id.Owner("watermelon");
+  id.SetVersionStr("");
   id.Category("test");
   id.Uuid("lllooo000ooolll");
   id.FileSize(2048u);
@@ -93,6 +99,8 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
 
   ModelIdentifier id2(id);
   EXPECT_EQ(std::string("hello"), id2.Name());
+  EXPECT_EQ(std::string("watermelon"), id2.Owner());
+  EXPECT_EQ("tip", id2.VersionStr());
   EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
@@ -110,6 +118,8 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
 {
   ModelIdentifier id;
   id.Name("hello");
+  id.Owner("pineapple");
+  id.SetVersionStr("tip");
   id.Category("test");
   id.Uuid("lllooo000ooolll");
   id.FileSize(2048u);
@@ -123,6 +133,8 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
   ModelIdentifier id2(id);
   id2 = id;
   EXPECT_EQ(std::string("hello"), id2.Name());
+  EXPECT_EQ(std::string("pineapple"), id2.Owner());
+  EXPECT_EQ(0u, id2.Version());
   EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
@@ -144,6 +156,7 @@ TEST(ModelIdentifier, AsString)
     std::string str =
         "Name: \n"\
         "Owner: \n"\
+        "Version: 0\n"\
         "Unique name: //models/\n"
         "Description: \n"
         "File size: 0\n"
@@ -165,6 +178,8 @@ TEST(ModelIdentifier, AsString)
   {
     ModelIdentifier id;
     id.Name("hello");
+    id.Owner("raspberry");
+    id.SetVersionStr("55");
     id.Uuid("lllooo000ooolll");
     id.FileSize(2048u);
     std::time_t d1;
@@ -178,6 +193,8 @@ TEST(ModelIdentifier, AsString)
     igndbg << str << std::endl;
 
     EXPECT_NE(str.find("hello"), std::string::npos);
+    EXPECT_NE(str.find("raspberry"), std::string::npos);
+    EXPECT_NE(str.find("55"), std::string::npos);
     EXPECT_NE(str.find("lllooo000ooolll"), std::string::npos);
     EXPECT_NE(str.find("2048"), std::string::npos);
   }
