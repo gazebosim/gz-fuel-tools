@@ -378,7 +378,7 @@ bool ModelIdentifier::SetVersion(const unsigned int _version)
 //////////////////////////////////////////////////
 bool ModelIdentifier::SetVersionStr(const std::string &_version)
 {
-  if (_version == "tip")
+  if (_version == "tip" || _version.empty())
   {
     this->dataPtr->version = 0;
     return true;

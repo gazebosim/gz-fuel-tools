@@ -86,7 +86,7 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
   ModelIdentifier id;
   id.Name("hello");
   id.Owner("watermelon");
-  id.SetVersion(8);
+  id.SetVersionStr("");
   id.Category("test");
   id.Uuid("lllooo000ooolll");
   id.FileSize(2048u);
@@ -100,7 +100,7 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
   ModelIdentifier id2(id);
   EXPECT_EQ(std::string("hello"), id2.Name());
   EXPECT_EQ(std::string("watermelon"), id2.Owner());
-  EXPECT_EQ("8", id2.VersionStr());
+  EXPECT_EQ("tip", id2.VersionStr());
   EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());

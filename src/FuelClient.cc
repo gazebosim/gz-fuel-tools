@@ -49,7 +49,7 @@ class ignition::fuel_tools::FuelClientPrivate
     // Server
     "([^\\/\\s]+)\\/+"
     // API Version
-    "([0-9]+[.][0-9]+)*\\/*"
+    "([0-9]+[.][0-9]+)?\\/*"
     // Owner
     "([^\\/\\s]+)\\/+"
     // "models"

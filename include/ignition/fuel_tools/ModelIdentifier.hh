@@ -195,7 +195,7 @@ namespace ignition
       public: unsigned int Version() const;
 
       /// \brief Returns the model's version as a string. Versions are integers
-      /// counting from 1. The string "tip" means the latest version.
+      /// counting from 1. The strings "tip" or "" mean the latest version.
       /// \return Model's version.
       /// \sa Version
       /// \sa SetVersionStr
