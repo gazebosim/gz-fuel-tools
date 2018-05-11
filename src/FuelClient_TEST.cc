@@ -247,7 +247,7 @@ TEST(FuelClient, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://api.ignitionfuel.org/1.0/openrobotics/models/Cordless Drill/"
+      "https://api.ignitionfuel.org/1.0/openrobotics/models/Cordless Drill/tip/"
       "files/meshes/cordless_drill.dae"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
@@ -267,7 +267,7 @@ TEST(FuelClient, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://api.ignitionfuel.org/1.0/openrobotics/models/Pine Tree/"
+      "https://api.ignitionfuel.org/1.0/openrobotics/models/Pine Tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
@@ -287,7 +287,7 @@ TEST(FuelClient, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://api.ignitionfuel.org/5.0/openrobotics/models/Pine Tree/"
+      "https://api.ignitionfuel.org/5.0/openrobotics/models/Pine Tree/tip/"
       "files/model.sdf"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
@@ -304,7 +304,7 @@ TEST(FuelClient, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://api.ignitionfuel.org/openrobotics/models/Pine Tree/"
+      "https://api.ignitionfuel.org/openrobotics/models/Pine Tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
@@ -324,7 +324,7 @@ TEST(FuelClient, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://api.ignitionfuel.org/openrobotics/models/Pine Tree/"
+      "https://api.ignitionfuel.org/openrobotics/models/Pine Tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
@@ -452,7 +452,7 @@ TEST(FuelClient, CachedModel)
   // Cached model file
   {
     common::URI url{
-        "http://localhost:8007/1.0/alice/models/My Model/files/model.sdf"};
+        "http://localhost:8007/1.0/alice/models/My Model/tip/files/model.sdf"};
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
@@ -464,7 +464,7 @@ TEST(FuelClient, CachedModel)
   // Deeper cached model file
   {
     common::URI url{
-      "http://localhost:8007/1.0/alice/models/My Model/files/meshes/model.dae"};
+      "http://localhost:8007/1.0/alice/models/My Model/tip/files/meshes/model.dae"};
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
@@ -495,7 +495,7 @@ TEST(FuelClient, CachedModel)
   // Non-cached model file
   {
     common::URI url{
-      "http://localhost:8007/1.0/alice/models/My Model/files/meshes/banana.dae"
+      "http://localhost:8007/1.0/alice/models/My Model/tip/files/meshes/banana.dae"
     };
     std::string path;
     auto result = client.CachedModelFile(url, path);
