@@ -139,7 +139,7 @@ TEST(ModelIdentifier, AsString)
     std::string str =
         "Name: \n"\
         "Owner: \n"\
-        "Unique name: //models/\n"
+        "Unique name: /1.0/models/\n"
         "Description: \n"
         "File size: 0\n"
         "Upload date: 0\n"
