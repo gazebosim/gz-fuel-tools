@@ -15,6 +15,7 @@
  *
 */
 
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -469,4 +470,31 @@ bool ModelIdentifier::SetTags(const std::vector<std::string> &_tags)
 {
   this->dataPtr->tags = _tags;
   return true;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::AsString(const std::string &_prefix) const
+{
+  std::stringstream out;
+  out << _prefix << "Name: " << this->Name() << std::endl
+      << _prefix << "Owner: " << this->Owner() << std::endl
+      << _prefix << "Unique name: " << this->UniqueName() << std::endl
+      << _prefix << "Description: " << this->Description() << std::endl
+      << _prefix << "File size: " << this->FileSize() << std::endl
+      << _prefix << "Upload date: " << this->UploadDate() << std::endl
+      << _prefix << "UUID: " << this->Uuid() << std::endl
+      << _prefix << "Likes: " << this->LikeCount() << std::endl
+      << _prefix << "Downloads: " << this->DownloadCount() << std::endl
+      << _prefix << "License name: " << this->LicenseName() << std::endl
+      << _prefix << "License URL: " << this->LicenseUrl() << std::endl
+      << _prefix << "License image URL: " << this->LicenseImageUrl()
+      << std::endl
+      << _prefix << "Tags: " << std::endl;
+
+  for (auto t : this->Tags())
+    out << _prefix << "- " << t << std::endl;
+
+  out << _prefix << "Server:" << std::endl
+      << this->Server().AsString(_prefix + "  ");
+  return out.str();
 }
