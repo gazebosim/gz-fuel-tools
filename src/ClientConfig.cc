@@ -188,9 +188,9 @@ void ServerConfig::SetVersion(const std::string &_version)
 std::string ServerConfig::AsString(const std::string &_prefix) const
 {
   std::stringstream out;
-  out << _prefix << "URL: " << this->URL() << std::endl
+  out << _prefix << "URL: " << this->Url() << std::endl
       << _prefix << "Version: " << this->Version() << std::endl
-      << _prefix << "API key: " << this->APIKey() << std::endl;
+      << _prefix << "API key: " << this->ApiKey() << std::endl;
   return out.str();
 }
 
