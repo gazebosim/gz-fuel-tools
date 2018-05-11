@@ -39,6 +39,7 @@ TEST(JSONParser, ParseModels)
     << "{\"id\":1,\"createdAt\":\"2012-04-21T19:25:44.511Z\","
     << "\"updatedAt\":\"2012-04-23T18:25:43.511Z\","
     << "\"name\":\"car\","
+    << "\"version\":3,"
     << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\"}]";
 
   ServerConfig srv;
@@ -48,6 +49,7 @@ TEST(JSONParser, ParseModels)
   EXPECT_EQ(1u, modelIds.size());
   auto model = modelIds.front();
   EXPECT_EQ("car", model.Name());
+  EXPECT_EQ(3u, model.Version());
   EXPECT_EQ("banana://testServer", model.Server().URL());
   auto t = model.ModifyDate();
   char buffer[100];
@@ -66,6 +68,7 @@ TEST(JSONParser, BuildModel)
   std::vector<ModelIdentifier> ids;
   ModelIdentifier id;
   id.Name("house");
+  id.SetVersion(5);
   id.Category("building");
   id.Description("affordable");
   id.Uuid("1234-0093asdf");
@@ -79,7 +82,8 @@ TEST(JSONParser, BuildModel)
     << "\t\"category\" : \"building\",\n"
     << "\t\"description\" : \"affordable\",\n"
     << "\t\"name\" : \"house\",\n"
-    << "\t\"uuid\" : \"1234-0093asdf\"\n"
+    << "\t\"uuid\" : \"1234-0093asdf\",\n"
+    << "\t\"version\" : 5\n"
     << "}";
   EXPECT_EQ(tmpJsonStr.str(), jsonStr);
 }
@@ -91,6 +95,7 @@ TEST(JSONParser, ParseModel)
   tmpJsonStr << "{\"id\":1,\"createdAt\":\"2012-04-21T19:25:44.511Z\","
     << "\"updatedAt\":\"2012-04-23T18:25:43.511Z\","
     << "\"name\":\"car\","
+    << "\"version\":1,"
     << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\","
     << "\"tags\":[\"tag1\"]}";
 
@@ -99,6 +104,7 @@ TEST(JSONParser, ParseModel)
 
   ModelIdentifier model = JSONParser::ParseModel(tmpJsonStr.str(), srv);
   EXPECT_EQ("car", model.Name());
+  EXPECT_EQ(1u, model.Version());
   EXPECT_EQ("http://testServer", model.Server().URL());
   auto t = model.ModifyDate();
   char buffer[100];
