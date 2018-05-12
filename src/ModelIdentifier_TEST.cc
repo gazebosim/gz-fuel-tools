@@ -156,7 +156,7 @@ TEST(ModelIdentifier, AsString)
     std::string str =
         "Name: \n"\
         "Owner: \n"\
-        "Version: 0\n"\
+        "Version: tip\n"\
         "Unique name: //models/\n"
         "Description: \n"
         "File size: 0\n"
@@ -196,6 +196,41 @@ TEST(ModelIdentifier, AsString)
     EXPECT_NE(str.find("raspberry"), std::string::npos);
     EXPECT_NE(str.find("55"), std::string::npos);
     EXPECT_NE(str.find("lllooo000ooolll"), std::string::npos);
+    EXPECT_NE(str.find("2048"), std::string::npos);
+  }
+}
+
+/////////////////////////////////////////////////
+TEST(ModelIdentifier, AsPrettyString)
+{
+  common::Console::SetVerbosity(4);
+  {
+    ModelIdentifier id;
+    std::string str =
+        "\x1B[96m\x1B[1mServer:\x1B[0m\n"
+        "  \x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
+    EXPECT_EQ(str, id.AsPrettyString());
+  }
+
+  {
+    ModelIdentifier id;
+    id.Name("hello");
+    id.Owner("raspberry");
+    id.SetVersionStr("55");
+    id.FileSize(2048u);
+    std::time_t d1;
+    std::time(&d1);
+    id.ModifyDate(d1);
+    std::time_t d2;
+    std::time(&d2);
+    id.UploadDate(d2);
+
+    auto str = id.AsPrettyString();
+    igndbg << str << std::endl;
+
+    EXPECT_NE(str.find("hello"), std::string::npos);
+    EXPECT_NE(str.find("raspberry"), std::string::npos);
+    EXPECT_NE(str.find("55"), std::string::npos);
     EXPECT_NE(str.find("2048"), std::string::npos);
   }
 }

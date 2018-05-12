@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <string>
+#include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel_tools/ign.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
@@ -143,6 +144,71 @@ TEST(CmdLine, ModelListCustomServerPrettyOwner)
   EXPECT_EQ(stdOutBuffer.str().find(
       "https://staging-api.ignitionfuel.org/1.0/"), std::string::npos)
       << stdOutBuffer.str();
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, ModelDownloadBadUrl)
+{
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  EXPECT_FALSE(downloadUrl("fake_url"));
+
+  EXPECT_NE(stdOutBuffer.str().find("Malformed URL"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, ModelDownloadWrongUrl)
+{
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  EXPECT_FALSE(downloadUrl(
+      "https://site.com/1.0/ownername/modelname"));
+
+  EXPECT_NE(stdOutBuffer.str().find("Invalid URL"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, ModelDownloadUnversioned)
+{
+  ignition::common::removeAll("test_cache");
+  ignition::common::createDirectories("test_cache");
+  setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
+
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  // Download
+  EXPECT_TRUE(downloadUrl(
+      "https://api.ignitionfuel.org/1.0/chapulina/models/Test box"));
+
+  // Check output
+  EXPECT_NE(stdOutBuffer.str().find("Download succeeded"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  // Check files
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box"));
+  EXPECT_TRUE(ignition::common::isFile(
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.sdf"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();

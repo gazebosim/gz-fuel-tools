@@ -165,6 +165,35 @@ std::string ServerConfig::AsString(const std::string &_prefix) const
   return out.str();
 }
 
+//////////////////////////////////////////////////
+std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
+{
+  std::string prop = "\033[96m\033[1m";
+  std::string value = "\033[37m";
+  std::string reset = "\033[0m";
+
+  std::stringstream out;
+
+  if (!this->URL().empty())
+  {
+    out << _prefix << prop << "URL: " << reset
+        << value << this->URL() << reset << std::endl;
+  }
+
+  if (!this->Version().empty())
+  {
+    out << _prefix << prop << "Version: " << reset
+        << value << this->Version() << reset << std::endl;
+  }
+
+  if (!this->APIKey().empty())
+  {
+    out << _prefix << prop << "API key: " << reset
+        << value << this->APIKey() << reset << std::endl;
+  }
+  return out.str();
+}
+
 /////////////////////////////////////////////////
 /// \brief Get home directory.
 /// \return Home directory or empty string if home wasn't found.

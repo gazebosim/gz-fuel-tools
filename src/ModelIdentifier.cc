@@ -402,7 +402,7 @@ std::string ModelIdentifier::AsString(const std::string &_prefix) const
   std::stringstream out;
   out << _prefix << "Name: " << this->Name() << std::endl
       << _prefix << "Owner: " << this->Owner() << std::endl
-      << _prefix << "Version: " << std::to_string(this->Version()) << std::endl
+      << _prefix << "Version: " << this->VersionStr() << std::endl
       << _prefix << "Unique name: " << this->UniqueName() << std::endl
       << _prefix << "Description: " << this->Description() << std::endl
       << _prefix << "File size: " << this->FileSize() << std::endl
@@ -421,5 +421,97 @@ std::string ModelIdentifier::AsString(const std::string &_prefix) const
 
   out << _prefix << "Server:" << std::endl
       << this->Server().AsString(_prefix + "  ");
+  return out.str();
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::AsPrettyString(const std::string &_prefix) const
+{
+  std::string prop = "\033[96m\033[1m";
+  std::string value = "\033[37m";
+  std::string reset = "\033[0m";
+
+  std::stringstream out;
+
+  if (!this->Name().empty())
+  {
+    out << _prefix << prop << "Name: " << reset
+        << value << this->Name() << reset << std::endl;
+  }
+
+  if (!this->Owner().empty())
+  {
+    out << _prefix << prop << "Owner: " << reset
+        << value << this->Owner() << reset << std::endl;
+  }
+
+  if (!this->Version() == 0)
+  {
+    out << _prefix << prop << "Version: " << reset
+        << value << this->VersionStr() << reset << std::endl;
+  }
+
+  if (!this->Description().empty())
+  {
+    out << _prefix << prop << "Description: " << reset
+        << value << this->Description() << reset << std::endl;
+  }
+
+  if (!this->FileSize() == 0)
+  {
+    out << _prefix << prop << "File size: " << reset
+        << value << this->FileSize() << reset << std::endl;
+  }
+
+  if (!this->UploadDate() == 0)
+  {
+    out << _prefix << prop << "Upload date: " << reset
+        << value << this->UploadDate() << reset << std::endl;
+  }
+
+  if (!this->Likes() == 0)
+  {
+    out << _prefix << prop << "Likes: " << reset
+        << value << this->Likes() << reset << std::endl;
+  }
+
+  if (!this->Downloads() == 0)
+  {
+    out << _prefix << prop << "Downloads: " << reset
+        << value << this->Downloads() << reset << std::endl;
+  }
+
+  if (!this->LicenseName().empty())
+  {
+    out << _prefix << prop << "License name: " << reset
+        << value << this->LicenseName() << reset << std::endl;
+  }
+
+  if (!this->LicenseURL().empty())
+  {
+    out << _prefix << prop << "License URL: " << reset
+        << value << this->LicenseURL() << reset << std::endl;
+  }
+
+  if (!this->LicenseImageURL().empty())
+  {
+    out << _prefix << prop << "License image URL: " << reset
+        << value << this->LicenseImageURL()
+        << reset << std::endl;
+  }
+
+  if (!this->Tags().empty())
+  {
+    out << _prefix << prop << "Tags: " << reset << std::endl;
+
+    for (auto t : this->Tags())
+    {
+      out << _prefix << prop << "- " << reset
+          << value << t << reset << std::endl;
+    }
+  }
+
+  out << _prefix << prop << "Server:" << reset << std::endl
+      << this->Server().AsPrettyString(_prefix + "  ");
   return out.str();
 }

@@ -211,5 +211,8 @@ bool LocalCache::SaveModel(
     ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
   }
 
+  ignmsg << "Saved model at:" << std::endl
+         << "  " << modelDir << std::endl;
+
   return true;
 }
