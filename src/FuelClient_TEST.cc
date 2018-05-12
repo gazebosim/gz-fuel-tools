@@ -247,17 +247,29 @@ TEST(FuelClient, DownloadModel)
     EXPECT_TRUE(res2);
     EXPECT_EQ(Result(Result::FETCH), res2);
 
-    // Check it was downloaded to `tip` (symlink to actual version)
+    // The returned path points to `tip`
     EXPECT_EQ(common::cwd() +
       "/test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip", path);
+
+    // Check it was downloaded to `1`
     EXPECT_TRUE(common::exists(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip"));
+        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip"));
     EXPECT_TRUE(common::exists(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
-       "model.sdf"));
+        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
+         "model.sdf"));
     EXPECT_TRUE(common::exists(
-     "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
-     "model.config"));
+       "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
+       "model.config"));
+
+    // And `tip` also exists (symlink)
+    EXPECT_TRUE(common::exists(
+        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1"));
+    EXPECT_TRUE(common::exists(
+        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1/"
+         "model.sdf"));
+    EXPECT_TRUE(common::exists(
+       "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1/"
+       "model.config"));
 
     // Check it wasn't downloaded to model root directory
     EXPECT_FALSE(common::exists(

@@ -196,20 +196,21 @@ bool LocalCache::SaveModel(
 
   auto modelRootDir = common::joinPaths(cacheLocation,
       _id.Server().Url().Path().Str(), _id.Owner(), "models", _id.Name());
-  auto modelVersionedDir = common::joinPaths(modelRootDir,
-      std::to_string(_id.Version()));
+  auto modelVersionedDir = common::joinPaths(modelRootDir, _id.VersionStr());
 
   // Is it already in the cache?
   if (common::isDirectory(modelVersionedDir) && !_overwrite)
   {
-    ignerr << "Directory [" << modelVersionedDir << "] already exists" << std::endl;
+    ignerr << "Directory [" << modelVersionedDir << "] already exists"
+           << std::endl;
     return false;
   }
 
   // Create the model directory.
   if (!common::createDirectories(modelVersionedDir))
   {
-    ignerr << "Unable to create directory [" << modelVersionedDir << "]" << std::endl;
+    ignerr << "Unable to create directory [" << modelVersionedDir << "]"
+           << std::endl;
   }
 
   auto zipFile = common::joinPaths(modelVersionedDir, _id.Name() + ".zip");

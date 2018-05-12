@@ -243,19 +243,9 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
   }
 
   // Route
-  std::string route;
-  if (_id.Version() == 0)
-  {
-    // Get tip if version is not set
-    route = ignition::common::joinPaths(_id.Owner(),
-        "models", _id.Name() + ".zip");
-  }
-  else
-  {
-    route = ignition::common::joinPaths(_id.Owner(),
-        "models", _id.Name(), std::to_string(_id.Version()),
+  auto route = ignition::common::joinPaths(_id.Owner(),
+        "models", _id.Name(), _id.VersionStr(),
         _id.Name() + ".zip");
-  }
 
   // Request
   ignition::fuel_tools::REST rest;
@@ -271,8 +261,8 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
     return Result(Result::FETCH_ERROR);
   }
 
-  // FIXME: hardcoding version 1 for now until we can get the model version
-  // from the header in case it is the tip
+  // FIXME: hardcoding version 1 for the tip for now until we can get the model
+  // version from X-Ign-Resource-Version
   auto copy = _id;
   if (copy.Version() == 0)
     copy.SetVersion(1);
@@ -385,7 +375,8 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   if (result)
   {
     _path = ignition::common::joinPaths(this->Config().CacheLocation(),
-        id.Server().Url().Path().Str(), id.Owner(), "models", id.Name());
+        id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
+        id.VersionStr());
   }
 
   return result;
