@@ -297,6 +297,36 @@ namespace ignition
       /// \return True if successful.
       public: bool SetTags(const std::vector<std::string> &_tags);
 
+      /// \brief Returns the model's version as a number. Versions are integers
+      /// counting from 1. Version zero means the tip.
+      /// \return Model's version.
+      /// \sa VersionStr
+      /// \sa SetVersion
+      public: unsigned int Version() const;
+
+      /// \brief Returns the model's version as a string. Versions are integers
+      /// counting from 1. The strings "tip" or "" mean the latest version.
+      /// \return Model's version.
+      /// \sa Version
+      /// \sa SetVersionStr
+      public: std::string VersionStr() const;
+
+      /// \brief Set the model's version. Versions are integers counting from
+      /// 1.
+      /// \param[in] _version The model's version
+      /// \return True if successful.
+      /// \sa Version
+      /// \sa SetVersionStr
+      public: bool SetVersion(const unsigned int _version);
+
+      /// \brief Set the model's version. Versions are integers counting from
+      /// 1 or "tip" for the latest version.
+      /// \param[in] _version The model's version
+      /// \return True if successful.
+      /// \sa VersionStr
+      /// \sa SetVersion
+      public: bool SetVersionStr(const std::string &_version);
+
       // /// \brief returns a SHA 2 256 hash of the model
       // /// \remarks fulfills versioning requirement
       // public: std::array<std::uint8_t, 32> SHA_256() const;

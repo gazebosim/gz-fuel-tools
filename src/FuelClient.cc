@@ -16,6 +16,7 @@
 */
 
 #include <algorithm>
+#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <regex>
@@ -39,36 +40,24 @@ using namespace fuel_tools;
 /// \brief Private Implementation
 class ignition::fuel_tools::FuelClientPrivate
 {
-  /// \brief A model URL.
-  /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
+  /// \brief A model URL,
+  /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer/2
+  /// Where the API version and the model version are optional.
   public: const std::string kModelUrlRegexStr{
     // Method
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
     "([^\\/\\s]+)\\/+"
+    // API Version
+    "([0-9]+[.][0-9]+)?\\/*"
+    // Owner
+    "([^\\/\\s]+)\\/+"
+    // "models"
+    "models\\/+"
+    // Name
+    "([^\\/]+)\\/*"
     // Version
-    "([^\\/\\s]+)\\/+"
-    // Owner
-    "([^\\/\\s]+)\\/+"
-    // "models"
-    "models\\/+"
-    // Name
-    "([^\\/]+)\\/*"};
-
-  /// \brief A model unique name, which is the same as the URL but without the
-  /// API version.
-  /// E.g.: https://api.ignitionfuel.org/caguero/models/Beer
-  public: const std::string kModelUniqueNameRegexStr{
-    // Method
-    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
-    // Server
-    "([^\\/\\s]+)\\/+"
-    // Owner
-    "([^\\/\\s]+)\\/+"
-    // "models"
-    "models\\/+"
-    // Name
-    "([^\\/]+)\\/*"};
+    "([0-9]*|tip)"};
 
   /// \brief Client configuration
   public: ClientConfig config;
@@ -81,9 +70,6 @@ class ignition::fuel_tools::FuelClientPrivate
 
   /// \brief Regex to parse Ignition Fuel model URLs.
   public: std::unique_ptr<std::regex> urlModelRegex;
-
-  /// \brief Regex to parse Ignition Fuel model unique names.
-  public: std::unique_ptr<std::regex> uniqueNameModelRegex;
 
   /// \brief The path where the configuration file is located.
   public: std::string configPath;
@@ -111,8 +97,6 @@ FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelUrlRegexStr));
-  this->dataPtr->uniqueNameModelRegex.reset(new std::regex(
-    this->dataPtr->kModelUniqueNameRegexStr));
 }
 
 //////////////////////////////////////////////////
@@ -296,28 +280,25 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   std::smatch match;
   std::string scheme;
   std::string server;
-  std::string version;
+  std::string apiVersion;
   std::string owner;
-  std::string name;
+  std::string modelName;
+  std::string modelVersion;
 
   // Try URL first
+  std::regex_match(urlStr, match, *this->dataPtr->urlModelRegex);
+
   if (std::regex_match(urlStr, match, *this->dataPtr->urlModelRegex) &&
-      match.size() == 6u)
+      match.size() >= 5u)
   {
-    scheme = match[1];
-    server = match[2];
-    version = match[3];
-    owner = match[4];
-    name = match[5];
-  }
-  // Then try unique name
-  else if (std::regex_match(urlStr, match,
-      *this->dataPtr->uniqueNameModelRegex) && match.size() == 5u)
-  {
-    scheme = match[1];
-    server = match[2];
-    owner = match[3];
-    name = match[4];
+    unsigned int i{1};
+
+    scheme = match[i++];
+    server = match[i++];
+    apiVersion = match[i++];
+    owner = match[i++];
+    modelName = match[i++];
+    modelVersion = match[i++];
   }
   else
   {
@@ -327,14 +308,14 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
 
   // Get remaining server information from config
   _id.Server().URL(scheme + "://" + server);
-  _id.Server().Version(version);
+  _id.Server().Version(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
     if (s.URL() == _id.Server().URL())
     {
-      if (!version.empty() && s.Version() != _id.Server().Version())
+      if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
-        ignwarn << "Requested server API version [" << version
+        ignwarn << "Requested server API version [" << apiVersion
                 << "] for server [" << s.URL() << "], but will use ["
                 << s.Version() << "] as given in the config file."
                 << std::endl;
@@ -351,7 +332,8 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   }
 
   _id.Owner(owner);
-  _id.Name(name);
+  _id.Name(modelName);
+  _id.SetVersionStr(modelVersion);
 
   return true;
 }
