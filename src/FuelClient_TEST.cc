@@ -463,8 +463,8 @@ TEST(FuelClient, CachedModel)
 
   // Deeper cached model file
   {
-    common::URI url{
-      "http://localhost:8007/1.0/alice/models/My Model/tip/files/meshes/model.dae"};
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip/files/"
+                    "meshes/model.dae"};
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
@@ -494,8 +494,8 @@ TEST(FuelClient, CachedModel)
 
   // Non-cached model file
   {
-    common::URI url{
-      "http://localhost:8007/1.0/alice/models/My Model/tip/files/meshes/banana.dae"
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip/files/"
+                    "meshes/banana.dae"
     };
     std::string path;
     auto result = client.CachedModelFile(url, path);
