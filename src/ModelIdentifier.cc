@@ -445,7 +445,7 @@ std::string ModelIdentifier::AsPrettyString(const std::string &_prefix) const
         << value << this->Owner() << reset << std::endl;
   }
 
-  if (!this->Version() == 0)
+  if (this->Version() != 0)
   {
     out << _prefix << prop << "Version: " << reset
         << value << this->VersionStr() << reset << std::endl;
@@ -457,25 +457,25 @@ std::string ModelIdentifier::AsPrettyString(const std::string &_prefix) const
         << value << this->Description() << reset << std::endl;
   }
 
-  if (!this->FileSize() == 0)
+  if (this->FileSize() != 0)
   {
     out << _prefix << prop << "File size: " << reset
         << value << this->FileSize() << reset << std::endl;
   }
 
-  if (!this->UploadDate() == 0)
+  if (this->UploadDate() != 0)
   {
     out << _prefix << prop << "Upload date: " << reset
         << value << this->UploadDate() << reset << std::endl;
   }
 
-  if (!this->Likes() == 0)
+  if (this->Likes() != 0)
   {
     out << _prefix << prop << "Likes: " << reset
         << value << this->Likes() << reset << std::endl;
   }
 
-  if (!this->Downloads() == 0)
+  if (this->Downloads() != 0)
   {
     out << _prefix << prop << "Downloads: " << reset
         << value << this->Downloads() << reset << std::endl;
