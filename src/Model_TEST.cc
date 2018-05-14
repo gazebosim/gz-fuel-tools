@@ -26,7 +26,11 @@ using namespace ignft;
 /// \brief Nothing crashes
 TEST(Model, ConstructorDoesNotCrash)
 {
+  const Model constModel;
+  EXPECT_FALSE(constModel);
+
   Model model;
+  EXPECT_FALSE(model);
 }
 
 //////////////////////////////////////////////////

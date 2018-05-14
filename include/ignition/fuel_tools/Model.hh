@@ -64,6 +64,9 @@ namespace ignition
       /// \param[in] _dPtr Model private data to copy.
       protected: explicit Model(std::shared_ptr<ModelPrivate> _dptr);
 
+      /// \brief Returns false if model was constructed via Model()
+      public: operator bool() const;
+
       /// \brief Returns false if model was constructed via Model().
       /// \return False if model was constructed via Model().
       public: operator bool();

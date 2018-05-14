@@ -45,6 +45,12 @@ Model::operator bool()
 }
 
 //////////////////////////////////////////////////
+Model::operator bool() const
+{
+  return this->dataPtr.get() != nullptr;
+}
+
+//////////////////////////////////////////////////
 ModelIdentifier Model::Identification() const
 {
   if (this->dataPtr)

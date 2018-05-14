@@ -15,6 +15,7 @@
  *
 */
 
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -48,13 +49,13 @@ class ignition::fuel_tools::ModelIdentifierPrivate
   public: std::string description;
 
   /// \brief FileSize of this model
-  public: unsigned int fileSize = 0u;
+  public: unsigned int fileSize{0u};
 
   /// \brief Model upload date
-  public: std::time_t uploadDate;
+  public: std::time_t uploadDate{0};
 
   /// \brief Model last modified date
-  public: std::time_t modifyDate;
+  public: std::time_t modifyDate{0};
 
   /// \brief Category of this model
   public: std::string category;
@@ -63,10 +64,10 @@ class ignition::fuel_tools::ModelIdentifierPrivate
   public: std::string uuid;
 
   /// \brief Number of "likes"
-  public: uint32_t likeCount;
+  public: uint32_t likeCount{0u};
 
   /// \brief Number of downloads
-  public: uint32_t downloads;
+  public: uint32_t downloads{0u};
 
   /// \brief The license name
   public: std::string licenseName;
@@ -469,4 +470,31 @@ bool ModelIdentifier::SetTags(const std::vector<std::string> &_tags)
 {
   this->dataPtr->tags = _tags;
   return true;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::AsString(const std::string &_prefix) const
+{
+  std::stringstream out;
+  out << _prefix << "Name: " << this->Name() << std::endl
+      << _prefix << "Owner: " << this->Owner() << std::endl
+      << _prefix << "Unique name: " << this->UniqueName() << std::endl
+      << _prefix << "Description: " << this->Description() << std::endl
+      << _prefix << "File size: " << this->FileSize() << std::endl
+      << _prefix << "Upload date: " << this->UploadDate() << std::endl
+      << _prefix << "UUID: " << this->Uuid() << std::endl
+      << _prefix << "Likes: " << this->LikeCount() << std::endl
+      << _prefix << "Downloads: " << this->DownloadCount() << std::endl
+      << _prefix << "License name: " << this->LicenseName() << std::endl
+      << _prefix << "License URL: " << this->LicenseUrl() << std::endl
+      << _prefix << "License image URL: " << this->LicenseImageUrl()
+      << std::endl
+      << _prefix << "Tags: " << std::endl;
+
+  for (auto t : this->Tags())
+    out << _prefix << "- " << t << std::endl;
+
+  out << _prefix << "Server:" << std::endl
+      << this->Server().AsString(_prefix + "  ");
+  return out.str();
 }
