@@ -208,6 +208,8 @@ namespace ignition
       /// \param[out] _id The model identifier. It may contain incomplete
       /// information based on the passed URL and the current client
       /// config.
+      /// The server version will be overridden if that server is in the config
+      /// file.
       /// \return True if parsed successfully.
       public: bool ParseModelUrl(const common::URI &_modelUrl,
                                  ModelIdentifier &_id);
