@@ -61,10 +61,10 @@ class ignition::fuel_tools::ModelIdentifierPrivate
   public: std::string uuid;
 
   /// \brief Number of "likes"
-  public: uint32_t likes{0u};
+  public: uint32_t likeCount{0u};
 
   /// \brief Number of downloads
-  public: uint32_t downloads{0u};
+  public: uint32_t downloadCount{0u};
 
   /// \brief The license name
   public: std::string licenseName;
@@ -157,6 +157,12 @@ std::string ModelIdentifier::Name() const
 //////////////////////////////////////////////////
 bool ModelIdentifier::Name(const std::string &_name)
 {
+  return this->SetName(_name);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetName(const std::string &_name)
+{
   bool success = false;
   if (this->dataPtr->ValidName(_name))
   {
@@ -169,6 +175,12 @@ bool ModelIdentifier::Name(const std::string &_name)
 //////////////////////////////////////////////////
 bool ModelIdentifier::Owner(const std::string &_name)
 {
+  return this->SetOwner(_name);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetOwner(const std::string &_name)
+{
   bool success = false;
   if (this->dataPtr->ValidName(_name))
   {
@@ -180,6 +192,12 @@ bool ModelIdentifier::Owner(const std::string &_name)
 
 //////////////////////////////////////////////////
 bool ModelIdentifier::Server(const ServerConfig &_server)
+{
+  return this->SetServer(_server);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetServer(const ServerConfig &_server)
 {
   bool success = common::URI::Valid(_server.URL());
   if (success)
@@ -239,13 +257,25 @@ std::string ModelIdentifier::Uuid() const
 //////////////////////////////////////////////////
 uint32_t ModelIdentifier::Likes() const
 {
-  return this->dataPtr->likes;
+  return this->LikeCount();
+}
+
+//////////////////////////////////////////////////
+uint32_t ModelIdentifier::LikeCount() const
+{
+  return this->dataPtr->likeCount;
 }
 
 //////////////////////////////////////////////////
 uint32_t ModelIdentifier::Downloads() const
 {
-  return this->dataPtr->downloads;
+  return this->DownloadCount();
+}
+
+//////////////////////////////////////////////////
+uint32_t ModelIdentifier::DownloadCount() const
+{
+  return this->dataPtr->downloadCount;
 }
 
 //////////////////////////////////////////////////
@@ -257,11 +287,23 @@ std::string ModelIdentifier::LicenseName() const
 //////////////////////////////////////////////////
 std::string ModelIdentifier::LicenseURL() const
 {
+  return this->LicenseUrl();
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::LicenseUrl() const
+{
   return this->dataPtr->licenseUrl.Str();
 }
 
 //////////////////////////////////////////////////
 std::string ModelIdentifier::LicenseImageURL() const
+{
+  return this->LicenseImageUrl();
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::LicenseImageUrl() const
 {
   return this->dataPtr->licenseImageUrl.Str();
 }
@@ -275,12 +317,24 @@ std::vector<std::string> ModelIdentifier::Tags() const
 //////////////////////////////////////////////////
 bool ModelIdentifier::Description(const std::string &_desc)
 {
+  return this->SetDescription(_desc);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetDescription(const std::string &_desc)
+{
   this->dataPtr->description = _desc;
   return true;
 }
 
 //////////////////////////////////////////////////
 bool ModelIdentifier::FileSize(const unsigned int _fileSize)
+{
+  return this->SetFileSize(_fileSize);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetFileSize(const unsigned int _fileSize)
 {
   this->dataPtr->fileSize = _fileSize;
   return true;
@@ -289,12 +343,24 @@ bool ModelIdentifier::FileSize(const unsigned int _fileSize)
 //////////////////////////////////////////////////
 bool ModelIdentifier::ModifyDate(const std::time_t &_date)
 {
+  return this->SetModifyDate(_date);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetModifyDate(const std::time_t &_date)
+{
   this->dataPtr->modifyDate = _date;
   return true;
 }
 
 //////////////////////////////////////////////////
 bool ModelIdentifier::UploadDate(const std::time_t &_date)
+{
+  return this->SetUploadDate(_date);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetUploadDate(const std::time_t &_date)
 {
   this->dataPtr->uploadDate = _date;
   return true;
@@ -310,6 +376,12 @@ bool ModelIdentifier::Category(const std::string &_cat)
 //////////////////////////////////////////////////
 bool ModelIdentifier::Uuid(const std::string &_uuid)
 {
+  return this->SetUuid(_uuid);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetUuid(const std::string &_uuid)
+{
   this->dataPtr->uuid = _uuid;
   return true;
 }
@@ -317,19 +389,37 @@ bool ModelIdentifier::Uuid(const std::string &_uuid)
 //////////////////////////////////////////////////
 bool ModelIdentifier::Likes(const uint32_t _likes)
 {
-  this->dataPtr->likes = _likes;
+  return this->SetLikeCount(_likes);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetLikeCount(const uint32_t _likes)
+{
+  this->dataPtr->likeCount = _likes;
   return true;
 }
 
 //////////////////////////////////////////////////
 bool ModelIdentifier::Downloads(const uint32_t _downloads)
 {
-  this->dataPtr->downloads = _downloads;
+  return this->SetDownloadCount(_downloads);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetDownloadCount(const uint32_t _downloads)
+{
+  this->dataPtr->downloadCount = _downloads;
   return true;
 }
 
 //////////////////////////////////////////////////
 bool ModelIdentifier::LicenseName(const std::string &_name)
+{
+  return this->SetLicenseName(_name);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetLicenseName(const std::string &_name)
 {
   this->dataPtr->licenseName = _name;
   return true;
@@ -338,17 +428,35 @@ bool ModelIdentifier::LicenseName(const std::string &_name)
 //////////////////////////////////////////////////
 bool ModelIdentifier::LicenseURL(const std::string &_url)
 {
+  return this->SetLicenseUrl(_url);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetLicenseUrl(const std::string &_url)
+{
   return this->dataPtr->licenseUrl.Parse(_url);
 }
 
 //////////////////////////////////////////////////
 bool ModelIdentifier::LicenseImageURL(const std::string &_url)
 {
+  return this->SetLicenseImageUrl(_url);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetLicenseImageUrl(const std::string &_url)
+{
   return this->dataPtr->licenseImageUrl.Parse(_url);
 }
 
 //////////////////////////////////////////////////
 bool ModelIdentifier::Tags(const std::vector<std::string> &_tags)
+{
+  return this->SetTags(_tags);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetTags(const std::vector<std::string> &_tags)
 {
   this->dataPtr->tags = _tags;
   return true;
@@ -423,3 +531,4 @@ std::string ModelIdentifier::AsString(const std::string &_prefix) const
       << this->Server().AsString(_prefix + "  ");
   return out.str();
 }
+

@@ -38,154 +38,264 @@ namespace ignition
     /// \brief Defines how to identify a model
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIdentifier
     {
-      /// \brief Constructor
+      /// \brief Constructor.
       public: ModelIdentifier();
 
-      /// \brief Copy Constructor
+      /// \brief Copy Constructor.
+      /// \param[in] _orig ModelIdentifier to copy.
       public: ModelIdentifier(const ModelIdentifier &_orig);
 
-      /// \brief Assignment operator
-      public: ModelIdentifier &operator=(const ModelIdentifier &_orig);
-
-      /// \brief Equality operator
-      public: bool operator==(const ModelIdentifier &_rhs) const;
-
-      /// \brief Destructor
+      /// \brief Destructor.
       public: ~ModelIdentifier();
 
-      /// \brief Returns just the last part of the model name
-      /// \return Model name
+      /// \brief Assignment operator
+      /// \param[in] _orig ModelIdentifier to copy.
+      /// \return Reference to this object.
+      public: ModelIdentifier &operator=(const ModelIdentifier &_orig);
+
+      /// \brief Equality operator.
+      /// \param[in] _rhs ModelIdentifier to compare.
+      /// \return True if the ModelIdentifier names are equal.
+      public: bool operator==(const ModelIdentifier &_rhs) const;
+
+      /// \brief Returns just the last part of the model name.
+      /// \return Model name.
       public: std::string Name() const;
 
-      /// \brief Returns owner to attribute model to
-      /// \return Owner name
+      /// \brief Returns owner to attribute model to.
+      /// \return Owner name.
       public: std::string Owner() const;
 
-      /// \brief Returns server information to retrieve model from
-      /// \return Server information
+      /// \brief Returns server information to retrieve model from.
+      /// \return Server information.
       public: ServerConfig &Server() const;
 
-      /// \brief Returns a unique name for the model
-      /// \remarks this is Server/Owner/models/Name
-      /// \return Unique model name
+      /// \brief Returns a unique name for the model.
+      /// \remarks this is Server/Owner/Name.
+      /// \return Unique model name.
       public: std::string UniqueName() const;
 
-      /// \brief set the name of the model
-      /// \param[in] _name The name to set. Must be ascii and pass [-_a-z0-9]+
-      /// \return true if successful
+      /// \brief set the name of the model.
+      /// \param[in] _name The name to set. Must be ascii and pass [-_a-z0-9]+.
+      /// \return true if successful.
+      /// \deprecated See bool SetName(const std::string &_name).
       public: bool Name(const std::string &_name);
+
+      /// \brief set the name of the model.
+      /// \param[in] _name The name to set. Must be ascii and pass [-_a-z0-9]+.
+      /// \return true if successful.
+      public: bool SetName(const std::string &_name);
 
       /// \brief Set the owner of the model
       /// \param[in] _name The name to set. Must be ascii and pass [-_a-z0-9]+
       /// \return true if successful
+      /// \deprecated See bool SetOwner(const std::string &_name).
       public: bool Owner(const std::string &_name);
+
+      /// \brief Set the owner of the model
+      /// \param[in] _name The name to set. Must be ascii and pass [-_a-z0-9]+
+      /// \return true if successful
+      public: bool SetOwner(const std::string &_name);
 
       /// \brief Set the server from which this model comes
       /// \param[in] _server The server to retrieve the model from
       /// \return true if successful
+      /// \deprecated See bool SetServer(const ServerConfig &_server)
       public: bool Server(const ServerConfig &_server);
 
-      /// \brief Returns the description of the model
-      /// \return Model description
+      /// \brief Set the server from which this model comes.
+      /// \param[in] _server The server to retrieve the model from.
+      /// \return True if successful.
+      public: bool SetServer(const ServerConfig &_server);
+
+      /// \brief Returns the description of the model.
+      /// \return Model description.
       public: std::string Description() const;
 
-      /// \brief Returns the file size of the model
-      /// \return Model file size
+      /// \brief Returns the file size of the model in bytes.
+      /// \return Model file size in bytes.
       public: unsigned int FileSize() const;
 
-      /// \brief Returns the upload date of the model
-      /// \return Model upload date
+      /// \brief Returns the upload date of the model.
+      /// \return Model upload date.
       public: std::time_t UploadDate() const;
 
-      /// \brief Returns the modify date of the model
-      /// \return Model modify date
+      /// \brief Returns the modify date of the model.
+      /// \return Model modify date.
       public: std::time_t ModifyDate() const;
 
-      /// \brief Returns the category of the model
-      /// \return Model category
+      /// \brief Returns the category of the model.
+      /// \return Model category.
+      /// \deprecated This concept is not relevant.
       public: std::string Category() const;
 
-      /// \brief Returns the uuid of the model
-      /// \return Model uuid
+      /// \brief Returns the uuid of the model.
+      /// \return Model uuid.
       public: std::string Uuid() const;
 
-      /// \brief Returns the number of "likes" for the model
-      /// \return Number of "likes"
+      /// \brief Returns the number of "likes" for the model.
+      /// \return Number of "likes".
+      /// \deprecated See uint32_t LikeCount() const
       public: uint32_t Likes() const;
 
-      /// \brief Returns the number of downloads for the model
-      /// \return Number of downloads
+      /// \brief Returns the number of "likes" for the model.
+      /// \return Number of "likes".
+      public: uint32_t LikeCount() const;
+
+      /// \brief Returns the number of downloads for the model.
+      /// \return Number of downloads.
+      /// \deprecated See uint32_t DownloadCount() const;
       public: uint32_t Downloads() const;
 
-      /// \brief Returns the license name
-      /// \return License name
+      /// \brief Returns the number of downloads for the model.
+      /// \return Number of downloads.
+      public: uint32_t DownloadCount() const;
+
+      /// \brief Returns the license name.
+      /// \return License name.
       public: std::string LicenseName() const;
 
-      /// \brief Returns the license URL as a string.
-      /// \return License URL
+      /// \brief Returns the license URL.
+      /// \return License URL.
+      /// \deprecated See std::string LicenseUrl() const
       public: std::string LicenseURL() const;
 
-      /// \brief Returns the license image URL as a string.
-      /// \return License image URL
+      /// \brief Returns the license URL.
+      /// \return License URL.
+      public: std::string LicenseUrl() const;
+
+      /// \brief Returns the license image URL.
+      /// \return License image URL.
+      /// \deprecated See std::string LicenseImageUrl() const
       public: std::string LicenseImageURL() const;
 
-      /// \brief Returns the collection of tags
-      /// \return the collection of tags
+      /// \brief Returns the license image URL.
+      /// \return License image URL.
+      public: std::string LicenseImageUrl() const;
+
+      /// \brief Returns the collection of tags.
+      /// \return The collection of tags.
       public: std::vector<std::string> Tags() const;
 
-      /// \brief Set the description of the model
-      /// \return True if successful
+      /// \brief Set the description of the model.
+      /// \return True if successful.
+      /// \deprecated See bool SetDescription(const std::string &_desc)
       public: bool Description(const std::string &_desc);
 
-      /// \brief Set the file size of the model
-      /// \return True if successful
+      /// \brief Set the description of the model.
+      /// \param[in] _desc The description
+      /// \return True if successful.
+      public: bool SetDescription(const std::string &_desc);
+
+      /// \brief Set the file size of the model.
+      /// \return True if successful.
+      /// \deprecated See bool SetFileSize(const unsigned int _filesize)
       public: bool FileSize(const unsigned int _filesize);
+
+      /// \brief Set the file size of the model in bytes.
+      /// \param[in] _filesize The model's file size in bytes.
+      /// \return True if successful.
+      public: bool SetFileSize(const unsigned int _filesize);
 
       /// \brief Set the upload date
       /// \return True if successful
+      /// \deprecated See bool SetUploadDate(const std::time_t &_date)
       public: bool UploadDate(const std::time_t &_date);
+
+      /// \brief Set the upload date.
+      /// \param[in] _date Upload date.
+      /// \return True if successful.
+      public: bool SetUploadDate(const std::time_t &_date);
 
       /// \brief Set the modify date
       /// \return True if successful
+      /// \deprecated See bool SetModifyDate(const std::time_t &_date);
       public: bool ModifyDate(const std::time_t &_date);
 
-      /// \brief Set the category of the model
+      /// \brief Set the modify date
       /// \return True if successful
+      public: bool SetModifyDate(const std::time_t &_date);
+
+      /// \brief Set the category of the model.
+      /// \return True if successful.
+      /// \deprecated This concept is not relevant.
       public: bool Category(const std::string &_cat);
 
-      /// \brief Set the uuid of the model
-      /// \return True if successful
+      /// \brief Set the uuid of the model.
+      /// \return True if successful.
+      /// \deprecated See bool SetUuid(const std::string &_uuid)
       public: bool Uuid(const std::string &_uuid);
 
-      /// \brief Set the number of "likes" of the model
-      /// \param[in] _likes Number of "likes"
-      /// \return True if successful
+      /// \brief Set the uuid of the model.
+      /// \param[in] _uuid The model's uuid.
+      /// \return True if successful.
+      public: bool SetUuid(const std::string &_uuid);
+
+      /// \brief Set the number of "likes" of the model.
+      /// \param[in] _likes Number of "likes".
+      /// \return True if successful.
+      /// \deprecated See bool SetLikeCount(const uint32_t _likes).
       public: bool Likes(const uint32_t _likes);
 
-      /// \brief Set the number of downloads of the model
-      /// \param[in] _downloads Number of downloads
-      /// \return True if successful
+      /// \brief Set the number of "likes" of the model.
+      /// \param[in] _likes Number of "likes".
+      /// \return True if successful.
+      public: bool SetLikeCount(const uint32_t _likes);
+
+      /// \brief Set the number of downloads of the model.
+      /// \param[in] _downloads Number of downloads.
+      /// \return True if successful.
+      /// \deprecated See bool SetDownloadCount(const uint32_t _downloads).
       public: bool Downloads(const uint32_t _downloads);
 
-      /// \brief Set the license name of the model
-      /// \param[in] _name The name
-      /// \return True if successful
+      /// \brief Set the number of downloads of the model.
+      /// \param[in] _downloads Number of downloads.
+      /// \return True if successful.
+      public: bool SetDownloadCount(const uint32_t _downloads);
+
+      /// \brief Set the license name of the model.
+      /// \param[in] _name The name.
+      /// \return True if successful.
+      /// \deprecated See bool SetLicenseName(const std::string &_name).
       public: bool LicenseName(const std::string &_name);
 
-      /// \brief Set the license URL of the model
-      /// \param[in] _url The URL
-      /// \return True if successful, will fail if it's not a valid URL.
+      /// \brief Set the license name of the model.
+      /// \param[in] _name The name.
+      /// \return True if successful.
+      public: bool SetLicenseName(const std::string &_name);
+
+      /// \brief Set the license URL of the model.
+      /// \param[in] _url The URL.
+      /// \return True if successful.
+      /// \deprecated See bool SetLicenseUrl(const std::string &_url).
       public: bool LicenseURL(const std::string &_url);
 
-      /// \brief Set the license image URL of the model
-      /// \param[in] _url The URL
-      /// \return True if successful, will fail if it's not a valid URL.
+      /// \brief Set the license URL of the model.
+      /// \param[in] _url The URL.
+      /// \return True if successful.
+      public: bool SetLicenseUrl(const std::string &_url);
+
+      /// \brief Set the license image URL of the model.
+      /// \param[in] _url The URL.
+      /// \return True if successful.
+      /// \deprecated bool SetLicenseImageUrl(const std::string &_url).
       public: bool LicenseImageURL(const std::string &_url);
 
-      /// \brief Set the list of tags of the model
-      /// \param[in] _tags The tags
-      /// \return True if successful
+      /// \brief Set the license image URL of the model.
+      /// \param[in] _url The URL.
+      /// \return True if successful.
+      public: bool SetLicenseImageUrl(const std::string &_url);
+
+      /// \brief Set the list of tags of the model.
+      /// \param[in] _tags The tags.
+      /// \return True if successful.
+      /// \deprecated See bool SetTags(const std::vector<std::string> &_tags).
       public: bool Tags(const std::vector<std::string> &_tags);
+
+      /// \brief Set the list of tags of the model.
+      /// \param[in] _tags The tags.
+      /// \return True if successful.
+      public: bool SetTags(const std::vector<std::string> &_tags);
 
       /// \brief Returns the model's version as a number. Versions are integers
       /// counting from 1. Version zero means the tip.
