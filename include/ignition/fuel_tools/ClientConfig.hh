@@ -54,12 +54,12 @@ namespace ignition
       public: ~ServerConfig();
 
       /// \brief Get the URL to access the server.
-      /// \deperecated See std::string Url() const.
+      /// \deprecated See common::URI Url() const.
       public: std::string URL() const;
 
       /// \brief Set the URL of this server.
       /// \param[in] _url URL of this server.
-      /// \deprecated See void SetUrl(const std::string &).
+      /// \deprecated See void SetUrl(const common::URI &).
       public: void URL(const std::string &_url);
 
       /// \brief Get the URL to access the server.
