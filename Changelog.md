@@ -1,5 +1,8 @@
 ## Ignition Fuel Tools 1.x.x (2018-XX-XX)
 
+1. Get cached model resource file
+    * [Pull request 63](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/63)
+
 1. Add some AsString functions
     * [Pull request 54](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/54)
 
