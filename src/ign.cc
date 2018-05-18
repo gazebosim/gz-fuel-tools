@@ -293,8 +293,11 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
   if (client.ParseModelUrl(url, model))
   {
     // Download
-    ignmsg << "Downloading model: " << "\033[36m" << std::endl
-           << model.AsPrettyString("  ") << "\033[39m" << std::endl;
+    if (ignition::common::Console::Verbosity() >= 3)
+    {
+      std::cout << "Downloading model: " << "\033[36m" << std::endl
+                << model.AsPrettyString("  ") << "\033[39m" << std::endl;
+    }
 
     if (model.Version() != 0)
     {
