@@ -130,7 +130,7 @@ extern "C" bool getAllModels(
 
   if (!iter)
   {
-    std::cout <<
+    ignerr <<
         "Either failed to fetch model list, or server has no models yet."
         << std::endl;
     return false;
@@ -166,7 +166,7 @@ extern "C" bool getOwnerModels(
 
   if (!iter)
   {
-    std::cout <<
+    ignerr <<
         "Either failed to fetch model list, or server has no models yet."
         << std::endl;
     return false;
@@ -277,7 +277,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
   ignition::common::URI url(urlStr);
   if (!url.Valid())
   {
-    std::cout << "Download failed: Malformed URL" << std::endl;
+    ignerr << "Download failed: Malformed URL" << std::endl;
     return false;
   }
 
@@ -293,8 +293,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
   if (client.ParseModelUrl(url, model))
   {
     // Download
-    std::cout << "Downloading model: " << "\033[36m" << std::endl
-              << model.AsPrettyString("  ") << "\033[39m" << std::endl;
+    ignmsg << "Downloading model: " << "\033[36m" << std::endl
+           << model.AsPrettyString("  ") << "\033[39m" << std::endl;
 
     if (model.Version() != 0)
     {
@@ -308,18 +308,18 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
 
     if (!result)
     {
-      std::cout << "Download failed." << std::endl;
+      ignerr << "Download failed." << std::endl;
       return false;
     }
   }
   else
   {
-    std::cout << "Invalid URL: only models can be downloaded so far."
-              << std::endl;
+    ignwarn << "Invalid URL: only models can be downloaded so far."
+            << std::endl;
     return false;
   }
 
-  std::cout << "Download succeeded." << std::endl;
+  ignmsg << "Download succeeded." << std::endl;
   return true;
 }
 
