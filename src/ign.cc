@@ -130,7 +130,7 @@ extern "C" bool getAllModels(
 
   if (!iter)
   {
-    ignerr <<
+    std::cout <<
         "Either failed to fetch model list, or server has no models yet."
         << std::endl;
     return false;
@@ -166,7 +166,7 @@ extern "C" bool getOwnerModels(
 
   if (!iter)
   {
-    ignerr <<
+    std::cout <<
         "Either failed to fetch model list, or server has no models yet."
         << std::endl;
     return false;
@@ -277,7 +277,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
   ignition::common::URI url(urlStr);
   if (!url.Valid())
   {
-    ignerr << "Download failed: Malformed URL" << std::endl;
+    std::cout << "Download failed: Malformed URL" << std::endl;
     return false;
   }
 
@@ -311,23 +311,26 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
 
     if (!result)
     {
-      ignerr << "Download failed." << std::endl;
+      std::cout << "Download failed." << std::endl;
       return false;
     }
   }
   else
   {
-    ignwarn << "Invalid URL: only models can be downloaded so far."
-            << std::endl;
+    std::cout << "Invalid URL: only models can be downloaded so far."
+              << std::endl;
     return false;
   }
 
-  ignmsg << "Download succeeded." << std::endl;
+  if (ignition::common::Console::Verbosity() >= 3)
+  {
+    std::cout << "Download succeeded." << std::endl;
+  }
   return true;
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbose(const char *_verbosity)
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 {
   ignition::common::Console::SetVerbosity(std::atoi(_verbosity));
 }

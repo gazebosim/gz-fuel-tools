@@ -187,6 +187,8 @@ TEST(CmdLine, ModelDownloadWrongUrl)
 /////////////////////////////////////////////////
 TEST(CmdLine, ModelDownloadUnversioned)
 {
+  cmdVerbosity("4");
+
   ignition::common::removeAll("test_cache");
   ignition::common::createDirectories("test_cache");
   setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
