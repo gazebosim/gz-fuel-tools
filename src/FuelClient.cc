@@ -130,7 +130,7 @@ Result FuelClient::ModelDetails(const ServerConfig &_server,
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
-  auto serverUrl = _server.Url();
+  auto serverUrl = _server.Url().Str();
   auto version = _server.Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
@@ -198,7 +198,7 @@ Result FuelClient::DownloadModel(const ServerConfig &_server,
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
-  auto serverUrl = _server.Url();
+  auto serverUrl = _server.Url().Str();
   auto version = _server.Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models",
     _id.Name() + ".zip");
@@ -232,7 +232,7 @@ bool FuelClient::ParseModelURL(const std::string &_modelUrl,
   _id.SetOwner(owner);
   _id.SetName(name);
 
-  _srv.SetUrl(method + "://" + server);
+  _srv.SetUrl(common::URI(method + "://" + server));
 
   return true;
 }

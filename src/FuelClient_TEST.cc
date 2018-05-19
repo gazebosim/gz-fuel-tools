@@ -33,7 +33,7 @@ TEST(FuelClient, ParseModelUrl)
   const std::string modelUrl =
     "https://api.ignitionfuel.org/1.0/german/models/Cardboard Box";
   EXPECT_TRUE(client.ParseModelURL(modelUrl, srv, id));
-  EXPECT_EQ(srv.Url(), "https://api.ignitionfuel.org");
+  EXPECT_EQ(srv.Url().Str(), "https://api.ignitionfuel.org");
   EXPECT_EQ(id.Owner(), "german");
   EXPECT_EQ(id.Name(), "Cardboard Box");
 

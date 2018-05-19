@@ -31,11 +31,6 @@ class ignition::fuel_tools::ModelIdentifierPrivate
   /// \param[in] _name Name to validate
   public: bool ValidName(const std::string &_name);
 
-  /// \brief returns true if URL follows rules
-  /// \param[in] _name Name to validate
-  /// \return True if the name is a valid url
-  public: bool ValidUrl(const std::string &_url);
-
   /// \brief a name given to this model by a user
   public: std::string name;
 
@@ -111,13 +106,6 @@ bool ModelIdentifierPrivate::ValidName(const std::string &_name)
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifierPrivate::ValidUrl(const std::string &_url)
-{
-  // TODO
-  return !_url.empty();
-}
-
-//////////////////////////////////////////////////
 ModelIdentifier::ModelIdentifier()
   : dataPtr(new ModelIdentifierPrivate)
 {
@@ -150,9 +138,9 @@ ModelIdentifier::~ModelIdentifier()
 //////////////////////////////////////////////////
 std::string ModelIdentifier::UniqueName() const
 {
-  return this->dataPtr->server.Url()     + "/"        +
-         this->dataPtr->server.Version() + "/"        +
-         this->dataPtr->owner            + "/models/" +
+  return this->dataPtr->server.Url().Str() + "/"        +
+         this->dataPtr->server.Version()   + "/"        +
+         this->dataPtr->owner              + "/models/" +
          this->dataPtr->name;
 }
 
@@ -207,7 +195,7 @@ bool ModelIdentifier::Server(const ServerConfig &_server)
 //////////////////////////////////////////////////
 bool ModelIdentifier::SetServer(const ServerConfig &_server)
 {
-  bool success = this->dataPtr->ValidUrl(_server.Url());
+  bool success = _server.Url().Valid();
   if (success)
     this->dataPtr->server = _server;
 

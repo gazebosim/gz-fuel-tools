@@ -44,7 +44,7 @@ extern "C" void prettyPrint(
 {
   unsigned int ownerCount{0};
   unsigned int resourceCount{0};
-  std::cout << "\033[92m\033[1m" << _serverConfig.Url() << "\033[39m\033[0m"
+  std::cout << "\033[92m\033[1m" << _serverConfig.Url().Str() << "\033[39m\033[0m"
             << std::endl;
   for (auto owner = _resourceMap.begin(); owner != _resourceMap.end(); ++owner)
   {
@@ -105,8 +105,8 @@ extern "C" void uglyPrint(
       auto encodedRes =
           curl_easy_escape(curl, resource.c_str(), resource.size());
 
-      std::cout << _serverConfig.Url() << "/" << _serverConfig.Version() << "/"
-                << owner->first << "/" << _resourceType << "/"
+      std::cout << _serverConfig.Url().Str() << "/" << _serverConfig.Version()
+                << "/" << owner->first << "/" << _resourceType << "/"
                 << std::string(encodedRes) << std::endl;
     }
   }
@@ -133,7 +133,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
   if (!url.empty())
   {
     ignition::fuel_tools::ServerConfig serverConf;
-    serverConf.SetUrl(url);
+    serverConf.SetUrl(ignition::common::URI(url));
     conf.AddServer(serverConf);
   }
   else
@@ -148,7 +148,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
   {
     if (pretty)
     {
-      std::cout << "Fetching model list from " << server.Url() << "..."
+      std::cout << "Fetching model list from " << server.Url().Str() << "..."
                 << std::endl;
     }
 

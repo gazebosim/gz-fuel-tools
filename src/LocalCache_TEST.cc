@@ -41,65 +41,55 @@ using namespace fuel_tools;
 /// \brief Creates a directory structure in the build directory with 6 models
 void createLocal6(ClientConfig &_conf)
 {
-  if (common::exists("LocalCache_TEST6"))
-  {
-    common::removeAll("LocalCache_TEST6");
-  }
-  common::createDirectories("LocalCache_TEST6/alice/am1");
-  common::createDirectories("LocalCache_TEST6/alice/am2");
-  common::createDirectories("LocalCache_TEST6/bob/bm1");
-  common::createDirectories("LocalCache_TEST6/bob/bm2");
-  common::createDirectories("LocalCache_TEST6/trudy/tm1");
-  common::createDirectories("LocalCache_TEST6/trudy/tm2");
+  common::createDirectories("test_cache/localhost:8001/alice/models/am1");
+  common::createDirectories("test_cache/localhost:8001/alice/models/am2");
+  common::createDirectories("test_cache/localhost:8001/bob/models/bm1");
+  common::createDirectories("test_cache/localhost:8001/bob/models/bm2");
+  common::createDirectories("test_cache/localhost:8001/trudy/models/tm1");
+  common::createDirectories("test_cache/localhost:8001/trudy/models/tm2");
 
-  std::ofstream fout("LocalCache_TEST6/alice/am1/model.config",
+  std::ofstream fout("test_cache/localhost:8001/alice/models/am1/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/alice/am2/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/bob/bm1/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/bob/bm2/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/trudy/tm1/model.config");
-  common::copyFile("LocalCache_TEST6/alice/am1/model.config",
-                   "LocalCache_TEST6/trudy/tm2/model.config");
+  common::copyFile("test_cache/localhost:8001/alice/models/am1/model.config",
+                   "test_cache/localhost:8001/alice/models/am2/model.config");
+  common::copyFile("test_cache/localhost:8001/alice/models/am1/model.config",
+                   "test_cache/localhost:8001/bob/models/bm1/model.config");
+  common::copyFile("test_cache/localhost:8001/alice/models/am1/model.config",
+                   "test_cache/localhost:8001/bob/models/bm2/model.config");
+  common::copyFile("test_cache/localhost:8001/alice/models/am1/model.config",
+                   "test_cache/localhost:8001/trudy/models/tm1/model.config");
+  common::copyFile("test_cache/localhost:8001/alice/models/am1/model.config",
+                   "test_cache/localhost:8001/trudy/models/tm2/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl("http://localhost:8001/");
-  srv.SetLocalName("LocalCache_TEST6");
+  srv.SetUrl(common::URI("http://localhost:8001/"));
   _conf.AddServer(srv);
 }
 
 /// \brief Creates a directory structure in the build directory with 3 models
 void createLocal3(ClientConfig &_conf)
 {
-  if (common::exists("LocalCache_TEST3"))
-  {
-    common::removeAll("LocalCache_TEST3");
-  }
-  common::createDirectories("LocalCache_TEST3/alice/am1");
-  common::createDirectories("LocalCache_TEST3/bob/bm1");
-  common::createDirectories("LocalCache_TEST3/trudy/tm1");
+  common::createDirectories("test_cache/localhost:8007/alice/models/am1");
+  common::createDirectories("test_cache/localhost:8007/bob/models/bm1");
+  common::createDirectories("test_cache/localhost:8007/trudy/models/tm1");
 
-  std::ofstream fout("LocalCache_TEST3/alice/am1/model.config",
+  std::ofstream fout("test_cache/localhost:8007/alice/models/am1/model.config",
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile("LocalCache_TEST3/alice/am1/model.config",
-                   "LocalCache_TEST3/bob/bm1/model.config");
-  common::copyFile("LocalCache_TEST3/alice/am1/model.config",
-                   "LocalCache_TEST3/trudy/tm1/model.config");
+  common::copyFile("test_cache/localhost:8007/alice/models/am1/model.config",
+                   "test_cache/localhost:8007/bob/models/bm1/model.config");
+  common::copyFile("test_cache/localhost:8007/alice/models/am1/model.config",
+                   "test_cache/localhost:8007/trudy/models/tm1/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl("http://localhost:8007/");
-  srv.SetLocalName("LocalCache_TEST3");
+  srv.SetUrl(common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
 
@@ -108,8 +98,10 @@ void createLocal3(ClientConfig &_conf)
 TEST(LocalCache, AllModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  common::removeAll("test_cache");
+  common::createDirectories("test_cache");
   ClientConfig conf;
-  conf.SetCacheLocation(common::cwd());
+  conf.SetCacheLocation(common::cwd() + "/test_cache");
   createLocal6(conf);
   createLocal3(conf);
 
@@ -123,15 +115,20 @@ TEST(LocalCache, AllModels)
     ++iter;
   }
   EXPECT_EQ(9u, uniqueNames.size());
+
+  EXPECT_NE(uniqueNames.end(), uniqueNames.find(
+      "http://localhost:8001/1.0/alice/models/am1"));
 }
 
 /////////////////////////////////////////////////
-/// \brief Get a specific model from cache
+/// \brief Get all models that match some fields
 TEST(LocalCache, MatchingModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  common::removeAll("test_cache");
+  common::createDirectories("test_cache");
   ClientConfig conf;
-  conf.SetCacheLocation(common::cwd());
+  conf.SetCacheLocation(common::cwd() + "/test_cache");
   createLocal6(conf);
   createLocal3(conf);
 
@@ -145,6 +142,9 @@ TEST(LocalCache, MatchingModels)
   std::set<std::string> uniqueNames;
   while (iter)
   {
+    EXPECT_EQ("alice", iter->Identification().Owner());
+    EXPECT_EQ("am1", iter->Identification().Name());
+
     uniqueNames.insert(iter->Identification().UniqueName());
     ++iter;
   }
@@ -157,23 +157,30 @@ TEST(LocalCache, MatchingModels)
 TEST(LocalCache, MatchingModel)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  common::removeAll("test_cache");
+  common::createDirectories("test_cache");
   ClientConfig conf;
-  conf.SetCacheLocation(common::cwd());
+  conf.SetCacheLocation(common::cwd() + "/test_cache");
   createLocal6(conf);
 
   ignition::fuel_tools::LocalCache cache(&conf);
 
   ignition::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl("http://localhost:8001/");
+  srv1.SetUrl(common::URI("http://localhost:8001/"));
 
   ignition::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl("http://localhost:8002/");
+  srv2.SetUrl(common::URI("http://localhost:8002/"));
 
   ModelIdentifier am1;
   am1.SetServer(srv1);
   am1.SetOwner("alice");
   am1.SetName("am1");
-  EXPECT_TRUE(cache.MatchingModel(am1));
+  auto am1Model = cache.MatchingModel(am1);
+  ASSERT_TRUE(am1Model);
+  EXPECT_EQ("alice", am1Model.Identification().Owner());
+  EXPECT_EQ("am1", am1Model.Identification().Name());
+  EXPECT_EQ("http://localhost:8001",
+      am1Model.Identification().Server().Url().Str());
 
   ModelIdentifier tm2;
   tm2.SetServer(srv1);
