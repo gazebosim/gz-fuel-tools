@@ -44,8 +44,8 @@ extern "C" void prettyPrint(
 {
   unsigned int ownerCount{0};
   unsigned int resourceCount{0};
-  std::cout << "\033[92m\033[1m" << _serverConfig.Url().Str() << "\033[39m\033[0m"
-            << std::endl;
+  std::cout << "\033[92m\033[1m" << _serverConfig.Url().Str()
+            << "\033[39m\033[0m" << std::endl;
   for (auto owner = _resourceMap.begin(); owner != _resourceMap.end(); ++owner)
   {
     ownerCount++;
