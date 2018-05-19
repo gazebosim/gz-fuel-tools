@@ -322,6 +322,33 @@ TEST(ClientConfig, AsString)
 }
 
 /////////////////////////////////////////////////
+TEST(ClientConfig, AsPrettyString)
+{
+  common::Console::SetVerbosity(4);
+
+  {
+    ServerConfig server;
+    std::string str = "\x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
+    EXPECT_EQ(str, server.AsPrettyString());
+  }
+
+  {
+    ServerConfig srv;
+    srv.URL("http://serverurl.com");
+    srv.Version("2.0");
+    srv.APIKey("ABCD");
+
+    auto str = srv.AsPrettyString();
+    igndbg << str << std::endl;
+
+    EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
+    EXPECT_EQ(str.find("local_name"), std::string::npos);
+    EXPECT_NE(str.find("2.0"), std::string::npos);
+    EXPECT_NE(str.find("ABCD"), std::string::npos);
+  }
+}
+
+/////////////////////////////////////////////////
 TEST(ServerConfig, Url)
 {
   // Invalid URL string
