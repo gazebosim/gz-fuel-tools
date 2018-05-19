@@ -31,7 +31,7 @@ require 'optparse'
 LIBRARY_NAME = '@IGN_LIBRARY_NAME@'
 LIBRARY_VERSION = '@PROJECT_VERSION_FULL@'
 COMMON_OPTIONS =
-               "  -h [ --help ]              Print this help message.\n"\
+               "  -h [--help]              Print this help message.\n"\
                "                                                    \n"        +
                "  --force-version <VERSION>  Use a specific library version.\n"\
                "                                                    \n"        +
@@ -191,8 +191,8 @@ class Cmd
 
       # Global configurations
       if options.key?('verbose')
-        Importer.extern 'void cmdVerbose(const char *)'
-        Importer.cmdVerbose(options['verbose'])
+        Importer.extern 'void cmdVerbosity(const char *)'
+        Importer.cmdVerbosity(options['verbose'])
       end
 
       case options['subcommand']
