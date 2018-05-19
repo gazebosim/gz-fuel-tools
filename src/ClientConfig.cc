@@ -134,11 +134,23 @@ void ServerConfig::LocalName(const std::string &/*_name*/)
 //////////////////////////////////////////////////
 std::string ServerConfig::APIKey() const
 {
+  return this->ApiKey();
+}
+
+//////////////////////////////////////////////////
+std::string ServerConfig::ApiKey() const
+{
   return this->dataPtr->key;
 }
 
 //////////////////////////////////////////////////
 void ServerConfig::APIKey(const std::string &_key)
+{
+  this->SetApiKey(_key);
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::SetApiKey(const std::string &_key)
 {
   this->dataPtr->key = _key;
 }
@@ -152,6 +164,12 @@ std::string ServerConfig::Version() const
 //////////////////////////////////////////////////
 void ServerConfig::Version(const std::string &_version)
 {
+  this->SetVersion(_version);
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::SetVersion(const std::string &_version)
+{
   this->dataPtr->version = _version;
 }
 
@@ -159,9 +177,38 @@ void ServerConfig::Version(const std::string &_version)
 std::string ServerConfig::AsString(const std::string &_prefix) const
 {
   std::stringstream out;
-  out << _prefix << "URL: " << this->URL() << std::endl
+  out << _prefix << "URL: " << this->Url().Str() << std::endl
       << _prefix << "Version: " << this->Version() << std::endl
-      << _prefix << "API key: " << this->APIKey() << std::endl;
+      << _prefix << "API key: " << this->ApiKey() << std::endl;
+  return out.str();
+}
+
+//////////////////////////////////////////////////
+std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
+{
+  std::string prop = "\033[96m\033[1m";
+  std::string value = "\033[37m";
+  std::string reset = "\033[0m";
+
+  std::stringstream out;
+
+  if (!this->URL().empty())
+  {
+    out << _prefix << prop << "URL: " << reset
+        << value << this->URL() << reset << std::endl;
+  }
+
+  if (!this->Version().empty())
+  {
+    out << _prefix << prop << "Version: " << reset
+        << value << this->Version() << reset << std::endl;
+  }
+
+  if (!this->APIKey().empty())
+  {
+    out << _prefix << prop << "API key: " << reset
+        << value << this->APIKey() << reset << std::endl;
+  }
   return out.str();
 }
 
@@ -192,7 +239,7 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
       ignerr << "[" << ignFuelPath << "] is not a directory" << std::endl;
       return;
     }
-    this->CacheLocation(ignFuelPath);
+    this->SetCacheLocation(ignFuelPath);
   }
 }
 
@@ -332,7 +379,7 @@ bool ClientConfig::LoadConfig()
             bool repeated = false;
             for (auto const savedServer : this->Servers())
             {
-              if (savedServer.URL() == serverURL)
+              if (savedServer.Url().Str() == serverURL)
               {
                 ignerr << "URL [" << serverURL << "] already exists. "
                        << "Ignoring server" << std::endl;
@@ -345,7 +392,7 @@ bool ClientConfig::LoadConfig()
             {
               // Add the new server.
               ServerConfig newServer;
-              newServer.URL(serverURL);
+              newServer.SetUrl(common::URI(serverURL));
               this->AddServer(newServer);
             }
           }
@@ -414,7 +461,7 @@ bool ClientConfig::LoadConfig()
             << "path in the configuration file will be ignored" << std::endl;
   }
   else
-    this->CacheLocation(cacheLocation);
+    this->SetCacheLocation(cacheLocation);
 
   // Cleanup.
   yaml_parser_delete(&parser);
@@ -455,6 +502,12 @@ std::string ClientConfig::CacheLocation() const
 
 //////////////////////////////////////////////////
 void ClientConfig::CacheLocation(const std::string &_path)
+{
+  this->SetCacheLocation(_path);
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::SetCacheLocation(const std::string &_path)
 {
   this->dataPtr->cacheLocation = _path;
 }

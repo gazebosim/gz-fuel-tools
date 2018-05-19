@@ -30,23 +30,21 @@ using namespace fuel_tools;
 TEST(ModelIdentifier, SetFields)
 {
   ModelIdentifier id;
-  id.Name("hello");
-  id.Owner("acai");
+  id.SetName("hello");
+  id.SetOwner("acai");
   id.SetVersion(6);
-  id.Category("test");
-  id.Uuid("lllooo000ooolll");
-  id.FileSize(2048u);
+  id.SetUuid("lllooo000ooolll");
+  id.SetFileSize(2048u);
   std::time_t d1;
   std::time(&d1);
-  id.ModifyDate(d1);
+  id.SetModifyDate(d1);
   std::time_t d2;
   std::time(&d2);
-  id.UploadDate(d2);
+  id.SetUploadDate(d2);
 
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("acai"), id.Owner());
   EXPECT_EQ(6u, id.Version());
-  EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id.Uuid());
   EXPECT_EQ(2048u, id.FileSize());
   EXPECT_EQ(d1, id.ModifyDate());
@@ -58,24 +56,24 @@ TEST(ModelIdentifier, SetFields)
 TEST(ModelIdentifier, UniqueName)
 {
   ignition::fuel_tools::ServerConfig srv1;
-  srv1.URL("http://localhost:8001/");
+  srv1.URL("https://localhost:8001/");
 
   ignition::fuel_tools::ServerConfig srv2;
-  srv2.URL("http://localhost:8002");
+  srv2.URL("https://localhost:8002");
 
   ignition::fuel_tools::ServerConfig srv3;
   srv3.URL("https://localhost:8003//////////////////////////");
 
   ModelIdentifier id;
-  id.Name("hello");
-  id.Owner("alice");
-  id.Server(srv1);
-  EXPECT_EQ("http://localhost:8001/alice/models/hello/tip", id.UniqueName());
+  id.SetName("hello");
+  id.SetOwner("alice");
+  id.SetServer(srv1);
+  EXPECT_EQ("https://localhost:8001/alice/models/hello/tip", id.UniqueName());
 
-  id.Server(srv2);
-  EXPECT_EQ("http://localhost:8002/alice/models/hello/tip", id.UniqueName());
+  id.SetServer(srv2);
+  EXPECT_EQ("https://localhost:8002/alice/models/hello/tip", id.UniqueName());
 
-  id.Server(srv3);
+  id.SetServer(srv3);
   EXPECT_EQ("https://localhost:8003/alice/models/hello/tip", id.UniqueName());
 }
 
@@ -84,30 +82,28 @@ TEST(ModelIdentifier, UniqueName)
 TEST(ModelIdentifier, CopyConstructorDeepCopy)
 {
   ModelIdentifier id;
-  id.Name("hello");
-  id.Owner("watermelon");
+  id.SetName("hello");
+  id.SetOwner("watermelon");
   id.SetVersionStr("");
-  id.Category("test");
-  id.Uuid("lllooo000ooolll");
-  id.FileSize(2048u);
+  id.SetUuid("lllooo000ooolll");
+  id.SetFileSize(2048u);
   std::time_t d1;
   std::time(&d1);
-  id.ModifyDate(d1);
+  id.SetModifyDate(d1);
   std::time_t d2;
   std::time(&d2);
-  id.UploadDate(d2);
+  id.SetUploadDate(d2);
 
   ModelIdentifier id2(id);
   EXPECT_EQ(std::string("hello"), id2.Name());
   EXPECT_EQ(std::string("watermelon"), id2.Owner());
   EXPECT_EQ("tip", id2.VersionStr());
-  EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
   EXPECT_EQ(d2, id2.UploadDate());
 
-  id2.Name("hello2");
+  id2.SetName("hello2");
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("hello2"), id2.Name());
 }
@@ -117,32 +113,30 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
 TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
 {
   ModelIdentifier id;
-  id.Name("hello");
-  id.Owner("pineapple");
+  id.SetName("hello");
+  id.SetOwner("pineapple");
   id.SetVersionStr("tip");
-  id.Category("test");
-  id.Uuid("lllooo000ooolll");
-  id.FileSize(2048u);
+  id.SetUuid("lllooo000ooolll");
+  id.SetFileSize(2048u);
   std::time_t d1;
   std::time(&d1);
-  id.ModifyDate(d1);
+  id.SetModifyDate(d1);
   std::time_t d2;
   std::time(&d2);
-  id.UploadDate(d2);
+  id.SetUploadDate(d2);
 
   ModelIdentifier id2(id);
   id2 = id;
   EXPECT_EQ(std::string("hello"), id2.Name());
   EXPECT_EQ(std::string("pineapple"), id2.Owner());
   EXPECT_EQ(0u, id2.Version());
-  EXPECT_EQ(std::string("test"), id.Category());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
   EXPECT_EQ(d2, id2.UploadDate());
 
 
-  id2.Name("hello2");
+  id2.SetName("hello2");
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("hello2"), id2.Name());
 }
@@ -156,7 +150,7 @@ TEST(ModelIdentifier, AsString)
     std::string str =
         "Name: \n"\
         "Owner: \n"\
-        "Version: 0\n"\
+        "Version: tip\n"\
         "Unique name: //models//tip\n"
         "Description: \n"
         "File size: 0\n"
@@ -177,17 +171,17 @@ TEST(ModelIdentifier, AsString)
 
   {
     ModelIdentifier id;
-    id.Name("hello");
-    id.Owner("raspberry");
+    id.SetName("hello");
+    id.SetOwner("raspberry");
     id.SetVersionStr("55");
-    id.Uuid("lllooo000ooolll");
-    id.FileSize(2048u);
+    id.SetUuid("lllooo000ooolll");
+    id.SetFileSize(2048u);
     std::time_t d1;
     std::time(&d1);
-    id.ModifyDate(d1);
+    id.SetModifyDate(d1);
     std::time_t d2;
     std::time(&d2);
-    id.UploadDate(d2);
+    id.SetUploadDate(d2);
 
     auto str = id.AsString();
     igndbg << str << std::endl;
@@ -196,6 +190,41 @@ TEST(ModelIdentifier, AsString)
     EXPECT_NE(str.find("raspberry"), std::string::npos);
     EXPECT_NE(str.find("55"), std::string::npos);
     EXPECT_NE(str.find("lllooo000ooolll"), std::string::npos);
+    EXPECT_NE(str.find("2048"), std::string::npos);
+  }
+}
+
+/////////////////////////////////////////////////
+TEST(ModelIdentifier, AsPrettyString)
+{
+  common::Console::SetVerbosity(4);
+  {
+    ModelIdentifier id;
+    std::string str =
+        "\x1B[96m\x1B[1mServer:\x1B[0m\n"
+        "  \x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
+    EXPECT_EQ(str, id.AsPrettyString());
+  }
+
+  {
+    ModelIdentifier id;
+    id.Name("hello");
+    id.Owner("raspberry");
+    id.SetVersionStr("55");
+    id.FileSize(2048u);
+    std::time_t d1;
+    std::time(&d1);
+    id.ModifyDate(d1);
+    std::time_t d2;
+    std::time(&d2);
+    id.UploadDate(d2);
+
+    auto str = id.AsPrettyString();
+    igndbg << str << std::endl;
+
+    EXPECT_NE(str.find("hello"), std::string::npos);
+    EXPECT_NE(str.find("raspberry"), std::string::npos);
+    EXPECT_NE(str.find("55"), std::string::npos);
     EXPECT_NE(str.find("2048"), std::string::npos);
   }
 }

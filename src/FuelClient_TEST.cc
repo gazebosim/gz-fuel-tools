@@ -42,20 +42,48 @@ using namespace ignft;
 void createLocal1(ClientConfig &_conf)
 {
   common::createDirectories(
-      "test_cache/localhost:8007/alice/models/My Model/tip");
+      "test_cache/localhost:8007/alice/models/My Model/tip/meshes");
   common::createDirectories(
-      "test_cache/localhost:8007/alice/models/My Model/3");
+      "test_cache/localhost:8007/alice/models/My Model/3/meshes");
 
-  std::ofstream fout(
-      "test_cache/localhost:8007/alice/models/My Model/tip/model.config",
-      std::ofstream::trunc);
-  fout << "<?xml version=\"1.0\"?>";
-  fout.flush();
-  fout.close();
+  {
+    std::ofstream fout(
+        "test_cache/localhost:8007/alice/models/My Model/tip/model.config",
+        std::ofstream::trunc);
+    fout << "<?xml version=\"1.0\"?>";
+    fout.flush();
+    fout.close();
 
   common::copyFile(
       "test_cache/localhost:8007/alice/models/My Model/tip/model.config",
       "test_cache/localhost:8007/alice/models/My Model/3/model.config");
+  }
+
+  {
+    std::ofstream fout(
+        "test_cache/localhost:8007/alice/models/My Model/model.sdf",
+        std::ofstream::trunc);
+    fout << "<?xml version=\"1.0\"?>";
+    fout.flush();
+    fout.close();
+
+  common::copyFile(
+      "test_cache/localhost:8007/alice/models/My Model/tip/model.sdf",
+      "test_cache/localhost:8007/alice/models/My Model/3/model.sdf");
+  }
+
+  {
+    std::ofstream fout(
+        "test_cache/localhost:8007/alice/models/My Model/meshes/model.dae",
+        std::ofstream::trunc);
+    fout << "<?xml version=\"1.0\"?>";
+    fout.flush();
+    fout.close();
+
+  common::copyFile(
+      "test_cache/localhost:8007/alice/models/My Model/tip/meshes/model.dae",
+      "test_cache/localhost:8007/alice/models/My Model/3/meshes/model.dae");
+  }
 
   ignition::fuel_tools::ServerConfig srv;
   srv.URL("http://localhost:8007/");
@@ -172,6 +200,14 @@ TEST(FuelClient, ParseModelURL)
     FuelClient client;
     ServerConfig srv;
     ModelIdentifier id;
+    EXPECT_FALSE(client.ParseModelURL("http://bad.url", srv, id));
+  }
+
+  // Not URL
+  {
+    FuelClient client;
+    ServerConfig srv;
+    ModelIdentifier id;
     EXPECT_FALSE(client.ParseModelURL("bad url", srv, id));
   }
   {
@@ -211,6 +247,124 @@ TEST(FuelClient, ParseModelURL)
     const std::string url{
       "https://api.ignitionfuel.org/2/2/german/models/Cardboard Box/banana"};
     EXPECT_FALSE(client.ParseModelURL(url, srv, id));
+  }
+}
+
+/////////////////////////////////////////////////
+TEST(FuelClient, ParseModelFileURL)
+{
+  common::Console::SetVerbosity(4);
+
+  // URL - without client config
+  {
+    FuelClient client;
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{
+      "https://api.ignitionfuel.org/1.0/openrobotics/models/Cordless Drill/tip/"
+      "files/meshes/cordless_drill.dae"};
+    EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
+
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "Cordless Drill");
+    EXPECT_EQ(filePath, "meshes/cordless_drill.dae");
+  }
+
+  // URL - with client config
+  {
+    ClientConfig config;
+    config.LoadConfig();
+
+    FuelClient client(config);
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{
+      "https://api.ignitionfuel.org/1.0/openrobotics/models/Pine Tree/tip/"
+      "files/materials/scripts/pine_tree.material"};
+    EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
+
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
+  }
+
+  // URL - version different from config
+  {
+    ClientConfig config;
+    config.LoadConfig();
+
+    FuelClient client(config);
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{
+      "https://api.ignitionfuel.org/5.0/openrobotics/models/Pine Tree/tip/"
+      "files/model.sdf"};
+    EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
+
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(filePath, "model.sdf");
+  }
+
+  // Unique name - without client config
+  {
+    FuelClient client;
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{
+      "https://api.ignitionfuel.org/openrobotics/models/Pine Tree/tip/"
+      "files/materials/scripts/pine_tree.material"};
+    EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
+
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_TRUE(id.Server().Version().empty());
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
+  }
+
+  // Unique name - with client config
+  {
+    ClientConfig config;
+    config.LoadConfig();
+
+    FuelClient client(config);
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{
+      "https://api.ignitionfuel.org/openrobotics/models/Pine Tree/tip/"
+      "files/materials/scripts/pine_tree.material"};
+    EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
+
+    EXPECT_EQ(id.Server().URL(), "https://api.ignitionfuel.org");
+    EXPECT_EQ(id.Server().Version(), "1.0");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
+  }
+
+  // Bad URL
+  {
+    FuelClient client;
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{"http://bad.url"};
+    EXPECT_FALSE(client.ParseModelFileUrl(modelUrl, id, filePath));
+  }
+
+  // Not URL
+  {
+    FuelClient client;
+    ModelIdentifier id;
+    std::string filePath;
+    const common::URI modelUrl{"bad_url"};
+    EXPECT_FALSE(client.ParseModelFileUrl(modelUrl, id, filePath));
   }
 }
 
@@ -352,6 +506,31 @@ TEST(FuelClient, CachedModel)
         "/test_cache/localhost:8007/alice/models/My Model/3", path);
   }
 
+  // Cached model file
+  {
+    common::URI url{
+        "http://localhost:8007/1.0/alice/models/My Model/tip/files/model.sdf"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(common::cwd() +
+        "/test_cache/localhost:8007/alice/models/My Model/model.sdf", path);
+  }
+
+  // Deeper cached model file
+  {
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip/files/"
+                    "meshes/model.dae"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(common::cwd() +
+        "/test_cache/localhost:8007/alice/models/My Model/meshes/model.dae",
+        path);
+  }
+
   // Non-cached model
   {
     common::URI url{"http://localhost:8007/1.0/alice/models/Banana"};
@@ -361,11 +540,49 @@ TEST(FuelClient, CachedModel)
     EXPECT_EQ(Result(Result::FETCH_ERROR), result);
   }
 
-  // Bad URL
+  // Non-cached model (when looking for file)
+  {
+    common::URI url{"http://localhost:8007/1.0/alice/models/Banana/model.sdf"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  // Non-cached model file
+  {
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip/files/"
+                    "meshes/banana.dae"
+    };
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  // Model root URL to model file
+  {
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  // Bad model URL
   {
     common::URI url{"banana"};
     std::string path;
     auto result = client.CachedModel(url, path);
+    EXPECT_FALSE(result);
+    EXPECT_EQ(Result(Result::FETCH_ERROR), result);
+  }
+
+  // Bad model file URL
+  {
+    common::URI url{"banana"};
+    std::string path;
+    auto result = client.CachedModelFile(url, path);
     EXPECT_FALSE(result);
     EXPECT_EQ(Result(Result::FETCH_ERROR), result);
   }

@@ -293,8 +293,18 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
   if (client.ParseModelUrl(url, model))
   {
     // Download
-    std::cout << "Downloading model: " << "\033[36m" << std::endl
-              << model.AsString("  ") << "\033[39m" << std::endl;
+    if (ignition::common::Console::Verbosity() >= 3)
+    {
+      std::cout << "Downloading model: " << "\033[36m" << std::endl
+                << model.AsPrettyString("  ") << "\033[39m" << std::endl;
+    }
+
+    if (model.Version() != 0)
+    {
+      ignwarn << "Requested version [" << model.VersionStr()  << "], but "
+              << "currently only the model's latest (tip) version is supported."
+              << std::endl;
+    }
 
     ignition::fuel_tools::ServerConfig srv;
     auto result = client.DownloadModel(srv, model);
@@ -312,12 +322,15 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
     return false;
   }
 
-  std::cout << "Download succeeded." << std::endl;
+  if (ignition::common::Console::Verbosity() >= 3)
+  {
+    std::cout << "Download succeeded." << std::endl;
+  }
   return true;
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbose(const char *_verbosity)
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 {
   ignition::common::Console::SetVerbosity(std::atoi(_verbosity));
 }
