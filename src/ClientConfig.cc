@@ -192,10 +192,10 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
 
   std::stringstream out;
 
-  if (!this->Url().empty())
+  if (this->Url().Valid())
   {
     out << _prefix << prop << "URL: " << reset
-        << value << this->Url() << reset << std::endl;
+        << value << this->Url().Str() << reset << std::endl;
   }
 
   if (!this->Version().empty())
