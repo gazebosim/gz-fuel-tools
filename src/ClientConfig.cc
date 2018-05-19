@@ -192,10 +192,10 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
 
   std::stringstream out;
 
-  if (!this->URL().empty())
+  if (!this->Url().empty())
   {
     out << _prefix << prop << "URL: " << reset
-        << value << this->URL() << reset << std::endl;
+        << value << this->Url() << reset << std::endl;
   }
 
   if (!this->Version().empty())
@@ -204,10 +204,10 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
         << value << this->Version() << reset << std::endl;
   }
 
-  if (!this->APIKey().empty())
+  if (!this->ApiKey().empty())
   {
     out << _prefix << prop << "API key: " << reset
-        << value << this->APIKey() << reset << std::endl;
+        << value << this->ApiKey() << reset << std::endl;
   }
   return out.str();
 }
