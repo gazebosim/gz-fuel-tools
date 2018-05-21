@@ -119,16 +119,14 @@ void ServerConfig::SetUrl(const common::URI &_url)
 //////////////////////////////////////////////////
 std::string ServerConfig::LocalName() const
 {
-  ignwarn << "LocalName is not used and will be deprecated on version 2"
-          << std::endl;
+  ignwarn << "LocalName is deprecated" << std::endl;
   return "";
 }
 
 //////////////////////////////////////////////////
 void ServerConfig::LocalName(const std::string &/*_name*/)
 {
-  ignwarn << "LocalName is not used and will be deprecated on version 2"
-          << std::endl;
+  ignwarn << "LocalName is deprecated" << std::endl;
 }
 
 //////////////////////////////////////////////////
