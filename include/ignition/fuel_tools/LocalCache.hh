@@ -45,6 +45,7 @@ namespace ignition
       public: virtual ~LocalCache();
 
       /// \brief Get all models in offline cache
+      /// \return Model iterator
       public: virtual ModelIter AllModels();
 
       /// \brief Get the first model matching all fields on an id.
