@@ -58,13 +58,10 @@ class ignition::fuel_tools::ClientConfigPrivate
 class ignition::fuel_tools::ServerConfigPrivate
 {
   /// \brief URL to reach server
-  public: std::string url;
-
-  /// \brief Local directory server stuff is saved in
-  public: std::string localName;
+  public: common::URI url;
 
   /// \brief A key to auth with the server
-  public: std::string key;
+  public: std::string key = "";
 
   /// \brief The protocol version used when talking with this server.
   public: std::string version = "1.0";
@@ -98,11 +95,11 @@ ServerConfig::~ServerConfig()
 //////////////////////////////////////////////////
 std::string ServerConfig::URL() const
 {
-  return this->Url();
+  return this->dataPtr->url.Str();
 }
 
 //////////////////////////////////////////////////
-std::string ServerConfig::Url() const
+common::URI ServerConfig::Url() const
 {
   return this->dataPtr->url;
 }
@@ -110,36 +107,26 @@ std::string ServerConfig::Url() const
 //////////////////////////////////////////////////
 void ServerConfig::URL(const std::string &_url)
 {
-  this->SetUrl(_url);
+  this->SetUrl(common::URI(_url));
 }
 
 //////////////////////////////////////////////////
-void ServerConfig::SetUrl(const std::string &_url)
+void ServerConfig::SetUrl(const common::URI &_url)
 {
-  // Strip trailing slashes
-  std::string url = _url;
-  while (!url.empty() && url.back() == '/')
-    url.pop_back();
-
-  this->dataPtr->url = url;
+  this->dataPtr->url = _url;
 }
 
 //////////////////////////////////////////////////
 std::string ServerConfig::LocalName() const
 {
-  return this->dataPtr->localName;
+  ignwarn << "LocalName is deprecated" << std::endl;
+  return "";
 }
 
 //////////////////////////////////////////////////
-void ServerConfig::LocalName(const std::string &_name)
+void ServerConfig::LocalName(const std::string &/*_name*/)
 {
-  this->SetLocalName(_name);
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::SetLocalName(const std::string &_name)
-{
-  this->dataPtr->localName = _name;
+  ignwarn << "LocalName is deprecated" << std::endl;
 }
 
 //////////////////////////////////////////////////
@@ -188,9 +175,38 @@ void ServerConfig::SetVersion(const std::string &_version)
 std::string ServerConfig::AsString(const std::string &_prefix) const
 {
   std::stringstream out;
-  out << _prefix << "URL: " << this->Url() << std::endl
+  out << _prefix << "URL: " << this->Url().Str() << std::endl
       << _prefix << "Version: " << this->Version() << std::endl
       << _prefix << "API key: " << this->ApiKey() << std::endl;
+  return out.str();
+}
+
+//////////////////////////////////////////////////
+std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
+{
+  std::string prop = "\033[96m\033[1m";
+  std::string value = "\033[37m";
+  std::string reset = "\033[0m";
+
+  std::stringstream out;
+
+  if (this->Url().Valid())
+  {
+    out << _prefix << prop << "URL: " << reset
+        << value << this->Url().Str() << reset << std::endl;
+  }
+
+  if (!this->Version().empty())
+  {
+    out << _prefix << prop << "Version: " << reset
+        << value << this->Version() << reset << std::endl;
+  }
+
+  if (!this->ApiKey().empty())
+  {
+    out << _prefix << prop << "API key: " << reset
+        << value << this->ApiKey() << reset << std::endl;
+  }
   return out.str();
 }
 
@@ -310,7 +326,6 @@ bool ClientConfig::LoadConfig()
   yaml_event_t event;
   std::stack<std::string> tokens;
   tokens.push("root");
-  std::string serverName = "";
   std::string serverURL = "";
   std::string cacheLocationConfig = "";
 
@@ -342,7 +357,6 @@ bool ClientConfig::LoadConfig()
         if (!tokens.empty() && tokens.top() == "servers")
         {
           tokens.push("server");
-          serverName = "";
           serverURL = "";
         }
         break;
@@ -357,21 +371,13 @@ bool ClientConfig::LoadConfig()
         }
         else if (!tokens.empty() && tokens.top() == "server")
         {
-          if (!serverName.empty() && !serverURL.empty())
+          if (!serverURL.empty())
           {
             // Sanity check: Make sure that the server is not already stored.
             bool repeated = false;
             for (auto const savedServer : this->Servers())
             {
-              if (savedServer.LocalName() == serverName)
-              {
-                ignerr << "Server [" << serverName << "] already exists. "
-                       << "Ignoring server" << std::endl;
-                repeated = true;
-                res = false;
-                break;
-              }
-              if (savedServer.Url() == serverURL)
+              if (savedServer.Url().Str() == serverURL)
               {
                 ignerr << "URL [" << serverURL << "] already exists. "
                        << "Ignoring server" << std::endl;
@@ -384,23 +390,14 @@ bool ClientConfig::LoadConfig()
             {
               // Add the new server.
               ServerConfig newServer;
-              newServer.SetLocalName(serverName);
-              newServer.SetUrl(serverURL);
+              newServer.SetUrl(common::URI(serverURL));
               this->AddServer(newServer);
             }
           }
           else
           {
-            if (serverName.empty())
-            {
-              ignerr << "[name] parameter is required for a server"
-                     << std::endl;
-            }
-            if (serverURL.empty())
-            {
-              ignerr << "[url] parameter is required for a server"
-                        << std::endl;
-            }
+            ignerr << "[url] parameter is required for a server"
+                      << std::endl;
             res = false;
           }
         }
@@ -412,14 +409,7 @@ bool ClientConfig::LoadConfig()
       case YAML_ALIAS_EVENT:
         break;
       case YAML_SCALAR_EVENT:
-        if (!tokens.empty() && tokens.top() == "name")
-        {
-          std::string name(
-            reinterpret_cast<const char *>(event.data.scalar.value));
-          serverName = name;
-          tokens.pop();
-        }
-        else if (!tokens.empty() && tokens.top() == "url")
+        if (!tokens.empty() && tokens.top() == "url")
         {
           std::string url(
             reinterpret_cast<const char *>(event.data.scalar.value));

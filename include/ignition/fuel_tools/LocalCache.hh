@@ -47,12 +47,15 @@ namespace ignition
       /// \brief Get all models in offline cache
       public: virtual ModelIter AllModels();
 
-      /// \brief Get the first model matching an ID
-      /// \param[in] _id An id with SourceURL, Owner, and Name all set
+      /// \brief Get the first model matching all fields on an id.
+      /// \param[in] _id An id with ServerURL, Owner, and Name all set
+      /// \return A model which matches all of _id's parameters.
       public: virtual Model MatchingModel(const ModelIdentifier &_id);
 
       /// \brief Get all models partially matching an ID
-      /// \param[in] _id An id with at least one of SourceURL, Owner, and Name
+      /// \param[in] _id An id with at least one of ServerURL, Owner, and Name
+      /// \return An iterator with all models that match all fields that are
+      /// set on _id.
       public: virtual ModelIter MatchingModels(const ModelIdentifier &_id);
 
       /// \brief Add a model from packed data to the local cache

@@ -22,6 +22,8 @@
 #include <string>
 #include <vector>
 
+#include <ignition/common/URI.hh>
+
 #include "ignition/fuel_tools/Export.hh"
 
 namespace ignition
@@ -52,33 +54,31 @@ namespace ignition
       public: ~ServerConfig();
 
       /// \brief Get the URL to access the server.
-      /// \deperecated See std::string Url() const.
+      /// \deprecated See common::URI Url() const.
       public: std::string IGN_DEPRECATED(2.0) URL() const;
 
       /// \brief Get the URL to access the server.
       /// \return The URL of this server.
-      public: std::string Url() const;
+      public: common::URI Url() const;
 
       /// \brief Set the URL of this server.
-      /// \deprecated See void SetUrl(const std::string &).
+      /// \param[in] _url URL of this server.
+      /// \deprecated See void SetUrl(const common::URI &).
       public: void IGN_DEPRECATED(2.0) URL(const std::string &_url);
 
       /// \brief Set the URL of this server.
       /// \param[in] _url URL of this server.
-      public: void SetUrl(const std::string &_url);
+      public: void SetUrl(const common::URI &_url);
 
       /// \brief Get folder name for server on disk.
       /// \return The local folder name.
-      public: std::string LocalName() const;
+      /// \deprecated Has no effect
+      public: std::string IGN_DEPRECATED(2.0) LocalName() const;
 
       /// \brief Set folder name for server on disk.
       /// \param[in] _name Folder name.
-      /// \deprecated See void SetLocalName(const std::string &).
+      /// \deprecated Has no effect
       public: void IGN_DEPRECATED(2.0) LocalName(const std::string &_name);
-
-      /// \brief Set folder name for server on disk.
-      /// \param[in] _name Folder name.
-      public: void SetLocalName(const std::string &_name);
 
       /// \brief Get the API key to auth with the server.
       /// \deprecated See std::string ApiKey() const.
@@ -113,6 +113,12 @@ namespace ignition
       /// \param[in] _prefix Optional prefix for every line of the string.
       /// \return Server information string
       public: std::string AsString(const std::string &_prefix = "") const;
+
+      /// \brief Returns all the available model information as a string using
+      /// colors for better human parsing.
+      /// \param[in] _prefix Optional prefix for every line of the string.
+      /// \return Model information string
+      public: std::string AsPrettyString(const std::string &_prefix = "") const;
 
       /// \brief PIMPL
       private: std::unique_ptr<ServerConfigPrivate> dataPtr;
@@ -177,7 +183,7 @@ namespace ignition
 
       /// \brief Set where models and stuff are saved.
       /// \param[in] _path path on disk where models are saved
-      /// \deprecated See void CacheLocation(const std::string &_path)
+      /// \deprecated See void SetCacheLocation(const std::string &_path)
       public: void IGN_DEPRECATED(2.0) CacheLocation(const std::string &_path);
 
       /// \brief Set where models and stuff are saved.

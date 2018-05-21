@@ -42,9 +42,9 @@ ign_set_project_public_cxx_standard(11)
 # Link the libraries that we always need.
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
+    ignition-common1::ignition-common1
   PRIVATE
     curl::curl
-    ignition-common1::ignition-common1
     ${JSONCPP_TARGET}
     YAML::YAML
     ZIP::ZIP
