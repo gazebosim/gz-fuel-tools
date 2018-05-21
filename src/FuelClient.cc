@@ -289,14 +289,31 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
     return Result(Result::FETCH_ERROR);
   }
 
-  // FIXME: hardcoding version 1 for the tip for now until we can get the model
-  // version from X-Ign-Resource-Version
-  auto copy = _id;
-  if (copy.Version() == 0)
-    copy.SetVersion(1);
+  // Get version from header
+  auto newId = _id;
+  unsigned int version = 1;
+  if (resp.headers.find("X-Ign-Resource-Version") != resp.headers.end())
+  {
+    try
+    {
+      version = std::stoi(resp.headers["X-Ign-Resource-Version"]);
+    }
+    catch(std::invalid_argument &)
+    {
+      ignwarn << "Failed to convert X-Ign-Resource-Version header value ["
+              << resp.headers["X-Ign-Resource-Version"]
+              << "] to integer. Hardcoding version 1." << std::endl;
+    }
+  }
+  else
+  {
+    ignwarn << "Missing X-Ign-Resource-Version in REST response headers."
+            << " Hardcoding version 1." << std::endl;
+  }
+  newId.SetVersion(version);
 
   // Save
-  if (!this->dataPtr->cache->SaveModel(copy, resp.data, true))
+  if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
     return Result(Result::FETCH_ERROR);
 
   return Result(Result::FETCH);
