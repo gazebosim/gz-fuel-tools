@@ -54,35 +54,35 @@ void createLocal1(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-  common::copyFile(
-      "test_cache/localhost:8007/alice/models/My Model/tip/model.config",
-      "test_cache/localhost:8007/alice/models/My Model/3/model.config");
+    common::copyFile(
+        "test_cache/localhost:8007/alice/models/My Model/tip/model.config",
+        "test_cache/localhost:8007/alice/models/My Model/3/model.config");
   }
 
   {
     std::ofstream fout(
-        "test_cache/localhost:8007/alice/models/My Model/model.sdf",
+        "test_cache/localhost:8007/alice/models/My Model/tip/model.sdf",
         std::ofstream::trunc);
     fout << "<?xml version=\"1.0\"?>";
     fout.flush();
     fout.close();
 
-  common::copyFile(
-      "test_cache/localhost:8007/alice/models/My Model/tip/model.sdf",
-      "test_cache/localhost:8007/alice/models/My Model/3/model.sdf");
+    common::copyFile(
+        "test_cache/localhost:8007/alice/models/My Model/tip/model.sdf",
+        "test_cache/localhost:8007/alice/models/My Model/3/model.sdf");
   }
 
   {
     std::ofstream fout(
-        "test_cache/localhost:8007/alice/models/My Model/meshes/model.dae",
+        "test_cache/localhost:8007/alice/models/My Model/tip/meshes/model.dae",
         std::ofstream::trunc);
     fout << "<?xml version=\"1.0\"?>";
     fout.flush();
     fout.close();
 
-  common::copyFile(
-      "test_cache/localhost:8007/alice/models/My Model/tip/meshes/model.dae",
-      "test_cache/localhost:8007/alice/models/My Model/3/meshes/model.dae");
+    common::copyFile(
+        "test_cache/localhost:8007/alice/models/My Model/tip/meshes/model.dae",
+        "test_cache/localhost:8007/alice/models/My Model/3/meshes/model.dae");
   }
 
   ignition::fuel_tools::ServerConfig srv;
@@ -373,6 +373,8 @@ TEST(FuelClient, DownloadModel)
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  common::removeDirectory(
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip");
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
@@ -401,21 +403,11 @@ TEST(FuelClient, DownloadModel)
     EXPECT_TRUE(res2);
     EXPECT_EQ(Result(Result::FETCH), res2);
 
-    // The returned path points to `tip`
+    // The returned path says `tip`
     EXPECT_EQ(common::cwd() +
       "/test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip", path);
 
     // Check it was downloaded to `1`
-    EXPECT_TRUE(common::exists(
-        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip"));
-    EXPECT_TRUE(common::exists(
-        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
-         "model.sdf"));
-    EXPECT_TRUE(common::exists(
-       "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
-       "model.config"));
-
-    // And `tip` also exists (symlink)
     EXPECT_TRUE(common::exists(
         "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1"));
     EXPECT_TRUE(common::exists(
@@ -423,6 +415,16 @@ TEST(FuelClient, DownloadModel)
          "model.sdf"));
     EXPECT_TRUE(common::exists(
        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1/"
+       "model.config"));
+
+    // And `tip` also exists (symlink)
+    EXPECT_TRUE(common::exists(
+        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip"));
+    EXPECT_TRUE(common::exists(
+        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
+         "model.sdf"));
+    EXPECT_TRUE(common::exists(
+       "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip/"
        "model.config"));
 
     // Check it wasn't downloaded to model root directory
@@ -433,7 +435,9 @@ TEST(FuelClient, DownloadModel)
     auto res3 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res3);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), res3);
-    EXPECT_EQ(path, cachedPath);
+    EXPECT_EQ(common::cwd() +
+      "/test_cache/api.ignitionfuel.org/chapulina/models/Test box/1",
+      cachedPath);
   }
 
   // Try using nonexistent URL
@@ -463,6 +467,8 @@ TEST(FuelClient, CachedModel)
 
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  common::removeDirectory(
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/tip");
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
@@ -515,7 +521,7 @@ TEST(FuelClient, CachedModel)
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
     EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model/model.sdf", path);
+        "/test_cache/localhost:8007/alice/models/My Model/tip/model.sdf", path);
   }
 
   // Deeper cached model file
@@ -527,7 +533,7 @@ TEST(FuelClient, CachedModel)
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
     EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model/meshes/model.dae",
+        "/test_cache/localhost:8007/alice/models/My Model/tip/meshes/model.dae",
         path);
   }
 

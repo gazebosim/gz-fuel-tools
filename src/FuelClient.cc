@@ -313,6 +313,7 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
   newId.SetVersion(version);
 
   // Save
+  // Note that the save function doesn't return the path
   if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
     return Result(Result::FETCH_ERROR);
 
