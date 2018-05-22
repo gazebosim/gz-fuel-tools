@@ -292,7 +292,9 @@ bool LocalCache::UpdateTipSymLink(const std::string &_path)
   // Create sym link
   auto highestDir = common::joinPaths(_path, std::to_string(highestVersion));
 
+#ifndef _WIN32
   if (symlink(highestDir.c_str(), tipDir.c_str()) != 0)
+#endif
   {
     ignmsg << "Failed to create a symbolic link from:" << std::endl
            << "  " << tipDir << std::endl
