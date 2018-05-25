@@ -38,37 +38,52 @@ using namespace ignft;
 
 //////////////////////////////////////////////////
 /// \brief Creates a directory structure in the build directory with 1 model
+/// that has 2 versions
 /// Taken from LocalCache_TEST
 void createLocal1(ClientConfig &_conf)
 {
   common::createDirectories(
-      "test_cache/localhost:8007/alice/models/My Model/meshes");
+      "test_cache/localhost:8007/alice/models/My Model/2/meshes");
+  common::createDirectories(
+      "test_cache/localhost:8007/alice/models/My Model/3/meshes");
 
   {
     std::ofstream fout(
-        "test_cache/localhost:8007/alice/models/My Model/model.config",
+        "test_cache/localhost:8007/alice/models/My Model/2/model.config",
         std::ofstream::trunc);
     fout << "<?xml version=\"1.0\"?>";
     fout.flush();
     fout.close();
+
+    common::copyFile(
+        "test_cache/localhost:8007/alice/models/My Model/2/model.config",
+        "test_cache/localhost:8007/alice/models/My Model/3/model.config");
   }
 
   {
     std::ofstream fout(
-        "test_cache/localhost:8007/alice/models/My Model/model.sdf",
+        "test_cache/localhost:8007/alice/models/My Model/2/model.sdf",
         std::ofstream::trunc);
     fout << "<?xml version=\"1.0\"?>";
     fout.flush();
     fout.close();
+
+    common::copyFile(
+        "test_cache/localhost:8007/alice/models/My Model/2/model.sdf",
+        "test_cache/localhost:8007/alice/models/My Model/3/model.sdf");
   }
 
   {
     std::ofstream fout(
-        "test_cache/localhost:8007/alice/models/My Model/meshes/model.dae",
+        "test_cache/localhost:8007/alice/models/My Model/2/meshes/model.dae",
         std::ofstream::trunc);
     fout << "<?xml version=\"1.0\"?>";
     fout.flush();
     fout.close();
+
+    common::copyFile(
+        "test_cache/localhost:8007/alice/models/My Model/2/meshes/model.dae",
+        "test_cache/localhost:8007/alice/models/My Model/3/meshes/model.dae");
   }
 
   ignition::fuel_tools::ServerConfig srv;
@@ -371,6 +386,7 @@ TEST(FuelClient, DownloadModel)
 
   // Download model from URL
   {
+    // Unversioned URL should get the latest available version
     common::URI url{
         "https://api.ignitionfuel.org/1.0/chapulina/models/Test box"};
 
@@ -385,20 +401,28 @@ TEST(FuelClient, DownloadModel)
     auto res2 = client.DownloadModel(url.Str(), path);
     EXPECT_TRUE(res2);
     EXPECT_EQ(Result(Result::FETCH), res2);
-    EXPECT_EQ(common::cwd() +
-      "/test_cache/api.ignitionfuel.org/chapulina/models/Test box", path);
+
+    // Check it was downloaded to `1`
     EXPECT_TRUE(common::exists(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box"));
+        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1"));
     EXPECT_TRUE(common::exists(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.sdf"));
+        "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1/"
+         "model.sdf"));
     EXPECT_TRUE(common::exists(
+       "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1/"
+       "model.config"));
+
+    // Check it wasn't downloaded to model root directory
+    EXPECT_FALSE(common::exists(
      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.config"));
 
     // Check it is cached
     auto res3 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res3);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), res3);
-    EXPECT_EQ(path, cachedPath);
+    EXPECT_EQ(common::cwd() +
+      "/test_cache/api.ignitionfuel.org/chapulina/models/Test box/1",
+      cachedPath);
   }
 
   // Try using nonexistent URL
@@ -438,7 +462,7 @@ TEST(FuelClient, CachedModel)
   FuelClient client(config);
   EXPECT_EQ(config.CacheLocation(), client.Config().CacheLocation());
 
-  // Cached model
+  // Cached model (no version)
   {
     common::URI url{"http://localhost:8007/1.0/alice/models/My Model"};
     std::string path;
@@ -446,10 +470,32 @@ TEST(FuelClient, CachedModel)
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
     EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model", path);
+        "/test_cache/localhost:8007/alice/models/My Model/3", path);
   }
 
-  // Cached model file
+  // Cached model (tip)
+  {
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip"};
+    std::string path;
+    auto result = client.CachedModel(url, path);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(common::cwd() +
+        "/test_cache/localhost:8007/alice/models/My Model/3", path);
+  }
+
+  // Cached model (version number)
+  {
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/2"};
+    std::string path;
+    auto result = client.CachedModel(url, path);
+    EXPECT_TRUE(result);
+    EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(common::cwd() +
+        "/test_cache/localhost:8007/alice/models/My Model/2", path);
+  }
+
+  // Cached model file (tip)
   {
     common::URI url{
         "http://localhost:8007/1.0/alice/models/My Model/tip/files/model.sdf"};
@@ -458,19 +504,19 @@ TEST(FuelClient, CachedModel)
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
     EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model/model.sdf", path);
+        "/test_cache/localhost:8007/alice/models/My Model/3/model.sdf", path);
   }
 
   // Deeper cached model file
   {
-    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip/files/"
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/2/files/"
                     "meshes/model.dae"};
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
     EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model/meshes/model.dae",
+        "/test_cache/localhost:8007/alice/models/My Model/2/meshes/model.dae",
         path);
   }
 

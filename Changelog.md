@@ -8,6 +8,7 @@
 
 1. Change cache directory structure and use it
     * [Pull request 57](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/57)
+    * [Pull request 71](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/71)
 
 1. Client return only relevant cached models
     * [Pull request 62](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/62)

@@ -143,9 +143,10 @@ ModelIdentifier::~ModelIdentifier()
 //////////////////////////////////////////////////
 std::string ModelIdentifier::UniqueName() const
 {
-  return this->dataPtr->server.URL()     + "/"        +
-         this->dataPtr->owner            + "/models/" +
-         this->dataPtr->name;
+  return common::joinPaths(this->dataPtr->server.URL(),
+                           this->dataPtr->owner,
+                           "models",
+                           this->dataPtr->name);
 }
 
 //////////////////////////////////////////////////

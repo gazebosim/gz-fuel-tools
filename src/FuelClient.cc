@@ -270,20 +270,51 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
     return Result(Result::FETCH_ERROR);
   }
 
-  // Local path
-  auto path = ignition::common::joinPaths(_id.Owner(),
-      "models", _id.Name() + ".zip");
+  // Route
+  auto route = ignition::common::joinPaths(_id.Owner(),
+        "models", _id.Name(), _id.VersionStr(),
+        _id.Name() + ".zip");
 
   // Request
   ignition::fuel_tools::REST rest;
   RESTResponse resp;
   resp = rest.Request(REST::GET, _id.Server().URL(), _id.Server().Version(),
-      path, {}, {}, "");
+      route, {}, {}, "");
   if (resp.statusCode != 200)
+  {
+    ignerr << "Failed to download model." << std::endl
+           << "  Server: " << _id.Server().URL() << std::endl
+           << "  Route: " << route << std::endl
+           << "  REST response code: " << resp.statusCode << std::endl;
     return Result(Result::FETCH_ERROR);
+  }
+
+  // Get version from header
+  auto newId = _id;
+  unsigned int version = 1;
+  if (resp.headers.find("X-Ign-Resource-Version") != resp.headers.end())
+  {
+    try
+    {
+      version = std::stoi(resp.headers["X-Ign-Resource-Version"]);
+    }
+    catch(std::invalid_argument &)
+    {
+      ignwarn << "Failed to convert X-Ign-Resource-Version header value ["
+              << resp.headers["X-Ign-Resource-Version"]
+              << "] to integer. Hardcoding version 1." << std::endl;
+    }
+  }
+  else
+  {
+    ignwarn << "Missing X-Ign-Resource-Version in REST response headers."
+            << " Hardcoding version 1." << std::endl;
+  }
+  newId.SetVersion(version);
 
   // Save
-  if (!this->dataPtr->cache->SaveModel(_id, resp.data, true))
+  // Note that the save function doesn't return the path
+  if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
     return Result(Result::FETCH_ERROR);
 
   return Result(Result::FETCH);
@@ -459,7 +490,8 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   if (result)
   {
     _path = ignition::common::joinPaths(this->Config().CacheLocation(),
-        id.Server().Url().Path().Str(), id.Owner(), "models", id.Name());
+        id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
+        id.VersionStr());
   }
 
   return result;
