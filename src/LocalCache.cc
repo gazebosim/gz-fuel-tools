@@ -150,14 +150,23 @@ ModelIter LocalCache::AllModels()
 //////////////////////////////////////////////////
 Model LocalCache::MatchingModel(const ModelIdentifier &_id)
 {
+  // For the tip, we have to find the highest version
+  bool tip = (_id.Version() == 0);
+  Model tipModel;
+
   for (auto iter = this->AllModels(); iter; ++iter)
   {
-    if (_id == iter->Identification())
+    auto id = iter->Identification();
+    if (_id == id)
     {
-      return *iter;
+      if (_id.Version() == id.Version())
+        return *iter;
+      else if (tip && id.Version() > tipModel.Identification().Version())
+        tipModel = *iter;
     }
   }
-  return Model();
+
+  return tipModel;
 }
 
 //////////////////////////////////////////////////
@@ -235,82 +244,6 @@ bool LocalCache::SaveModel(
   ignmsg << "Saved model at:" << std::endl
          << "  " << modelVersionedDir << std::endl;
 
-  this->UpdateTipSymLink(modelRootDir);
-
   return true;
 }
 
-//////////////////////////////////////////////////
-bool LocalCache::UpdateTipSymLink(const std::string &_path)
-{
-  unsigned int highestVersion{0};
-
-  // Iterate over all subdirectories of _path and get the highest version
-  common::DirIter endIter;
-  common::DirIter versionIter(_path);
-  while (versionIter != endIter)
-  {
-    if (!common::isDirectory(*versionIter))
-    {
-      ++versionIter;
-      continue;
-    }
-
-    auto parts = common::Split(*versionIter, *common::separator("").c_str());
-
-    unsigned int version{0};
-    try
-    {
-      version = std::stoi(parts.back());
-    }
-    catch(std::invalid_argument &_e)
-    {
-      ++versionIter;
-      continue;
-    }
-
-    highestVersion = version > highestVersion ? version : highestVersion;
-
-    ++versionIter;
-  }
-
-  if (highestVersion == 0)
-  {
-    ignerr << "Failed to locate a numbered directory under [" << _path
-           << "], symbolic link not created." << std::endl;
-    return false;
-  }
-
-  // Remove tip dir if it already exists
-  auto tipDir = common::joinPaths(_path, "tip");
-  if (common::isDirectory(tipDir))
-  {
-    if (!common::removeDirectory(tipDir.c_str()))
-    {
-      ignerr << "Unable to remove directory [" << tipDir << "]" << std::endl;
-      return false;
-    }
-  }
-
-  // Create sym link
-  auto highestDir = common::joinPaths(_path, std::to_string(highestVersion));
-
-#ifndef _WIN32
-  if (symlink(highestDir.c_str(), tipDir.c_str()) == 0)
-  {
-    ignmsg << "Created symbolic link from:" << std::endl
-           << "  " << tipDir << std::endl
-           <<"to:" << std::endl
-           << "  " << highestDir << std::endl;
-
-    return true;
-  }
-#endif
-
-  ignmsg << "Failed to create a symbolic link from:" << std::endl
-         << "  " << tipDir << std::endl
-         <<"to:" << std::endl
-         << "  " << highestDir << std::endl;
-
-  return false;
-}

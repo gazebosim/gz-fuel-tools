@@ -68,13 +68,13 @@ TEST(ModelIdentifier, UniqueName)
   id.SetName("hello");
   id.SetOwner("alice");
   id.SetServer(srv1);
-  EXPECT_EQ("https://localhost:8001/alice/models/hello/tip", id.UniqueName());
+  EXPECT_EQ("https://localhost:8001/alice/models/hello", id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ("https://localhost:8002/alice/models/hello/tip", id.UniqueName());
+  EXPECT_EQ("https://localhost:8002/alice/models/hello", id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ("https://localhost:8003/alice/models/hello/tip", id.UniqueName());
+  EXPECT_EQ("https://localhost:8003/alice/models/hello", id.UniqueName());
 }
 
 /////////////////////////////////////////////////
@@ -151,7 +151,7 @@ TEST(ModelIdentifier, AsString)
         "Name: \n"\
         "Owner: \n"\
         "Version: tip\n"\
-        "Unique name: //models//tip\n"
+        "Unique name: //models/\n"
         "Description: \n"
         "File size: 0\n"
         "Upload date: 0\n"

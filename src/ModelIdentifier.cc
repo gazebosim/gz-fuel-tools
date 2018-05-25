@@ -146,8 +146,7 @@ std::string ModelIdentifier::UniqueName() const
   return common::joinPaths(this->dataPtr->server.URL(),
                            this->dataPtr->owner,
                            "models",
-                           this->dataPtr->name,
-                           this->VersionStr());
+                           this->dataPtr->name);
 }
 
 //////////////////////////////////////////////////
