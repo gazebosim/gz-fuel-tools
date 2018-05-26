@@ -182,6 +182,8 @@ bool JSONParser::ParseModelImpl(
       _model.SetLicenseImageUrl(_json["license_image"].asString());
     if (_json.isMember("tags"))
       _model.SetTags(ParseTags(_json["tags"]));
+    if (_json.isMember("version"))
+      _model.SetVersion(_json["version"].asUInt());
   }
 #if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
   catch (...)
@@ -207,6 +209,7 @@ std::string JSONParser::BuildModel(ModelIter _modelIt)
   value["name"] = id.Name();
   value["description"] = id.Description();
   value["uuid"] = id.Uuid();
+  value["version"] = id.Version();
 
   Json::StreamWriterBuilder builder;
   return Json::writeString(builder, value);

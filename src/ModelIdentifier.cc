@@ -19,6 +19,8 @@
 #include <string>
 #include <vector>
 
+#include <ignition/common/Filesystem.hh>
+
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
 
@@ -62,19 +64,22 @@ class ignition::fuel_tools::ModelIdentifierPrivate
   public: uint32_t likeCount{0u};
 
   /// \brief Number of downloads
-  public: uint32_t downloads{0u};
+  public: uint32_t downloadCount{0u};
 
   /// \brief The license name
   public: std::string licenseName;
 
   /// \brief License URL
-  public: std::string licenseUrl;
+  public: common::URI licenseUrl;
 
   /// \brief License image URL
-  public: std::string licenseImageUrl;
+  public: common::URI licenseImageUrl;
 
   /// \brief Collection of tags
   public: std::vector<std::string> tags;
+
+  /// \brief Model version. Valid versions start from 1, 0 means the tip.
+  public: unsigned int version{0};
 };
 
 //////////////////////////////////////////////////
@@ -138,10 +143,10 @@ ModelIdentifier::~ModelIdentifier()
 //////////////////////////////////////////////////
 std::string ModelIdentifier::UniqueName() const
 {
-  return this->dataPtr->server.Url().Str() + "/"        +
-         this->dataPtr->server.Version()   + "/"        +
-         this->dataPtr->owner              + "/models/" +
-         this->dataPtr->name;
+  return common::joinPaths(this->dataPtr->server.Url().Str(),
+                           this->dataPtr->owner,
+                           "models",
+                           this->dataPtr->name);
 }
 
 //////////////////////////////////////////////////
@@ -271,7 +276,7 @@ uint32_t ModelIdentifier::Downloads() const
 //////////////////////////////////////////////////
 uint32_t ModelIdentifier::DownloadCount() const
 {
-  return this->dataPtr->downloads;
+  return this->dataPtr->downloadCount;
 }
 
 //////////////////////////////////////////////////
@@ -289,7 +294,7 @@ std::string ModelIdentifier::LicenseURL() const
 //////////////////////////////////////////////////
 std::string ModelIdentifier::LicenseUrl() const
 {
-  return this->dataPtr->licenseUrl;
+  return this->dataPtr->licenseUrl.Str();
 }
 
 //////////////////////////////////////////////////
@@ -301,7 +306,7 @@ std::string ModelIdentifier::LicenseImageURL() const
 //////////////////////////////////////////////////
 std::string ModelIdentifier::LicenseImageUrl() const
 {
-  return this->dataPtr->licenseImageUrl;
+  return this->dataPtr->licenseImageUrl.Str();
 }
 
 //////////////////////////////////////////////////
@@ -404,7 +409,7 @@ bool ModelIdentifier::Downloads(const uint32_t _downloads)
 //////////////////////////////////////////////////
 bool ModelIdentifier::SetDownloadCount(const uint32_t _downloads)
 {
-  this->dataPtr->downloads = _downloads;
+  this->dataPtr->downloadCount = _downloads;
   return true;
 }
 
@@ -430,8 +435,7 @@ bool ModelIdentifier::LicenseURL(const std::string &_url)
 //////////////////////////////////////////////////
 bool ModelIdentifier::SetLicenseUrl(const std::string &_url)
 {
-  this->dataPtr->licenseUrl = _url;
-  return true;
+  return this->dataPtr->licenseUrl.Parse(_url);
 }
 
 //////////////////////////////////////////////////
@@ -443,8 +447,7 @@ bool ModelIdentifier::LicenseImageURL(const std::string &_url)
 //////////////////////////////////////////////////
 bool ModelIdentifier::SetLicenseImageUrl(const std::string &_url)
 {
-  this->dataPtr->licenseImageUrl = _url;
-  return true;
+  return this->dataPtr->licenseImageUrl.Parse(_url);
 }
 
 //////////////////////////////////////////////////
@@ -461,11 +464,54 @@ bool ModelIdentifier::SetTags(const std::vector<std::string> &_tags)
 }
 
 //////////////////////////////////////////////////
+unsigned int ModelIdentifier::Version() const
+{
+  return this->dataPtr->version;
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::VersionStr() const
+{
+  std::string version = this->dataPtr->version == 0 ?
+      "tip" : std::to_string(this->dataPtr->version);
+  return version;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetVersion(const unsigned int _version)
+{
+  this->dataPtr->version = _version;
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetVersionStr(const std::string &_version)
+{
+  if (_version == "tip" || _version.empty())
+  {
+    this->dataPtr->version = 0;
+    return true;
+  }
+
+  try
+  {
+    this->dataPtr->version = std::stoi(_version);
+  }
+  catch(std::invalid_argument &_e)
+  {
+    return false;
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
 std::string ModelIdentifier::AsString(const std::string &_prefix) const
 {
   std::stringstream out;
   out << _prefix << "Name: " << this->Name() << std::endl
       << _prefix << "Owner: " << this->Owner() << std::endl
+      << _prefix << "Version: " << this->VersionStr() << std::endl
       << _prefix << "Unique name: " << this->UniqueName() << std::endl
       << _prefix << "Description: " << this->Description() << std::endl
       << _prefix << "File size: " << this->FileSize() << std::endl
@@ -484,5 +530,97 @@ std::string ModelIdentifier::AsString(const std::string &_prefix) const
 
   out << _prefix << "Server:" << std::endl
       << this->Server().AsString(_prefix + "  ");
+  return out.str();
+}
+
+//////////////////////////////////////////////////
+std::string ModelIdentifier::AsPrettyString(const std::string &_prefix) const
+{
+  std::string prop = "\033[96m\033[1m";
+  std::string value = "\033[37m";
+  std::string reset = "\033[0m";
+
+  std::stringstream out;
+
+  if (!this->Name().empty())
+  {
+    out << _prefix << prop << "Name: " << reset
+        << value << this->Name() << reset << std::endl;
+  }
+
+  if (!this->Owner().empty())
+  {
+    out << _prefix << prop << "Owner: " << reset
+        << value << this->Owner() << reset << std::endl;
+  }
+
+  if (this->Version() != 0)
+  {
+    out << _prefix << prop << "Version: " << reset
+        << value << this->VersionStr() << reset << std::endl;
+  }
+
+  if (!this->Description().empty())
+  {
+    out << _prefix << prop << "Description: " << reset
+        << value << this->Description() << reset << std::endl;
+  }
+
+  if (this->FileSize() != 0)
+  {
+    out << _prefix << prop << "File size: " << reset
+        << value << this->FileSize() << reset << std::endl;
+  }
+
+  if (this->UploadDate() != 0)
+  {
+    out << _prefix << prop << "Upload date: " << reset
+        << value << this->UploadDate() << reset << std::endl;
+  }
+
+  if (this->LikeCount() != 0)
+  {
+    out << _prefix << prop << "Likes: " << reset
+        << value << this->LikeCount() << reset << std::endl;
+  }
+
+  if (this->DownloadCount() != 0)
+  {
+    out << _prefix << prop << "Downloads: " << reset
+        << value << this->DownloadCount() << reset << std::endl;
+  }
+
+  if (!this->LicenseName().empty())
+  {
+    out << _prefix << prop << "License name: " << reset
+        << value << this->LicenseName() << reset << std::endl;
+  }
+
+  if (!this->LicenseUrl().empty())
+  {
+    out << _prefix << prop << "License URL: " << reset
+        << value << this->LicenseUrl() << reset << std::endl;
+  }
+
+  if (!this->LicenseImageUrl().empty())
+  {
+    out << _prefix << prop << "License image URL: " << reset
+        << value << this->LicenseImageUrl()
+        << reset << std::endl;
+  }
+
+  if (!this->Tags().empty())
+  {
+    out << _prefix << prop << "Tags: " << reset << std::endl;
+
+    for (auto t : this->Tags())
+    {
+      out << _prefix << prop << "- " << reset
+          << value << t << reset << std::endl;
+    }
+  }
+
+  out << _prefix << prop << "Server:" << reset << std::endl
+      << this->Server().AsPrettyString(_prefix + "  ");
   return out.str();
 }

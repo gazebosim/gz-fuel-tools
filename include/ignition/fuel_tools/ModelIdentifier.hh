@@ -298,6 +298,36 @@ namespace ignition
       /// \return True if successful.
       public: bool SetTags(const std::vector<std::string> &_tags);
 
+      /// \brief Returns the model's version as a number. Versions are integers
+      /// counting from 1. Version zero means the tip.
+      /// \return Model's version.
+      /// \sa VersionStr
+      /// \sa SetVersion
+      public: unsigned int Version() const;
+
+      /// \brief Returns the model's version as a string. Versions are integers
+      /// counting from 1. The strings "tip" or "" mean the latest version.
+      /// \return Model's version.
+      /// \sa Version
+      /// \sa SetVersionStr
+      public: std::string VersionStr() const;
+
+      /// \brief Set the model's version. Versions are integers counting from
+      /// 1.
+      /// \param[in] _version The model's version
+      /// \return True if successful.
+      /// \sa Version
+      /// \sa SetVersionStr
+      public: bool SetVersion(const unsigned int _version);
+
+      /// \brief Set the model's version. Versions are integers counting from
+      /// 1 or "tip" for the latest version.
+      /// \param[in] _version The model's version
+      /// \return True if successful.
+      /// \sa VersionStr
+      /// \sa SetVersion
+      public: bool SetVersionStr(const std::string &_version);
+
       // /// \brief returns a SHA 2 256 hash of the model
       // /// \remarks fulfills versioning requirement
       // public: std::array<std::uint8_t, 32> SHA_256() const;
@@ -307,10 +337,17 @@ namespace ignition
       // /// \returns true if successful
       // public: bool SHA_256(const std::array<std::uint8_t, 32> &_hash);
 
-      /// \brief Returns all the model information as a string.
+      /// \brief Returns all the model information as a string. Convenient for
+      /// debugging.
       /// \param[in] _prefix Optional prefix for every line of the string.
       /// \return Model information string
       public: std::string AsString(const std::string &_prefix = "") const;
+
+      /// \brief Returns all the available model information as a string using
+      /// colors for better human parsing.
+      /// \param[in] _prefix Optional prefix for every line of the string.
+      /// \return Model information string
+      public: std::string AsPrettyString(const std::string &_prefix = "") const;
 
       /// \brief PIMPL
       private: std::unique_ptr<ModelIdentifierPrivate> dataPtr;
