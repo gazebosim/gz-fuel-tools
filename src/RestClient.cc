@@ -238,6 +238,18 @@ RestResponse Rest::Request(HttpMethod _method,
   return res;
 }
 
+/////////////////////////////////////////////////
+void Rest::SetUserAgent(const std::string &_agent)
+{
+  this->userAgent = _agent;
+}
+
+/////////////////////////////////////////////////
+const std::string &Rest::UserAgent() const
+{
+  return this->userAgent;
+}
+
 #ifndef _WIN32
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"

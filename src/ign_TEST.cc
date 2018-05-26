@@ -48,6 +48,8 @@ std::string custom_exec_str(std::string _cmd)
 
 auto g_version = std::string(strdup(IGNITION_FUEL_TOOLS_VERSION_FULL));
 
+auto g_listCmd = "ign fuel list -v 4 --force-version " + g_version;
+
 /////////////////////////////////////////////////
 TEST(CmdLine, Versions)
 {
@@ -72,15 +74,13 @@ TEST(CmdLine, Help)
 /////////////////////////////////////////////////
 TEST(CmdLine, ModelListFail)
 {
-  auto output = custom_exec_str("ign fuel list --force-version " + g_version);
+  auto output = custom_exec_str(g_listCmd);
   EXPECT_NE(output.find("Missing resource type"), std::string::npos) << output;
 
-  output = custom_exec_str("ign fuel list --force-version " + g_version +
-      " -t banana");
+  output = custom_exec_str(g_listCmd + " -t banana");
   EXPECT_NE(output.find("Only model resources"), std::string::npos) << output;
 
-  output = custom_exec_str("ign fuel list --force-version " + g_version +
-      " -t model -u fake_url");
+  output = custom_exec_str(g_listCmd + " -t model -u fake_url");
   EXPECT_NE(output.find("failed to fetch model list"), std::string::npos)
       << output;
 }
@@ -88,8 +88,7 @@ TEST(CmdLine, ModelListFail)
 /////////////////////////////////////////////////
 TEST(CmdLine, ModelListConfigServerUgly)
 {
-  auto output = custom_exec_str("ign fuel list --force-version " + g_version +
-      " -t model --raw");
+  auto output = custom_exec_str(g_listCmd + " -t model --raw");
   EXPECT_NE(output.find("https://api.ignitionfuel.org/1.0/"), std::string::npos)
       << output;
   EXPECT_EQ(output.find("owners"), std::string::npos) << output;
@@ -98,8 +97,8 @@ TEST(CmdLine, ModelListConfigServerUgly)
 /////////////////////////////////////////////////
 TEST(CmdLine, ModelListCustomServerPretty)
 {
-  auto output = custom_exec_str("ign fuel list --force-version " + g_version +
-      " -t model -u https://staging-api.ignitionfuel.org");
+  auto output = custom_exec_str(
+      g_listCmd + " -t model -u https://staging-api.ignitionfuel.org");
 
   EXPECT_NE(output.find("https://staging-api.ignitionfuel.org"),
       std::string::npos) << output;
@@ -111,5 +110,4 @@ TEST(CmdLine, ModelListCustomServerPretty)
   EXPECT_EQ(output.find("https://staging-api.ignitionfuel.org/1.0/"),
       std::string::npos) << output;
 }
-
 

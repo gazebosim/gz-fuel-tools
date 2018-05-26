@@ -17,7 +17,6 @@
 
 #include <gtest/gtest.h>
 #include <string>
-
 #include <ignition/common/Console.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
@@ -32,6 +31,8 @@ TEST(ModelIdentifier, SetFields)
 {
   ModelIdentifier id;
   id.SetName("hello");
+  id.SetOwner("acai");
+  id.SetVersion(6);
   id.SetUuid("lllooo000ooolll");
   id.SetFileSize(2048u);
   std::time_t d1;
@@ -42,6 +43,8 @@ TEST(ModelIdentifier, SetFields)
   id.SetUploadDate(d2);
 
   EXPECT_EQ(std::string("hello"), id.Name());
+  EXPECT_EQ(std::string("acai"), id.Owner());
+  EXPECT_EQ(6u, id.Version());
   EXPECT_EQ(std::string("lllooo000ooolll"), id.Uuid());
   EXPECT_EQ(2048u, id.FileSize());
   EXPECT_EQ(d1, id.ModifyDate());
@@ -53,25 +56,25 @@ TEST(ModelIdentifier, SetFields)
 TEST(ModelIdentifier, UniqueName)
 {
   ignition::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(common::URI("http://localhost:8001/"));
+  srv1.SetUrl(common::URI("https://localhost:8001/"));
 
   ignition::fuel_tools::ServerConfig srv2;
-  srv1.SetUrl(common::URI("http://localhost:8001"));
+  srv2.SetUrl(common::URI("https://localhost:8002"));
 
   ignition::fuel_tools::ServerConfig srv3;
-  srv1.SetUrl(common::URI("https://localhost:8001//////////////////////////"));
+  srv3.SetUrl(common::URI("https://localhost:8003//////////////////////////"));
 
   ModelIdentifier id;
   id.SetName("hello");
   id.SetOwner("alice");
   id.SetServer(srv1);
-  EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8001/alice/models/hello", id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8002/alice/models/hello", id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ("https://localhost:8001/1.0/alice/models/hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8003/alice/models/hello", id.UniqueName());
 }
 
 /////////////////////////////////////////////////
@@ -80,6 +83,8 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
 {
   ModelIdentifier id;
   id.SetName("hello");
+  id.SetOwner("watermelon");
+  id.SetVersionStr("");
   id.SetUuid("lllooo000ooolll");
   id.SetFileSize(2048u);
   std::time_t d1;
@@ -91,6 +96,8 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
 
   ModelIdentifier id2(id);
   EXPECT_EQ(std::string("hello"), id2.Name());
+  EXPECT_EQ(std::string("watermelon"), id2.Owner());
+  EXPECT_EQ("tip", id2.VersionStr());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
@@ -107,6 +114,8 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
 {
   ModelIdentifier id;
   id.SetName("hello");
+  id.SetOwner("pineapple");
+  id.SetVersionStr("tip");
   id.SetUuid("lllooo000ooolll");
   id.SetFileSize(2048u);
   std::time_t d1;
@@ -119,6 +128,8 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
   ModelIdentifier id2(id);
   id2 = id;
   EXPECT_EQ(std::string("hello"), id2.Name());
+  EXPECT_EQ(std::string("pineapple"), id2.Owner());
+  EXPECT_EQ(0u, id2.Version());
   EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
@@ -139,7 +150,8 @@ TEST(ModelIdentifier, AsString)
     std::string str =
         "Name: \n"\
         "Owner: \n"\
-        "Unique name: /1.0//models/\n"
+        "Version: tip\n"\
+        "Unique name: //models/\n"
         "Description: \n"
         "File size: 0\n"
         "Upload date: 0\n"
@@ -160,6 +172,8 @@ TEST(ModelIdentifier, AsString)
   {
     ModelIdentifier id;
     id.SetName("hello");
+    id.SetOwner("raspberry");
+    id.SetVersionStr("55");
     id.SetUuid("lllooo000ooolll");
     id.SetFileSize(2048u);
     std::time_t d1;
@@ -173,7 +187,44 @@ TEST(ModelIdentifier, AsString)
     igndbg << str << std::endl;
 
     EXPECT_NE(str.find("hello"), std::string::npos);
+    EXPECT_NE(str.find("raspberry"), std::string::npos);
+    EXPECT_NE(str.find("55"), std::string::npos);
     EXPECT_NE(str.find("lllooo000ooolll"), std::string::npos);
+    EXPECT_NE(str.find("2048"), std::string::npos);
+  }
+}
+
+/////////////////////////////////////////////////
+TEST(ModelIdentifier, AsPrettyString)
+{
+  common::Console::SetVerbosity(4);
+  {
+    ModelIdentifier id;
+    std::string str =
+        "\x1B[96m\x1B[1mServer:\x1B[0m\n"
+        "  \x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
+    EXPECT_EQ(str, id.AsPrettyString());
+  }
+
+  {
+    ModelIdentifier id;
+    id.SetName("hello");
+    id.SetOwner("raspberry");
+    id.SetVersionStr("55");
+    id.SetFileSize(2048u);
+    std::time_t d1;
+    std::time(&d1);
+    id.SetModifyDate(d1);
+    std::time_t d2;
+    std::time(&d2);
+    id.SetUploadDate(d2);
+
+    auto str = id.AsPrettyString();
+    igndbg << str << std::endl;
+
+    EXPECT_NE(str.find("hello"), std::string::npos);
+    EXPECT_NE(str.find("raspberry"), std::string::npos);
+    EXPECT_NE(str.find("55"), std::string::npos);
     EXPECT_NE(str.find("2048"), std::string::npos);
   }
 }

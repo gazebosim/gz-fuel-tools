@@ -42,13 +42,16 @@ ign_set_project_public_cxx_standard(11)
 # Link the libraries that we always need.
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
-    ignition-common1::ignition-common1
   PRIVATE
     curl::curl
+    ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
     ${JSONCPP_TARGET}
     YAML::YAML
     ZIP::ZIP
 )
+
+ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
+  ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER})
 
 # Create installation instructions for the library target. This must be called
 # in the same scope that the target is created.

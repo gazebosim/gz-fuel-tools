@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <string>
+#include <ignition/common/URI.hh>
 
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/ModelIter.hh"
@@ -85,7 +86,8 @@ namespace ignition
       public: ClientConfig &Config();
 
       /// \brief Fetch the details of a model.
-      /// \param[in] _server The server to request the operation.
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \param[out] _model The requested model
@@ -105,8 +107,20 @@ namespace ignition
       /// \return A model iterator
       public: ModelIter Models(const ServerConfig &_server);
 
-      /// \brief Returns models matching a given identifying criteria
+      /// \brief Returns an iterator that can return names of models
+      /// \remarks Fulfills Get-All requirement
+      /// \remarks an iterator instead of a list of names is returned in case
+      ///          the model names api supports pagination in the future. The
+      ///          iterator may fetch more names if code continues to request
+      ///          it. The initial API appears to return all of the models, so
+      ///          right now this iterator stores a list of names internally.
       /// \param[in] _server The server to request the operation.
+      /// \return A model iterator
+      public: ModelIter Models(const ServerConfig &_server) const;
+
+      /// \brief Returns models matching a given identifying criteria
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \remarks It's not yet clear if model names are unique, so this API
@@ -116,8 +130,21 @@ namespace ignition
       public: ModelIter Models(const ServerConfig &_server,
                                const ModelIdentifier &_id);
 
+      /// \brief Returns models matching a given identifying criteria
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
+      /// \param[in] _id a partially filled out identifier used to fetch models
+      /// \remarks Fulfills Get-One requirement
+      /// \remarks It's not yet clear if model names are unique, so this API
+      ///          allows the posibility of getting multiple models with the
+      ///          same name.
+      /// \return An iterator of models with names matching the criteria
+      public: ModelIter Models(const ServerConfig &_server,
+                               const ModelIdentifier &_id) const;
+
       /// \brief Upload a directory as a new model
-      /// \param[in] _server The server to request the operation.
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
       /// \param[in] _pathToModelDir a path to a directory containing a model
       /// \param[in] _id An identifier to assign to this new model
       /// \return Result of the upload operation
@@ -126,35 +153,101 @@ namespace ignition
                                  const ModelIdentifier &_id);
 
       /// \brief Remove a model from ignition fuel
-      /// \param[in] _server The server to request the operation.
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
       /// \param[in] _id The model identifier.
       /// \return Result of the delete operation
       public: Result DeleteModel(const ServerConfig &_server,
                                  const ModelIdentifier &_id);
 
-      /// \brief Download a model from ignition fuel
-      /// \param[in] _server The server to request the operation.
+      /// \brief Download a model from ignition fuel. This will override an
+      /// existing local copy of the model.
+      /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
+      /// instead.
       /// \param[in] _id The model identifier.
       /// \return Result of the download operation
       public: Result DownloadModel(const ServerConfig &_server,
                                    const ModelIdentifier &_id);
 
-      /// \brief Download a model from ignition fuel
-      /// \param[in] _modelURL The unique URL of the model to download.
+      /// \brief Download a model from ignition fuel. This will override an
+      /// existing local copy of the model.
+      ///
+      /// Obs: This will be deprecated on 2.0 in favor of function that accepts
+      /// common::URI.
+      ///
+      /// \param[in] _modelUrl The unique URL of the model to download.
       /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
       /// \param[out] _path Path where the model was downloaded.
       /// \return Result of the download operation.
-      public: Result DownloadModel(const std::string &_modelURL,
+      public: Result DownloadModel(const std::string &_modelUrl,
                                    std::string &_path);
 
-      /// \brief Parse server and model identifer from model URL.
-      /// \param[in] _modelURL The unique URL of the model to download.
-      /// \param[out] _srv The server to request the operation.
-      /// \param[out] _id The model identifier.
+      /// \brief Download a model from ignition fuel. This will override an
+      /// existing local copy of the model.
+      /// \param[in] _modelUrl The unique URL of the model to download.
+      /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
+      /// \param[out] _path Path where the model was downloaded.
+      /// \return Result of the download operation.
+      public: Result DownloadModel(const common::URI &_modelUrl,
+                                   std::string &_path);
+
+      /// \brief Check if a model is already present in the local cache.
+      /// \param[in] _modelUrl The unique URL of the model on a Fuel server.
+      /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
+      /// \param[out] _path Local path where the model can be found.
+      /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
+      public: Result CachedModel(const common::URI &_modelUrl,
+                                 std::string &_path);
+
+      /// \brief Check if a file belonging to a model is already present in the
+      /// local cache.
+      /// \param[in] _fileUrl The unique URL of the file on a Fuel server. E.g.:
+      /// https://server.org/1.0/owner/models/model/files/meshes/mesh.dae
+      /// \param[out] _path Local path where the file can be found.
+      /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
+      public: Result CachedModelFile(const common::URI &_fileUrl,
+                                     std::string &_path);
+
+      /// \brief Parse server and model identifer from model URL or unique name.
+      /// \param[in] _modelUrl The unique URL of a model. It may also be a
+      /// unique name, which is a URL without the server version.
+      ///
+      /// Obs: This will be deprecated on 2.0 in favor of ParseModelUrl.
+      ///
+      /// \param[in] _server Deprecated: this will be ignored, get _id.Server()
+      /// instead.
+      /// \param[out] _id The model identifier. It may contain incomplete
+      /// information based on the passed URL and the current client
+      /// config.
       /// \return True if parsed successfully.
-      public: bool ParseModelURL(const std::string &_modelURL,
+      public: bool ParseModelURL(const std::string &_modelUrl,
                                  ServerConfig &_srv,
                                  ModelIdentifier &_id);
+
+      /// \brief Parse model identifer from model URL or unique name.
+      /// \param[in] _modelUrl The unique URL of a model. It may also be a
+      /// unique name, which is a URL without the server version.
+      /// \param[out] _id The model identifier. It may contain incomplete
+      /// information based on the passed URL and the current client
+      /// config.
+      /// The server version will be overridden if that server is in the config
+      /// file.
+      /// \return True if parsed successfully.
+      public: bool ParseModelUrl(const common::URI &_modelUrl,
+                                 ModelIdentifier &_id);
+
+      /// \brief Parse model file identifer from model file URL.
+      /// \param[in] _modelUrl The unique URL of a model file. It may also be a
+      /// unique name, which is a URL without the server version.
+      /// \param[out] _id The model identifier. It may contain incomplete
+      /// information based on the passed URL and the current client
+      /// config.
+      /// \param[out] _filePath Path to the file from the model's root
+      /// directory, such as "meshes/mesh.dae" or "model.sdf".
+      /// \return True if parsed successfully.
+      public: bool ParseModelFileUrl(const common::URI &_modelFileUrl,
+                                     ModelIdentifier &_id,
+                                     std::string &_filePath);
 
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;

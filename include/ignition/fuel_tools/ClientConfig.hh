@@ -57,14 +57,14 @@ namespace ignition
       /// \deprecated See common::URI Url() const.
       public: std::string IGN_DEPRECATED(2.0) URL() const;
 
-      /// \brief Get the URL to access the server.
-      /// \return The URL of this server.
-      public: common::URI Url() const;
-
       /// \brief Set the URL of this server.
       /// \param[in] _url URL of this server.
       /// \deprecated See void SetUrl(const common::URI &).
       public: void IGN_DEPRECATED(2.0) URL(const std::string &_url);
+
+      /// \brief Get the URL to access the server.
+      /// \return The URL of this server.
+      public: common::URI Url() const;
 
       /// \brief Set the URL of this server.
       /// \param[in] _url URL of this server.

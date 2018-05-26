@@ -99,15 +99,15 @@ std::string ServerConfig::URL() const
 }
 
 //////////////////////////////////////////////////
-common::URI ServerConfig::Url() const
-{
-  return this->dataPtr->url;
-}
-
-//////////////////////////////////////////////////
 void ServerConfig::URL(const std::string &_url)
 {
   this->SetUrl(common::URI(_url));
+}
+
+//////////////////////////////////////////////////
+common::URI ServerConfig::Url() const
+{
+  return this->dataPtr->url;
 }
 
 //////////////////////////////////////////////////
