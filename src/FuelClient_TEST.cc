@@ -403,6 +403,8 @@ TEST(FuelClient, DownloadModel)
     EXPECT_EQ(Result(Result::FETCH), res2);
 
     // Check it was downloaded to `1`
+    EXPECT_EQ(path, common::cwd() +
+        "/test_cache/api.ignitionfuel.org/chapulina/models/Test box/1");
     EXPECT_TRUE(common::exists(
         "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1"));
     EXPECT_TRUE(common::exists(

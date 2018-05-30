@@ -487,12 +487,22 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   // Download
   ServerConfig srv;
   auto result = this->DownloadModel(srv, id);
-  if (result)
+  if (!result)
+    return result;
+
+  // TODO(anyone) We shouldn't need to reconstruct the path, SaveModel should
+  // be changed to return it
+
+  // We need to figure out the version for the tip
+  if (id.Version() == 0)
   {
-    _path = ignition::common::joinPaths(this->Config().CacheLocation(),
-        id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
-        id.VersionStr());
+    auto model = this->dataPtr->cache->MatchingModel(id);
+    id.SetVersion(model.Identification().Version());
   }
+
+  _path = ignition::common::joinPaths(this->Config().CacheLocation(),
+      id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
+      id.VersionStr());
 
   return result;
 }
