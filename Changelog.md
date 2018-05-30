@@ -1,5 +1,9 @@
 ## Ignition Fuel Tools 1.x.x (2018-XX-XX)
 
+
+
+## Ignition Fuel Tools 1.2.0 (2018-05-30)
+
 1. Get cached model resource file
     * [Pull request 63](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/63)
 
@@ -9,6 +13,7 @@
 1. Change cache directory structure and use it
     * [Pull request 57](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/57)
     * [Pull request 71](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/71)
+    * [Pull request 73](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/73)
 
 1. Client return only relevant cached models
     * [Pull request 62](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/62)
@@ -36,6 +41,9 @@
     * [Pull request 44](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/44)
     * [Pull request 45](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/45)
 
+1. Get cached model resource file
+    * [Pull request 63](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/63)
+
 1. Added const constructors for ModelIter and Model
     * [Pull request 42](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/42)
 
@@ -47,6 +55,13 @@
 
 1. Encode url path before downloading models
     * [Pull request 41](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/41)
+
+1. Download model from command line
+    * [Pull request 68](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/68)
+
+1. Backport code style changes
+    * [Pull request 69](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/69)
+    * [Pull request 67](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/67)
 
 ## Ignition Fuel Tools 0.x.x
 
