@@ -63,5 +63,5 @@
     * [Pull request 69](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/69)
     * [Pull request 67](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/67)
 
-## Ignition Fuel Tools 0.x.x
+## Ignition Fuel Tools 1.0.0 (2018-01-25)
 
