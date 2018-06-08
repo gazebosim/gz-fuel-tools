@@ -35,13 +35,13 @@
    been mapping `ResultType` to an `int`.
     * [Pull request #51](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/51/update-result-style/diff#chg-include/ignition/fuel_tools/Result.hh)
 
-## Ignition Fuel Tools 1.1 to 1.X
+## Ignition Fuel Tools 1.2 to 1.X
 
 ### Modifications
 
 
 
-## Ignition Fuel Tools 1.0 to 1.1
+## Ignition Fuel Tools 1.0 to 1.2
 
 ### Modifications
 
