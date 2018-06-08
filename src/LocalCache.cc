@@ -35,6 +35,8 @@
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/ModelPrivate.hh"
 #include "ignition/fuel_tools/Zip.hh"
+#include "ignition/fuel_tools/WorldIterPrivate.hh"
+#include "ignition/fuel_tools/WorldPrivate.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;
@@ -45,6 +47,10 @@ class ignft::LocalCachePrivate
   /// \brief return all models in a given directory
   /// \param[in] _path A directory for the local server cache
   public: std::vector<Model> ModelsInServer(const std::string &_path) const;
+
+  /// \brief return all worlds in a given directory
+  /// \param[in] _path A directory for the local server cache
+  public: std::vector<World> WorldsInServer(const std::string &_path) const;
 
   /// \brief return all models in a given Owner/models directory
   public: std::vector<Model> ModelsInPath(const std::string &_path);
@@ -114,6 +120,66 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
 }
 
 //////////////////////////////////////////////////
+std::vector<World> LocalCachePrivate::WorldsInServer(
+    const std::string &_path) const
+{
+  std::vector<World> worlds;
+  if (!common::isDirectory(_path))
+  {
+    ignwarn << "Server directory does not exist [" << _path << "]\n";
+    return worlds;
+  }
+
+  common::DirIter end;
+  common::DirIter ownIter(_path);
+  while (ownIter != end)
+  {
+    if (!common::isDirectory(*ownIter))
+    {
+      ++ownIter;
+      continue;
+    }
+
+    // This is an owner directory, look for worlds
+    common::DirIter modIter(common::joinPaths(*ownIter, "worlds"));
+    while (modIter != end)
+    {
+      if (!common::isDirectory(*modIter))
+      {
+        ++modIter;
+        continue;
+      }
+
+      // Go through all versions
+      common::DirIter versionIter(common::absPath(*modIter));
+      while (versionIter != end)
+      {
+        if (!common::isDirectory(*versionIter))
+        {
+          ++versionIter;
+          continue;
+        }
+
+        if (common::exists(common::joinPaths(*versionIter, "world.config")))
+        {
+          std::shared_ptr<WorldPrivate> modPriv(new WorldPrivate);
+          modPriv->id.SetName(common::basename(*modIter));
+          modPriv->id.SetOwner(common::basename(*ownIter));
+          modPriv->id.SetVersionStr(common::basename(*versionIter));
+          modPriv->pathOnDisk = common::absPath(*versionIter);
+          World world(modPriv);
+          worlds.push_back(world);
+        }
+        ++versionIter;
+      }
+      ++modIter;
+    }
+    ++ownIter;
+  }
+  return worlds;
+}
+
+//////////////////////////////////////////////////
 LocalCache::LocalCache(const ClientConfig *_config)
   : dataPtr(new LocalCachePrivate)
 {
@@ -148,6 +214,28 @@ ModelIter LocalCache::AllModels()
 }
 
 //////////////////////////////////////////////////
+WorldIter LocalCache::AllWorlds()
+{
+  std::vector<World> worlds;
+  if (this->dataPtr->config)
+  {
+    for (auto &server : this->dataPtr->config->Servers())
+    {
+      std::string path = common::joinPaths(
+          this->dataPtr->config->CacheLocation(), server.Url().Path().Str());
+      auto srvWorlds = this->dataPtr->WorldsInServer(path);
+      for (auto &mod : srvWorlds)
+      {
+        mod.dataPtr->id.SetServer(server);
+      }
+      worlds.insert(worlds.end(), srvWorlds.begin(), srvWorlds.end());
+    }
+  }
+
+  return WorldIterFactory::Create(worlds);
+}
+
+//////////////////////////////////////////////////
 Model LocalCache::MatchingModel(const ModelIdentifier &_id)
 {
   // For the tip, we have to find the highest version
@@ -167,6 +255,28 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
   }
 
   return tipModel;
+}
+
+//////////////////////////////////////////////////
+World LocalCache::MatchingWorld(const WorldIdentifier &_id)
+{
+  // For the tip, we have to find the highest version
+  bool tip = (_id.Version() == 0);
+  World tipWorld;
+
+  for (auto iter = this->AllWorlds(); iter; ++iter)
+  {
+    auto id = iter->Identification();
+    if (_id == id)
+    {
+      if (_id.Version() == id.Version())
+        return *iter;
+      else if (tip && id.Version() > tipWorld.Identification().Version())
+        tipWorld = *iter;
+    }
+  }
+
+  return tipWorld;
 }
 
 //////////////////////////////////////////////////
@@ -190,6 +300,29 @@ ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
       models.push_back(*iter);
   }
   return ModelIterFactory::Create(models);
+}
+
+//////////////////////////////////////////////////
+WorldIter LocalCache::MatchingWorlds(const WorldIdentifier &_id)
+{
+  if (_id.Name().empty() && _id.Server().URL().empty() && _id.Owner().empty())
+    return WorldIterFactory::Create();
+
+  std::vector<World> worlds;
+  for (auto iter = this->AllWorlds(); iter; ++iter)
+  {
+    bool matches = true;
+    if (!_id.Name().empty() && _id.Name() != iter->Identification().Name())
+      matches = false;
+    if (!_id.Owner().empty() && _id.Owner() != iter->Identification().Owner())
+      matches = false;
+    if (!_id.Server().URL().empty() &&
+        _id.Server().URL() != iter->Identification().Server().URL())
+      matches = false;
+    if (matches)
+      worlds.push_back(*iter);
+  }
+  return WorldIterFactory::Create(worlds);
 }
 
 //////////////////////////////////////////////////

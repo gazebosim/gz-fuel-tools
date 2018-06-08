@@ -33,6 +33,8 @@
 #include "ignition/fuel_tools/ModelIdentifier.hh"
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/REST.hh"
+#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "ignition/fuel_tools/WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
@@ -199,6 +201,26 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
 }
 
 //////////////////////////////////////////////////
+WorldIter FuelClient::Worlds(const ServerConfig &_server) const
+{
+  WorldIter iter = WorldIterFactory::Create(this->dataPtr->rest,
+      _server, "worlds");
+
+  if (!iter)
+  {
+    // Return just the cached worlds
+    ignwarn << "Failed to fetch worlds from server, returning cached worlds."
+            << std::endl << _server.AsString() << std::endl;
+
+    WorldIdentifier id;
+    id.SetServer(_server);
+
+    return this->dataPtr->cache->MatchingWorlds(id);
+  }
+  return iter;
+}
+
+//////////////////////////////////////////////////
 ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id)
 {
@@ -240,6 +262,26 @@ ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
     path = ignition::common::joinPaths(_id.Owner(), "models");
 
   return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
+}
+
+//////////////////////////////////////////////////
+WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
+{
+  // Check local cache first
+  WorldIter localIter = this->dataPtr->cache->MatchingWorlds(_id);
+  if (localIter)
+    return localIter;
+
+  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+
+  // Note: ign-fuel-server doesn't like URLs ending in /
+  std::string path;
+  if (!_id.Name().empty())
+    path = ignition::common::joinPaths(_id.Owner(), "worlds", _id.Name());
+  else
+    path = ignition::common::joinPaths(_id.Owner(), "worlds");
+
+  return WorldIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
 }
 
 //////////////////////////////////////////////////

@@ -26,6 +26,7 @@
 #include "ignition/fuel_tools/ModelIter.hh"
 #include "ignition/fuel_tools/REST.hh"
 #include "ignition/fuel_tools/Result.hh"
+#include "ignition/fuel_tools/WorldIter.hh"
 
 namespace ignition
 {
@@ -96,6 +97,14 @@ namespace ignition
       /// \return A model iterator
       public: ModelIter Models(const ServerConfig &_server) const;
 
+      /// \brief Returns an iterator that can return information of worlds
+      /// \remarks An iterator instead of a list of names, to be able to
+      ///          handle pagination. The iterator may fetch more names if
+      ///          code continues to request it.
+      /// \param[in] _server The server to request the operation.
+      /// \return A world iterator
+      public: WorldIter Worlds(const ServerConfig &_server) const;
+
       /// \brief Returns models matching a given identifying criteria
       /// \param[in] _server Deprecated: this will be ignored, set _id.Server()
       /// instead.
@@ -119,6 +128,11 @@ namespace ignition
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ServerConfig &_server,
                                const ModelIdentifier &_id) const;
+
+      /// \brief Returns worlds matching a given identifying criteria
+      /// \param[in] _id A partially filled out identifier used to fetch worlds
+      /// \return An iterator of worlds with names matching the criteria
+      public: WorldIter Worlds(const WorldIdentifier &_id) const;
 
       /// \brief Upload a directory as a new model
       /// \param[in] _server Deprecated: this will be ignored, set _id.Server()

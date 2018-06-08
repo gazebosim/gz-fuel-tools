@@ -149,6 +149,40 @@ extern "C" bool getAllModels(
 }
 
 //////////////////////////////////////////////////
+/// \brief Fill a map with all worlds from a server
+/// \param[in] _client Fuel client
+/// \param[in] _server Server configuration
+/// \param[out] _resourceMap Key is owner name, value is vector of resources
+/// \return True if successful, will fail if there's a server error or if the
+/// server has no worlds yet.
+extern "C" bool getAllWorlds(
+    const ignition::fuel_tools::FuelClient &_client,
+    const ignition::fuel_tools::ServerConfig &_server,
+    std::map<std::string, std::vector<std::string>> &_resourceMap)
+{
+  auto iter = _client.Worlds(_server);
+
+  if (!iter)
+  {
+    std::cout <<
+        "Either failed to fetch world list, or server has no worlds yet."
+        << std::endl;
+    return false;
+  }
+
+  // Rearrange by user
+  // key: user name
+  // value: vector of world names
+  for (; iter; ++iter)
+  {
+    _resourceMap[iter->Identification().Owner()].push_back(
+        iter->Identification().Name());
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
 /// \brief Fill a map with all models from an owner
 /// \param[in] _client Fuel client
 /// \param[in] _modelId Identifier for models to be returned
@@ -175,6 +209,40 @@ extern "C" bool getOwnerModels(
   // Rearrange by user
   // key: user name
   // value: vector of model names
+  for (; iter; ++iter)
+  {
+    _resourceMap[iter->Identification().Owner()].push_back(
+        iter->Identification().Name());
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
+/// \brief Fill a map with all worlds from an owner
+/// \param[in] _client Fuel client
+/// \param[in] _worldId Identifier for worlds to be returned
+/// \param[out] _resourceMap Key is owner name, value is vector of resources
+/// \return True if successful, will fail if there's a server error or if the
+/// server has no worlds yet.
+extern "C" bool getOwnerWorlds(
+    const ignition::fuel_tools::FuelClient &_client,
+    const ignition::fuel_tools::WorldIdentifier &_worldId,
+    std::map<std::string, std::vector<std::string>> &_resourceMap)
+{
+  auto iter = _client.Worlds(_worldId);
+
+  if (!iter)
+  {
+    std::cout <<
+        "Either failed to fetch world list, or server has no worlds yet."
+        << std::endl;
+    return false;
+  }
+
+  // Rearrange by user
+  // key: user name
+  // value: vector of world names
   for (; iter; ++iter)
   {
     _resourceMap[iter->Identification().Owner()].push_back(
@@ -265,6 +333,86 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
       prettyPrint(server, modelsMap, "models");
     else
       uglyPrint(server, modelsMap, "models");
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
+    const char *_owner, const char *_raw)
+{
+  std::string url{_url};
+  std::string owner{_owner};
+  std::string rawStr{_raw};
+  std::transform(rawStr.begin(), rawStr.end(),
+                 rawStr.begin(), ::tolower);
+  bool pretty = rawStr != "true";
+
+  // Client
+  ignition::fuel_tools::ClientConfig conf;
+  if (!url.empty())
+  {
+    ignition::fuel_tools::ServerConfig serverConf;
+    serverConf.URL(url);
+    conf.AddServer(serverConf);
+  }
+  else
+  {
+    conf.LoadConfig();
+  }
+
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+
+  // Filter
+  ignition::fuel_tools::WorldIdentifier worldId;
+  if (!owner.empty())
+    worldId.SetOwner(owner);
+
+  ignition::fuel_tools::FuelClient client(conf);
+
+  // Get worlds
+  for (auto server : conf.Servers())
+  {
+    worldId.SetServer(server);
+
+    if (pretty)
+    {
+      std::cout << "Fetching world list from " << server.URL() << "..."
+                << std::endl;
+    }
+
+    auto startTime = std::chrono::high_resolution_clock::now();
+
+    std::map<std::string, std::vector<std::string>> worldsMap;
+
+    // All worlds
+    if (owner.empty())
+    {
+      if (!getAllWorlds(client, server, worldsMap))
+        return false;
+    }
+    else
+    {
+      if (!getOwnerWorlds(client, worldId, worldsMap))
+        return false;
+    }
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+        endTime - startTime);
+
+    if (pretty)
+    {
+      std::cout << "Received world list (took " << duration.count() << "ms)."
+                << std::endl;
+    }
+
+    // Print all worlds
+    if (pretty)
+      prettyPrint(server, worldsMap, "worlds");
+    else
+      uglyPrint(server, worldsMap, "worlds");
   }
 
   return true;

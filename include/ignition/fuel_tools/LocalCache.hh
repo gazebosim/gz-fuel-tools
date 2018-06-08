@@ -24,6 +24,8 @@
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/Model.hh"
 #include "ignition/fuel_tools/ModelIter.hh"
+#include "ignition/fuel_tools/World.hh"
+#include "ignition/fuel_tools/WorldIter.hh"
 
 namespace ignition
 {
@@ -48,16 +50,31 @@ namespace ignition
       /// \return Model iterator
       public: virtual ModelIter AllModels();
 
+      /// \brief Get all worlds in offline cache
+      /// \return World iterator
+      public: virtual WorldIter AllWorlds();
+
       /// \brief Get the first model matching all fields on an id.
-      /// \param[in] _id An id with ServerURL, Owner, and Name all set
+      /// \param[in] _id An id with ServerUrl, Owner, and Name all set
       /// \return A model which matches all of _id's parameters.
       public: virtual Model MatchingModel(const ModelIdentifier &_id);
+
+      /// \brief Get the first world matching all fields on an id.
+      /// \param[in] _id An id with ServerUrl, Owner, and Name all set
+      /// \return A world which matches all of _id's parameters.
+      public: virtual World MatchingWorld(const WorldIdentifier &_id);
 
       /// \brief Get all models partially matching an ID
       /// \param[in] _id An id with at least one of ServerURL, Owner, and Name
       /// \return An iterator with all models that match all fields that are
       /// set on _id.
       public: virtual ModelIter MatchingModels(const ModelIdentifier &_id);
+
+      /// \brief Get all worlds partially matching an ID
+      /// \param[in] _id An id with at least one of ServerUrl, Owner, and Name
+      /// \return An iterator with all worlds that match all fields that are
+      /// set on _id.
+      public: virtual WorldIter MatchingWorlds(const WorldIdentifier &_id);
 
       /// \brief Add a model from packed data to the local cache
       /// \param[in] _id A completely populated ID
