@@ -181,7 +181,6 @@ TEST(ModelIdentifier, AsString)
     EXPECT_NE(str.find("hello"), std::string::npos);
     EXPECT_NE(str.find("raspberry"), std::string::npos);
     EXPECT_NE(str.find("55"), std::string::npos);
-    EXPECT_NE(str.find("lllooo000ooolll"), std::string::npos);
     EXPECT_NE(str.find("2048"), std::string::npos);
   }
 }

@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 
+#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
