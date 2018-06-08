@@ -33,7 +33,6 @@ TEST(ModelIdentifier, SetFields)
   id.SetName("hello");
   id.SetOwner("acai");
   id.SetVersion(6);
-  id.SetUuid("lllooo000ooolll");
   id.SetFileSize(2048u);
   std::time_t d1;
   std::time(&d1);
@@ -45,7 +44,6 @@ TEST(ModelIdentifier, SetFields)
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("acai"), id.Owner());
   EXPECT_EQ(6u, id.Version());
-  EXPECT_EQ(std::string("lllooo000ooolll"), id.Uuid());
   EXPECT_EQ(2048u, id.FileSize());
   EXPECT_EQ(d1, id.ModifyDate());
   EXPECT_EQ(d2, id.UploadDate());
@@ -85,7 +83,6 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
   id.SetName("hello");
   id.SetOwner("watermelon");
   id.SetVersionStr("");
-  id.SetUuid("lllooo000ooolll");
   id.SetFileSize(2048u);
   std::time_t d1;
   std::time(&d1);
@@ -98,7 +95,6 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
   EXPECT_EQ(std::string("hello"), id2.Name());
   EXPECT_EQ(std::string("watermelon"), id2.Owner());
   EXPECT_EQ("tip", id2.VersionStr());
-  EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
   EXPECT_EQ(d2, id2.UploadDate());
@@ -116,7 +112,6 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
   id.SetName("hello");
   id.SetOwner("pineapple");
   id.SetVersionStr("tip");
-  id.SetUuid("lllooo000ooolll");
   id.SetFileSize(2048u);
   std::time_t d1;
   std::time(&d1);
@@ -130,7 +125,6 @@ TEST(ModelIdentifier, AssignmentOperatorDeepCopy)
   EXPECT_EQ(std::string("hello"), id2.Name());
   EXPECT_EQ(std::string("pineapple"), id2.Owner());
   EXPECT_EQ(0u, id2.Version());
-  EXPECT_EQ(std::string("lllooo000ooolll"), id2.Uuid());
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
   EXPECT_EQ(d2, id2.UploadDate());
@@ -155,7 +149,6 @@ TEST(ModelIdentifier, AsString)
         "Description: \n"
         "File size: 0\n"
         "Upload date: 0\n"
-        "UUID: \n"
         "Likes: 0\n"
         "Downloads: 0\n"
         "License name: \n"
@@ -174,7 +167,6 @@ TEST(ModelIdentifier, AsString)
     id.SetName("hello");
     id.SetOwner("raspberry");
     id.SetVersionStr("55");
-    id.SetUuid("lllooo000ooolll");
     id.SetFileSize(2048u);
     std::time_t d1;
     std::time(&d1);
