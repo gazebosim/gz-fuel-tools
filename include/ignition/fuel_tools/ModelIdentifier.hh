@@ -131,7 +131,8 @@ namespace ignition
 
       /// \brief Returns the uuid of the model.
       /// \return Model uuid.
-      public: std::string Uuid() const;
+      /// \deprecated This concept is not relevant
+      public: std::string IGN_DEPRECATED(2.0) Uuid() const;
 
       /// \brief Returns the number of "likes" for the model.
       /// \return Number of "likes".
@@ -223,13 +224,14 @@ namespace ignition
 
       /// \brief Set the uuid of the model.
       /// \return True if successful.
-      /// \deprecated See bool SetUuid(const std::string &_uuid)
+      /// \deprecated This concept is not relevant
       public: bool IGN_DEPRECATED(2.0) Uuid(const std::string &_uuid);
 
       /// \brief Set the uuid of the model.
       /// \param[in] _uuid The model's uuid.
       /// \return True if successful.
-      public: bool SetUuid(const std::string &_uuid);
+      /// \deprecated This concept is not relevant
+      public: bool IGN_DEPRECATED(2.0) SetUuid(const std::string &_uuid);
 
       /// \brief Set the number of "likes" of the model.
       /// \param[in] _likes Number of "likes".

@@ -19,6 +19,7 @@
 #include <string>
 #include <vector>
 
+#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
@@ -53,12 +54,6 @@ class ignition::fuel_tools::ModelIdentifierPrivate
 
   /// \brief Model last modified date
   public: std::time_t modifyDate{0};
-
-  /// \brief Category of this model
-  public: std::string category;
-
-  /// \brief UUID of this model
-  public: std::string uuid;
 
   /// \brief Number of "likes"
   public: uint32_t likeCount{0u};
@@ -246,13 +241,15 @@ std::time_t ModelIdentifier::ModifyDate() const
 //////////////////////////////////////////////////
 std::string ModelIdentifier::Category() const
 {
-  return this->dataPtr->category;
+  ignwarn << "Category is deprecated" << std::endl;
+  return "";
 }
 
 //////////////////////////////////////////////////
 std::string ModelIdentifier::Uuid() const
 {
-  return this->dataPtr->uuid;
+  ignwarn << "UUID is deprecated" << std::endl;
+  return "";
 }
 
 //////////////////////////////////////////////////
@@ -368,23 +365,24 @@ bool ModelIdentifier::SetUploadDate(const std::time_t &_date)
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifier::Category(const std::string &_cat)
+bool ModelIdentifier::Category(const std::string &/*_cat*/)
 {
-  this->dataPtr->category = _cat;
-  return true;
+  ignwarn << "Category is deprecated" << std::endl;
+  return false;
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifier::Uuid(const std::string &_uuid)
+bool ModelIdentifier::Uuid(const std::string &/*_uuid*/)
 {
-  return this->SetUuid(_uuid);
+  ignwarn << "UUID is deprecated" << std::endl;
+  return false;
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifier::SetUuid(const std::string &_uuid)
+bool ModelIdentifier::SetUuid(const std::string &/*_uuid*/)
 {
-  this->dataPtr->uuid = _uuid;
-  return true;
+  ignwarn << "UUID is deprecated" << std::endl;
+  return false;
 }
 
 //////////////////////////////////////////////////
@@ -516,7 +514,6 @@ std::string ModelIdentifier::AsString(const std::string &_prefix) const
       << _prefix << "Description: " << this->Description() << std::endl
       << _prefix << "File size: " << this->FileSize() << std::endl
       << _prefix << "Upload date: " << this->UploadDate() << std::endl
-      << _prefix << "UUID: " << this->Uuid() << std::endl
       << _prefix << "Likes: " << this->LikeCount() << std::endl
       << _prefix << "Downloads: " << this->DownloadCount() << std::endl
       << _prefix << "License name: " << this->LicenseName() << std::endl

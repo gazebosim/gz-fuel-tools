@@ -39,8 +39,7 @@ TEST(JSONParser, ParseModels)
     << "{\"id\":1,\"createdAt\":\"2012-04-21T19:25:44.511Z\","
     << "\"updatedAt\":\"2012-04-23T18:25:43.511Z\","
     << "\"name\":\"car\","
-    << "\"version\":3,"
-    << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\"}]";
+    << "\"version\":3}]";
 
   ServerConfig srv;
   srv.SetUrl(common::URI("banana://testServer"));
@@ -58,7 +57,6 @@ TEST(JSONParser, ParseModels)
   t = model.UploadDate();
   std::strftime(buffer, sizeof(buffer), "%F %T", gmtime(&t));
   EXPECT_EQ("2012-04-21 19:25:44", std::string(buffer));
-  EXPECT_EQ("3d3112d9-02b2-4b28-8d2f-f03be00a5a26", model.Uuid());
 }
 
 /////////////////////////////////////////////////
@@ -70,7 +68,6 @@ TEST(JSONParser, BuildModel)
   id.SetName("house");
   id.SetVersion(5);
   id.SetDescription("affordable");
-  id.SetUuid("1234-0093asdf");
   ids.push_back(id);
 
   std::string jsonStr = JSONParser::BuildModel(ModelIterFactory::Create(ids));
@@ -80,7 +77,6 @@ TEST(JSONParser, BuildModel)
     << "{\n"
     << "\t\"description\" : \"affordable\",\n"
     << "\t\"name\" : \"house\",\n"
-    << "\t\"uuid\" : \"1234-0093asdf\",\n"
     << "\t\"version\" : 5\n"
     << "}";
   EXPECT_EQ(tmpJsonStr.str(), jsonStr);
@@ -94,7 +90,6 @@ TEST(JSONParser, ParseModel)
     << "\"updatedAt\":\"2012-04-23T18:25:43.511Z\","
     << "\"name\":\"car\","
     << "\"version\":1,"
-    << "\"uuid\":\"3d3112d9-02b2-4b28-8d2f-f03be00a5a26\","
     << "\"tags\":[\"tag1\"]}";
 
   ServerConfig srv;
@@ -111,7 +106,6 @@ TEST(JSONParser, ParseModel)
   t = model.UploadDate();
   std::strftime(buffer, sizeof(buffer), "%F %T", gmtime(&t));
   EXPECT_EQ("2012-04-21 19:25:44", std::string(buffer));
-  EXPECT_EQ("3d3112d9-02b2-4b28-8d2f-f03be00a5a26", model.Uuid());
 
   ASSERT_FALSE(model.Tags().empty());
   EXPECT_EQ("tag1", model.Tags()[0]);
