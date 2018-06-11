@@ -161,6 +161,12 @@ namespace ignition
       public: Result DownloadModel(const ServerConfig &_server,
                                    const ModelIdentifier &_id);
 
+      /// \brief Download a world from Ignition Fuel. This will override an
+      /// existing local copy of the world.
+      /// \param[in] _id The world identifier.
+      /// \return Result of the download operation
+      public: Result DownloadWorld(const WorldIdentifier &_id);
+
       /// \brief Download a model from ignition fuel. This will override an
       /// existing local copy of the model.
       ///
@@ -227,6 +233,18 @@ namespace ignition
       /// \return True if parsed successfully.
       public: bool ParseModelUrl(const common::URI &_modelUrl,
                                  ModelIdentifier &_id);
+
+      /// \brief Parse world identifer from world URL or unique name.
+      /// \param[in] _worldUrl The unique URL of a world. It may also be a
+      /// unique name, which is a URL without the server version.
+      /// \param[out] _id The world identifier. It may contain incomplete
+      /// information based on the passed URL and the current client
+      /// config.
+      /// The server version will be overridden if that server is in the config
+      /// file.
+      /// \return True if parsed successfully.
+      public: bool ParseWorldUrl(const common::URI &_worldUrl,
+                                 WorldIdentifier &_id);
 
       /// \brief Parse model file identifer from model file URL.
       /// \param[in] _modelUrl The unique URL of a model file. It may also be a

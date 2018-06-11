@@ -140,8 +140,8 @@ WorldIterRESTIds::~WorldIterRESTIds()
 }
 
 //////////////////////////////////////////////////
-WorldIterRESTIds::WorldIterRESTIds(const REST &_rest, const ServerConfig &_config,
-    const std::string &_api)
+WorldIterRESTIds::WorldIterRESTIds(const REST &_rest,
+    const ServerConfig &_config, const std::string &_api)
   : config(_config), rest(_rest)
 {
   REST::Method method = REST::GET;
@@ -238,7 +238,7 @@ WorldIter::WorldIter(std::unique_ptr<WorldIterPrivate> _dptr)
 }
 
 //////////////////////////////////////////////////
-WorldIter::WorldIter(WorldIter &&_old)
+WorldIter::WorldIter(WorldIter && _old)
 {
   this->dataPtr.reset(_old.dataPtr.release());
 }

@@ -40,7 +40,7 @@ namespace ignition
       protected: explicit WorldIter(std::unique_ptr<WorldIterPrivate> _dptr);
 
       /// \brief Move constructor
-      public: WorldIter(WorldIter &&_old);
+      public: WorldIter(WorldIter && _old);
 
       /// \brief Default destructor.
       public: ~WorldIter();

@@ -396,3 +396,58 @@ bool LocalCache::SaveModel(
   return true;
 }
 
+//////////////////////////////////////////////////
+bool LocalCache::SaveWorld(
+  const WorldIdentifier &_id, const std::string &_data, const bool _overwrite)
+{
+  if (_id.Server().URL().empty() || _id.Owner().empty() ||
+      _id.Name().empty() || _id.Version() == 0)
+  {
+    ignerr << "Incomplete world identifier, failed to save world." << std::endl
+           << _id.AsString();
+    return false;
+  }
+
+  auto cacheLocation = this->dataPtr->config->CacheLocation();
+
+  auto worldRootDir = common::joinPaths(cacheLocation,
+      _id.Server().Url().Path().Str(), _id.Owner(), "worlds", _id.Name());
+  auto worldVersionedDir = common::joinPaths(worldRootDir, _id.VersionStr());
+
+  // Is it already in the cache?
+  if (common::isDirectory(worldVersionedDir) && !_overwrite)
+  {
+    ignerr << "Directory [" << worldVersionedDir << "] already exists"
+           << std::endl;
+    return false;
+  }
+
+  // Create the world directory.
+  if (!common::createDirectories(worldVersionedDir))
+  {
+    ignerr << "Unable to create directory [" << worldVersionedDir << "]"
+           << std::endl;
+  }
+
+  auto zipFile = common::joinPaths(worldVersionedDir, _id.Name() + ".zip");
+  std::ofstream ofs(zipFile, std::ofstream::out);
+  ofs << _data;
+  ofs.close();
+
+  if (!Zip::Extract(zipFile, worldVersionedDir))
+  {
+    ignerr << "Unable to unzip [" << zipFile << "]" << std::endl;
+    return false;
+  }
+
+  if (!common::removeDirectoryOrFile(zipFile))
+  {
+    ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
+  }
+
+  ignmsg << "Saved world at:" << std::endl
+         << "  " << worldVersionedDir << std::endl;
+
+  return true;
+}
+

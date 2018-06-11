@@ -85,6 +85,16 @@ namespace ignition
           const std::string &_data,
           const bool _overwrite);
 
+      /// \brief Add a world from packed data to the local cache
+      /// \param[in] _id A completely populated ID
+      /// \param[in] _data Compressed content of the world
+      /// \param[in] _overwrite Overwrite world if already exists.
+      /// \returns True if the world was successfully added to the local cache
+      public: virtual bool SaveWorld(
+          const WorldIdentifier &_id,
+          const std::string &_data,
+          const bool _overwrite);
+
       /// \brief Internal data.
       private: std::shared_ptr<LocalCachePrivate> dataPtr;
     };

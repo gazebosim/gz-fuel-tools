@@ -435,9 +435,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
 
   ignition::fuel_tools::FuelClient client(conf);
+  ignition::fuel_tools::ModelIdentifier model;
+  ignition::fuel_tools::WorldIdentifier world;
 
   // Model?
-  ignition::fuel_tools::ModelIdentifier model;
   if (client.ParseModelUrl(url, model))
   {
     // Download
@@ -463,9 +464,34 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
       return false;
     }
   }
+  // World?
+  else if (client.ParseWorldUrl(url, world))
+  {
+    // Download
+    if (ignition::common::Console::Verbosity() >= 3)
+    {
+      std::cout << "Downloading world: " << "\033[36m" << std::endl
+                << world.AsPrettyString("  ") << "\033[39m" << std::endl;
+    }
+
+    if (world.Version() != 0)
+    {
+      ignwarn << "Requested version [" << world.VersionStr()  << "], but "
+              << "currently only the world's latest (tip) version is supported."
+              << std::endl;
+    }
+
+    auto result = client.DownloadWorld(world);
+
+    if (!result)
+    {
+      std::cout << "Download failed." << std::endl;
+      return false;
+    }
+  }
   else
   {
-    std::cout << "Invalid URL: only models can be downloaded so far."
+    std::cout << "Invalid URL: only models and worlds can be downloaded so far."
               << std::endl;
     return false;
   }
