@@ -51,9 +51,6 @@ namespace ignition
       /// \brief Prefix increment
       public: WorldIter &operator++();
 
-      /// \brief Dereference operator
-      public: World &operator*();
-
       /// \brief -> operator
       public: World *operator->();
 

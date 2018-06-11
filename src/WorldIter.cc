@@ -222,18 +222,11 @@ WorldIter::operator bool() const
 //////////////////////////////////////////////////
 WorldIter &WorldIter::operator++()
 {
-  // TODO Request more data if there are more pages
   if (!this->dataPtr->HasReachedEnd())
   {
     this->dataPtr->Next();
   }
   return *this;
-}
-
-//////////////////////////////////////////////////
-World &WorldIter::operator*()
-{
-  return this->dataPtr->world;
 }
 
 //////////////////////////////////////////////////
