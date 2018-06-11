@@ -100,41 +100,6 @@ bool WorldIterIds::HasReachedEnd()
 }
 
 //////////////////////////////////////////////////
-IterWorlds::~IterWorlds()
-{
-}
-
-//////////////////////////////////////////////////
-IterWorlds::IterWorlds(std::vector<World> _worlds)
-  : worlds(_worlds)
-{
-  this->worldIter = this->worlds.begin();
-  if (!this->worlds.empty())
-  {
-    this->world = this->worlds.front();
-  }
-}
-
-//////////////////////////////////////////////////
-void IterWorlds::Next()
-{
-  // advance pointer
-  ++(this->worldIter);
-
-  // Update personal world class
-  if (this->worldIter != this->worlds.end())
-  {
-    this->world = *(this->worldIter);
-  }
-}
-
-//////////////////////////////////////////////////
-bool IterWorlds::HasReachedEnd()
-{
-  return this->worlds.empty() || this->worldIter == this->worlds.end();
-}
-
-//////////////////////////////////////////////////
 WorldIterRESTIds::~WorldIterRESTIds()
 {
 }

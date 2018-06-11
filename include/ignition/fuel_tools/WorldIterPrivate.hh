@@ -91,30 +91,6 @@ namespace ignition
       protected: std::vector<WorldIdentifier>::iterator idIter;
     };
 
-    /// \brief class for iterating through world ids where all are known
-    ///        in advance
-    class IGNITION_FUEL_TOOLS_VISIBLE IterWorlds: public WorldIterPrivate
-    {
-      /// \brief constructor
-      public: explicit IterWorlds(std::vector<World> _worlds);
-
-      /// \brief destructor
-      public: virtual ~IterWorlds();
-
-      /// \brief Advance iterator to next world
-      public: virtual void Next() override;
-
-      /// \brief true if this iterator has reach the end
-      public: virtual bool HasReachedEnd() override;
-
-      /// \brief Worlds to iterator through
-      protected: std::vector<World> worlds;
-
-      /// \brief where the current iterator is in the list of worlds
-      protected: std::vector<World>::iterator worldIter;
-    };
-
-
     /// \brief class for iterating through world ids from a rest API
     class IGNITION_FUEL_TOOLS_VISIBLE WorldIterRESTIds: public WorldIterPrivate
     {
