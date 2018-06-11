@@ -310,12 +310,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     if (owner.empty())
     {
       if (!getAllModels(client, server, modelsMap))
-        return false;
+        continue;
     }
     else
     {
       if (!getOwnerModels(client, modelId, modelsMap))
-        return false;
+        continue;
     }
 
     auto endTime = std::chrono::high_resolution_clock::now();
@@ -390,12 +390,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
     if (owner.empty())
     {
       if (!getAllWorlds(client, server, worldsMap))
-        return false;
+        continue;
     }
     else
     {
       if (!getOwnerWorlds(client, worldId, worldsMap))
-        return false;
+        continue;
     }
 
     auto endTime = std::chrono::high_resolution_clock::now();

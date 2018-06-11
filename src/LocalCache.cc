@@ -216,23 +216,28 @@ ModelIter LocalCache::AllModels()
 //////////////////////////////////////////////////
 WorldIter LocalCache::AllWorlds()
 {
-  std::vector<World> worlds;
+  std::vector<WorldIdentifier> worldIds;
   if (this->dataPtr->config)
   {
+    // Iterate over servers
     for (auto &server : this->dataPtr->config->Servers())
     {
       std::string path = common::joinPaths(
           this->dataPtr->config->CacheLocation(), server.Url().Path().Str());
+
+      // Make sure the server info is correct
       auto srvWorlds = this->dataPtr->WorldsInServer(path);
-      for (auto &mod : srvWorlds)
+      for (auto &world : srvWorlds)
       {
-        mod.dataPtr->id.SetServer(server);
+        WorldIdentifier id = world.dataPtr->id;
+        id.SetServer(server);
+
+        worldIds.push_back(id);
       }
-      worlds.insert(worlds.end(), srvWorlds.begin(), srvWorlds.end());
     }
   }
 
-  return WorldIterFactory::Create(worlds);
+  return WorldIterFactory::Create(worldIds);
 }
 
 //////////////////////////////////////////////////
@@ -308,7 +313,7 @@ WorldIter LocalCache::MatchingWorlds(const WorldIdentifier &_id)
   if (_id.Name().empty() && _id.Server().URL().empty() && _id.Owner().empty())
     return WorldIterFactory::Create();
 
-  std::vector<World> worlds;
+  std::vector<WorldIdentifier> worldIds;
   for (auto iter = this->AllWorlds(); iter; ++iter)
   {
     bool matches = true;
@@ -320,9 +325,9 @@ WorldIter LocalCache::MatchingWorlds(const WorldIdentifier &_id)
         _id.Server().URL() != iter->Identification().Server().URL())
       matches = false;
     if (matches)
-      worlds.push_back(*iter);
+      worldIds.push_back(iter->Identification());
   }
-  return WorldIterFactory::Create(worlds);
+  return WorldIterFactory::Create(worldIds);
 }
 
 //////////////////////////////////////////////////

@@ -40,10 +40,6 @@ namespace ignition
       /// \param[in] _ids World identifiers
       public: static WorldIter Create(const std::vector<WorldIdentifier> &_ids);
 
-      /// \brief Create a world iterator from a vector of worlds
-      /// \param[in] _ids Worlds
-      public: static WorldIter Create(const std::vector<World> &_worlds);
-
       /// \brief Create a world iter that will make REST api calls
       /// \param[in] _rest a REST request
       /// \param[in] _server The server to request the operation

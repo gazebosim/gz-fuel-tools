@@ -40,13 +40,6 @@ WorldIter WorldIterFactory::Create(const std::vector<WorldIdentifier> &_ids)
 }
 
 //////////////////////////////////////////////////
-WorldIter WorldIterFactory::Create(const std::vector<World> &_worlds)
-{
-  std::unique_ptr<WorldIterPrivate> priv(new IterWorlds(_worlds));
-  return std::move(WorldIter(std::move(priv)));
-}
-
-//////////////////////////////////////////////////
 WorldIter WorldIterFactory::Create(const REST &_rest,
     const ServerConfig &_server, const std::string &_api)
 {
