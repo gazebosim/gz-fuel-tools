@@ -24,7 +24,6 @@
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/Model.hh"
 #include "ignition/fuel_tools/ModelIter.hh"
-#include "ignition/fuel_tools/World.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
 
 namespace ignition
@@ -62,7 +61,7 @@ namespace ignition
       /// \brief Get the first world matching all fields on an id.
       /// \param[in] _id An id with ServerUrl, Owner, and Name all set
       /// \return A world which matches all of _id's parameters.
-      public: virtual World MatchingWorld(const WorldIdentifier &_id);
+      public: virtual bool MatchingWorld(WorldIdentifier &_id);
 
       /// \brief Get all models partially matching an ID
       /// \param[in] _id An id with at least one of ServerURL, Owner, and Name

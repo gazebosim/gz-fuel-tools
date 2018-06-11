@@ -263,11 +263,11 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
 }
 
 //////////////////////////////////////////////////
-World LocalCache::MatchingWorld(const WorldIdentifier &_id)
+bool LocalCache::MatchingWorld(WorldIdentifier &_id)
 {
   // For the tip, we have to find the highest version
   bool tip = (_id.Version() == 0);
-  World tipWorld;
+  WorldIdentifier tipWorld;
 
   for (auto iter = this->AllWorlds(); iter; ++iter)
   {
@@ -275,13 +275,24 @@ World LocalCache::MatchingWorld(const WorldIdentifier &_id)
     if (_id == id)
     {
       if (_id.Version() == id.Version())
-        return *iter;
-      else if (tip && id.Version() > tipWorld.Identification().Version())
-        tipWorld = *iter;
+      {
+        _id = id;
+        return true;
+      }
+      else if (tip && id.Version() > tipWorld.Version())
+      {
+        tipWorld = id;
+      }
     }
   }
 
-  return tipWorld;
+  auto foundTip = !(tipWorld == WorldIdentifier());
+  if (foundTip)
+  {
+    _id = tipWorld;
+  }
+
+  return foundTip;
 }
 
 //////////////////////////////////////////////////
