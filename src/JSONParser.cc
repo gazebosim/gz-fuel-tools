@@ -157,10 +157,6 @@ bool JSONParser::ParseModelImpl(
       _model.Name(_json["name"].asString());
     if (_json.isMember("owner"))
       _model.Owner(_json["owner"].asString());
-    else
-      _model.Owner("anonymous");
-    if (_json.isMember("uuid"))
-      _model.Uuid(_json["uuid"].asString());
     if (_json.isMember("updatedAt"))
       _model.ModifyDate(ParseDateTime(_json["updatedAt"].asString()));
     if (_json.isMember("createdAt"))
@@ -207,8 +203,6 @@ std::string JSONParser::BuildModel(ModelIter _modelIt)
   Json::Value value;
   value["name"] = id.Name();
   value["description"] = id.Description();
-  value["category"] = id.Category();
-  value["uuid"] = id.Uuid();
   value["version"] = id.Version();
 
   Json::StreamWriterBuilder builder;
