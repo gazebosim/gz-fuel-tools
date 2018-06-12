@@ -22,7 +22,6 @@
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/JSONParser.hh"
-#include "ignition/fuel_tools/World.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
 #include "ignition/fuel_tools/WorldIterPrivate.hh"

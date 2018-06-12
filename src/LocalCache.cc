@@ -35,7 +35,6 @@
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/ModelPrivate.hh"
 #include "ignition/fuel_tools/Zip.hh"
-#include "ignition/fuel_tools/World.hh"
 #include "ignition/fuel_tools/WorldIterPrivate.hh"
 #include "ignition/fuel_tools/WorldPrivate.hh"
 
@@ -49,9 +48,10 @@ class ignft::LocalCachePrivate
   /// \param[in] _path A directory for the local server cache
   public: std::vector<Model> ModelsInServer(const std::string &_path) const;
 
-  /// \brief return all worlds in a given directory
+  /// \brief Return all worlds in a given directory
   /// \param[in] _path A directory for the local server cache
-  public: std::vector<World> WorldsInServer(const std::string &_path) const;
+  public: std::vector<WorldIdentifier> WorldsInServer(
+      const std::string &_path) const;
 
   /// \brief return all models in a given Owner/models directory
   public: std::vector<Model> ModelsInPath(const std::string &_path);
@@ -121,14 +121,14 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
 }
 
 //////////////////////////////////////////////////
-std::vector<World> LocalCachePrivate::WorldsInServer(
+std::vector<WorldIdentifier> LocalCachePrivate::WorldsInServer(
     const std::string &_path) const
 {
-  std::vector<World> worlds;
+  std::vector<WorldIdentifier> worldIds;
   if (!common::isDirectory(_path))
   {
     ignwarn << "Server directory does not exist [" << _path << "]\n";
-    return worlds;
+    return worldIds;
   }
 
   common::DirIter end;
@@ -142,17 +142,17 @@ std::vector<World> LocalCachePrivate::WorldsInServer(
     }
 
     // This is an owner directory, look for worlds
-    common::DirIter modIter(common::joinPaths(*ownIter, "worlds"));
-    while (modIter != end)
+    common::DirIter worldIter(common::joinPaths(*ownIter, "worlds"));
+    while (worldIter != end)
     {
-      if (!common::isDirectory(*modIter))
+      if (!common::isDirectory(*worldIter))
       {
-        ++modIter;
+        ++worldIter;
         continue;
       }
 
       // Go through all versions
-      common::DirIter versionIter(common::absPath(*modIter));
+      common::DirIter versionIter(common::absPath(*worldIter));
       while (versionIter != end)
       {
         if (!common::isDirectory(*versionIter))
@@ -161,23 +161,20 @@ std::vector<World> LocalCachePrivate::WorldsInServer(
           continue;
         }
 
-        if (common::exists(common::joinPaths(*versionIter, "world.config")))
-        {
-          std::shared_ptr<WorldPrivate> modPriv(new WorldPrivate);
-          modPriv->id.SetName(common::basename(*modIter));
-          modPriv->id.SetOwner(common::basename(*ownIter));
-          modPriv->id.SetVersionStr(common::basename(*versionIter));
-          modPriv->pathOnDisk = common::absPath(*versionIter);
-          World world(modPriv);
-          worlds.push_back(world);
-        }
+        WorldIdentifier id;
+        id.SetName(common::basename(*worldIter));
+        id.SetOwner(common::basename(*ownIter));
+        id.SetVersionStr(common::basename(*versionIter));
+        // pathOnDisk = common::absPath(*versionIter);
+        worldIds.push_back(id);
+
         ++versionIter;
       }
-      ++modIter;
+      ++worldIter;
     }
     ++ownIter;
   }
-  return worlds;
+  return worldIds;
 }
 
 //////////////////////////////////////////////////
@@ -230,7 +227,7 @@ WorldIter LocalCache::AllWorlds()
       auto srvWorlds = this->dataPtr->WorldsInServer(path);
       for (auto &world : srvWorlds)
       {
-        WorldIdentifier id = world.dataPtr->id;
+        WorldIdentifier id = world;
         id.SetServer(server);
 
         worldIds.push_back(id);

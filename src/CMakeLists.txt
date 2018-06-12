@@ -11,7 +11,6 @@ set (sources
   REST.cc
   Result.cc
   Zip.cc
-  World.cc
   WorldIdentifier.cc
   WorldIter.cc
 )
