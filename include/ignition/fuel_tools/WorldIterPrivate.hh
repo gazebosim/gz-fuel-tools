@@ -91,15 +91,15 @@ namespace ignition
     };
 
     /// \brief class for iterating through world ids from a rest API
-    class IGNITION_FUEL_TOOLS_VISIBLE WorldIterRESTIds: public WorldIterPrivate
+    class IGNITION_FUEL_TOOLS_VISIBLE WorldIterRestIds: public WorldIterPrivate
     {
       /// \brief constructor
-      public: WorldIterRESTIds(const REST &_rest,
+      public: WorldIterRestIds(const REST &_rest,
                                const ServerConfig &_server,
                                const std::string &_api);
 
       /// \brief destructor
-      public: virtual ~WorldIterRESTIds();
+      public: virtual ~WorldIterRestIds();
 
       /// \brief Advance iterator to next world
       public: virtual void Next() override;

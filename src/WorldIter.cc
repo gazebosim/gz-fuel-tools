@@ -25,7 +25,6 @@
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
 #include "ignition/fuel_tools/WorldIterPrivate.hh"
-#include "ignition/fuel_tools/WorldPrivate.hh"
 #include "ignition/fuel_tools/REST.hh"
 
 using namespace ignition;
@@ -42,7 +41,7 @@ WorldIter WorldIterFactory::Create(const std::vector<WorldIdentifier> &_ids)
 WorldIter WorldIterFactory::Create(const REST &_rest,
     const ServerConfig &_server, const std::string &_api)
 {
-  std::unique_ptr<WorldIterPrivate> priv(new WorldIterRESTIds(
+  std::unique_ptr<WorldIterPrivate> priv(new WorldIterRestIds(
     _rest, _server, _api));
   return std::move(WorldIter(std::move(priv)));
 }
@@ -95,12 +94,12 @@ bool WorldIterIds::HasReachedEnd()
 }
 
 //////////////////////////////////////////////////
-WorldIterRESTIds::~WorldIterRESTIds()
+WorldIterRestIds::~WorldIterRestIds()
 {
 }
 
 //////////////////////////////////////////////////
-WorldIterRESTIds::WorldIterRESTIds(const REST &_rest,
+WorldIterRestIds::WorldIterRestIds(const REST &_rest,
     const ServerConfig &_config, const std::string &_api)
   : config(_config), rest(_rest)
 {
@@ -167,7 +166,7 @@ WorldIterRESTIds::WorldIterRESTIds(const REST &_rest,
 }
 
 //////////////////////////////////////////////////
-void WorldIterRESTIds::Next()
+void WorldIterRestIds::Next()
 {
   // advance pointer
   ++(this->idIter);
@@ -182,7 +181,7 @@ void WorldIterRESTIds::Next()
 }
 
 //////////////////////////////////////////////////
-bool WorldIterRESTIds::HasReachedEnd()
+bool WorldIterRestIds::HasReachedEnd()
 {
   return this->ids.empty() || this->idIter == this->ids.end();
 }

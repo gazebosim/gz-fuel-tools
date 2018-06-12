@@ -36,13 +36,11 @@
 #include "ignition/fuel_tools/ModelPrivate.hh"
 #include "ignition/fuel_tools/Zip.hh"
 #include "ignition/fuel_tools/WorldIterPrivate.hh"
-#include "ignition/fuel_tools/WorldPrivate.hh"
 
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
+using namespace fuel_tools;
 
-class ignft::LocalCachePrivate
+class ignition::fuel_tools::LocalCachePrivate
 {
   /// \brief return all models in a given directory
   /// \param[in] _path A directory for the local server cache
