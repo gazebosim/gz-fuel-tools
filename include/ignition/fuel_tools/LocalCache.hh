@@ -51,7 +51,7 @@ namespace ignition
 
       /// \brief Get all worlds in offline cache
       /// \return World iterator
-      public: virtual WorldIter AllWorlds();
+      public: virtual WorldIter AllWorlds() const;
 
       /// \brief Get the first model matching all fields on an id.
       /// \param[in] _id An id with ServerUrl, Owner, and Name all set
@@ -61,7 +61,7 @@ namespace ignition
       /// \brief Get the first world matching all fields on an id.
       /// \param[in] _id An id with ServerUrl, Owner, and Name all set
       /// \return A world which matches all of _id's parameters.
-      public: virtual bool MatchingWorld(WorldIdentifier &_id);
+      public: virtual bool MatchingWorld(WorldIdentifier &_id) const;
 
       /// \brief Get all models partially matching an ID
       /// \param[in] _id An id with at least one of ServerURL, Owner, and Name
@@ -73,7 +73,8 @@ namespace ignition
       /// \param[in] _id An id with at least one of ServerUrl, Owner, and Name
       /// \return An iterator with all worlds that match all fields that are
       /// set on _id.
-      public: virtual WorldIter MatchingWorlds(const WorldIdentifier &_id);
+      public: virtual WorldIter MatchingWorlds(
+          const WorldIdentifier &_id) const;
 
       /// \brief Add a model from packed data to the local cache
       /// \param[in] _id A completely populated ID

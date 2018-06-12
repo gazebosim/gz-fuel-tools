@@ -210,7 +210,7 @@ ModelIter LocalCache::AllModels()
 }
 
 //////////////////////////////////////////////////
-WorldIter LocalCache::AllWorlds()
+WorldIter LocalCache::AllWorlds() const
 {
   std::vector<WorldIdentifier> worldIds;
   if (this->dataPtr->config)
@@ -259,7 +259,7 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
 }
 
 //////////////////////////////////////////////////
-bool LocalCache::MatchingWorld(WorldIdentifier &_id)
+bool LocalCache::MatchingWorld(WorldIdentifier &_id) const
 {
   // For the tip, we have to find the highest version
   bool tip = (_id.Version() == 0);
@@ -314,7 +314,7 @@ ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
 }
 
 //////////////////////////////////////////////////
-WorldIter LocalCache::MatchingWorlds(const WorldIdentifier &_id)
+WorldIter LocalCache::MatchingWorlds(const WorldIdentifier &_id) const
 {
   if (_id.Name().empty() && _id.Server().URL().empty() && _id.Owner().empty())
     return WorldIterFactory::Create();
@@ -405,8 +405,7 @@ bool LocalCache::SaveWorld(
 
   auto cacheLocation = this->dataPtr->config->CacheLocation();
 
-  auto worldRootDir = common::joinPaths(cacheLocation,
-      _id.Server().Url().Path().Str(), _id.Owner(), "worlds", _id.Name());
+  auto worldRootDir = common::joinPaths(cacheLocation, _id.UniqueName());
   auto worldVersionedDir = common::joinPaths(worldRootDir, _id.VersionStr());
 
   // Is it already in the cache?

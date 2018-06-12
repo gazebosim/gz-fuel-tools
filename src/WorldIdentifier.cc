@@ -75,7 +75,7 @@ WorldIdentifier::~WorldIdentifier()
 //////////////////////////////////////////////////
 std::string WorldIdentifier::UniqueName() const
 {
-  return common::joinPaths(this->dataPtr->server.URL(),
+  return common::joinPaths(this->dataPtr->server.Url().Path().Str(),
                            this->dataPtr->owner,
                            "worlds",
                            this->dataPtr->name);
@@ -209,3 +209,4 @@ std::string WorldIdentifier::AsPrettyString(const std::string &_prefix) const
       << this->Server().AsPrettyString(_prefix + "  ");
   return out.str();
 }
+
