@@ -261,7 +261,14 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     const char *_owner, const char *_raw)
 {
-  std::string url{_url};
+  std::string urlStr{_url};
+  if (!urlStr.empty() && !ignition::common::URI::Valid(_url))
+  {
+    std::cout << "Invalid URL [" << _url << "]" << std::endl;
+    return 0;
+  }
+
+  ignition::common::URI url(urlStr);
   std::string owner{_owner};
   std::string rawStr{_raw};
   std::transform(rawStr.begin(), rawStr.end(),
@@ -270,10 +277,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
-  if (!url.empty())
+  if (url.Valid())
   {
     ignition::fuel_tools::ServerConfig serverConf;
-    serverConf.URL(url);
+    serverConf.SetUrl(url);
     conf.AddServer(serverConf);
   }
   else
@@ -341,7 +348,14 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
     const char *_owner, const char *_raw)
 {
-  std::string url{_url};
+  std::string urlStr{_url};
+  if (!urlStr.empty() && !ignition::common::URI::Valid(_url))
+  {
+    std::cout << "Invalid URL [" << _url << "]" << std::endl;
+    return 0;
+  }
+
+  ignition::common::URI url(urlStr);
   std::string owner{_owner};
   std::string rawStr{_raw};
   std::transform(rawStr.begin(), rawStr.end(),
@@ -350,10 +364,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
-  if (!url.empty())
+  if (url.Valid())
   {
     ignition::fuel_tools::ServerConfig serverConf;
-    serverConf.URL(url);
+    serverConf.SetUrl(url);
     conf.AddServer(serverConf);
   }
   else
