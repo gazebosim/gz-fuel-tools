@@ -33,6 +33,7 @@
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/ign.hh"
+#include "ignition/fuel_tools/WorldIdentifier.hh"
 
 //////////////////////////////////////////////////
 /// \brief Print resources in a human readable manner
@@ -175,8 +176,7 @@ extern "C" bool getAllWorlds(
   // value: vector of world names
   for (; iter; ++iter)
   {
-    _resourceMap[iter->Identification().Owner()].push_back(
-        iter->Identification().Name());
+    _resourceMap[iter->Owner()].push_back(iter->Name());
   }
 
   return true;
@@ -245,8 +245,7 @@ extern "C" bool getOwnerWorlds(
   // value: vector of world names
   for (; iter; ++iter)
   {
-    _resourceMap[iter->Identification().Owner()].push_back(
-        iter->Identification().Name());
+    _resourceMap[iter->Owner()].push_back(iter->Name());
   }
 
   return true;

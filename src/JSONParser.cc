@@ -304,10 +304,9 @@ bool JSONParser::ParseWorldImpl(
 /////////////////////////////////////////////////
 std::string JSONParser::BuildWorld(WorldIter _worldIt)
 {
-  WorldIdentifier id = _worldIt->Identification();
   Json::Value value;
-  value["name"] = id.Name();
-  value["version"] = id.Version();
+  value["name"] = _worldIt->Name();
+  value["version"] = _worldIt->Version();
 
   Json::StreamWriterBuilder builder;
   return Json::writeString(builder, value);

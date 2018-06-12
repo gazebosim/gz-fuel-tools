@@ -72,9 +72,7 @@ WorldIterIds::WorldIterIds(std::vector<WorldIdentifier> _ids)
   this->idIter = this->ids.begin();
   if (!this->ids.empty())
   {
-    std::shared_ptr<WorldPrivate> ptr(new WorldPrivate);
-    ptr->id = *(this->idIter);
-    this->world = World(ptr);
+    this->worldId = *(this->idIter);
   }
 }
 
@@ -87,9 +85,7 @@ void WorldIterIds::Next()
   // Update personal world class
   if (this->idIter != this->ids.end())
   {
-    std::shared_ptr<WorldPrivate> ptr(new WorldPrivate);
-    ptr->id = *(this->idIter);
-    this->world = World(ptr);
+    this->worldId = *(this->idIter);
   }
 }
 
@@ -165,10 +161,8 @@ WorldIterRESTIds::WorldIterRESTIds(const REST &_rest,
   this->idIter = this->ids.begin();
 
   // make first world
-  std::shared_ptr<WorldPrivate> ptr(new WorldPrivate);
-  ptr->id = *(this->idIter);
-  ptr->id.SetServer(this->config);
-  this->world = World(ptr);
+  this->worldId = *(this->idIter);
+  this->worldId.SetServer(this->config);
 
   igndbg << "Got response [" << resp.data << "]\n";
 }
@@ -182,10 +176,8 @@ void WorldIterRESTIds::Next()
   // Update personal world class
   if (this->idIter != this->ids.end())
   {
-    std::shared_ptr<WorldPrivate> ptr(new WorldPrivate);
-    ptr->id = *(this->idIter);
-    ptr->id.SetServer(this->config);
-    this->world = World(ptr);
+    this->worldId = *(this->idIter);
+    this->worldId.SetServer(this->config);
   }
   // TODO request next page if api is paginated
 }
@@ -230,7 +222,13 @@ WorldIter &WorldIter::operator++()
 }
 
 //////////////////////////////////////////////////
-World *WorldIter::operator->()
+WorldIdentifier *WorldIter::operator->()
 {
-  return &(this->dataPtr->world);
+  return &(this->dataPtr->worldId);
+}
+
+//////////////////////////////////////////////////
+WorldIter::operator WorldIdentifier() const
+{
+  return this->dataPtr->worldId;
 }

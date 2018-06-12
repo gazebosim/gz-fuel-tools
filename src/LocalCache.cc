@@ -35,6 +35,7 @@
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/ModelPrivate.hh"
 #include "ignition/fuel_tools/Zip.hh"
+#include "ignition/fuel_tools/World.hh"
 #include "ignition/fuel_tools/WorldIterPrivate.hh"
 #include "ignition/fuel_tools/WorldPrivate.hh"
 
@@ -269,17 +270,16 @@ bool LocalCache::MatchingWorld(WorldIdentifier &_id)
   bool tip = (_id.Version() == 0);
   WorldIdentifier tipWorld;
 
-  for (auto iter = this->AllWorlds(); iter; ++iter)
+  for (auto id = this->AllWorlds(); id; ++id)
   {
-    auto id = iter->Identification();
     if (_id == id)
     {
-      if (_id.Version() == id.Version())
+      if (_id.Version() == id->Version())
       {
         _id = id;
         return true;
       }
-      else if (tip && id.Version() > tipWorld.Version())
+      else if (tip && id->Version() > tipWorld.Version())
       {
         tipWorld = id;
       }
@@ -328,15 +328,15 @@ WorldIter LocalCache::MatchingWorlds(const WorldIdentifier &_id)
   for (auto iter = this->AllWorlds(); iter; ++iter)
   {
     bool matches = true;
-    if (!_id.Name().empty() && _id.Name() != iter->Identification().Name())
+    if (!_id.Name().empty() && _id.Name() != iter->Name())
       matches = false;
-    if (!_id.Owner().empty() && _id.Owner() != iter->Identification().Owner())
+    if (!_id.Owner().empty() && _id.Owner() != iter->Owner())
       matches = false;
     if (!_id.Server().URL().empty() &&
-        _id.Server().URL() != iter->Identification().Server().URL())
+        _id.Server().URL() != iter->Server().URL())
       matches = false;
     if (matches)
-      worldIds.push_back(iter->Identification());
+      worldIds.push_back(iter);
   }
   return WorldIterFactory::Create(worldIds);
 }

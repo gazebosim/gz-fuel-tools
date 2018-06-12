@@ -21,13 +21,13 @@
 #include <memory>
 
 #include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/World.hh"
 
 namespace ignition
 {
   namespace fuel_tools
   {
     /// \brief forward declaration
+    class WorldIdentifier;
     class WorldIterPrivate;
     class WorldIterFactory;
 
@@ -52,7 +52,10 @@ namespace ignition
       public: WorldIter &operator++();
 
       /// \brief -> operator
-      public: World *operator->();
+      public: WorldIdentifier *operator->();
+
+      /// \brief Conversion operator
+      public: operator WorldIdentifier() const;
 
       /// \brief Private data pointer.
       private: std::unique_ptr<WorldIterPrivate> dataPtr;

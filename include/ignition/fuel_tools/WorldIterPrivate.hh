@@ -22,7 +22,6 @@
 #include <vector>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/World.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 #include "ignition/fuel_tools/REST.hh"
 
@@ -65,7 +64,7 @@ namespace ignition
       public: virtual bool HasReachedEnd() = 0;
 
       /// \brief current world for returning references
-      public: World world;
+      public: WorldIdentifier worldId;
     };
 
     /// \brief class for iterating through world ids where all are known
