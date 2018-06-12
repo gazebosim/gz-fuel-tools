@@ -78,10 +78,10 @@ TEST(CmdLine, ModelListFail)
   EXPECT_NE(output.find("Missing resource type"), std::string::npos) << output;
 
   output = custom_exec_str(g_listCmd + " -t banana");
-  EXPECT_NE(output.find("Only model resources"), std::string::npos) << output;
+  EXPECT_NE(output.find("Invalid resource"), std::string::npos) << output;
 
   output = custom_exec_str(g_listCmd + " -t model -u fake_url");
-  EXPECT_NE(output.find("failed to fetch model list"), std::string::npos)
+  EXPECT_NE(output.find("Invalid URL"), std::string::npos)
       << output;
 }
 

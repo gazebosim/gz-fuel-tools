@@ -40,6 +40,9 @@ class ignition::fuel_tools::WorldIdentifierPrivate
 
   /// \brief World version. Valid versions start from 1, 0 means the tip.
   public: unsigned int version{0};
+
+  /// \brief Path of this model in the local cache
+  public: std::string localPath;
 };
 
 //////////////////////////////////////////////////
@@ -166,6 +169,19 @@ bool WorldIdentifier::SetVersionStr(const std::string &_version)
 }
 
 //////////////////////////////////////////////////
+std::string WorldIdentifier::LocalPath() const
+{
+  return this->dataPtr->localPath;
+}
+
+//////////////////////////////////////////////////
+bool WorldIdentifier::SetLocalPath(const std::string &_localPath)
+{
+  this->dataPtr->localPath = _localPath;
+  return true;
+}
+
+//////////////////////////////////////////////////
 std::string WorldIdentifier::AsString(const std::string &_prefix) const
 {
   std::stringstream out;
@@ -173,6 +189,7 @@ std::string WorldIdentifier::AsString(const std::string &_prefix) const
       << _prefix << "Owner: " << this->Owner() << std::endl
       << _prefix << "Version: " << this->VersionStr() << std::endl
       << _prefix << "Unique name: " << this->UniqueName() << std::endl
+      << _prefix << "Local path: " << this->LocalPath() << std::endl
       << _prefix << "Server:" << std::endl
       << this->Server().AsString(_prefix + "  ");
   return out.str();

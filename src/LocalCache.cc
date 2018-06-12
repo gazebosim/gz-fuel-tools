@@ -163,7 +163,7 @@ std::vector<WorldIdentifier> LocalCachePrivate::WorldsInServer(
         id.SetName(common::basename(*worldIter));
         id.SetOwner(common::basename(*ownIter));
         id.SetVersionStr(common::basename(*versionIter));
-        // pathOnDisk = common::absPath(*versionIter);
+        id.SetLocalPath(common::absPath(*versionIter));
         worldIds.push_back(id);
 
         ++versionIter;
@@ -393,7 +393,7 @@ bool LocalCache::SaveModel(
 
 //////////////////////////////////////////////////
 bool LocalCache::SaveWorld(
-  const WorldIdentifier &_id, const std::string &_data, const bool _overwrite)
+  WorldIdentifier &_id, const std::string &_data, const bool _overwrite)
 {
   if (_id.Server().URL().empty() || _id.Owner().empty() ||
       _id.Name().empty() || _id.Version() == 0)
@@ -439,6 +439,7 @@ bool LocalCache::SaveWorld(
     ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
   }
 
+  _id.SetLocalPath(worldVersionedDir);
   ignmsg << "Saved world at:" << std::endl
          << "  " << worldVersionedDir << std::endl;
 

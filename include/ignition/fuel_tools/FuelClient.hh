@@ -163,9 +163,9 @@ namespace ignition
 
       /// \brief Download a world from Ignition Fuel. This will override an
       /// existing local copy of the world.
-      /// \param[in] _id The world identifier.
+      /// \param[out] _id The world identifier, with local path updated.
       /// \return Result of the download operation
-      public: Result DownloadWorld(const WorldIdentifier &_id);
+      public: Result DownloadWorld(WorldIdentifier &_id);
 
       /// \brief Download a model from ignition fuel. This will override an
       /// existing local copy of the model.
@@ -189,12 +189,29 @@ namespace ignition
       public: Result DownloadModel(const common::URI &_modelUrl,
                                    std::string &_path);
 
+      /// \brief Download a world from ignition fuel. This will override an
+      /// existing local copy of the world.
+      /// \param[in] _worldUrl The unique URL of the world to download.
+      /// E.g.: https://api.ignitionfuel.org/1.0/caguero/worlds/Beer
+      /// \param[out] _path Path where the world was downloaded.
+      /// \return Result of the download operation.
+      public: Result DownloadWorld(const common::URI &_worldUrl,
+                                   std::string &_path);
+
       /// \brief Check if a model is already present in the local cache.
       /// \param[in] _modelUrl The unique URL of the model on a Fuel server.
       /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer
       /// \param[out] _path Local path where the model can be found.
       /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
       public: Result CachedModel(const common::URI &_modelUrl,
+                                 std::string &_path);
+
+      /// \brief Check if a world is already present in the local cache.
+      /// \param[in] _worldUrl The unique URL of the world on a Fuel server.
+      /// E.g.: https://api.ignitionfuel.org/1.0/caguero/worlds/Beer
+      /// \param[out] _path Local path where the world can be found.
+      /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
+      public: Result CachedWorld(const common::URI &_worldUrl,
                                  std::string &_path);
 
       /// \brief Check if a file belonging to a model is already present in the
@@ -204,6 +221,15 @@ namespace ignition
       /// \param[out] _path Local path where the file can be found.
       /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
       public: Result CachedModelFile(const common::URI &_fileUrl,
+                                     std::string &_path);
+
+      /// \brief Check if a file belonging to a world is already present in the
+      /// local cache.
+      /// \param[in] _fileUrl The unique URL of the file on a Fuel server. E.g.:
+      /// https://server.org/1.0/owner/worlds/world/files/meshes/mesh.dae
+      /// \param[out] _path Local path where the file can be found.
+      /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
+      public: Result CachedWorldFile(const common::URI &_fileUrl,
                                      std::string &_path);
 
       /// \brief Parse server and model identifer from model URL or unique name.
@@ -257,6 +283,19 @@ namespace ignition
       /// \return True if parsed successfully.
       public: bool ParseModelFileUrl(const common::URI &_modelFileUrl,
                                      ModelIdentifier &_id,
+                                     std::string &_filePath);
+
+      /// \brief Parse world file identifer from world file URL.
+      /// \param[in] _worldUrl The unique URL of a world file. It may also be a
+      /// unique name, which is a URL without the server version.
+      /// \param[out] _id The world identifier. It may contain incomplete
+      /// information based on the passed URL and the current client
+      /// config.
+      /// \param[out] _filePath Path to the file from the world's root
+      /// directory, such as "meshes/mesh.dae" or "world.sdf".
+      /// \return True if parsed successfully.
+      public: bool ParseWorldFileUrl(const common::URI &_worldFileUrl,
+                                     WorldIdentifier &_id,
                                      std::string &_filePath);
 
       /// \brief PIMPL

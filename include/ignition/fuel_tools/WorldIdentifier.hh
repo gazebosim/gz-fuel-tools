@@ -111,6 +111,16 @@ namespace ignition
       /// \sa SetVersion
       public: bool SetVersionStr(const std::string &_version);
 
+      /// \brief Returns a path to the world on disk if it is already cached
+      /// \returns Path, or empty string if the path has not been set
+      /// \sa SetLocalPath
+      public: std::string LocalPath() const;
+
+      /// \brief Sets the path of the world in the local cache.
+      /// \param[in] Local path to world.
+      /// \sa LocalPath
+      public: bool SetLocalPath(const std::string &_path);
+
       /// \brief Returns a unique name for the world.
       /// \remarks this is Server/Owner/Name.
       /// \return Unique world name.
