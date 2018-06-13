@@ -177,7 +177,7 @@ void WorldIterRestIds::Next()
     this->worldId = *(this->idIter);
     this->worldId.SetServer(this->config);
   }
-  // TODO request next page if api is paginated
+  // TODO request next page if api is paginated here instead of in the constructor
 }
 
 //////////////////////////////////////////////////

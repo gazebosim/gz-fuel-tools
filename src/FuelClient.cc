@@ -470,7 +470,6 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
   _id.SetVersion(version);
 
   // Save
-  // Note that the save function doesn't return the path
   if (!this->dataPtr->cache->SaveWorld(_id, resp.data, true))
     return Result(Result::FETCH_ERROR);
 
