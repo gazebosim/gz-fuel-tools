@@ -33,6 +33,7 @@
 #include "ignition/fuel_tools/ModelIdentifier.hh"
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/REST.hh"
+#include "ignition/fuel_tools/RestClient.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 #include "ignition/fuel_tools/WorldIterPrivate.hh"
 
@@ -196,14 +197,14 @@ ClientConfig &FuelClient::Config()
 Result FuelClient::ModelDetails(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id, ModelIdentifier &_model) const
 {
-  ignition::fuel_tools::REST rest;
-  RESTResponse resp;
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
 
   auto serverUrl = _id.Server().URL();
   auto version = _id.Server().Version();
   auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
 
-  resp = rest.Request(REST::GET, serverUrl, version, path, {}, {}, "");
+  resp = rest.Request(HttpMethod::GET, serverUrl, version, path, {}, {}, "");
   if (resp.statusCode != 200)
     return Result(Result::FETCH_ERROR);
 
@@ -370,9 +371,9 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
         _id.Name() + ".zip");
 
   // Request
-  ignition::fuel_tools::REST rest;
-  RESTResponse resp;
-  resp = rest.Request(REST::GET, _id.Server().URL(), _id.Server().Version(),
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+  resp = rest.Request(HttpMethod::GET, _id.Server().URL(), _id.Server().Version(),
       route, {}, {}, "");
   if (resp.statusCode != 200)
   {
