@@ -17,13 +17,13 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include "ignition/fuel_tools/REST.hh"
+#include "ignition/fuel_tools/RestClient.hh"
 #include "test/test_config.h"
 
 /////////////////////////////////////////////////
 TEST(REST, UserAgent)
 {
-  ignition::fuel_tools::REST rest;
+  ignition::fuel_tools::Rest rest;
   EXPECT_TRUE(rest.UserAgent().empty());
 
   rest.SetUserAgent("my_user_agent");
