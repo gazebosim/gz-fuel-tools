@@ -27,6 +27,7 @@ set (gtest_sources
   Model_TEST.cc
   REST_TEST.cc
   Result_TEST.cc
+  WorldIdentifier_TEST.cc
   Zip_TEST.cc
 )
 
