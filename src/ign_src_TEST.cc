@@ -373,8 +373,8 @@ TEST(CmdLine, WorldDownloadUnversioned)
   EXPECT_TRUE(ignition::common::isDirectory(
       "test_cache/staging-api.ignitionfuel.org/chapulina/worlds/Empty/1"));
   EXPECT_TRUE(ignition::common::isFile(
-      "test_cache/staging-api.ignitionfuel.org/chapulina/worlds/Empty/1/\
-empty.world"));
+      std::string("test_cache/staging-api.ignitionfuel.org/chapulina/worlds/")
+      + "Empty/1/empty.world"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();

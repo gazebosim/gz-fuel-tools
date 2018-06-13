@@ -925,8 +925,8 @@ TEST(FuelClient, DownloadWorld)
        "empty.world"));
 
     // Check it wasn't downloaded to world root directory
-    EXPECT_FALSE(common::exists(
-    "test_cache/staging-api.ignitionfuel.org/chapulina/worlds/Empty/empty.world"));
+    EXPECT_FALSE(common::exists("test_cache/staging-api.ignitionfuel.org/" +
+        std::string("chapulina/worlds/Empty/empty.world")));
 
     // Check it is cached
     auto res3 = client.CachedWorld(url, cachedPath);
@@ -1009,14 +1009,15 @@ TEST(FuelClient, CachedWorld)
 
   // Cached world file (tip)
   {
-    common::URI url{
-        "http://localhost:8007/1.0/banana/worlds/My World/tip/files/strawberry.world"};
+    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World/tip/"
+                    "files/strawberry.world"};
     std::string path;
     auto result = client.CachedWorldFile(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(Result::FETCH_ALREADY_EXISTS), result);
     EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/banana/worlds/My World/3/strawberry.world", path);
+        "/test_cache/localhost:8007/banana/worlds/My World/3/strawberry.world",
+        path);
   }
 
   // Deeper cached world file
@@ -1053,8 +1054,8 @@ TEST(FuelClient, CachedWorld)
 
   // Non-cached world file
   {
-    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World/tip/files/"
-                    "banana.sdf"};
+    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World/tip/"
+                    "files/banana.sdf"};
     std::string path;
     auto result = client.CachedWorldFile(url, path);
     EXPECT_FALSE(result);
