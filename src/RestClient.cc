@@ -288,13 +288,15 @@ const std::string &Rest::UserAgent() const
 }
 
 /////////////////////////////////////////////////
-Rest::Rest(const REST &/*_deprecated*/)
+Rest::Rest(const REST &_deprecated)
 {
+  this->userAgent = _deprecated.UserAgent();
 }
 
 /////////////////////////////////////////////////
-Rest &Rest::operator=(const REST &/*_deprecated*/)
+Rest &Rest::operator=(const REST &_deprecated)
 {
+  this->userAgent = _deprecated.UserAgent();
   return *this;
 }
 

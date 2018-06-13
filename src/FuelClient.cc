@@ -256,8 +256,8 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
 //////////////////////////////////////////////////
 WorldIter FuelClient::Worlds(const ServerConfig &_server) const
 {
-  WorldIter iter = WorldIterFactory::Create(this->dataPtr->rest,
-      _server, "worlds");
+  Rest rest(this->dataPtr->rest);
+  WorldIter iter = WorldIterFactory::Create(rest, _server, "worlds");
 
   if (!iter)
   {
@@ -334,7 +334,8 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
   else
     path = ignition::common::joinPaths(_id.Owner(), "worlds");
 
-  return WorldIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
+  Rest rest(this->dataPtr->rest);
+  return WorldIterFactory::Create(rest, _id.Server(), path);
 }
 
 //////////////////////////////////////////////////
@@ -432,9 +433,9 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
         _id.Name() + ".zip");
 
   // Request
-  ignition::fuel_tools::REST rest;
-  RESTResponse resp;
-  resp = rest.Request(REST::GET, _id.Server().URL(), _id.Server().Version(),
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+  resp = rest.Request(HttpMethod::GET, _id.Server().URL(), _id.Server().Version(),
       route, {}, {}, "");
   if (resp.statusCode != 200)
   {

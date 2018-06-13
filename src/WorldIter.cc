@@ -25,7 +25,7 @@
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
 #include "ignition/fuel_tools/WorldIterPrivate.hh"
-#include "ignition/fuel_tools/REST.hh"
+#include "ignition/fuel_tools/RestClient.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
@@ -38,7 +38,7 @@ WorldIter WorldIterFactory::Create(const std::vector<WorldIdentifier> &_ids)
 }
 
 //////////////////////////////////////////////////
-WorldIter WorldIterFactory::Create(const REST &_rest,
+WorldIter WorldIterFactory::Create(const Rest &_rest,
     const ServerConfig &_server, const std::string &_api)
 {
   std::unique_ptr<WorldIterPrivate> priv(new WorldIterRestIds(
@@ -99,14 +99,14 @@ WorldIterRestIds::~WorldIterRestIds()
 }
 
 //////////////////////////////////////////////////
-WorldIterRestIds::WorldIterRestIds(const REST &_rest,
+WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
     const ServerConfig &_config, const std::string &_api)
   : config(_config), rest(_rest)
 {
-  REST::Method method = REST::GET;
+  auto method = HttpMethod::GET;
   this->config = _config;
   std::vector<std::string> headers = {"Accept: application/json"};
-  RESTResponse resp;
+  RestResponse resp;
   std::vector<WorldIdentifier> worldIds;
   this->ids.clear();
 

@@ -23,7 +23,7 @@
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/REST.hh"
+#include "ignition/fuel_tools/RestClient.hh"
 
 namespace ignition
 {
@@ -43,7 +43,7 @@ namespace ignition
       /// \param[in] _rest a REST request
       /// \param[in] _server The server to request the operation
       /// \param[in] _api The path to request
-      public: static WorldIter Create(const REST &_rest,
+      public: static WorldIter Create(const Rest &_rest,
                                       const ServerConfig &_server,
                                       const std::string &_api);
 
@@ -94,7 +94,7 @@ namespace ignition
     class IGNITION_FUEL_TOOLS_VISIBLE WorldIterRestIds: public WorldIterPrivate
     {
       /// \brief constructor
-      public: WorldIterRestIds(const REST &_rest,
+      public: WorldIterRestIds(const Rest &_rest,
                                const ServerConfig &_server,
                                const std::string &_api);
 
@@ -111,7 +111,7 @@ namespace ignition
       public: ServerConfig config;
 
       /// \brief RESTful client
-      public: REST rest;
+      public: Rest rest;
 
       /// \brief World identifiers in the current page
       protected: std::vector<WorldIdentifier> ids;
