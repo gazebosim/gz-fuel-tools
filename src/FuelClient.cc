@@ -374,8 +374,8 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
   // Request
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
-  resp = rest.Request(HttpMethod::GET, _id.Server().URL(), _id.Server().Version(),
-      route, {}, {}, "");
+  resp = rest.Request(HttpMethod::GET, _id.Server().URL(),
+      _id.Server().Version(), route, {}, {}, "");
   if (resp.statusCode != 200)
   {
     ignerr << "Failed to download model." << std::endl
@@ -435,8 +435,8 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
   // Request
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
-  resp = rest.Request(HttpMethod::GET, _id.Server().URL(), _id.Server().Version(),
-      route, {}, {}, "");
+  resp = rest.Request(HttpMethod::GET, _id.Server().URL(),
+      _id.Server().Version(), route, {}, {}, "");
   if (resp.statusCode != 200)
   {
     ignerr << "Failed to download world." << std::endl
