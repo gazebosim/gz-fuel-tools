@@ -37,77 +37,83 @@ namespace ignition
     {
       /// \brief Create a world iterator from a vector of world identifiers
       /// \param[in] _ids World identifiers
+      /// \return World iterator
       public: static WorldIter Create(const std::vector<WorldIdentifier> &_ids);
 
       /// \brief Create a world iter that will make REST api calls
       /// \param[in] _rest a REST request
       /// \param[in] _server The server to request the operation
-      /// \param[in] _api The path to request
+      /// \param[in] _path The path to request
+      /// \return World iterator
       public: static WorldIter Create(const Rest &_rest,
                                       const ServerConfig &_server,
-                                      const std::string &_api);
+                                      const std::string &_path);
 
       /// \brief Create a world iterator that is empty
+      /// \return An empty iterator
       public: static WorldIter Create();
     };
 
     /// \brief Private class, do not include or instantiate
     class IGNITION_FUEL_TOOLS_VISIBLE WorldIterPrivate
     {
-      /// \brief destructor
+      /// \brief Destructor
       public: virtual ~WorldIterPrivate();
 
       /// \brief Advance iterator to next world
       public: virtual void Next() = 0;
 
-      /// \brief true if this iterator has reach the end
+      /// \brief True if this iterator has reach the end
+      /// \return True if reached end.
       public: virtual bool HasReachedEnd() = 0;
 
-      /// \brief current world for returning references
+      /// \brief Current world for returning references
       public: WorldIdentifier worldId;
     };
 
-    /// \brief class for iterating through world ids where all are known
-    ///        in advance
+    /// \brief Class for iterating through world ids
     class IGNITION_FUEL_TOOLS_VISIBLE WorldIterIds : public WorldIterPrivate
     {
-      /// \brief constructor
+      /// \brief Constructor
       public: explicit WorldIterIds(std::vector<WorldIdentifier> _ids);
 
-      /// \brief destructor
+      /// \brief Destructor
       public: virtual ~WorldIterIds();
 
-      /// \brief Advance iterator to next world
+      // Documentation inherited
       public: virtual void Next() override;
 
-      /// \brief true if this iterator has reach the end
+      // Documentation inherited
       public: virtual bool HasReachedEnd() override;
 
       /// \brief World identifiers that have been requested
       protected: std::vector<WorldIdentifier> ids;
 
-      /// \brief where the current iterator is in the list of ids
+      /// \brief Where the current iterator is in the list of ids
       protected: std::vector<WorldIdentifier>::iterator idIter;
     };
 
     /// \brief class for iterating through world ids from a rest API
     class IGNITION_FUEL_TOOLS_VISIBLE WorldIterRestIds: public WorldIterPrivate
     {
-      /// \brief constructor
+      /// \brief Constructor
+      /// \param[in] _rest REST client
+      /// \param[in] _server Server configuration
+      /// \param[in] _path The path to request
       public: WorldIterRestIds(const Rest &_rest,
                                const ServerConfig &_server,
-                               const std::string &_api);
+                               const std::string &_path);
 
-      /// \brief destructor
+      /// \brief Destructor
       public: virtual ~WorldIterRestIds();
 
-      /// \brief Advance iterator to next world
+      // Documentation inherited
       public: virtual void Next() override;
 
-      /// \brief true if this iterator has reach the end
+      // Documentation inherited
       public: virtual bool HasReachedEnd() override;
 
-      /// \brief Client configuration
+      /// \brief Server configuration
       public: ServerConfig config;
 
       /// \brief RESTful client
@@ -116,7 +122,7 @@ namespace ignition
       /// \brief World identifiers in the current page
       protected: std::vector<WorldIdentifier> ids;
 
-      /// \brief where the current iterator is in the list of ids
+      /// \brief Where the current iterator is in the list of ids
       protected: std::vector<WorldIdentifier>::iterator idIter;
     };
   }

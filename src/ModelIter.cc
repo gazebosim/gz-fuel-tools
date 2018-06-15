@@ -48,10 +48,10 @@ ModelIter ModelIterFactory::Create(const std::vector<Model> &_models)
 
 //////////////////////////////////////////////////
 ModelIter ModelIterFactory::Create(const REST &_rest,
-    const ServerConfig &_server, const std::string &_api)
+    const ServerConfig &_server, const std::string &_path)
 {
   std::unique_ptr<ModelIterPrivate> priv(new IterRESTIds(
-    _rest, _server, _api));
+    _rest, _server, _path));
   return std::move(ModelIter(std::move(priv)));
 }
 
@@ -148,7 +148,7 @@ IterRESTIds::~IterRESTIds()
 
 //////////////////////////////////////////////////
 IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
-    const std::string &_api)
+    const std::string &_path)
   : config(_config), rest(_rest)
 {
   REST::Method method = REST::GET;
@@ -165,7 +165,7 @@ IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
   {
     // Fire the request.
     resp = this->rest.Request(method, this->config.URL(),
-      this->config.Version(), _api, {queryStrPage}, headers, "");
+      this->config.Version(), _path, {queryStrPage}, headers, "");
 
     // Reset the query string
     queryStrPage = "";

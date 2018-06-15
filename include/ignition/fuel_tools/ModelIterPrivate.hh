@@ -38,37 +38,42 @@ namespace ignition
     {
       /// \brief Create a model iterator from a vector of model identifiers
       /// \param[in] _ids Model identifiers
+      /// \return Model iterator
       public: static ModelIter Create(const std::vector<ModelIdentifier> &_ids);
 
       /// \brief Create a model iterator from a vector of models
       /// \param[in] _ids Models
+      /// \return Model iterator
       public: static ModelIter Create(const std::vector<Model> &_models);
 
       /// \brief Create a model iter that will make REST api calls
       /// \param[in] _rest a REST request
       /// \param[in] _server The server to request the operation
-      /// \param[in] _api The path to request
+      /// \param[in] _path The path to request
+      /// \return Model iterator
       public: static ModelIter Create(const REST &_rest,
                                       const ServerConfig &_server,
-                                      const std::string &_api);
+                                      const std::string &_path);
 
       /// \brief Create a model iterator that is empty
+      /// \return An empty iterator
       public: static ModelIter Create();
     };
 
     /// \brief Private class, do not include or instantiate
     class IGNITION_FUEL_TOOLS_VISIBLE ModelIterPrivate
     {
-      /// \brief destructor
+      /// \brief Destructor
       public: virtual ~ModelIterPrivate();
 
       /// \brief Advance iterator to next model
       public: virtual void Next() = 0;
 
-      /// \brief true if this iterator has reach the end
+      /// \brief True if this iterator has reach the end
+      /// \return True if reached end.
       public: virtual bool HasReachedEnd() = 0;
 
-      /// \brief current model for returning references
+      /// \brief Current model for returning references
       public: Model model;
     };
 
@@ -76,22 +81,22 @@ namespace ignition
     ///        in advance
     class IGNITION_FUEL_TOOLS_VISIBLE IterIds : public ModelIterPrivate
     {
-      /// \brief constructor
+      /// \brief Constructor
       public: explicit IterIds(std::vector<ModelIdentifier> _ids);
 
-      /// \brief destructor
+      /// \brief Destructor
       public: virtual ~IterIds();
 
-      /// \brief Advance iterator to next model
+      // Documentation inherited
       public: virtual void Next() override;
 
-      /// \brief true if this iterator has reach the end
+      // Documentation inherited
       public: virtual bool HasReachedEnd() override;
 
       /// \brief Model identifiers that have been requested
       protected: std::vector<ModelIdentifier> ids;
 
-      /// \brief where the current iterator is in the list of ids
+      /// \brief Where the current iterator is in the list of ids
       protected: std::vector<ModelIdentifier>::iterator idIter;
     };
 
@@ -99,22 +104,22 @@ namespace ignition
     ///        in advance
     class IGNITION_FUEL_TOOLS_VISIBLE IterModels: public ModelIterPrivate
     {
-      /// \brief constructor
+      /// \brief Constructor
       public: explicit IterModels(std::vector<Model> _models);
 
-      /// \brief destructor
+      /// \brief Destructor
       public: virtual ~IterModels();
 
-      /// \brief Advance iterator to next model
+      // Documentation inherited
       public: virtual void Next() override;
 
-      /// \brief true if this iterator has reach the end
+      // Documentation inherited
       public: virtual bool HasReachedEnd() override;
 
       /// \brief Models to iterator through
       protected: std::vector<Model> models;
 
-      /// \brief where the current iterator is in the list of models
+      /// \brief Where the current iterator is in the list of models
       protected: std::vector<Model>::iterator modelIter;
     };
 
@@ -122,18 +127,21 @@ namespace ignition
     /// \brief class for iterating through model ids from a rest API
     class IGNITION_FUEL_TOOLS_VISIBLE IterRESTIds: public ModelIterPrivate
     {
-      /// \brief constructor
+      /// \brief Constructor
+      /// \param[in] _rest REST client
+      /// \param[in] _server Server configuration
+      /// \param[in] _path The path to request
       public: IterRESTIds(const REST &_rest,
                           const ServerConfig &_server,
                           const std::string &_api);
 
-      /// \brief destructor
+      /// \brief Destructor
       public: virtual ~IterRESTIds();
 
-      /// \brief Advance iterator to next model
+      // Documentation inherited
       public: virtual void Next() override;
 
-      /// \brief true if this iterator has reach the end
+      // Documentation inherited
       public: virtual bool HasReachedEnd() override;
 
       /// \brief Client configuration
@@ -145,7 +153,7 @@ namespace ignition
       /// \brief Model identifiers in the current page
       protected: std::vector<ModelIdentifier> ids;
 
-      /// \brief where the current iterator is in the list of ids
+      /// \brief Where the current iterator is in the list of ids
       protected: std::vector<ModelIdentifier>::iterator idIter;
     };
   }

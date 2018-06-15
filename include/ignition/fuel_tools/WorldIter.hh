@@ -26,7 +26,7 @@ namespace ignition
 {
   namespace fuel_tools
   {
-    /// \brief forward declaration
+    /// \brief Forward declarations
     class WorldIdentifier;
     class WorldIterPrivate;
     class WorldIterFactory;
@@ -37,25 +37,31 @@ namespace ignition
       friend WorldIterFactory;
 
       /// \brief Construct an iterator with the data it needs to function
+      /// \param[in] _dptr Pointer to private data to copy
       protected: explicit WorldIter(std::unique_ptr<WorldIterPrivate> _dptr);
 
       /// \brief Move constructor
+      /// \param[in] _old Iter to move
       public: WorldIter(WorldIter && _old);
 
       /// \brief Default destructor.
       public: ~WorldIter();
 
+      /// \brief Conversion operator
       /// \return False once the iterator is one past the end of the worlds
       public: operator bool() const;
 
+      /// \brief Conversion operator
+      /// \return Internal world identifier.
+      public: operator WorldIdentifier() const;
+
       /// \brief Prefix increment
+      /// \return Next iteration
       public: WorldIter &operator++();
 
       /// \brief -> operator
+      /// \return Internal world identifier
       public: WorldIdentifier *operator->();
-
-      /// \brief Conversion operator
-      public: operator WorldIdentifier() const;
 
       /// \brief Private data pointer.
       private: std::unique_ptr<WorldIterPrivate> dataPtr;

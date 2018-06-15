@@ -39,10 +39,10 @@ WorldIter WorldIterFactory::Create(const std::vector<WorldIdentifier> &_ids)
 
 //////////////////////////////////////////////////
 WorldIter WorldIterFactory::Create(const Rest &_rest,
-    const ServerConfig &_server, const std::string &_api)
+    const ServerConfig &_server, const std::string &_path)
 {
   std::unique_ptr<WorldIterPrivate> priv(new WorldIterRestIds(
-    _rest, _server, _api));
+    _rest, _server, _path));
   return std::move(WorldIter(std::move(priv)));
 }
 
@@ -100,7 +100,7 @@ WorldIterRestIds::~WorldIterRestIds()
 
 //////////////////////////////////////////////////
 WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
-    const ServerConfig &_config, const std::string &_api)
+    const ServerConfig &_config, const std::string &_path)
   : config(_config), rest(_rest)
 {
   auto method = HttpMethod::GET;
@@ -117,7 +117,7 @@ WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
   {
     // Fire the request.
     resp = this->rest.Request(method, this->config.URL(),
-      this->config.Version(), _api, {queryStrPage}, headers, "");
+      this->config.Version(), _path, {queryStrPage}, headers, "");
 
     // Reset the query string
     queryStrPage = "";
