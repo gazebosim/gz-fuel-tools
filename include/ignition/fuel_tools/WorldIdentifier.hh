@@ -54,7 +54,7 @@ namespace ignition
       /// \return True if the WorldIdentifier names are equal.
       public: bool operator==(const WorldIdentifier &_rhs) const;
 
-      /// \brief Returns just the last part of the world name.
+      /// \brief Returns the world name
       /// \return World name.
       public: std::string Name() const;
 

@@ -75,6 +75,7 @@ namespace ignition
     class IGNITION_FUEL_TOOLS_VISIBLE WorldIterIds : public WorldIterPrivate
     {
       /// \brief Constructor
+      /// \param[in] _ids Vector of ids
       public: explicit WorldIterIds(std::vector<WorldIdentifier> _ids);
 
       /// \brief Destructor
