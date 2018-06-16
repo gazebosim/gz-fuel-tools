@@ -33,6 +33,7 @@
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/ign.hh"
+#include "ignition/fuel_tools/WorldIdentifier.hh"
 
 //////////////////////////////////////////////////
 /// \brief Print resources in a human readable manner
@@ -149,6 +150,39 @@ extern "C" bool getAllModels(
 }
 
 //////////////////////////////////////////////////
+/// \brief Fill a map with all worlds from a server
+/// \param[in] _client Fuel client
+/// \param[in] _server Server configuration
+/// \param[out] _resourceMap Key is owner name, value is vector of resources
+/// \return True if successful, will fail if there's a server error or if the
+/// server has no worlds yet.
+extern "C" bool getAllWorlds(
+    const ignition::fuel_tools::FuelClient &_client,
+    const ignition::fuel_tools::ServerConfig &_server,
+    std::map<std::string, std::vector<std::string>> &_resourceMap)
+{
+  auto iter = _client.Worlds(_server);
+
+  if (!iter)
+  {
+    std::cout <<
+        "Either failed to fetch world list, or server has no worlds yet."
+        << std::endl;
+    return false;
+  }
+
+  // Rearrange by user
+  // key: user name
+  // value: vector of world names
+  for (; iter; ++iter)
+  {
+    _resourceMap[iter->Owner()].push_back(iter->Name());
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
 /// \brief Fill a map with all models from an owner
 /// \param[in] _client Fuel client
 /// \param[in] _modelId Identifier for models to be returned
@@ -185,6 +219,39 @@ extern "C" bool getOwnerModels(
 }
 
 //////////////////////////////////////////////////
+/// \brief Fill a map with all worlds from an owner
+/// \param[in] _client Fuel client
+/// \param[in] _worldId Identifier for worlds to be returned
+/// \param[out] _resourceMap Key is owner name, value is vector of resources
+/// \return True if successful, will fail if there's a server error or if the
+/// server has no worlds yet.
+extern "C" bool getOwnerWorlds(
+    const ignition::fuel_tools::FuelClient &_client,
+    const ignition::fuel_tools::WorldIdentifier &_worldId,
+    std::map<std::string, std::vector<std::string>> &_resourceMap)
+{
+  auto iter = _client.Worlds(_worldId);
+
+  if (!iter)
+  {
+    std::cout <<
+        "Either failed to fetch world list, or server has no worlds yet."
+        << std::endl;
+    return false;
+  }
+
+  // Rearrange by user
+  // key: user name
+  // value: vector of world names
+  for (; iter; ++iter)
+  {
+    _resourceMap[iter->Owner()].push_back(iter->Name());
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 {
   return strdup(IGNITION_FUEL_TOOLS_VERSION_FULL);
@@ -194,7 +261,14 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     const char *_owner, const char *_raw)
 {
-  std::string url{_url};
+  std::string urlStr{_url};
+  if (!urlStr.empty() && !ignition::common::URI::Valid(_url))
+  {
+    std::cout << "Invalid URL [" << _url << "]" << std::endl;
+    return 0;
+  }
+
+  ignition::common::URI url(urlStr);
   std::string owner{_owner};
   std::string rawStr{_raw};
   std::transform(rawStr.begin(), rawStr.end(),
@@ -203,10 +277,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
-  if (!url.empty())
+  if (url.Valid())
   {
     ignition::fuel_tools::ServerConfig serverConf;
-    serverConf.URL(url);
+    serverConf.SetUrl(url);
     conf.AddServer(serverConf);
   }
   else
@@ -242,12 +316,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     if (owner.empty())
     {
       if (!getAllModels(client, server, modelsMap))
-        return false;
+        continue;
     }
     else
     {
       if (!getOwnerModels(client, modelId, modelsMap))
-        return false;
+        continue;
     }
 
     auto endTime = std::chrono::high_resolution_clock::now();
@@ -271,6 +345,93 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 }
 
 //////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
+    const char *_owner, const char *_raw)
+{
+  std::string urlStr{_url};
+  if (!urlStr.empty() && !ignition::common::URI::Valid(_url))
+  {
+    std::cout << "Invalid URL [" << _url << "]" << std::endl;
+    return 0;
+  }
+
+  ignition::common::URI url(urlStr);
+  std::string owner{_owner};
+  std::string rawStr{_raw};
+  std::transform(rawStr.begin(), rawStr.end(),
+                 rawStr.begin(), ::tolower);
+  bool pretty = rawStr != "true";
+
+  // Client
+  ignition::fuel_tools::ClientConfig conf;
+  if (url.Valid())
+  {
+    ignition::fuel_tools::ServerConfig serverConf;
+    serverConf.SetUrl(url);
+    conf.AddServer(serverConf);
+  }
+  else
+  {
+    conf.LoadConfig();
+  }
+
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+
+  // Filter
+  ignition::fuel_tools::WorldIdentifier worldId;
+  if (!owner.empty())
+    worldId.SetOwner(owner);
+
+  ignition::fuel_tools::FuelClient client(conf);
+
+  // Get worlds
+  for (auto server : conf.Servers())
+  {
+    worldId.SetServer(server);
+
+    if (pretty)
+    {
+      std::cout << "Fetching world list from " << server.URL() << "..."
+                << std::endl;
+    }
+
+    auto startTime = std::chrono::high_resolution_clock::now();
+
+    std::map<std::string, std::vector<std::string>> worldsMap;
+
+    // All worlds
+    if (owner.empty())
+    {
+      if (!getAllWorlds(client, server, worldsMap))
+        continue;
+    }
+    else
+    {
+      if (!getOwnerWorlds(client, worldId, worldsMap))
+        continue;
+    }
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+        endTime - startTime);
+
+    if (pretty)
+    {
+      std::cout << "Received world list (took " << duration.count() << "ms)."
+                << std::endl;
+    }
+
+    // Print all worlds
+    if (pretty)
+      prettyPrint(server, worldsMap, "worlds");
+    else
+      uglyPrint(server, worldsMap, "worlds");
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
 {
   std::string urlStr{_url};
@@ -287,9 +448,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
 
   ignition::fuel_tools::FuelClient client(conf);
+  ignition::fuel_tools::ModelIdentifier model;
+  ignition::fuel_tools::WorldIdentifier world;
 
   // Model?
-  ignition::fuel_tools::ModelIdentifier model;
   if (client.ParseModelUrl(url, model))
   {
     // Download
@@ -315,9 +477,34 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
       return false;
     }
   }
+  // World?
+  else if (client.ParseWorldUrl(url, world))
+  {
+    // Download
+    if (ignition::common::Console::Verbosity() >= 3)
+    {
+      std::cout << "Downloading world: " << "\033[36m" << std::endl
+                << world.AsPrettyString("  ") << "\033[39m" << std::endl;
+    }
+
+    if (world.Version() != 0)
+    {
+      ignwarn << "Requested version [" << world.VersionStr()  << "], but "
+              << "currently only the world's latest (tip) version is supported."
+              << std::endl;
+    }
+
+    auto result = client.DownloadWorld(world);
+
+    if (!result)
+    {
+      std::cout << "Download failed." << std::endl;
+      return false;
+    }
+  }
   else
   {
-    std::cout << "Invalid URL: only models can be downloaded so far."
+    std::cout << "Invalid URL: only models and worlds can be downloaded so far."
               << std::endl;
     return false;
   }

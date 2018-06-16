@@ -72,16 +72,20 @@ TEST(CmdLine, Help)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelListFail)
+TEST(CmdLine, ListFail)
 {
   auto output = custom_exec_str(g_listCmd);
   EXPECT_NE(output.find("Missing resource type"), std::string::npos) << output;
 
   output = custom_exec_str(g_listCmd + " -t banana");
-  EXPECT_NE(output.find("Only model resources"), std::string::npos) << output;
+  EXPECT_NE(output.find("Invalid resource"), std::string::npos) << output;
 
   output = custom_exec_str(g_listCmd + " -t model -u fake_url");
-  EXPECT_NE(output.find("failed to fetch model list"), std::string::npos)
+  EXPECT_NE(output.find("Invalid URL"), std::string::npos)
+      << output;
+
+  output = custom_exec_str(g_listCmd + " -t world -u fake_url");
+  EXPECT_NE(output.find("Invalid URL"), std::string::npos)
       << output;
 }
 
@@ -109,5 +113,27 @@ TEST(CmdLine, ModelListCustomServerPretty)
       << output;
   EXPECT_EQ(output.find("https://staging-api.ignitionfuel.org/1.0/"),
       std::string::npos) << output;
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, WorldListConfigServerUgly)
+{
+  auto output = custom_exec_str(g_listCmd +
+      " -t world --raw -u https://staging-api.ignitionfuel.org");
+  EXPECT_NE(output.find("https://staging-api.ignitionfuel.org/1.0/"),
+      std::string::npos) << output;
+  EXPECT_EQ(output.find("owners"), std::string::npos) << output;
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, WorldListCustomServerPretty)
+{
+  auto output = custom_exec_str(
+      g_listCmd + " -t world -u https://staging-api.ignitionfuel.org");
+
+  EXPECT_NE(output.find("https://staging-api.ignitionfuel.org"),
+      std::string::npos) << output;
+  EXPECT_NE(output.find("owners"), std::string::npos) << output;
+  EXPECT_NE(output.find("worlds"), std::string::npos) << output;
 }
 

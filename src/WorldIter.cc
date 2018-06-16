@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Open Source Robotics Foundation
+ * Copyright (C) 2018 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,143 +22,95 @@
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/JSONParser.hh"
-#include "ignition/fuel_tools/Model.hh"
-#include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ignition/fuel_tools/ModelIter.hh"
-#include "ignition/fuel_tools/ModelIterPrivate.hh"
-#include "ignition/fuel_tools/ModelPrivate.hh"
-#include "ignition/fuel_tools/REST.hh"
+#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "ignition/fuel_tools/WorldIter.hh"
+#include "ignition/fuel_tools/WorldIterPrivate.hh"
+#include "ignition/fuel_tools/RestClient.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
 
 //////////////////////////////////////////////////
-ModelIter ModelIterFactory::Create(const std::vector<ModelIdentifier> &_ids)
+WorldIter WorldIterFactory::Create(const std::vector<WorldIdentifier> &_ids)
 {
-  std::unique_ptr<ModelIterPrivate> priv(new IterIds(_ids));
-  return std::move(ModelIter(std::move(priv)));
+  std::unique_ptr<WorldIterPrivate> priv(new WorldIterIds(_ids));
+  return std::move(WorldIter(std::move(priv)));
 }
 
 //////////////////////////////////////////////////
-ModelIter ModelIterFactory::Create(const std::vector<Model> &_models)
-{
-  std::unique_ptr<ModelIterPrivate> priv(new IterModels(_models));
-  return std::move(ModelIter(std::move(priv)));
-}
-
-//////////////////////////////////////////////////
-ModelIter ModelIterFactory::Create(const REST &_rest,
+WorldIter WorldIterFactory::Create(const Rest &_rest,
     const ServerConfig &_server, const std::string &_path)
 {
-  std::unique_ptr<ModelIterPrivate> priv(new IterRESTIds(
+  std::unique_ptr<WorldIterPrivate> priv(new WorldIterRestIds(
     _rest, _server, _path));
-  return std::move(ModelIter(std::move(priv)));
+  return std::move(WorldIter(std::move(priv)));
 }
 
 //////////////////////////////////////////////////
-ModelIter ModelIterFactory::Create()
+WorldIter WorldIterFactory::Create()
 {
-  std::unique_ptr<ModelIterPrivate> priv(new IterIds({}));
-  return std::move(ModelIter(std::move(priv)));
+  std::unique_ptr<WorldIterPrivate> priv(new WorldIterIds({}));
+  return std::move(WorldIter(std::move(priv)));
 }
 
 //////////////////////////////////////////////////
-ModelIterPrivate::~ModelIterPrivate()
-{
-}
-
-//////////////////////////////////////////////////
-IterIds::~IterIds()
+WorldIterPrivate::~WorldIterPrivate()
 {
 }
 
 //////////////////////////////////////////////////
-IterIds::IterIds(std::vector<ModelIdentifier> _ids)
+WorldIterIds::~WorldIterIds()
+{
+}
+
+//////////////////////////////////////////////////
+WorldIterIds::WorldIterIds(std::vector<WorldIdentifier> _ids)
   : ids(_ids)
 {
   this->idIter = this->ids.begin();
   if (!this->ids.empty())
   {
-    std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
-    ptr->id = *(this->idIter);
-    this->model = Model(ptr);
+    this->worldId = *(this->idIter);
   }
 }
 
 //////////////////////////////////////////////////
-void IterIds::Next()
+void WorldIterIds::Next()
 {
   // advance pointer
   ++(this->idIter);
 
-  // Update personal model class
+  // Update personal world class
   if (this->idIter != this->ids.end())
   {
-    std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
-    ptr->id = *(this->idIter);
-    this->model = Model(ptr);
+    this->worldId = *(this->idIter);
   }
 }
 
 //////////////////////////////////////////////////
-bool IterIds::HasReachedEnd()
+bool WorldIterIds::HasReachedEnd()
 {
   return this->ids.empty() || this->idIter == this->ids.end();
 }
 
 //////////////////////////////////////////////////
-IterModels::~IterModels()
+WorldIterRestIds::~WorldIterRestIds()
 {
 }
 
 //////////////////////////////////////////////////
-IterModels::IterModels(std::vector<Model> _models)
-  : models(_models)
-{
-  this->modelIter = this->models.begin();
-  if (!this->models.empty())
-  {
-    this->model = this->models.front();
-  }
-}
-
-//////////////////////////////////////////////////
-void IterModels::Next()
-{
-  // advance pointer
-  ++(this->modelIter);
-
-  // Update personal model class
-  if (this->modelIter != this->models.end())
-  {
-    this->model = *(this->modelIter);
-  }
-}
-
-//////////////////////////////////////////////////
-bool IterModels::HasReachedEnd()
-{
-  return this->models.empty() || this->modelIter == this->models.end();
-}
-
-//////////////////////////////////////////////////
-IterRESTIds::~IterRESTIds()
-{
-}
-
-//////////////////////////////////////////////////
-IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
-    const std::string &_path)
+WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
+    const ServerConfig &_config, const std::string &_path)
   : config(_config), rest(_rest)
 {
-  REST::Method method = REST::GET;
+  auto method = HttpMethod::GET;
   this->config = _config;
   std::vector<std::string> headers = {"Accept: application/json"};
-  RESTResponse resp;
-  std::vector<ModelIdentifier> modelIds;
+  RestResponse resp;
+  std::vector<WorldIdentifier> worldIds;
   this->ids.clear();
 
-  // Empty query string will get the first page of models.
+  // Empty query string will get the first page of worlds.
   std::string queryStrPage  = "";
   std::string queryStrPageKey = "page=";
   do
@@ -194,83 +146,73 @@ IterRESTIds::IterRESTIds(const REST &_rest, const ServerConfig &_config,
     }
 
     // Parse the response.
-    modelIds = JSONParser::ParseModels(resp.data, this->config);
+    worldIds = JSONParser::ParseWorlds(resp.data, this->config);
 
-    // Add the vector of models to the list.
-    this->ids.insert(std::end(this->ids), std::begin(modelIds),
-      std::end(modelIds));
-  } while (!modelIds.empty() && !queryStrPage.empty());
+    // Add the vector of worlds to the list.
+    this->ids.insert(std::end(this->ids), std::begin(worldIds),
+      std::end(worldIds));
+  } while (!worldIds.empty() && !queryStrPage.empty());
 
   if (this->ids.empty())
     return;
 
   this->idIter = this->ids.begin();
 
-  // make first model
-  std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
-  ptr->id = *(this->idIter);
-  ptr->id.Server(this->config);
-  this->model = Model(ptr);
+  // make first world
+  this->worldId = *(this->idIter);
+  this->worldId.SetServer(this->config);
 
   igndbg << "Got response [" << resp.data << "]\n";
 }
 
 //////////////////////////////////////////////////
-void IterRESTIds::Next()
+void WorldIterRestIds::Next()
 {
   // advance pointer
   ++(this->idIter);
 
-  // Update personal model class
+  // Update personal world class
   if (this->idIter != this->ids.end())
   {
-    std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
-    ptr->id = *(this->idIter);
-    ptr->id.Server(this->config);
-    this->model = Model(ptr);
+    this->worldId = *(this->idIter);
+    this->worldId.SetServer(this->config);
   }
-  // TODO request next page if api is paginated
+  // TODO request next page if api is paginated here instead of in the
+  // constructor
 }
 
 //////////////////////////////////////////////////
-bool IterRESTIds::HasReachedEnd()
+bool WorldIterRestIds::HasReachedEnd()
 {
   return this->ids.empty() || this->idIter == this->ids.end();
 }
 
 //////////////////////////////////////////////////
-ModelIter::ModelIter(std::unique_ptr<ModelIterPrivate> _dptr)
+WorldIter::WorldIter(std::unique_ptr<WorldIterPrivate> _dptr)
 {
   this->dataPtr.reset(_dptr.release());
 }
 
 //////////////////////////////////////////////////
-ModelIter::ModelIter(ModelIter && _old)
+WorldIter::WorldIter(WorldIter && _old)
 {
   this->dataPtr.reset(_old.dataPtr.release());
 }
 
 //////////////////////////////////////////////////
-ModelIter::~ModelIter()
+WorldIter::~WorldIter()
 {
 }
 
 //////////////////////////////////////////////////
-ModelIter::operator bool()
+WorldIter::operator bool() const
 {
   return !this->dataPtr->HasReachedEnd();
 }
 
 //////////////////////////////////////////////////
-ModelIter::operator bool() const
+WorldIter &WorldIter::operator++()
 {
-  return !this->dataPtr->HasReachedEnd();
-}
-
-//////////////////////////////////////////////////
-ModelIter &ModelIter::operator++()
-{
-  // TODO Request more data if there are more pages
   if (!this->dataPtr->HasReachedEnd())
   {
     this->dataPtr->Next();
@@ -279,13 +221,13 @@ ModelIter &ModelIter::operator++()
 }
 
 //////////////////////////////////////////////////
-Model &ModelIter::operator*()
+WorldIdentifier *WorldIter::operator->()
 {
-  return this->dataPtr->model;
+  return &(this->dataPtr->worldId);
 }
 
 //////////////////////////////////////////////////
-Model *ModelIter::operator->()
+WorldIter::operator WorldIdentifier() const
 {
-  return &(this->dataPtr->model);
+  return this->dataPtr->worldId;
 }

@@ -208,3 +208,106 @@ std::string JSONParser::BuildModel(ModelIter _modelIt)
   Json::StreamWriterBuilder builder;
   return Json::writeString(builder, value);
 }
+
+/////////////////////////////////////////////////
+WorldIdentifier JSONParser::ParseWorld(const std::string &_json,
+  const ServerConfig &_server)
+{
+  Json::CharReaderBuilder reader;
+  Json::Value world;
+  WorldIdentifier id;
+  std::istringstream iss(_json);
+  JSONCPP_STRING errs;
+
+  Json::parseFromStream(reader, iss, &world, &errs);
+  ParseWorldImpl(world, id);
+
+  // Adding the server used to retrieve the world.
+  id.SetServer(_server);
+
+  return id;
+}
+
+/////////////////////////////////////////////////
+std::vector<WorldIdentifier> JSONParser::ParseWorlds(const std::string &_json,
+  const ServerConfig &_server)
+{
+  std::vector<WorldIdentifier> ids;
+  Json::CharReaderBuilder reader;
+  Json::Value worlds;
+  std::istringstream iss(_json);
+  JSONCPP_STRING errs;
+
+  Json::parseFromStream(reader, iss, &worlds, &errs);
+
+  if (!worlds.isArray())
+  {
+    ignerr << "JSON response is not an array\n";
+  }
+  else
+  {
+    for (auto worldIt = worlds.begin(); worldIt != worlds.end(); ++worldIt)
+    {
+      Json::Value world = *worldIt;
+      WorldIdentifier id;
+      if (!ParseWorldImpl(world, id))
+      {
+        ignerr << "World isn't a json object!\n";
+        break;
+      }
+
+      // Adding the server used to retrieve the world.
+      id.SetServer(_server);
+
+      ids.push_back(id);
+    }
+  }
+
+  return ids;
+}
+
+/////////////////////////////////////////////////
+bool JSONParser::ParseWorldImpl(
+  const Json::Value &_json, WorldIdentifier &_world)
+{
+  try
+  {
+    if (!_json.isObject())
+    {
+      ignerr << "World isn't a json object!\n";
+      return false;
+    }
+
+    if (_json.isMember("name"))
+      _world.SetName(_json["name"].asString());
+    if (_json.isMember("owner"))
+      _world.SetOwner(_json["owner"].asString());
+    if (_json.isMember("version"))
+      _world.SetVersion(_json["version"].asUInt());
+  }
+#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
+  catch (...)
+  {
+    std::string what;
+#else
+  catch (const Json::LogicError &error)
+  {
+    std::string what = ": [" + std::string(error.what()) + "]";
+#endif
+    ignerr << "Bad response from server" << what << "\n";
+    return false;
+  }
+
+  return true;
+}
+
+/////////////////////////////////////////////////
+std::string JSONParser::BuildWorld(WorldIter _worldIt)
+{
+  Json::Value value;
+  value["name"] = _worldIt->Name();
+  value["version"] = _worldIt->Version();
+
+  Json::StreamWriterBuilder builder;
+  return Json::writeString(builder, value);
+}

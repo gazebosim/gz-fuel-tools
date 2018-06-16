@@ -60,7 +60,7 @@ SUBCOMMANDS = {
   "  ign fuel list [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
-  "  -t [--type] arg          Resource type (i.e. model). Required.        \n"\
+  "  -t [--type] arg          Resource type (i.e. model, world). Required. \n"\
   "  -o [--owner] arg         Return only resources for given owner.       \n"\
   "  -u [--url] arg           URL of a server the resource comes from,     \n"\
   "                           if unspecified, it will be taken from        \n"\
@@ -142,8 +142,8 @@ class Cmd
         puts "Missing resource type (e.g. --type model)."
         exit(-1)
       end
-      if options['type'] != 'model'
-        puts "Only model resources currently supported (e.g. --type model)."
+      if options['type'] != 'model' and options['type'] != 'world'
+        puts "Invalid resource type, use 'model' or 'world'."
         exit(-1)
       end
     when 'download'
@@ -197,11 +197,20 @@ class Cmd
 
       case options['subcommand']
       when 'list'
-        Importer.extern 'int listModels(const char *, const char *, const char *)'
-        if not Importer.listModels(options['url'],
-                                   options['owner'],
-                                   options['raw'])
-          exit(-1)
+        if options['type'] == 'model'
+          Importer.extern 'int listModels(const char *, const char *, const char *)'
+          if not Importer.listModels(options['url'],
+                                     options['owner'],
+                                     options['raw'])
+            exit(-1)
+          end
+        elsif options['type'] == 'world'
+          Importer.extern 'int listWorlds(const char *, const char *, const char *)'
+          if not Importer.listWorlds(options['url'],
+                                     options['owner'],
+                                     options['raw'])
+            exit(-1)
+          end
         end
       when 'download'
         Importer.extern 'int downloadUrl(const char *)'
