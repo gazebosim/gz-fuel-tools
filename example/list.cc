@@ -24,18 +24,19 @@
 DEFINE_bool(h, false, "Show help");
 
 DEFINE_string(c, "", "Config file");
-DEFINE_string(s, "", "Server name");
+DEFINE_string(s, "", "Server URL");
+DEFINE_string(t, "", "Resource type (model / world)");
 
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
   // Simple usage.
   std::string usage("List all models.");
-  usage += " Usage:\n  ./modelList <options>\n\n";
+  usage += " Usage:\n  ./list <options>\n\n";
   usage += "  Example:\n"
-           "\t ./modelList\n"
-           "\t ./modelList -s https://localhost:4430"
-           "\t ./modelList -c /tmp/my_config.yaml\n";
+           "\t ./list -t world\n"
+           "\t ./list -s https://localhost:4430 -t model"
+           "\t ./list -c /tmp/my_config.yaml -t world\n";
 
   gflags::SetUsageMessage(usage);
 
@@ -43,7 +44,7 @@ int main(int argc, char **argv)
   gflags::ParseCommandLineNonHelpFlags(&argc, &argv, true);
 
   // Show help, if specified.
-  if (FLAGS_h)
+  if (FLAGS_h || (FLAGS_t != "model" && FLAGS_t != "world"))
   {
     gflags::SetCommandLineOptionWithMode("help", "false",
         gflags::SET_FLAGS_DEFAULT);
@@ -61,14 +62,13 @@ int main(int argc, char **argv)
 
   // Setup ClientConfig.
   ignition::fuel_tools::ClientConfig conf;
-  conf.SetUserAgent("ExampleModelList");
+  conf.SetUserAgent("ExampleList");
 
   if (FLAGS_s != "")
   {
     // The user specified a Fuel server via command line.
     ignition::fuel_tools::ServerConfig srv;
-    srv.URL(FLAGS_s);
-    srv.LocalName("ignitionfuel");
+    srv.SetUrl(ignition::common::URI(FLAGS_s));
 
     // Add the extra Fuel server.
     conf.AddServer(srv);
@@ -91,9 +91,18 @@ int main(int argc, char **argv)
 
   for (const auto &server : client.Config().Servers())
   {
-    std::cout << "[" << server.URL() << "]\n\n";
-    for (auto iter = client.Models(server); iter; ++iter)
-      std::cout << "  " << iter->Identification().Name() << "\n";
+    std::cout << "[" << server.Url().Str() << "]\n\n";
+    if (FLAGS_t == "model")
+    {
+      for (auto iter = client.Models(server); iter; ++iter)
+        std::cout << "  " << iter->Identification().Name() << "\n";
+    }
+    else if (FLAGS_t == "world")
+    {
+      for (auto iter = client.Worlds(server); iter; ++iter)
+        std::cout << "  " << iter->Name() << "\n";
+    }
     std::cout << std::endl;
   }
 }
+

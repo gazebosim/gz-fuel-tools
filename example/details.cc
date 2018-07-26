@@ -24,20 +24,21 @@
 DEFINE_bool(h, false, "Show help");
 
 DEFINE_string(c, "", "Config file");
-DEFINE_string(m, "", "Model name");
-DEFINE_string(o, "anonymous", "Owner name");
+DEFINE_string(n, "", "Resource name");
+DEFINE_string(o, "", "Owner name");
 DEFINE_string(s, "", "Server name");
+DEFINE_string(t, "", "Resource type (model / world)");
 
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
   // Simple usage.
-  std::string usage("Show details of a model.");
-  usage += " Usage:\n  ./modelDetails <options>\n\n";
+  std::string usage("Show details of a resource.");
+  usage += " Usage:\n  ./details <options>\n\n";
   usage += "  Example:\n"
-           "\t ./modelDetails -o anonymous -m Beer"
-           "\t ./modelDetails -s https://localhost:4430 -o anonymous -m Beer"
-           "\t ./modelDetails -c /tmp/my_config.yaml -o anonymous -m Beer";
+    "\t ./details -t model -o openrobotics -m Beer"
+    "\t ./details -t world -s https://localhost:4430 -o openrobotics -m Empty"
+    "\t ./details -c /tmp/my_config.yaml -o openrobotics -m Beer -t model";
 
   gflags::SetUsageMessage(usage);
 
@@ -45,7 +46,7 @@ int main(int argc, char **argv)
   gflags::ParseCommandLineNonHelpFlags(&argc, &argv, true);
 
   // Show help, if specified.
-  if (FLAGS_h || FLAGS_m == "")
+  if (FLAGS_h || FLAGS_n == "" || (FLAGS_t != "model" && FLAGS_t != "world"))
   {
     gflags::SetCommandLineOptionWithMode("help", "false",
         gflags::SET_FLAGS_DEFAULT);
@@ -56,13 +57,13 @@ int main(int argc, char **argv)
 
   // Setup ClientConfig.
   ignition::fuel_tools::ClientConfig conf;
+  conf.SetUserAgent("ExampleDetails");
 
   if (FLAGS_s != "")
   {
     // The user specified a Fuel server via command line.
     ignition::fuel_tools::ServerConfig srv;
-    srv.URL(FLAGS_s);
-    srv.LocalName("ignitionfuel");
+    srv.SetUrl(ignition::common::URI(FLAGS_s));
 
     // Add the extra Fuel server.
     conf.AddServer(srv);
@@ -81,36 +82,48 @@ int main(int argc, char **argv)
   // Instantiate the FuelClient object with the configuration.
   ignition::fuel_tools::FuelClient client(conf);
 
-  // Set the properties of the model that we want to search.
+  // Set the properties of the resource that we want to search.
   ignition::fuel_tools::ModelIdentifier modelIdentifier;
-  modelIdentifier.Owner(FLAGS_o);
-  modelIdentifier.Name(FLAGS_m);
+  ignition::fuel_tools::WorldIdentifier worldIdentifier;
 
-  // Fetch the model details.
+  if (FLAGS_t == "model")
+  {
+    modelIdentifier.SetOwner(FLAGS_o);
+    modelIdentifier.SetName(FLAGS_n);
+  }
+  else if (FLAGS_t == "world")
+  {
+    worldIdentifier.SetOwner(FLAGS_o);
+    worldIdentifier.SetName(FLAGS_n);
+  }
+
+  // Fetch the details.
   for (const auto &server : client.Config().Servers())
   {
-    ignition::fuel_tools::ModelIdentifier model;
-    if (!client.ModelDetails(server, modelIdentifier, model))
-      continue;
+    if (FLAGS_t == "model")
+    {
+      // Set server
+      auto id = modelIdentifier;
+      id.SetServer(server);
 
-    // Show server.
-    std::cout << "[" << server.URL() << "]\n\n";
+      ignition::fuel_tools::ModelIdentifier model;
+      if (!client.ModelDetails(server, id, model))
+        continue;
 
-    // Show model details.
-    std::cout << "  Name: " << model.Name() << std::endl;
-    std::cout << "  Source URL: " << model.Server().URL() << std::endl;
-    std::cout << "  Unique name: " << model.UniqueName() << std::endl;
-    std::cout << "  Owner: " << model.Owner() << std::endl;
-    std::cout << "  Description: " << model.Description() << std::endl;
-    std::cout << "  Likes: " << model.Likes() << std::endl;
-    std::cout << "  Downloads: " << model.Downloads() << std::endl;
-    std::cout << "  License name: " << model.LicenseName() << std::endl;
-    std::cout << "  License URL: " << model.LicenseURL() << std::endl;
-    std::cout << "  License image URL: " << model.LicenseImageURL()
-        << std::endl;
-    std::cout << "  Tags: " << std::endl;
-    for (auto const &tag : model.Tags())
-      std::cout << "  " << tag << std::endl;
+      std::cout << model.AsPrettyString() << std::endl;
+    }
+    else if (FLAGS_t == "world")
+    {
+      // Set server
+      auto id = worldIdentifier;
+      id.SetServer(server);
+
+      ignition::fuel_tools::WorldIdentifier world;
+      if (!client.WorldDetails(id, world))
+        continue;
+
+      std::cout << world.AsPrettyString() << std::endl;
+    }
   }
 
   return 0;

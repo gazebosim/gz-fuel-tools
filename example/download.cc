@@ -19,25 +19,27 @@
 
 #include <iostream>
 
+#include <ignition/common/URI.hh>
 #include <ignition/fuel_tools.hh>
 
 DEFINE_bool(h, false, "Show help");
 
 DEFINE_string(c, "", "Config file");
-DEFINE_string(m, "", "Model name");
-DEFINE_string(o, "anonymous", "Owner name");
-DEFINE_string(s, "", "Server name");
+DEFINE_string(t, "", "Resource type (model / world)");
+DEFINE_string(n, "", "Resource name");
+DEFINE_string(o, "", "Owner name");
+DEFINE_string(s, "", "Server URL");
 
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
   // Simple usage.
-  std::string usage("Download a model.");
-  usage += " Usage:\n  ./modelDownload <options>\n\n";
+  std::string usage("Download a resource.");
+  usage += " Usage:\n  ./download <options>\n\n";
   usage += "  Examples:\n"
-           "\t ./modelDownload -o caguero -m Beer\n"
-           "\t ./modelDownload -s https://localhost:4430 -o caguero -m Beer\n"
-           "\t ./modelDownload -c /tmp/my_config.yaml -o caguero -m Beer\n";
+    "\t ./download -t model -o openrobotics -n Beer\n"
+    "\t ./download -s https://api.ignitionfuel.org -t world -o openrobotics -m Empty\n"
+    "\t ./download -c /tmp/my_config.yaml -t model -o caguero -m Beer\n";
 
   gflags::SetUsageMessage(usage);
 
@@ -45,7 +47,7 @@ int main(int argc, char **argv)
   gflags::ParseCommandLineNonHelpFlags(&argc, &argv, true);
 
   // Show help, if specified.
-  if (FLAGS_h || FLAGS_m == "")
+  if (FLAGS_h || FLAGS_n == "" || (FLAGS_t != "model" && FLAGS_t != "world"))
   {
     gflags::SetCommandLineOptionWithMode("help", "false",
         gflags::SET_FLAGS_DEFAULT);
@@ -56,17 +58,7 @@ int main(int argc, char **argv)
 
   // Setup ClientConfig.
   ignition::fuel_tools::ClientConfig conf;
-
-  if (FLAGS_s != "")
-  {
-    // The user specified a Fuel server via command line.
-    ignition::fuel_tools::ServerConfig srv;
-    srv.URL(FLAGS_s);
-    srv.LocalName("ignitionfuel");
-
-    // Add the extra Fuel server.
-    conf.AddServer(srv);
-  }
+  conf.SetUserAgent("ExampleDownload");
 
   if (FLAGS_c != "")
     conf.SetConfigPath(FLAGS_c);
@@ -78,21 +70,59 @@ int main(int argc, char **argv)
     return -1;
   }
 
+  if (FLAGS_s != "")
+  {
+    // The user specified a Fuel server via command line.
+    ignition::fuel_tools::ServerConfig srv;
+    srv.SetUrl(ignition::common::URI(FLAGS_s));
+
+    // Add the extra Fuel server.
+    conf.AddServer(srv);
+  }
+
   // Instantiate the FuelClient object with the configuration.
   ignition::fuel_tools::FuelClient client(conf);
 
-  // Set the properties of the model that we want to download.
+  // Set the properties of the resource that we want to download.
   ignition::fuel_tools::ModelIdentifier modelIdentifier;
-  modelIdentifier.Owner(FLAGS_o);
-  modelIdentifier.Name(FLAGS_m);
+  ignition::fuel_tools::WorldIdentifier worldIdentifier;
 
-  // Fetch the model.
-  for (const auto &server : client.Config().Servers())
+  if (FLAGS_t == "model")
   {
-    if (client.DownloadModel(server, modelIdentifier))
-      return 0;
+    modelIdentifier.SetOwner(FLAGS_o);
+    modelIdentifier.SetName(FLAGS_n);
+  }
+  else if (FLAGS_t == "world")
+  {
+    worldIdentifier.SetOwner(FLAGS_o);
+    worldIdentifier.SetName(FLAGS_n);
   }
 
-  std::cerr << "Unable to download model" << std::endl;
+  // Fetch the resource.
+  for (const auto &server : client.Config().Servers())
+  {
+    if (FLAGS_t == "model")
+    {
+      // Set server
+      auto id = modelIdentifier;
+      id.SetServer(server);
+
+      // Download
+      if (client.DownloadModel(server, id))
+        return 0;
+    }
+    else if (FLAGS_t == "world")
+    {
+      // Set server
+      auto id = worldIdentifier;
+      id.SetServer(server);
+
+      // Download
+      if (client.DownloadWorld(id))
+        return 0;
+    }
+  }
+
+  std::cerr << "Unable to download resource" << std::endl;
   return -1;
 }
