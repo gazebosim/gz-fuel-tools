@@ -254,6 +254,26 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
 }
 
 //////////////////////////////////////////////////
+Result FuelClient::WorldDetails(const WorldIdentifier &_id,
+    WorldIdentifier &_world) const
+{
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  auto serverUrl = _id.Server().Url().Str();
+  auto version = _id.Server().Version();
+  auto path = ignition::common::joinPaths(_id.Owner(), "worlds", _id.Name());
+
+  resp = rest.Request(HttpMethod::GET, serverUrl, version, path, {}, {}, "");
+  if (resp.statusCode != 200)
+    return Result(Result::FETCH_ERROR);
+
+  _world = JSONParser::ParseWorld(resp.data, _id.Server());
+
+  return Result(Result::FETCH);
+}
+
+//////////////////////////////////////////////////
 WorldIter FuelClient::Worlds(const ServerConfig &_server) const
 {
   Rest rest(this->dataPtr->rest);

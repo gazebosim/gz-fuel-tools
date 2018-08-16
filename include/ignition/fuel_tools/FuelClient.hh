@@ -97,6 +97,13 @@ namespace ignition
       /// \return A model iterator
       public: ModelIter Models(const ServerConfig &_server) const;
 
+      /// \brief Fetch the details of a world.
+      /// \param[in] _id a partially filled out identifier used to fetch worlds
+      /// \param[out] _world The requested world
+      /// \return Result of the fetch operation.
+      public: Result WorldDetails(const WorldIdentifier &_id,
+                                  WorldIdentifier &_world) const;
+
       /// \brief Returns an iterator that can return information of worlds
       /// \remarks An iterator instead of a list of names, to be able to
       ///          handle pagination. The iterator may fetch more names if
