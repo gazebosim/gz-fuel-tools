@@ -66,7 +66,7 @@ TEST(CmdLine, ModelListFail)
 
   EXPECT_FALSE(listModels("fake_url"));
 
-  EXPECT_NE(stdOutBuffer.str().find("failed to fetch model list"),
+  EXPECT_NE(stdOutBuffer.str().find("Invalid URL"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_TRUE(stdErrBuffer.str().empty());
 
@@ -213,6 +213,168 @@ TEST(CmdLine, ModelDownloadUnversioned)
       "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1"));
   EXPECT_TRUE(ignition::common::isFile(
       "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1/model.sdf"));
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, WorldListFail)
+{
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  EXPECT_FALSE(listWorlds("fake_url"));
+
+  EXPECT_NE(stdOutBuffer.str().find("Invalid URL"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, WorldListConfigServerUgly)
+{
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  EXPECT_TRUE(listWorlds("https://staging-api.ignitionfuel.org", "", "true"));
+
+  EXPECT_NE(stdOutBuffer.str().find("https://staging-api.ignitionfuel.org"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_EQ(stdOutBuffer.str().find("owners"), std::string::npos)
+      << stdOutBuffer.str();
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, WorldListCustomServerPretty)
+{
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  EXPECT_TRUE(listWorlds("https://staging-api.ignitionfuel.org"));
+
+  EXPECT_NE(stdOutBuffer.str().find("https://staging-api.ignitionfuel.org"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_NE(stdOutBuffer.str().find("owners"), std::string::npos)
+      << stdOutBuffer.str();
+  EXPECT_NE(stdOutBuffer.str().find("worlds"), std::string::npos)
+      << stdOutBuffer.str();
+
+  EXPECT_EQ(stdOutBuffer.str().find("https://api.ignitionfuel.org"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_EQ(stdOutBuffer.str().find(
+      "https://staging-api.ignitionfuel.org/1.0/"), std::string::npos)
+      << stdOutBuffer.str();
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, WorldListCustomServerPrettyOwner)
+{
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  EXPECT_TRUE(listWorlds("https://staging-api.ignitionfuel.org",
+      "chapulina"));
+
+  EXPECT_NE(stdOutBuffer.str().find("https://staging-api.ignitionfuel.org"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_NE(stdOutBuffer.str().find("1 owners"), std::string::npos)
+      << stdOutBuffer.str();
+  EXPECT_NE(stdOutBuffer.str().find("worlds"), std::string::npos)
+      << stdOutBuffer.str();
+
+  // If pagination fails, we only get the first 20 worlds
+  EXPECT_EQ(stdOutBuffer.str().find("20 worlds"), std::string::npos)
+      << stdOutBuffer.str();
+
+  EXPECT_EQ(stdOutBuffer.str().find("https://api.ignitionfuel.org"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_EQ(stdOutBuffer.str().find(
+      "https://staging-api.ignitionfuel.org/1.0/"), std::string::npos)
+      << stdOutBuffer.str();
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, WorldDownloadBadUrl)
+{
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  EXPECT_FALSE(downloadUrl("fake_url"));
+
+  EXPECT_NE(stdOutBuffer.str().find("Malformed URL"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, WorldDownloadWrongUrl)
+{
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  EXPECT_FALSE(downloadUrl(
+      "https://site.com/1.0/ownername/worldname"));
+
+  EXPECT_NE(stdOutBuffer.str().find("Invalid URL"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+TEST(CmdLine, WorldDownloadUnversioned)
+{
+  cmdVerbosity("4");
+
+  ignition::common::removeAll("test_cache");
+  ignition::common::createDirectories("test_cache");
+  setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
+
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  // Download
+  EXPECT_TRUE(downloadUrl(
+      "https://staging-api.ignitionfuel.org/1.0/chapulina/worlds/Empty"));
+
+  // Check output
+  EXPECT_NE(stdOutBuffer.str().find("Download succeeded"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  // Check files
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/staging-api.ignitionfuel.org/chapulina/worlds/Empty"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/staging-api.ignitionfuel.org/chapulina/worlds/Empty/1"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/staging-api.ignitionfuel.org/chapulina/worlds/")
+      + "Empty/1/empty.world"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();

@@ -44,8 +44,8 @@ ign_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find ignition-common
-set(IGN_COMMON_MAJOR_VER 1)
-ign_find_package(ignition-common${IGN_COMMON_MAJOR_VER} VERSION 1.1.0 REQUIRED PRIVATE)
+ign_find_package(ignition-common1 VERSION 1.1.0 REQUIRED PRIVATE)
+set(IGN_COMMON_MAJOR_VER ${ignition-common1_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-tools

@@ -34,6 +34,8 @@
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/REST.hh"
 #include "ignition/fuel_tools/RestClient.hh"
+#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "ignition/fuel_tools/WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
@@ -55,6 +57,25 @@ class ignition::fuel_tools::FuelClientPrivate
     "([^\\/\\s]+)\\/+"
     // "models"
     "models\\/+"
+    // Name
+    "([^\\/]+)\\/*"
+    // Version
+    "([0-9]*|tip)"};
+
+  /// \brief A world URL,
+  /// E.g.: https://api.ignitionfuel.org/1.0/openrobotics/worlds/Empty/1
+  /// Where the API version and the world version are optional.
+  public: const std::string kWorldUrlRegexStr{
+    // Method
+    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
+    // Server
+    "([^\\/\\s]+)\\/+"
+    // API Version
+    "([0-9]+[.][0-9]+)?\\/*"
+    // Owner
+    "([^\\/\\s]+)\\/+"
+    // "worlds"
+    "worlds\\/+"
     // Name
     "([^\\/]+)\\/*"
     // Version
@@ -83,6 +104,29 @@ class ignition::fuel_tools::FuelClientPrivate
     // File path
     "(.*)"};
 
+  /// \brief A world file URL,
+  /// E.g.: https://server.org/1.0/owner/worlds/worldname/files/meshes/mesh.dae
+  /// Where the API version is optional, but the world version is required.
+  public: const std::string kWorldFileUrlRegexStr{
+    // Method
+    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
+    // Server
+    "([^\\/\\s]+)\\/+"
+    // API Version
+    "([0-9]+[.][0-9]+)?\\/*"
+    // Owner
+    "([^\\/\\s]+)\\/+"
+    // "worlds"
+    "worlds\\/+"
+    // World
+    "([^\\/]+)\\/+"
+    // Version
+    "([0-9]*|tip)\\/+"
+    // "files"
+    "files\\/+"
+    // File path
+    "(.*)"};
+
   /// \brief Client configuration
   public: ClientConfig config;
 
@@ -95,8 +139,14 @@ class ignition::fuel_tools::FuelClientPrivate
   /// \brief Regex to parse Ignition Fuel model URLs.
   public: std::unique_ptr<std::regex> urlModelRegex;
 
+  /// \brief Regex to parse Ignition Fuel world URLs.
+  public: std::unique_ptr<std::regex> urlWorldRegex;
+
   /// \brief Regex to parse Ignition Fuel model file URLs.
   public: std::unique_ptr<std::regex> urlModelFileRegex;
+
+  /// \brief Regex to parse Ignition Fuel world file URLs.
+  public: std::unique_ptr<std::regex> urlWorldFileRegex;
 
   /// \brief The path where the configuration file is located.
   public: std::string configPath;
@@ -138,8 +188,12 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelUrlRegexStr));
+  this->dataPtr->urlWorldRegex.reset(new std::regex(
+    this->dataPtr->kWorldUrlRegexStr));
   this->dataPtr->urlModelFileRegex.reset(new std::regex(
     this->dataPtr->kModelFileUrlRegexStr));
+  this->dataPtr->urlWorldFileRegex.reset(new std::regex(
+    this->dataPtr->kWorldFileUrlRegexStr));
 }
 
 //////////////////////////////////////////////////
@@ -214,6 +268,46 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
 }
 
 //////////////////////////////////////////////////
+Result FuelClient::WorldDetails(const WorldIdentifier &_id,
+    WorldIdentifier &_world) const
+{
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  auto serverUrl = _id.Server().Url().Str();
+  auto version = _id.Server().Version();
+  auto path = ignition::common::joinPaths(_id.Owner(), "worlds", _id.Name());
+
+  resp = rest.Request(HttpMethod::GET, serverUrl, version, path, {}, {}, "");
+  if (resp.statusCode != 200)
+    return Result(Result::FETCH_ERROR);
+
+  _world = JSONParser::ParseWorld(resp.data, _id.Server());
+
+  return Result(Result::FETCH);
+}
+
+//////////////////////////////////////////////////
+WorldIter FuelClient::Worlds(const ServerConfig &_server) const
+{
+  Rest rest(this->dataPtr->rest);
+  WorldIter iter = WorldIterFactory::Create(rest, _server, "worlds");
+
+  if (!iter)
+  {
+    // Return just the cached worlds
+    ignwarn << "Failed to fetch worlds from server, returning cached worlds."
+            << std::endl << _server.AsString() << std::endl;
+
+    WorldIdentifier id;
+    id.SetServer(_server);
+
+    return this->dataPtr->cache->MatchingWorlds(id);
+  }
+  return iter;
+}
+
+//////////////////////////////////////////////////
 ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id)
 {
@@ -255,6 +349,27 @@ ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
     path = ignition::common::joinPaths(_id.Owner(), "models");
 
   return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
+}
+
+//////////////////////////////////////////////////
+WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
+{
+  // Check local cache first
+  WorldIter localIter = this->dataPtr->cache->MatchingWorlds(_id);
+  if (localIter)
+    return localIter;
+
+  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+
+  // Note: ign-fuel-server doesn't like URLs ending in /
+  std::string path;
+  if (!_id.Name().empty())
+    path = ignition::common::joinPaths(_id.Owner(), "worlds", _id.Name());
+  else
+    path = ignition::common::joinPaths(_id.Owner(), "worlds");
+
+  Rest rest(this->dataPtr->rest);
+  return WorldIterFactory::Create(rest, _id.Server(), path);
 }
 
 //////////////////////////////////////////////////
@@ -330,6 +445,66 @@ Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
   // Save
   // Note that the save function doesn't return the path
   if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
+    return Result(ResultType::FETCH_ERROR);
+
+  return Result(ResultType::FETCH);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadWorld(WorldIdentifier &_id)
+{
+  // Server config
+  if (_id.Server().URL().empty() || _id.Server().Version().empty())
+  {
+    ignerr << "Can't download world, server configuration incomplete: "
+          << std::endl << _id.Server().AsString() << std::endl;
+    return Result(ResultType::FETCH_ERROR);
+  }
+
+  // Route
+  auto route = ignition::common::joinPaths(_id.Owner(),
+        "worlds", _id.Name(), _id.VersionStr(),
+        _id.Name() + ".zip");
+
+  // Request
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+  resp = rest.Request(HttpMethod::GET, _id.Server().URL(),
+      _id.Server().Version(), route, {}, {}, "");
+  if (resp.statusCode != 200)
+  {
+    ignerr << "Failed to download world." << std::endl
+           << "  Server: " << _id.Server().URL() << std::endl
+           << "  Route: " << route << std::endl
+           << "  REST response code: " << resp.statusCode << std::endl;
+    return Result(ResultType::FETCH_ERROR);
+  }
+
+  // Get version from header
+  unsigned int version = 1;
+
+  if (resp.headers.find("X-Ign-Resource-Version") != resp.headers.end())
+  {
+    try
+    {
+      version = std::stoi(resp.headers["X-Ign-Resource-Version"]);
+    }
+    catch(std::invalid_argument &)
+    {
+      ignwarn << "Failed to convert X-Ign-Resource-Version header value ["
+              << resp.headers["X-Ign-Resource-Version"]
+              << "] to integer. Hardcoding version 1." << std::endl;
+    }
+  }
+  else
+  {
+    ignwarn << "Missing X-Ign-Resource-Version in REST response headers."
+            << " Hardcoding version 1." << std::endl;
+  }
+  _id.SetVersion(version);
+
+  // Save
+  if (!this->dataPtr->cache->SaveWorld(_id, resp.data, true))
     return Result(ResultType::FETCH_ERROR);
 
   return Result(ResultType::FETCH);
@@ -412,6 +587,74 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
 }
 
 //////////////////////////////////////////////////
+bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
+    WorldIdentifier &_id)
+{
+  if (!_worldUrl.Valid())
+    return false;
+
+  auto urlStr = _worldUrl.Str();
+
+  std::smatch match;
+  std::string scheme;
+  std::string server;
+  std::string apiVersion;
+  std::string owner;
+  std::string worldName;
+  std::string worldVersion;
+
+  std::regex_match(urlStr, match, *this->dataPtr->urlWorldRegex);
+
+  if (std::regex_match(urlStr, match, *this->dataPtr->urlWorldRegex) &&
+      match.size() >= 5u)
+  {
+    unsigned int i{1};
+
+    scheme = match[i++];
+    server = match[i++];
+    apiVersion = match[i++];
+    owner = match[i++];
+    worldName = match[i++];
+    worldVersion = match[i++];
+  }
+  else
+  {
+    return false;
+  }
+
+  // Get remaining server information from config
+  _id.Server().URL(scheme + "://" + server);
+  _id.Server().Version(apiVersion);
+  for (const auto &s : this->dataPtr->config.Servers())
+  {
+    if (s.URL() == _id.Server().URL())
+    {
+      if (!apiVersion.empty() && s.Version() != _id.Server().Version())
+      {
+        ignwarn << "Requested server API version [" << apiVersion
+                << "] for server [" << s.URL() << "], but will use ["
+                << s.Version() << "] as given in the config file."
+                << std::endl;
+      }
+      _id.Server() = s;
+      break;
+    }
+  }
+
+  if (_id.Server().Version().empty())
+  {
+    ignwarn << "Server configuration is incomplete:" << std::endl
+            << _id.Server().AsString();
+  }
+
+  _id.SetOwner(owner);
+  _id.SetName(worldName);
+  _id.SetVersionStr(worldVersion);
+
+  return true;
+}
+
+//////////////////////////////////////////////////
 bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
     ModelIdentifier &_id, std::string &_filePath)
 {
@@ -444,7 +687,6 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
   }
   else
   {
-    ignerr << "Invalid URL [" << urlStr << "]" << std::endl;
     return false;
   }
 
@@ -476,6 +718,75 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
   _id.SetOwner(owner);
   _id.SetName(modelName);
   _id.SetVersionStr(modelVersion);
+  _filePath = file;
+
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
+    WorldIdentifier &_id, std::string &_filePath)
+{
+  if (!_fileUrl.Valid())
+    return false;
+
+  auto urlStr = _fileUrl.Str();
+
+  std::smatch match;
+  std::string scheme;
+  std::string server;
+  std::string apiVersion;
+  std::string owner;
+  std::string worldName;
+  std::string worldVersion;
+  std::string file;
+
+  if (std::regex_match(urlStr, match, *this->dataPtr->urlWorldFileRegex) &&
+      match.size() == 8u)
+  {
+    unsigned int i{1};
+
+    scheme = match[i++];
+    server = match[i++];
+    apiVersion = match[i++];
+    owner = match[i++];
+    worldName = match[i++];
+    worldVersion = match[i++];
+    file = match[i++];
+  }
+  else
+  {
+    return false;
+  }
+
+  // Get remaining server information from config
+  _id.Server().URL(scheme + "://" + server);
+  _id.Server().Version(apiVersion);
+  for (const auto &s : this->dataPtr->config.Servers())
+  {
+    if (s.URL() == _id.Server().URL())
+    {
+      if (!apiVersion.empty() && s.Version() != _id.Server().Version())
+      {
+        ignwarn << "Requested server API version [" << apiVersion
+                << "] for server [" << s.URL() << "], but will use ["
+                << s.Version() << "] as given in the config file."
+                << std::endl;
+      }
+      _id.Server() = s;
+      break;
+    }
+  }
+
+  if (_id.Server().Version().empty())
+  {
+    ignwarn << "Server configuration is incomplete:" << std::endl
+            << _id.Server().AsString();
+  }
+
+  _id.SetOwner(owner);
+  _id.SetName(worldName);
+  _id.SetVersionStr(worldVersion);
   _filePath = file;
 
   return true;
@@ -523,6 +834,27 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
 }
 
 //////////////////////////////////////////////////
+Result FuelClient::DownloadWorld(const common::URI &_worldUrl,
+  std::string &_path)
+{
+  // Get data from URL
+  WorldIdentifier id;
+  if (!this->ParseWorldUrl(_worldUrl, id))
+  {
+    return Result(Result::FETCH_ERROR);
+  }
+
+  // Download
+  auto result = this->DownloadWorld(id);
+  if (!result)
+    return result;
+
+  _path = id.LocalPath();
+
+  return result;
+}
+
+//////////////////////////////////////////////////
 Result FuelClient::CachedModel(const common::URI &_modelUrl,
   std::string &_path)
 {
@@ -543,6 +875,28 @@ Result FuelClient::CachedModel(const common::URI &_modelUrl,
   }
 
   return Result(ResultType::FETCH_ERROR);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::CachedWorld(const common::URI &_worldUrl,
+  std::string &_path)
+{
+  // Get data from URL
+  WorldIdentifier id;
+  if (!this->ParseWorldUrl(_worldUrl, id))
+  {
+    return Result(Result::FETCH_ERROR);
+  }
+
+  // Check local cache
+  auto success = this->dataPtr->cache->MatchingWorld(id);
+  if (success)
+  {
+    _path = id.LocalPath();
+    return Result(Result::FETCH_ALREADY_EXISTS);
+  }
+
+  return Result(Result::FETCH_ERROR);
 }
 
 //////////////////////////////////////////////////
@@ -572,7 +926,40 @@ Result FuelClient::CachedModelFile(const common::URI &_fileUrl,
   if (common::exists(filePath))
   {
     _path = filePath;
-    return Result(ResultType::FETCH_ALREADY_EXISTS);
+    return Result(Result::FETCH_ALREADY_EXISTS);
+  }
+
+  return Result(Result::FETCH_ERROR);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::CachedWorldFile(const common::URI &_fileUrl,
+  std::string &_path)
+{
+  // Get data from URL
+  WorldIdentifier id;
+  std::string filePath;
+  if (!this->ParseWorldFileUrl(_fileUrl, id, filePath))
+    return Result(Result::FETCH_ERROR);
+
+  if (filePath.empty())
+    return Result(Result::FETCH_ERROR);
+
+  // Look for world
+  auto success = this->dataPtr->cache->MatchingWorld(id);
+
+  if (!success)
+    return Result(ResultType::FETCH_ERROR);
+
+  auto worldPath = id.LocalPath();
+
+  // Check if file exists
+  filePath = common::joinPaths(worldPath, filePath);
+
+  if (common::exists(filePath))
+  {
+    _path = filePath;
+    return Result(Result::FETCH_ALREADY_EXISTS);
   }
 
   return Result(ResultType::FETCH_ERROR);

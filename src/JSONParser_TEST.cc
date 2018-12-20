@@ -26,6 +26,8 @@
 #include "ignition/fuel_tools/JSONParser.hh"
 #include "ignition/fuel_tools/ModelIter.hh"
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
+#include "ignition/fuel_tools/WorldIter.hh"
+#include "ignition/fuel_tools/WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
@@ -109,6 +111,63 @@ TEST(JSONParser, ParseModel)
 
   ASSERT_FALSE(model.Tags().empty());
   EXPECT_EQ("tag1", model.Tags()[0]);
+}
+
+/////////////////////////////////////////////////
+/// \brief Convert JSON string to world iterator
+TEST(JSONParser, ParseWorlds)
+{
+  std::stringstream tmpJsonStr;
+  tmpJsonStr << "["
+    << "{\"name\":\"car\","
+    << "\"version\":3}]";
+
+  ServerConfig srv;
+  srv.SetUrl(common::URI("banana://testServer"));
+
+  auto worldIds = JSONParser::ParseWorlds(tmpJsonStr.str(), srv);
+  EXPECT_EQ(1u, worldIds.size());
+  auto world = worldIds.front();
+  EXPECT_EQ("car", world.Name());
+  EXPECT_EQ(3u, world.Version());
+  EXPECT_EQ("banana://testServer", world.Server().Url().Str());
+}
+
+/////////////////////////////////////////////////
+/// \brief Convert world iterator to JSON string
+TEST(JSONParser, BuildWorld)
+{
+  std::vector<WorldIdentifier> ids;
+  WorldIdentifier id;
+  id.SetName("house");
+  id.SetVersion(5);
+  ids.push_back(id);
+
+  std::string jsonStr = JSONParser::BuildWorld(WorldIterFactory::Create(ids));
+
+  std::stringstream tmpJsonStr;
+  tmpJsonStr
+    << "{\n"
+    << "\t\"name\" : \"house\",\n"
+    << "\t\"version\" : 5\n"
+    << "}";
+  EXPECT_EQ(tmpJsonStr.str(), jsonStr);
+}
+
+/////////////////////////////////////////////////
+TEST(JSONParser, ParseWorld)
+{
+  std::stringstream tmpJsonStr;
+  tmpJsonStr << "{\"name\":\"car\","
+    << "\"version\":1]}";
+
+  ServerConfig srv;
+  srv.SetUrl(common::URI("banana://testServer"));
+
+  WorldIdentifier world = JSONParser::ParseWorld(tmpJsonStr.str(), srv);
+  EXPECT_EQ("car", world.Name());
+  EXPECT_EQ(1u, world.Version());
+  EXPECT_EQ("banana://testServer", world.Server().Url().Str());
 }
 
 //////////////////////////////////////////////////
