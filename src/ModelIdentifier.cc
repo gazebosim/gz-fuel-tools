@@ -253,12 +253,6 @@ std::string ModelIdentifier::Uuid() const
 }
 
 //////////////////////////////////////////////////
-uint32_t ModelIdentifier::Likes() const
-{
-  return this->LikeCount();
-}
-
-//////////////////////////////////////////////////
 uint32_t ModelIdentifier::LikeCount() const
 {
   return this->dataPtr->likeCount;
@@ -283,21 +277,9 @@ std::string ModelIdentifier::LicenseName() const
 }
 
 //////////////////////////////////////////////////
-std::string ModelIdentifier::LicenseURL() const
-{
-  return this->LicenseUrl();
-}
-
-//////////////////////////////////////////////////
 std::string ModelIdentifier::LicenseUrl() const
 {
   return this->dataPtr->licenseUrl.Str();
-}
-
-//////////////////////////////////////////////////
-std::string ModelIdentifier::LicenseImageURL() const
-{
-  return this->LicenseImageUrl();
 }
 
 //////////////////////////////////////////////////
@@ -396,12 +378,6 @@ bool ModelIdentifier::SetLikeCount(const uint32_t _likes)
 {
   this->dataPtr->likeCount = _likes;
   return true;
-}
-
-//////////////////////////////////////////////////
-bool ModelIdentifier::Downloads(const uint32_t _downloads)
-{
-  return this->SetDownloadCount(_downloads);
 }
 
 //////////////////////////////////////////////////

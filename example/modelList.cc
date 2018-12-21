@@ -67,8 +67,7 @@ int main(int argc, char **argv)
   {
     // The user specified a Fuel server via command line.
     ignition::fuel_tools::ServerConfig srv;
-    srv.URL(FLAGS_s);
-    srv.LocalName("ignitionfuel");
+    srv.SetUrl(ignition::common::URI(FLAGS_s));
 
     // Add the extra Fuel server.
     conf.AddServer(srv);
@@ -91,7 +90,7 @@ int main(int argc, char **argv)
 
   for (const auto &server : client.Config().Servers())
   {
-    std::cout << "[" << server.URL() << "]\n\n";
+    std::cout << "[" << server.Url().Str() << "]\n\n";
     for (auto iter = client.Models(server); iter; ++iter)
       std::cout << "  " << iter->Identification().Name() << "\n";
     std::cout << std::endl;

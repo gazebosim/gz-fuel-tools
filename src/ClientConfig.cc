@@ -35,10 +35,44 @@ using namespace fuel_tools;
 static const std::string initialConfigFile = ignition::common::joinPaths(
     IGNITION_FUEL_INITIAL_CONFIG_PATH, "config.yaml");
 
+/////////////////////////////////////////////////
+/// \brief Get home directory.
+/// \return Home directory or empty string if home wasn't found.
+/// \ToDo: Move this function to ignition::common::Filesystem
+std::string homePath()
+{
+  std::string homePath;
+#ifndef _WIN32
+  ignition::common::env("HOME", homePath);
+#else
+  ignition::common::env("HOMEPATH", homePath);
+#endif
+
+  return homePath;
+}
+
 //////////////////////////////////////////////////
 /// \brief Private data class
 class ignition::fuel_tools::ClientConfigPrivate
 {
+  /// \brief Constructor.
+  public: ClientConfigPrivate()
+          {
+            this->cacheLocation = homePath();
+            this->cacheLocation += "/.ignition/fuel";
+            this->servers.push_back(ServerConfig());
+          }
+
+  /// \brief Clear values.
+  public: void Clear()
+          {
+            this->servers.clear();
+            this->cacheLocation = "";
+            this->configPath = "";
+            this->userAgent =
+              "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
+          }
+
   /// \brief A list of servers.
   public: std::vector<ServerConfig> servers;
 
@@ -57,8 +91,16 @@ class ignition::fuel_tools::ClientConfigPrivate
 /// \brief Private data class
 class ignition::fuel_tools::ServerConfigPrivate
 {
+  /// \brief Clear values.
+  public: void Clear()
+          {
+            this->url.Clear();
+            this->key = "";
+            this->version = "1.0";
+          }
+
   /// \brief URL to reach server
-  public: common::URI url;
+  public: common::URI url{"https://fuel.ignitionrobotics.org"};
 
   /// \brief A key to auth with the server
   public: std::string key = "";
@@ -81,6 +123,12 @@ ServerConfig::ServerConfig(const ServerConfig &_orig)
 }
 
 //////////////////////////////////////////////////
+void ServerConfig::Clear()
+{
+  this->dataPtr->Clear();
+}
+
+//////////////////////////////////////////////////
 ServerConfig &ServerConfig::operator=(const ServerConfig &_orig)
 {
   *(this->dataPtr) = *(_orig.dataPtr);
@@ -90,18 +138,6 @@ ServerConfig &ServerConfig::operator=(const ServerConfig &_orig)
 //////////////////////////////////////////////////
 ServerConfig::~ServerConfig()
 {
-}
-
-//////////////////////////////////////////////////
-std::string ServerConfig::URL() const
-{
-  return this->dataPtr->url.Str();
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::URL(const std::string &_url)
-{
-  this->SetUrl(common::URI(_url));
 }
 
 //////////////////////////////////////////////////
@@ -210,22 +246,6 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
   return out.str();
 }
 
-/////////////////////////////////////////////////
-/// \brief Get home directory.
-/// \return Home directory or empty string if home wasn't found.
-/// \ToDo: Move this function to ignition::common::Filesystem
-std::string homePath()
-{
-  std::string homePath;
-#ifndef _WIN32
-  ignition::common::env("HOME", homePath);
-#else
-  ignition::common::env("HOMEPATH", homePath);
-#endif
-
-  return homePath;
-}
-
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
@@ -259,6 +279,12 @@ ClientConfig &ClientConfig::operator=(const ClientConfig &_rhs)
 //////////////////////////////////////////////////
 ClientConfig::~ClientConfig()
 {
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::Clear()
+{
+  this->dataPtr->Clear();
 }
 
 //////////////////////////////////////////////////
@@ -496,12 +522,6 @@ void ClientConfig::AddServer(const ServerConfig &_srv)
 std::string ClientConfig::CacheLocation() const
 {
   return this->dataPtr->cacheLocation;
-}
-
-//////////////////////////////////////////////////
-void ClientConfig::CacheLocation(const std::string &_path)
-{
-  this->SetCacheLocation(_path);
 }
 
 //////////////////////////////////////////////////

@@ -53,14 +53,10 @@ namespace ignition
       /// \brief Destructor.
       public: ~ServerConfig();
 
-      /// \brief Get the URL to access the server.
-      /// \deprecated See common::URI Url() const.
-      public: std::string IGN_DEPRECATED(2.0) URL() const;
-
-      /// \brief Set the URL of this server.
-      /// \param[in] _url URL of this server.
-      /// \deprecated See void SetUrl(const common::URI &).
-      public: void IGN_DEPRECATED(2.0) URL(const std::string &_url);
+      /// \brief Clear the server config. This will set all values to empty
+      /// strings, excpect the version string will be set to it's default
+      /// value.
+      public: void Clear();
 
       /// \brief Get the URL to access the server.
       /// \return The URL of this server.
@@ -142,6 +138,11 @@ namespace ignition
       /// \brief Destructor.
       public: ~ClientConfig();
 
+      /// \brief Clear the client config. This will set all values to empty
+      /// strings, except the user agent which will be set to its default
+      /// value.
+      public: void Clear();
+
       /// \brief Set the user agent name.
       /// \param[in] _agent User agent name.
       public: void SetUserAgent(const std::string &_agent);
@@ -180,11 +181,6 @@ namespace ignition
       /// \brief Where are models and stuff stored locally?
       /// \return The location where assets are stored locally.
       public: std::string CacheLocation() const;
-
-      /// \brief Set where models and stuff are saved.
-      /// \param[in] _path path on disk where models are saved
-      /// \deprecated See void SetCacheLocation(const std::string &_path)
-      public: void IGN_DEPRECATED(2.0) CacheLocation(const std::string &_path);
 
       /// \brief Set where models and stuff are saved.
       /// \param[in] _path path on disk where models are saved.

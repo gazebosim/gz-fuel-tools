@@ -42,7 +42,7 @@ using namespace fuel_tools;
 class ignition::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL,
-  /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer/2
+  /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer/2
   /// Where the API version and the model version are optional.
   public: const std::string kModelUrlRegexStr{
     // Method
@@ -109,20 +109,6 @@ FuelClient::FuelClient()
 }
 
 //////////////////////////////////////////////////
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-FuelClient::FuelClient(const ClientConfig &_config, const REST &_rest,
-    LocalCache *_cache)
-  : FuelClient(_config, Rest(_rest), _cache)
-{
-}
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-
-//////////////////////////////////////////////////
 FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
     LocalCache *_cache)
   : dataPtr(new FuelClientPrivate)
@@ -154,8 +140,8 @@ ClientConfig &FuelClient::Config()
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::ModelDetails(const ServerConfig &/*_server*/,
-  const ModelIdentifier &_id, ModelIdentifier &_model) const
+Result FuelClient::ModelDetails(const ModelIdentifier &_id,
+    ModelIdentifier &_model) const
 {
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
@@ -266,16 +252,14 @@ Result FuelClient::UploadModel(const ServerConfig &/*_server*/,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DeleteModel(const ServerConfig &/*_server*/,
-  const ModelIdentifier &/*_id*/)
+Result FuelClient::DeleteModel(const ModelIdentifier &/*_id*/)
 {
   // TODO Delete a model and return a Result
   return Result(ResultType::DELETE_ERROR);
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DownloadModel(const ServerConfig &/*_server*/,
-  const ModelIdentifier &_id)
+Result FuelClient::DownloadModel(const ModelIdentifier &_id)
 {
   // Server config
   if (!_id.Server().Url().Valid() || _id.Server().Version().empty())
@@ -500,8 +484,7 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   }
 
   // Download
-  ServerConfig srv;
-  auto result = this->DownloadModel(srv, id);
+  auto result = this->DownloadModel(id);
   if (!result)
     return result;
 

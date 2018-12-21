@@ -61,8 +61,7 @@ int main(int argc, char **argv)
   {
     // The user specified a Fuel server via command line.
     ignition::fuel_tools::ServerConfig srv;
-    srv.URL(FLAGS_s);
-    srv.LocalName("ignitionfuel");
+    srv.SetUrl(ignition::common::URI(FLAGS_s));
 
     // Add the extra Fuel server.
     conf.AddServer(srv);
@@ -83,13 +82,14 @@ int main(int argc, char **argv)
 
   // Set the properties of the model that we want to download.
   ignition::fuel_tools::ModelIdentifier modelIdentifier;
-  modelIdentifier.Owner(FLAGS_o);
-  modelIdentifier.Name(FLAGS_m);
+  modelIdentifier.SetOwner(FLAGS_o);
+  modelIdentifier.SetName(FLAGS_m);
 
   // Fetch the model.
   for (const auto &server : client.Config().Servers())
   {
-    if (client.DownloadModel(server, modelIdentifier))
+    modelIdentifier.SetServer(server);
+    if (client.DownloadModel(modelIdentifier))
       return 0;
   }
 

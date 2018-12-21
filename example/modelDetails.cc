@@ -61,8 +61,7 @@ int main(int argc, char **argv)
   {
     // The user specified a Fuel server via command line.
     ignition::fuel_tools::ServerConfig srv;
-    srv.URL(FLAGS_s);
-    srv.LocalName("ignitionfuel");
+    srv.SetUrl(ignition::common::URI(FLAGS_s));
 
     // Add the extra Fuel server.
     conf.AddServer(srv);
@@ -83,30 +82,31 @@ int main(int argc, char **argv)
 
   // Set the properties of the model that we want to search.
   ignition::fuel_tools::ModelIdentifier modelIdentifier;
-  modelIdentifier.Owner(FLAGS_o);
-  modelIdentifier.Name(FLAGS_m);
+  modelIdentifier.SetOwner(FLAGS_o);
+  modelIdentifier.SetName(FLAGS_m);
 
   // Fetch the model details.
   for (const auto &server : client.Config().Servers())
   {
     ignition::fuel_tools::ModelIdentifier model;
-    if (!client.ModelDetails(server, modelIdentifier, model))
+    modelIdentifier.SetServer(server);
+    if (!client.ModelDetails(modelIdentifier, model))
       continue;
 
     // Show server.
-    std::cout << "[" << server.URL() << "]\n\n";
+    std::cout << "[" << server.Url().Str() << "]\n\n";
 
     // Show model details.
     std::cout << "  Name: " << model.Name() << std::endl;
-    std::cout << "  Source URL: " << model.Server().URL() << std::endl;
+    std::cout << "  Source URL: " << model.Server().Url().Str() << std::endl;
     std::cout << "  Unique name: " << model.UniqueName() << std::endl;
     std::cout << "  Owner: " << model.Owner() << std::endl;
     std::cout << "  Description: " << model.Description() << std::endl;
-    std::cout << "  Likes: " << model.Likes() << std::endl;
-    std::cout << "  Downloads: " << model.Downloads() << std::endl;
+    std::cout << "  Likes: " << model.LikeCount() << std::endl;
+    std::cout << "  Downloads: " << model.DownloadCount() << std::endl;
     std::cout << "  License name: " << model.LicenseName() << std::endl;
-    std::cout << "  License URL: " << model.LicenseURL() << std::endl;
-    std::cout << "  License image URL: " << model.LicenseImageURL()
+    std::cout << "  License URL: " << model.LicenseUrl() << std::endl;
+    std::cout << "  License image URL: " << model.LicenseImageUrl()
         << std::endl;
     std::cout << "  Tags: " << std::endl;
     for (auto const &tag : model.Tags())

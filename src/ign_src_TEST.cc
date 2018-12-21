@@ -83,7 +83,7 @@ TEST(CmdLine, ModelListConfigServerUgly)
 
   EXPECT_TRUE(listModels("", "", "true"));
 
-  EXPECT_NE(stdOutBuffer.str().find("https://api.ignitionfuel.org"),
+  EXPECT_NE(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_EQ(stdOutBuffer.str().find("owners"), std::string::npos)
       << stdOutBuffer.str();
@@ -99,19 +99,19 @@ TEST(CmdLine, ModelListCustomServerPretty)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  EXPECT_TRUE(listModels("https://staging-api.ignitionfuel.org"));
+  EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org"));
 
-  EXPECT_NE(stdOutBuffer.str().find("https://staging-api.ignitionfuel.org"),
+  EXPECT_NE(stdOutBuffer.str().find("https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("owners"), std::string::npos)
       << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("models"), std::string::npos)
       << stdOutBuffer.str();
 
-  EXPECT_EQ(stdOutBuffer.str().find("https://api.ignitionfuel.org"),
+  EXPECT_EQ(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_EQ(stdOutBuffer.str().find(
-      "https://staging-api.ignitionfuel.org/1.0/"), std::string::npos)
+      "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
       << stdOutBuffer.str();
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
@@ -125,10 +125,10 @@ TEST(CmdLine, ModelListCustomServerPrettyOwner)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  EXPECT_TRUE(listModels("https://staging-api.ignitionfuel.org",
+  EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org",
       "openrobotics"));
 
-  EXPECT_NE(stdOutBuffer.str().find("https://staging-api.ignitionfuel.org"),
+  EXPECT_NE(stdOutBuffer.str().find("https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("1 owners"), std::string::npos)
       << stdOutBuffer.str();
@@ -139,10 +139,10 @@ TEST(CmdLine, ModelListCustomServerPrettyOwner)
   EXPECT_EQ(stdOutBuffer.str().find("20 models"), std::string::npos)
       << stdOutBuffer.str();
 
-  EXPECT_EQ(stdOutBuffer.str().find("https://api.ignitionfuel.org"),
+  EXPECT_EQ(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_EQ(stdOutBuffer.str().find(
-      "https://staging-api.ignitionfuel.org/1.0/"), std::string::npos)
+      "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
       << stdOutBuffer.str();
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
@@ -199,7 +199,7 @@ TEST(CmdLine, ModelDownloadUnversioned)
 
   // Download
   EXPECT_TRUE(downloadUrl(
-      "https://api.ignitionfuel.org/1.0/chapulina/models/Test box"));
+      "https://fuel.ignitionrobotics.org/1.0/chapulina/models/Test box"));
 
   // Check output
   EXPECT_NE(stdOutBuffer.str().find("Download succeeded"),
@@ -208,11 +208,11 @@ TEST(CmdLine, ModelDownloadUnversioned)
 
   // Check files
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box"));
+      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1"));
+      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/1"));
   EXPECT_TRUE(ignition::common::isFile(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1/model.sdf"));
+      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/1/model.sdf"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();

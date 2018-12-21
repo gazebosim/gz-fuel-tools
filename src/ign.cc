@@ -307,8 +307,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
               << std::endl;
     }
 
-    ignition::fuel_tools::ServerConfig srv;
-    auto result = client.DownloadModel(srv, model);
+    auto result = client.DownloadModel(model);
 
     if (!result)
     {
@@ -335,4 +334,3 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 {
   ignition::common::Console::SetVerbosity(std::atoi(_verbosity));
 }
-

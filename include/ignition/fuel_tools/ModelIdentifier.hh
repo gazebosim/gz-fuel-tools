@@ -136,11 +136,6 @@ namespace ignition
 
       /// \brief Returns the number of "likes" for the model.
       /// \return Number of "likes".
-      /// \deprecated See uint32_t LikeCount() const
-      public: uint32_t IGN_DEPRECATED(2.0) Likes() const;
-
-      /// \brief Returns the number of "likes" for the model.
-      /// \return Number of "likes".
       public: uint32_t LikeCount() const;
 
       /// \brief Returns the number of downloads for the model.
@@ -158,17 +153,7 @@ namespace ignition
 
       /// \brief Returns the license URL.
       /// \return License URL.
-      /// \deprecated See std::string LicenseUrl() const
-      public: std::string IGN_DEPRECATED(2.0) LicenseURL() const;
-
-      /// \brief Returns the license URL.
-      /// \return License URL.
       public: std::string LicenseUrl() const;
-
-      /// \brief Returns the license image URL.
-      /// \return License image URL.
-      /// \deprecated See std::string LicenseImageUrl() const
-      public: std::string IGN_DEPRECATED(2.0) LicenseImageURL() const;
 
       /// \brief Returns the license image URL.
       /// \return License image URL.
@@ -243,12 +228,6 @@ namespace ignition
       /// \param[in] _likes Number of "likes".
       /// \return True if successful.
       public: bool SetLikeCount(const uint32_t _likes);
-
-      /// \brief Set the number of downloads of the model.
-      /// \param[in] _downloads Number of downloads.
-      /// \return True if successful.
-      /// \deprecated See bool SetDownloadCount(const uint32_t _downloads).
-      public: bool IGN_DEPRECATED(2.0) Downloads(const uint32_t _downloads);
 
       /// \brief Set the number of downloads of the model.
       /// \param[in] _downloads Number of downloads.

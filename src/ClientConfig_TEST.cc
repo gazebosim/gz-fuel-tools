@@ -44,11 +44,11 @@ std::string homePath()
 }
 
 /////////////////////////////////////////////////
-/// \brief Initially no servers in config
+/// \brief By default there is one server in config
 TEST(ClientConfig, InitiallyNoServers)
 {
   ClientConfig config;
-  EXPECT_EQ(0u, config.Servers().size());
+  EXPECT_EQ(1u, config.Servers().size());
 }
 
 /////////////////////////////////////////////////
@@ -60,8 +60,8 @@ TEST(ClientConfig, ServersCanBeAdded)
   srv.SetUrl(common::URI("http://asdf"));
   config.AddServer(srv);
 
-  ASSERT_EQ(1u, config.Servers().size());
-  EXPECT_EQ(std::string("http://asdf"), config.Servers().front().Url().Str());
+  ASSERT_EQ(2u, config.Servers().size());
+  EXPECT_EQ(std::string("http://asdf"), config.Servers().back().Url().Str());
 }
 
 /////////////////////////////////////////////////
@@ -72,8 +72,8 @@ TEST(ClientConfig, CustomDefaultConfiguration)
   config.SetConfigPath(TEST_IGNITION_FUEL_INITIAL_CONFIG_PATH);
   config.LoadConfig();
 
-  ASSERT_EQ(1u, config.Servers().size());
-  EXPECT_EQ("https://api.ignitionfuel.org",
+  ASSERT_EQ(2u, config.Servers().size());
+  EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().front().Url().Str());
 
   std::string defaultCacheLocation = ignition::common::joinPaths(
@@ -86,6 +86,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
 TEST(ClientConfig, CustomConfiguration)
 {
   ClientConfig config;
+  config.Clear();
 
   // Create a temporary file with the configuration.
   std::ofstream ofs;
@@ -96,7 +97,7 @@ TEST(ClientConfig, CustomConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
       << "    url: https://myserver"              << std::endl
@@ -110,7 +111,7 @@ TEST(ClientConfig, CustomConfiguration)
   EXPECT_TRUE(config.LoadConfig());
 
   ASSERT_EQ(2u, config.Servers().size());
-  EXPECT_EQ("https://api.ignitionfuel.org",
+  EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().front().Url().Str());
   EXPECT_EQ("https://myserver",
     config.Servers().back().Url().Str());
@@ -136,10 +137,10 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl
@@ -278,18 +279,21 @@ TEST(ClientConfig, AsString)
   common::Console::SetVerbosity(4);
   {
     ClientConfig client;
+    client.Clear();
     std::string str = "Config path: \nCache location: \nServers:\n";
     EXPECT_EQ(str, client.AsString());
   }
 
   {
     ServerConfig server;
+    server.Clear();
     std::string str = "URL: \nVersion: 1.0\nAPI key: \n";
     EXPECT_EQ(str, server.AsString());
   }
 
   {
     ServerConfig srv;
+    srv.Clear();
     srv.SetUrl(common::URI("http://serverurl.com"));
     srv.SetVersion("2.0");
     srv.SetApiKey("ABCD");
@@ -328,6 +332,7 @@ TEST(ClientConfig, AsPrettyString)
 
   {
     ServerConfig server;
+    server.Clear();
     std::string str = "\x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
     EXPECT_EQ(str, server.AsPrettyString());
   }
