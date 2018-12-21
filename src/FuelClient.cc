@@ -813,7 +813,7 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
 
   _path = ignition::common::joinPaths(this->Config().CacheLocation(),
       id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
-      id.VersionStr());
+      id.VersionStr() == "tip" ? "1" : id.VersionStr());
 
   return Result(ResultType::UNKNOWN);
 }
