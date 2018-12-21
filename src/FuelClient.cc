@@ -32,7 +32,6 @@
 #include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
-#include "ignition/fuel_tools/REST.hh"
 #include "ignition/fuel_tools/RestClient.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 #include "ignition/fuel_tools/WorldIterPrivate.hh"
@@ -243,7 +242,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
   {
     // Return just the cached models
     ignwarn << "Failed to fetch models from server, returning cached models."
-            << std::endl << _server.AsString() << std::endl;
+      << std::endl << _server.AsString() << std::endl;
 
     ModelIdentifier id;
     id.SetServer(_server);
@@ -362,14 +361,14 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
 Result FuelClient::UploadModel(const ServerConfig &/*_server*/,
   const std::string &/*_pathToModelDir*/, const ModelIdentifier &/*_id*/)
 {
-  // TODO Upload a model and return an Result
+  // TODO(nkoenig) Upload a model and return an Result
   return Result(ResultType::UPLOAD_ERROR);
 }
 
 //////////////////////////////////////////////////
 Result FuelClient::DeleteModel(const ModelIdentifier &/*_id*/)
 {
-  // TODO Delete a model and return a Result
+  // TODO(nkoenig) Delete a model and return a Result
   return Result(ResultType::DELETE_ERROR);
 }
 
@@ -534,7 +533,6 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   }
   else
   {
-    ignerr << "Invalid URL [" << urlStr << "]" << std::endl;
     return false;
   }
 

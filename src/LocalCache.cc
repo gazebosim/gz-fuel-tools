@@ -350,11 +350,12 @@ bool LocalCache::SaveModel(
     return false;
   }
 
-  auto cacheLocation = this->dataPtr->config->CacheLocation();
+  std::string cacheLocation = this->dataPtr->config->CacheLocation();
 
-  auto modelRootDir = common::joinPaths(cacheLocation,
+  std::string modelRootDir = common::joinPaths(cacheLocation,
       _id.Server().Url().Path().Str(), _id.Owner(), "models", _id.Name());
-  auto modelVersionedDir = common::joinPaths(modelRootDir, _id.VersionStr());
+  std::string modelVersionedDir =
+    common::joinPaths(modelRootDir, _id.VersionStr());
 
   // Is it already in the cache?
   if (common::isDirectory(modelVersionedDir) && !_overwrite)

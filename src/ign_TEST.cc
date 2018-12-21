@@ -93,8 +93,8 @@ TEST(CmdLine, ListFail)
 TEST(CmdLine, ModelListConfigServerUgly)
 {
   auto output = custom_exec_str(g_listCmd + " -t model --raw");
-  EXPECT_NE(output.find("https://fuel.ignitionrobotics.org/1.0/"), std::string::npos)
-      << output;
+  EXPECT_NE(output.find("https://fuel.ignitionrobotics.org/1.0/"),
+            std::string::npos) << output;
   EXPECT_EQ(output.find("owners"), std::string::npos) << output;
 }
 
@@ -120,7 +120,7 @@ TEST(CmdLine, WorldListConfigServerUgly)
 {
   auto output = custom_exec_str(g_listCmd +
       " -t world --raw -u https://staging-fuel.ignitionrobotics.org");
-  EXPECT_NE(output.find("https://staging-fuel.ignitionrobotics.org/1.0/"),
+  EXPECT_NE(output.find("https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << output;
   EXPECT_EQ(output.find("owners"), std::string::npos) << output;
 }
@@ -136,4 +136,3 @@ TEST(CmdLine, WorldListCustomServerPretty)
   EXPECT_NE(output.find("owners"), std::string::npos) << output;
   EXPECT_NE(output.find("worlds"), std::string::npos) << output;
 }
-

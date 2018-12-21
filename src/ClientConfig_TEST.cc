@@ -72,7 +72,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
   config.SetConfigPath(TEST_IGNITION_FUEL_INITIAL_CONFIG_PATH);
   config.LoadConfig();
 
-  ASSERT_EQ(2u, config.Servers().size());
+  ASSERT_EQ(1u, config.Servers().size());
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().front().Url().Str());
 

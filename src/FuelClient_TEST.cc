@@ -268,7 +268,8 @@ TEST(FuelClient, ParseModelURL)
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/2/2/german/models/Cardboard Box/banana"};
+      "https://fuel.ignitionrobotics.org/2/2/german/"
+        "models/Cardboard Box/banana"};
     EXPECT_FALSE(client.ParseModelUrl(ignition::common::URI(url), id));
   }
 }
@@ -284,8 +285,8 @@ TEST(FuelClient, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Cordless Drill/tip/"
-      "files/meshes/cordless_drill.dae"};
+      "https://fuel.ignitionrobotics.org/1.0/openrobotics/models/"
+        "Cordless Drill/tip/files/meshes/cordless_drill.dae"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
@@ -426,33 +427,35 @@ TEST(FuelClient, DownloadModel)
 
     // Check it was downloaded to `1`
     EXPECT_EQ(path, common::cwd() +
-        "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/1");
+        "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2");
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/1"));
+        "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2"));
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/1/"
+        "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2/"
          "model.sdf"));
     EXPECT_TRUE(common::exists(
-       "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/1/"
+       "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2/"
        "model.config"));
 
     // Check it wasn't downloaded to model root directory
     EXPECT_FALSE(common::exists(
-     "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/model.config"));
+     "test_cache/fuel.ignitionrobotics.org/chapulina/models/"
+     "Test box/model.config"));
 
     // Check it is cached
     auto res3 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res3);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
     EXPECT_EQ(common::cwd() +
-      "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/1",
+      "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2",
       cachedPath);
   }
 
   // Try using nonexistent URL
   {
     std::string url{
-        "https://fuel.ignitionrobotics.org/1.0/chapulina/models/Inexistent model"};
+        "https://fuel.ignitionrobotics.org/1.0/chapulina/models/"
+          "Inexistent model"};
     std::string path;
     auto result = client.DownloadModel(url, path);
     EXPECT_FALSE(result);
@@ -675,7 +678,7 @@ TEST(FuelClient, ParseWorldUrl)
     EXPECT_TRUE(client.ParseWorldUrl(url, id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
-    EXPECT_TRUE(id.Server().Version().empty());
+    EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
     EXPECT_EQ(id.Version(), 0u);
@@ -744,7 +747,8 @@ TEST(FuelClient, ParseWorldUrl)
     FuelClient client;
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/2/2/german/worlds/Cardboard Box/banana"};
+      "https://fuel.ignitionrobotics.org/2/2/german/worlds/Cardboard Box"
+        "/banana"};
     EXPECT_FALSE(client.ParseWorldUrl(url, id));
   }
 }
@@ -822,7 +826,7 @@ TEST(FuelClient, ParseWorldFileUrl)
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
-    EXPECT_TRUE(id.Server().Version().empty());
+    EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "Empty sky");
     EXPECT_EQ(filePath, "empty_sky.world");
@@ -878,7 +882,8 @@ TEST(FuelClient, DownloadWorld)
   common::createDirectories("test_cache");
 
   ServerConfig server;
-  server.SetUrl(ignition::common::URI("https://staging-fuel.ignitionrobotics.org"));
+  server.SetUrl(ignition::common::URI(
+        "https://staging-fuel.ignitionrobotics.org"));
 
   ClientConfig config;
   config.AddServer(server);
@@ -892,7 +897,7 @@ TEST(FuelClient, DownloadWorld)
   {
     // Unversioned URL should get the latest available version
     common::URI url{
-        "https://staging-fuel.ignitionrobotics.org/1.0/chapulina/worlds/Empty"};
+        "https://staging-fuel.ignitionrobotics.org/1.0/nate/worlds/Empty"};
 
     // Check it is not cached
     std::string cachedPath;
@@ -908,30 +913,31 @@ TEST(FuelClient, DownloadWorld)
 
     // Check it was downloaded to `1`
     EXPECT_EQ(path, common::cwd() +
-        "/test_cache/staging-fuel.ignitionrobotics.org/chapulina/worlds/Empty/1");
+        "/test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1");
     EXPECT_TRUE(common::exists(
-        "test_cache/staging-fuel.ignitionrobotics.org/chapulina/worlds/Empty/1"));
+        "test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1"));
     EXPECT_TRUE(common::exists(
-       "test_cache/staging-fuel.ignitionrobotics.org/chapulina/worlds/Empty/1/"
+       "test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1/"
        "empty.world"));
 
     // Check it wasn't downloaded to world root directory
-    EXPECT_FALSE(common::exists("test_cache/staging-fuel.ignitionrobotics.org/" +
-        std::string("chapulina/worlds/Empty/empty.world")));
+    EXPECT_FALSE(common::exists(
+          "test_cache/staging-fuel.ignitionrobotics.org/" +
+          std::string("chapulina/worlds/Empty/empty.world")));
 
     // Check it is cached
     auto res3 = client.CachedWorld(url, cachedPath);
     EXPECT_TRUE(res3);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
     EXPECT_EQ(common::cwd() +
-      "/test_cache/staging-fuel.ignitionrobotics.org/chapulina/worlds/Empty/1",
+      "/test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1",
       cachedPath);
   }
 
   // Try using nonexistent URL
   {
     common::URI url{
-        "https://staging-fuel.ignitionrobotics.org/1.0/chapulina/worlds/Bad world"};
+        "https://staging-fuel.ignitionrobotics.org/1.0/nate/worlds/Bad world"};
     std::string path;
     auto result = client.DownloadWorld(url, path);
     EXPECT_FALSE(result);

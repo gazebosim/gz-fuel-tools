@@ -21,7 +21,7 @@
 #include "test/test_config.h"
 
 /////////////////////////////////////////////////
-TEST(REST, UserAgent)
+TEST(RestClient, UserAgent)
 {
   ignition::fuel_tools::Rest rest;
   EXPECT_TRUE(rest.UserAgent().empty());

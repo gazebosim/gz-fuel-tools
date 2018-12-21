@@ -101,7 +101,8 @@ TEST(CmdLine, ModelListCustomServerPretty)
 
   EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org"));
 
-  EXPECT_NE(stdOutBuffer.str().find("https://staging-fuel.ignitionrobotics.org"),
+  EXPECT_NE(stdOutBuffer.str().find(
+        "https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("owners"), std::string::npos)
       << stdOutBuffer.str();
@@ -128,7 +129,8 @@ TEST(CmdLine, ModelListCustomServerPrettyOwner)
   EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org",
       "openrobotics"));
 
-  EXPECT_NE(stdOutBuffer.str().find("https://staging-fuel.ignitionrobotics.org"),
+  EXPECT_NE(stdOutBuffer.str().find(
+        "https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("1 owners"), std::string::npos)
       << stdOutBuffer.str();
@@ -204,15 +206,16 @@ TEST(CmdLine, ModelDownloadUnversioned)
   // Check output
   EXPECT_NE(stdOutBuffer.str().find("Download succeeded"),
       std::string::npos) << stdOutBuffer.str();
-  EXPECT_TRUE(stdErrBuffer.str().empty());
+  EXPECT_TRUE(stdErrBuffer.str().empty()) << stdErrBuffer.str();
 
   // Check files
   EXPECT_TRUE(ignition::common::isDirectory(
       "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/1"));
+      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2"));
   EXPECT_TRUE(ignition::common::isFile(
-      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2/model.sdf"));
+      std::string("test_cache/fuel.ignitionrobotics.org/chapulina/models") +
+      "/Test box/2/model.sdf"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
@@ -242,9 +245,11 @@ TEST(CmdLine, WorldListConfigServerUgly)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org", "", "true"));
+  EXPECT_TRUE(listWorlds(
+        "https://staging-fuel.ignitionrobotics.org", "", "true"));
 
-  EXPECT_NE(stdOutBuffer.str().find("https://staging-fuel.ignitionrobotics.org"),
+  EXPECT_NE(stdOutBuffer.str().find(
+        "https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_EQ(stdOutBuffer.str().find("owners"), std::string::npos)
       << stdOutBuffer.str();
@@ -262,8 +267,9 @@ TEST(CmdLine, WorldListCustomServerPretty)
 
   EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org"));
 
-  EXPECT_NE(stdOutBuffer.str().find("https://staging-fuel.ignitionrobotics.org"),
-      std::string::npos) << stdOutBuffer.str();
+  EXPECT_NE(stdOutBuffer.str().find(
+        "https://staging-fuel.ignitionrobotics.org"), std::string::npos)
+    << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("owners"), std::string::npos)
       << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("worlds"), std::string::npos)
@@ -286,11 +292,11 @@ TEST(CmdLine, WorldListCustomServerPrettyOwner)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org",
-      "chapulina"));
+  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org", "nate"));
 
-  EXPECT_NE(stdOutBuffer.str().find("https://staging-fuel.ignitionrobotics.org"),
-      std::string::npos) << stdOutBuffer.str();
+  EXPECT_NE(stdOutBuffer.str().find(
+        "https://staging-fuel.ignitionrobotics.org"), std::string::npos)
+    << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("1 owners"), std::string::npos)
       << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("worlds"), std::string::npos)
@@ -360,7 +366,7 @@ TEST(CmdLine, WorldDownloadUnversioned)
 
   // Download
   EXPECT_TRUE(downloadUrl(
-      "https://staging-fuel.ignitionrobotics.org/1.0/chapulina/worlds/Empty"));
+      "https://staging-fuel.ignitionrobotics.org/1.0/nate/worlds/Empty"));
 
   // Check output
   EXPECT_NE(stdOutBuffer.str().find("Download succeeded"),
@@ -369,14 +375,13 @@ TEST(CmdLine, WorldDownloadUnversioned)
 
   // Check files
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/staging-fuel.ignitionrobotics.org/chapulina/worlds/Empty"));
+      "test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/staging-fuel.ignitionrobotics.org/chapulina/worlds/Empty/1"));
+      "test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/staging-fuel.ignitionrobotics.org/chapulina/worlds/")
+      std::string("test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/")
       + "Empty/1/empty.world"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
 }
-

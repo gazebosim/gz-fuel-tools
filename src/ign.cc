@@ -278,6 +278,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
+  conf.Clear();
   if (url.Valid())
   {
     ignition::fuel_tools::ServerConfig serverConf;
@@ -365,6 +366,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
+  conf.Clear();
   if (url.Valid())
   {
     ignition::fuel_tools::ServerConfig serverConf;
@@ -445,6 +447,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
+  conf.Clear();
   conf.LoadConfig();
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
 
@@ -494,11 +497,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
               << std::endl;
     }
 
-    auto result = client.DownloadWorld(world);
+    ignition::fuel_tools::Result result = client.DownloadWorld(world);
 
     if (!result)
     {
-      std::cout << "Download failed." << std::endl;
+      std::cout << "Download failed because " << result.ReadableResult()
+        << std::endl;
       return false;
     }
   }

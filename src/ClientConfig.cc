@@ -32,7 +32,7 @@ using namespace ignition;
 using namespace fuel_tools;
 
 // Constants.
-static const std::string initialConfigFile = ignition::common::joinPaths(
+const std::string initialConfigFile = ignition::common::joinPaths( // NOLINT
     IGNITION_FUEL_INITIAL_CONFIG_PATH, "config.yaml");
 
 /////////////////////////////////////////////////
@@ -58,8 +58,6 @@ class ignition::fuel_tools::ClientConfigPrivate
   /// \brief Constructor.
   public: ClientConfigPrivate()
           {
-            this->cacheLocation = homePath();
-            this->cacheLocation += "/.ignition/fuel";
             this->servers.push_back(ServerConfig());
           }
 
@@ -77,7 +75,8 @@ class ignition::fuel_tools::ClientConfigPrivate
   public: std::vector<ServerConfig> servers;
 
   /// \brief a path on disk to where data is cached.
-  public: std::string cacheLocation = "";
+  public: std::string cacheLocation{ignition::common::joinPaths(
+              homePath(), ".ignition", "fuel")};
 
   /// \brief The path where the configuration file is located.
   public: std::string configPath = "";
@@ -483,9 +482,9 @@ bool ClientConfig::LoadConfig()
   {
     ignwarn << "IGN_FUEL_CACHE_PATH is set to [" << ignFuelPath << "]. The "
             << "path in the configuration file will be ignored" << std::endl;
+    cacheLocation = ignFuelPath;
   }
-  else
-    this->SetCacheLocation(cacheLocation);
+  this->SetCacheLocation(cacheLocation);
 
   // Cleanup.
   yaml_parser_delete(&parser);

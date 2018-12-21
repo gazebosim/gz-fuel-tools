@@ -18,6 +18,7 @@
 #ifndef IGNITION_FUEL_TOOLS_HELPERS_HH_
 #define IGNITION_FUEL_TOOLS_HELPERS_HH_
 
+#include <string>
 #include <ignition/fuel_tools/Export.hh>
 
 namespace ignition
