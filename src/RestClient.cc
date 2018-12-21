@@ -62,6 +62,31 @@ std::string RestJoinUrl(const std::string &_base,
 }
 
 /////////////////////////////////////////////////
+size_t RestHeaderCallback(char *_ptr, size_t _size, size_t _nmemb, void *_userp)
+{
+  std::map<std::string, std::string> *map =
+    static_cast<std::map<std::string, std::string> *>(_userp);
+
+  _size *= _nmemb;
+
+  if (map)
+  {
+    std::string header(_ptr);
+    auto colonPos = header.find(":");
+
+    // Only store header information of the form
+    //     <type>: <data>
+    if (colonPos != std::string::npos)
+    {
+      map->insert(std::make_pair(header.substr(0, colonPos),
+                                 header.substr(colonPos+2)));
+    }
+  }
+
+  return _size;
+}
+
+/////////////////////////////////////////////////
 size_t RestWriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
     void *_userp)
 {
@@ -94,10 +119,14 @@ RestResponse Rest::Request(HttpMethod _method,
   // Process query strings.
   if (!_queryStrings.empty())
   {
-    url += "?";
+    std::string fullQuery{"?"};
     for (auto const &queryString : _queryStrings)
-      url += queryString + "&";
-    url.pop_back();
+      fullQuery += queryString + "&";
+
+    fullQuery.pop_back();
+
+    if (fullQuery != "?")
+      url += fullQuery;
   }
 
   // Process headers.
@@ -116,12 +145,17 @@ RestResponse Rest::Request(HttpMethod _method,
     }
   }
 
+  curl_easy_setopt(curl, CURLOPT_USERAGENT, this->userAgent.c_str());
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
   std::string responseData;
+  std::map<std::string, std::string> headerData;
   curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
   curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, RestWriteMemoryCallback);
   curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseData);
+
+  curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, RestHeaderCallback);
+  curl_easy_setopt(curl, CURLOPT_HEADERDATA, &headerData);
 
   char errbuf[CURL_ERROR_SIZE];
   // provide a buffer to store errors in
@@ -203,7 +237,7 @@ RestResponse Rest::Request(HttpMethod _method,
   CURLcode success = curl_easy_perform(curl);
   if (success != CURLE_OK)
   {
-    ignerr << "Error in Rest request" << std::endl;
+    ignerr << "Error in REST request" << std::endl;
     size_t len = strlen(errbuf);
     fprintf(stderr, "\nlibcurl: (%d) ", success);
     if (len)
@@ -220,6 +254,9 @@ RestResponse Rest::Request(HttpMethod _method,
 
   // Update the data.
   res.data = responseData;
+
+  // Update the header data.
+  res.headers = headerData;
 
   if (formpost)
     curl_formfree(formpost);
@@ -255,13 +292,15 @@ const std::string &Rest::UserAgent() const
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
 /////////////////////////////////////////////////
-Rest::Rest(const REST &/*_deprecated*/)
+Rest::Rest(const REST &_deprecated)
 {
+  this->userAgent = _deprecated.UserAgent();
 }
 
 /////////////////////////////////////////////////
-Rest &Rest::operator=(const REST &/*_deprecated*/)
+Rest &Rest::operator=(const REST &_deprecated)
 {
+  this->userAgent = _deprecated.UserAgent();
   return *this;
 }
 #ifndef _WIN32

@@ -39,6 +39,16 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(
     const char *_url = nullptr, const char *_owner = "",
     const char *_raw = "false");
 
+/// \brief External hook to execute 'ign fuel list -t world' from the command
+/// line.
+/// \param[in] _url Optional server URL.
+/// \param[in] _owner Optional owner name
+/// \param[in] _raw 'true' for machine readable output.
+/// \return 1 if successful, 0 if not.
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(
+    const char *_url = nullptr, const char *_owner = "",
+    const char *_raw = "false");
+
 /// \brief External hook to execute 'ign fuel download -u URL' from the command
 /// line.
 /// \param[in] _url Resource URL.

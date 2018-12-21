@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Open Source Robotics Foundation
+ * Copyright (C) 2018 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,61 +15,56 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_MODELITER_HH_
-#define IGNITION_FUEL_TOOLS_MODELITER_HH_
+#ifndef IGNITION_FUEL_TOOLS_WORLDITER_HH_
+#define IGNITION_FUEL_TOOLS_WORLDITER_HH_
 
 #include <memory>
 
 #include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/Model.hh"
 
 namespace ignition
 {
   namespace fuel_tools
   {
-    /// \brief forward declaration
-    class FuelClient;
-    class ModelIterPrivate;
-    class ModelIterFactory;
+    /// \brief Forward declarations
+    class WorldIdentifier;
+    class WorldIterPrivate;
+    class WorldIterFactory;
 
-    /// \brief class for iterating through models
-    class IGNITION_FUEL_TOOLS_VISIBLE ModelIter
+    /// \brief class for iterating through worlds
+    class IGNITION_FUEL_TOOLS_VISIBLE WorldIter
     {
-      friend ModelIterFactory;
+      friend WorldIterFactory;
 
       /// \brief Construct an iterator with the data it needs to function
       /// \param[in] _dptr Pointer to private data to copy
-      protected: explicit ModelIter(std::unique_ptr<ModelIterPrivate> _dptr);
+      protected: explicit WorldIter(std::unique_ptr<WorldIterPrivate> _dptr);
 
       /// \brief Move constructor
       /// \param[in] _old Iter to move
-      public: ModelIter(ModelIter && _old);
+      public: WorldIter(WorldIter && _old);
 
       /// \brief Default destructor.
-      public: ~ModelIter();
+      public: ~WorldIter();
 
       /// \brief Conversion operator
-      /// \return false once the iterator is one past the end of the models
-      public: operator bool();
-
-      /// \brief Conversion operator
-      /// \return false once the iterator is one past the end of the models
+      /// \return False once the iterator is one past the end of the worlds
       public: operator bool() const;
+
+      /// \brief Conversion operator
+      /// \return Internal world identifier.
+      public: operator WorldIdentifier() const;
 
       /// \brief Prefix increment
       /// \return Next iteration
-      public: ModelIter &operator++();
-
-      /// \brief Dereference operator
-      /// \return Reference
-      public: Model &operator*();
+      public: WorldIter &operator++();
 
       /// \brief -> operator
       /// \return Internal world identifier
-      public: Model *operator->();
+      public: WorldIdentifier *operator->();
 
       /// \brief Private data pointer.
-      private: std::unique_ptr<ModelIterPrivate> dataPtr;
+      private: std::unique_ptr<WorldIterPrivate> dataPtr;
     };
   }
 }

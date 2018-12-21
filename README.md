@@ -32,16 +32,16 @@ Default is `/usr/local/share/ignition`.
 ** List all models **
 ```
 $ ign fuel list | head
-https://ignitionfuel.org/anonymous/test_model_595389531
-https://ignitionfuel.org/anonymous/test_model_122023392
-https://ignitionfuel.org/anonymous/test_model_429486665
-https://ignitionfuel.org/anonymous/test_model_887243621
-https://ignitionfuel.org/anonymous/test_model_084900530
-https://ignitionfuel.org/anonymous/test_model_240061059
-https://ignitionfuel.org/anonymous/test_model_464734097
-https://ignitionfuel.org/anonymous/test_model_658598990
-https://ignitionfuel.org/anonymous/test_model_834617935
-https://ignitionfuel.org/anonymous/test_model_380348669
+https://fuel.ignitionrobotics.org/anonymous/test_model_595389531
+https://fuel.ignitionrobotics.org/anonymous/test_model_122023392
+https://fuel.ignitionrobotics.org/anonymous/test_model_429486665
+https://fuel.ignitionrobotics.org/anonymous/test_model_887243621
+https://fuel.ignitionrobotics.org/anonymous/test_model_084900530
+https://fuel.ignitionrobotics.org/anonymous/test_model_240061059
+https://fuel.ignitionrobotics.org/anonymous/test_model_464734097
+https://fuel.ignitionrobotics.org/anonymous/test_model_658598990
+https://fuel.ignitionrobotics.org/anonymous/test_model_834617935
+https://fuel.ignitionrobotics.org/anonymous/test_model_380348669
 ```
 
 ** Find a model on disk **
@@ -55,8 +55,7 @@ $ ign fuel locate --name am1
   // Create a ClientConfig, TODO create this from a yaml file
   ignition::fuel_tools::ClientConfig conf;
   ignition::fuel_tools::ServerConfig srv;
-  srv.URL("https://ignitionfuel.org/");
-  srv.LocalName("ignitionfuel");
+  srv.SetUrl("https://fuel.ignitionrobotics.org/");
   conf.AddServer(srv);
 
   ignition::fuel_tools::FuelClient client(conf);
@@ -73,7 +72,7 @@ See issues beginning with [Fuel backend] in the title. Here are two examples.
 
 ** TODO: Upload **
 ```
-$ ign fuel push --owner trudy --name car --url https://ignitionfuel.org/ --path models/car
+$ ign fuel push --owner trudy --name car --url https://fuel.ignitionrobotics.org/ --path models/car
 TODO Upload a model
 ```
 
@@ -113,7 +112,7 @@ sources:
     api_key: r1CJIKTadlpS1IWt9jivf2sqGJAkbvSQoIMIubrn
 
   osrf_public:
-    url: https://staging-api.ignitionfuel.org
+    url: https://staging-fuel.ignitionrobotics.org
     api_key: sdfpWzZZbdixQ3zZbzxQzG4WPRlMT6DgUthvsfZ7
 
   local:
