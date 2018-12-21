@@ -392,7 +392,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 
     if (pretty)
     {
-      std::cout << "Fetching world list from " << server.URL() << "..."
+      std::cout << "Fetching world list from " << server.Url().Str() << "..."
                 << std::endl;
     }
 

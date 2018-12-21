@@ -113,7 +113,7 @@ bool WorldIdentifier::SetOwner(const std::string &_name)
 //////////////////////////////////////////////////
 bool WorldIdentifier::SetServer(const ServerConfig &_server)
 {
-  bool success = common::URI::Valid(_server.URL());
+  bool success = _server.Url().Valid();
   if (success)
     this->dataPtr->server = _server;
 

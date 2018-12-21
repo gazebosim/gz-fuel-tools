@@ -210,9 +210,9 @@ TEST(CmdLine, ModelDownloadUnversioned)
   EXPECT_TRUE(ignition::common::isDirectory(
       "test_cache/api.ignitionfuel.org/chapulina/models/Test box"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1"));
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/2"));
   EXPECT_TRUE(ignition::common::isFile(
-      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/1/model.sdf"));
+      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/2/model.sdf"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();

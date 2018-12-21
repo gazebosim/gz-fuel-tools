@@ -116,7 +116,7 @@ WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
   do
   {
     // Fire the request.
-    resp = this->rest.Request(method, this->config.URL(),
+    resp = this->rest.Request(method, this->config.Url().Str(),
       this->config.Version(), _path, {queryStrPage}, headers, "");
 
     // Reset the query string

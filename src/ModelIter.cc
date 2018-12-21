@@ -47,23 +47,6 @@ ModelIter ModelIterFactory::Create(const std::vector<Model> &_models)
 }
 
 //////////////////////////////////////////////////
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-ModelIter ModelIterFactory::Create(const REST &_rest,
-    const ServerConfig &_server, const std::string &_api)
-{
-  std::unique_ptr<ModelIterPrivate> priv(new IterRestIds(
-    Rest(_rest), _server, _api));
-  return std::move(ModelIter(std::move(priv)));
-}
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-
-
-//////////////////////////////////////////////////
 ModelIter ModelIterFactory::Create(const Rest &_rest,
     const ServerConfig &_server, const std::string &_api)
 {
