@@ -316,8 +316,11 @@ ModelIter LocalCache::MatchingModels(const ModelIdentifier &_id)
 //////////////////////////////////////////////////
 WorldIter LocalCache::MatchingWorlds(const WorldIdentifier &_id) const
 {
-  if (_id.Name().empty() && _id.Server().URL().empty() && _id.Owner().empty())
+  if (_id.Name().empty() && _id.Server().Url().Str().empty() &&
+      _id.Owner().empty())
+  {
     return WorldIterFactory::Create();
+  }
 
   std::vector<WorldIdentifier> worldIds;
   for (auto iter = this->AllWorlds(); iter; ++iter)
@@ -327,8 +330,8 @@ WorldIter LocalCache::MatchingWorlds(const WorldIdentifier &_id) const
       matches = false;
     if (!_id.Owner().empty() && _id.Owner() != iter->Owner())
       matches = false;
-    if (!_id.Server().URL().empty() &&
-        _id.Server().URL() != iter->Server().URL())
+    if (!_id.Server().Url().Str().empty() &&
+        _id.Server().Url().Str() != iter->Server().Url().Str())
       matches = false;
     if (matches)
       worldIds.push_back(iter);
@@ -395,7 +398,7 @@ bool LocalCache::SaveModel(
 bool LocalCache::SaveWorld(
   WorldIdentifier &_id, const std::string &_data, const bool _overwrite)
 {
-  if (_id.Server().URL().empty() || _id.Owner().empty() ||
+  if (_id.Server().Url().Str().empty() || _id.Owner().empty() ||
       _id.Name().empty() || _id.Version() == 0)
   {
     ignerr << "Incomplete world identifier, failed to save world." << std::endl
