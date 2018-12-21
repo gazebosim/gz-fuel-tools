@@ -792,10 +792,15 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
     return Result(ResultType::FETCH_ERROR);
   }
 
-  // Download
-  auto result = this->DownloadModel(id);
-  if (!result)
-    return result;
+  // Check local cache before downloading.
+  Model model = this->dataPtr->cache->MatchingModel(id);
+  if (!model)
+  {
+    // Download
+    Result result = this->DownloadModel(id);
+    if (!result)
+      return result;
+  }
 
   // TODO(anyone) We shouldn't need to reconstruct the path, SaveModel should
   // be changed to return it
@@ -803,7 +808,6 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   // We need to figure out the version for the tip
   if (id.Version() == 0)
   {
-    auto model = this->dataPtr->cache->MatchingModel(id);
     id.SetVersion(model.Identification().Version());
   }
 
@@ -811,7 +815,7 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
       id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
       id.VersionStr());
 
-  return result;
+  return Result(ResultType::UNKNOWN);
 }
 
 //////////////////////////////////////////////////

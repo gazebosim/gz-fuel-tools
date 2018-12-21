@@ -19,6 +19,8 @@
   #include <unistd.h>
 #endif
 
+#include "tinyxml2.h"
+
 #include <stdio.h>
 #include <algorithm>
 #include <fstream>
@@ -381,6 +383,126 @@ bool LocalCache::SaveModel(
   {
     ignerr << "Unable to unzip [" << zipFile << "]" << std::endl;
     return false;
+  }
+  // Get model.config
+  std::cout << "VersionedDir[" << modelVersionedDir << "]\n";
+  std::string modelConfigPath = common::joinPaths(
+      modelVersionedDir, "model.config");
+  if (common::exists(modelConfigPath))
+  {
+    std::cout << "IT EXISTS\n";
+    tinyxml2::XMLDocument modelConfigDoc;
+    if (modelConfigDoc.LoadFile(modelConfigPath.c_str()) !=
+        tinyxml2::XML_SUCCESS)
+    {
+      ignerr << "Unable to load model.config file[" << modelConfigPath << "]\n";
+    }
+
+    tinyxml2::XMLElement *modelElement = modelConfigDoc.FirstChildElement(
+        "model");
+    std::string modelName = modelElement->FirstChildElement("name")->GetText();
+    tinyxml2::XMLElement *sdfElement = modelElement->LastChildElement("sdf");
+    std::string modelSdfFilePath = common::joinPaths(modelVersionedDir,
+        sdfElement->GetText());
+
+    // Get name of model.sdf file.
+    std::cout << "SDFFILE[" << modelSdfFilePath << "]\n";
+
+    tinyxml2::XMLDocument modelSdfDoc;
+    if (modelSdfDoc.LoadFile(modelSdfFilePath.c_str()) !=
+        tinyxml2::XML_SUCCESS)
+    {
+      ignerr << "Unable to load SDF file[" << modelSdfFilePath << "]\n";
+    }
+    tinyxml2::XMLElement *modelElem =
+      modelSdfDoc.RootElement()->FirstChildElement("model");
+    while (modelElem)
+    {
+      // std::string modelName = modelElem->Attribute("name");
+      std::cout << "Processing Model[" <<  modelName << "]\n";
+      tinyxml2::XMLElement *linkElem =
+        modelElem->FirstChildElement("link");
+      while (linkElem)
+      {
+        std::cout << "Processing Link[" << linkElem->Attribute("name") << "]\n";
+
+        tinyxml2::XMLElement *collisionElem =
+          linkElem->FirstChildElement("collision");
+        while (collisionElem)
+        {
+          std::cout << "Processing Collision["
+            << collisionElem->Attribute("name") << "]\n";
+
+          tinyxml2::XMLElement *geomElem =
+            collisionElem->FirstChildElement("geometry");
+
+          if (geomElem)
+          {
+            tinyxml2::XMLElement *meshElem = geomElem->FirstChildElement(
+                "mesh");
+            if (meshElem)
+            {
+              tinyxml2::XMLElement *uriElem =
+                meshElem->FirstChildElement("uri");
+
+              if (uriElem)
+              {
+                std::string uri = uriElem->GetText();
+                std::string prefix =  "model://";
+                int firstSlash = uri.find('/', prefix.size()+1);
+                std::string suffix = uri.substr(firstSlash);
+
+                std::string diskPath = common::joinPaths("file:/",
+                    modelVersionedDir, suffix);
+
+                uriElem->SetText(diskPath.c_str());
+              }
+            }
+          }
+
+          collisionElem = collisionElem->NextSiblingElement("collision");
+        }
+        tinyxml2::XMLElement *visualElem =
+          linkElem->FirstChildElement("visual");
+        while (visualElem)
+        {
+          std::cout << "Processing Visual["
+            << visualElem->Attribute("name") << "]\n";
+
+          tinyxml2::XMLElement *geomElem =
+            visualElem->FirstChildElement("geometry");
+
+          if (geomElem)
+          {
+            tinyxml2::XMLElement *meshElem = geomElem->FirstChildElement(
+                "mesh");
+            if (meshElem)
+            {
+              tinyxml2::XMLElement *uriElem =
+                meshElem->FirstChildElement("uri");
+
+              if (uriElem)
+              {
+                std::string uri = uriElem->GetText();
+                std::string prefix =  "model://";
+                int firstSlash = uri.find('/', prefix.size()+1);
+                std::string suffix = uri.substr(firstSlash);
+
+                std::string diskPath = common::joinPaths("file:/",
+                    modelVersionedDir, suffix);
+
+                uriElem->SetText(diskPath.c_str());
+              }
+            }
+          }
+
+          visualElem = visualElem->NextSiblingElement("visual");
+        }
+        linkElem = linkElem->NextSiblingElement("link");
+      }
+      modelElem = modelElem->NextSiblingElement("model");
+    }
+    modelSdfDoc.SaveFile(modelSdfFilePath.c_str());
   }
 
   if (!common::removeDirectoryOrFile(zipFile))
