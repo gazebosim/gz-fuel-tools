@@ -15,9 +15,9 @@ type, such as `model` or `world` as follows:
 You should see a list such as:
 
 ```
-Fetching world list from https://api.ignitionfuel.org...
+Fetching world list from https://fuel.ignitionrobotics.org...
 Received world list (took 350ms).
-https://api.ignitionfuel.org
+https://fuel.ignitionrobotics.org
 ├── openrobotics
 │   ├── Empty
 │   └── Shapes
@@ -47,9 +47,9 @@ a way that's easier for scripts to parse. For example, try:
 And you'll get a list of the world URLs similar to the one below:
 
 ```
-https://api.ignitionfuel.org/1.0/openrobotics/worlds/Empty
-https://api.ignitionfuel.org/1.0/openrobotics/worlds/Shapes
-https://api.ignitionfuel.org/1.0/chapulina/worlds/Shapes%20copy
+https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty
+https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Shapes
+https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Shapes%20copy
 ```
 
 ### By owner
@@ -67,7 +67,7 @@ computer. We use the `ign fuel download` tool for this.
 We learned above how to get resource URLs. Now we can use these URLs to download
 them. For example, try:
 
-`ign fuel download -v 4 -u https://api.ignitionfuel.org/1.0/openrobotics/worlds/Empty`
+`ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty`
 
 Note that we passed the `-v 4` option so we get a verbose output. You should see something like:
 
@@ -76,11 +76,11 @@ Downloading world:
   Name: Empty
   Owner: openrobotics
   Server:
-    URL: https://api.ignitionfuel.org
+    URL: https://fuel.ignitionrobotics.org
     Version: 1.0
 
 [Msg] Saved world at:
-  /home/louise/.ignition/fuel/api.ignitionfuel.org/chapulina/worlds/Empty/1
+  /home/louise/.ignition/fuel/fuel.ignitionrobotics.org/chapulina/worlds/Empty/1
 Download succeeded.
 ```
 
@@ -91,5 +91,5 @@ directory, which we call the "local cache". The path is broken down as follows:
 
 > **Tip**: You can change the local cache path on `config.yaml`.
 
-> **Tip**: You can also use other tools such as `wget` to download a zipped file of a world, just add `.zip` to the end of the URL, for example: `wget https://api.ignitionfuel.org/1.0/openrobotics/worlds/Empty.zip`.
+> **Tip**: You can also use other tools such as `wget` to download a zipped file of a world, just add `.zip` to the end of the URL, for example: `wget https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty.zip`.
 

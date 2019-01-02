@@ -44,7 +44,7 @@ using namespace fuel_tools;
 class ignition::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL,
-  /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer/2
+  /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer/2
   /// Where the API version and the model version are optional.
   public: const std::string kModelUrlRegexStr{
     // Method
@@ -63,7 +63,7 @@ class ignition::fuel_tools::FuelClientPrivate
     "([0-9]*|tip)"};
 
   /// \brief A world URL,
-  /// E.g.: https://api.ignitionfuel.org/1.0/openrobotics/worlds/Empty/1
+  /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty/1
   /// Where the API version and the world version are optional.
   public: const std::string kWorldUrlRegexStr{
     // Method
