@@ -113,7 +113,7 @@ RestResponse Rest::Request(HttpMethod _method,
   std::string url = RestJoinUrl(_url, _version);
 
   CURL *curl = curl_easy_init();
-  char *encodedPath= curl_easy_escape(curl, _path.c_str(), _path.size());
+  char *encodedPath = curl_easy_escape(curl, _path.c_str(), _path.size());
   url = RestJoinUrl(url, encodedPath);
 
   // Process query strings.

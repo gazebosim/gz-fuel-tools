@@ -65,7 +65,7 @@ Result Model::Fetch() const
   {
     if (this->PathToModel().empty())
     {
-      // TODO look for models on servers
+      // TODO(nkoenig) look for models on servers
       return Result(ResultType::FETCH_ERROR);
     }
     return Result(ResultType::FETCH_ALREADY_EXISTS);
@@ -80,7 +80,7 @@ std::string Model::PathToModel() const
   {
     if (this->dataPtr->pathOnDisk.empty())
     {
-      // TODO check if model is in cache, store path
+      // TODO(nkoenig) check if model is in cache, store path
     }
     return this->dataPtr->pathOnDisk;
   }

@@ -170,7 +170,8 @@ IterRestIds::IterRestIds(const Rest &_rest, const ServerConfig &_config,
     resp = this->rest.Request(method, this->config.Url().Str(),
       this->config.Version(), path, {queryStrPage}, headers, "");
 
-    // ToDo: resp.statusCode should return != 200 when the page requested does
+    // TODO(nkoenig): resp.statusCode should return != 200 when the page
+    // requested does
     // not exist. When this happens we should stop without calling ParseModels()
     // https://bitbucket.org/ignitionrobotics/ign-fuelserver/issues/7
     if (resp.data == "null\n" || resp.statusCode != 200)
@@ -212,7 +213,7 @@ void IterRestIds::Next()
     ptr->id.SetServer(this->config);
     this->model = Model(ptr);
   }
-  // TODO request next page if api is paginated
+  // TODO(nkoenig) request next page if api is paginated
 }
 
 //////////////////////////////////////////////////
@@ -314,7 +315,7 @@ void IterRESTIds::Next()
     ptr->id.SetServer(this->config);
     this->model = Model(ptr);
   }
-  // TODO request next page if api is paginated
+  // TODO(nkoenig) request next page if api is paginated
 }
 
 //////////////////////////////////////////////////
@@ -358,7 +359,7 @@ ModelIter::operator bool() const
 //////////////////////////////////////////////////
 ModelIter &ModelIter::operator++()
 {
-  // TODO Request more data if there are more pages
+  // TODO(nkoenig) Request more data if there are more pages
   if (!this->dataPtr->HasReachedEnd())
   {
     this->dataPtr->Next();

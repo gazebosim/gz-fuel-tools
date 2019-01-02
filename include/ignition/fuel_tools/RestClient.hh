@@ -41,6 +41,7 @@ namespace ignition
     struct IGNITION_FUEL_TOOLS_VISIBLE RestResponse
     {
       /// \brief The returned status code. E.g.: 200
+      // cppcheck-suppress unusedStructMember
       public: int statusCode = 0;
 
       /// \brief The data received.

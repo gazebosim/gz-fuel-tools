@@ -64,7 +64,7 @@ ign_install_library()
 # Build the unit tests.
 ign_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
-                LIB_DEPS ignition-common1::ignition-common1
+                LIB_DEPS ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
 )
 
 # Command line support.

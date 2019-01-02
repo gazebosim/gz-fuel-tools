@@ -9,5 +9,5 @@ link_directories(${PROJECT_BINARY_DIR}/test)
 
 ign_build_tests(TYPE INTEGRATION
                 SOURCES ${tests}
-                LIB_DEPS ignition-common1::ignition-common1
+                LIB_DEPS ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
 )
