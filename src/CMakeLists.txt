@@ -42,9 +42,9 @@ ign_create_core_library(SOURCES ${sources} CXX_STANDARD 17)
 # Link the libraries that we always need.
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
+    ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
   PRIVATE
     curl::curl
-    ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
     ${JSONCPP_TARGET}
     YAML::YAML
     ZIP::ZIP
