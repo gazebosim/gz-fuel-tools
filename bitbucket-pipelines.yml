@@ -14,7 +14,7 @@ pipelines:
             lcov curl libyaml-dev
             libignition-cmake-dev
             libignition-math4-dev
-            libignition-common-dev
+            libignition-common3-dev
           # Style checker first - fail fast
           - sh tools/code_check.sh
           # Ignition tools
