@@ -110,7 +110,7 @@ int main(int argc, char **argv)
       id.SetServer(server);
 
       // Download
-      if (client.DownloadModel(server, id))
+      if (client.DownloadModel(id))
         return 0;
     }
     else if (FLAGS_t == "world")

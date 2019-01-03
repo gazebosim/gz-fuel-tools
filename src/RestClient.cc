@@ -286,23 +286,3 @@ const std::string &Rest::UserAgent() const
 {
   return this->userAgent;
 }
-
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-/////////////////////////////////////////////////
-Rest::Rest(const REST &_deprecated)
-{
-  this->userAgent = _deprecated.UserAgent();
-}
-
-/////////////////////////////////////////////////
-Rest &Rest::operator=(const REST &_deprecated)
-{
-  this->userAgent = _deprecated.UserAgent();
-  return *this;
-}
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif

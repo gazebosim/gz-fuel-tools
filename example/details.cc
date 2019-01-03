@@ -107,7 +107,7 @@ int main(int argc, char **argv)
       id.SetServer(server);
 
       ignition::fuel_tools::ModelIdentifier model;
-      if (!client.ModelDetails(server, id, model))
+      if (!client.ModelDetails(id, model))
         continue;
 
       std::cout << model.AsPrettyString() << std::endl;

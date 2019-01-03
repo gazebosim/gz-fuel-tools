@@ -44,13 +44,14 @@ TEST(WorldIdentifier, SetFields)
 TEST(WorldIdentifier, UniqueName)
 {
   ignition::fuel_tools::ServerConfig srv1;
-  srv1.URL("https://localhost:8001/");
+  srv1.SetUrl(ignition::common::URI("https://localhost:8001/"));
 
   ignition::fuel_tools::ServerConfig srv2;
-  srv2.URL("https://localhost:8002");
+  srv2.SetUrl(ignition::common::URI("https://localhost:8002"));
 
   ignition::fuel_tools::ServerConfig srv3;
-  srv3.URL("https://localhost:8003//////////////////////////");
+
+  srv3.SetUrl(ignition::common::URI("https://localhost:8003/"));
 
   WorldIdentifier id;
   id.SetName("hello");

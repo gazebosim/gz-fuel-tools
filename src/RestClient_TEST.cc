@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Open Source Robotics Foundation
+ * Copyright (C) 2018 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,24 @@
  *
 */
 
-#include <cstdlib>
+#include <gtest/gtest.h>
 #include <string>
+#include "ignition/fuel_tools/RestClient.hh"
+#include "test/test_config.h"
 
-#include "ignition/fuel_tools/Helpers.hh"
-
-// This whole file is deprecated.
-namespace ignition
+/////////////////////////////////////////////////
+TEST(RestClient, UserAgent)
 {
-  namespace fuel_tools
-  {
-    //////////////////////////////////////////////////
-    bool env(const std::string &_name, std::string &_value)
-    {
-      char *v;
-#ifdef _MSC_VER
-      size_t sz = 0;
-      _dupenv_s(&v, &sz, _name.c_str());
-#else
-      v = std::getenv(_name.c_str());
-#endif
-      if (v)
-      {
-        _value = v;
-        return true;
-      }
-      return false;
-    }
-  }
+  ignition::fuel_tools::Rest rest;
+  EXPECT_TRUE(rest.UserAgent().empty());
+
+  rest.SetUserAgent("my_user_agent");
+  EXPECT_EQ("my_user_agent", rest.UserAgent());
+}
+
+//////////////////////////////////////////////////
+int main(int argc, char **argv)
+{
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
