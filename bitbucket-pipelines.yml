@@ -31,7 +31,7 @@ pipelines:
           # Ignition Fuel Tools
           - mkdir build && cd build
           - cmake .. -DCMAKE_BUILD_TYPE=coverage
-          # - make codecheck
+          - make codecheck
           - make -j4
           - make install
           - make test ARGS="-VV"

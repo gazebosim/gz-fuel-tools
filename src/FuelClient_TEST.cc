@@ -268,7 +268,8 @@ TEST(FuelClient, ParseModelURL)
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/2/2/german/models/Cardboard Box/banana"};
+      "https://fuel.ignitionrobotics.org/2/2/german/models"
+        "/Cardboard Box/banana"};
     EXPECT_FALSE(client.ParseModelUrl(ignition::common::URI(url), id));
   }
 }
@@ -881,7 +882,8 @@ TEST(FuelClient, DownloadWorld)
   common::createDirectories("test_cache");
 
   ServerConfig server;
-  server.SetUrl(ignition::common::URI("https://staging-fuel.ignitionrobotics.org"));
+  server.SetUrl(ignition::common::URI(
+        "https://staging-fuel.ignitionrobotics.org"));
 
   ClientConfig config;
   config.AddServer(server);
