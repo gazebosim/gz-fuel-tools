@@ -53,11 +53,6 @@ namespace ignition
       /// \brief Destructor.
       public: ~ServerConfig();
 
-      /// \brief Clear the server config. This will set all values to empty
-      /// strings, excpect the version string will be set to it's default
-      /// value.
-      public: void Clear();
-
       /// \brief Get the URL to access the server.
       /// \return The URL of this server.
       public: common::URI Url() const;
