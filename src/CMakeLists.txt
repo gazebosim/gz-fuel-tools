@@ -1,7 +1,6 @@
 set (sources
   ClientConfig.cc
   FuelClient.cc
-  Helpers.cc
   ign.cc
   Interface.cc
   JSONParser.cc
@@ -25,6 +24,7 @@ set (gtest_sources
   ModelIdentifier_TEST.cc
   ModelIter_TEST.cc
   Model_TEST.cc
+  RestClient_TEST.cc
   Result_TEST.cc
   WorldIdentifier_TEST.cc
   WorldIter_TEST.cc

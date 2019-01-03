@@ -195,9 +195,7 @@ extern "C" bool getOwnerModels(
     const ignition::fuel_tools::ModelIdentifier &_modelId,
     std::map<std::string, std::vector<std::string>> &_resourceMap)
 {
-  // Dummy server config not used, will be deprecated on version 2
-  ignition::fuel_tools::ServerConfig server;
-  auto iter = _client.Models(server, _modelId);
+  ignition::fuel_tools::ModelIter iter = _client.Models(_modelId);
 
   if (!iter)
   {

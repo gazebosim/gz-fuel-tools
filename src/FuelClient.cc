@@ -242,7 +242,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
   {
     // Return just the cached models
     ignwarn << "Failed to fetch models from server, returning cached models."
-      << std::endl << _server.AsString() << std::endl;
+            << std::endl << _server.AsString() << std::endl;
 
     ModelIdentifier id;
     id.SetServer(_server);
@@ -293,8 +293,7 @@ WorldIter FuelClient::Worlds(const ServerConfig &_server) const
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
-  const ModelIdentifier &_id)
+ModelIter FuelClient::Models(const ModelIdentifier &_id)
 {
   // Check local cache first
   ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
@@ -315,8 +314,7 @@ ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
 }
 
 //////////////////////////////////////////////////
-ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
-  const ModelIdentifier &_id) const
+ModelIter FuelClient::Models(const ModelIdentifier &_id) const
 {
   // Check local cache first
   ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
@@ -358,8 +356,8 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::UploadModel(const ServerConfig &/*_server*/,
-  const std::string &/*_pathToModelDir*/, const ModelIdentifier &/*_id*/)
+Result FuelClient::UploadModel(const std::string &/*_pathToModelDir*/,
+    const ModelIdentifier &/*_id*/)
 {
   // TODO(nkoenig) Upload a model and return an Result
   return Result(ResultType::UPLOAD_ERROR);
@@ -384,7 +382,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id)
   }
 
   // Route
-  auto route = ignition::common::joinPaths(_id.Owner(),
+  std::string route = ignition::common::joinPaths(_id.Owner(),
         "models", _id.Name(), _id.VersionStr(),
         _id.Name() + ".zip");
 
@@ -403,7 +401,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id)
   }
 
   // Get version from header
-  auto newId = _id;
+  ModelIdentifier newId = _id;
   unsigned int version = 1;
   if (resp.headers.find("X-Ign-Resource-Version") != resp.headers.end())
   {
@@ -491,13 +489,6 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
     return Result(ResultType::FETCH_ERROR);
 
   return Result(ResultType::FETCH);
-}
-
-//////////////////////////////////////////////////
-bool FuelClient::ParseModelURL(const std::string &_modelUrl,
-    ServerConfig &/*_server*/, ModelIdentifier &_id)
-{
-  return this->ParseModelUrl(common::URI(_modelUrl), _id);
 }
 
 //////////////////////////////////////////////////
@@ -775,13 +766,6 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DownloadModel(const std::string &_modelUrl,
-  std::string &_path)
-{
-  return this->DownloadModel(common::URI(_modelUrl), _path);
-}
-
-//////////////////////////////////////////////////
 Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   std::string &_path)
 {
@@ -806,14 +790,14 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   // be changed to return it
 
   // We need to figure out the version for the tip
-  if (id.Version() == 0)
+  if (id.Version() == 0 || id.VersionStr() == "tip")
   {
     id.SetVersion(model.Identification().Version());
   }
 
   _path = ignition::common::joinPaths(this->Config().CacheLocation(),
       id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
-      id.VersionStr() == "tip" ? "1" : id.VersionStr());
+      id.VersionStr());
 
   return Result(ResultType::UNKNOWN);
 }

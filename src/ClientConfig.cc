@@ -152,34 +152,9 @@ void ServerConfig::SetUrl(const common::URI &_url)
 }
 
 //////////////////////////////////////////////////
-std::string ServerConfig::LocalName() const
-{
-  ignwarn << "LocalName is deprecated" << std::endl;
-  return "";
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::LocalName(const std::string &/*_name*/)
-{
-  ignwarn << "LocalName is deprecated" << std::endl;
-}
-
-//////////////////////////////////////////////////
-std::string ServerConfig::APIKey() const
-{
-  return this->ApiKey();
-}
-
-//////////////////////////////////////////////////
 std::string ServerConfig::ApiKey() const
 {
   return this->dataPtr->key;
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::APIKey(const std::string &_key)
-{
-  this->SetApiKey(_key);
 }
 
 //////////////////////////////////////////////////
@@ -192,12 +167,6 @@ void ServerConfig::SetApiKey(const std::string &_key)
 std::string ServerConfig::Version() const
 {
   return this->dataPtr->version;
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::Version(const std::string &_version)
-{
-  this->SetVersion(_version);
 }
 
 //////////////////////////////////////////////////

@@ -27,7 +27,7 @@ namespace ignition
     {
       ignition::fuel_tools::FuelClient client;
       std::string result;
-      client.DownloadModel(_uri, result);
+      client.DownloadModel(common::URI(_uri), result);
       return result;
     }
   }

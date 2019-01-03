@@ -245,9 +245,9 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
   bool tip = (_id.Version() == 0);
   Model tipModel;
 
-  for (auto iter = this->AllModels(); iter; ++iter)
+  for (ModelIter iter = this->AllModels(); iter; ++iter)
   {
-    auto id = iter->Identification();
+    ModelIdentifier id = iter->Identification();
     if (_id == id)
     {
       if (_id.Version() == id.Version())
