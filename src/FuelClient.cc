@@ -784,6 +784,7 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
     Result result = this->DownloadModel(id);
     if (!result)
       return result;
+    model = this->dataPtr->cache->MatchingModel(id);
   }
 
   // TODO(anyone) We shouldn't need to reconstruct the path, SaveModel should
@@ -799,7 +800,7 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
       id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
       id.VersionStr());
 
-  return Result(ResultType::UNKNOWN);
+  return Result(ResultType::FETCH_ALREADY_EXISTS);
 }
 
 //////////////////////////////////////////////////

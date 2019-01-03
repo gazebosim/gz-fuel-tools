@@ -19,7 +19,6 @@
   #include <unistd.h>
 #endif
 
-#include "tinyxml2.h"
 
 #include <stdio.h>
 #include <algorithm>
@@ -31,6 +30,8 @@
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/StringUtils.hh>
 #include <ignition/common/Util.hh>
+
+#include "tinyxml2.h"
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
@@ -385,12 +386,10 @@ bool LocalCache::SaveModel(
     return false;
   }
   // Get model.config
-  std::cout << "VersionedDir[" << modelVersionedDir << "]\n";
   std::string modelConfigPath = common::joinPaths(
       modelVersionedDir, "model.config");
   if (common::exists(modelConfigPath))
   {
-    std::cout << "IT EXISTS\n";
     tinyxml2::XMLDocument modelConfigDoc;
     if (modelConfigDoc.LoadFile(modelConfigPath.c_str()) !=
         tinyxml2::XML_SUCCESS)
@@ -400,14 +399,11 @@ bool LocalCache::SaveModel(
 
     tinyxml2::XMLElement *modelElement = modelConfigDoc.FirstChildElement(
         "model");
-    std::string modelName = modelElement->FirstChildElement("name")->GetText();
     tinyxml2::XMLElement *sdfElement = modelElement->LastChildElement("sdf");
     std::string modelSdfFilePath = common::joinPaths(modelVersionedDir,
         sdfElement->GetText());
 
     // Get name of model.sdf file.
-    std::cout << "SDFFILE[" << modelSdfFilePath << "]\n";
-
     tinyxml2::XMLDocument modelSdfDoc;
     if (modelSdfDoc.LoadFile(modelSdfFilePath.c_str()) !=
         tinyxml2::XML_SUCCESS)
@@ -418,21 +414,14 @@ bool LocalCache::SaveModel(
       modelSdfDoc.RootElement()->FirstChildElement("model");
     while (modelElem)
     {
-      // std::string modelName = modelElem->Attribute("name");
-      std::cout << "Processing Model[" <<  modelName << "]\n";
       tinyxml2::XMLElement *linkElem =
         modelElem->FirstChildElement("link");
       while (linkElem)
       {
-        std::cout << "Processing Link[" << linkElem->Attribute("name") << "]\n";
-
         tinyxml2::XMLElement *collisionElem =
           linkElem->FirstChildElement("collision");
         while (collisionElem)
         {
-          std::cout << "Processing Collision["
-            << collisionElem->Attribute("name") << "]\n";
-
           tinyxml2::XMLElement *geomElem =
             collisionElem->FirstChildElement("geometry");
 
@@ -466,9 +455,6 @@ bool LocalCache::SaveModel(
           linkElem->FirstChildElement("visual");
         while (visualElem)
         {
-          std::cout << "Processing Visual["
-            << visualElem->Attribute("name") << "]\n";
-
           tinyxml2::XMLElement *geomElem =
             visualElem->FirstChildElement("geometry");
 
