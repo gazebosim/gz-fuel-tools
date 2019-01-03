@@ -1089,8 +1089,8 @@ TEST(FuelClient, Config)
 
   // Check a few values. More client config tests in ClientConfig_TEST
   EXPECT_FALSE(config.UserAgent().empty());
-  EXPECT_TRUE(config.CacheLocation().empty());
-  EXPECT_TRUE(config.Servers().empty());
+  EXPECT_FALSE(config.CacheLocation().empty());
+  EXPECT_FALSE(config.Servers().empty());
 }
 
 /////////////////////////////////////////////////
@@ -1134,10 +1134,11 @@ TEST(FuelClient, Models)
 
   {
     ModelIter iter = client.Models(serverConfig);
-    EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 
   {
+    serverConfig.Clear();
     ModelIter const iter = client.Models(serverConfig);
     EXPECT_FALSE(iter);
   }

@@ -32,18 +32,51 @@ using namespace ignition;
 using namespace fuel_tools;
 
 // Constants.
-static const std::string initialConfigFile = ignition::common::joinPaths(
+static const std::string initialConfigFile = ignition::common::joinPaths( // NOLINT
     IGNITION_FUEL_INITIAL_CONFIG_PATH, "config.yaml");
+
+/////////////////////////////////////////////////
+/// \brief Get home directory.
+/// \return Home directory or empty string if home wasn't found.
+/// \ToDo: Move this function to ignition::common::Filesystem
+std::string homePath()
+{
+  std::string homePath;
+#ifndef _WIN32
+  ignition::common::env("HOME", homePath);
+#else
+  ignition::common::env("HOMEPATH", homePath);
+#endif
+
+  return homePath;
+}
 
 //////////////////////////////////////////////////
 /// \brief Private data class
 class ignition::fuel_tools::ClientConfigPrivate
 {
+  /// \brief Constructor.
+  public: ClientConfigPrivate()
+          {
+            this->servers.push_back(ServerConfig());
+          }
+
+  /// \brief Clear values.
+  public: void Clear()
+          {
+            this->servers.clear();
+            this->cacheLocation = "";
+            this->configPath = "";
+            this->userAgent =
+              "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
+          }
+
   /// \brief A list of servers.
   public: std::vector<ServerConfig> servers;
 
   /// \brief a path on disk to where data is cached.
-  public: std::string cacheLocation = "";
+  public: std::string cacheLocation{ignition::common::joinPaths(
+              homePath(), ".ignition", "fuel")};
 
   /// \brief The path where the configuration file is located.
   public: std::string configPath = "";
@@ -57,8 +90,16 @@ class ignition::fuel_tools::ClientConfigPrivate
 /// \brief Private data class
 class ignition::fuel_tools::ServerConfigPrivate
 {
+  /// \brief Clear values.
+  public: void Clear()
+          {
+            this->url.Clear();
+            this->key = "";
+            this->version = "1.0";
+          }
+
   /// \brief URL to reach server
-  public: common::URI url;
+  public: common::URI url{"https://fuel.ignitionrobotics.org"};
 
   /// \brief A key to auth with the server
   public: std::string key = "";
@@ -78,6 +119,12 @@ ServerConfig::ServerConfig(const ServerConfig &_orig)
   : dataPtr(new ServerConfigPrivate)
 {
   *(this->dataPtr) = *(_orig.dataPtr);
+}
+
+//////////////////////////////////////////////////
+void ServerConfig::Clear()
+{
+  this->dataPtr->Clear();
 }
 
 //////////////////////////////////////////////////
@@ -167,22 +214,6 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
   return out.str();
 }
 
-/////////////////////////////////////////////////
-/// \brief Get home directory.
-/// \return Home directory or empty string if home wasn't found.
-/// \ToDo: Move this function to ignition::common::Filesystem
-std::string homePath()
-{
-  std::string homePath;
-#ifndef _WIN32
-  ignition::common::env("HOME", homePath);
-#else
-  ignition::common::env("HOMEPATH", homePath);
-#endif
-
-  return homePath;
-}
-
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
@@ -216,6 +247,12 @@ ClientConfig &ClientConfig::operator=(const ClientConfig &_rhs)
 //////////////////////////////////////////////////
 ClientConfig::~ClientConfig()
 {
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::Clear()
+{
+  this->dataPtr->Clear();
 }
 
 //////////////////////////////////////////////////
@@ -414,9 +451,9 @@ bool ClientConfig::LoadConfig()
   {
     ignwarn << "IGN_FUEL_CACHE_PATH is set to [" << ignFuelPath << "]. The "
             << "path in the configuration file will be ignored" << std::endl;
+    cacheLocation = ignFuelPath;
   }
-  else
-    this->SetCacheLocation(cacheLocation);
+  this->SetCacheLocation(cacheLocation);
 
   // Cleanup.
   yaml_parser_delete(&parser);

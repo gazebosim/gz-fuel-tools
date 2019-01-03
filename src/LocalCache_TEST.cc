@@ -202,6 +202,7 @@ TEST(LocalCache, MatchingModels)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig conf;
+  conf.Clear();
   conf.SetCacheLocation(common::cwd() + "/test_cache");
   createLocal6Models(conf);
   createLocal3Models(conf);
@@ -209,6 +210,7 @@ TEST(LocalCache, MatchingModels)
   ignition::fuel_tools::LocalCache cache(&conf);
 
   ModelIdentifier am1;
+  am1.SetServer(conf.Servers().front());
   am1.SetOwner("alice");
   am1.SetName("am1");
   auto iter = cache.MatchingModels(am1);
@@ -222,7 +224,18 @@ TEST(LocalCache, MatchingModels)
     uniqueNames.insert(iter->Identification().UniqueName());
     ++iter;
   }
-  EXPECT_EQ(2u, uniqueNames.size());
+  EXPECT_EQ(1u, uniqueNames.size());
+
+  am1.SetServer(conf.Servers().back());
+  auto iter2 = cache.MatchingModels(am1);
+  while (iter2)
+  {
+    EXPECT_EQ("alice", iter2->Identification().Owner());
+    EXPECT_EQ("am1", iter2->Identification().Name());
+
+    uniqueNames.insert(iter2->Identification().UniqueName());
+    ++iter2;
+  }
 }
 
 /////////////////////////////////////////////////
@@ -315,6 +328,7 @@ TEST(LocalCache, MatchingWorlds)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig conf;
+  conf.Clear();
   conf.SetCacheLocation(common::cwd() + "/test_cache");
   createLocal6Worlds(conf);
   createLocal3Worlds(conf);
@@ -322,6 +336,7 @@ TEST(LocalCache, MatchingWorlds)
   ignition::fuel_tools::LocalCache cache(&conf);
 
   WorldIdentifier am1;
+  am1.SetServer(conf.Servers().front());
   am1.SetOwner("alice");
   am1.SetName("am1");
   auto iter = cache.MatchingWorlds(am1);
@@ -335,7 +350,7 @@ TEST(LocalCache, MatchingWorlds)
     uniqueNames.insert(iter->UniqueName());
     ++iter;
   }
-  EXPECT_EQ(2u, uniqueNames.size());
+  EXPECT_EQ(1u, uniqueNames.size());
 }
 
 

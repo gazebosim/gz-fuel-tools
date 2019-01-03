@@ -53,6 +53,11 @@ namespace ignition
       /// \brief Destructor.
       public: ~ServerConfig();
 
+      /// \brief Clear the server config. This will set all values to empty
+      /// strings, excpect the version string will be set to it's default
+      /// value.
+      public: void Clear();
+
       /// \brief Get the URL to access the server.
       /// \return The URL of this server.
       public: common::URI Url() const;
@@ -109,6 +114,11 @@ namespace ignition
 
       /// \brief Destructor.
       public: ~ClientConfig();
+
+      /// \brief Clear the client config. This will set all values to empty
+      /// strings, except the user agent which will be set to its default
+      /// value.
+      public: void Clear();
 
       /// \brief Set the user agent name.
       /// \param[in] _agent User agent name.
