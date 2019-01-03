@@ -24,7 +24,6 @@
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/Model.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ignition/fuel_tools/REST.hh"
 #include "ignition/fuel_tools/RestClient.hh"
 
 namespace ignition
@@ -122,49 +121,6 @@ namespace ignition
       /// \brief Where the current iterator is in the list of models
       protected: std::vector<Model>::iterator modelIter;
     };
-
-
-    /// \brief class for iterating through model ids from a rest API
-    /// \deprecated See IterRestIds
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-    class IGNITION_FUEL_TOOLS_VISIBLE IGN_DEPRECATED(2.0)
-      IterRESTIds: public ModelIterPrivate
-    {
-      /// \brief Constructor
-      /// \param[in] _rest REST client
-      /// \param[in] _server Server configuration
-      /// \param[in] _path The path to request
-      public: IterRESTIds(const REST &_rest,
-                          const ServerConfig &_server,
-                          const std::string &_api);
-
-      /// \brief Destructor
-      public: virtual ~IterRESTIds();
-
-      // Documentation inherited
-      public: virtual void Next() override;
-
-      // Documentation inherited
-      public: virtual bool HasReachedEnd() override;
-
-      /// \brief Client configuration
-      public: ServerConfig config;
-
-      /// \brief RESTful client
-      public: REST rest;
-
-      /// \brief Model identifiers in the current page
-      protected: std::vector<ModelIdentifier> ids;
-
-      /// \brief where the current iterator is in the list of ids
-      protected: std::vector<ModelIdentifier>::iterator idIter;
-    };
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
 
     /// \brief class for iterating through model ids from a rest API
     class IGNITION_FUEL_TOOLS_VISIBLE IterRestIds: public ModelIterPrivate

@@ -93,18 +93,6 @@ ServerConfig::~ServerConfig()
 }
 
 //////////////////////////////////////////////////
-std::string ServerConfig::URL() const
-{
-  return this->dataPtr->url.Str();
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::URL(const std::string &_url)
-{
-  this->SetUrl(common::URI(_url));
-}
-
-//////////////////////////////////////////////////
 common::URI ServerConfig::Url() const
 {
   return this->dataPtr->url;
@@ -117,34 +105,9 @@ void ServerConfig::SetUrl(const common::URI &_url)
 }
 
 //////////////////////////////////////////////////
-std::string ServerConfig::LocalName() const
-{
-  ignwarn << "LocalName is deprecated" << std::endl;
-  return "";
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::LocalName(const std::string &/*_name*/)
-{
-  ignwarn << "LocalName is deprecated" << std::endl;
-}
-
-//////////////////////////////////////////////////
-std::string ServerConfig::APIKey() const
-{
-  return this->ApiKey();
-}
-
-//////////////////////////////////////////////////
 std::string ServerConfig::ApiKey() const
 {
   return this->dataPtr->key;
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::APIKey(const std::string &_key)
-{
-  this->SetApiKey(_key);
 }
 
 //////////////////////////////////////////////////
@@ -157,12 +120,6 @@ void ServerConfig::SetApiKey(const std::string &_key)
 std::string ServerConfig::Version() const
 {
   return this->dataPtr->version;
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::Version(const std::string &_version)
-{
-  this->SetVersion(_version);
 }
 
 //////////////////////////////////////////////////
@@ -496,12 +453,6 @@ void ClientConfig::AddServer(const ServerConfig &_srv)
 std::string ClientConfig::CacheLocation() const
 {
   return this->dataPtr->cacheLocation;
-}
-
-//////////////////////////////////////////////////
-void ClientConfig::CacheLocation(const std::string &_path)
-{
-  this->SetCacheLocation(_path);
 }
 
 //////////////////////////////////////////////////
