@@ -211,6 +211,13 @@ ClientConfig &FuelClient::Config()
 Result FuelClient::ModelDetails(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id, ModelIdentifier &_model) const
 {
+  return this->ModelDetails(_id, _model);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::ModelDetails(const ModelIdentifier &_id,
+    ModelIdentifier &_model) const
+{
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 

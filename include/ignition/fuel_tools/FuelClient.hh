@@ -93,8 +93,18 @@ namespace ignition
       /// \remarks Fulfills Get-One requirement
       /// \param[out] _model The requested model
       /// \return Result of the fetch operation.
-      public: Result ModelDetails(const ServerConfig &_server,
+      /// \deprecated See version without ServerConfig parameter.
+      public: Result IGN_DEPRECATED(2.0) ModelDetails(
+                                  const ServerConfig &_server,
                                   const ModelIdentifier &_id,
+                                  ModelIdentifier &_model) const;
+
+      /// \brief Fetch the details of a model.
+      /// \param[in] _id a partially filled out identifier used to fetch models
+      /// \remarks Fulfills Get-One requirement
+      /// \param[out] _model The requested model
+      /// \return Result of the fetch operation.
+      public: Result ModelDetails(const ModelIdentifier &_id,
                                   ModelIdentifier &_model) const;
 
       /// \brief Returns an iterator that can return names of models

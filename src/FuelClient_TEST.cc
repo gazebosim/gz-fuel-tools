@@ -1108,11 +1108,10 @@ TEST(FuelClient, ModelDownload)
 TEST(FuelClient, ModelDetails)
 {
   FuelClient client;
-  ServerConfig serverConfig;
   ModelIdentifier modelId;
   ModelIdentifier model;
 
-  Result result = client.ModelDetails(serverConfig, modelId, model);
+  Result result = client.ModelDetails(modelId, model);
   EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
 }
 
