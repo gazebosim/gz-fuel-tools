@@ -24,15 +24,6 @@
 
 #include "ignition/fuel_tools/Export.hh"
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-#include "ignition/fuel_tools/REST.hh"
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-
 namespace ignition
 {
   namespace fuel_tools
@@ -106,21 +97,6 @@ namespace ignition
           const std::string &_data,
           const std::map<std::string, std::string> &_form =
           std::map<std::string, std::string>()) const;
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-      /// \brief Copy REST constructor.
-      /// \param[in] _deprecated REST to copy.
-      public: explicit Rest(const REST &_deprecated);
-
-      /// \brief Copy REST operator constructor.
-      /// \param[in] _deprecated REST to copy.
-      /// \return Reference to this.
-      public: Rest &operator=(const REST &_deprecated);
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
 
       /// \brief Set the user agent name.
       /// \param[in] _agent User agent name.

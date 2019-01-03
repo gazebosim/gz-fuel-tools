@@ -99,7 +99,7 @@ void createLocal3Models(ClientConfig &_conf)
       "test_cache/localhost:8007/trudy/models/tm1/3/model.config");
 
   ignition::fuel_tools::ServerConfig srv;
-  srv.URL("http://localhost:8007/");
+  srv.SetUrl(ignition::common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
 
@@ -137,7 +137,7 @@ void createLocal6Worlds(ClientConfig &_conf)
       "test_cache/localhost:8001/trudy/worlds/tm2/2/world.world");
 
   ignition::fuel_tools::ServerConfig srv;
-  srv.URL("http://localhost:8001/");
+  srv.SetUrl(ignition::common::URI("http://localhost:8001/"));
   _conf.AddServer(srv);
 }
 
@@ -225,7 +225,6 @@ TEST(LocalCache, MatchingModels)
   EXPECT_EQ(2u, uniqueNames.size());
 }
 
-
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
 TEST(LocalCache, MatchingModel)
@@ -289,7 +288,7 @@ TEST(LocalCache, AllWorlds)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig conf;
-  conf.CacheLocation(common::cwd() + "/test_cache");
+  conf.SetCacheLocation(common::cwd() + "/test_cache");
   createLocal6Worlds(conf);
   createLocal3Worlds(conf);
 
@@ -316,7 +315,7 @@ TEST(LocalCache, MatchingWorlds)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig conf;
-  conf.CacheLocation(common::cwd() + "/test_cache");
+  conf.SetCacheLocation(common::cwd() + "/test_cache");
   createLocal6Worlds(conf);
   createLocal3Worlds(conf);
 
@@ -348,16 +347,16 @@ TEST(LocalCache, MatchingWorld)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig conf;
-  conf.CacheLocation(common::cwd() + "/test_cache");
+  conf.SetCacheLocation(common::cwd() + "/test_cache");
   createLocal6Worlds(conf);
 
   ignition::fuel_tools::LocalCache cache(&conf);
 
   ignition::fuel_tools::ServerConfig srv1;
-  srv1.URL("http://localhost:8001/");
+  srv1.SetUrl(ignition::common::URI("http://localhost:8001/"));
 
   ignition::fuel_tools::ServerConfig srv2;
-  srv2.URL("http://localhost:8002/");
+  srv2.SetUrl(ignition::common::URI("http://localhost:8002/"));
 
   WorldIdentifier am1;
   am1.SetServer(srv1);
@@ -366,7 +365,7 @@ TEST(LocalCache, MatchingWorld)
   EXPECT_TRUE(cache.MatchingWorld(am1));
   EXPECT_EQ("alice", am1.Owner());
   EXPECT_EQ("am1", am1.Name());
-  EXPECT_EQ("http://localhost:8001", am1.Server().URL());
+  EXPECT_EQ("http://localhost:8001", am1.Server().Url().Str());
 
   WorldIdentifier tm2;
   tm2.SetServer(srv1);
