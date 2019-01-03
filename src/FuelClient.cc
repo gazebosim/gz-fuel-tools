@@ -302,7 +302,7 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id)
 
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
-  // Todo try to fetch model directly from a server
+  // TODO(nkoenig) try to fetch model directly from a server
   // Note: ign-fuel-server doesn't like URLs ending in /
   std::string path;
   if (!_id.Name().empty())
@@ -323,7 +323,7 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
 
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
-  // Todo try to fetch model directly from a server
+  // TODO(nkoenig) try to fetch model directly from a server
   // Note: ign-fuel-server doesn't like URLs ending in /
   std::string path;
   if (!_id.Name().empty())
