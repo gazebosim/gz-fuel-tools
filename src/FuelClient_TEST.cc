@@ -21,6 +21,7 @@
 #include <ignition/common/Filesystem.hh>
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/Result.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
 #include "test/test_config.h"
@@ -33,9 +34,8 @@
 #define ChangeDirectory chdir
 #endif
 
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
+using namespace ignition::fuel_tools;
 
 //////////////////////////////////////////////////
 /// \brief Creates a directory structure in the build directory with 1 model
@@ -414,13 +414,13 @@ TEST(FuelClient, DownloadModel)
 
     // Check it is not cached
     std::string cachedPath;
-    auto res1 = client.CachedModel(url, cachedPath);
+    Result res1 = client.CachedModel(url, cachedPath);
     EXPECT_FALSE(res1);
     EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
 
     // Download
     std::string path;
-    auto res2 = client.DownloadModel(url.Str(), path);
+    Result res2 = client.DownloadModel(url, path);
     EXPECT_TRUE(res2);
     EXPECT_EQ(Result(ResultType::FETCH), res2);
 
@@ -441,7 +441,7 @@ TEST(FuelClient, DownloadModel)
      "test_cache/api.ignitionfuel.org/chapulina/models/Test box/model.config"));
 
     // Check it is cached
-    auto res3 = client.CachedModel(url, cachedPath);
+    Result res3 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res3);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
     EXPECT_EQ(common::cwd() +
@@ -454,7 +454,7 @@ TEST(FuelClient, DownloadModel)
     std::string url{
         "https://api.ignitionfuel.org/1.0/chapulina/models/Inexistent model"};
     std::string path;
-    auto result = client.DownloadModel(url, path);
+    Result result = client.DownloadModel(common::URI(url), path);
     EXPECT_FALSE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
   }
@@ -463,7 +463,7 @@ TEST(FuelClient, DownloadModel)
   {
     std::string url{"banana"};
     std::string path;
-    auto result = client.DownloadModel(url, path);
+    Result result = client.DownloadModel(common::URI(url), path);
     EXPECT_FALSE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
   }
@@ -837,7 +837,7 @@ TEST(FuelClient, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://api.ignitionfuel.org/openrobotics/worlds/Empty/tip/"
+      "https://api.ignitionfuel.org/1.0/openrobotics/worlds/Empty/tip/"
       "files/empty.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
@@ -1100,7 +1100,7 @@ TEST(FuelClient, ModelDownload)
   FuelClient client;
 
   std::string path;
-  Result result = client.DownloadModel("bad", path);
+  Result result = client.DownloadModel(common::URI("bad"), path);
   EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
 }
 
@@ -1108,11 +1108,10 @@ TEST(FuelClient, ModelDownload)
 TEST(FuelClient, ModelDetails)
 {
   FuelClient client;
-  ServerConfig serverConfig;
   ModelIdentifier modelId;
   ModelIdentifier model;
 
-  Result result = client.ModelDetails(serverConfig, modelId, model);
+  Result result = client.ModelDetails(modelId, model);
   EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
 }
 
@@ -1124,12 +1123,12 @@ TEST(FuelClient, Models)
   ModelIdentifier modelId;
 
   {
-    ModelIter iter = client.Models(serverConfig, modelId);
+    ModelIter iter = client.Models(modelId);
     EXPECT_FALSE(iter);
   }
 
   {
-    ModelIter const iter = client.Models(serverConfig, modelId);
+    ModelIter const iter = client.Models(modelId);
     EXPECT_FALSE(iter);
   }
 
@@ -1148,10 +1147,9 @@ TEST(FuelClient, Models)
 TEST(FuelClient, DownloadModelFail)
 {
   FuelClient client;
-  ServerConfig serverConfig;
   ModelIdentifier modelId;
 
-  Result result = client.DownloadModel(serverConfig, modelId);
+  Result result = client.DownloadModel(modelId);
   EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
 }
 
@@ -1159,10 +1157,9 @@ TEST(FuelClient, DownloadModelFail)
 TEST(FuelClient, DeleteModelFail)
 {
   FuelClient client;
-  ServerConfig serverConfig;
   ModelIdentifier modelId;
 
-  Result result = client.DeleteModel(serverConfig, modelId);
+  Result result = client.DeleteModel(modelId);
   EXPECT_EQ(ResultType::DELETE_ERROR, result.Type());
 }
 
@@ -1170,10 +1167,9 @@ TEST(FuelClient, DeleteModelFail)
 TEST(FuelClient, UploadModelFail)
 {
   FuelClient client;
-  ServerConfig serverConfig;
   ModelIdentifier modelId;
 
-  Result result = client.UploadModel(serverConfig, "path", modelId);
+  Result result = client.UploadModel("path", modelId);
   EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
 }
 
