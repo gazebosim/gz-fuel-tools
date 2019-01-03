@@ -51,6 +51,7 @@ std::time_t ParseDateTime(const std::string &_datetime)
   tm.tm_sec = static_cast<int>(s);
   // 0 - standard time, 1, daylight saving, -1 unknown
   tm.tm_isdst = -1;
+  // cppcheck-suppress ConfigurationNotChecked
   return timegm(&tm);
 }
 
