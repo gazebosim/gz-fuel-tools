@@ -32,7 +32,7 @@ using namespace ignition;
 using namespace fuel_tools;
 
 // Constants.
-const std::string initialConfigFile = ignition::common::joinPaths( // NOLINT
+static const std::string initialConfigFile = ignition::common::joinPaths( // NOLINT
     IGNITION_FUEL_INITIAL_CONFIG_PATH, "config.yaml");
 
 /////////////////////////////////////////////////
