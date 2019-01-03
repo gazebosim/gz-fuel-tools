@@ -20,7 +20,14 @@ ign_configure_project()
 # Set project-specific options
 #============================================================================
 
-# ignition-fuel-tools currently has no options that are unique to it
+# Option: Should we use our internal copy of tinyxml2?
+if(UNIX OR APPLE)
+  option(USE_EXTERNAL_TINYXML2 "Use a system-installed version of tinyxml2" ON)
+elseif(WIN32)
+  # This is always false for Windows, so we can avoid trying to search for a
+  # system installation of tinyxml2.
+  set(USE_EXTERNAL_TINYXML2 false)
+endif()
 
 #============================================================================
 # Search for project-specific dependencies
@@ -52,6 +59,16 @@ set(IGN_COMMON_MAJOR_VER ${ignition-common1_VERSION_MAJOR})
 ign_find_package(ignition-tools QUIET)
 if (ignition-tools_FOUND)
   set (HAVE_IGN_TOOLS TRUE)
+endif()
+
+#--------------------------------------
+# Find Tinyxml2
+if(USE_EXTERNAL_TINYXML2)
+  ign_find_package(TINYXML2 PRETTY tinyxml2
+    REQUIRED_BY graphics
+    PRIVATE_FOR graphics)
+else()
+  message(STATUS "Skipping search for tinyxml2 and using an internal version\n")
 endif()
 
 #============================================================================
