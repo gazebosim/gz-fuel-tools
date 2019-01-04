@@ -196,7 +196,7 @@ TEST(FuelClient, ParseModelURL)
     EXPECT_TRUE(client.ParseModelUrl(ignition::common::URI(url), id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
-    EXPECT_TRUE(id.Server().Version().empty());
+    EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
     EXPECT_EQ(id.Version(), 0u);
@@ -347,7 +347,8 @@ TEST(FuelClient, ParseModelFileURL)
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
-    EXPECT_TRUE(id.Server().Version().empty());
+    EXPECT_FALSE(id.Server().Version().empty());
+    EXPECT_EQ("1.0", id.Server().Version());
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "Pine Tree");
     EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
@@ -678,7 +679,8 @@ TEST(FuelClient, ParseWorldUrl)
     EXPECT_TRUE(client.ParseWorldUrl(url, id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
-    EXPECT_TRUE(id.Server().Version().empty());
+    EXPECT_FALSE(id.Server().Version().empty());
+    EXPECT_EQ("1.0", id.Server().Version());
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
     EXPECT_EQ(id.Version(), 0u);
@@ -826,7 +828,8 @@ TEST(FuelClient, ParseWorldFileUrl)
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
-    EXPECT_TRUE(id.Server().Version().empty());
+    EXPECT_FALSE(id.Server().Version().empty());
+    EXPECT_EQ("1.0", id.Server().Version());
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "Empty sky");
     EXPECT_EQ(filePath, "empty_sky.world");

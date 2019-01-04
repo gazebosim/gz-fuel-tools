@@ -35,22 +35,6 @@ using namespace fuel_tools;
 const std::string initialConfigFile = ignition::common::joinPaths( // NOLINT
     IGNITION_FUEL_INITIAL_CONFIG_PATH, "config.yaml");
 
-/////////////////////////////////////////////////
-/// \brief Get home directory.
-/// \return Home directory or empty string if home wasn't found.
-/// \ToDo: Move this function to ignition::common::Filesystem
-std::string homePath()
-{
-  std::string homePath;
-#ifndef _WIN32
-  ignition::common::env("HOME", homePath);
-#else
-  ignition::common::env("HOMEPATH", homePath);
-#endif
-
-  return homePath;
-}
-
 //////////////////////////////////////////////////
 /// \brief Private data class
 class ignition::fuel_tools::ClientConfigPrivate
@@ -58,6 +42,11 @@ class ignition::fuel_tools::ClientConfigPrivate
   /// \brief Constructor.
   public: ClientConfigPrivate()
           {
+            std::string homePath;
+            ignition::common::env(IGN_HOMEDIR, homePath);
+            this->cacheLocation = common::joinPaths(
+                homePath, ".ignition", "fuel");
+
             this->servers.push_back(ServerConfig());
           }
 
@@ -75,8 +64,7 @@ class ignition::fuel_tools::ClientConfigPrivate
   public: std::vector<ServerConfig> servers;
 
   /// \brief a path on disk to where data is cached.
-  public: std::string cacheLocation{ignition::common::joinPaths(
-              homePath(), ".ignition", "fuel")};
+  public: std::string cacheLocation = "";
 
   /// \brief The path where the configuration file is located.
   public: std::string configPath = "";
@@ -261,8 +249,11 @@ bool ClientConfig::LoadConfig()
   // SetConfigPath() wasn't used. Using the default one.
   if (this->dataPtr->configPath.empty())
   {
-    auto configDir = ignition::common::joinPaths(
-      homePath(), ".ignition", "fuel");
+    std::string homePath;
+    ignition::common::env(IGN_HOMEDIR, homePath);
+
+    std::string configDir = ignition::common::joinPaths(
+      homePath, ".ignition", "fuel");
     if (!ignition::common::exists(configDir) &&
         !ignition::common::createDirectories(configDir))
     {
@@ -437,9 +428,12 @@ bool ClientConfig::LoadConfig()
       yaml_event_delete(&event);
   } while (event.type != YAML_STREAM_END_EVENT);
 
+
   // Default cache path.
+  std::string homePath;
+  ignition::common::env(IGN_HOMEDIR, homePath);
   std::string cacheLocation = ignition::common::joinPaths(
-    homePath(), ".ignition", "fuel");
+    homePath, ".ignition", "fuel");
 
   // The user wants to overwrite the default cache path.
   if (!cacheLocationConfig.empty())
