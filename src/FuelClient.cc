@@ -43,7 +43,7 @@ using namespace fuel_tools;
 class ignition::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL,
-  /// E.g.: https://api.ignitionfuel.org/1.0/caguero/models/Beer/2
+  /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer/2
   /// Where the API version and the model version are optional.
   public: const std::string kModelUrlRegexStr{
     // Method
@@ -62,7 +62,7 @@ class ignition::fuel_tools::FuelClientPrivate
     "([0-9]*|tip)"};
 
   /// \brief A world URL,
-  /// E.g.: https://api.ignitionfuel.org/1.0/openrobotics/worlds/Empty/1
+  /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty/1
   /// Where the API version and the world version are optional.
   public: const std::string kWorldUrlRegexStr{
     // Method
@@ -302,7 +302,7 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id)
 
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
-  // Todo try to fetch model directly from a server
+  // TODO(nkoenig) try to fetch model directly from a server
   // Note: ign-fuel-server doesn't like URLs ending in /
   std::string path;
   if (!_id.Name().empty())
@@ -323,7 +323,7 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
 
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
-  // Todo try to fetch model directly from a server
+  // TODO(nkoenig) try to fetch model directly from a server
   // Note: ign-fuel-server doesn't like URLs ending in /
   std::string path;
   if (!_id.Name().empty())
@@ -359,14 +359,14 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
 Result FuelClient::UploadModel(const std::string &/*_pathToModelDir*/,
     const ModelIdentifier &/*_id*/)
 {
-  // TODO Upload a model and return an Result
+  // TODO(nkoenig) Upload a model and return an Result
   return Result(ResultType::UPLOAD_ERROR);
 }
 
 //////////////////////////////////////////////////
 Result FuelClient::DeleteModel(const ModelIdentifier &/*_id*/)
 {
-  // TODO Delete a model and return a Result
+  // TODO(nkoenig) Delete a model and return a Result
   return Result(ResultType::DELETE_ERROR);
 }
 
