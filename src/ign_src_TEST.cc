@@ -109,7 +109,7 @@ TEST(CmdLine, ModelListCustomServerPretty)
   EXPECT_NE(stdOutBuffer.str().find("models"), std::string::npos)
       << stdOutBuffer.str();
 
-  EXPECT_EQ(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
+  EXPECT_NE(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_EQ(stdOutBuffer.str().find(
       "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
@@ -141,7 +141,7 @@ TEST(CmdLine, ModelListCustomServerPrettyOwner)
   EXPECT_EQ(stdOutBuffer.str().find("20 models"), std::string::npos)
       << stdOutBuffer.str();
 
-  EXPECT_EQ(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
+  EXPECT_NE(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_EQ(stdOutBuffer.str().find(
       "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
@@ -275,7 +275,7 @@ TEST(CmdLine, WorldListCustomServerPretty)
   EXPECT_NE(stdOutBuffer.str().find("worlds"), std::string::npos)
       << stdOutBuffer.str();
 
-  EXPECT_EQ(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
+  EXPECT_NE(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_EQ(stdOutBuffer.str().find(
       "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
@@ -306,7 +306,7 @@ TEST(CmdLine, WorldListCustomServerPrettyOwner)
   EXPECT_EQ(stdOutBuffer.str().find("20 worlds"), std::string::npos)
       << stdOutBuffer.str();
 
-  EXPECT_EQ(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
+  EXPECT_NE(stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << stdOutBuffer.str();
   EXPECT_EQ(stdOutBuffer.str().find(
       "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
