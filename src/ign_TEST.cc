@@ -109,7 +109,7 @@ TEST(CmdLine, ModelListCustomServerPretty)
   EXPECT_NE(output.find("owners"), std::string::npos) << output;
   EXPECT_NE(output.find("models"), std::string::npos) << output;
 
-  EXPECT_EQ(output.find("https://fuel.ignitionrobotics.org"), std::string::npos)
+  EXPECT_NE(output.find("https://fuel.ignitionrobotics.org"), std::string::npos)
       << output;
   EXPECT_EQ(output.find("https://staging-fuel.ignitionrobotics.org/1.0/"),
       std::string::npos) << output;
