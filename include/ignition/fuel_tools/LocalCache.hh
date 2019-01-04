@@ -80,7 +80,8 @@ namespace ignition
       /// \param[in] _id A completely populated ID
       /// \param[in] _data Compressed content of the model
       /// \param[in] _overwrite Overwrite model if already exists.
-      /// \returns true if the model was successfully added to the local cache
+      /// \returns True if the model was successfully added to the local cache,
+      /// and the model contains a model.config file.
       public: virtual bool SaveModel(
           const ModelIdentifier &_id,
           const std::string &_data,

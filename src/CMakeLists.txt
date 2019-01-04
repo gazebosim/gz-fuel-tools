@@ -46,6 +46,7 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PRIVATE
     curl::curl
     ${JSONCPP_TARGET}
+    TINYXML2::TINYXML2
     YAML::YAML
     ZIP::ZIP
 )
@@ -57,7 +58,9 @@ ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
 # Build the unit tests.
 ign_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
-                LIB_DEPS ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
+                LIB_DEPS
+                  ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
+                  TINYXML2::TINYXML2
 )
 
 # Command line support.

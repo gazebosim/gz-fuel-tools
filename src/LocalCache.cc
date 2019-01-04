@@ -30,6 +30,8 @@
 #include <ignition/common/StringUtils.hh>
 #include <ignition/common/Util.hh>
 
+#include "tinyxml2.h"
+
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
@@ -380,9 +382,30 @@ bool LocalCache::SaveModel(
     return false;
   }
 
+  // Cleanup the zip file.
   if (!common::removeDirectoryOrFile(zipFile))
   {
     ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
+  }
+
+  // Get model.config
+  std::string modelConfigPath = common::joinPaths(
+      modelVersionedDir, "model.config");
+  if (common::exists(modelConfigPath))
+  {
+    tinyxml2::XMLDocument modelConfigDoc;
+    if (modelConfigDoc.LoadFile(modelConfigPath.c_str()) !=
+        tinyxml2::XML_SUCCESS)
+    {
+      ignerr << "Unable to load model.config file[" << modelConfigPath << "]\n";
+      return false;
+    }
+  }
+  else
+  {
+    ignerr << "model.config file does not exist in ["
+      << modelVersionedDir << ".\n";
+    return false;
   }
 
   ignmsg << "Saved model at:" << std::endl
