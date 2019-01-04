@@ -12,7 +12,7 @@ Ignition Fuel Tools accepts a YAML file with the following syntax:
 # The list of servers.
 servers:
   -
-    url: https://api.ignitionfuel.org
+    url: https://fuel.ignitionrobotics.org
 
   # -
     # url: https://myserver
@@ -42,7 +42,7 @@ Create a file `/tmp/my_config.yaml` with the following content:
 # The list of servers.
 servers:
   -
-    url: https://api.ignitionfuel.org
+    url: https://fuel.ignitionrobotics.org
 
 # Where are the assets stored in disk.
 cache:
@@ -83,7 +83,7 @@ And now the fun part, execute it:
 ```
 
 Verify that you have the model in
-`/tmp/ignition/fuel/api.ignitionfuel.org/caguero/models/Beer`,
+`/tmp/ignition/fuel/fuel.ignitionrobotics.org/caguero/models/Beer`,
 as you configured in your YAML file.
 
 ## Walkthrough

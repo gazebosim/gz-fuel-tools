@@ -3,13 +3,13 @@ cmake_minimum_required(VERSION 3.5.1 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(ignition-fuel_tools2 VERSION 2.0.0)
+project(ignition-fuel_tools3 VERSION 3.0.0)
 
 #============================================================================
 # Find ignition-cmake
 #============================================================================
 # If you get an error at this line, you need to install ignition-cmake
-find_package(ignition-cmake0 REQUIRED)
+find_package(ignition-cmake2 REQUIRED)
 
 #============================================================================
 # Configure the project
@@ -46,8 +46,8 @@ ign_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find ignition-common
-ign_find_package(ignition-common1 VERSION 1.1.0 REQUIRED PRIVATE)
-set(IGN_COMMON_MAJOR_VER ${ignition-common1_VERSION_MAJOR})
+ign_find_package(ignition-common3 REQUIRED PRIVATE)
+set(IGN_COMMON_MAJOR_VER ${ignition-common3_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-tools

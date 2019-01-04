@@ -43,7 +43,7 @@ You should see the name of the server followed by its list of models. Here's an
 example:
 
 ```
-[https://api.ignitionfuel.org]
+[https://fuel.ignitionrobotics.org]
 
   Beer
   Wastebasket
@@ -105,11 +105,11 @@ You should see the name of the server followed by the details of the model.
 Here's an example:
 
 ```
-[https://api.ignitionfuel.org]
+[https://fuel.ignitionrobotics.org]
 
   Name: Beer
-  Source URL: https://api.ignitionfuel.org
-  Unique name: https://api.ignitionfuel.org/1.0/caguero/models/Beer
+  Source URL: https://fuel.ignitionrobotics.org
+  Unique name: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer
   Owner: caguero
   Description: A beer can
   Likes: 0

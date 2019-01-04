@@ -37,17 +37,14 @@ if (HAVE_IGN_TOOLS)
 endif()
 
 # Create the library target.
-ign_add_library(${PROJECT_LIBRARY_TARGET_NAME} ${sources})
-
-# Turn on C++11 support for the library.
-ign_set_project_public_cxx_standard(11)
+ign_create_core_library(SOURCES ${sources} CXX_STANDARD 17)
 
 # Link the libraries that we always need.
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
+    ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
   PRIVATE
     curl::curl
-    ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
     ${JSONCPP_TARGET}
     YAML::YAML
     ZIP::ZIP
@@ -56,9 +53,6 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
 ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
   ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER})
 
-# Create installation instructions for the library target. This must be called
-# in the same scope that the target is created.
-ign_install_library()
 
 # Build the unit tests.
 ign_build_tests(TYPE UNIT
