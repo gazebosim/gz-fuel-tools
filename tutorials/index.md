@@ -2,7 +2,7 @@
 
 Ignition Fuel Tools provides both a command line tool and a C++ API which allow
 interacting with Ignition Fuel web servers such as
-[https://ignitionfuel.org](https://ignitionfuel.org) and their hosted
+[https://app.ignitionrobotics.org](https://app.ignitionrobotics.org) and their hosted
 simulation resources.
 
 ## Simulation resources

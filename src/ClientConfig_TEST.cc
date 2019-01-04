@@ -73,7 +73,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
   config.LoadConfig();
 
   ASSERT_EQ(2u, config.Servers().size());
-  EXPECT_EQ("https://api.ignitionfuel.org",
+  EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().back().Url().Str());
 
   std::string defaultCacheLocation = ignition::common::joinPaths(
@@ -96,7 +96,7 @@ TEST(ClientConfig, CustomConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
       << "    url: https://myserver"              << std::endl
@@ -138,10 +138,10 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl

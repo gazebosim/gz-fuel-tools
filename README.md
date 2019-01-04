@@ -113,7 +113,7 @@ sources:
     api_key: r1CJIKTadlpS1IWt9jivf2sqGJAkbvSQoIMIubrn
 
   osrf_public:
-    url: https://staging-api.ignitionfuel.org
+    url: https://staging-fuel.ignitionrobotics.org
     api_key: sdfpWzZZbdixQ3zZbzxQzG4WPRlMT6DgUthvsfZ7
 
   local:
