@@ -135,10 +135,10 @@ TEST(FuelClient, ParseModelURL)
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/1.0/german/models/Cardboard Box"};
+      "https://some.example.org/1.0/german/models/Cardboard Box"};
     EXPECT_TRUE(client.ParseModelUrl(ignition::common::URI(url), id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://some.example.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");

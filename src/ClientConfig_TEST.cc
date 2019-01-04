@@ -44,8 +44,8 @@ std::string homePath()
 }
 
 /////////////////////////////////////////////////
-/// \brief Initially no servers in config
-TEST(ClientConfig, InitiallyNoServers)
+/// \brief Initially only the default server in config
+TEST(ClientConfig, InitiallyDefaultServers)
 {
   ClientConfig config;
   EXPECT_EQ(1u, config.Servers().size());
@@ -69,12 +69,13 @@ TEST(ClientConfig, ServersCanBeAdded)
 TEST(ClientConfig, CustomDefaultConfiguration)
 {
   ClientConfig config;
+  config.Clear();
   config.SetConfigPath(TEST_IGNITION_FUEL_INITIAL_CONFIG_PATH);
   config.LoadConfig();
 
   ASSERT_EQ(1u, config.Servers().size());
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
-    config.Servers().back().Url().Str());
+    config.Servers().front().Url().Str());
 
   std::string defaultCacheLocation = ignition::common::joinPaths(
     homePath(), ".ignition", "fuel");
@@ -280,6 +281,16 @@ TEST(ClientConfig, AsString)
   common::Console::SetVerbosity(4);
   {
     ClientConfig client;
+
+    auto str = client.AsString();
+    igndbg << str << std::endl;
+
+    EXPECT_NE(str.find(".ignition/fuel"), std::string::npos);
+    EXPECT_NE(str.find("https://fuel.ignitionrobotics.org"), std::string::npos);
+  }
+
+  {
+    ClientConfig client;
     client.Clear();
     std::string str = "Config path: \nCache location: \nServers:\n";
     EXPECT_EQ(str, client.AsString());
@@ -294,7 +305,6 @@ TEST(ClientConfig, AsString)
 
   {
     ServerConfig srv;
-    srv.Clear();
     srv.SetUrl(common::URI("http://serverurl.com"));
     srv.SetVersion("2.0");
     srv.SetApiKey("ABCD");
