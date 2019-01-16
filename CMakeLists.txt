@@ -20,11 +20,13 @@ ign_configure_project()
 # Set project-specific options
 #============================================================================
 
-# ignition-fuel-tools currently has no options that are unique to it
-
 #============================================================================
 # Search for project-specific dependencies
 #============================================================================
+
+#--------------------------------------
+# Find Tinyxml2
+ign_find_package(TINYXML2 REQUIRED PRIVATE PRETTY tinyxml2)
 
 #--------------------------------------
 # Find libcurl
