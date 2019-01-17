@@ -35,7 +35,7 @@ using namespace ignition;
 using namespace ignition::fuel_tools;
 
 /////////////////////////////////////////////////
-TEST(Interface, FetchAsset)
+TEST(Interface, FetchResource)
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
@@ -51,19 +51,15 @@ TEST(Interface, FetchAsset)
   // Create client
   FuelClient client(config);
   EXPECT_EQ(config.CacheLocation(), client.Config().CacheLocation());
-  fetchAsset(url.Str(), client);
 
   // Check it is not cached
   std::string cachedPath;
   Result res1 = client.CachedModel(url, cachedPath);
-  EXPECT_FALSE(res1);
+  EXPECT_FALSE(res1) << "Cached Path[" << cachedPath;
   EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
 
   // Download
-  std::string path;
-  Result res2 = client.DownloadModel(url, path);
-  EXPECT_TRUE(res2);
-  EXPECT_EQ(Result(ResultType::FETCH), res2);
+  std::string path = fetchResource(url.Str(), client);
 
   // Check it was downloaded to `1`
   EXPECT_EQ(path, common::cwd() +

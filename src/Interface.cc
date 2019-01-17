@@ -16,24 +16,35 @@
 */
 
 #include "ignition/fuel_tools/Interface.hh"
+#include "ignition/fuel_tools/WorldIdentifier.hh"
 
 namespace ignition
 {
   namespace fuel_tools
   {
     //////////////////////////////////////////////
-    std::string fetchAsset(const std::string &_uri)
+    std::string fetchResource(const std::string &_uri)
     {
       ignition::fuel_tools::FuelClient client;
-      return fetchAsset(_uri, client);
+      return fetchResource(_uri, client);
     }
 
     //////////////////////////////////////////////
-    std::string fetchAsset(const std::string &_uri,
-                           ignition::fuel_tools::FuelClient &_client)
+    std::string fetchResource(const std::string &_uri,
+        ignition::fuel_tools::FuelClient &_client)
     {
       std::string result;
-      _client.DownloadModel(common::URI(_uri), result);
+
+      ignition::fuel_tools::ModelIdentifier model;
+      ignition::fuel_tools::WorldIdentifier world;
+      ignition::common::URI uri(_uri);
+      // Download the model, if it is a model URI
+      if (_client.ParseModelUrl(uri, model))
+        _client.DownloadModel(uri, result);
+      // Download the world, if it is a world URI
+      else if (_client.ParseWorldUrl(uri, world))
+        _client.DownloadWorld(uri, result);
+
       return result;
     }
   }
