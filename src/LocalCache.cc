@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include <tinyxml2.h>
+
 #include <algorithm>
 #include <fstream>
 #include <memory>
@@ -30,7 +31,6 @@
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/StringUtils.hh>
 #include <ignition/common/Util.hh>
-
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
