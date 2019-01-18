@@ -63,8 +63,8 @@ SUBCOMMANDS = {
   "  -t [--type] arg          Resource type (i.e. model, world). Required. \n"\
   "  -o [--owner] arg         Return only resources for given owner.       \n"\
   "  -u [--url] arg           URL of a server the resource comes from,     \n"\
-  "                           if unspecified, it will be taken from        \n"\
-  "                           config.yaml.                                 \n"\
+  "                           if unspecified, it will be                   \n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
   "  -r [--raw]               Machine-friendly output.                     \n" +
   COMMON_OPTIONS,
 

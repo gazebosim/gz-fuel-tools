@@ -284,7 +284,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
   }
   else
   {
-    conf.LoadConfig();
+    std::cout << "Using default URL of "
+      << conf.Servers().front().Url().Str() << std::endl;
   }
 
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
@@ -371,7 +372,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
   }
   else
   {
-    conf.LoadConfig();
+    std::cout << "Using default URL of "
+      << conf.Servers().front().Url().Str() << std::endl;
   }
 
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
@@ -443,7 +445,6 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
-  conf.LoadConfig();
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
 
   ignition::fuel_tools::FuelClient client(conf);

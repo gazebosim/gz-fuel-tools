@@ -150,7 +150,6 @@ TEST(FuelClient, ParseModelURL)
   // * with model version
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -170,7 +169,6 @@ TEST(FuelClient, ParseModelURL)
   // * with model version
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -207,7 +205,6 @@ TEST(FuelClient, ParseModelURL)
   // * with model version `tip`
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -299,7 +296,6 @@ TEST(FuelClient, ParseModelFileURL)
   // URL - with client config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -319,7 +315,6 @@ TEST(FuelClient, ParseModelFileURL)
   // URL - version different from config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -357,7 +352,6 @@ TEST(FuelClient, ParseModelFileURL)
   // Unique name - with client config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -401,7 +395,6 @@ TEST(FuelClient, DownloadModel)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
-  config.LoadConfig();
   config.SetCacheLocation(common::cwd() + "/test_cache");
 
   // Create client
@@ -633,7 +626,6 @@ TEST(FuelClient, ParseWorldUrl)
   // * with world version
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;
@@ -653,7 +645,6 @@ TEST(FuelClient, ParseWorldUrl)
   // * with world version
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;
@@ -691,7 +682,6 @@ TEST(FuelClient, ParseWorldUrl)
   // * with world version `tip`
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;
@@ -780,7 +770,6 @@ TEST(FuelClient, ParseWorldFileUrl)
   // URL - with client config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;
@@ -800,7 +789,6 @@ TEST(FuelClient, ParseWorldFileUrl)
   // URL - version different from config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;
@@ -838,7 +826,6 @@ TEST(FuelClient, ParseWorldFileUrl)
   // Unique name - with client config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;

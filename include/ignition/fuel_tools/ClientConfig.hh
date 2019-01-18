@@ -128,25 +128,6 @@ namespace ignition
       /// \return Name of the user agent.
       public: const std::string &UserAgent() const;
 
-      /// \brief Load the YAML configuration file.
-      /// If SetConfigPath() is not used, this function will try to load the
-      /// default configuration path.
-      /// \return True if the configuration was loaded correctly.
-      /// \sa SetConfigPath
-      public: bool LoadConfig();
-
-      /// \brief Set the location of the configuration file.
-      /// \param[in] _path Path to the configuration file.
-      /// \sa LoadConfig
-      /// \sa ConfigPath
-      public: void SetConfigPath(const std::string &_path);
-
-      /// \brief Get the location of the configuration file.
-      /// \return Path to the configuration file.
-      /// \sa LoadConfig
-      /// \sa SetConfigPath
-      public: std::string ConfigPath() const;
-
       /// \brief List of servers the client will connect to.
       /// \return The list of servers.
       public: std::vector<ServerConfig> Servers() const;
