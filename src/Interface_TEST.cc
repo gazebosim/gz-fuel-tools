@@ -55,28 +55,28 @@ TEST(Interface, FetchResource)
   // Check it is not cached
   std::string cachedPath;
   Result res1 = client.CachedModel(url, cachedPath);
-  EXPECT_FALSE(res1) << "Cached Path[" << cachedPath;
+  EXPECT_FALSE(res1) << "Cached Path: " << cachedPath;
   EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
 
   // Download
   std::string path = fetchResource(url.Str(), client);
 
-  // Check it was downloaded to `1`
+  // Check it was downloaded to `2`
   EXPECT_EQ(path, common::cwd() +
       "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2");
   EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2"));
+      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2"));
   EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2/"
-        "model.sdf"));
+      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2/"
+      "model.sdf"));
   EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2/"
-        "model.config"));
+      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2/"
+      "model.config"));
 
   // Check it wasn't downloaded to model root directory
   EXPECT_FALSE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models"
-        "/Test box/model.config"));
+      "test_cache/fuel.ignitionrobotics.org/chapulina/models"
+      "/Test box/model.config"));
 
   // Check it is cached
   Result res3 = client.CachedModel(url, cachedPath);
