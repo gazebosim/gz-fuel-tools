@@ -34,26 +34,29 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(
 /// \param[in] _url Optional server URL.
 /// \param[in] _owner Optional owner name
 /// \param[in] _raw 'true' for machine readable output.
+/// \param[in] _configFile Path to a YAML configuration file.
 /// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(
     const char *_url = nullptr, const char *_owner = "",
-    const char *_raw = "false");
+    const char *_raw = "false", const char *_configFile = nullptr);
 
 /// \brief External hook to execute 'ign fuel list -t world' from the command
 /// line.
 /// \param[in] _url Optional server URL.
 /// \param[in] _owner Optional owner name
 /// \param[in] _raw 'true' for machine readable output.
+/// \param[in] _configFile Path to a YAML configuration file.
 /// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(
     const char *_url = nullptr, const char *_owner = "",
-    const char *_raw = "false");
+    const char *_raw = "false", const char *_configFile = nullptr);
 
 /// \brief External hook to execute 'ign fuel download -u URL' from the command
 /// line.
 /// \param[in] _url Resource URL.
+/// \param[in] _configFile Path to a YAML configuration file.
 /// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(
-    const char *_url = nullptr);
+    const char *_url = nullptr, const char *_configFile = nullptr);
 
 #endif

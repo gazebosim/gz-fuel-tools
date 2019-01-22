@@ -240,33 +240,31 @@ void ClientConfig::Clear()
 }
 
 //////////////////////////////////////////////////
-bool ClientConfig::LoadConfig()
+bool ClientConfig::LoadConfig(const std::string &_file)
 {
-  // SetConfigPath() wasn't used. Using default values.
-  if (this->dataPtr->configPath.empty())
-    return true;
-
   // Sanity check: Verify that the configuration file exists.
-  if (!ignition::common::exists(this->dataPtr->configPath))
+  if (!ignition::common::exists(_file))
   {
-    ignerr << "Unable to find configuration file in  ["
-           << this->dataPtr->configPath << "]" << std::endl;
+    ignerr << "Unable to find configuration file [" << _file<< "]" << std::endl;
     return false;
   }
 
-  FILE *fh = fopen(this->dataPtr->configPath.c_str(), "r");
+
+  FILE *fh = fopen(_file.c_str(), "r");
   if (!fh)
   {
-    ignerr << "Failed to open file [" << this->dataPtr->configPath
-           << "]" << std::endl;
+    ignerr << "Failed to open configuration file ["
+      << _file << "]" << std::endl;
     return false;
   }
+
+  this->dataPtr->configPath = _file;
 
   // Initialize parser.
   yaml_parser_t parser;
   if (!yaml_parser_initialize(&parser))
   {
-    ignerr << "Failed to initialize parser" << std::endl;
+    ignerr << "Failed to initialize YAML parser" << std::endl;
     fclose(fh);
     return false;
   }
@@ -420,12 +418,6 @@ bool ClientConfig::LoadConfig()
   fclose(fh);
 
   return res;
-}
-
-//////////////////////////////////////////////////
-void ClientConfig::SetConfigPath(const std::string &_path)
-{
-  this->dataPtr->configPath = _path;
 }
 
 //////////////////////////////////////////////////
