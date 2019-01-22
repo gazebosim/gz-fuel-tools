@@ -15,6 +15,7 @@
  *
 */
 
+#include <yaml.h>
 #include <cstdio>
 #include <sstream>
 #include <stack>
@@ -50,6 +51,7 @@ class ignition::fuel_tools::ClientConfigPrivate
           {
             this->servers.clear();
             this->cacheLocation = "";
+            this->configPath = "";
             this->userAgent =
               "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
           }
@@ -59,6 +61,9 @@ class ignition::fuel_tools::ClientConfigPrivate
 
   /// \brief a path on disk to where data is cached.
   public: std::string cacheLocation = "";
+
+  /// \brief The path where the configuration file is located.
+  public: std::string configPath = "";
 
   /// \brief Name of the user agent.
   public: std::string userAgent =
@@ -235,6 +240,201 @@ void ClientConfig::Clear()
 }
 
 //////////////////////////////////////////////////
+bool ClientConfig::LoadConfig()
+{
+  // SetConfigPath() wasn't used. Using default values.
+  if (this->dataPtr->configPath.empty())
+    return true;
+
+  // Sanity check: Verify that the configuration file exists.
+  if (!ignition::common::exists(this->dataPtr->configPath))
+  {
+    ignerr << "Unable to find configuration file in  ["
+           << this->dataPtr->configPath << "]" << std::endl;
+    return false;
+  }
+
+  FILE *fh = fopen(this->dataPtr->configPath.c_str(), "r");
+  if (!fh)
+  {
+    ignerr << "Failed to open file [" << this->dataPtr->configPath
+           << "]" << std::endl;
+    return false;
+  }
+
+  // Initialize parser.
+  yaml_parser_t parser;
+  if (!yaml_parser_initialize(&parser))
+  {
+    ignerr << "Failed to initialize parser" << std::endl;
+    fclose(fh);
+    return false;
+  }
+
+  // Set input file.
+  yaml_parser_set_input_file(&parser, fh);
+
+  bool res = true;
+  yaml_event_t event;
+  std::stack<std::string> tokens;
+  tokens.push("root");
+  std::string serverURL = "";
+  std::string cacheLocationConfig = "";
+
+  do
+  {
+    if (!yaml_parser_parse(&parser, &event))
+    {
+      ignerr << "Parser error [" << parser.error << "]" << std::endl;
+      res = false;
+      break;
+    }
+
+    switch (event.type)
+    {
+      case YAML_NO_EVENT:
+      // Stream start/end.
+      case YAML_STREAM_START_EVENT:
+      case YAML_STREAM_END_EVENT:
+      // Block delimeters.
+      case YAML_DOCUMENT_START_EVENT:
+      case YAML_DOCUMENT_END_EVENT:
+      case YAML_SEQUENCE_START_EVENT:
+        break;
+      case YAML_SEQUENCE_END_EVENT:
+        if (!tokens.empty())
+          tokens.pop();
+        break;
+      case YAML_MAPPING_START_EVENT:
+        if (!tokens.empty() && tokens.top() == "servers")
+        {
+          tokens.push("server");
+          serverURL = "";
+        }
+        break;
+      case YAML_MAPPING_END_EVENT:
+        if (!tokens.empty() && tokens.top() == "cache")
+        {
+          if (cacheLocationConfig.empty())
+          {
+            ignerr << "[path] parameter is required for a cache" << std::endl;
+            res = false;
+          }
+        }
+        else if (!tokens.empty() && tokens.top() == "server")
+        {
+          if (!serverURL.empty())
+          {
+            // Sanity check: Make sure that the server is not already stored.
+            bool repeated = false;
+            for (auto const savedServer : this->Servers())
+            {
+              if (savedServer.Url().Str() == serverURL)
+              {
+                ignerr << "URL [" << serverURL << "] already exists. "
+                       << "Ignoring server" << std::endl;
+                repeated = true;
+                res = false;
+                break;
+              }
+            }
+            if (!repeated)
+            {
+              // Add the new server.
+              ServerConfig newServer;
+              newServer.SetUrl(common::URI(serverURL));
+              this->AddServer(newServer);
+            }
+          }
+          else
+          {
+            ignerr << "[url] parameter is required for a server"
+                      << std::endl;
+            res = false;
+          }
+        }
+
+        if (!tokens.empty())
+          tokens.pop();
+        break;
+      // Data .
+      case YAML_ALIAS_EVENT:
+        break;
+      case YAML_SCALAR_EVENT:
+        if (!tokens.empty() && tokens.top() == "url")
+        {
+          std::string url(
+            reinterpret_cast<const char *>(event.data.scalar.value));
+          serverURL = url;
+          tokens.pop();
+        }
+        else if (!tokens.empty() && tokens.top() == "path")
+        {
+          std::string path(
+            reinterpret_cast<const char *>(event.data.scalar.value));
+          cacheLocationConfig = path;
+          tokens.pop();
+        }
+        else
+        {
+          std::string key(
+            reinterpret_cast<const char *>(event.data.scalar.value));
+          if (!key.empty())
+            tokens.push(key);
+        }
+
+        break;
+      default:
+      {
+        ignerr << "Unknown event type [" << event.type << "]" << std::endl;
+        res = false;
+      }
+    }
+
+    if (event.type != YAML_STREAM_END_EVENT)
+      yaml_event_delete(&event);
+  } while (event.type != YAML_STREAM_END_EVENT);
+
+  // Default cache path.
+  std::string homePath;
+  ignition::common::env(IGN_HOMEDIR, homePath);
+  std::string cacheLocation = ignition::common::joinPaths(
+    homePath, ".ignition", "fuel");
+
+  // The user wants to overwrite the default cache path.
+  if (!cacheLocationConfig.empty())
+    cacheLocation = cacheLocationConfig;
+
+  // Do not overwrite the cache location if IGN_FUEL_CACHE_PATH is set.
+  std::string ignFuelPath = "";
+  if (ignition::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
+  {
+    ignwarn << "IGN_FUEL_CACHE_PATH is set to [" << ignFuelPath << "]. The "
+            << "path in the configuration file will be ignored" << std::endl;
+  }
+  else
+    this->SetCacheLocation(cacheLocation);
+
+  // Cleanup.
+  yaml_parser_delete(&parser);
+  fclose(fh);
+
+  return res;
+}
+
+//////////////////////////////////////////////////
+void ClientConfig::SetConfigPath(const std::string &_path)
+{
+  this->dataPtr->configPath = _path;
+}
+
+//////////////////////////////////////////////////
+std::string ClientConfig::ConfigPath() const
+{
+  return this->dataPtr->configPath;
+}
+
+//////////////////////////////////////////////////
 std::vector<ServerConfig> ClientConfig::Servers() const
 {
   return this->dataPtr->servers;
@@ -274,7 +474,8 @@ const std::string &ClientConfig::UserAgent() const
 std::string ClientConfig::AsString(const std::string &_prefix) const
 {
   std::stringstream out;
-  out << _prefix << "Cache location: " << this->CacheLocation() << std::endl
+  out << _prefix << "Config path: " << this->ConfigPath() << std::endl
+      << _prefix << "Cache location: " << this->CacheLocation() << std::endl
       << _prefix << "Servers:" << std::endl;
 
   for (auto s : this->Servers())

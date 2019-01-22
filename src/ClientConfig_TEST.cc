@@ -79,6 +79,175 @@ TEST(ClientConfig, CustomDefaultConfiguration)
 }
 
 /////////////////////////////////////////////////
+/// \brief We can load custom settings in a configuration file.
+TEST(ClientConfig, CustomConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << ""                                       << std::endl
+      << "  -"                                    << std::endl
+      << "    url: https://myserver"              << std::endl
+      << ""                                       << std::endl
+      << "# Where are the assets stored in disk." << std::endl
+      << "cache:"                                 << std::endl
+      << "  path: /tmp/ignition/fuel"             << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_TRUE(config.LoadConfig());
+
+  ASSERT_EQ(3u, config.Servers().size());
+  EXPECT_EQ("https://fuel.ignitionrobotics.org",
+    config.Servers().front().Url().Str());
+  EXPECT_EQ("https://api.ignitionfuel.org",
+    config.Servers()[1].Url().Str());
+  EXPECT_EQ("https://myserver",
+    config.Servers().back().Url().Str());
+
+  EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
+
+  // Remove the configuration file.
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
+}
+
+/////////////////////////////////////////////////
+/// \brief A server contains an already used URL.
+TEST(ClientConfig, RepeatedServerConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
+      << ""                                       << std::endl
+      << "  -"                                    << std::endl
+      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
+      << ""                                       << std::endl
+      << "# Where are the assets stored in disk." << std::endl
+      << "cache:"                                 << std::endl
+      << "  path: /tmp/ignition/fuel"             << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
+}
+
+/////////////////////////////////////////////////
+/// \brief A server without URL is not valid.
+TEST(ClientConfig, NoServerUrlConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    banana: coconut"                           << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
+}
+
+/////////////////////////////////////////////////
+/// \brief A server with an empty URL is not valid.
+TEST(ClientConfig, EmptyServerUrlConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "# The list of servers."                 << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    url: "                              << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
+}
+
+/////////////////////////////////////////////////
+/// \brief The "cache" option requires to set "path".
+TEST(ClientConfig, NoCachePathConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"    << std::endl
+      << "cache:" << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
+}
+
+/////////////////////////////////////////////////
+/// \brief The path parameter cannot be empty.
+TEST(ClientConfig, EmptyCachePathConfiguration)
+{
+  ClientConfig config;
+
+  // Create a temporary file with the configuration.
+  std::ofstream ofs;
+  std::string testPath = "test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"     << std::endl
+      << "cache:"  << std::endl
+      << "  path:" << std::endl
+      << std::endl;
+
+  config.SetConfigPath(testPath);
+  EXPECT_FALSE(config.LoadConfig());
+
+  // Remove the configuration file.
+  EXPECT_TRUE(ignition::common::removeFile(testPath));
+}
+
+/////////////////////////////////////////////////
 TEST(ClientConfig, UserAgent)
 {
   ClientConfig config;
@@ -119,7 +288,7 @@ TEST(ClientConfig, AsString)
   {
     ClientConfig client;
     client.Clear();
-    std::string str = "Cache location: \nServers:\n";
+    std::string str = "Config path: \nCache location: \nServers:\n";
     EXPECT_EQ(str, client.AsString());
   }
 
@@ -147,6 +316,7 @@ TEST(ClientConfig, AsString)
 
   {
     ClientConfig client;
+    client.SetConfigPath("config/path");
     client.SetCacheLocation("cache/location");
 
     ServerConfig srv;
@@ -156,6 +326,7 @@ TEST(ClientConfig, AsString)
     auto str = client.AsString();
     igndbg << str << std::endl;
 
+    EXPECT_NE(str.find("config/path"), std::string::npos);
     EXPECT_NE(str.find("cache/location"), std::string::npos);
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
   }
