@@ -261,12 +261,12 @@ TEST(CmdLine, DownloadConfigCache)
   EXPECT_TRUE(stdErrBuffer.str().empty()) << stdErrBuffer.str();
 
   // Check files
-  EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box"));
-  EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2"));
-  EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/fuel.ignitionrobotics.org/chapulina/models") +
+  EXPECT_TRUE(ignition::common::isDirectory(std::string(PROJECT_BINARY_PATH) +
+      "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box"));
+  EXPECT_TRUE(ignition::common::isDirectory(std::string(PROJECT_BINARY_PATH) +
+      "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2"));
+  EXPECT_TRUE(ignition::common::isFile(std::string(PROJECT_BINARY_PATH) +
+      std::string("/test_cache/fuel.ignitionrobotics.org/chapulina/models") +
       "/Test box/2/model.sdf"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
