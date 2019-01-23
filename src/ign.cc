@@ -258,7 +258,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
-    const char *_owner, const char *_raw)
+    const char *_owner, const char *_raw, const char *_configFile)
 {
   std::string urlStr{_url};
   if (!urlStr.empty() && !ignition::common::URI::Valid(_url))
@@ -276,6 +276,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
+  if (_configFile && strlen(_configFile) > 0)
+  {
+    conf.Clear();
+    conf.LoadConfig(_configFile);
+  }
+
   if (url.Valid())
   {
     conf.Clear();
@@ -342,7 +348,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
-    const char *_owner, const char *_raw)
+    const char *_owner, const char *_raw, const char *_configFile)
 {
   std::string urlStr{_url};
   if (!urlStr.empty() && !ignition::common::URI::Valid(_url))
@@ -360,6 +366,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
+  if (_configFile && strlen(_configFile) > 0)
+  {
+    conf.Clear();
+    conf.LoadConfig(_configFile);
+  }
+
   if (url.Valid())
   {
     conf.Clear();
@@ -425,7 +437,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
+    const char *_configFile)
 {
   std::string urlStr{_url};
   ignition::common::URI url(urlStr);
@@ -437,6 +450,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url)
 
   // Client
   ignition::fuel_tools::ClientConfig conf;
+  if (_configFile && strlen(_configFile) > 0)
+  {
+    conf.Clear();
+    conf.LoadConfig(_configFile);
+  }
+
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
 
   ignition::fuel_tools::FuelClient client(conf);
