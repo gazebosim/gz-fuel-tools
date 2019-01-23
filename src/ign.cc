@@ -33,7 +33,7 @@
 #include "ignition/fuel_tools/config.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/ign.hh"
+#include "ign.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
 //////////////////////////////////////////////////

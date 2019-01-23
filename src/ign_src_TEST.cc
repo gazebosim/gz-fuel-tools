@@ -22,7 +22,7 @@
 #include <string>
 #include <ignition/common/Filesystem.hh>
 
-#include "ignition/fuel_tools/ign.hh"
+#include "ign.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
 
 // Std streams
