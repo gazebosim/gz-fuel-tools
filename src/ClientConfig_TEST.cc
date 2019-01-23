@@ -106,11 +106,9 @@ TEST(ClientConfig, CustomConfiguration)
 
   EXPECT_TRUE(config.LoadConfig(testPath));
 
-  ASSERT_EQ(3u, config.Servers().size());
+  ASSERT_EQ(2u, config.Servers().size());
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://api.ignitionfuel.org",
-    config.Servers()[1].Url().Str());
   EXPECT_EQ("https://myserver",
     config.Servers().back().Url().Str());
 

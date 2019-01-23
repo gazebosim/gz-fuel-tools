@@ -33,8 +33,6 @@
 #include <ignition/common/StringUtils.hh>
 #include <ignition/common/Util.hh>
 
-#include "tinyxml2.h"
-
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/ModelIterPrivate.hh"
@@ -334,9 +332,7 @@ WorldIter LocalCache::MatchingWorlds(const WorldIdentifier &_id) const
       matches = false;
     if (_id.Server().Url().Valid() &&
         _id.Server().Url().Str() != iter->Server().Url().Str())
-    {
       matches = false;
-    }
     if (matches)
       worldIds.push_back(iter);
   }
