@@ -131,7 +131,7 @@ namespace ignition
       /// \brief Load a YAML configuration file.
       /// \param[in] _file Config file to load.
       /// \return True if the configuration was loaded correctly.
-      /// \sa SetConfigPath
+      /// \sa ConfigPath
       public: bool LoadConfig(const std::string &_file);
 
       /// \brief Get the location of the configuration file.
