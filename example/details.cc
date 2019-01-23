@@ -36,9 +36,9 @@ int main(int argc, char **argv)
   std::string usage("Show details of a resource.");
   usage += " Usage:\n  ./details <options>\n\n";
   usage += "  Example:\n"
-    "\t ./details -t model -o openrobotics -m Beer"
-    "\t ./details -t world -s https://localhost:4430 -o openrobotics -m Empty"
-    "\t ./details -c /tmp/my_config.yaml -o openrobotics -m Beer -t model";
+    "\t ./details -t model -o openrobotics -n Beer"
+    "\t ./details -t world -s https://localhost:4430 -o openrobotics -n Empty"
+    "\t ./details -c /tmp/my_config.yaml -o openrobotics -n Beer -t model";
 
   gflags::SetUsageMessage(usage);
 
@@ -70,13 +70,13 @@ int main(int argc, char **argv)
   }
 
   if (FLAGS_c != "")
-    conf.SetConfigPath(FLAGS_c);
-
-  if (!conf.LoadConfig())
   {
-    std::cerr << "Error loading configuration file [" << FLAGS_c << "]"
-              << std::endl;
-    return -1;
+    if (!conf.LoadConfig(FLAGS_c))
+    {
+      std::cerr << "Error loading configuration file [" << FLAGS_c << "]"
+                << std::endl;
+      return -1;
+    }
   }
 
   // Instantiate the FuelClient object with the configuration.
