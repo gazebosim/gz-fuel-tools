@@ -226,6 +226,7 @@ TEST(CmdLine, DownloadConfigCache)
 {
   cmdVerbosity("4");
 
+  unsetenv("IGN_FUEL_CACHE_PATH");
   ignition::common::removeAll("test_cache");
   ignition::common::createDirectories("test_cache");
 
