@@ -116,10 +116,10 @@ TEST(WorldIdentifier, AsString)
         "Name: \n"\
         "Owner: \n"\
         "Version: tip\n"\
-        "Unique name: //worlds/\n"
+        "Unique name: fuel.ignitionrobotics.org//worlds/\n"
         "Local path: \n"
         "Server:\n"
-        "  URL: \n"
+        "  URL: https://fuel.ignitionrobotics.org\n"
         "  Version: 1.0\n"
         "  API key: \n";
     EXPECT_EQ(str, id.AsString());
@@ -147,8 +147,9 @@ TEST(WorldIdentifier, AsPrettyString)
   {
     WorldIdentifier id;
     std::string str =
-        "\x1B[96m\x1B[1mServer:\x1B[0m\n"
-        "  \x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
+      "\x1B[96m\x1B[1mServer:\x1B[0m\n  "
+      "\x1B[96m\x1B[1mURL: \x1B[0m\x1B[37mhttps://fuel.ignitionrobotics.org"
+      "\x1B[0m\n  \x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
     EXPECT_EQ(str, id.AsPrettyString());
   }
 

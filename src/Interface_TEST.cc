@@ -42,7 +42,6 @@ TEST(Interface, FetchResource)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
-  config.LoadConfig();
   config.SetCacheLocation(common::cwd() + "/test_cache");
 
   common::URI url{

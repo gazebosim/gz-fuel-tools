@@ -146,9 +146,6 @@ class ignition::fuel_tools::FuelClientPrivate
 
   /// \brief Regex to parse Ignition Fuel world file URLs.
   public: std::unique_ptr<std::regex> urlWorldFileRegex;
-
-  /// \brief The path where the configuration file is located.
-  public: std::string configPath;
 };
 
 //////////////////////////////////////////////////

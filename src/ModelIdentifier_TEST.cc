@@ -145,7 +145,7 @@ TEST(ModelIdentifier, AsString)
         "Name: \n"\
         "Owner: \n"\
         "Version: tip\n"\
-        "Unique name: //models/\n"
+        "Unique name: https://fuel.ignitionrobotics.org//models/\n"
         "Description: \n"
         "File size: 0\n"
         "Upload date: 0\n"
@@ -156,7 +156,7 @@ TEST(ModelIdentifier, AsString)
         "License image URL: \n"
         "Tags: \n"
         "Server:\n"
-        "  URL: \n"
+        "  URL: https://fuel.ignitionrobotics.org\n"
         "  Version: 1.0\n"
         "  API key: \n";
     EXPECT_EQ(str, id.AsString());
@@ -192,8 +192,9 @@ TEST(ModelIdentifier, AsPrettyString)
   {
     ModelIdentifier id;
     std::string str =
-        "\x1B[96m\x1B[1mServer:\x1B[0m\n"
-        "  \x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
+      "\x1B[96m\x1B[1mServer:\x1B[0m\n  "
+      "\x1B[96m\x1B[1mURL: \x1B[0m\x1B[37mhttps://fuel.ignitionrobotics.org"
+      "\x1B[0m\n  \x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
     EXPECT_EQ(str, id.AsPrettyString());
   }
 

@@ -53,6 +53,11 @@ namespace ignition
       /// \brief Destructor.
       public: ~ServerConfig();
 
+      /// \brief Clear the server config. This will set all values to empty
+      /// strings, except the version string which will be set to its default
+      /// value.
+      public: void Clear();
+
       /// \brief Get the URL to access the server.
       /// \return The URL of this server.
       public: common::URI Url() const;
@@ -110,6 +115,11 @@ namespace ignition
       /// \brief Destructor.
       public: ~ClientConfig();
 
+      /// \brief Clear the client config. This will set all values to empty
+      /// strings, except the user agent which will be set to its default
+      /// value.
+      public: void Clear();
+
       /// \brief Set the user agent name.
       /// \param[in] _agent User agent name.
       public: void SetUserAgent(const std::string &_agent);
@@ -118,23 +128,16 @@ namespace ignition
       /// \return Name of the user agent.
       public: const std::string &UserAgent() const;
 
-      /// \brief Load the YAML configuration file.
-      /// If SetConfigPath() is not used, this function will try to load the
-      /// default configuration path.
+      /// \brief Load a YAML configuration file.
+      /// \param[in] _file Config file to load.
       /// \return True if the configuration was loaded correctly.
-      /// \sa SetConfigPath
-      public: bool LoadConfig();
-
-      /// \brief Set the location of the configuration file.
-      /// \param[in] _path Path to the configuration file.
-      /// \sa LoadConfig
       /// \sa ConfigPath
-      public: void SetConfigPath(const std::string &_path);
+      public: bool LoadConfig(const std::string &_file);
 
       /// \brief Get the location of the configuration file.
-      /// \return Path to the configuration file.
+      /// \return Path to the configuration file, which is set via
+      /// LoadConfig. The default return value is an empty string.
       /// \sa LoadConfig
-      /// \sa SetConfigPath
       public: std::string ConfigPath() const;
 
       /// \brief List of servers the client will connect to.

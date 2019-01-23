@@ -76,13 +76,13 @@ int main(int argc, char **argv)
   else
   {
     if (FLAGS_c != "")
-      conf.SetConfigPath(FLAGS_c);
-
-    if (!conf.LoadConfig())
     {
-      std::cerr << "Error loading configuration file [" << FLAGS_c << "]"
-                << std::endl;
-      return -1;
+      if (!conf.LoadConfig(FLAGS_c))
+      {
+        std::cerr << "Error loading configuration file [" << FLAGS_c << "]"
+                  << std::endl;
+        return -1;
+      }
     }
   }
 
