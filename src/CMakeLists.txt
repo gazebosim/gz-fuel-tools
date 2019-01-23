@@ -19,6 +19,7 @@ set (gtest_sources
   ClientConfig_TEST.cc
   FuelClient_TEST.cc
   ign_src_TEST.cc
+  Interface_TEST.cc
   JSONParser_TEST.cc
   LocalCache_TEST.cc
   ModelIdentifier_TEST.cc
@@ -37,13 +38,6 @@ if (HAVE_IGN_TOOLS)
   )
 endif()
 
-if(NOT USE_EXTERNAL_TINYXML2)
-  # If we are using our internal copy of tinyxml2, then add its
-  # source file.
-  message(STATUS "Adding tinyxml2 source files")
-  list(APPEND sources ${CMAKE_CURRENT_SOURCE_DIR}/tinyxml2/tinyxml2.cpp)
-endif()
-
 # Create the library target.
 ign_create_core_library(SOURCES ${sources} CXX_STANDARD 17)
 
@@ -54,33 +48,10 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PRIVATE
     curl::curl
     ${JSONCPP_TARGET}
+    TINYXML2::TINYXML2
     YAML::YAML
     ZIP::ZIP
 )
-
-if(USE_EXTERNAL_TINYXML2)
-
-  # If we are using an external copy of tinyxml2, add its imported target
-  target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
-    PRIVATE
-      TINYXML2::TINYXML2)
-else()
-
-  # Otherwise, add its source directory to our target's PRIVATE include
-  # directories. We do not want this to be visible to consumers of
-  # ignition-common.
-  target_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/tinyxml2)
-endif()
-
-# define of tinxml2 major version >= 6
-# https://bitbucket.org/ignitionrobotics/ign-common/issues/28
-if (NOT TINYXML2_VERSION VERSION_LESS "6.0.0")
-  message(STATUS "TINYXML2_VERSION ${TINYXML2_VERSION} >= 6.0.0")
-  target_compile_definitions(${PROJECT_LIBRARY_TARGET_NAME}
-    PRIVATE "TINYXML2_MAJOR_VERSION_GE_6")
-endif()
-
 
 ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
   ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER})
@@ -88,7 +59,9 @@ ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
 # Build the unit tests.
 ign_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
-                LIB_DEPS ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
+                LIB_DEPS
+                  ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
+                  TINYXML2::TINYXML2
 )
 
 # Command line support.

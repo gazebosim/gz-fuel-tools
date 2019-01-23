@@ -16,15 +16,26 @@
 */
 
 #include <string>
+#include "ignition/fuel_tools/Export.hh"
+#include "ignition/fuel_tools/FuelClient.hh"
 
 namespace ignition
 {
   namespace fuel_tools
   {
-    /// \brief Download the specified asset into the default configuration of
+    /// \brief Download the specified resource into the default configuration of
     /// fuel tools. This will place the asset in ~/.ignition/fuel.
     /// \param[in] _uri URI to the asset.
     /// \return Path to the downloaded asset. Empty on error.
-    std::string fetchAsset(const std::string &_uri);
+    IGNITION_FUEL_TOOLS_VISIBLE std::string fetchResource(
+        const std::string &_uri);
+
+    /// \brief Download the specified resource using the ClientConfig
+    /// contained in the FuelClient parameter.
+    /// \param[in] _uri URI to the asset.
+    /// \param[in] _client Custom FuelClient configuration.
+    /// \return Path to the downloaded asset. Empty on error.
+    IGNITION_FUEL_TOOLS_VISIBLE std::string fetchResource(
+        const std::string &_uri, ignition::fuel_tools::FuelClient &_client);
   }
 }

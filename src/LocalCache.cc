@@ -21,6 +21,8 @@
 
 
 #include <stdio.h>
+#include <tinyxml2.h>
+
 #include <algorithm>
 #include <fstream>
 #include <memory>
@@ -491,9 +493,30 @@ bool LocalCache::SaveModel(
     modelSdfDoc.SaveFile(modelSdfFilePath.c_str());
   }
 
+  // Cleanup the zip file.
   if (!common::removeDirectoryOrFile(zipFile))
   {
     ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
+  }
+
+  // Get model.config
+  std::string modelConfigPath = common::joinPaths(
+      modelVersionedDir, "model.config");
+  if (common::exists(modelConfigPath))
+  {
+    tinyxml2::XMLDocument modelConfigDoc;
+    if (modelConfigDoc.LoadFile(modelConfigPath.c_str()) !=
+        tinyxml2::XML_SUCCESS)
+    {
+      ignerr << "Unable to load model.config file[" << modelConfigPath << "]\n";
+      return false;
+    }
+  }
+  else
+  {
+    ignerr << "model.config file does not exist in ["
+      << modelVersionedDir << ".\n";
+    return false;
   }
 
   ignmsg << "Saved model at:" << std::endl

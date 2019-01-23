@@ -13,13 +13,11 @@ pipelines:
           - apt update
           - apt -y install
             cmake pkg-config python cppcheck doxygen ruby-ronn
-            mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev
+            mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev libtinyxml2-dev
             lcov curl libyaml-dev
             libignition-cmake2-dev
             libignition-math4-dev
-            libignition-common-dev
-          # Style checker first - fail fast
-          - sh tools/code_check.sh
+            libignition-common3-dev
           # Ignition tools
           - hg clone http://bitbucket.org/ignitionrobotics/ign-tools -b default
           - cd ign-tools
@@ -33,12 +31,12 @@ pipelines:
           # Ignition Fuel Tools
           - mkdir build && cd build
           - cmake .. -DCMAKE_BUILD_TYPE=coverage
+          - make codecheck
           - make -j4
           - make install
           - make test ARGS="-VV"
           - make coverage
           - bash <(curl -s https://codecov.io/bash)
-          - make doc
           # Build examples
           - cd ../example
           - mkdir build && cd build

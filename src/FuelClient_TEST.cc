@@ -268,8 +268,8 @@ TEST(FuelClient, ParseModelURL)
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/2/2/german/"
-        "models/Cardboard Box/banana"};
+      "https://fuel.ignitionrobotics.org/2/2/german/models"
+        "/Cardboard Box/banana"};
     EXPECT_FALSE(client.ParseModelUrl(ignition::common::URI(url), id));
   }
 }
@@ -841,7 +841,7 @@ TEST(FuelClient, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/openrobotics/worlds/Empty/tip/"
+      "https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty/tip/"
       "files/empty.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
@@ -923,7 +923,7 @@ TEST(FuelClient, DownloadWorld)
     // Check it wasn't downloaded to world root directory
     EXPECT_FALSE(common::exists(
           "test_cache/staging-fuel.ignitionrobotics.org/" +
-          std::string("chapulina/worlds/Empty/empty.world")));
+          std::string("nate/worlds/Empty/empty.world")));
 
     // Check it is cached
     auto res3 = client.CachedWorld(url, cachedPath);
