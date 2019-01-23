@@ -56,13 +56,14 @@ class ignition::fuel_tools::LocalCachePrivate
   /// \brief return all models in a given Owner/models directory
   public: std::vector<Model> ModelsInPath(const std::string &_path);
 
-  /// \brief Fix model:// URI paths
+  /// \brief Associate model:// URI paths with paths on disk
   /// \param[in] _modelVersionedDir Directory containing the model.
   public: bool FixPaths(const std::string &_modelVersionedDir);
 
   /// \brief Helper function to fix model:// URI paths in geometry elements.
   /// \param[in] _geomElem Pointer to the geometry element.
   /// \param[in] _modelVersionedDir Directory containing the model.
+  /// \sa FixPaths
   public: void FixPathsInGeomElement(tinyxml2::XMLElement *_geomElem,
               const std::string &_modelVersionedDir);
 
@@ -401,9 +402,6 @@ bool LocalCache::SaveModel(
   {
     ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
   }
-
-  ignmsg << "Saved model at:" << std::endl
-         << "  " << modelVersionedDir << std::endl;
 
   return true;
 }

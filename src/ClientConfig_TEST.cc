@@ -107,11 +107,11 @@ TEST(ClientConfig, CustomConfiguration)
 
   ASSERT_EQ(3u, config.Servers().size());
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
-      config.Servers().front().Url().Str());
+    config.Servers().front().Url().Str());
   EXPECT_EQ("https://api.ignitionfuel.org",
-      config.Servers()[1].Url().Str());
+    config.Servers()[1].Url().Str());
   EXPECT_EQ("https://myserver",
-      config.Servers().back().Url().Str());
+   config.Servers().back().Url().Str());
 
   EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
 
