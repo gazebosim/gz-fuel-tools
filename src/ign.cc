@@ -284,6 +284,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 
   if (url.Valid())
   {
+    conf.Clear();
     ignition::fuel_tools::ServerConfig serverConf;
     serverConf.SetUrl(ignition::common::URI(url));
     conf.AddServer(serverConf);
@@ -373,6 +374,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 
   if (url.Valid())
   {
+    conf.Clear();
     ignition::fuel_tools::ServerConfig serverConf;
     serverConf.SetUrl(url);
     conf.AddServer(serverConf);
