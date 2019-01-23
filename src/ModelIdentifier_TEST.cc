@@ -72,7 +72,7 @@ TEST(ModelIdentifier, UniqueName)
   EXPECT_EQ("https://localhost:8002/alice/models/hello", id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ("https://localhost:8002/alice/models/hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8003/alice/models/hello", id.UniqueName());
 }
 
 /////////////////////////////////////////////////
