@@ -26,11 +26,11 @@ namespace ignition
     std::string fetchResource(const std::string &_uri)
     {
       ignition::fuel_tools::FuelClient client;
-      return fetchResource(_uri, client);
+      return fetchResourceWithClient(_uri, client);
     }
 
     //////////////////////////////////////////////
-    std::string fetchResource(const std::string &_uri,
+    std::string fetchResourceWithClient(const std::string &_uri,
         ignition::fuel_tools::FuelClient &_client)
     {
       std::string result;

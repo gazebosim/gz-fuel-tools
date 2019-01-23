@@ -58,7 +58,7 @@ TEST(Interface, FetchResource)
   EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
 
   // Download
-  std::string path = fetchResource(url.Str(), client);
+  std::string path = fetchResourceWithClient(url.Str(), client);
 
   // Check it was downloaded to `2`
   EXPECT_EQ(path, common::cwd() +
