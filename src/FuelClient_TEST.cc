@@ -135,10 +135,10 @@ TEST(FuelClient, ParseModelURL)
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/1.0/german/models/Cardboard Box"};
+      "https://some.example.org/1.0/german/models/Cardboard Box"};
     EXPECT_TRUE(client.ParseModelUrl(ignition::common::URI(url), id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://some.example.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
@@ -150,7 +150,6 @@ TEST(FuelClient, ParseModelURL)
   // * with model version
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -170,7 +169,6 @@ TEST(FuelClient, ParseModelURL)
   // * with model version
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -207,7 +205,6 @@ TEST(FuelClient, ParseModelURL)
   // * with model version `tip`
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -299,7 +296,6 @@ TEST(FuelClient, ParseModelFileURL)
   // URL - with client config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -319,7 +315,6 @@ TEST(FuelClient, ParseModelFileURL)
   // URL - version different from config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -348,6 +343,7 @@ TEST(FuelClient, ParseModelFileURL)
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_FALSE(id.Server().Version().empty());
+    EXPECT_EQ("1.0", id.Server().Version());
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "Pine Tree");
     EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
@@ -356,7 +352,6 @@ TEST(FuelClient, ParseModelFileURL)
   // Unique name - with client config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     ModelIdentifier id;
@@ -400,7 +395,6 @@ TEST(FuelClient, DownloadModel)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
-  config.LoadConfig();
   config.SetCacheLocation(common::cwd() + "/test_cache");
 
   // Create client
@@ -632,7 +626,6 @@ TEST(FuelClient, ParseWorldUrl)
   // * with world version
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;
@@ -652,7 +645,6 @@ TEST(FuelClient, ParseWorldUrl)
   // * with world version
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;
@@ -679,6 +671,7 @@ TEST(FuelClient, ParseWorldUrl)
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_FALSE(id.Server().Version().empty());
+    EXPECT_EQ("1.0", id.Server().Version());
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "Cardboard Box");
     EXPECT_EQ(id.Version(), 0u);
@@ -689,7 +682,6 @@ TEST(FuelClient, ParseWorldUrl)
   // * with world version `tip`
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;
@@ -778,7 +770,6 @@ TEST(FuelClient, ParseWorldFileUrl)
   // URL - with client config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;
@@ -798,7 +789,6 @@ TEST(FuelClient, ParseWorldFileUrl)
   // URL - version different from config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;
@@ -827,6 +817,7 @@ TEST(FuelClient, ParseWorldFileUrl)
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_FALSE(id.Server().Version().empty());
+    EXPECT_EQ("1.0", id.Server().Version());
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "Empty sky");
     EXPECT_EQ(filePath, "empty_sky.world");
@@ -835,7 +826,6 @@ TEST(FuelClient, ParseWorldFileUrl)
   // Unique name - with client config
   {
     ClientConfig config;
-    config.LoadConfig();
 
     FuelClient client(config);
     WorldIdentifier id;

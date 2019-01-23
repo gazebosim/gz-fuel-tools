@@ -69,9 +69,6 @@ TEST(ClientConfig, ServersCanBeAdded)
 TEST(ClientConfig, CustomDefaultConfiguration)
 {
   ClientConfig config;
-  config.SetConfigPath(TEST_IGNITION_FUEL_INITIAL_CONFIG_PATH);
-  config.LoadConfig();
-
   ASSERT_EQ(1u, config.Servers().size());
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().front().Url().Str());
@@ -107,12 +104,13 @@ TEST(ClientConfig, CustomConfiguration)
       << "  path: /tmp/ignition/fuel"             << std::endl
       << std::endl;
 
-  config.SetConfigPath(testPath);
-  EXPECT_TRUE(config.LoadConfig());
+  EXPECT_TRUE(config.LoadConfig(testPath));
 
-  ASSERT_EQ(2u, config.Servers().size());
+  ASSERT_EQ(3u, config.Servers().size());
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().front().Url().Str());
+  EXPECT_EQ("https://api.ignitionfuel.org",
+    config.Servers()[1].Url().Str());
   EXPECT_EQ("https://myserver",
     config.Servers().back().Url().Str());
 
@@ -147,8 +145,7 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << "  path: /tmp/ignition/fuel"             << std::endl
       << std::endl;
 
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
+  EXPECT_FALSE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
   EXPECT_TRUE(ignition::common::removeFile(testPath));
@@ -172,8 +169,7 @@ TEST(ClientConfig, NoServerUrlConfiguration)
       << "    banana: coconut"                           << std::endl
       << std::endl;
 
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
+  EXPECT_FALSE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
   EXPECT_TRUE(ignition::common::removeFile(testPath));
@@ -197,8 +193,7 @@ TEST(ClientConfig, EmptyServerUrlConfiguration)
       << "    url: "                              << std::endl
       << std::endl;
 
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
+  EXPECT_FALSE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
   EXPECT_TRUE(ignition::common::removeFile(testPath));
@@ -219,8 +214,7 @@ TEST(ClientConfig, NoCachePathConfiguration)
       << "cache:" << std::endl
       << std::endl;
 
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
+  EXPECT_FALSE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
   EXPECT_TRUE(ignition::common::removeFile(testPath));
@@ -242,8 +236,7 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
       << "  path:" << std::endl
       << std::endl;
 
-  config.SetConfigPath(testPath);
-  EXPECT_FALSE(config.LoadConfig());
+  EXPECT_FALSE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
   EXPECT_TRUE(ignition::common::removeFile(testPath));
@@ -279,6 +272,16 @@ TEST(ClientConfig, AsString)
   common::Console::SetVerbosity(4);
   {
     ClientConfig client;
+
+    std::string str = client.AsString();
+    igndbg << str << std::endl;
+
+    EXPECT_NE(str.find(".ignition/fuel"), std::string::npos);
+    EXPECT_NE(str.find("https://fuel.ignitionrobotics.org"), std::string::npos);
+  }
+
+  {
+    ClientConfig client;
     client.Clear();
     std::string str = "Config path: \nCache location: \nServers:\n";
     EXPECT_EQ(str, client.AsString());
@@ -309,7 +312,6 @@ TEST(ClientConfig, AsString)
 
   {
     ClientConfig client;
-    client.SetConfigPath("config/path");
     client.SetCacheLocation("cache/location");
 
     ServerConfig srv;
@@ -319,7 +321,6 @@ TEST(ClientConfig, AsString)
     auto str = client.AsString();
     igndbg << str << std::endl;
 
-    EXPECT_NE(str.find("config/path"), std::string::npos);
     EXPECT_NE(str.find("cache/location"), std::string::npos);
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
   }

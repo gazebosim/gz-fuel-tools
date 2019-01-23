@@ -30,7 +30,9 @@ require 'optparse'
 # Constants.
 LIBRARY_NAME = '@IGN_LIBRARY_NAME@'
 LIBRARY_VERSION = '@PROJECT_VERSION_FULL@'
+
 COMMON_OPTIONS =
+               "  -c [--config] arg        Path to a configuration file.\n"\
                "  -h [--help]              Print this help message.\n"\
                "                                                    \n"        +
                "  --force-version <VERSION>  Use a specific library version.\n"\
@@ -63,8 +65,8 @@ SUBCOMMANDS = {
   "  -t [--type] arg          Resource type (i.e. model, world). Required. \n"\
   "  -o [--owner] arg         Return only resources for given owner.       \n"\
   "  -u [--url] arg           URL of a server the resource comes from,     \n"\
-  "                           if unspecified, it will be taken from        \n"\
-  "                           config.yaml.                                 \n"\
+  "                           if unspecified, it will be                   \n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
   "  -r [--raw]               Machine-friendly output.                     \n" +
   COMMON_OPTIONS,
 
@@ -93,6 +95,7 @@ class Cmd
       'url' => '',
       'owner' => '',
       'raw' => 'false',
+      'config' => ''
     }
 
     usage = COMMANDS[args[0]]
@@ -119,6 +122,9 @@ class Cmd
       end
       opts.on('-o [OWNER]', '--owner', String, 'Resource owner') do |owner|
         options['owner'] = owner
+      end
+      opts.on('-c [CONFIG]', '--config', String, 'Configuration file') do |cfg|
+        options['config'] = cfg
       end
       opts.on('-r', '--raw', 'Machine readable') do
         options['raw'] = 'true'
@@ -198,23 +204,25 @@ class Cmd
       case options['subcommand']
       when 'list'
         if options['type'] == 'model'
-          Importer.extern 'int listModels(const char *, const char *, const char *)'
+          Importer.extern 'int listModels(const char *, const char *, const char *, const char *)'
           if not Importer.listModels(options['url'],
                                      options['owner'],
-                                     options['raw'])
+                                     options['raw'],
+                                     options['config'])
             exit(-1)
           end
         elsif options['type'] == 'world'
-          Importer.extern 'int listWorlds(const char *, const char *, const char *)'
+          Importer.extern 'int listWorlds(const char *, const char *, const char *, const char *)'
           if not Importer.listWorlds(options['url'],
                                      options['owner'],
-                                     options['raw'])
+                                     options['raw'],
+                                     options['config'])
             exit(-1)
           end
         end
       when 'download'
-        Importer.extern 'int downloadUrl(const char *)'
-        if not Importer.downloadUrl(options['url'])
+        Importer.extern 'int downloadUrl(const char *, const  char *)'
+        if not Importer.downloadUrl(options['url'], options['config'])
           exit(-1)
         end
       end

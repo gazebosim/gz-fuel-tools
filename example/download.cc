@@ -40,8 +40,8 @@ int main(int argc, char **argv)
     "\t ./download -t model -o openrobotics -n Beer\n"
     "\t ./download -s https://fuel.ignitionrobotics.org -t world "
     "-o openrobotics"
-    " -m Empty\n"
-    "\t ./download -c /tmp/my_config.yaml -t model -o caguero -m Beer\n";
+    " -n Empty\n"
+    "\t ./download -c /tmp/my_config.yaml -t model -o caguero -n Beer\n";
 
   gflags::SetUsageMessage(usage);
 
@@ -63,13 +63,13 @@ int main(int argc, char **argv)
   conf.SetUserAgent("ExampleDownload");
 
   if (FLAGS_c != "")
-    conf.SetConfigPath(FLAGS_c);
-
-  if (!conf.LoadConfig())
   {
-    std::cerr << "Error loading configuration file [" << FLAGS_c << "]"
-              << std::endl;
-    return -1;
+    if (!conf.LoadConfig(FLAGS_c))
+    {
+      std::cerr << "Error loading configuration file [" << FLAGS_c << "]"
+                << std::endl;
+      return -1;
+    }
   }
 
   if (FLAGS_s != "")

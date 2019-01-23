@@ -222,6 +222,58 @@ TEST(CmdLine, ModelDownloadUnversioned)
 }
 
 /////////////////////////////////////////////////
+TEST(CmdLine, DownloadConfigCache)
+{
+  cmdVerbosity("4");
+
+  unsetenv("IGN_FUEL_CACHE_PATH");
+  ignition::common::removeAll("test_cache");
+  ignition::common::createDirectories("test_cache");
+
+  // Test config
+  std::ofstream ofs;
+  std::string testPath =
+      std::string(PROJECT_BINARY_PATH) + "/test_cache/test_conf.yaml";
+  ofs.open(testPath, std::ofstream::out | std::ofstream::app);
+
+  ofs << "---"                                    << std::endl
+      << "servers:"                               << std::endl
+      << "  -"                                    << std::endl
+      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
+      << ""                                       << std::endl
+      << "cache:"                                 << std::endl
+      << "  path: " << PROJECT_BINARY_PATH << "/test_cache" << std::endl
+      << std::endl;
+  ofs.close();
+
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  // Download
+  EXPECT_TRUE(downloadUrl(
+      "https://fuel.ignitionrobotics.org/1.0/chapulina/models/Test box",
+      testPath.c_str()));
+
+  // Check output
+  EXPECT_NE(stdOutBuffer.str().find("Download succeeded"),
+      std::string::npos) << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty()) << stdErrBuffer.str();
+
+  // Check files
+  EXPECT_TRUE(ignition::common::isDirectory(std::string(PROJECT_BINARY_PATH) +
+      "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box"));
+  EXPECT_TRUE(ignition::common::isDirectory(std::string(PROJECT_BINARY_PATH) +
+      "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2"));
+  EXPECT_TRUE(ignition::common::isFile(std::string(PROJECT_BINARY_PATH) +
+      std::string("/test_cache/fuel.ignitionrobotics.org/chapulina/models") +
+      "/Test box/2/model.sdf"));
+
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
 TEST(CmdLine, WorldListFail)
 {
   std::stringstream stdOutBuffer;
