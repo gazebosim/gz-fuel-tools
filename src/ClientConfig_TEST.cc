@@ -44,8 +44,8 @@ std::string homePath()
 }
 
 /////////////////////////////////////////////////
-/// \brief By default there is one server in config
-TEST(ClientConfig, InitiallyNoServers)
+/// \brief Initially only the default server in config
+TEST(ClientConfig, InitiallyDefaultServers)
 {
   ClientConfig config;
   EXPECT_EQ(1u, config.Servers().size());
@@ -83,7 +83,6 @@ TEST(ClientConfig, CustomDefaultConfiguration)
 TEST(ClientConfig, CustomConfiguration)
 {
   ClientConfig config;
-  config.Clear();
 
   // Create a temporary file with the configuration.
   std::ofstream ofs;
@@ -94,7 +93,7 @@ TEST(ClientConfig, CustomConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
+      << "    url: https://api.ignitionfuel.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
       << "    url: https://myserver"              << std::endl
@@ -106,11 +105,13 @@ TEST(ClientConfig, CustomConfiguration)
 
   EXPECT_TRUE(config.LoadConfig(testPath));
 
-  ASSERT_EQ(2u, config.Servers().size());
+  ASSERT_EQ(3u, config.Servers().size());
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
-    config.Servers().front().Url().Str());
+      config.Servers().front().Url().Str());
+  EXPECT_EQ("https://api.ignitionfuel.org",
+      config.Servers()[1].Url().Str());
   EXPECT_EQ("https://myserver",
-    config.Servers().back().Url().Str());
+      config.Servers().back().Url().Str());
 
   EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
 
@@ -294,7 +295,6 @@ TEST(ClientConfig, AsString)
 
   {
     ServerConfig srv;
-    srv.Clear();
     srv.SetUrl(common::URI("http://serverurl.com"));
     srv.SetVersion("2.0");
     srv.SetApiKey("ABCD");

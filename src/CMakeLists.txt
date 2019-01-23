@@ -56,6 +56,7 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
 ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
   ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER})
 
+
 # Build the unit tests.
 ign_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
