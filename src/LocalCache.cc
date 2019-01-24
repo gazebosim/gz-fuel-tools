@@ -411,95 +411,93 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
 {
   // Get model.config
   std::string modelConfigPath = common::joinPaths(
-      _modelVersionedDir, "model.config");
+  		_modelVersionedDir, "model.config");
 
   // Make sure the model config file exits.
-  if (common::exists(modelConfigPath))
+  if (!common::exists(modelConfigPath))
   {
-    // Load the model config into tinyxml
-    tinyxml2::XMLDocument modelConfigDoc;
-    if (modelConfigDoc.LoadFile(modelConfigPath.c_str()) !=
-        tinyxml2::XML_SUCCESS)
-    {
-      ignerr << "Unable to load model.config file[" << modelConfigPath << "]\n";
-      return false;
-    }
-
-    // Get the first <model> element. There really should only be one, but
-    // we are not being strict.
-    tinyxml2::XMLElement *modelElement = modelConfigDoc.FirstChildElement(
-        "model");
-
-    // Get the <sdf> element with the highest (most recent) version.
-    tinyxml2::XMLElement *sdfElementLatest = nullptr;
-    double maxVersion = 0.0;
-    tinyxml2::XMLElement *sdfElement = modelElement->FirstChildElement("sdf");
-    while (sdfElement)
-    {
-      double version = std::stod(sdfElement->Attribute("version"));
-      if (version > maxVersion)
-      {
-        maxVersion = version;
-        sdfElementLatest = sdfElement;
-      }
-
-      sdfElement = sdfElement->NextSiblingElement("sdf");
-    }
-
-    // Get name of the model SDF file.
-    std::string modelSdfFilePath = common::joinPaths(_modelVersionedDir,
-        sdfElementLatest->GetText());
-
-    // Load the model SDF file
-    tinyxml2::XMLDocument modelSdfDoc;
-    if (modelSdfDoc.LoadFile(modelSdfFilePath.c_str()) !=
-        tinyxml2::XML_SUCCESS)
-    {
-      ignerr << "Unable to load SDF file[" << modelSdfFilePath << "]\n";
-      return false;
-    }
-
-    // Process each <model>
-    tinyxml2::XMLElement *modelElem =
-      modelSdfDoc.RootElement()->FirstChildElement("model");
-    while (modelElem)
-    {
-      // Process each <link>
-      tinyxml2::XMLElement *linkElem = modelElem->FirstChildElement("link");
-      while (linkElem)
-      {
-        // Process each <collision>
-        tinyxml2::XMLElement *collisionElem =
-          linkElem->FirstChildElement("collision");
-        while (collisionElem)
-        {
-          this->FixPathsInGeomElement(
-              collisionElem->FirstChildElement("geometry"), _modelVersionedDir);
-          // Next collision element.
-          collisionElem = collisionElem->NextSiblingElement("collision");
-        }
-
-        // Process each <visual>
-        tinyxml2::XMLElement *visualElem =
-          linkElem->FirstChildElement("visual");
-        while (visualElem)
-        {
-          this->FixPathsInGeomElement(
-              visualElem->FirstChildElement("geometry"), _modelVersionedDir);
-          visualElem = visualElem->NextSiblingElement("visual");
-        }
-        linkElem = linkElem->NextSiblingElement("link");
-      }
-      modelElem = modelElem->NextSiblingElement("model");
-    }
-    modelSdfDoc.SaveFile(modelSdfFilePath.c_str());
+  	ignerr << "model.config file does not exist in ["
+  		<< _modelVersionedDir << ".\n";
+  	return false;
   }
-  else
+
+  // Load the model config into tinyxml
+  tinyxml2::XMLDocument modelConfigDoc;
+  if (modelConfigDoc.LoadFile(modelConfigPath.c_str()) !=
+  		tinyxml2::XML_SUCCESS)
   {
-    ignerr << "model.config file does not exist in ["
-      << _modelVersionedDir << ".\n";
-    return false;
+  	ignerr << "Unable to load model.config file[" << modelConfigPath << "]\n";
+  	return false;
   }
+
+  // Get the first <model> element. There really should only be one, but
+  // we are not being strict.
+  tinyxml2::XMLElement *modelElement = modelConfigDoc.FirstChildElement(
+  		"model");
+
+  // Get the <sdf> element with the highest (most recent) version.
+  tinyxml2::XMLElement *sdfElementLatest = nullptr;
+  double maxVersion = 0.0;
+  tinyxml2::XMLElement *sdfElement = modelElement->FirstChildElement("sdf");
+  while (sdfElement)
+  {
+  	double version = std::stod(sdfElement->Attribute("version"));
+  	if (version > maxVersion)
+  	{
+  		maxVersion = version;
+  		sdfElementLatest = sdfElement;
+  	}
+
+  	sdfElement = sdfElement->NextSiblingElement("sdf");
+  }
+
+  // Get name of the model SDF file.
+  std::string modelSdfFilePath = common::joinPaths(_modelVersionedDir,
+  		sdfElementLatest->GetText());
+
+  // Load the model SDF file
+  tinyxml2::XMLDocument modelSdfDoc;
+  if (modelSdfDoc.LoadFile(modelSdfFilePath.c_str()) !=
+  		tinyxml2::XML_SUCCESS)
+  {
+  	ignerr << "Unable to load SDF file[" << modelSdfFilePath << "]\n";
+  	return false;
+  }
+
+  // Process each <model>
+  tinyxml2::XMLElement *modelElem =
+  	modelSdfDoc.RootElement()->FirstChildElement("model");
+  while (modelElem)
+  {
+  	// Process each <link>
+  	tinyxml2::XMLElement *linkElem = modelElem->FirstChildElement("link");
+  	while (linkElem)
+  	{
+  		// Process each <collision>
+  		tinyxml2::XMLElement *collisionElem =
+  			linkElem->FirstChildElement("collision");
+  		while (collisionElem)
+  		{
+  			this->FixPathsInGeomElement(
+  					collisionElem->FirstChildElement("geometry"), _modelVersionedDir);
+  			// Next collision element.
+  			collisionElem = collisionElem->NextSiblingElement("collision");
+  		}
+
+  		// Process each <visual>
+  		tinyxml2::XMLElement *visualElem =
+  			linkElem->FirstChildElement("visual");
+  		while (visualElem)
+  		{
+  			this->FixPathsInGeomElement(
+  					visualElem->FirstChildElement("geometry"), _modelVersionedDir);
+  			visualElem = visualElem->NextSiblingElement("visual");
+  		}
+  		linkElem = linkElem->NextSiblingElement("link");
+  	}
+  	modelElem = modelElem->NextSiblingElement("model");
+  }
+  modelSdfDoc.SaveFile(modelSdfFilePath.c_str());
 
   return true;
 }
