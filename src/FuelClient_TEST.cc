@@ -1120,12 +1120,12 @@ TEST(FuelClient, Models)
 
   {
     ModelIter iter = client.Models(modelId);
-    EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 
   {
     ModelIter const iter = client.Models(modelId);
-    EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 
   {
@@ -1136,7 +1136,7 @@ TEST(FuelClient, Models)
   {
     serverConfig.Clear();
     ModelIter const iter = client.Models(serverConfig);
-    EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 }
 
