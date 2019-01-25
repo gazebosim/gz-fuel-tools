@@ -111,7 +111,7 @@ TEST(ClientConfig, CustomConfiguration)
   EXPECT_EQ("https://api.ignitionfuel.org",
     config.Servers()[1].Url().Str());
   EXPECT_EQ("https://myserver",
-   config.Servers().back().Url().Str());
+    config.Servers().back().Url().Str());
 
   EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
 
