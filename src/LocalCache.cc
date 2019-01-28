@@ -59,6 +59,8 @@ class ignition::fuel_tools::LocalCachePrivate
 
   /// \brief Associate model:// URI paths with paths on disk
   /// \param[in] _modelVersionedDir Directory containing the model.
+  /// \return True if the paths were fixed. False could occur if the
+  /// `model.config` file is not present or contains XML errors.
   public: bool FixPaths(const std::string &_modelVersionedDir);
 
   /// \brief Helper function to fix model:// URI paths in geometry elements.
@@ -81,7 +83,7 @@ class ignition::fuel_tools::LocalCachePrivate
   /// \param[in] _elem Pointer to an element tha contains a URI.
   /// \param[in] _modelVersionedDir Directory containing the model.
   /// \sa FixPaths
-  public: void FixUri(tinyxml2::XMLElement *_elem,
+  public: void FixPathsInUri(tinyxml2::XMLElement *_elem,
               const std::string &_modelVersionedDir);
 
   /// \brief client configuration
@@ -522,7 +524,7 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
 }
 
 //////////////////////////////////////////////////
-void LocalCachePrivate::FixUri(tinyxml2::XMLElement *_elem,
+void LocalCachePrivate::FixPathsInUri(tinyxml2::XMLElement *_elem,
     const std::string &_modelVersionedDir)
 {
   if (!_elem)
@@ -567,7 +569,7 @@ void LocalCachePrivate::FixPathsInMaterialElement(
     // Convert the "model://" URI pattern to file://
     while (uriElem)
     {
-      this->FixUri(uriElem, _modelVersionedDir);
+      this->FixPathsInUri(uriElem, _modelVersionedDir);
       uriElem = uriElem->NextSiblingElement("uri");
     }
   }
@@ -588,7 +590,7 @@ void LocalCachePrivate::FixPathsInGeomElement(tinyxml2::XMLElement *_geomElem,
   {
     tinyxml2::XMLElement *uriElem = meshElem->FirstChildElement("uri");
     // Convert the "model://" URI pattern to file://
-    this->FixUri(uriElem, _modelVersionedDir);
+    this->FixPathsInUri(uriElem, _modelVersionedDir);
   }
 }
 

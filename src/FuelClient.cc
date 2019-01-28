@@ -773,16 +773,10 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
     return Result(ResultType::FETCH_ERROR);
   }
 
-  // Check local cache before downloading.
-  Model model = this->dataPtr->cache->MatchingModel(id);
-  if (!model)
-  {
-    // Download
-    Result result = this->DownloadModel(id);
-    if (!result)
-      return result;
-    model = this->dataPtr->cache->MatchingModel(id);
-  }
+  // Download
+  Result result = this->DownloadModel(id);
+  if (!result)
+    return result;
 
   // TODO(anyone) We shouldn't need to reconstruct the path, SaveModel should
   // be changed to return it
@@ -790,6 +784,7 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   // We need to figure out the version for the tip
   if (id.Version() == 0 || id.VersionStr() == "tip")
   {
+    Model model = this->dataPtr->cache->MatchingModel(id);
     id.SetVersion(model.Identification().Version());
   }
 
@@ -822,6 +817,18 @@ Result FuelClient::DownloadWorld(const common::URI &_worldUrl,
 }
 
 //////////////////////////////////////////////////
+bool FuelClient::CachedModel(const common::URI &_modelUrl)
+{
+  // Get data from URL
+  ModelIdentifier id;
+  if (!this->ParseModelUrl(_modelUrl, id))
+    return Result(ResultType::FETCH_ERROR);
+
+  // Check local cache
+  return this->dataPtr->cache->MatchingModel(id) ? true : false;
+}
+
+//////////////////////////////////////////////////
 Result FuelClient::CachedModel(const common::URI &_modelUrl,
   std::string &_path)
 {
@@ -841,6 +848,18 @@ Result FuelClient::CachedModel(const common::URI &_modelUrl,
   }
 
   return Result(ResultType::FETCH_ERROR);
+}
+
+//////////////////////////////////////////////////
+bool FuelClient::CachedWorld(const common::URI &_worldUrl)
+{
+  // Get data from URL
+  WorldIdentifier id;
+  if (!this->ParseWorldUrl(_worldUrl, id))
+    return Result(ResultType::FETCH_ERROR);
+
+  // Check local cache
+  return this->dataPtr->cache->MatchingWorld(id);
 }
 
 //////////////////////////////////////////////////
