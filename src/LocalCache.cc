@@ -545,10 +545,7 @@ void LocalCachePrivate::FixPathsInUri(tinyxml2::XMLElement *_elem,
     std::string diskPath = common::joinPaths("file:/",
         _modelVersionedDir, suffix);
 
-    // Escaped white space
-    std::string escaped = std::regex_replace(diskPath, std::regex(" "), "\\ ");
-
-    _elem->SetText(escaped.c_str());
+    _elem->SetText(diskPath.c_str());
   }
 }
 
