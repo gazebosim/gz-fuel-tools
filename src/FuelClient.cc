@@ -211,6 +211,13 @@ ClientConfig &FuelClient::Config()
 Result FuelClient::ModelDetails(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id, ModelIdentifier &_model) const
 {
+  return this->ModelDetails(_id, _model);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::ModelDetails(const ModelIdentifier &_id,
+    ModelIdentifier &_model) const
+{
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
@@ -308,6 +315,48 @@ WorldIter FuelClient::Worlds(const ServerConfig &_server) const
 }
 
 //////////////////////////////////////////////////
+ModelIter FuelClient::Models(const ModelIdentifier &_id)
+{
+  // Check local cache first
+  ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
+  if (localIter)
+    return localIter;
+
+  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+
+  // TODO(nkoenig) try to fetch model directly from a server
+  // Note: ign-fuel-server doesn't like URLs ending in /
+  std::string path;
+  if (!_id.Name().empty())
+    path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
+  else
+    path = ignition::common::joinPaths(_id.Owner(), "models");
+
+  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
+}
+
+//////////////////////////////////////////////////
+ModelIter FuelClient::Models(const ModelIdentifier &_id) const
+{
+  // Check local cache first
+  ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
+  if (localIter)
+    return localIter;
+
+  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+
+  // TODO(nkoenig) try to fetch model directly from a server
+  // Note: ign-fuel-server doesn't like URLs ending in /
+  std::string path;
+  if (!_id.Name().empty())
+    path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
+  else
+    path = ignition::common::joinPaths(_id.Owner(), "models");
+
+  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
+}
+
+//////////////////////////////////////////////////
 ModelIter FuelClient::Models(const ServerConfig &/*_server*/,
   const ModelIdentifier &_id)
 {
@@ -381,11 +430,87 @@ Result FuelClient::UploadModel(const ServerConfig &/*_server*/,
 }
 
 //////////////////////////////////////////////////
+Result FuelClient::UploadModel(const std::string &/*_pathToModelDir*/,
+    const ModelIdentifier &/*_id*/)
+{
+  // TODO(nkoenig) Upload a model and return an Result
+  return Result(ResultType::UPLOAD_ERROR);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DeleteModel(const ModelIdentifier &/*_id*/)
+{
+  // TODO(nkoenig) Delete a model and return a Result
+  return Result(ResultType::DELETE_ERROR);
+}
+
+//////////////////////////////////////////////////
 Result FuelClient::DeleteModel(const ServerConfig &/*_server*/,
   const ModelIdentifier &/*_id*/)
 {
   // TODO Delete a model and return a Result
   return Result(ResultType::DELETE_ERROR);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadModel(const ModelIdentifier &_id)
+{
+  // Server config
+  if (!_id.Server().Url().Valid() || _id.Server().Version().empty())
+  {
+    ignerr << "Can't download model, server configuration incomplete: "
+          << std::endl << _id.Server().AsString() << std::endl;
+    return Result(ResultType::FETCH_ERROR);
+  }
+
+  // Route
+  std::string route = ignition::common::joinPaths(_id.Owner(),
+        "models", _id.Name(), _id.VersionStr(),
+        _id.Name() + ".zip");
+
+  // Request
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+  resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
+      _id.Server().Version(), route, {}, {}, "");
+  if (resp.statusCode != 200)
+  {
+    ignerr << "Failed to download model." << std::endl
+           << "  Server: " << _id.Server().Url().Str() << std::endl
+           << "  Route: " << route << std::endl
+           << "  REST response code: " << resp.statusCode << std::endl;
+    return Result(ResultType::FETCH_ERROR);
+  }
+
+  // Get version from header
+  ModelIdentifier newId = _id;
+  unsigned int version = 1;
+  if (resp.headers.find("X-Ign-Resource-Version") != resp.headers.end())
+  {
+    try
+    {
+      version = std::stoi(resp.headers["X-Ign-Resource-Version"]);
+    }
+    catch(std::invalid_argument &)
+    {
+      ignwarn << "Failed to convert X-Ign-Resource-Version header value ["
+              << resp.headers["X-Ign-Resource-Version"]
+              << "] to integer. Hardcoding version 1." << std::endl;
+    }
+  }
+  else
+  {
+    ignwarn << "Missing X-Ign-Resource-Version in REST response headers."
+            << " Hardcoding version 1." << std::endl;
+  }
+  newId.SetVersion(version);
+
+  // Save
+  // Note that the save function doesn't return the path
+  if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
+    return Result(ResultType::FETCH_ERROR);
+
+  return Result(ResultType::FETCH);
 }
 
 //////////////////////////////////////////////////
@@ -811,8 +936,7 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   }
 
   // Download
-  ServerConfig srv;
-  auto result = this->DownloadModel(srv, id);
+  auto result = this->DownloadModel(id);
   if (!result)
     return result;
 
