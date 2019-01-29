@@ -521,7 +521,6 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   }
   else
   {
-    ignerr << "Invalid URL [" << urlStr << "]" << std::endl;
     return false;
   }
 
@@ -818,6 +817,18 @@ Result FuelClient::DownloadWorld(const common::URI &_worldUrl,
 }
 
 //////////////////////////////////////////////////
+bool FuelClient::CachedModel(const common::URI &_modelUrl)
+{
+  // Get data from URL
+  ModelIdentifier id;
+  if (!this->ParseModelUrl(_modelUrl, id))
+    return Result(ResultType::FETCH_ERROR);
+
+  // Check local cache
+  return this->dataPtr->cache->MatchingModel(id) ? true : false;
+}
+
+//////////////////////////////////////////////////
 Result FuelClient::CachedModel(const common::URI &_modelUrl,
   std::string &_path)
 {
@@ -837,6 +848,18 @@ Result FuelClient::CachedModel(const common::URI &_modelUrl,
   }
 
   return Result(ResultType::FETCH_ERROR);
+}
+
+//////////////////////////////////////////////////
+bool FuelClient::CachedWorld(const common::URI &_worldUrl)
+{
+  // Get data from URL
+  WorldIdentifier id;
+  if (!this->ParseWorldUrl(_worldUrl, id))
+    return Result(ResultType::FETCH_ERROR);
+
+  // Check local cache
+  return this->dataPtr->cache->MatchingWorld(id);
 }
 
 //////////////////////////////////////////////////

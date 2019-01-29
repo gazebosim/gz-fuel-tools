@@ -60,7 +60,7 @@ TEST(ModelIdentifier, UniqueName)
   srv2.SetUrl(common::URI("https://localhost:8002"));
 
   ignition::fuel_tools::ServerConfig srv3;
-  srv3.SetUrl(common::URI("https://localhost:8003//////////////////////////"));
+  srv3.SetUrl(common::URI("https://localhost:8003"));
 
   ModelIdentifier id;
   id.SetName("hello");
@@ -72,7 +72,7 @@ TEST(ModelIdentifier, UniqueName)
   EXPECT_EQ("https://localhost:8002/alice/models/hello", id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ("https://localhost:8002/alice/models/hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8003/alice/models/hello", id.UniqueName());
 }
 
 /////////////////////////////////////////////////

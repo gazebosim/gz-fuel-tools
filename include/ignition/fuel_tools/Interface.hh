@@ -35,7 +35,7 @@ namespace ignition
     /// \param[in] _uri URI to the asset.
     /// \param[in] _client Custom FuelClient configuration.
     /// \return Path to the downloaded asset. Empty on error.
-    IGNITION_FUEL_TOOLS_VISIBLE std::string fetchResource(
+    IGNITION_FUEL_TOOLS_VISIBLE std::string fetchResourceWithClient(
         const std::string &_uri, ignition::fuel_tools::FuelClient &_client);
   }
 }

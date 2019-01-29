@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <fstream>
 #include <memory>
+#include <regex>
 #include <string>
 #include <vector>
 #include <ignition/common/Console.hh>
@@ -55,6 +56,35 @@ class ignition::fuel_tools::LocalCachePrivate
 
   /// \brief return all models in a given Owner/models directory
   public: std::vector<Model> ModelsInPath(const std::string &_path);
+
+  /// \brief Associate model:// URI paths with paths on disk
+  /// \param[in] _modelVersionedDir Directory containing the model.
+  /// \return True if the paths were fixed. False could occur if the
+  /// `model.config` file is not present or contains XML errors.
+  public: bool FixPaths(const std::string &_modelVersionedDir);
+
+  /// \brief Helper function to fix model:// URI paths in geometry elements.
+  /// \param[in] _geomElem Pointer to the geometry element.
+  /// \param[in] _modelVersionedDir Directory containing the model.
+  /// \sa FixPaths
+  public: void FixPathsInGeomElement(tinyxml2::XMLElement *_geomElem,
+              const std::string &_modelVersionedDir);
+
+  /// \brief Helper function to fix model:// URI paths in material elements.
+  /// \param[in] _matElem Pointer to the material element.
+  /// \param[in] _modelVersionedDir Directory containing the model.
+  /// \sa FixPaths
+  public: void FixPathsInMaterialElement(
+              tinyxml2::XMLElement *_matElem,
+              const std::string &_modelVersionedDir);
+
+  /// \brief Helper function to fix a single model:// URI that is contained
+  /// in an element.
+  /// \param[in] _elem Pointer to an element tha contains a URI.
+  /// \param[in] _modelVersionedDir Directory containing the model.
+  /// \sa FixPaths
+  public: void FixPathsInUri(tinyxml2::XMLElement *_elem,
+              const std::string &_modelVersionedDir);
 
   /// \brief client configuration
   public: const ClientConfig *config = nullptr;
@@ -350,11 +380,12 @@ bool LocalCache::SaveModel(
     return false;
   }
 
-  auto cacheLocation = this->dataPtr->config->CacheLocation();
+  std::string cacheLocation = this->dataPtr->config->CacheLocation();
 
-  auto modelRootDir = common::joinPaths(cacheLocation,
+  std::string modelRootDir = common::joinPaths(cacheLocation,
       _id.Server().Url().Path().Str(), _id.Owner(), "models", _id.Name());
-  auto modelVersionedDir = common::joinPaths(modelRootDir, _id.VersionStr());
+  std::string modelVersionedDir =
+    common::joinPaths(modelRootDir, _id.VersionStr());
 
   // Is it already in the cache?
   if (common::isDirectory(modelVersionedDir) && !_overwrite)
@@ -382,36 +413,185 @@ bool LocalCache::SaveModel(
     return false;
   }
 
+  // Convert model:// URIs to locations on disk.
+  this->dataPtr->FixPaths(modelVersionedDir);
+
   // Cleanup the zip file.
   if (!common::removeDirectoryOrFile(zipFile))
   {
     ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
   }
 
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
+{
   // Get model.config
   std::string modelConfigPath = common::joinPaths(
-      modelVersionedDir, "model.config");
-  if (common::exists(modelConfigPath))
-  {
-    tinyxml2::XMLDocument modelConfigDoc;
-    if (modelConfigDoc.LoadFile(modelConfigPath.c_str()) !=
-        tinyxml2::XML_SUCCESS)
-    {
-      ignerr << "Unable to load model.config file[" << modelConfigPath << "]\n";
-      return false;
-    }
-  }
-  else
+      _modelVersionedDir, "model.config");
+
+  // Make sure the model config file exits.
+  if (!common::exists(modelConfigPath))
   {
     ignerr << "model.config file does not exist in ["
-      << modelVersionedDir << ".\n";
+      << _modelVersionedDir << ".\n";
     return false;
   }
 
-  ignmsg << "Saved model at:" << std::endl
-         << "  " << modelVersionedDir << std::endl;
+  // Load the model config into tinyxml
+  tinyxml2::XMLDocument modelConfigDoc;
+  if (modelConfigDoc.LoadFile(modelConfigPath.c_str()) !=
+      tinyxml2::XML_SUCCESS)
+  {
+    ignerr << "Unable to load model.config file[" << modelConfigPath << "]\n";
+    return false;
+  }
+
+  // Get the first <model> element. There really should only be one, but
+  // we are not being strict.
+  tinyxml2::XMLElement *modelElement = modelConfigDoc.FirstChildElement(
+      "model");
+
+  // Get the <sdf> element with the highest (most recent) version.
+  tinyxml2::XMLElement *sdfElementLatest = nullptr;
+  double maxVersion = 0.0;
+  tinyxml2::XMLElement *sdfElement = modelElement->FirstChildElement("sdf");
+  while (sdfElement)
+  {
+    double version = std::stod(sdfElement->Attribute("version"));
+    if (version > maxVersion)
+    {
+      maxVersion = version;
+      sdfElementLatest = sdfElement;
+    }
+
+    sdfElement = sdfElement->NextSiblingElement("sdf");
+  }
+
+  // Get name of the model SDF file.
+  std::string modelSdfFilePath = common::joinPaths(_modelVersionedDir,
+      sdfElementLatest->GetText());
+
+  // Load the model SDF file
+  tinyxml2::XMLDocument modelSdfDoc;
+  if (modelSdfDoc.LoadFile(modelSdfFilePath.c_str()) !=
+      tinyxml2::XML_SUCCESS)
+  {
+    ignerr << "Unable to load SDF file[" << modelSdfFilePath << "]\n";
+    return false;
+  }
+
+  // Process each <model>
+  tinyxml2::XMLElement *modelElem =
+    modelSdfDoc.RootElement()->FirstChildElement("model");
+  while (modelElem)
+  {
+    // Process each <link>
+    tinyxml2::XMLElement *linkElem = modelElem->FirstChildElement("link");
+    while (linkElem)
+    {
+      // Process each <collision>
+      tinyxml2::XMLElement *collisionElem =
+        linkElem->FirstChildElement("collision");
+      while (collisionElem)
+      {
+        this->FixPathsInGeomElement(
+            collisionElem->FirstChildElement("geometry"), _modelVersionedDir);
+        // Next collision element.
+        collisionElem = collisionElem->NextSiblingElement("collision");
+      }
+
+      // Process each <visual>
+      tinyxml2::XMLElement *visualElem =
+        linkElem->FirstChildElement("visual");
+      while (visualElem)
+      {
+        this->FixPathsInGeomElement(
+            visualElem->FirstChildElement("geometry"), _modelVersionedDir);
+        this->FixPathsInMaterialElement(
+            visualElem->FirstChildElement("material"), _modelVersionedDir);
+        visualElem = visualElem->NextSiblingElement("visual");
+      }
+      linkElem = linkElem->NextSiblingElement("link");
+    }
+    modelElem = modelElem->NextSiblingElement("model");
+  }
+  modelSdfDoc.SaveFile(modelSdfFilePath.c_str());
 
   return true;
+}
+
+//////////////////////////////////////////////////
+void LocalCachePrivate::FixPathsInUri(tinyxml2::XMLElement *_elem,
+    const std::string &_modelVersionedDir)
+{
+  if (!_elem)
+    return;
+
+  std::string uri = _elem->GetText();
+  std::string prefix =  "model://";
+
+  // Make sure the URI is of the form model://
+  if (uri.find(prefix) != std::string::npos)
+  {
+    int firstSlash = uri.find('/', prefix.size()+1);
+    std::string suffix = uri.substr(firstSlash);
+
+    // Convert the model:// to point to an actual file.
+    // \todo(nkoenig) Handle URIs to other models. For
+    // example, ModelA may use something from ModelB.
+    std::string diskPath = common::joinPaths("file:/",
+        _modelVersionedDir, suffix);
+
+    // Escaped white space
+    std::string escaped = std::regex_replace(diskPath, std::regex(" "), "\\ ");
+
+    _elem->SetText(escaped.c_str());
+  }
+}
+
+//////////////////////////////////////////////////
+void LocalCachePrivate::FixPathsInMaterialElement(
+    tinyxml2::XMLElement *_matElem,
+    const std::string &_modelVersionedDir)
+{
+  if (!_matElem)
+    return;
+
+  // Get the <script> element, if present.
+  tinyxml2::XMLElement *scriptElem = _matElem->FirstChildElement("script");
+
+  if (scriptElem)
+  {
+    tinyxml2::XMLElement *uriElem = scriptElem->FirstChildElement("uri");
+    // Convert the "model://" URI pattern to file://
+    while (uriElem)
+    {
+      this->FixPathsInUri(uriElem, _modelVersionedDir);
+      uriElem = uriElem->NextSiblingElement("uri");
+    }
+  }
+}
+
+
+//////////////////////////////////////////////////
+void LocalCachePrivate::FixPathsInGeomElement(tinyxml2::XMLElement *_geomElem,
+    const std::string &_modelVersionedDir)
+{
+  if (!_geomElem)
+    return;
+
+  // Get the mesh element, if present.
+  tinyxml2::XMLElement *meshElem = _geomElem->FirstChildElement("mesh");
+
+  if (meshElem)
+  {
+    tinyxml2::XMLElement *uriElem = meshElem->FirstChildElement("uri");
+    // Convert the "model://" URI pattern to file://
+    this->FixPathsInUri(uriElem, _modelVersionedDir);
+  }
 }
 
 //////////////////////////////////////////////////

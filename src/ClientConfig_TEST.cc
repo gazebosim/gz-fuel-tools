@@ -272,7 +272,7 @@ TEST(ClientConfig, AsString)
   {
     ClientConfig client;
 
-    auto str = client.AsString();
+    std::string str = client.AsString();
     igndbg << str << std::endl;
 
     EXPECT_NE(str.find(".ignition/fuel"), std::string::npos);
