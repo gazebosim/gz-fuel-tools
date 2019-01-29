@@ -31,34 +31,35 @@ Default is `/usr/local/share/ignition`.
 
 ** List all models **
 ```
-$ ign fuel list | head
-https://ignitionfuel.org/anonymous/test_model_595389531
-https://ignitionfuel.org/anonymous/test_model_122023392
-https://ignitionfuel.org/anonymous/test_model_429486665
-https://ignitionfuel.org/anonymous/test_model_887243621
-https://ignitionfuel.org/anonymous/test_model_084900530
-https://ignitionfuel.org/anonymous/test_model_240061059
-https://ignitionfuel.org/anonymous/test_model_464734097
-https://ignitionfuel.org/anonymous/test_model_658598990
-https://ignitionfuel.org/anonymous/test_model_834617935
-https://ignitionfuel.org/anonymous/test_model_380348669
-```
+$ ign fuel list -t model -r | head
+https://fuel.ignitionrobotics.org/anonymous/test_model_595389531
+https://fuel.ignitionrobotics.org/anonymous/test_model_122023392
+https://fuel.ignitionrobotics.org/anonymous/test_model_429486665
+https://fuel.ignitionrobotics.org/anonymous/test_model_887243621
+https://fuel.ignitionrobotics.org/anonymous/test_model_084900530
+https://fuel.ignitionrobotics.org/anonymous/test_model_240061059
+https://fuel.ignitionrobotics.org/anonymous/test_model_464734097
+https://fuel.ignitionrobotics.org/anonymous/test_model_658598990
+https://fuel.ignitionrobotics.org/anonymous/test_model_834617935
+https://fuel.ignitionrobotics.org/anonymous/test_model_380348669
 
-** Find a model on disk **
+** Download a model **
 ```
-$ ign fuel locate --name am1
-/home/developer/.ignition/fuel/staging_ignitionfuel/alice/am1
+$ ign fuel download -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance -v 4
+Downloading model:
+  Name: Ambulance
+  Owner: openrobotics
+  Server:
+    URL: https://fuel.ignitionrobotics.org
+    Version: 1.0
+
+Download succeeded.
 ```
 
 ** C++ Get List models **
 ```
-  // Create a ClientConfig, TODO create this from a yaml file
+  // Create a client (uses https://fuel.ignitionrobotics.org by default)
   ignition::fuel_tools::ClientConfig conf;
-  ignition::fuel_tools::ServerConfig srv;
-  srv.URL("https://ignitionfuel.org/");
-  srv.LocalName("ignitionfuel");
-  conf.AddServer(srv);
-
   ignition::fuel_tools::FuelClient client(conf);
   ignition::fuel_tools::ModelIter iter = client.Models();
   while (iter)
@@ -73,14 +74,14 @@ See issues beginning with [Fuel backend] in the title. Here are two examples.
 
 ** TODO: Upload **
 ```
-$ ign fuel push --owner trudy --name car --url https://ignitionfuel.org/ --path models/car
+$ ign fuel push --owner trudy --name car --url https://fuel.ignitionrobotics.org/ --path models/car
 TODO Upload a model
 ```
 
-** TODO: Download**
+** TODO: Find a model on disk **
 ```
-$ ign fuel pull --owner bob --name traffic_signal
-TODO Download a model
+$ ign fuel locate --name am1
+/home/developer/.ignition/fuel/fuel.ignitionrobotics.org/alice/am1
 ```
 
 ## Dependencies
@@ -93,49 +94,25 @@ sudo apt install ruby-ffi libzip-dev libcurl-dev libjsoncpp-dev
 
 Please refer to the [Bitbucket Pipelines](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/addon/pipelines/home#!/).
 
-
-## Documentation
-
-Check [here](http://ignition-fuel-tools.readthedocs.io/en/default/).
-
-[![Documentation Status](https://readthedocs.org/projects/ignition-fuel-tools/badge/?version=default)](https://readthedocs.org/projects/ignition-fuel-tools/?badge=default)
-
-
 ## Roadmap
 
-* Create a YAML configuration file and parse it as part of the ClientConfig class.
-
-~~~
-# The list of asset sources.
-sources:
-  osrf_local:
-    url: https://localhost:8080
-    api_key: r1CJIKTadlpS1IWt9jivf2sqGJAkbvSQoIMIubrn
-
-  osrf_public:
-    url: https://staging-fuel.ignitionrobotics.org
-    api_key: sdfpWzZZbdixQ3zZbzxQzG4WPRlMT6DgUthvsfZ7
-
-  local:
-    url: file:///home/caguero/.ignition/fuel/
-~~~
 * Create the notion of "asset repository" or similar. An asset repository abstracts an entity that can store assets. It can be local or remote. This is the interface for "asset repository":
-    * List(category). 
+    * List(category).
         E.g.: localRepository.List("models")
         remote1Repository.List("models")
-    * Details(assetIdentifier). 
+    * Details(assetIdentifier).
         E.g.: Modeldentifier model;
         model.Owner("the_owner");
         model.Name("the_name");
         localRepository.Details(model)
         remote1Repository.Details(model)
-    * Create(assetIdentifier, path_to_the_asset). 
+    * Create(assetIdentifier, path_to_the_asset).
         E.g.: Modeldentifier model;
         model.Owner("the_owner");
         model.Name("the_name");
         localRepository.Create(model, path_to_the_asset)
         remote1Repository.Create(model, path_to_the_asset)
-    * Delete(assetIdentifier). 
+    * Delete(assetIdentifier).
         E.g.: Modeldentifier model;
         model.Owner("the_owner");
         model.Name("the_name");
@@ -154,7 +131,6 @@ sources:
     * Idea of a hash.
 
 * Add ignition fuel command line utilities for:
-    * list
     * detail
     * create
     * delete

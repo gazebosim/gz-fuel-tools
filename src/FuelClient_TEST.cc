@@ -417,7 +417,7 @@ TEST(FuelClient, DownloadModel)
     std::string path;
     Result res2 = client.DownloadModel(url, path);
     EXPECT_TRUE(res2);
-    EXPECT_EQ(Result(ResultType::FETCH), res2);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res2);
 
     // Check it was downloaded to `1`
     EXPECT_EQ(path, common::cwd() +

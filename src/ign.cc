@@ -504,11 +504,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
               << std::endl;
     }
 
-    auto result = client.DownloadWorld(world);
+    ignition::fuel_tools::Result result = client.DownloadWorld(world);
 
     if (!result)
     {
-      std::cout << "Download failed." << std::endl;
+      std::cout << "Download failed because " << result.ReadableResult()
+        << std::endl;
       return false;
     }
   }
@@ -531,4 +532,3 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 {
   ignition::common::Console::SetVerbosity(std::atoi(_verbosity));
 }
-

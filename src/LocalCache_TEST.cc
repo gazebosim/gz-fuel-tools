@@ -236,6 +236,7 @@ TEST(LocalCache, MatchingModels)
     uniqueNames.insert(iter2->Identification().UniqueName());
     ++iter2;
   }
+  EXPECT_EQ(2u, uniqueNames.size());
 }
 
 /////////////////////////////////////////////////
@@ -352,7 +353,6 @@ TEST(LocalCache, MatchingWorlds)
   }
   EXPECT_EQ(1u, uniqueNames.size());
 }
-
 
 /////////////////////////////////////////////////
 /// \brief Get a specific world from cache

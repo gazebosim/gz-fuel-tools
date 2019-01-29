@@ -409,9 +409,9 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   {
     ignwarn << "IGN_FUEL_CACHE_PATH is set to [" << ignFuelPath << "]. The "
             << "path in the configuration file will be ignored" << std::endl;
+    cacheLocation = ignFuelPath;
   }
-  else
-    this->SetCacheLocation(cacheLocation);
+  this->SetCacheLocation(cacheLocation);
 
   // Cleanup.
   yaml_parser_delete(&parser);

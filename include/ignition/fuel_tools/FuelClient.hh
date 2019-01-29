@@ -182,6 +182,12 @@ namespace ignition
       public: Result CachedModel(const common::URI &_modelUrl,
                                  std::string &_path);
 
+      /// \brief Check if a model exists in the cache.
+      /// \param[in] _modelUrl The unique URL of the world on a Fuel server.
+      /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer
+      /// \return True if the model exists in the cache, false otherwise.
+      public: bool CachedModel(const common::URI &_modelUrl);
+
       /// \brief Check if a world is already present in the local cache.
       /// \param[in] _worldUrl The unique URL of the world on a Fuel server.
       /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty
@@ -189,6 +195,12 @@ namespace ignition
       /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
       public: Result CachedWorld(const common::URI &_worldUrl,
                                  std::string &_path);
+
+      /// \brief Check if a world exists in the cache.
+      /// \param[in] _worldUrl The unique URL of the world on a Fuel server.
+      /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty
+      /// \return True if the world exists in the cache, false otherwise.
+      public: bool CachedWorld(const common::URI &_worldUrl);
 
       /// \brief Check if a file belonging to a model is already present in the
       /// local cache.

@@ -26,11 +26,11 @@ namespace ignition
     std::string fetchResource(const std::string &_uri)
     {
       ignition::fuel_tools::FuelClient client;
-      return fetchResource(_uri, client);
+      return fetchResourceWithClient(_uri, client);
     }
 
     //////////////////////////////////////////////
-    std::string fetchResource(const std::string &_uri,
+    std::string fetchResourceWithClient(const std::string &_uri,
         ignition::fuel_tools::FuelClient &_client)
     {
       std::string result;
@@ -39,11 +39,17 @@ namespace ignition
       ignition::fuel_tools::WorldIdentifier world;
       ignition::common::URI uri(_uri);
       // Download the model, if it is a model URI
-      if (_client.ParseModelUrl(uri, model))
+      if (_client.ParseModelUrl(uri, model) &&
+          !_client.CachedModel(uri, result))
+      {
         _client.DownloadModel(uri, result);
+      }
       // Download the world, if it is a world URI
-      else if (_client.ParseWorldUrl(uri, world))
+      else if (_client.ParseWorldUrl(uri, world) &&
+               !_client.CachedWorld(uri, result))
+      {
         _client.DownloadWorld(uri, result);
+      }
 
       return result;
     }
