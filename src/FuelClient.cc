@@ -792,7 +792,7 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
       id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
       id.VersionStr());
 
-  return Result(ResultType::FETCH_ALREADY_EXISTS);
+  return result;
 }
 
 //////////////////////////////////////////////////
