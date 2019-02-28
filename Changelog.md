@@ -1,6 +1,13 @@
-## Ignition Fuel Tools 1.x.x (2018-XX-XX)
+## Ignition Fuel Tools 3.0.0 (2018-02-28)
 
-
+1. Integration with ign-gazebo
+    * [Pull request 82](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/82)
+    * [Pull request 82](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/83)
+    * [Pull request 82](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/84)
+    * [Pull request 82](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/85)
+    * [Pull request 82](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/87)
+    * [Pull request 82](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/88)
+    * [Pull request 82](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/89)
 
 ## Ignition Fuel Tools 1.2.0 (2018-05-30)
 
