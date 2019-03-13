@@ -1,5 +1,8 @@
-Configuration
-=============
+\page configuration Configuration
+
+Next Tutorial: \ref cmdline
+
+## Overview
 
 Some aspects of Ignition Fuel Tools can be configured according to the needs of
 the library users. This configuration can be done via a YAML configuration file
