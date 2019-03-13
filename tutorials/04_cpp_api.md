@@ -1,5 +1,6 @@
-C++ API
-======
+\page cppapi C++ API
+
+## Overview 
 
 Ignition Fuel Tools lets you perform a set of operations over the resources
 hosted in any Ignition Fuel server. These operations allow you to list all

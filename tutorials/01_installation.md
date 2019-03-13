@@ -1,4 +1,8 @@
-# Installation
+\page install Installation
+
+Next Tutorial: \ref configuration
+
+## Overview
 
 Instructions to install Ignition Fuel Tools on all the platforms
 supported: major Linux distributions, Mac OS X and Windows.
