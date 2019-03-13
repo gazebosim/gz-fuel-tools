@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5.1 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(ignition-fuel_tools3 VERSION 3.0.0)
+project(ignition-fuel_tools3 VERSION 3.0.1)
 
 #============================================================================
 # Find ignition-cmake
@@ -79,4 +79,7 @@ configure_file(${CMAKE_SOURCE_DIR}/tutorials.md.in ${CMAKE_BINARY_DIR}/tutorials
 
 ign_create_docs(
   API_MAINPAGE_MD "${CMAKE_BINARY_DIR}/api.md"
-  TUTORIALS_MAINPAGE_MD "${CMAKE_BINARY_DIR}/tutorials.md")
+  TUTORIALS_MAINPAGE_MD "${CMAKE_BINARY_DIR}/tutorials.md"
+  TAGFILES
+   "${IGNITION-COMMON_DOXYGEN_TAGFILE} = ${IGNITION-COMMON_API_URL}"
+  )
