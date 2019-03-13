@@ -1,5 +1,8 @@
-Command line tools
-======
+\page cmdline Command Line Tools
+
+Next Tutorial: \ref cppapi
+
+## Overview
 
 The `ign fuel` command line tool provides a convenient way to handle Ignition
 Fuel resources from a terminal.
