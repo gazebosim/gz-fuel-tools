@@ -162,7 +162,7 @@ namespace ignition
       /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer
       /// \param[out] _path Path where the model was downloaded.
       /// \return Result of the download operation.
-      public: Result DownloadModel(const ignition::common::URI &_modelUrl,
+      public: Result DownloadModel(const common::URI &_modelUrl,
                                    std::string &_path);
 
       /// \brief Download a world from ignition fuel. This will override an
