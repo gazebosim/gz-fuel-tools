@@ -25,11 +25,6 @@
 #include "ign.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
 
-#ifdef _MSC_VER
-#  define popen _popen
-#  define pclose _pclose
-#endif
-
 // Std streams
 static std::streambuf *g_stdOutFile;
 static std::streambuf *g_stdErrFile;
