@@ -1,3 +1,8 @@
+## Ignition Fuel Tools 3.x.x (20xx-xx-xx)
+
+1. Fix PBR material URI
+    * [Pull request 95](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/95)
+
 ## Ignition Fuel Tools 3.0.0 (2018-02-28)
 
 1. Integration with ign-gazebo. The following set of pull requests update
@@ -11,7 +16,6 @@
     * [Pull request 87](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/87)
     * [Pull request 88](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/88)
     * [Pull request 89](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/89)
-    * [Pull request 95](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/95)
 
 ## Ignition Fuel Tools 1.2.0 (2018-05-30)
 
