@@ -445,6 +445,104 @@ TEST(FuelClient, DownloadModel)
       cachedPath);
   }
 
+  // Download model with pbr paths from URL and check that paths are fixed
+  {
+    // Unversioned URL should get the latest available version
+    common::URI url{
+        "https://fuel.ignitionrobotics.org/1.0/iche033/models/Rescue Randy"};
+
+    // Check it is not cached
+    std::string cachedPath;
+    Result res1 = client.CachedModel(url, cachedPath);
+    EXPECT_FALSE(res1);
+    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
+
+    // Download
+    std::string path;
+    Result res2 = client.DownloadModel(url, path);
+    EXPECT_TRUE(res2);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res2);
+
+    // Check it was downloaded to `1`
+    EXPECT_EQ(path, common::cwd() +
+        "/test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2");
+    EXPECT_TRUE(common::exists(
+        "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2"));
+    EXPECT_TRUE(common::exists(
+        "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2/"
+         "model.sdf"));
+    EXPECT_TRUE(common::exists(
+       "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2/"
+       "model.config"));
+
+    // Check it wasn't downloaded to model root directory
+    EXPECT_FALSE(common::exists(
+     "test_cache/fuel.ignitionrobotics.org/iche033/models/"
+     "Rescue Randy/model.config"));
+
+    // Check it is cached
+    Result res3 = client.CachedModel(url, cachedPath);
+    EXPECT_TRUE(res3);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
+    EXPECT_EQ(common::cwd() +
+      "/test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2",
+      cachedPath);
+  }
+
+  // Download model with pbr paths from URL and check that paths are fixed
+  {
+    // Unversioned URL should get the latest available version
+    common::URI url{
+        "https://fuel.ignitionrobotics.org/1.0/iche033/models/Rescue Randy"};
+
+    // Check it is not cached
+    std::string cachedPath;
+    Result res1 = client.CachedModel(url, cachedPath);
+    EXPECT_FALSE(res1);
+    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
+
+    // Download
+    std::string path;
+    Result res2 = client.DownloadModel(url, path);
+    EXPECT_TRUE(res2);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res2);
+
+    // Check it was downloaded to `1`
+    EXPECT_EQ(path, common::cwd() +
+        "/test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2");
+    EXPECT_TRUE(common::exists(
+        "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2"));
+    const std::string model_sdf_path =
+        "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2/"
+         "model.sdf";
+    EXPECT_TRUE(common::exists(model_sdf_path));
+    EXPECT_TRUE(common::exists(
+       "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2/"
+       "model.config"));
+
+    // Check it wasn't downloaded to model root directory
+    EXPECT_FALSE(common::exists(
+     "test_cache/fuel.ignitionrobotics.org/iche033/models/"
+     "Rescue Randy/model.config"));
+
+    // Check it is cached
+    Result res3 = client.CachedModel(url, cachedPath);
+    EXPECT_TRUE(res3);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
+    EXPECT_EQ(common::cwd() +
+      "/test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2",
+      cachedPath);
+
+    // Check that pbr paths have been updated.
+    std::ifstream ifs(model_sdf_path);
+    std::string model_sdf((std::istreambuf_iterator<char>(ifs)),
+        std::istreambuf_iterator<char>());
+    EXPECT_EQ(std::string::npos, model_sdf.find("<albedo_map>model://"));
+    EXPECT_EQ(std::string::npos, model_sdf.find("<normal_map>model://"));
+    EXPECT_EQ(std::string::npos, model_sdf.find("<metalness_map>model://"));
+    EXPECT_EQ(std::string::npos, model_sdf.find("<roughness_map>model://"));
+  }
+
   // Try using nonexistent URL
   {
     std::string url{
