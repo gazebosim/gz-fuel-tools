@@ -419,7 +419,7 @@ TEST(FuelClient, DownloadModel)
     EXPECT_TRUE(res2);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res2);
 
-    // Check it was downloaded to `1`
+    // Check it was downloaded to `2`
     EXPECT_EQ(path, common::cwd() +
         "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2");
     EXPECT_TRUE(common::exists(
