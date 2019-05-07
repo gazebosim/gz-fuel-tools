@@ -2,6 +2,7 @@
 
 1. Fix PBR material URI
     * [Pull request 95](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/95)
+    * [Pull request 96](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/96)
 
 ## Ignition Fuel Tools 3.0.0 (2018-02-28)
 
