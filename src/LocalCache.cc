@@ -570,6 +570,57 @@ void LocalCachePrivate::FixPathsInMaterialElement(
       uriElem = uriElem->NextSiblingElement("uri");
     }
   }
+
+  // Get the <pbr> element, if present.
+  tinyxml2::XMLElement *pbrElem = _matElem->FirstChildElement("pbr");
+  if (pbrElem)
+  {
+    std::vector<std::string> workflows{"metal", "specular"};
+    for (auto workflow : workflows)
+    {
+      tinyxml2::XMLElement *workflowElem =
+          pbrElem->FirstChildElement(workflow.c_str());
+      if (workflowElem)
+      {
+        tinyxml2::XMLElement *albedoElem =
+            workflowElem->FirstChildElement("albedo_map");
+        if (albedoElem)
+          this->FixPathsInUri(albedoElem, _modelVersionedDir);
+        tinyxml2::XMLElement *normalElem =
+            workflowElem->FirstChildElement("normal_map");
+        if (normalElem)
+          this->FixPathsInUri(normalElem, _modelVersionedDir);
+        tinyxml2::XMLElement *envElem =
+            workflowElem->FirstChildElement("environment_map");
+        if (envElem)
+          this->FixPathsInUri(envElem, _modelVersionedDir);
+        // metal workflow specific elements
+        if (workflow == "metal")
+        {
+          tinyxml2::XMLElement *metalnessElem =
+              workflowElem->FirstChildElement("metalness_map");
+          if (metalnessElem)
+            this->FixPathsInUri(metalnessElem, _modelVersionedDir);
+          tinyxml2::XMLElement *roughnessElem =
+              workflowElem->FirstChildElement("roughness_map");
+          if (roughnessElem)
+            this->FixPathsInUri(roughnessElem, _modelVersionedDir);
+        }
+        // specular workflow specific elements
+        else if (workflow == "specular")
+        {
+          tinyxml2::XMLElement *specularElem =
+              workflowElem->FirstChildElement("specular_map");
+          if (specularElem)
+            this->FixPathsInUri(specularElem, _modelVersionedDir);
+          tinyxml2::XMLElement *glossinessElem =
+              workflowElem->FirstChildElement("glossiness_map");
+          if (glossinessElem)
+            this->FixPathsInUri(glossinessElem, _modelVersionedDir);
+        }
+      }
+    }
+  }
 }
 
 
