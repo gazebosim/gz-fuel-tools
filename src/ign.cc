@@ -438,8 +438,9 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
-    const char *_configFile)
+    const char *_configFile, const char *_header)
 {
+  std::cout << "HERE\n\n";
   std::string urlStr{_url};
   ignition::common::URI url(urlStr);
   if (!url.Valid())
@@ -479,7 +480,17 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
               << std::endl;
     }
 
-    auto result = client.DownloadModel(model);
+    int result = 0;
+    if (_header)
+    {
+      std::vector<std::string> headers;
+      headers.push_back(_header);
+      result = client.DownloadModel(model, headers);
+    }
+    else
+    {
+      result = client.DownloadModel(model);
+    }
 
     if (!result)
     {
