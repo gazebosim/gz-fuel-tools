@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 #include <ignition/common/URI.hh>
 
 #include "ignition/fuel_tools/Helpers.hh"
