@@ -440,7 +440,6 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
     const char *_configFile, const char *_header)
 {
-  std::cout << "HERE\n\n";
   std::string urlStr{_url};
   ignition::common::URI url(urlStr);
   if (!url.Valid())
