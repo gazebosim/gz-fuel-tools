@@ -481,7 +481,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
     }
 
     int result = 0;
-    if (_header)
+    if (_header && strlen(_header) > 0)
     {
       std::vector<std::string> headers;
       headers.push_back(_header);
