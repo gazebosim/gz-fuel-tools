@@ -1,5 +1,9 @@
 ## Ignition Fuel Tools 3.x.x (20xx-xx-xx)
 
+1. FuelClient::DownloadModel accepts HTTP headers, and the `ign fuel
+   download` command can accept a single HTTP header.
+    * [Pull request 100](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/100)
+
 ## Ignition Fuel Tools 3.1.0 (2019-05-xx)
 
 1. Fix PBR material URI
