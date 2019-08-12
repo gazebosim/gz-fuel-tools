@@ -518,7 +518,6 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
     }
     modelElem = modelElem->NextSiblingElement("model");
   }
-  modelSdfDoc.SaveFile(modelSdfFilePath.c_str());
 
   // Process each <actor>
   auto actorElem = modelSdfDoc.RootElement()->FirstChildElement("actor");
