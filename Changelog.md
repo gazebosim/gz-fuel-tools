@@ -1,5 +1,10 @@
 ## Ignition Fuel Tools 3.x.x (20xx-xx-xx)
 
+## Ignition Fuel Tools 3.2.1 (2019-08-12)
+
+1. Support actors
+    * [Pull request 101](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/101)
+
 ## Ignition Fuel Tools 3.2.0 (2019-06-14)
 
 1. FuelClient::DownloadModel accepts HTTP headers, and the `ign fuel
@@ -16,7 +21,7 @@
 1. Integration with ign-gazebo. The following set of pull requests update
    fuel-tools to use ign-cmake2, sets api.ignitionfuel.org as the default
    server, fixes codecheck errors, removes old deprecations, and parses
-   model.config files using tinyxml2. 
+   model.config files using tinyxml2.
     * [Pull request 82](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/82)
     * [Pull request 83](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/83)
     * [Pull request 84](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/84)
