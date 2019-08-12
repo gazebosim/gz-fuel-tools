@@ -518,6 +518,37 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
     }
     modelElem = modelElem->NextSiblingElement("model");
   }
+
+  // Process each <actor>
+  auto actorElem = modelSdfDoc.RootElement()->FirstChildElement("actor");
+  while (actorElem)
+  {
+    // Process each <skin>
+    auto skinElem = actorElem->FirstChildElement("skin");
+    while (skinElem)
+    {
+      // Process <filename>
+      auto filenameElem = skinElem->FirstChildElement("filename");
+      if (filenameElem)
+      {
+        this->FixPathsInUri(filenameElem, _modelVersionedDir);
+      }
+      skinElem = skinElem->NextSiblingElement("skin");
+    }
+    // Process each <animation>
+    auto animationElem = actorElem->FirstChildElement("animation");
+    while (animationElem)
+    {
+      // Process <filename>
+      auto filenameElem = animationElem->FirstChildElement("filename");
+      if (filenameElem)
+      {
+        this->FixPathsInUri(filenameElem, _modelVersionedDir);
+      }
+      animationElem = animationElem->NextSiblingElement("animation");
+    }
+    actorElem = actorElem->NextSiblingElement("actor");
+  }
   modelSdfDoc.SaveFile(modelSdfFilePath.c_str());
 
   return true;
