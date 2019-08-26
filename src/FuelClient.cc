@@ -390,6 +390,8 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
         "models", _id.Name(), _id.VersionStr(),
         _id.Name() + ".zip");
 
+  ignmsg << "Downloading model [" << _id.UniqueName() << "]" << std::endl;
+
   // Request
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
@@ -450,6 +452,8 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
   auto route = ignition::common::joinPaths(_id.Owner(),
         "worlds", _id.Name(), _id.VersionStr(),
         _id.Name() + ".zip");
+
+  ignmsg << "Downloading world [" << _id.UniqueName() << "]" << std::endl;
 
   // Request
   ignition::fuel_tools::Rest rest;
