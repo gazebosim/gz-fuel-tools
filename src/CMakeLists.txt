@@ -52,7 +52,7 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
     curl::curl
     ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
     ${JSONCPP_TARGET}
-    YAML::YAML
+    ${YAML_TARGET}
     ZIP::ZIP
 )
 
