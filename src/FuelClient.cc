@@ -353,10 +353,59 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::UploadModel(const std::string &/*_pathToModelDir*/,
-    const ModelIdentifier &/*_id*/)
+Result FuelClient::UploadModel(const std::string &_pathToModelDir,
+    const ModelIdentifier &/*_id*/, const std::vector<std::string> &_headers)
 {
-  // TODO(nkoenig) Upload a model and return an Result
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  if (!common::exists(_pathToModelDir))
+  {
+    ignerr << "The model path[" << _pathToModelDir << "] doesn't exist.\n";
+    return Result(ResultType::UPLOAD_ERROR);
+  }
+
+  std::cout << "Path[" << _pathToModelDir << "]\n";
+
+  std::string metadataPath = common::joinPaths(_pathToModelDir,
+      "metadata.pbtxt");
+  if (common::exists(metadataPath))
+  {
+
+    std::cout << "Has metadata\n";
+    std::ifstream inStream(metadataPath.c_str());
+    std::string metadata((std::istreambuf_iterator<char>(inStream)),
+        std::istreambuf_iterator<char>());
+
+    std::cout << metadata << std::endl;
+    //TextFormat.ParseFromString(metadata, message);
+  }
+
+
+  std::map<std::string, std::string> form = {
+    {"modelName", "test_model"},
+    {"urlName", "test_model_url_name"},
+    {"description", "my description"},
+    {"license", "0"},
+    {"permission", "0"}
+  };
+
+
+
+  printf("Attempting to upload a model\n");
+
+  resp = rest.Request(HttpMethod::POST, "http://localhost:8000",
+      "1.0", "models", {}, _headers, "", form);
+
+  if (resp.statusCode != 200)
+  {
+    ignerr << "Failed to upload model." << std::endl
+           << "  Server: http://localhost:8000" << std::endl
+           << "  Route: /models\n"
+           << "  REST response code: " << resp.statusCode << std::endl;
+    return Result(ResultType::FETCH_ERROR);
+  }
+
   return Result(ResultType::UPLOAD_ERROR);
 }
 

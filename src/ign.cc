@@ -17,6 +17,9 @@
 
 #include <curl/curl.h>
 #include <string.h>
+#include <tinyxml2.h>
+#include <ignition/msgs/fuel_metadata.pb.h>
+
 #ifdef _WIN32
 // DELETE is defined in winnt.h and causes a problem with REST::DELETE
 #undef DELETE
@@ -541,4 +544,121 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 {
   ignition::common::Console::SetVerbosity(std::atoi(_verbosity));
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
+    const char *_header)
+{
+  ignition::fuel_tools::ClientConfig conf;
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  ignition::fuel_tools::FuelClient client(conf);
+  ignition::fuel_tools::ModelIdentifier model;
+
+  // \todo(nkoenig) Working on this.
+  /*printf("Upload[%s] header[%s]\n", _path, _header);
+  int result = 0;
+  std::vector<std::string> headers;
+  if (_header && strlen(_header) > 0)
+  {
+    headers.push_back(_header);
+  }
+  result = client.UploadModel(_path,  model, headers);
+  */
+
+  return 1;
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int configConvert(const char *_path)
+{
+  ignition::msgs::FuelMetadata meta;
+
+  // Load the model config into tinyxml
+  tinyxml2::XMLDocument modelConfigDoc;
+  if (modelConfigDoc.LoadFile(_path) != tinyxml2::XML_SUCCESS)
+  {
+    ignerr << "Unable to load model.config file[" << _path << "]\n";
+    return 0;
+  }
+
+  // Get the top level <model> element.
+  tinyxml2::XMLElement *modelElement = modelConfigDoc.FirstChildElement(
+      "model");
+  if (!modelElement)
+  {
+    ignerr << "Model config file[" << _path << "] does not contain a "
+      << "<model> element\n";
+    return 0;
+  }
+
+  // Read the name, which is a mandatory element.
+  tinyxml2::XMLElement *elem = modelElement->FirstChildElement("name");
+  if (!elem)
+  {
+    ignerr << "Model config file[" << _path << "] does not contain a "
+      << "<name> element\n";
+    return 0;
+  }
+  meta.set_name(ignition::common::trimmed(elem->GetText()));
+
+  // Read the description, if present.
+  std::string description;
+  elem = modelElement->FirstChildElement("description");
+  if (elem)
+    meta.set_description(ignition::common::trimmed(elem->GetText()));
+
+  // Read the authors, if any.
+  elem = modelElement->FirstChildElement("author");
+  while (elem)
+  {
+    ignition::msgs::FuelMetadata::Contact *author = meta.add_author();
+    // Get the author name and email
+    std::string authorName, authorEmail;
+    if (elem->FirstChildElement("name"))
+    {
+      author->set_name(ignition::common::trimmed(
+            elem->FirstChildElement("name")->GetText()));
+    }
+    if (elem->FirstChildElement("email"))
+    {
+      author->set_email(ignition::common::trimmed(
+            elem->FirstChildElement("email")->GetText()));
+    }
+
+    elem = elem->NextSiblingElement("author");
+  }
+
+  // Get the most recent SDF file
+  elem = modelElement->FirstChildElement("sdf");
+  float maxVer = 0.0;
+  while (elem)
+  {
+    std::string verStr = elem->Attribute("version");
+    float ver = std::stof(ignition::common::trimmed(verStr));
+    if (ver > maxVer)
+    {
+      meta.mutable_model()->mutable_file_format()->set_name("sdf");
+      ignition::msgs::Version *verMsg =
+        meta.mutable_model()->mutable_file_format()->mutable_version();
+
+      std::vector<std::string> parts = ignition::common::split(verStr, ".");
+      verMsg->set_major(std::stoi(parts[0]));
+      verMsg->set_minor(std::stoi(parts[1]));
+
+      meta.mutable_model()->set_file(
+          ignition::common::trimmed(elem->GetText()));
+    }
+
+    elem = elem->NextSiblingElement("sdf");
+  }
+  if (meta.model().file().empty())
+  {
+    ignerr << "Model config file[" << _path << "] does not contain a "
+      << "<sdf> element\n";
+    return 0;
+  }
+
+  std::cout << meta.DebugString() << std::endl;
+  return 1;
 }

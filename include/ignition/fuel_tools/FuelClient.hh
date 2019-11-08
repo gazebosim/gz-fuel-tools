@@ -138,7 +138,8 @@ namespace ignition
       /// \param[in] _id An identifier to assign to this new model
       /// \return Result of the upload operation
       public: Result UploadModel(const std::string &_pathToModelDir,
-                                 const ModelIdentifier &_id);
+                                 const ModelIdentifier &_id,
+                                 const std::vector<std::string> &_headers);
 
       /// \brief Remove a model from ignition fuel
       /// \param[in] _id The model identifier.

@@ -47,6 +47,8 @@ COMMANDS = { 'fuel' =>
   "Available Actions:                                                      \n"\
   "  list                     List available resources                     \n"\
   "  download                 Download resources                           \n"\
+  "  upload                   Upload resources                             \n"\
+  "  meta                     Read and write resource metadata             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -v [ --verbose ] [arg]   Adjust the level of console output (0~4).    \n"\
@@ -81,6 +83,27 @@ SUBCOMMANDS = {
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'authorization: Bearer JWT'.        \n" +
   COMMON_OPTIONS,
+
+ 'upload' =>
+  "Upload simulation resources                                             \n"\
+  "                                                                        \n"\
+  "  ign fuel upload [options]                                             \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  -m [--model] arg         Path to directory containing a model         \n"\
+  "  --header arg             Set an HTTP header, such as                  \n"\
+  "                           --header 'authorization: Bearer JWT'.        \n" +
+  COMMON_OPTIONS,
+
+  'meta' =>
+  "Read and write resource metadata                                        \n"\
+  "                                                                        \n"\
+  "  ign fuel meta [options]                                               \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  --config-convert arg     Convert a model.config file to a             \n"\
+  "                           metadata.pbtx.                               \n"+
+  COMMON_OPTIONS,
 }
 
 #
@@ -98,7 +121,9 @@ class Cmd
       'owner' => '',
       'raw' => 'false',
       'config' => '',
-      'header' => ''
+      'header' => '',
+      'model' => '',
+      'config-convert' => ''
     }
 
     usage = COMMANDS[args[0]]
@@ -140,6 +165,14 @@ class Cmd
               'Add a header to the HTTP request.') do |h|
         options['header'] = h
       end
+      opts.on('--model [model]', String, 'Model to upload.') do |m|
+        options['model'] = m
+      end
+      opts.on('--config-convert [config]',
+              String, 'Convert config file.') do |c|
+        options['config-convert'] = c
+      end
+
     end # opt_parser do
 
     opt_parser.parse!(args)
@@ -162,6 +195,11 @@ class Cmd
     when 'download'
       if options['url'] == ''
         puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        exit(-1)
+      end
+    when 'upload'
+      if options['model'] == ''
+        puts "Missing model path."
         exit(-1)
       end
     end
@@ -233,7 +271,20 @@ class Cmd
             options['header'])
           exit(-1)
         end
+      when 'upload'
+        Importer.extern 'int upload(const char *, const char *)'
+        if not Importer.upload(options['model'], options['header'])
+          exit(-1)
+        end
+      when 'meta'
+        if options.key?('config-convert')
+          Importer.extern 'int configConvert(const char *)'
+          if not Importer.configConvert(options['config-convert'])
+            exit(-1)
+          end
+        end
       end
+
     rescue
       puts "Library error: Problem running [#{options['subcommand']}]() "\
            "from @IGN_LIBRARY_NAME@."

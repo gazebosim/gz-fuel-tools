@@ -115,6 +115,7 @@ RestResponse Rest::Request(HttpMethod _method,
   CURL *curl = curl_easy_init();
   char *encodedPath = curl_easy_escape(curl, _path.c_str(), _path.size());
   url = RestJoinUrl(url, encodedPath);
+  std::cout << "Request URL[" << url << "]\n";
 
   // Process query strings.
   if (!_queryStrings.empty())
@@ -177,6 +178,7 @@ RestResponse Rest::Request(HttpMethod _method,
   }
   else if (_method == HttpMethod::POST)
   {
+    std::cout << "POSTING!\n";
     curl_easy_setopt(curl, CURLOPT_POST, 1);
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, _data.c_str());
   }

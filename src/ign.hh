@@ -61,4 +61,20 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(
     const char *_url = nullptr, const char *_configFile = nullptr,
     const char *_header = nullptr);
 
+/// \brief External hook to execute 'ign fuel upload -m path' from the command
+/// line.
+/// \param[in] _path Resource path.
+/// \param[in] _header An HTTP header.
+/// \return 1 if successful, 0 if not.
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path = nullptr,
+    const char *_header = nullptr);
+
+/// \brief External hook to execute 'ign fuel upload -m path' from the command
+/// line.
+/// \param[in] _path Resource path.
+/// \param[in] _header An HTTP header.
+/// \return 1 if successful, 0 if not.
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int configConvert(
+    const char *_path = nullptr);
+
 #endif
