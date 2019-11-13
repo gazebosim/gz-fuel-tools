@@ -91,6 +91,11 @@ SUBCOMMANDS = {
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -m [--model] arg         Path to directory containing a model         \n"\
+  "  -u [--url] arg           URL of the server that should receive        \n"\
+  "                           the model. If unspecified, it will be        \n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
+  "  -p [--private]           Use this argument to make the model private. \n"\
+  "                           Otherwise, the model will be public.         \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'authorization: Bearer JWT'.        \n" +
   COMMON_OPTIONS,
@@ -101,8 +106,11 @@ SUBCOMMANDS = {
   "  ign fuel meta [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
-  "  --config-convert arg     Convert a model.config file to a             \n"\
+  "  --config2pbtxt arg       Convert a model.config file to a             \n"\
   "                           metadata.pbtx.                               \n"+
+  "  --pbtxt2config arg       Convert a metadata.pbtx file to a            \n"\
+  "                           model.confg.                                 \n"+
+
   COMMON_OPTIONS,
 }
 
@@ -123,7 +131,9 @@ class Cmd
       'config' => '',
       'header' => '',
       'model' => '',
-      'config-convert' => ''
+      'config2pbtxt' => '',
+      'pbtxt2config' => '',
+      'private' => '0'
     }
 
     usage = COMMANDS[args[0]]
@@ -168,9 +178,16 @@ class Cmd
       opts.on('--model [model]', String, 'Model to upload.') do |m|
         options['model'] = m
       end
-      opts.on('--config-convert [config]',
+      opts.on('--config2pbtxt [config]',
               String, 'Convert config file.') do |c|
-        options['config-convert'] = c
+        options['config2pbtxt'] = c
+      end
+      opts.on('--pbtxt2config [pbtxt]',
+              String, 'Convert pbtxt file.') do |c|
+        options['pbtxt2config'] = c
+      end
+      opts.on('-p', '--private', 'Private resource') do
+        options['private'] = '1'
       end
 
     end # opt_parser do
@@ -272,14 +289,22 @@ class Cmd
           exit(-1)
         end
       when 'upload'
-        Importer.extern 'int upload(const char *, const char *)'
-        if not Importer.upload(options['model'], options['header'])
+        Importer.extern 'int upload(const char *, const char *, const char *, const char *)'
+        if not Importer.upload(options['model'],
+                               options['url'],
+                               options['header'],
+                               options['private'])
           exit(-1)
         end
       when 'meta'
-        if options.key?('config-convert')
-          Importer.extern 'int configConvert(const char *)'
-          if not Importer.configConvert(options['config-convert'])
+        if options.key?('config2pbtxt') && !options['config2pbtxt'].empty?
+          Importer.extern 'int config2Pbtxt(const char *)'
+          if not Importer.config2Pbtxt(options['config2pbtxt'])
+            exit(-1)
+          end
+        elsif options.key?('pbtxt2config') && !options['pbtxt2config'].empty?
+          Importer.extern 'int pbtxt2Config(const char *)'
+          if not Importer.pbtxt2Config(options['pbtxt2config'])
             exit(-1)
           end
         end

@@ -21,10 +21,14 @@
 #include <memory>
 #include <regex>
 #include <string>
+#include <google/protobuf/text_format.h>
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
+
+#include <ignition/msgs/fuel_metadata.pb.h>
+#include <ignition/msgs/Utility.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
@@ -125,6 +129,9 @@ class ignition::fuel_tools::FuelClientPrivate
     "files\\/+"
     // File path
     "(.*)"};
+
+  public: void AllFiles(const std::string &_path,
+              std::vector<std::string> &_files) const;
 
   /// \brief Client configuration
   public: ClientConfig config;
@@ -354,7 +361,8 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
 
 //////////////////////////////////////////////////
 Result FuelClient::UploadModel(const std::string &_pathToModelDir,
-    const ModelIdentifier &/*_id*/, const std::vector<std::string> &_headers)
+    const ModelIdentifier &_id, const std::vector<std::string> &_headers,
+    bool _private)
 {
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
@@ -365,42 +373,87 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     return Result(ResultType::UPLOAD_ERROR);
   }
 
-  std::cout << "Path[" << _pathToModelDir << "]\n";
-
-  std::string metadataPath = common::joinPaths(_pathToModelDir,
-      "metadata.pbtxt");
-  if (common::exists(metadataPath))
+  ignition::msgs::FuelMetadata meta;
+  if (ignition::common::exists(
+        ignition::common::joinPaths(_pathToModelDir, "metadata.pbtxt")))
   {
+    std::string filePath =
+      ignition::common::joinPaths(_pathToModelDir, "metadata.pbtxt");
 
-    std::cout << "Has metadata\n";
-    std::ifstream inStream(metadataPath.c_str());
-    std::string metadata((std::istreambuf_iterator<char>(inStream)),
+    ignmsg << "Parsing " << filePath  << std::endl;
+
+    // Read the pbtxt file.
+    std::ifstream inputFile(filePath);
+    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
         std::istreambuf_iterator<char>());
 
-    std::cout << metadata << std::endl;
-    //TextFormat.ParseFromString(metadata, message);
+    // Parse the file into the fuell metadata message
+    google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+  }
+  else if (ignition::common::exists(
+           ignition::common::joinPaths(_pathToModelDir, "model.config")))
+  {
+    std::string filePath = ignition::common::joinPaths(_pathToModelDir,
+        "model.config");
+
+    ignmsg << "Parsing " << filePath << std::endl;
+
+    std::ifstream inputFile(filePath);
+    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+        std::istreambuf_iterator<char>());
+
+    if (!ignition::msgs::ConvertFuelMetadata(inputStr, meta))
+    {
+      ignerr << "Unable to convert model config[" << _pathToModelDir << "].\n";
+      return Result(ResultType::UPLOAD_ERROR);
+    }
+  }
+  else
+  {
+    ignerr << "Provided model directory[" <<  _pathToModelDir
+      << "] is lacking a metadata.pbtxt or model.confg file.";
+    return Result(ResultType::UPLOAD_ERROR);
   }
 
-
-  std::map<std::string, std::string> form = {
-    {"modelName", "test_model"},
-    {"urlName", "test_model_url_name"},
-    {"description", "my description"},
-    {"license", "0"},
-    {"permission", "0"}
+  std::multimap<std::string, std::string> form =
+  {
+    {"name", meta.name()},
+    {"description", meta.description()},
+    {"permission", _private ? "1" : "0"},
   };
 
+  // \todo(nkoenig) The ign-fuelserver expects an integer number for the
+  // license information. The fuelserver should be modified to accept
+  // a string. Otherwise, we have to bake into each client a mapping of
+  // license name to integer. For now, we are making a model
+  // "Creative Commons - Public Domain
+  // if (meta.has_legal()) {....}
+  form.emplace("license", "1");
 
+  // Add tags
+  std::string tags;
+  for (int i = 0; i < meta.tags_size(); ++i)
+    tags += meta.tags(i) + ",";
+  if (!tags.empty())
+    form.emplace("tags", tags);
 
-  printf("Attempting to upload a model\n");
+  // Recursively get all the files.
+  std::vector<std::string> files;
+  this->dataPtr->AllFiles(_pathToModelDir, files);
+  for (const std::string &file : files)
+  {
+    form.emplace("file", std::string("@") + file + ";"
+        + file.substr(_pathToModelDir.size()+1));
+  }
 
-  resp = rest.Request(HttpMethod::POST, "http://localhost:8000",
-      "1.0", "models", {}, _headers, "", form);
+  // Send the request.
+  resp = rest.Request(HttpMethod::POST_FORM, _id.Server().Url().Str(),
+      _id.Server().Version(), "models", {}, _headers, "", form);
 
   if (resp.statusCode != 200)
   {
     ignerr << "Failed to upload model." << std::endl
-           << "  Server: http://localhost:8000" << std::endl
+           << "  Server: " << _id.Server().Url().Str() << std::endl
            << "  Route: /models\n"
            << "  REST response code: " << resp.statusCode << std::endl;
     return Result(ResultType::FETCH_ERROR);
@@ -1008,5 +1061,22 @@ Result FuelClient::CachedWorldFile(const common::URI &_fileUrl,
   }
 
   return Result(ResultType::FETCH_ERROR);
+}
+
+//////////////////////////////////////////////////
+void FuelClientPrivate::AllFiles(const std::string &_path,
+    std::vector<std::string> &_files) const
+{
+  common::DirIter dirIter(_path);
+  common::DirIter end;
+  while (dirIter != end)
+  {
+    if (common::isDirectory(*dirIter))
+      this->AllFiles(*dirIter, _files);
+    else
+      _files.push_back(*dirIter);
+
+    ++dirIter;
+  }
 }
 

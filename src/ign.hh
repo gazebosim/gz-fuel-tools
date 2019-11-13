@@ -63,18 +63,28 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(
 
 /// \brief External hook to execute 'ign fuel upload -m path' from the command
 /// line.
+///
+/// Example usage, including a private access token which is required:
+///
+/// `ign fuel upload -m ~/my_model --header "Private-Token: <access_token>"`
+///
 /// \param[in] _path Resource path.
+/// \param[in] _url Server URL.
 /// \param[in] _header An HTTP header.
+/// \param[in] _private "1" to make the resource private, "0" to make it
+/// public.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path = nullptr,
-    const char *_header = nullptr);
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
+    const char *_url, const char *_header = nullptr,
+    const char *_private = nullptr);
 
 /// \brief External hook to execute 'ign fuel upload -m path' from the command
 /// line.
 /// \param[in] _path Resource path.
 /// \param[in] _header An HTTP header.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int configConvert(
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(
     const char *_path = nullptr);
 
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path);
 #endif
