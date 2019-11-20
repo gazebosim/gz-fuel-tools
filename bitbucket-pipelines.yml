@@ -16,6 +16,7 @@ pipelines:
             lcov curl libyaml-dev
             libignition-cmake2-dev
             libignition-math4-dev
+            libignition-msgs4-dev
             libignition-common3-dev
           # Ignition tools
           - hg clone http://bitbucket.org/ignitionrobotics/ign-tools -b default
