@@ -50,7 +50,7 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
     curl::curl
     ${JSONCPP_TARGET}
     TINYXML2::TINYXML2
-    YAML::YAML
+    ${YAML_TARGET}
     ZIP::ZIP
 )
 
