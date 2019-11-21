@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 #include <ignition/common/URI.hh>
 
 #include "ignition/fuel_tools/Helpers.hh"
@@ -149,6 +150,14 @@ namespace ignition
       /// \param[in] _id The model identifier.
       /// \return Result of the download operation
       public: Result DownloadModel(const ModelIdentifier &_id);
+
+      /// \brief Download a model from ignition fuel. This will override an
+      /// existing local copy of the model.
+      /// \param[in] _id The model identifier.
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \return Result of the download operation
+      public: Result DownloadModel(const ModelIdentifier &_id,
+                  const std::vector<std::string> &_headers);
 
       /// \brief Download a world from Ignition Fuel. This will override an
       /// existing local copy of the world.

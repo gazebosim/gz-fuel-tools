@@ -77,7 +77,9 @@ SUBCOMMANDS = {
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
-  "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n" +
+  "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
+  "  --header arg             Set an HTTP header, such as                  \n"\
+  "                           --header 'authorization: Bearer JWT'.        \n" +
   COMMON_OPTIONS,
 }
 
@@ -95,7 +97,8 @@ class Cmd
       'url' => '',
       'owner' => '',
       'raw' => 'false',
-      'config' => ''
+      'config' => '',
+      'header' => ''
     }
 
     usage = COMMANDS[args[0]]
@@ -132,6 +135,10 @@ class Cmd
       opts.on('-v [verbose]', '--verbose [verbose]', String,
           'Adjust level of console output') do |v|
         options['verbose'] = v || '3'
+      end
+      opts.on('--header [header]', String,
+              'Add a header to the HTTP request.') do |h|
+        options['header'] = h
       end
     end # opt_parser do
 
@@ -221,8 +228,9 @@ class Cmd
           end
         end
       when 'download'
-        Importer.extern 'int downloadUrl(const char *, const  char *)'
-        if not Importer.downloadUrl(options['url'], options['config'])
+        Importer.extern 'int downloadUrl(const char *, const  char *, const char *)'
+        if not Importer.downloadUrl(options['url'], options['config'],
+            options['header'])
           exit(-1)
         end
       end

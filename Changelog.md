@@ -1,9 +1,32 @@
-## Ignition Fuel Tools 3.0.0 (2018-02-28)
+## Ignition Fuel Tools 3.x
+
+### Ignition Fuel Tools 3.x.x (20xx-xx-xx)
+
+1. Use `${YAML_TARGET}` instead of `YAML::YAML` imported target.
+    * [Pull request 103](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/103)
+
+### Ignition Fuel Tools 3.2.1 (2019-08-12)
+
+1. Support actors
+    * [Pull request 101](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/101)
+
+### Ignition Fuel Tools 3.2.0 (2019-06-14)
+
+1. FuelClient::DownloadModel accepts HTTP headers, and the `ign fuel
+   download` command can accept a single HTTP header.
+    * [Pull request 100](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/100)
+
+### Ignition Fuel Tools 3.1.0 (2019-05-xx)
+
+1. Fix PBR material URI
+    * [Pull request 96](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/96)
+
+### Ignition Fuel Tools 3.0.0 (2018-02-28)
 
 1. Integration with ign-gazebo. The following set of pull requests update
    fuel-tools to use ign-cmake2, sets api.ignitionfuel.org as the default
    server, fixes codecheck errors, removes old deprecations, and parses
-   model.config files using tinyxml2. 
+   model.config files using tinyxml2.
     * [Pull request 82](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/82)
     * [Pull request 83](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/83)
     * [Pull request 84](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/84)
@@ -12,7 +35,14 @@
     * [Pull request 88](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/88)
     * [Pull request 89](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/89)
 
-## Ignition Fuel Tools 1.2.0 (2018-05-30)
+## Ignition Fuel Tools 1.x
+
+### Ignition Fuel Tools 1.x.x (20xx-xx-xx)
+
+1. Use `${YAML_TARGET}` instead of `YAML::YAML` imported target.
+    * [Pull request 103](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/103)
+
+### Ignition Fuel Tools 1.2.0 (2018-05-30)
 
 1. Get cached model resource file
     * [Pull request 63](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/63)
@@ -73,5 +103,5 @@
     * [Pull request 69](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/69)
     * [Pull request 67](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/67)
 
-## Ignition Fuel Tools 1.0.0 (2018-01-25)
+### Ignition Fuel Tools 1.0.0 (2018-01-25)
 

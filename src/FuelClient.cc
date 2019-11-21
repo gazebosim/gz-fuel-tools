@@ -370,6 +370,13 @@ Result FuelClient::DeleteModel(const ModelIdentifier &/*_id*/)
 //////////////////////////////////////////////////
 Result FuelClient::DownloadModel(const ModelIdentifier &_id)
 {
+  return this->DownloadModel(_id, {});
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadModel(const ModelIdentifier &_id,
+    const std::vector<std::string> &_headers)
+{
   // Server config
   if (!_id.Server().Url().Valid() || _id.Server().Version().empty())
   {
@@ -383,11 +390,13 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id)
         "models", _id.Name(), _id.VersionStr(),
         _id.Name() + ".zip");
 
+  ignmsg << "Downloading model [" << _id.UniqueName() << "]" << std::endl;
+
   // Request
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
-      _id.Server().Version(), route, {}, {}, "");
+      _id.Server().Version(), route, {}, _headers, "");
   if (resp.statusCode != 200)
   {
     ignerr << "Failed to download model." << std::endl
@@ -443,6 +452,8 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
   auto route = ignition::common::joinPaths(_id.Owner(),
         "worlds", _id.Name(), _id.VersionStr(),
         _id.Name() + ".zip");
+
+  ignmsg << "Downloading world [" << _id.UniqueName() << "]" << std::endl;
 
   // Request
   ignition::fuel_tools::Rest rest;
