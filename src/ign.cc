@@ -575,8 +575,42 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     privateBool = privateStr == "1" || privateStr == "true";
   }
 
-  // Upload the model
-  return client.UploadModel(_path, model, headers, privateBool);
+  if (!ignition::common::exists(_path))
+  {
+    ignerr << "The model path[" << _path << "] doesn't exist.\n";
+    return 0;
+  }
+
+  if (ignition::common::exists(
+        ignition::common::joinPaths(_path, "metadata.pbtxt")) ||
+      ignition::common::exists(
+        ignition::common::joinPaths(_path, "model.config")))
+  {
+    std::cout << "Uploading a model[" << _path << "]\n";
+    // Upload the model
+    return client.UploadModel(_path, model, headers, privateBool);
+  }
+
+  // If a model.config or metadata.pbtxt file does not exist, then assume
+  // that the given path is a directory containing multiple models.
+  ignition::common::DirIter dirIter(_path);
+  ignition::common::DirIter end;
+  while (dirIter != end)
+  {
+    if (ignition::common::isDirectory(*dirIter) &&
+        (ignition::common::exists(
+           ignition::common::joinPaths(*dirIter, "metadata.pbtxt")) ||
+         ignition::common::exists(
+           ignition::common::joinPaths(*dirIter, "model.config"))))
+    {
+      if (!client.UploadModel(*dirIter, model, headers, privateBool))
+      {
+        ignerr << "Failed to upload model[" << *dirIter << "]\n";
+      }
+    }
+    ++dirIter;
+  }
+  return 1;
 }
 
 //////////////////////////////////////////////////

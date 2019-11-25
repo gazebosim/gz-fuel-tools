@@ -78,13 +78,17 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     const char *_url, const char *_header = nullptr,
     const char *_private = nullptr);
 
-/// \brief External hook to execute 'ign fuel upload -m path' from the command
-/// line.
+/// \brief External hook to execute 'ign fuel meta --config2pbtxt path'
+/// from the command line.
 /// \param[in] _path Resource path.
-/// \param[in] _header An HTTP header.
 /// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(
     const char *_path = nullptr);
 
+
+/// \brief External hook to execute 'ign fuel meta --pbtxt2config path'
+/// from the command line.
+/// \param[in] _path Resource path.
+/// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path);
 #endif

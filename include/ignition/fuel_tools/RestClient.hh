@@ -86,36 +86,6 @@ namespace ignition
       /// \param[in] _headers All the headers to be included in the HTTP request
       ///            E.g.: {"Accept: application/json"}
       /// \param[in] _data Data to be included in the HTTP request.
-      /// \param[in] _form multi-part / form data to be used with
-      ///            Method::POST_FORM
-      /// \deprecated Use the version that accepts a std::multimap for the
-      /// _form parameter.
-      /*public: virtual IGN_DEPRECATED(4) RestResponse Request(
-                  const HttpMethod _method,
-          const std::string &_url,
-          const std::string &_version,
-          const std::string &_path,
-          const std::vector<std::string> &_queryStrings,
-          const std::vector<std::string> &_headers,
-          const std::string &_data,
-          const std::map<std::string, std::string> &_form =
-          std::map<std::string, std::string>()) const;
-          */
-
-      /// \brief Trigger a REST request.
-      /// \param[in] _method The HTTP method. Use all uppercase letters.
-      ///            E.g.: "GET"
-      /// \param[in] _url The url to request.
-      ///            E.g.: "http://localhost:8000/"
-      /// \param[in] _version The protocol version.
-      ///            E.g.: "1.0"
-      /// \param[in] _path The path to request.
-      ///            E.g.: "collection"
-      /// \param[in] _queryStrings All the query strings to be requested.
-      ///            E.g.: {"sort=name", "sortdir=1"}
-      /// \param[in] _headers All the headers to be included in the HTTP request
-      ///            E.g.: {"Accept: application/json"}
-      /// \param[in] _data Data to be included in the HTTP request.
       /// \param[in] _form Multi-part / form data to be used with
       /// Method::POST_FORM. Files can be transferred by using a value of
       /// "@<local_file_path>;<upload_filename>". For example, to transfer the

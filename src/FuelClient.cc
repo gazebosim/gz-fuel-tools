@@ -15,19 +15,19 @@
  *
 */
 
+#include <google/protobuf/text_format.h>
+#include <ignition/msgs/fuel_metadata.pb.h>
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <memory>
 #include <regex>
 #include <string>
-#include <google/protobuf/text_format.h>
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
 
-#include <ignition/msgs/fuel_metadata.pb.h>
 #include <ignition/msgs/Utility.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
@@ -130,6 +130,9 @@ class ignition::fuel_tools::FuelClientPrivate
     // File path
     "(.*)"};
 
+  /// \brief Recursively get all the files in the given path.
+  /// \param[in] _path Path to process.
+  /// \param[out] _files All the files in the given _path.
   public: void AllFiles(const std::string &_path,
               std::vector<std::string> &_files) const;
 
@@ -374,11 +377,12 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   }
 
   ignition::msgs::FuelMetadata meta;
-  if (ignition::common::exists(
-        ignition::common::joinPaths(_pathToModelDir, "metadata.pbtxt")))
+
+  // Try the `metadata.pbtxt` file first since it contains more information
+  // than `model.config`.
+  if (common::exists(common::joinPaths(_pathToModelDir, "metadata.pbtxt")))
   {
-    std::string filePath =
-      ignition::common::joinPaths(_pathToModelDir, "metadata.pbtxt");
+    std::string filePath = common::joinPaths(_pathToModelDir, "metadata.pbtxt");
 
     ignmsg << "Parsing " << filePath  << std::endl;
 
@@ -390,11 +394,9 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     // Parse the file into the fuell metadata message
     google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
   }
-  else if (ignition::common::exists(
-           ignition::common::joinPaths(_pathToModelDir, "model.config")))
+  else if (common::exists(common::joinPaths(_pathToModelDir, "model.config")))
   {
-    std::string filePath = ignition::common::joinPaths(_pathToModelDir,
-        "model.config");
+    std::string filePath = common::joinPaths(_pathToModelDir, "model.config");
 
     ignmsg << "Parsing " << filePath << std::endl;
 
@@ -411,7 +413,7 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   else
   {
     ignerr << "Provided model directory[" <<  _pathToModelDir
-      << "] is lacking a metadata.pbtxt or model.confg file.";
+      << "] needs a metadata.pbtxt or a model.confg file.";
     return Result(ResultType::UPLOAD_ERROR);
   }
 
@@ -459,7 +461,7 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     return Result(ResultType::FETCH_ERROR);
   }
 
-  return Result(ResultType::UPLOAD_ERROR);
+  return Result(ResultType::UPLOAD);
 }
 
 //////////////////////////////////////////////////

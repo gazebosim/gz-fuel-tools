@@ -127,19 +127,6 @@ size_t RestWriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
 }
 
 /////////////////////////////////////////////////
-/*RestResponse Rest::Request(HttpMethod _method,
-    const std::string &_url, const std::string &_version,
-    const std::string &_path, const std::vector<std::string> &_queryStrings,
-    const std::vector<std::string> &_headers, const std::string &_data,
-    const std::map<std::string, std::string> &_form) const
-{
-  std::multimap<std::string, std::string> multimap;
-  std::copy(_form.begin(), _form.end(), std::back_inserter(multimap));
-  return Request(_method, _url, _version, _path, _queryStrings,
-      _headers, _data, multimap);
-}*/
-
-/////////////////////////////////////////////////
 RestResponse Rest::Request(HttpMethod _method,
     const std::string &_url, const std::string &_version,
     const std::string &_path, const std::vector<std::string> &_queryStrings,

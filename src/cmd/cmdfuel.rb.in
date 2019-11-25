@@ -90,9 +90,10 @@ SUBCOMMANDS = {
   "  ign fuel upload [options]                                             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
-  "  -m [--model] arg         Path to directory containing a model         \n"\
+  "  -m [--model] arg         Path to directory containing a model, or     \n"\
+  "                           multiple models each in a subdirectory.      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
-  "                           the model. If unspecified, it will be        \n"\
+  "                           the model. If unspecified, the server will be\n"\
   "                           https://fuel.ignitionrobotics.org.           \n"\
   "  -p [--private]           Use this argument to make the model private. \n"\
   "                           Otherwise, the model will be public.         \n"\
@@ -107,8 +108,8 @@ SUBCOMMANDS = {
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  --config2pbtxt arg       Convert a model.config file to a             \n"\
-  "                           metadata.pbtx.                               \n"+
-  "  --pbtxt2config arg       Convert a metadata.pbtx file to a            \n"\
+  "                           metadata.pbtxt.                              \n"+
+  "  --pbtxt2config arg       Convert a metadata.pbtxt file to a           \n"\
   "                           model.confg.                                 \n"+
 
   COMMON_OPTIONS,
