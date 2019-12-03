@@ -33,6 +33,7 @@
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
+#include <ignition/common/SignalHandler.hh>
 #include <ignition/common/URI.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
@@ -553,6 +554,9 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     const char *_url, const char *_header, const char *_private)
 {
+   ignition::common::SignalHandler handler;
+   handler.AddCallback([] (int) { return 0; });
+
   ignition::fuel_tools::ClientConfig conf;
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
   ignition::fuel_tools::FuelClient client(conf);
