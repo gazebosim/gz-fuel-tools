@@ -554,8 +554,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     const char *_url, const char *_header, const char *_private)
 {
-   ignition::common::SignalHandler handler;
-   handler.AddCallback([] (int) { return 0; });
+  ignition::common::SignalHandler handler;
+  bool sigKilled{false};
+  handler.AddCallback([&sigKilled](const int)
+  {
+    sigKilled = true;
+  });
 
   ignition::fuel_tools::ClientConfig conf;
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
@@ -599,7 +603,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
   // that the given path is a directory containing multiple models.
   ignition::common::DirIter dirIter(_path);
   ignition::common::DirIter end;
-  while (dirIter != end)
+  while (!sigKilled && dirIter != end)
   {
     if (ignition::common::isDirectory(*dirIter) &&
         (ignition::common::exists(

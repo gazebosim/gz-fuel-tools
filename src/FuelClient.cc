@@ -391,7 +391,7 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
         std::istreambuf_iterator<char>());
 
-    // Parse the file into the fuell metadata message
+    // Parse the file into the fuel metadata message
     google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
   }
   else if (common::exists(common::joinPaths(_pathToModelDir, "model.config")))

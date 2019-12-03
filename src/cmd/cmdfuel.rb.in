@@ -134,7 +134,7 @@ class Cmd
       'model' => '',
       'config2pbtxt' => '',
       'pbtxt2config' => '',
-      'private' => '0'
+      'private' => 'false'
     }
 
     usage = COMMANDS[args[0]]
@@ -188,7 +188,7 @@ class Cmd
         options['pbtxt2config'] = c
       end
       opts.on('-p', '--private', 'Private resource') do
-        options['private'] = '1'
+        options['private'] = 'true'
       end
 
     end # opt_parser do
