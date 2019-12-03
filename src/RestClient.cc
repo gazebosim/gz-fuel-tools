@@ -245,7 +245,7 @@ RestResponse Rest::Request(HttpMethod _method,
         if (dotIdx != std::string::npos)
         {
           std::string extension =
-            ignition::common::lowercase(basename.substr(dotIdx+1));
+            ignition::common::lowercase(basename.substr(dotIdx));
           if (kContentTypes.find(extension) != kContentTypes.end())
           {
             contentType = kContentTypes.at(extension);
