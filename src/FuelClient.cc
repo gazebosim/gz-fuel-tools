@@ -421,7 +421,7 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   {
     {"name", meta.name()},
     {"description", meta.description()},
-    {"permission", _private ? "1" : "0"},
+    {"private", _private ? "1" : "0"},
   };
 
   // \todo(nkoenig) The ign-fuelserver expects an integer number for the
