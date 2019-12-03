@@ -37,6 +37,7 @@ using namespace fuel_tools;
 static const std::map<std::string, std::string> kContentTypes =
 {
   {".config", "text/xml"},
+  {".bvh",    "text/plain"},
   {".dae",    "text/xml"},
   {".erb",    "text/plain"},
   {".obj",    "text/plain"},
