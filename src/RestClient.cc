@@ -48,7 +48,7 @@ static const std::map<std::string, std::string> kContentTypes =
   {".jpg",    "image/jpeg"},
   {".jpeg",   "image/jpeg"},
   {".json",   "text/json"},
-  {".material", "text/json"},
+  {".material", "text/plain"},
   {".md",    "text/plain"},
   {".mtl",   "text/plain"},
   {".pbtxt", "text/json"},
