@@ -34,7 +34,7 @@ using namespace fuel_tools;
 WorldIter WorldIterFactory::Create(const std::vector<WorldIdentifier> &_ids)
 {
   std::unique_ptr<WorldIterPrivate> priv(new WorldIterIds(_ids));
-  return std::move(WorldIter(std::move(priv)));
+  return WorldIter(std::move(priv));
 }
 
 //////////////////////////////////////////////////
@@ -43,14 +43,14 @@ WorldIter WorldIterFactory::Create(const Rest &_rest,
 {
   std::unique_ptr<WorldIterPrivate> priv(new WorldIterRestIds(
     _rest, _server, _path));
-  return std::move(WorldIter(std::move(priv)));
+  return WorldIter(std::move(priv));
 }
 
 //////////////////////////////////////////////////
 WorldIter WorldIterFactory::Create()
 {
   std::unique_ptr<WorldIterPrivate> priv(new WorldIterIds({}));
-  return std::move(WorldIter(std::move(priv)));
+  return WorldIter(std::move(priv));
 }
 
 //////////////////////////////////////////////////
