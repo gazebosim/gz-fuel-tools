@@ -36,14 +36,14 @@ using namespace fuel_tools;
 ModelIter ModelIterFactory::Create(const std::vector<ModelIdentifier> &_ids)
 {
   std::unique_ptr<ModelIterPrivate> priv(new IterIds(_ids));
-  return std::move(ModelIter(std::move(priv)));
+  return ModelIter(std::move(priv));
 }
 
 //////////////////////////////////////////////////
 ModelIter ModelIterFactory::Create(const std::vector<Model> &_models)
 {
   std::unique_ptr<ModelIterPrivate> priv(new IterModels(_models));
-  return std::move(ModelIter(std::move(priv)));
+  return ModelIter(std::move(priv));
 }
 
 //////////////////////////////////////////////////
@@ -52,14 +52,14 @@ ModelIter ModelIterFactory::Create(const Rest &_rest,
 {
   std::unique_ptr<ModelIterPrivate> priv(new IterRestIds(
     _rest, _server, _api));
-  return std::move(ModelIter(std::move(priv)));
+  return ModelIter(std::move(priv));
 }
 
 //////////////////////////////////////////////////
 ModelIter ModelIterFactory::Create()
 {
   std::unique_ptr<ModelIterPrivate> priv(new IterIds({}));
-  return std::move(ModelIter(std::move(priv)));
+  return ModelIter(std::move(priv));
 }
 
 //////////////////////////////////////////////////

@@ -262,7 +262,7 @@ RestResponse Rest::Request(HttpMethod _method,
             CURLFORM_COPYNAME, key.c_str(),
             CURLFORM_FILENAME, uploadFilename.c_str(),
             CURLFORM_FILE, path.c_str(),
-            CURLFORM_CONTENTTYPE, contentType,
+            CURLFORM_CONTENTTYPE, contentType.c_str(),
             CURLFORM_END);
       }
       else
