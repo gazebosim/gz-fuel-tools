@@ -1,8 +1,15 @@
+## Ignition Fuel Tools 3.X to 4.X
+
+### Modifications
+
+1. `FuelClient::UploadModel` takes 2 more arguments now.
+1. `RestClient::Request`'s `_form` argument is now an `std::multimap` instead of `std::map`.
+
 ## Ignition Fuel Tools 1.X to 2.X
 
 ### Modifications
 
-1. Renamed the REST class to Rest. 
+1. Renamed the REST class to Rest.
     * [Pull request #53](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/53)
 
 1. All setters (functions that set class variables) have been prefixed
@@ -18,7 +25,7 @@
 
 1. Deprecated the `ModelIdentifier::Category` functions. The Category concept does not exist on fuelserver.
     * [Pull request #52](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/52)
- 
+
 1. Deprecated the accessor `ModelIdentifier::Likes` for `ModelIdentifier::LikeCount`, and the mutator `ModelIdentifier::Likes` for `ModelIdentifier::SetLikeCount`.
     * [Pull request #52](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-request/52)
 
@@ -27,7 +34,7 @@
 
 
 1. ResultTypes have moved from a plain `enum` inside the `Result` class to
-   an `enum class ResultType` outside the `Result` class scope. 
+   an `enum class ResultType` outside the `Result` class scope.
     * [Pull request #51](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/51/update-result-style/diff#chg-include/ignition/fuel_tools/Result.hh)
 
 1. `ResultType Result::Type() const` now returns an `enum class`

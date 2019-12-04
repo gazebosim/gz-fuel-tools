@@ -1,3 +1,10 @@
+## Ignition Fuel Tools 4.x
+
+### Ignition Fuel Tools 4.0.0 (20xx-xx-xx)
+
+1. Model upload CLI, resource metadata CLI, depend on ign-msgs5.
+    * [Pull request 108](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/108)
+
 ## Ignition Fuel Tools 3.x
 
 ### Ignition Fuel Tools 3.x.x (20xx-xx-xx)
