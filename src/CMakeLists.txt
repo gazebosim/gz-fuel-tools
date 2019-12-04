@@ -46,6 +46,7 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
     ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
   PRIVATE
+    ignition-msgs${IGN_MSGS_MAJOR_VER}::ignition-msgs${IGN_MSGS_MAJOR_VER}
     curl::curl
     ${JSONCPP_TARGET}
     TINYXML2::TINYXML2
@@ -54,7 +55,9 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
 )
 
 ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
-  ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER})
+  ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
+  ignition-msgs${IGN_MSGS_MAJOR_VER}::ignition-msgs${IGN_MSGS_MAJOR_VER}
+)
 
 
 # Build the unit tests.

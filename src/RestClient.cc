@@ -33,6 +33,35 @@
 using namespace ignition;
 using namespace fuel_tools;
 
+// List of known file extensions and associated mime type.
+static const std::map<std::string, std::string> kContentTypes =
+{
+  {".config", "text/xml"},
+  {".bvh",    "text/plain"},
+  {".dae",    "text/xml"},
+  {".erb",    "text/plain"},
+  {".obj",    "text/plain"},
+  {".gif",    "image/gif"},
+  {".glsl",   "text/plain"},
+  {".htm",    "text/html"},
+  {".html",   "text/html"},
+  {".jpg",    "image/jpeg"},
+  {".jpeg",   "image/jpeg"},
+  {".json",   "text/json"},
+  {".material", "text/plain"},
+  {".md",    "text/plain"},
+  {".mtl",   "text/plain"},
+  {".pbtxt", "text/json"},
+  {".pdf",   "application/pdf"},
+  {".png",   "image/png"},
+  {".sdf",   "text/xml"},
+  {".stl",   "text/plain"},
+  {".svg",   "image/svg+xml"},
+  {".tga",   "image/tga"},
+  {".txt",   "text/plain"},
+  {".urdf",  "text/xml"},
+  {".xml",   "text/xml"},
+};
 
 //////////////////////////////////////////////////
 std::string RestJoinUrl(const std::string &_base,
@@ -103,7 +132,7 @@ RestResponse Rest::Request(HttpMethod _method,
     const std::string &_url, const std::string &_version,
     const std::string &_path, const std::vector<std::string> &_queryStrings,
     const std::vector<std::string> &_headers, const std::string &_data,
-    const std::map<std::string, std::string> &_form) const
+    const std::multimap<std::string, std::string> &_form) const
 {
   RestResponse res;
 
@@ -120,7 +149,7 @@ RestResponse Rest::Request(HttpMethod _method,
   if (!_queryStrings.empty())
   {
     std::string fullQuery{"?"};
-    for (auto const &queryString : _queryStrings)
+    for (const std::string &queryString : _queryStrings)
       fullQuery += queryString + "&";
 
     fullQuery.pop_back();
@@ -131,7 +160,7 @@ RestResponse Rest::Request(HttpMethod _method,
 
   // Process headers.
   struct curl_slist *headers = nullptr;
-  for (auto const &header : _headers)
+  for (const std::string &header : _headers)
   {
     headers = curl_slist_append(headers, header.c_str());
     if (!headers)
@@ -183,7 +212,7 @@ RestResponse Rest::Request(HttpMethod _method,
   else if (_method == HttpMethod::POST_FORM)
   {
     struct curl_httppost *lastptr = nullptr;
-    for (const auto &it : _form)
+    for (const std::pair<std::string, std::string> &it : _form)
     {
       std::string key = it.first;
       std::string value = it.second;
@@ -193,19 +222,48 @@ RestResponse Rest::Request(HttpMethod _method,
       // others are standard fields to describe the file
       if (!value.empty() && value[0] == '@')
       {
-        // file upload
+        // Default file path
         std::string path = value.substr(1);
-        std::string filename = ignition::common::basename(path);
-        ifs.open(path, std::ios::binary);
-        std::filebuf* pbuf = ifs.rdbuf();
-        std::size_t size = pbuf->pubseekoff(0, ifs.end, ifs.in);
+
+        // Default upload filename
+        std::string uploadFilename = ignition::common::basename(path);
+
+        // If the value has a semicolon, then use the string preceding the
+        // semicolon as the local filesystem path and the string following
+        // the semicolon as the upload filename.
+        if (value.substr(1).find(";") != std::string::npos)
+        {
+          path = value.substr(1, value.find(";") - 1);
+          uploadFilename = value.substr(value.find(";") + 1);
+        }
+
+        std::string basename = ignition::common::basename(path);
+        std::string contentType = "application/octet-stream";
+
+        // Figure out the content type based on the file extension.
+        std::string::size_type dotIdx = basename.rfind('.');
+        if (dotIdx != std::string::npos)
+        {
+          std::string extension =
+            ignition::common::lowercase(basename.substr(dotIdx));
+          if (kContentTypes.find(extension) != kContentTypes.end())
+          {
+            contentType = kContentTypes.at(extension);
+          }
+          else
+          {
+            ignwarn << "Unknown mime type for file[" << path
+              << "]. The mime type '" << contentType << "' will be used.\n";
+          }
+        }
+
         curl_formadd(&formpost,
-                     &lastptr,
-                     CURLFORM_COPYNAME, key.c_str(),
-                     CURLFORM_BUFFER, filename.c_str(),
-                     CURLFORM_BUFFERPTR, pbuf,
-                     CURLFORM_BUFFERLENGTH, size,
-                     CURLFORM_END);
+            &lastptr,
+            CURLFORM_COPYNAME, key.c_str(),
+            CURLFORM_FILENAME, uploadFilename.c_str(),
+            CURLFORM_FILE, path.c_str(),
+            CURLFORM_CONTENTTYPE, contentType,
+            CURLFORM_END);
       }
       else
       {

@@ -1220,7 +1220,8 @@ TEST(FuelClient, UploadModelFail)
   FuelClient client;
   ModelIdentifier modelId;
 
-  Result result = client.UploadModel("path", modelId);
+  std::vector<std::string> headers;
+  Result result = client.UploadModel("path", modelId, headers);
   EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
 }
 

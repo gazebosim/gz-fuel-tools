@@ -136,9 +136,13 @@ namespace ignition
       /// \brief Upload a directory as a new model
       /// \param[in] _pathToModelDir a path to a directory containing a model
       /// \param[in] _id An identifier to assign to this new model
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \param[in] _private True to make the model private.
       /// \return Result of the upload operation
       public: Result UploadModel(const std::string &_pathToModelDir,
-                                 const ModelIdentifier &_id);
+                                 const ModelIdentifier &_id,
+                                 const std::vector<std::string> &_headers,
+                                 bool _private = false);
 
       /// \brief Remove a model from ignition fuel
       /// \param[in] _id The model identifier.

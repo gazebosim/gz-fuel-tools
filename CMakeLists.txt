@@ -50,6 +50,11 @@ ign_find_package(ignition-common3 REQUIRED PRIVATE)
 set(IGN_COMMON_MAJOR_VER ${ignition-common3_VERSION_MAJOR})
 
 #--------------------------------------
+# Find ignition-msgs
+ign_find_package(ignition-msgs5 REQUIRED PRIVATE)
+set(IGN_MSGS_MAJOR_VER ${ignition-msgs5_VERSION_MAJOR})
+
+#--------------------------------------
 # Find ignition-tools
 ign_find_package(ignition-tools QUIET)
 if (ignition-tools_FOUND)
