@@ -26,7 +26,7 @@ Install Ignition Fuel Tools:
 
 ```
 sudo apt-get update
-sudo apt-get install libignition-fuel-tools-dev
+sudo apt-get install libignition-fuel-tools4-dev
 ```
 
 ## Mac OS X
@@ -51,7 +51,7 @@ Run the following commands:
 
 ```
 brew tap osrf/simulation
-brew install ignition-fuel-tools1
+brew install ignition-fuel-tools4
 ```
 
 ## Windows
@@ -67,7 +67,7 @@ Make sure you have removed the Ubuntu pre-compiled binaries before
 installing from source:
 
 ```
-sudo apt-get remove libignition-fuel-tools-dev
+sudo apt-get remove libignition-fuel-tools4-dev
 ```
 
 Install prerequisites. A clean Ubuntu system will need:
