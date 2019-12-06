@@ -17,6 +17,11 @@
 
 #include <curl/curl.h>
 #include <string.h>
+#include <tinyxml2.h>
+#include <google/protobuf/text_format.h>
+#include <ignition/msgs/fuel_metadata.pb.h>
+#include <ignition/msgs/Utility.hh>
+
 #ifdef _WIN32
 // DELETE is defined in winnt.h and causes a problem with REST::DELETE
 #undef DELETE
@@ -27,6 +32,8 @@
 #include <iostream>
 
 #include <ignition/common/Console.hh>
+#include <ignition/common/Filesystem.hh>
+#include <ignition/common/SignalHandler.hh>
 #include <ignition/common/URI.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
@@ -541,4 +548,119 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 {
   ignition::common::Console::SetVerbosity(std::atoi(_verbosity));
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
+    const char *_url, const char *_header, const char *_private)
+{
+  ignition::common::SignalHandler handler;
+  bool sigKilled{false};
+  handler.AddCallback([&sigKilled](const int)
+  {
+    sigKilled = true;
+  });
+
+  ignition::fuel_tools::ClientConfig conf;
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  ignition::fuel_tools::FuelClient client(conf);
+  ignition::fuel_tools::ModelIdentifier model;
+
+  // Set the server URL, if present.
+  if (_url && std::strlen(_url) != 0)
+    model.Server().SetUrl(ignition::common::URI(_url));
+
+  // Store header information
+  std::vector<std::string> headers;
+  if (_header && strlen(_header) > 0)
+    headers.push_back(_header);
+
+  // Determine if the resource should be private.
+  bool privateBool = false;
+  if (_private && std::strlen(_private) != 0)
+  {
+    std::string privateStr = ignition::common::lowercase(_private);
+    privateBool = privateStr == "1" || privateStr == "true";
+  }
+
+  if (!ignition::common::exists(_path))
+  {
+    ignerr << "The model path[" << _path << "] doesn't exist.\n";
+    return 0;
+  }
+
+  if (ignition::common::exists(
+        ignition::common::joinPaths(_path, "metadata.pbtxt")) ||
+      ignition::common::exists(
+        ignition::common::joinPaths(_path, "model.config")))
+  {
+    std::cout << "Uploading a model[" << _path << "]\n";
+    // Upload the model
+    return client.UploadModel(_path, model, headers, privateBool);
+  }
+
+  // If a model.config or metadata.pbtxt file does not exist, then assume
+  // that the given path is a directory containing multiple models.
+  ignition::common::DirIter dirIter(_path);
+  ignition::common::DirIter end;
+  while (!sigKilled && dirIter != end)
+  {
+    if (ignition::common::isDirectory(*dirIter) &&
+        (ignition::common::exists(
+           ignition::common::joinPaths(*dirIter, "metadata.pbtxt")) ||
+         ignition::common::exists(
+           ignition::common::joinPaths(*dirIter, "model.config"))))
+    {
+      if (!client.UploadModel(*dirIter, model, headers, privateBool))
+      {
+        ignerr << "Failed to upload model[" << *dirIter << "]\n";
+      }
+    }
+    ++dirIter;
+  }
+  return 1;
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(const char *_path)
+{
+  ignition::msgs::FuelMetadata meta;
+
+  std::ifstream inputFile(_path);
+  std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+      std::istreambuf_iterator<char>());
+
+  if (!ignition::msgs::ConvertFuelMetadata(inputStr, meta))
+  {
+    ignerr << "Unable to convert model config[" << _path << "].\n";
+    return 0;
+  }
+
+  // Output the result.
+  std::cout << meta.DebugString() << std::endl;
+  return 1;
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
+{
+  ignition::msgs::FuelMetadata meta;
+
+  // Read the pbtxt file.
+  std::ifstream inputFile(_path);
+  std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+      std::istreambuf_iterator<char>());
+
+  // Parse the file into the fuell metadata message
+  google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+
+  std::string modelConfig;
+  if (!ignition::msgs::ConvertFuelMetadata(meta, modelConfig))
+  {
+    std::cerr << "Unable to convert Fuel metadata to model.config\n";
+    return 0;
+  }
+
+  std::cout << modelConfig << std::endl;
+  return 1;
 }

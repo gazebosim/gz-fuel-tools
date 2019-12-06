@@ -1174,12 +1174,24 @@ TEST(FuelClient, Models)
 
   {
     ModelIter iter = client.Models(modelId);
-    EXPECT_FALSE(iter);
+    // If you have models in the cache location, such as ~/.ignition/fuel,
+    // then the model iter will be true. On CI systems, which probably
+    // have an empty cache, the model iter will be false.
+    if (common::exists(client.Config().CacheLocation()))
+      EXPECT_TRUE(iter);
+    else
+      EXPECT_FALSE(iter);
   }
 
   {
     ModelIter const iter = client.Models(modelId);
-    EXPECT_FALSE(iter);
+    // If you have models in the cache location, such as ~/.ignition/fuel,
+    // then the model iter will be true. On CI systems, which probably
+    // have an empty cache, the model iter will be false.
+    if (common::exists(client.Config().CacheLocation()))
+      EXPECT_TRUE(iter);
+    else
+      EXPECT_FALSE(iter);
   }
 
   {
@@ -1190,7 +1202,13 @@ TEST(FuelClient, Models)
   {
     serverConfig.Clear();
     ModelIter const iter = client.Models(serverConfig);
-    EXPECT_FALSE(iter);
+    // If you have models in the cache location, such as ~/.ignition/fuel,
+    // then the model iter will be true. On CI systems, which probably
+    // have an empty cache, the model iter will be false.
+    if (common::exists(client.Config().CacheLocation()))
+      EXPECT_TRUE(iter);
+    else
+      EXPECT_FALSE(iter);
   }
 }
 
@@ -1220,7 +1238,8 @@ TEST(FuelClient, UploadModelFail)
   FuelClient client;
   ModelIdentifier modelId;
 
-  Result result = client.UploadModel("path", modelId);
+  std::vector<std::string> headers;
+  Result result = client.UploadModel("path", modelId, headers);
   EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
 }
 

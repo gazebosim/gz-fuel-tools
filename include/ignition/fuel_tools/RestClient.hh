@@ -86,8 +86,16 @@ namespace ignition
       /// \param[in] _headers All the headers to be included in the HTTP request
       ///            E.g.: {"Accept: application/json"}
       /// \param[in] _data Data to be included in the HTTP request.
-      /// \param[in] _form multi-part / form data to be used with
-      ///            Method::POST_FORM
+      /// \param[in] _form Multi-part / form data to be used with
+      /// Method::POST_FORM. Files can be transferred by using a value of
+      /// "@<local_file_path>;<upload_filename>". For example, to transfer the
+      /// local file "/tmp/test.txt" and upload the file as "changed.txt"
+      /// in a form with the field name "file", then insert
+      /// the following key-value pair into the _form parameter:
+      /// `{"file", "@/tmp/test.txt;changed.txt"}`. The ";<upload_filename>"
+      /// portion is optional. If this part is absent, then the basename of
+      /// provided "<local_file_path>" is used. For example,
+      /// "@/tmp/text.txt" will be uploaded as "text.txt".
       public: virtual RestResponse Request(const HttpMethod _method,
           const std::string &_url,
           const std::string &_version,
@@ -95,8 +103,8 @@ namespace ignition
           const std::vector<std::string> &_queryStrings,
           const std::vector<std::string> &_headers,
           const std::string &_data,
-          const std::map<std::string, std::string> &_form =
-          std::map<std::string, std::string>()) const;
+          const std::multimap<std::string, std::string> &_form =
+          std::multimap<std::string, std::string>()) const;
 
       /// \brief Set the user agent name.
       /// \param[in] _agent User agent name.
