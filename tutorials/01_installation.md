@@ -73,7 +73,7 @@ sudo apt-get remove libignition-fuel-tools-dev
 Install prerequisites. A clean Ubuntu system will need:
 
 ```
-sudo apt-get install mercurial cmake pkg-config python ruby-ronn libignition-cmake-dev libignition-common-dev libzip-dev libjsoncpp-dev libcurl4-openssl-dev libyaml-dev
+sudo apt-get install mercurial cmake pkg-config python ruby-ronn libignition-cmake2-dev libignition-common3-dev libignition-msgs5-dev libignition-tools-dev libzip-dev libjsoncpp-dev libcurl4-openssl-dev libyaml-dev
 ```
 
 Clone the repository into a directory and go into it:
@@ -123,7 +123,7 @@ Make note of your install path, which is output from cmake and should
 look something like:
 
 ```
--- Install path: /home/$USER/local
+-- Install prefix: /home/$USER/local
 ```
 
 Build Ignition Fuel Tools:
