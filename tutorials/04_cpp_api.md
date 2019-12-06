@@ -66,7 +66,7 @@ example:
 ### Walkthrough
 
 This example contains some boilerplate to parse command line arguments and load
-some configuration. Refer to the [configuration tutorial](https://ignitionrobotics.org/api/fuel_tools/3.1/configuration.html)
+some configuration. Refer to the [configuration tutorial](configuration.html)
 for details about this part of the code. Let's focus on the relevant code for
 listing resources:
 
@@ -124,7 +124,7 @@ Server:
 ### Walkthrough
 
 This example contains some boilerplate to parse command line arguments and load
-some configuration. Refer to the [configuration tutorial](https://ignitionrobotics.org/api/fuel_tools/3.1/configuration.html)
+some configuration. Refer to the [configuration tutorial](configuration.html)
 for details about this part of the code. Let's focus on the relevant code for
 getting details of a resource:
 
@@ -168,6 +168,6 @@ use the `AsPrettyString()` method to print its information to the screen.
 ## Download a resource
 
 Refer to the
-[configuration tutorial](https://ignitionrobotics.org/api/fuel_tools/3.1/configuration.html)
+[configuration tutorial](configuration.html)
 to see an example of how to download resources programmatically.
 
