@@ -144,7 +144,7 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << "  path: /tmp/ignition/fuel"             << std::endl
       << std::endl;
 
-  EXPECT_FALSE(config.LoadConfig(testPath));
+  EXPECT_TRUE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
   EXPECT_TRUE(ignition::common::removeFile(testPath));

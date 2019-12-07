@@ -17,10 +17,10 @@ Download the files `list.cc`, `details.cc`, `download.cc`,
 `CMakeLists.txt`, and save them under `/tmp/fuel_tutorial`:
 
 ```
-wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools1/example/list.cc
-wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools1/example/details.cc
-wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools1/example/download.cc
-wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools1/example/CMakeLists.txt
+wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/default/example/list.cc
+wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/default/example/details.cc
+wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/default/example/download.cc
+wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/default/example/CMakeLists.txt
 ```
 
 Let's start by compiling the examples:
@@ -66,7 +66,7 @@ example:
 ### Walkthrough
 
 This example contains some boilerplate to parse command line arguments and load
-some configuration. Refer to the [configuration tutorial](https://ignitionrobotics.org/tutorials/fuel_tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_configuration.html)
+some configuration. Refer to the [configuration tutorial](configuration.html)
 for details about this part of the code. Let's focus on the relevant code for
 listing resources:
 
@@ -102,29 +102,29 @@ server:
 ./details -o caguero -n Beer -t model
 ```
 
-You should see the name of the server followed by the details of the model.
+You should see the details of the model.
 Here's an example:
 
 ```
-[https://fuel.ignitionrobotics.org]
-
-  Name: Beer
-  Source URL: https://fuel.ignitionrobotics.org
-  Unique name: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer
-  Owner: caguero
-  Description: A beer can
-  Likes: 0
-  Downloads: 3
-  License name: Creative Commons - Attribution
-  License URL: http://creativecommons.org/licenses/by/4.0/
-  License image URL: https://i.creativecommons.org/l/by/4.0/88x31.png
-  Tags:
+Name: Beer
+Owner: caguero
+Version: 2
+Description: A beer can
+File size: 2969297
+Upload date: 1516833583
+Downloads: 1573
+License name: Creative Commons - Attribution
+License URL: http://creativecommons.org/licenses/by/4.0
+License image URL: https://i.creativecommons.org/l/by/4.0/88x31.png
+Server:
+  URL: https://fuel.ignitionrobotics.org
+  Version: 1.0
 ```
 
 ### Walkthrough
 
 This example contains some boilerplate to parse command line arguments and load
-some configuration. Refer to the [configuration tutorial](https://ignitionrobotics.org/tutorials/fuel_tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_configuration.html)
+some configuration. Refer to the [configuration tutorial](configuration.html)
 for details about this part of the code. Let's focus on the relevant code for
 getting details of a resource:
 
@@ -168,6 +168,6 @@ use the `AsPrettyString()` method to print its information to the screen.
 ## Download a resource
 
 Refer to the
-[configuration tutorial](https://ignitionrobotics.org/tutorials/fuel_tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_configuration.html)
+[configuration tutorial](configuration.html)
 to see an example of how to download resources programmatically.
 
