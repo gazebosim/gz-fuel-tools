@@ -70,20 +70,21 @@ computer. We use the `ign fuel download` tool for this.
 We learned above how to get resource URLs. Now we can use these URLs to download
 them. For example, try:
 
-`ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty`
+`ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/nate/worlds/Empty`
 
 Note that we passed the `-v 4` option so we get a verbose output. You should see something like:
 
 ```
-Downloading world:
+Downloading world: 
   Name: Empty
-  Owner: openrobotics
+  Owner: nate
   Server:
     URL: https://fuel.ignitionrobotics.org
     Version: 1.0
 
+[Msg] Downloading world [fuel.ignitionrobotics.org/nate/worlds/Empty]
 [Msg] Saved world at:
-  /home/louise/.ignition/fuel/fuel.ignitionrobotics.org/chapulina/worlds/Empty/1
+  /home/louise/.ignition/fuel/fuel.ignitionrobotics.org/nate/worlds/Empty/1
 Download succeeded.
 ```
 
@@ -92,7 +93,7 @@ directory, which we call the "local cache". The path is broken down as follows:
 
 `<local cache path>/<server URL>/<owner name>/<resource type>/<resource name>/<version number>`
 
-> **Tip**: You can change the local cache path on `config.yaml`.
+> **Tip**: You can change the local cache path in `config.yaml`.
 
-> **Tip**: You can also use other tools such as `wget` to download a zipped file of a world, just add `.zip` to the end of the URL, for example: `wget https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty.zip`.
+> **Tip**: You can also use other tools such as `wget` to download a zipped file of a world, just add `.zip` to the end of the URL, for example: `wget https://fuel.ignitionrobotics.org/1.0/nate/worlds/Empty.zip`.
 
