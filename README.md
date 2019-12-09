@@ -68,15 +68,29 @@ Download succeeded.
   }
 ```
 
+** Upload a model **
+
+Create an account on [https://app.ignitionrobotics.org/](https://app.ignitionrobotics.org/) and log in.
+
+While logged in, obtain the JWT token of the account from the browser.
+In Chrome and Firefox, this can be done by opening Developer Tools (`Ctrl+Shift+I`). Click on the Console tab, and type in
+```
+localStorage.id_token
+```
+This will print out the token.
+
+The token can also be obtained through the Developer Tools GUI. Click on the Application tab in Chrome (or Storage tab in Firefox). Expand the Local Storage item, click on the URL displayed, and select Key `id_token`. Its Value can be copied.
+
+The JWT token can then used to upload the model:
+```
+ign fuel upload -m ~/path_to_model --header 'authorization: Bearer <JWT TOKEN>'
+```
+
+Note that the `upload` command only works models currently, not worlds.
+
 ## TODO
 
 See issues beginning with [Fuel backend] in the title. Here are two examples.
-
-** TODO: Upload **
-```
-$ ign fuel push --owner trudy --name car --url https://fuel.ignitionrobotics.org/ --path models/car
-TODO Upload a model
-```
 
 ** TODO: Find a model on disk **
 ```
