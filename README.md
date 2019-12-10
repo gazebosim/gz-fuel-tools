@@ -84,7 +84,9 @@ This will print out the token.
 
 The token can also be obtained through the Developer Tools GUI.
 Click on the Application tab in Chrome (or Storage tab in Firefox), and expand
-the Local Storage item. In Firefox versions < 71.0, this may be under Web Developer, then Storage Inspector.
+the Local Storage item.
+In Firefox versions < 71.0, this may be under Web Developer, then Storage
+Inspector.
 Click on the URL displayed, and select Key `id_token`.
 Its Value can be copied.
 
