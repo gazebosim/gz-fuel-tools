@@ -70,23 +70,30 @@ Download succeeded.
 
 ** Upload a model **
 
-Create an account on [https://app.ignitionrobotics.org/](https://app.ignitionrobotics.org/) and log in.
+Create an account on
+[https://app.ignitionrobotics.org/](https://app.ignitionrobotics.org/) and log
+in.
 
 While logged in, obtain the JWT token of the account from the browser.
-In Chrome and Firefox, this can be done by opening Developer Tools (`Ctrl+Shift+I`). Click on the Console tab, and type in
+In Chrome and Firefox, this can be done by opening Developer Tools (
+`Ctrl+Shift+I`). Click on the Console tab, and type in
 ```
 localStorage.id_token
 ```
 This will print out the token.
 
-The token can also be obtained through the Developer Tools GUI. Click on the Application tab in Chrome (or Storage tab in Firefox). Expand the Local Storage item, click on the URL displayed, and select Key `id_token`. Its Value can be copied.
+The token can also be obtained through the Developer Tools GUI.
+Click on the Application tab in Chrome (or Storage tab in Firefox), and expand
+the Local Storage item. In Firefox versions < 71.0, this may be under Web Developer, then Storage Inspector.
+Click on the URL displayed, and select Key `id_token`.
+Its Value can be copied.
 
 The JWT token can then used to upload the model:
 ```
 ign fuel upload -m ~/path_to_model --header 'authorization: Bearer <JWT TOKEN>'
 ```
 
-Note that the `upload` command only works models currently, not worlds.
+Note that the `upload` command only works for models currently, not worlds.
 
 ## TODO
 
@@ -157,16 +164,21 @@ Please refer to the [Bitbucket Pipelines](https://bitbucket.org/ignitionrobotics
 
 # Known issue of command line tools
 
-In the event that the installation is a mix of Debian and from source, command line tools from `ign-tools` may not work correctly.
+In the event that the installation is a mix of Debian and from source, command
+line tools from `ign-tools` may not work correctly.
 
-A workaround for a single package is to define the environment variable `IGN_CONFIG_PATH` to point to the location of the Ignition library installation, where the YAML file for the package is found, such as
+A workaround for a single package is to define the environment variable
+`IGN_CONFIG_PATH` to point to the location of the Ignition library installation,
+where the YAML file for the package is found, such as
 ```
 export IGN_CONFIG_PATH=/usr/local/share/ignition
 ```
 
-However, that environment variable only takes a single path, which means if the installations from source are in different locations, only one can be specified.
+However, that environment variable only takes a single path, which means if the
+installations from source are in different locations, only one can be specified.
 
-Another workaround for working with multiple Ignition libraries on the command line is using symbolic links to each library's YAML file.
+Another workaround for working with multiple Ignition libraries on the command
+line is using symbolic links to each library's YAML file.
 ```
 mkdir ~/.ignition/tools/configs -p
 cd ~/.ignition/tools/configs/
@@ -176,3 +188,6 @@ ln -s /usr/local/share/ignition/transportlog7.yaml .
 ...
 export IGN_CONFIG_PATH=$HOME/.ignition/tools/configs
 ```
+
+This issue is tracked [here](https://bitbucket.org/ignitionrobotics/ign-tools/issues/8/too-strict-looking-for-config-paths).
+
