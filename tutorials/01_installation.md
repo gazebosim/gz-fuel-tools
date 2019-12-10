@@ -106,7 +106,7 @@ Configure Ignition Fuel Tools (choose either method a or b below):
     ```
 
 * B. Debug mode: This will generate code with debug symbols. Ignition Fuel Tools will run slower, but you'll be able to use GDB.
-∏
+
     ```
     cmake -DCMAKE_BUILD_TYPE=Debug ../
     ```
