@@ -80,8 +80,16 @@ SUBCOMMANDS = {
   "Available Options:                                                      \n"\
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
   "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
-  "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "  --header arg             Set an HTTP header, which can be used to pass\n"\
+  "                           along credentials. Two types of credentials  \n"\
+  "                           are supported on Ignition Fuel. The Private  \n"\
+  "                           token method is prefered. Private tokens can \n"\
+  "                           be created through your user settings on     \n"\
+  "                           https://app.ignitionrobotics.org.            \n"\
+  "                             1. Private token method:                   \n"\
+  "                                --header 'Private-Token <token>'        \n"\
+  "                             2. JWT method:                             \n"\
+  "                                --header 'authorization: Bearer <JWT>'  \n"+
   COMMON_OPTIONS,
 
  'upload' =>
