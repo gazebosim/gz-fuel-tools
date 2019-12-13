@@ -87,7 +87,7 @@ SUBCOMMANDS = {
   "                           be created through your user settings on     \n"\
   "                           https://app.ignitionrobotics.org.            \n"\
   "                             1. Private token method:                   \n"\
-  "                                --header 'Private-Token <token>'        \n"\
+  "                                --header 'Private-Token: <token>'       \n"\
   "                             2. JWT method:                             \n"\
   "                                --header 'authorization: Bearer <JWT>'  \n"+
   COMMON_OPTIONS,
