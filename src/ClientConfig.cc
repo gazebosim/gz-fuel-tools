@@ -329,10 +329,9 @@ bool ClientConfig::LoadConfig(const std::string &_file)
             {
               if (savedServer.Url().Str() == serverURL)
               {
-                ignerr << "URL [" << serverURL << "] already exists. "
+                ignwarn << "URL [" << serverURL << "] already exists. "
                        << "Ignoring server" << std::endl;
                 repeated = true;
-                res = false;
                 break;
               }
             }

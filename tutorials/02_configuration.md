@@ -62,13 +62,18 @@ mkdir /tmp/conf_tutorial && cd /tmp/conf_tutorial
 Download the file `download.cc` and save it under `/tmp/conf_tutorial`:
 
 ```
-wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools1/example/download.cc
+wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools4/example/download.cc
 ```
 
 Also, download `CMakeLists.txt` for compiling the example:
 
 ```
-wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools1/example/CMakeLists.txt
+wget https://bitbucket.org/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools4/example/CMakeLists.txt
+```
+
+Install a dependency:
+```
+sudo apt-get install libgflags-dev
 ```
 
 Let's compile the example:
