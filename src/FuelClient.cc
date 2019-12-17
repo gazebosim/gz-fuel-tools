@@ -456,6 +456,7 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   {
     ignerr << "Failed to upload model." << std::endl
            << "  Server: " << _id.Server().Url().Str() << std::endl
+           << "  Server API Version: " <<  _id.Server().Version() << std::endl
            << "  Route: /models\n"
            << "  REST response code: " << resp.statusCode << std::endl;
     return Result(ResultType::FETCH_ERROR);

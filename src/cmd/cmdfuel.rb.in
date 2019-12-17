@@ -32,12 +32,27 @@ LIBRARY_NAME = '@IGN_LIBRARY_NAME@'
 LIBRARY_VERSION = '@PROJECT_VERSION_FULL@'
 
 COMMON_OPTIONS =
-               "  -c [--config] arg        Path to a configuration file.\n"\
-               "  -h [--help]              Print this help message.\n"\
-               "                                                    \n"        +
-               "  --force-version <VERSION>  Use a specific library version.\n"\
-               "                                                    \n"        +
-               '  --versions                 Show the available versions.'
+  "  -c [--config] arg        Path to a configuration file.                 \n"\
+  "  -h [--help]              Print this help message.                      \n"\
+  "                                                                         \n"\
+  "  --force-version <VERSION>  Use a specific library version.             \n"\
+  "                                                                         \n"\
+  "  --versions               Show the available versions.                  \n"\
+  "                                                                         \n"\
+  " HTTP Headers:                                                           \n"\
+  "                                                                         \n"\
+  "   The following information is in regards to user authentication via    \n"\
+  "   the --header command line option.                                     \n"\
+  "                                                                         \n"\
+  "   Two types of credentials are supported on Ignition Fuel, Private      \n"\
+  "   Token and JSON Web Token(JWT). The Private Token method is prefered.  \n"\
+  "   Private tokens can be created through your  user settings on          \n"\
+  "   https://app.ignitionrobotics.org. Example usage:                      \n"\
+  "     1. Private token method:                                            \n"\
+  "         --header 'Private-Token: <token>'                               \n"\
+  "     2. JWT method:                                                      \n"\
+  "         --header 'authorization: Bearer <JWT>'                          \n"
+
 
 COMMANDS = { 'fuel' =>
   "Manage simulation resources.                                            \n"\
@@ -80,8 +95,9 @@ SUBCOMMANDS = {
   "Available Options:                                                      \n"\
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
   "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
-  "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "  --header arg             Set an HTTP header, which can be used to pass\n"\
+  "                           along credentials. Refer to the HTTP Headers \n"\
+  "                           section below.                               \n"+
   COMMON_OPTIONS,
 
  'upload' =>
@@ -97,8 +113,9 @@ SUBCOMMANDS = {
   "                           https://fuel.ignitionrobotics.org.           \n"\
   "  -p [--private]           Use this argument to make the model private. \n"\
   "                           Otherwise, the model will be public.         \n"\
-  "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "  --header arg             Set an HTTP header, which can be used to pass\n"\
+  "                           along credentials. Refer to the HTTP Headers \n"\
+  "                           section below.                               \n"+
   COMMON_OPTIONS,
 
   'meta' =>
