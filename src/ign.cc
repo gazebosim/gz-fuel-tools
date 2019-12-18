@@ -622,6 +622,24 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 }
 
 //////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteResource(
+    const char *_url, const char *_header)
+{
+  ignition::fuel_tools::ClientConfig conf;
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  ignition::fuel_tools::FuelClient client(conf);
+
+  // Store header information
+  std::vector<std::string> headers;
+  if (_header && strlen(_header) > 0)
+    headers.push_back(_header);
+
+  client.DeleteResource(ignition::common::URI(_url), headers);
+
+  return 1;
+}
+
+//////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(const char *_path)
 {
   ignition::msgs::FuelMetadata meta;

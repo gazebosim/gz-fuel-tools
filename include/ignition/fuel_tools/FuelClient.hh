@@ -149,6 +149,14 @@ namespace ignition
       /// \return Result of the delete operation
       public: Result DeleteModel(const ModelIdentifier &_id);
 
+      /// \brief Remove a resource, such as a model or world, from Ignition Fuel
+      /// \param[in] _uri The full URI of the resource, e.g:
+      /// https://fuel.ignitionrobotics.org/1.0/openrobotcs/model/my_model
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \return Result of the delete operation
+      public: Result DeleteResource(const ignition::common::URI &_uri,
+                  const std::vector<std::string> &_headers);
+
       /// \brief Download a model from ignition fuel. This will override an
       /// existing local copy of the model.
       /// \param[in] _id The model identifier.

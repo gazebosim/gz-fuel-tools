@@ -465,10 +465,41 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DeleteModel(const ModelIdentifier &/*_id*/)
+Result FuelClient::DeleteModel(const ModelIdentifier &_id)
 {
-  // TODO(nkoenig) Delete a model and return a Result
-  return Result(ResultType::DELETE_ERROR);
+  return DeleteResource(_id.Server().Url(), {});
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DeleteResource(const ignition::common::URI &_uri,
+    const std::vector<std::string> &_headers)
+{
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  std::string fullPath = _uri.Path().Str();
+  int firstSlash = fullPath.find("/");
+  int secondSlash = fullPath.find("/", firstSlash+1);
+
+  std::string server = _uri.Scheme() + "://" + fullPath.substr(0, firstSlash);
+  std::string version = fullPath.substr(firstSlash+1, secondSlash-firstSlash-1);
+  std::string path = fullPath.substr(secondSlash+1);
+
+  // Send the request.
+  resp = rest.Request(HttpMethod::DELETE, server, version, path, {},
+      _headers, "", {});
+
+  if (resp.statusCode != 200)
+  {
+    ignerr << "Failed to delete resource." << std::endl
+           << "  Server: " << server << std::endl
+           << "  API Version: " << version << std::endl
+           << "  Route: " << path << std::endl
+           << "  REST response code: " << resp.statusCode << std::endl;
+    return Result(ResultType::FETCH_ERROR);
+  }
+
+  return Result(ResultType::DELETE);
 }
 
 //////////////////////////////////////////////////

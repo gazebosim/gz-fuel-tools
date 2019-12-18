@@ -78,6 +78,19 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     const char *_url, const char *_header = nullptr,
     const char *_private = nullptr);
 
+/// \brief External hook to execute 'ign fuel delete [options]' from the command
+/// line.
+///
+/// Example usage, including a private access token which is required:
+///
+/// `ign fuel delete -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"`
+///
+/// \param[in] _url Resource URL.
+/// \param[in] _header An HTTP header.
+/// \return 1 if successful, 0 if not.
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteResource(
+    const char *_url, const char *_header = nullptr);
+
 /// \brief External hook to execute 'ign fuel meta --config2pbtxt path'
 /// from the command line.
 /// \param[in] _path Resource path.
