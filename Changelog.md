@@ -1,5 +1,10 @@
 ## Ignition Fuel Tools 4.x
 
+### Ignition Fuel Tools 4.1.0 (20xx-xx-xx)
+
+1. Resource deletion CLI.
+    * [Pull request 119](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/119)
+
 ### Ignition Fuel Tools 4.0.0 (2019-12-10)
 
 1. Model upload CLI, resource metadata CLI, depend on ign-msgs5.
