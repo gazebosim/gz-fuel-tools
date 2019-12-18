@@ -147,6 +147,8 @@ namespace ignition
       /// \brief Remove a model from ignition fuel
       /// \param[in] _id The model identifier.
       /// \return Result of the delete operation
+      /// Deprecate this function in ign-fuel-tools5. DeleteResource
+      /// replaces this function.
       public: Result DeleteModel(const ModelIdentifier &_id);
 
       /// \brief Remove a resource, such as a model or world, from Ignition Fuel
