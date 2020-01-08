@@ -622,7 +622,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteResource(
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteUrl(
     const char *_url, const char *_header)
 {
   ignition::fuel_tools::ClientConfig conf;
@@ -634,7 +634,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteResource(
   if (_header && strlen(_header) > 0)
     headers.push_back(_header);
 
-  client.DeleteResource(ignition::common::URI(_url), headers);
+  client.DeleteUrl(ignition::common::URI(_url), headers);
 
   return 1;
 }

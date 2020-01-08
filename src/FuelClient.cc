@@ -467,23 +467,47 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
 //////////////////////////////////////////////////
 Result FuelClient::DeleteModel(const ModelIdentifier &_id)
 {
-  return DeleteResource(_id.Server().Url(), {});
+  return DeleteUrl(_id.Server().Url(), {});
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DeleteResource(const ignition::common::URI &_uri,
+Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
     const std::vector<std::string> &_headers)
 {
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
-  std::string fullPath = _uri.Path().Str();
-  int firstSlash = fullPath.find("/");
-  int secondSlash = fullPath.find("/", firstSlash+1);
+  std::string server;
+  std::string version;
+  std::string path;
+  std::string type;
+  std::string name;
 
-  std::string server = _uri.Scheme() + "://" + fullPath.substr(0, firstSlash);
-  std::string version = fullPath.substr(firstSlash+1, secondSlash-firstSlash-1);
-  std::string path = fullPath.substr(secondSlash+1);
+  ModelIdentifier modelId;
+  WorldIdentifier worldId;
+  if (this->ParseModelUrl(_uri, modelId))
+  {
+    type = "model";
+    name = modelId.UniqueName();
+    server = modelId.Server().Url().Str();
+    version = modelId.Server().Version();
+    path = ignition::common::joinPaths(modelId.Owner(), "models",
+        modelId.Name());
+  }
+  else if (this->ParseWorldUrl(_uri, worldId))
+  {
+    type = "world";
+    name = worldId.UniqueName();
+    server = worldId.Server().Url().Str();
+    version = worldId.Server().Version();
+    path = ignition::common::joinPaths(worldId.Owner(), "worlds",
+        worldId.Name());
+  }
+  else
+  {
+    ignerr << "Unable to parse URI[" << _uri.Str() << "]\n";
+    return Result(ResultType::FETCH_ERROR);
+  }
 
   // Send the request.
   resp = rest.Request(HttpMethod::DELETE, server, version, path, {},
@@ -497,6 +521,10 @@ Result FuelClient::DeleteResource(const ignition::common::URI &_uri,
            << "  Route: " << path << std::endl
            << "  REST response code: " << resp.statusCode << std::endl;
     return Result(ResultType::FETCH_ERROR);
+  }
+  else
+  {
+    ignmsg << "Deleted " << type << " [" << name << "]" << std::endl;
   }
 
   return Result(ResultType::DELETE);

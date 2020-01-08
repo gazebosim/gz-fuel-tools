@@ -88,7 +88,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 /// \param[in] _url Resource URL.
 /// \param[in] _header An HTTP header.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteResource(
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteUrl(
     const char *_url, const char *_header = nullptr);
 
 /// \brief External hook to execute 'ign fuel meta --config2pbtxt path'

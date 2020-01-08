@@ -317,8 +317,8 @@ class Cmd
           exit(-1)
         end
       when 'delete'
-        Importer.extern 'int deleteResource(const char *, const char *)'
-        if not Importer.deleteResource(options['url'], options['header'])
+        Importer.extern 'int deleteUrl(const char *, const char *)'
+        if not Importer.deleteUrl(options['url'], options['header'])
           exit(-1)
         end
       when 'meta'
