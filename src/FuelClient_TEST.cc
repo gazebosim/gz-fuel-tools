@@ -1175,24 +1175,12 @@ TEST(FuelClient, Models)
 
   {
     ModelIter iter = client.Models(modelId);
-    // If you have models in the cache location, such as ~/.ignition/fuel,
-    // then the model iter will be true. On CI systems, which probably
-    // have an empty cache, the model iter will be false.
-    if (common::exists(client.Config().CacheLocation()))
-      EXPECT_TRUE(iter);
-    else
-      EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 
   {
     ModelIter const iter = client.Models(modelId);
-    // If you have models in the cache location, such as ~/.ignition/fuel,
-    // then the model iter will be true. On CI systems, which probably
-    // have an empty cache, the model iter will be false.
-    if (common::exists(client.Config().CacheLocation()))
-      EXPECT_TRUE(iter);
-    else
-      EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 
   {
