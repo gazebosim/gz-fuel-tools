@@ -83,7 +83,9 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 ///
 /// Example usage, including a private access token which is required:
 ///
-/// `ign fuel delete -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"`
+/// `ign fuel delete \
+/// -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance \
+/// --header "Private-Token: <access_token>"`
 ///
 /// \param[in] _url Resource URL.
 /// \param[in] _header An HTTP header.

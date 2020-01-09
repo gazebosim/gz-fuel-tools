@@ -1161,8 +1161,15 @@ TEST(FuelClient, ModelDetails)
   ModelIdentifier modelId;
   ModelIdentifier model;
 
+  // An empty modelId will get a list of the models. The fetch will be
+  // successful.
   Result result = client.ModelDetails(modelId, model);
-  EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
+  EXPECT_EQ(ResultType::FETCH, result.Type());
+  EXPECT_TRUE(model.Name().empty());
+
+  modelId.SetOwner("bad-owner");
+  Result result2 = client.ModelDetails(modelId, model);
+  EXPECT_EQ(ResultType::FETCH_ERROR, result2.Type());
 }
 
 /////////////////////////////////////////////////

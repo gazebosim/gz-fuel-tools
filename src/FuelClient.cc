@@ -208,9 +208,11 @@ Result FuelClient::ModelDetails(const ModelIdentifier &_id,
 
   auto serverUrl = _id.Server().Url().Str();
   auto version = _id.Server().Version();
-  auto path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
+  common::URIPath path;
+  path = path / _id.Owner() / "models" / _id.Name();
 
-  resp = rest.Request(HttpMethod::GET, serverUrl, version, path, {}, {}, "");
+  resp = rest.Request(HttpMethod::GET, serverUrl, version,
+      path.Str(), {}, {}, "");
   if (resp.statusCode != 200)
     return Result(ResultType::FETCH_ERROR);
 
@@ -268,9 +270,11 @@ Result FuelClient::WorldDetails(const WorldIdentifier &_id,
 
   auto serverUrl = _id.Server().Url().Str();
   auto version = _id.Server().Version();
-  auto path = ignition::common::joinPaths(_id.Owner(), "worlds", _id.Name());
+  common::URIPath path;
+  path = path / _id.Owner() / "worlds" / _id.Name();
 
-  resp = rest.Request(HttpMethod::GET, serverUrl, version, path, {}, {}, "");
+  resp = rest.Request(HttpMethod::GET, serverUrl, version,
+      path.Str(), {}, {}, "");
   if (resp.statusCode != 200)
     return Result(ResultType::FETCH_ERROR);
 
@@ -311,13 +315,15 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id)
 
   // TODO(nkoenig) try to fetch model directly from a server
   // Note: ign-fuel-server doesn't like URLs ending in /
-  std::string path;
-  if (!_id.Name().empty())
-    path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
-  else
-    path = ignition::common::joinPaths(_id.Owner(), "models");
+  common::URIPath path;
 
-  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
+  if (!_id.Name().empty())
+    path = path / _id.Owner() / "models" / _id.Name();
+  else
+    path = path / _id.Owner() / "models";
+
+  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(),
+      path.Str());
 }
 
 //////////////////////////////////////////////////
@@ -332,13 +338,14 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
 
   // TODO(nkoenig) try to fetch model directly from a server
   // Note: ign-fuel-server doesn't like URLs ending in /
-  std::string path;
+  common::URIPath path;
   if (!_id.Name().empty())
-    path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
+    path = path / _id.Owner() / "models" / _id.Name();
   else
-    path = ignition::common::joinPaths(_id.Owner(), "models");
+    path = path / _id.Owner() / "models";
 
-  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
+  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(),
+      path.Str());
 }
 
 //////////////////////////////////////////////////
@@ -352,14 +359,14 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
   // Note: ign-fuel-server doesn't like URLs ending in /
-  std::string path;
+  common::URIPath path;
   if (!_id.Name().empty())
-    path = ignition::common::joinPaths(_id.Owner(), "worlds", _id.Name());
+    path = path / _id.Owner() / "worlds" / _id.Name();
   else
-    path = ignition::common::joinPaths(_id.Owner(), "worlds");
+    path = path / _id.Owner() / "worlds";
 
   Rest rest(this->dataPtr->rest);
-  return WorldIterFactory::Create(rest, _id.Server(), path);
+  return WorldIterFactory::Create(rest, _id.Server(), path.Str());
 }
 
 //////////////////////////////////////////////////
@@ -465,9 +472,12 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DeleteModel(const ModelIdentifier &_id)
+Result FuelClient::DeleteModel(const ModelIdentifier &)
 {
-  return DeleteUrl(_id.Server().Url(), {});
+  ignerr << "Model deletion requires a private-token or JWT to be specified"
+    << " in a header. No action is performed.\n";
+
+  return Result(ResultType::DELETE_ERROR);
 }
 
 //////////////////////////////////////////////////
@@ -479,7 +489,7 @@ Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
 
   std::string server;
   std::string version;
-  std::string path;
+  common::URIPath path;
   std::string type;
   std::string name;
 
@@ -491,8 +501,7 @@ Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
     name = modelId.UniqueName();
     server = modelId.Server().Url().Str();
     version = modelId.Server().Version();
-    path = ignition::common::joinPaths(modelId.Owner(), "models",
-        modelId.Name());
+    path = path / modelId.Owner() / "models" / modelId.Name();
   }
   else if (this->ParseWorldUrl(_uri, worldId))
   {
@@ -500,17 +509,16 @@ Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
     name = worldId.UniqueName();
     server = worldId.Server().Url().Str();
     version = worldId.Server().Version();
-    path = ignition::common::joinPaths(worldId.Owner(), "worlds",
-        worldId.Name());
+    path = path / worldId.Owner() / "worlds" / worldId.Name();
   }
   else
   {
     ignerr << "Unable to parse URI[" << _uri.Str() << "]\n";
-    return Result(ResultType::FETCH_ERROR);
+    return Result(ResultType::DELETE_ERROR);
   }
 
   // Send the request.
-  resp = rest.Request(HttpMethod::DELETE, server, version, path, {},
+  resp = rest.Request(HttpMethod::DELETE, server, version, path.Str(), {},
       _headers, "", {});
 
   if (resp.statusCode != 200)
@@ -518,9 +526,9 @@ Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
     ignerr << "Failed to delete resource." << std::endl
            << "  Server: " << server << std::endl
            << "  API Version: " << version << std::endl
-           << "  Route: " << path << std::endl
+           << "  Route: " << path.Str() << std::endl
            << "  REST response code: " << resp.statusCode << std::endl;
-    return Result(ResultType::FETCH_ERROR);
+    return Result(ResultType::DELETE_ERROR);
   }
   else
   {
@@ -549,9 +557,9 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   }
 
   // Route
-  std::string route = ignition::common::joinPaths(_id.Owner(),
-        "models", _id.Name(), _id.VersionStr(),
-        _id.Name() + ".zip");
+  common::URIPath route;
+  route = route / _id.Owner() / "models" / _id.Name() / _id.VersionStr() /
+        (_id.Name() + ".zip");
 
   ignmsg << "Downloading model [" << _id.UniqueName() << "]" << std::endl;
 
@@ -559,12 +567,12 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
-      _id.Server().Version(), route, {}, _headers, "");
+      _id.Server().Version(), route.Str(), {}, _headers, "");
   if (resp.statusCode != 200)
   {
     ignerr << "Failed to download model." << std::endl
            << "  Server: " << _id.Server().Url().Str() << std::endl
-           << "  Route: " << route << std::endl
+           << "  Route: " << route.Str() << std::endl
            << "  REST response code: " << resp.statusCode << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
@@ -612,9 +620,9 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
   }
 
   // Route
-  auto route = ignition::common::joinPaths(_id.Owner(),
-        "worlds", _id.Name(), _id.VersionStr(),
-        _id.Name() + ".zip");
+  common::URIPath route;
+  route = route / _id.Owner() / "worlds" / _id.Name() / _id.VersionStr() /
+        (_id.Name() + ".zip");
 
   ignmsg << "Downloading world [" << _id.UniqueName() << "]" << std::endl;
 
@@ -622,12 +630,12 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
-      _id.Server().Version(), route, {}, {}, "");
+      _id.Server().Version(), route.Str(), {}, {}, "");
   if (resp.statusCode != 200)
   {
     ignerr << "Failed to download world." << std::endl
            << "  Server: " << _id.Server().Url().Str() << std::endl
-           << "  Route: " << route << std::endl
+           << "  Route: " << route.Str() << std::endl
            << "  REST response code: " << resp.statusCode << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
