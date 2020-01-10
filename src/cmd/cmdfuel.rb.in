@@ -48,6 +48,7 @@ COMMANDS = { 'fuel' =>
   "  list                     List available resources                     \n"\
   "  download                 Download resources                           \n"\
   "  upload                   Upload resources                             \n"\
+  "  delete                   Delete resources                             \n"\
   "  meta                     Read and write resource metadata             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
@@ -97,6 +98,19 @@ SUBCOMMANDS = {
   "                           https://fuel.ignitionrobotics.org.           \n"\
   "  -p [--private]           Use this argument to make the model private. \n"\
   "                           Otherwise, the model will be public.         \n"\
+  "  --header arg             Set an HTTP header, such as                  \n"\
+  "                           --header 'authorization: Bearer JWT'.        \n" +
+  COMMON_OPTIONS,
+  
+ 'delete' =>
+  "Delete simulation resources                                             \n"\
+  "                                                                        \n"\
+  "  ign fuel delete [options]                                             \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  -u [--url] arg           URL of the server that should receive        \n"\
+  "                           the model. If unspecified, the server will be\n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'authorization: Bearer JWT'.        \n" +
   COMMON_OPTIONS,
@@ -220,6 +234,11 @@ class Cmd
         puts "Missing model path."
         exit(-1)
       end
+    when 'delete'
+      if options['url'] == ''
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        exit(-1)
+      end
     end
 
     options
@@ -295,6 +314,11 @@ class Cmd
                                options['url'],
                                options['header'],
                                options['private'])
+          exit(-1)
+        end
+      when 'delete'
+        Importer.extern 'int deleteUrl(const char *, const char *)'
+        if not Importer.deleteUrl(options['url'], options['header'])
           exit(-1)
         end
       when 'meta'
