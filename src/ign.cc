@@ -40,6 +40,7 @@
 #include "ignition/fuel_tools/config.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Helpers.hh"
+#include "ignition/fuel_tools/Result.hh"
 #include "ign.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
@@ -618,6 +619,48 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     }
     ++dirIter;
   }
+  return 1;
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteUrl(
+    const char *_url, const char *_header)
+{
+  ignition::fuel_tools::ClientConfig conf;
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  ignition::fuel_tools::FuelClient client(conf);
+
+  // Store header information
+  std::vector<std::string> headers;
+  if (_header && strlen(_header) > 0)
+    headers.push_back(_header);
+
+  ignition::common::URI url(_url);
+
+  if (ignition::common::Console::Verbosity() >= 3)
+  {
+    ignition::fuel_tools::ModelIdentifier model;
+    ignition::fuel_tools::WorldIdentifier world;
+
+    if (client.ParseModelUrl(url, model))
+    {
+      std::cout << "Deleting model: " << "\033[36m" << std::endl
+        << model.AsPrettyString("  ") << "\033[39m" << std::endl;
+    }
+    else if (client.ParseWorldUrl(url, world))
+    {
+      std::cout << "Deleting world: " << "\033[36m" << std::endl
+                << world.AsPrettyString("  ") << "\033[39m" << std::endl;
+    }
+    else
+    {
+      std::cout << "Invalid URL: only models and worlds can be delete so far."
+        << std::endl;
+    }
+  }
+
+  client.DeleteUrl(url, headers);
+
   return 1;
 }
 

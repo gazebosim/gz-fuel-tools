@@ -8,7 +8,12 @@
 
 ### Ignition Fuel Tools 4.x.x
 
-### Ignition Fuel Tools 4.0.0 (20xx-xx-xx)
+### Ignition Fuel Tools 4.1.0 (20xx-xx-xx)
+
+1. Resource deletion CLI.
+    * [Pull request 119](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/119)
+
+### Ignition Fuel Tools 4.0.0 (2019-12-10)
 
 1. Model upload CLI, resource metadata CLI, depend on ign-msgs5.
     * [Pull request 108](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/108)
@@ -17,8 +22,20 @@
 
 ### Ignition Fuel Tools 3.x.x (20xx-xx-xx)
 
+1. Print message when downloading a resource.
+    * [Pull request 102](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/102)
+
 1. Use `${YAML_TARGET}` instead of `YAML::YAML` imported target.
     * [Pull request 103](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/103)
+
+1. Convert emissive map file path.
+    * [Pull request 105](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/105)
+
+1. Fix windows build with `popen` and `pclose` macros.
+    * [Pull request 109](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/109)
+
+1. Remove std::experimental for filesystem (support for VS2019).
+    * [Pull request 120](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/120)
 
 ### Ignition Fuel Tools 3.2.1 (2019-08-12)
 
@@ -120,4 +137,3 @@
     * [Pull request 67](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/67)
 
 ### Ignition Fuel Tools 1.0.0 (2018-01-25)
-
