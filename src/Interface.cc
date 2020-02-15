@@ -15,6 +15,7 @@
  *
 */
 
+#include "ignition/common/Console.hh"
 #include "ignition/fuel_tools/Interface.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
@@ -37,6 +38,7 @@ namespace ignition
 
       ignition::fuel_tools::ModelIdentifier model;
       ignition::fuel_tools::WorldIdentifier world;
+      std::string fileUrl;
       ignition::common::URI uri(_uri);
       // Download the model, if it is a model URI
       if (_client.ParseModelUrl(uri, model) &&
@@ -44,11 +46,27 @@ namespace ignition
       {
         _client.DownloadModel(uri, result);
       }
+      // Download the model, if it's a model file URI
+      else if (_client.ParseModelFileUrl(uri, model, fileUrl) &&
+          !_client.CachedModelFile(uri, result))
+      {
+        auto modelUri = _uri.substr(0, _uri.find("files")-1);
+        _client.DownloadModel(common::URI(modelUri), result);
+        result += "/" + fileUrl;
+      }
       // Download the world, if it is a world URI
       else if (_client.ParseWorldUrl(uri, world) &&
                !_client.CachedWorld(uri, result))
       {
         _client.DownloadWorld(uri, result);
+      }
+      // Download the world, if it's a world file URI
+      else if (_client.ParseWorldFileUrl(uri, world, fileUrl) &&
+          !_client.CachedWorldFile(uri, result))
+      {
+        auto worldUri = _uri.substr(0, _uri.find(fileUrl));
+        _client.DownloadWorld(common::URI(worldUri), result);
+        result += "/" + fileUrl;
       }
 
       return result;
