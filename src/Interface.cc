@@ -50,7 +50,8 @@ namespace ignition
       else if (_client.ParseModelFileUrl(uri, model, fileUrl) &&
           !_client.CachedModelFile(uri, result))
       {
-        auto modelUri = _uri.substr(0, _uri.find("files")-1);
+        auto modelUri = _uri.substr(0,
+            _uri.find("files", model.UniqueName().size())-1);
         _client.DownloadModel(common::URI(modelUri), result);
         result += "/" + fileUrl;
       }
@@ -64,7 +65,8 @@ namespace ignition
       else if (_client.ParseWorldFileUrl(uri, world, fileUrl) &&
           !_client.CachedWorldFile(uri, result))
       {
-        auto worldUri = _uri.substr(0, _uri.find("files")-1);
+        auto worldUri = _uri.substr(0,
+            _uri.find("files", world.UniqueName().size())-1);
         _client.DownloadWorld(common::URI(worldUri), result);
         result += "/" + fileUrl;
       }

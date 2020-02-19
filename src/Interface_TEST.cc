@@ -119,11 +119,11 @@ TEST(Interface, FetchResources)
     std::string path = fetchResourceWithClient(modelFileUrl.Str(), client);
 
     // Check entire model was downloaded to `1`
+    EXPECT_TRUE(common::exists(
+        "test_cache/fuel.ignitionrobotics.org/openrobotics/models/Bus/1"));
     EXPECT_EQ(path, common::cwd() +
         "/test_cache/fuel.ignitionrobotics.org/openrobotics/models/Bus/1/"
         "meshes/bus.obj");
-    EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/openrobotics/models/Bus/1"));
     EXPECT_TRUE(common::exists(
         "test_cache/fuel.ignitionrobotics.org/openrobotics/models/Bus/1/"
         "model.sdf"));
@@ -158,6 +158,95 @@ TEST(Interface, FetchResources)
       EXPECT_EQ(common::cwd() +
           "/test_cache/fuel.ignitionrobotics.org/openrobotics/models/Bus/1"
           "/meshes/bus.obj",
+          cachedPath);
+     }
+  }
+
+  // World
+  {
+    // Check it's not cached
+    common::URI worldUrl{
+      "https://fuel.ignitionrobotics.org/1.0/nate/worlds/Empty"};
+    {
+      Result res = client.CachedWorld(worldUrl, cachedPath);
+      EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
+      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+    }
+
+    // Download world
+    std::string path = fetchResourceWithClient(worldUrl.Str(), client);
+
+    // Check it was downloaded to `1`
+    EXPECT_EQ(path, common::cwd() +
+        "/test_cache/fuel.ignitionrobotics.org/nate/worlds/Empty/1");
+    EXPECT_TRUE(common::exists(
+        "test_cache/fuel.ignitionrobotics.org/nate/worlds/Empty/1"));
+    EXPECT_TRUE(common::exists(
+        "test_cache/fuel.ignitionrobotics.org/nate/worlds/Empty/1/"
+        "empty.world"));
+
+    // Check it is cached
+    {
+      Result res = client.CachedWorld(worldUrl, cachedPath);
+      EXPECT_TRUE(res);
+      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(common::cwd() +
+          "/test_cache/fuel.ignitionrobotics.org/nate/worlds/Empty/1",
+          cachedPath);
+     }
+  }
+
+  // World file
+  {
+    // Check neither file nor its world are cached
+    common::URI worldUrl{
+      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/1/"};
+    common::URI worldFileUrl{
+      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/1/"
+      "files/thumbnails/1.png"};
+
+    {
+      Result res = client.CachedWorld(worldUrl, cachedPath);
+      EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
+      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+    }
+    {
+      Result res = client.CachedWorldFile(worldFileUrl, cachedPath);
+      EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
+      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+    }
+
+    // Download world file
+    std::string path = fetchResourceWithClient(worldFileUrl.Str(), client);
+
+    // Check entire world was downloaded to `1`
+    EXPECT_TRUE(common::exists(
+        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1"));
+    EXPECT_EQ(path, common::cwd() +
+        "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1/"
+        "thumbnails/1.png");
+    EXPECT_TRUE(common::exists(
+        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1/"
+        "test.world"));
+
+    // Check world is cached
+    {
+      Result res = client.CachedWorld(worldUrl, cachedPath);
+      EXPECT_TRUE(res);
+      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(common::cwd() +
+          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1",
+          cachedPath);
+     }
+
+    // Check file is cached
+    {
+      Result res = client.CachedWorldFile(worldFileUrl, cachedPath);
+      EXPECT_TRUE(res);
+      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(common::cwd() +
+          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1"
+          "/thumbnails/1.png",
           cachedPath);
      }
   }
