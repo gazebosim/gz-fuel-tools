@@ -1,12 +1,21 @@
 ## Ignition Fuel Tools 4.x
 
-### Ignition Fuel Tools 4.1.0 (20xx-xx-xx)
+### Ignition Fuel Tools 4.X.X (20xx-xx-xx)
+
+
+
+### Ignition Fuel Tools 4.1.0 (2020-02-27)
 
 1. Resource deletion CLI.
     * [Pull request 119](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/119)
 
 1. Fetch files
     * [Pull request 123](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/123)
+
+1. README and tutorial updates:
+    * [Pull request 113](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/113)
+    * [Pull request 114](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/114)
+    * [Pull request 115](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/115)
 
 ### Ignition Fuel Tools 4.0.0 (2019-12-10)
 
