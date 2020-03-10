@@ -297,15 +297,18 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id)
   if (localIter)
     return localIter;
 
-  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
-
   // TODO(nkoenig) try to fetch model directly from a server
   // Note: ign-fuel-server doesn't like URLs ending in /
   std::string path;
-  if (!_id.Name().empty())
+  if (!_id.Name().empty() && !_id.Owner().empty())
     path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
-  else
+  else if (!_id.Owner().empty())
     path = ignition::common::joinPaths(_id.Owner(), "models");
+
+  if (path.empty())
+    return localIter;
+
+  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
   return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
 }
@@ -318,15 +321,15 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
   if (localIter)
     return localIter;
 
-  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
-
   // TODO(nkoenig) try to fetch model directly from a server
   // Note: ign-fuel-server doesn't like URLs ending in /
   std::string path;
-  if (!_id.Name().empty())
+  if (!_id.Name().empty() && !_id.Owner().empty())
     path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
-  else
+  else if (!_id.Owner().empty())
     path = ignition::common::joinPaths(_id.Owner(), "models");
+
+  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
   return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
 }

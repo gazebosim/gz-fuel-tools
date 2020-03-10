@@ -123,11 +123,18 @@ void createLocalWorld(ClientConfig &_conf)
 }
 
 /////////////////////////////////////////////////
-/// \brief Nothing crashes
-TEST(FuelClient, ParseModelURL)
+class FuelClientTest : public ::testing::Test
 {
-  common::Console::SetVerbosity(4);
+  public: void SetUp() override
+  {
+    ignition::common::Console::SetVerbosity(4);
+  }
+};
 
+/////////////////////////////////////////////////
+/// \brief Nothing crashes
+TEST_F(FuelClientTest, ParseModelURL)
+{
   // * without client config
   // * with server API version
   // * without model version
@@ -272,10 +279,8 @@ TEST(FuelClient, ParseModelURL)
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, ParseModelFileURL)
+TEST_F(FuelClientTest, ParseModelFileURL)
 {
-  common::Console::SetVerbosity(4);
-
   // URL - without client config
   {
     FuelClient client;
@@ -388,7 +393,7 @@ TEST(FuelClient, ParseModelFileURL)
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, DownloadModel)
+TEST_F(FuelClientTest, DownloadModel)
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
@@ -521,10 +526,8 @@ TEST(FuelClient, DownloadModel)
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, CachedModel)
+TEST_F(FuelClientTest, CachedModel)
 {
-  common::Console::SetVerbosity(4);
-
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -654,10 +657,8 @@ TEST(FuelClient, CachedModel)
 
 /////////////////////////////////////////////////
 /// \brief Nothing crashes
-TEST(FuelClient, ParseWorldUrl)
+TEST_F(FuelClientTest, ParseWorldUrl)
 {
-  common::Console::SetVerbosity(4);
-
   // * without client config
   // * with server API version
   // * without world version
@@ -800,10 +801,8 @@ TEST(FuelClient, ParseWorldUrl)
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, ParseWorldFileUrl)
+TEST_F(FuelClientTest, ParseWorldFileUrl)
 {
-  common::Console::SetVerbosity(4);
-
   // URL - without client config
   {
     FuelClient client;
@@ -916,10 +915,8 @@ TEST(FuelClient, ParseWorldFileUrl)
 }
 
 //////////////////////////////////////////////////
-TEST(FuelClient, DownloadWorld)
+TEST_F(FuelClientTest, DownloadWorld)
 {
-  common::Console::SetVerbosity(4);
-
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -999,10 +996,8 @@ TEST(FuelClient, DownloadWorld)
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, CachedWorld)
+TEST_F(FuelClientTest, CachedWorld)
 {
-  common::Console::SetVerbosity(4);
-
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -1132,7 +1127,7 @@ TEST(FuelClient, CachedWorld)
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, Config)
+TEST_F(FuelClientTest, Config)
 {
   FuelClient client;
   ClientConfig &config = client.Config();
@@ -1145,7 +1140,7 @@ TEST(FuelClient, Config)
 
 /////////////////////////////////////////////////
 /// \brief Expect model download to fail with lack of server
-TEST(FuelClient, ModelDownload)
+TEST_F(FuelClientTest, ModelDownload)
 {
   FuelClient client;
 
@@ -1155,7 +1150,18 @@ TEST(FuelClient, ModelDownload)
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, ModelDetails)
+/// \brief Expect world download to fail with lack of server
+TEST_F(FuelClientTest, WorldDownload)
+{
+  FuelClient client;
+
+  std::string path;
+  Result result = client.DownloadWorld(common::URI("bad"), path);
+  EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
+TEST_F(FuelClientTest, ModelDetails)
 {
   FuelClient client;
   ModelIdentifier modelId;
@@ -1166,26 +1172,37 @@ TEST(FuelClient, ModelDetails)
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, Models)
+TEST_F(FuelClientTest, WorldDetails)
 {
-  common::Console::SetVerbosity(4);
-
-  // By default, will use https://fuel.ignitionrobotics.org
   FuelClient client;
+  WorldIdentifier worldId;
+  WorldIdentifier world;
+
+  Result result = client.WorldDetails(worldId, world);
+  EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
+TEST_F(FuelClientTest, Models)
+{
+  ClientConfig config;
+  config.SetCacheLocation(common::cwd() + "/test_cache");
+  FuelClient client(config);
   ServerConfig serverConfig;
   ModelIdentifier modelId;
 
   {
     ModelIter iter = client.Models(modelId);
-    EXPECT_TRUE(iter);
+    EXPECT_FALSE(iter);
   }
 
   {
     ModelIter const iter = client.Models(modelId);
-    EXPECT_TRUE(iter);
+    EXPECT_FALSE(iter);
   }
 
   {
+    // Uses fuel.ignitionrobotics.org by default
     ModelIter iter = client.Models(serverConfig);
     EXPECT_TRUE(iter);
   }
@@ -1193,12 +1210,44 @@ TEST(FuelClient, Models)
   {
     serverConfig.Clear();
     ModelIter const iter = client.Models(serverConfig);
-    EXPECT_TRUE(iter);
+    EXPECT_FALSE(iter);
   }
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, DownloadModelFail)
+TEST_F(FuelClientTest, Worlds)
+{
+  ClientConfig config;
+  config.SetCacheLocation(common::cwd() + "/test_cache");
+  FuelClient client(config);
+  ServerConfig serverConfig;
+  WorldIdentifier worldId;
+
+  {
+    WorldIter iter = client.Worlds(worldId);
+    EXPECT_FALSE(iter);
+  }
+
+  {
+    WorldIter const iter = client.Worlds(worldId);
+    EXPECT_FALSE(iter);
+  }
+
+  {
+    // Uses fuel.ignitionrobotics.org by default
+    WorldIter iter = client.Worlds(serverConfig);
+    EXPECT_TRUE(iter);
+  }
+
+  {
+    serverConfig.Clear();
+    WorldIter const iter = client.Worlds(serverConfig);
+    EXPECT_FALSE(iter);
+  }
+}
+
+/////////////////////////////////////////////////
+TEST_F(FuelClientTest, DownloadModelFail)
 {
   FuelClient client;
   ModelIdentifier modelId;
@@ -1208,7 +1257,17 @@ TEST(FuelClient, DownloadModelFail)
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, DeleteModelFail)
+TEST_F(FuelClientTest, DownloadWorldFail)
+{
+  FuelClient client;
+  WorldIdentifier worldId;
+
+  Result result = client.DownloadWorld(worldId);
+  EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
+TEST_F(FuelClientTest, DeleteModelFail)
 {
   FuelClient client;
   ModelIdentifier modelId;
@@ -1218,7 +1277,7 @@ TEST(FuelClient, DeleteModelFail)
 }
 
 /////////////////////////////////////////////////
-TEST(FuelClient, UploadModelFail)
+TEST_F(FuelClientTest, UploadModelFail)
 {
   FuelClient client;
   ModelIdentifier modelId;
