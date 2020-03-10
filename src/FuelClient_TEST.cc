@@ -1168,18 +1168,21 @@ TEST(FuelClient, ModelDetails)
 /////////////////////////////////////////////////
 TEST(FuelClient, Models)
 {
+  common::Console::SetVerbosity(4);
+
+  // By default, will use https://fuel.ignitionrobotics.org
   FuelClient client;
   ServerConfig serverConfig;
   ModelIdentifier modelId;
 
   {
     ModelIter iter = client.Models(modelId);
-    EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 
   {
     ModelIter const iter = client.Models(modelId);
-    EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 
   {
@@ -1190,7 +1193,7 @@ TEST(FuelClient, Models)
   {
     serverConfig.Clear();
     ModelIter const iter = client.Models(serverConfig);
-    EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 }
 
