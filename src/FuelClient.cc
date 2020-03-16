@@ -212,21 +212,7 @@ Result FuelClient::ModelDetails(const ModelIdentifier &_id,
 //////////////////////////////////////////////////
 ModelIter FuelClient::Models(const ServerConfig &_server)
 {
-  ModelIter iter = ModelIterFactory::Create(this->dataPtr->rest,
-      _server, "models");
-
-  if (!iter)
-  {
-    // Return just the cached models
-    ignwarn << "Failed to fetch models from server, returning cached models."
-            << std::endl << _server.AsString() << std::endl;
-
-    ModelIdentifier id;
-    id.SetServer(_server);
-
-    return this->dataPtr->cache->MatchingModels(id);
-  }
-  return iter;
+  return const_cast<const FuelClient*>(this)->Models(_server);
 }
 
 //////////////////////////////////////////////////
@@ -292,25 +278,7 @@ WorldIter FuelClient::Worlds(const ServerConfig &_server) const
 //////////////////////////////////////////////////
 ModelIter FuelClient::Models(const ModelIdentifier &_id)
 {
-  // Check local cache first
-  ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
-  if (localIter)
-    return localIter;
-
-  // TODO(nkoenig) try to fetch model directly from a server
-  // Note: ign-fuel-server doesn't like URLs ending in /
-  std::string path;
-  if (!_id.Name().empty() && !_id.Owner().empty())
-    path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
-  else if (!_id.Owner().empty())
-    path = ignition::common::joinPaths(_id.Owner(), "models");
-
-  if (path.empty())
-    return localIter;
-
-  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
-
-  return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(), path);
+  return const_cast<const FuelClient*>(this)->Models(_id);
 }
 
 //////////////////////////////////////////////////
@@ -328,6 +296,9 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
     path = ignition::common::joinPaths(_id.Owner(), "models", _id.Name());
   else if (!_id.Owner().empty())
     path = ignition::common::joinPaths(_id.Owner(), "models");
+
+  if (path.empty())
+    return localIter;
 
   ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
