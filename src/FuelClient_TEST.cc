@@ -1194,12 +1194,12 @@ TEST_F(FuelClientTest, Models)
 
   {
     ModelIter iter = client.Models(modelId);
-    EXPECT_TRUE(iter);
+    EXPECT_FALSE(iter);
   }
 
   {
     ModelIter const iter = client.Models(modelId);
-    EXPECT_TRUE(iter);
+    EXPECT_FALSE(iter);
   }
 
   {
@@ -1232,12 +1232,12 @@ TEST_F(FuelClientTest, Worlds)
 
   {
     WorldIter iter = client.Worlds(worldId);
-    EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 
   {
     WorldIter const iter = client.Worlds(worldId);
-    EXPECT_FALSE(iter);
+    EXPECT_TRUE(iter);
   }
 
   {

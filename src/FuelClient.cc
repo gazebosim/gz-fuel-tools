@@ -251,10 +251,14 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
 Result FuelClient::WorldDetails(const WorldIdentifier &_id,
     WorldIdentifier &_world) const
 {
+  auto serverUrl = _id.Server().Url().Str();
+
+  if (serverUrl.empty() || _id.Owner().empty() || _id.Name().empty())
+    return Result(ResultType::FETCH_ERROR);
+
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
-  auto serverUrl = _id.Server().Url().Str();
   auto version = _id.Server().Version();
   common::URIPath path;
   path = path / _id.Owner() / "worlds" / _id.Name();
