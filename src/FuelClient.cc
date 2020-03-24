@@ -446,6 +446,26 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   if (!tags.empty())
     form.emplace("tags", tags);
 
+  // Add categories
+  std::string categories;
+  if (meta.has_categories())
+  {
+    // Add the first category, if present.
+    if (!meta.categories().first().empty())
+      categories = meta.categories().first();
+
+    // Add the second category, if present.
+    if (!meta.categories().second().empty())
+    {
+      // Add a comma separator if the first category was not empty.
+      if (!categories.empty())
+        categories += ",";
+      categories += meta.categories().second();
+    }
+  }
+  if (!categories.empty())
+    form.emplace("categories", categories);
+
   // Recursively get all the files.
   std::vector<std::string> files;
   this->dataPtr->AllFiles(_pathToModelDir, files);
