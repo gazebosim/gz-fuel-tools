@@ -18,7 +18,7 @@ pipelines:
             libignition-cmake2-dev
             libignition-common3-dev
             libignition-math6-dev
-            libignition-msgs5-dev
+            # libignition-msgs5-dev
           # Ignition tools
           - hg clone http://bitbucket.org/ignitionrobotics/ign-tools -b default
           - cd ign-tools
@@ -28,15 +28,15 @@ pipelines:
           - make -j4 install
           - cd ../..
           # # Ignition msgs
-          # - apt-get -y install
-          #   libprotobuf-dev protobuf-compiler libprotoc-dev libtinyxml2-dev
-          # - hg clone http://bitbucket.org/ignitionrobotics/ign-msgs -b default
-          # - cd ign-msgs
-          # - mkdir build
-          # - cd build
-          # - cmake ..
-          # - make -j4 install
-          # - cd ../..
+          - apt-get -y install
+            libprotobuf-dev protobuf-compiler libprotoc-dev libtinyxml2-dev
+          - hg clone http://bitbucket.org/ignitionrobotics/ign-msgs -b default
+          - cd ign-msgs
+          - mkdir build
+          - cd build
+          - cmake ..
+          - make -j4 install
+          - cd ../..
           # Make sure ign-tools can find installed libs
           - export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
           # Ignition Fuel Tools
