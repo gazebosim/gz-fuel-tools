@@ -446,6 +446,26 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   if (!tags.empty())
     form.emplace("tags", tags);
 
+  // Add categories
+  std::string categories;
+  if (meta.has_categories())
+  {
+    // Add the first category, if present.
+    if (!meta.categories().first().empty())
+      categories = meta.categories().first();
+
+    // Add the second category, if present.
+    if (!meta.categories().second().empty())
+    {
+      // Add a comma separator if the first category was not empty.
+      if (!categories.empty())
+        categories += ", ";
+      categories += meta.categories().second();
+    }
+  }
+  if (!categories.empty())
+    form.emplace("categories", categories);
+
   // Recursively get all the files.
   std::vector<std::string> files;
   this->dataPtr->AllFiles(_pathToModelDir, files);
@@ -465,7 +485,14 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
            << "  Server: " << _id.Server().Url().Str() << std::endl
            << "  Server API Version: " <<  _id.Server().Version() << std::endl
            << "  Route: /models\n"
-           << "  REST response code: " << resp.statusCode << std::endl;
+           << "  Categories: " << categories << std::endl
+           << "  REST response code: " << resp.statusCode
+           << std::endl << std::endl
+           << "Suggestions" << std::endl
+           << "  1. Is the Server URL correct? Try entering it on a browser.\n"
+           << "  2. Do the categories exist? If you are using the Fuel server,"
+           << " then you can get the complete list at"
+           << " https://fuel.ignitionrobotics.org/1.0/categories." << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
 
