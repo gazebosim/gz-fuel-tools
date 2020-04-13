@@ -489,7 +489,7 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
            << "  REST response code: " << resp.statusCode
            << std::endl << std::endl
            << "Suggestions" << std::endl
-           << "  1. Is the Server URL correct? Try entering it a browser.\n"
+           << "  1. Is the Server URL correct? Try entering it on a browser.\n"
            << "  2. Do the categories exist? If you are using the Fuel server,"
            << " then you can get the complete list at"
            << " https://fuel.ignitionrobotics.org/1.0/categories." << std::endl;
