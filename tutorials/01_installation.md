@@ -79,7 +79,7 @@ sudo apt-get install mercurial cmake pkg-config python ruby-ronn libignition-cma
 Clone the repository into a directory and go into it:
 
 ```
-hg clone https://bitbucket.org/ignitionrobotics/ign-fuel-tools /tmp/ign-fuel-tools
+git clone https://github.com/ignitionrobotics/ign-fuel-tools /tmp/ign-fuel-tools
 cd /tmp/ign-fuel-tools
 ```
 
