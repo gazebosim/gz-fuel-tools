@@ -12,7 +12,7 @@ pipelines:
           - apt update
           - apt -y install
             cmake pkg-config python cppcheck doxygen ruby-ronn
-            mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev libtinyxml2-dev
+            git libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev libtinyxml2-dev
             lcov curl libyaml-dev
             libignition-cmake2-dev
             libignition-math4-dev
