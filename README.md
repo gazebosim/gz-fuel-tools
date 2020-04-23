@@ -5,7 +5,7 @@
 Ignition Fuel Tools is composed by a client library and command line tools for
 interacting with Ignition Fuel servers.
 
-  [http://github.com/ignitionrobotics/ign-fuel-tools](http://github.org/ignitionrobotics/ign-fuel-tools)
+  [http://github.com/ignitionrobotics/ign-fuel-tools](http://github.com/ignitionrobotics/ign-fuel-tools)
 
 Test coverage reports are available at Codecov:
 
@@ -116,22 +116,22 @@ sources:
     url: file:///home/caguero/.ignition/fuel/
 ~~~
 * Create the notion of "asset repository" or similar. An asset repository abstracts an entity that can store assets. It can be local or remote. This is the interface for "asset repository":
-    * List(category). 
+    * List(category).
         E.g.: localRepository.List("models")
         remote1Repository.List("models")
-    * Details(assetIdentifier). 
+    * Details(assetIdentifier).
         E.g.: Modeldentifier model;
         model.Owner("the_owner");
         model.Name("the_name");
         localRepository.Details(model)
         remote1Repository.Details(model)
-    * Create(assetIdentifier, path_to_the_asset). 
+    * Create(assetIdentifier, path_to_the_asset).
         E.g.: Modeldentifier model;
         model.Owner("the_owner");
         model.Name("the_name");
         localRepository.Create(model, path_to_the_asset)
         remote1Repository.Create(model, path_to_the_asset)
-    * Delete(assetIdentifier). 
+    * Delete(assetIdentifier).
         E.g.: Modeldentifier model;
         model.Owner("the_owner");
         model.Name("the_name");
