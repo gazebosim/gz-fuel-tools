@@ -10,7 +10,7 @@ pipelines:
           - apt update
           - apt -y install
             cmake pkg-config python cppcheck doxygen ruby-ronn
-            mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev
+            git libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev
             lcov curl libyaml-dev
             libignition-cmake-dev
             libignition-math4-dev
@@ -18,7 +18,7 @@ pipelines:
           # Style checker first - fail fast
           - sh tools/code_check.sh
           # Ignition tools
-          - hg clone http://bitbucket.org/ignitionrobotics/ign-tools -b default
+          - git clone http://github.com/ignitionrobotics/ign-tools -b master
           - cd ign-tools
           - mkdir build
           - cd build

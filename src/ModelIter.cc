@@ -172,7 +172,7 @@ IterRestIds::IterRestIds(const Rest &_rest, const ServerConfig &_config,
 
     // ToDo: resp.statusCode should return != 200 when the page requested does
     // not exist. When this happens we should stop without calling ParseModels()
-    // https://bitbucket.org/ignitionrobotics/ign-fuelserver/issues/7
+    // https://github.com/ignitionrobotics/ign-fuelserver/issues/7
     if (resp.data == "null\n" || resp.statusCode != 200)
       break;
 
