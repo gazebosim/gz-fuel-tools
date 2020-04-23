@@ -5,7 +5,7 @@
 Ignition Fuel Tools is composed by a client library and command line tools for
 interacting with Ignition Fuel servers.
 
-  [http://github.com/ignitionrobotics/ign-fuel-tools](http://github.org/ignitionrobotics/ign-fuel-tools)
+  [http://github.com/ignitionrobotics/ign-fuel-tools](http://github.com/ignitionrobotics/ign-fuel-tools)
 
 Test coverage reports are available at Codecov:
 
