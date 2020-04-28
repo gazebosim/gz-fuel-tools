@@ -9,7 +9,7 @@ call %win_lib% :download_unzip_install jsoncpp-1.8.4-vc15-x64-dll-MD.zip
 call %win_lib% :download_unzip_install libyaml-0.1.7-vc15-x64-md.zip
 call %win_lib% :download_unzip_install libzip-1.4.0_zlip-1.2.11_vc15-x64-dll-MD.zip
 call %win_lib% :install_ign_project ign-common ign-common3
-call %win_lib% :install_ign_project ign-msgs default
+call %win_lib% :install_ign_project ign-msgs master
 
 :: Set configuration variables
 @set build_type=Release
