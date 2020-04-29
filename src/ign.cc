@@ -567,6 +567,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
   ignition::fuel_tools::FuelClient client(conf);
   ignition::fuel_tools::ModelIdentifier model;
 
+  client.PopulateLicenses();
+
+  return 1;
+
   // Set the server URL, if present.
   if (_url && std::strlen(_url) != 0)
     model.Server().SetUrl(ignition::common::URI(_url));
