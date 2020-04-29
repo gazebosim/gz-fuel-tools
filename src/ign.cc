@@ -567,10 +567,6 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
   ignition::fuel_tools::FuelClient client(conf);
   ignition::fuel_tools::ModelIdentifier model;
 
-  client.PopulateLicenses();
-
-  return 1;
-
   // Set the server URL, if present.
   if (_url && std::strlen(_url) != 0)
     model.Server().SetUrl(ignition::common::URI(_url));
@@ -593,6 +589,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     ignerr << "The model path[" << _path << "] doesn't exist.\n";
     return 0;
   }
+
+  client.PopulateLicenses(model.Server());
+
+  return 1;
 
   if (ignition::common::exists(
         ignition::common::joinPaths(_path, "metadata.pbtxt")) ||

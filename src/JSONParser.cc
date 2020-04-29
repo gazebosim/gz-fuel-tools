@@ -313,3 +313,68 @@ std::string JSONParser::BuildWorld(WorldIter _worldIt)
   Json::StreamWriterBuilder builder;
   return Json::writeString(builder, value);
 }
+/////////////////////////////////////////////////
+bool JSONParser::ParseLicenses(const std::string &_json,
+    std::map<unsigned int, std::string> &_licenses)
+{
+  Json::CharReaderBuilder reader;
+  Json::Value licenses;
+  std::istringstream iss(_json);
+  JSONCPP_STRING errs;
+  Json::parseFromStream(reader, iss, &licenses, &errs);
+
+  if (!licenses.isArray())
+  {
+    ignerr << "JSON response is not an array.\n";
+    return false;
+  }
+
+  for (auto licenseIt = licenses.begin();
+      licenseIt != licenses.end(); ++licenseIt)
+  {
+    Json::Value licenseJson = *licenseIt;
+    std::pair<unsigned int, std::string> license;
+    if (!ParseLicenseImpl(licenseJson, license))
+    {
+      ignerr << "License isn't a json object!\n";
+      continue;
+    }
+
+    _licenses.insert(license);
+  }
+
+  return true;
+}
+
+/////////////////////////////////////////////////
+bool JSONParser::ParseLicenseImpl(const Json::Value &_json,
+    std::pair<unsigned int, std::string> &_license)
+{
+  try
+  {
+    if (!_json.isObject())
+    {
+      ignerr << "License isn't a json object!\n";
+      return false;
+    }
+
+    if (_json.isMember("ID"))
+      _license.first = _json["ID"].asUInt();
+    if (_json.isMember("name"))
+      _license.second = _json["name"].asString();
+  }
+#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
+  catch (...)
+  {
+    std::string what;
+#else
+  catch (const Json::LogicError &error)
+  {
+    std::string what = ": [" + std::string(error.what()) + "]";
+#endif
+    ignerr << "Bad response from server" << what << "\n";
+    return false;
+  }
+
+  return true;
+}

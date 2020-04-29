@@ -293,7 +293,7 @@ namespace ignition
                                      WorldIdentifier &_id,
                                      std::string &_filePath);
 
-      public: void PopulateLicenses();
+      public: void PopulateLicenses(const ServerConfig &_server);
 
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;
