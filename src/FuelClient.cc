@@ -419,18 +419,22 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   //
   // If there is no license information, then default to
   // "Creative Commons - Public Domain"
-  if (this->dataPtr->licenses.empty())
+  if (this->dataPtr->licenses.empty() || !meta.has_legal())
   {
     form.emplace("license", "1");
   }
-  else if (meta.has_legal())
+  // Otherwise, we have license information (see PopulateLicenses) and
+  // legal information
+  else
   {
+    // Find the license by name.
     std::map<std::string, unsigned int>::const_iterator licenseIt =
       this->dataPtr->licenses.find(meta.legal().license());
     if (licenseIt != this->dataPtr->licenses.end())
     {
       form.emplace("license", std::to_string(licenseIt->second));
     }
+    // No license found, print an error and return.
     else
     {
       std::string validLicenseNames;
@@ -1172,5 +1176,13 @@ void FuelClient::PopulateLicenses(const ServerConfig &_server)
   // Send the request.
   resp = rest.Request(HttpMethod::GET, _server.Url().Str(),
       _server.Version(), "licenses", {}, {}, "");
-  JSONParser::ParseLicenses(resp.data, this->dataPtr->licenses);
+  if (resp.statusCode != 200)
+  {
+    ignerr << "Failed to get license information from "
+      << _server.Url().Str() << "/" << _server.Version() << std::endl;
+  }
+  else if (!JSONParser::ParseLicenses(resp.data, this->dataPtr->licenses))
+  {
+    ignerr << "Failed to parse license information[" << resp.data << "]\n";
+  }
 }
