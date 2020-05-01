@@ -156,6 +156,11 @@ class ignition::fuel_tools::FuelClientPrivate
 
   /// \brief Regex to parse Ignition Fuel world file URLs.
   public: std::unique_ptr<std::regex> urlWorldFileRegex;
+
+  /// \brief The set of licenses where the key is the name of the license
+  /// and the value is the license ID on a Fuel server. See the
+  /// PopulateLicenses function.
+  public: std::map<std::string, unsigned int> licenses;
 };
 
 //////////////////////////////////////////////////
@@ -410,10 +415,42 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   // \todo(nkoenig) The ign-fuelserver expects an integer number for the
   // license information. The fuelserver should be modified to accept
   // a string. Otherwise, we have to bake into each client a mapping of
-  // license name to integer. For now, we are making a model
-  // "Creative Commons - Public Domain
-  // if (meta.has_legal()) {....}
-  form.emplace("license", "1");
+  // license name to integer.
+  //
+  // If there is no license information, then default to
+  // "Creative Commons - Public Domain"
+  if (this->dataPtr->licenses.empty())
+  {
+    form.emplace("license", "1");
+  }
+  else if (meta.has_legal())
+  {
+    std::map<std::string, unsigned int>::const_iterator licenseIt =
+      this->dataPtr->licenses.find(meta.legal().license());
+    if (licenseIt != this->dataPtr->licenses.end())
+    {
+      form.emplace("license", std::to_string(licenseIt->second));
+    }
+    else
+    {
+      std::string validLicenseNames;
+      auto end = this->dataPtr->licenses.end();
+      std::advance(end, -1);
+      //for (size_t i = 0; i < this->dataPtr->licenses.size(); ++i)
+      for (licenseIt = this->dataPtr->licenses.begin();
+           licenseIt != end; ++licenseIt)
+      {
+        validLicenseNames += "    " + licenseIt->first + "\n";
+      }
+      validLicenseNames += "    " + licenseIt->first;
+
+      ignerr << "Invalid license[" << meta.legal().license() << "].\n"
+             << "  Valid licenses include:\n"
+             << validLicenseNames << std::endl;
+
+      return Result(ResultType::UPLOAD_ERROR);
+    }
+  }
 
   // Add tags
   std::string tags;
@@ -1135,11 +1172,5 @@ void FuelClient::PopulateLicenses(const ServerConfig &_server)
   // Send the request.
   resp = rest.Request(HttpMethod::GET, _server.Url().Str(),
       _server.Version(), "licenses", {}, {}, "");
-  std::map<unsigned int, std::string> licenses;
-  JSONParser::ParseLicenses(resp.data, licenses);
-
-  for (const auto &[key, value] : licenses)
-  {
-    std::cout << key << ":" << value << std::endl;
-  }
+  JSONParser::ParseLicenses(resp.data, this->dataPtr->licenses);
 }

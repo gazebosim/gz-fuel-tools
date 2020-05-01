@@ -313,9 +313,10 @@ std::string JSONParser::BuildWorld(WorldIter _worldIt)
   Json::StreamWriterBuilder builder;
   return Json::writeString(builder, value);
 }
+
 /////////////////////////////////////////////////
 bool JSONParser::ParseLicenses(const std::string &_json,
-    std::map<unsigned int, std::string> &_licenses)
+    std::map<std::string, unsigned int> &_licenses)
 {
   Json::CharReaderBuilder reader;
   Json::Value licenses;
@@ -333,7 +334,7 @@ bool JSONParser::ParseLicenses(const std::string &_json,
       licenseIt != licenses.end(); ++licenseIt)
   {
     Json::Value licenseJson = *licenseIt;
-    std::pair<unsigned int, std::string> license;
+    std::pair<std::string, unsigned int> license;
     if (!ParseLicenseImpl(licenseJson, license))
     {
       ignerr << "License isn't a json object!\n";
@@ -348,7 +349,7 @@ bool JSONParser::ParseLicenses(const std::string &_json,
 
 /////////////////////////////////////////////////
 bool JSONParser::ParseLicenseImpl(const Json::Value &_json,
-    std::pair<unsigned int, std::string> &_license)
+    std::pair<std::string, unsigned int> &_license)
 {
   try
   {
@@ -358,10 +359,10 @@ bool JSONParser::ParseLicenseImpl(const Json::Value &_json,
       return false;
     }
 
-    if (_json.isMember("ID"))
-      _license.first = _json["ID"].asUInt();
     if (_json.isMember("name"))
-      _license.second = _json["name"].asString();
+      _license.first = _json["name"].asString();
+    if (_json.isMember("ID"))
+      _license.second = _json["ID"].asUInt();
   }
 #if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
   catch (...)

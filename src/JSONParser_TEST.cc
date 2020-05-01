@@ -243,42 +243,39 @@ TEST(JSONParser, ParseLicenses)
     ])tmpJsonStr";
 
 
-  std::map<unsigned int, std::string> licenses;
+  std::map<std::string, unsigned int> licenses;
   EXPECT_TRUE(JSONParser::ParseLicenses(tmpJsonStr.str(), licenses));
 
   EXPECT_EQ(7u, licenses.size());
   for (unsigned int i = 1; i < 8; ++i)
   {
-    EXPECT_TRUE(licenses.find(i) != licenses.end());
-
     switch (i)
     {
       case 1:
-        EXPECT_EQ("Creative Commons - Public Domain", licenses[i]);
+        EXPECT_EQ(i, licenses["Creative Commons - Public Domain"]);
         break;
       case 2:
-        EXPECT_EQ("Creative Commons - Attribution", licenses[i]);
+        EXPECT_EQ(i, licenses["Creative Commons - Attribution"]);
         break;
       case 3:
-        EXPECT_EQ("Creative Commons - Attribution - Share Alike", licenses[i]);
+        EXPECT_EQ(i, licenses["Creative Commons - Attribution - Share Alike"]);
         break;
       case 4:
-        EXPECT_EQ("Creative Commons - Attribution - No Derivatives",
-            licenses[i]);
+        EXPECT_EQ(i,
+            licenses["Creative Commons - Attribution - No Derivatives"]);
         break;
       case 5:
-        EXPECT_EQ("Creative Commons - Attribution - Non Commercial",
-            licenses[i]);
+        EXPECT_EQ(i,
+            licenses["Creative Commons - Attribution - Non Commercial"]);
         break;
       case 6:
-        EXPECT_EQ(
-            "Creative Commons - Attribution - Non Commercial - Share Alike",
-            licenses[i]);
+        EXPECT_EQ(i, licenses[
+            "Creative Commons - Attribution - Non Commercial - Share Alike"]);
         break;
       case 7:
-        EXPECT_EQ(
-            "Creative Commons - Attribution - Non Commercial - No Derivatives",
-            licenses[i]);
+        EXPECT_EQ(i, licenses[
+            "Creative Commons - Attribution - Non Commercial - No Derivatives"]
+            );
         break;
       default:
         FAIL() << "Invalid license id[" << i << "]\n";

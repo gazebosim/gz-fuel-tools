@@ -95,7 +95,7 @@ namespace ignition
       /// id's on the Fuel server, and the values are license names.
       /// \return True on success, false otherwise.
       public: static bool ParseLicenses(const std::string &_json,
-                  std::map<unsigned int, std::string> &_licenses);
+                  std::map<std::string, unsigned int> &_licenses);
 
       /// \brief Parse a json object as a model.
       /// \param[in] _json JSON object containing a single model
@@ -124,7 +124,7 @@ namespace ignition
       /// name of the license.
       /// \return True if the parsing succeed or false otherwise
       private: static bool ParseLicenseImpl(const Json::Value &_json,
-                   std::pair<unsigned int, std::string> &_license);
+                   std::pair< std::string, unsigned int> &_license);
     };
   }
 }

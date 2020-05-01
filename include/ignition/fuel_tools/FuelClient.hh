@@ -293,6 +293,16 @@ namespace ignition
                                      WorldIdentifier &_id,
                                      std::string &_filePath);
 
+      /// \brief This function request the available licenes from the server
+      /// and stores this information locally.
+      ///
+      /// The UploadModel function can use this information to set
+      /// approriate license information based on a model's metadata.pbtxt
+      /// file. If license information is not available, then the
+      /// UploadModel function will default to the
+      /// "Creative Commons - Public Domain" license.
+      /// \param[in] _server Information about the server that provides
+      /// license information.
       public: void PopulateLicenses(const ServerConfig &_server);
 
       /// \brief PIMPL
