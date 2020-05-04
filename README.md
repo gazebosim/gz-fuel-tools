@@ -9,7 +9,7 @@ interacting with Ignition Fuel servers.
 
 Test coverage reports are available at Codecov:
 
-[![codecov](https://codecov.io/bb/ignitionrobotics/ign-fuel-tools/branch/default/graph/badge.svg)](https://codecov.io/bb/ignitionrobotics/ign-fuel-tools)
+[![codecov](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools)
 
 # Building and installing
 
@@ -92,7 +92,7 @@ sudo apt install ruby-ffi libzip-dev libcurl-dev libjsoncpp-dev
 
 ## Documentation
 
-Check [here](http://ignition-fuel-tools.readthedocs.io/en/default/).
+Check [here](http://ignition-fuel-tools.readthedocs.io/en/master/).
 
 [![Documentation Status](https://readthedocs.org/projects/ignition-fuel-tools/badge/?version=default)](https://readthedocs.org/projects/ignition-fuel-tools/?badge=default)
 
