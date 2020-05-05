@@ -41,6 +41,10 @@ TEST(ModelIdentifier, SetFields)
   std::time(&d2);
   id.SetUploadDate(d2);
 
+  EXPECT_FALSE(id.Private());
+  id.SetPrivate(true);
+  EXPECT_TRUE(id.Private());
+
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("acai"), id.Owner());
   EXPECT_EQ(6u, id.Version());

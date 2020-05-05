@@ -47,6 +47,7 @@ COMMANDS = { 'fuel' =>
   "Available Actions:                                                      \n"\
   "  delete                   Delete resources                             \n"\
   "  download                 Download resources                           \n"\
+  "  edit                     Edit a resource                              \n"\
   "  list                     List available resources                     \n"\
   "  meta                     Read and write resource metadata             \n"\
   "  upload                   Upload resources                             \n"\
@@ -80,6 +81,21 @@ SUBCOMMANDS = {
   "Available Options:                                                      \n"\
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
   "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
+  "  --header arg             Set an HTTP header, such as                  \n"\
+  "                           --header 'authorization: Bearer JWT'.        \n" +
+  COMMON_OPTIONS,
+
+ 'edit' =>
+  "Edit a simulation resource                                              \n"\
+  "                                                                        \n"\
+  "  ign fuel edit [options]                                               \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  -u [--url] arg           URL of the server that should receive        \n"\
+  "                           the model. If unspecified, the server will be\n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
+  "  -p [--private]           Use this argument to make the model private. \n"\
+  "  -b [--public]            Use this argument to make the model public.  \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'authorization: Bearer JWT'.        \n" +
   COMMON_OPTIONS,
@@ -148,7 +164,7 @@ class Cmd
       'model' => '',
       'config2pbtxt' => '',
       'pbtxt2config' => '',
-      'private' => 'false'
+      'private' => ''
     }
 
     usage = COMMANDS[args[0]]
@@ -204,7 +220,9 @@ class Cmd
       opts.on('-p', '--private', 'Private resource') do
         options['private'] = 'true'
       end
-
+      opts.on('-b', '--public', 'Public resource') do
+        options['private'] = 'false'
+      end
     end # opt_parser do
 
     opt_parser.parse!(args)
@@ -284,55 +302,72 @@ class Cmd
       end
 
       case options['subcommand']
-      when 'list'
-        if options['type'] == 'model'
-          Importer.extern 'int listModels(const char *, const char *, const char *, const char *)'
-          if not Importer.listModels(options['url'],
-                                     options['owner'],
-                                     options['raw'],
-                                     options['config'])
+        # Delete
+        when 'delete'
+          Importer.extern 'int deleteUrl(const char *, const char *)'
+          if not Importer.deleteUrl(options['url'], options['header'])
             exit(-1)
           end
-        elsif options['type'] == 'world'
-          Importer.extern 'int listWorlds(const char *, const char *, const char *, const char *)'
-          if not Importer.listWorlds(options['url'],
-                                     options['owner'],
-                                     options['raw'],
-                                     options['config'])
+
+        # Download
+        when 'download'
+          Importer.extern 'int downloadUrl(const char *, const  char *, const char *)'
+          if not Importer.downloadUrl(options['url'], options['config'],
+              options['header'])
             exit(-1)
           end
-        end
-      when 'download'
-        Importer.extern 'int downloadUrl(const char *, const  char *, const char *)'
-        if not Importer.downloadUrl(options['url'], options['config'],
-            options['header'])
-          exit(-1)
-        end
-      when 'upload'
-        Importer.extern 'int upload(const char *, const char *, const char *, const char *)'
-        if not Importer.upload(options['model'],
-                               options['url'],
-                               options['header'],
-                               options['private'])
-          exit(-1)
-        end
-      when 'delete'
-        Importer.extern 'int deleteUrl(const char *, const char *)'
-        if not Importer.deleteUrl(options['url'], options['header'])
-          exit(-1)
-        end
-      when 'meta'
-        if options.key?('config2pbtxt') && !options['config2pbtxt'].empty?
-          Importer.extern 'int config2Pbtxt(const char *)'
-          if not Importer.config2Pbtxt(options['config2pbtxt'])
+
+        # Edit
+        when 'edit'
+          Importer.extern 'int editUrl(const char *, const char *, const char *)'
+          if not Importer.editUrl(options['url'], options['header'],
+              options['private'])
             exit(-1)
           end
-        elsif options.key?('pbtxt2config') && !options['pbtxt2config'].empty?
-          Importer.extern 'int pbtxt2Config(const char *)'
-          if not Importer.pbtxt2Config(options['pbtxt2config'])
+
+        # List
+        when 'list'
+          if options['type'] == 'model'
+            Importer.extern 'int listModels(const char *, const char *, const char *, const char *)'
+            if not Importer.listModels(options['url'],
+                                       options['owner'],
+                                       options['raw'],
+                                       options['config'])
+              exit(-1)
+            end
+          elsif options['type'] == 'world'
+            Importer.extern 'int listWorlds(const char *, const char *, const char *, const char *)'
+            if not Importer.listWorlds(options['url'],
+                                       options['owner'],
+                                       options['raw'],
+                                       options['config'])
+              exit(-1)
+            end
+          end
+
+        # Meta
+        when 'meta'
+          if options.key?('config2pbtxt') && !options['config2pbtxt'].empty?
+            Importer.extern 'int config2Pbtxt(const char *)'
+            if not Importer.config2Pbtxt(options['config2pbtxt'])
+              exit(-1)
+            end
+          elsif options.key?('pbtxt2config') && !options['pbtxt2config'].empty?
+            Importer.extern 'int pbtxt2Config(const char *)'
+            if not Importer.pbtxt2Config(options['pbtxt2config'])
+              exit(-1)
+            end
+          end
+
+        # Upload
+        when 'upload'
+          Importer.extern 'int upload(const char *, const char *, const char *, const char *)'
+          if not Importer.upload(options['model'],
+                                 options['url'],
+                                 options['header'],
+                                 options['private'])
             exit(-1)
           end
-        end
       end
 
     rescue

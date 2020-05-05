@@ -68,7 +68,13 @@ namespace ignition
 
       /// \brief Upload failed. Other errors.
       /// \sa ReadableResult
-      UPLOAD_ERROR
+      UPLOAD_ERROR,
+
+      /// \brief Patch failed.
+      PATCH_ERROR,
+
+      /// \brief Patch successful.
+      PATCH,
     };
 
     /// \brief Class describing a result of an operation.

@@ -128,6 +128,79 @@ size_t RestWriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
 }
 
 /////////////////////////////////////////////////
+struct curl_httppost *BuildFormPost(
+    const std::multimap<std::string, std::string> &_form)
+{
+  struct curl_httppost *formpost = nullptr;
+  struct curl_httppost *lastptr = nullptr;
+  for (const std::pair<std::string, std::string> &it : _form)
+  {
+    std::string key = it.first;
+    std::string value = it.second;
+
+    // follow same convention as curl cmdline tool
+    // field starting with @ indicates path to file to upload
+    // others are standard fields to describe the file
+    if (!value.empty() && value[0] == '@')
+    {
+      // Default file path
+      std::string path = value.substr(1);
+
+      // Default upload filename
+      std::string uploadFilename = ignition::common::basename(path);
+
+      // If the value has a semicolon, then use the string preceding the
+      // semicolon as the local filesystem path and the string following
+      // the semicolon as the upload filename.
+      if (value.substr(1).find(";") != std::string::npos)
+      {
+        path = value.substr(1, value.find(";") - 1);
+        uploadFilename = value.substr(value.find(";") + 1);
+      }
+
+      std::string basename = ignition::common::basename(path);
+      std::string contentType = "application/octet-stream";
+
+      // Figure out the content type based on the file extension.
+      std::string::size_type dotIdx = basename.rfind('.');
+      if (dotIdx != std::string::npos)
+      {
+        std::string extension =
+          ignition::common::lowercase(basename.substr(dotIdx));
+        if (kContentTypes.find(extension) != kContentTypes.end())
+        {
+          contentType = kContentTypes.at(extension);
+        }
+        else
+        {
+          ignwarn << "Unknown mime type for file[" << path
+            << "]. The mime type '" << contentType << "' will be used.\n";
+        }
+      }
+
+      curl_formadd(&formpost,
+          &lastptr,
+          CURLFORM_COPYNAME, key.c_str(),
+          CURLFORM_FILENAME, uploadFilename.c_str(),
+          CURLFORM_FILE, path.c_str(),
+          CURLFORM_CONTENTTYPE, contentType.c_str(),
+          CURLFORM_END);
+    }
+    else
+    {
+      // standard key:value fields
+      curl_formadd(&formpost,
+          &lastptr,
+          CURLFORM_COPYNAME, key.c_str(),
+          CURLFORM_COPYCONTENTS, value.c_str(),
+          CURLFORM_END);
+    }
+  }
+
+  return formpost;
+}
+
+/////////////////////////////////////////////////
 RestResponse Rest::Request(HttpMethod _method,
     const std::string &_url, const std::string &_version,
     const std::string &_path, const std::vector<std::string> &_queryStrings,
@@ -204,6 +277,12 @@ RestResponse Rest::Request(HttpMethod _method,
   {
     // no need to do anything
   }
+  else if (_method == HttpMethod::PATCH_FORM)
+  {
+    formpost = BuildFormPost(_form);
+    curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
+    curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
+  }
   else if (_method == HttpMethod::POST)
   {
     curl_easy_setopt(curl, CURLOPT_POST, 1);
@@ -211,71 +290,7 @@ RestResponse Rest::Request(HttpMethod _method,
   }
   else if (_method == HttpMethod::POST_FORM)
   {
-    struct curl_httppost *lastptr = nullptr;
-    for (const std::pair<std::string, std::string> &it : _form)
-    {
-      std::string key = it.first;
-      std::string value = it.second;
-
-      // follow same convention as curl cmdline tool
-      // field starting with @ indicates path to file to upload
-      // others are standard fields to describe the file
-      if (!value.empty() && value[0] == '@')
-      {
-        // Default file path
-        std::string path = value.substr(1);
-
-        // Default upload filename
-        std::string uploadFilename = ignition::common::basename(path);
-
-        // If the value has a semicolon, then use the string preceding the
-        // semicolon as the local filesystem path and the string following
-        // the semicolon as the upload filename.
-        if (value.substr(1).find(";") != std::string::npos)
-        {
-          path = value.substr(1, value.find(";") - 1);
-          uploadFilename = value.substr(value.find(";") + 1);
-        }
-
-        std::string basename = ignition::common::basename(path);
-        std::string contentType = "application/octet-stream";
-
-        // Figure out the content type based on the file extension.
-        std::string::size_type dotIdx = basename.rfind('.');
-        if (dotIdx != std::string::npos)
-        {
-          std::string extension =
-            ignition::common::lowercase(basename.substr(dotIdx));
-          if (kContentTypes.find(extension) != kContentTypes.end())
-          {
-            contentType = kContentTypes.at(extension);
-          }
-          else
-          {
-            ignwarn << "Unknown mime type for file[" << path
-              << "]. The mime type '" << contentType << "' will be used.\n";
-          }
-        }
-
-        curl_formadd(&formpost,
-            &lastptr,
-            CURLFORM_COPYNAME, key.c_str(),
-            CURLFORM_FILENAME, uploadFilename.c_str(),
-            CURLFORM_FILE, path.c_str(),
-            CURLFORM_CONTENTTYPE, contentType.c_str(),
-            CURLFORM_END);
-      }
-      else
-      {
-        // standard key:value fields
-        curl_formadd(&formpost,
-                     &lastptr,
-                     CURLFORM_COPYNAME, key.c_str(),
-                     CURLFORM_COPYCONTENTS, value.c_str(),
-                     CURLFORM_END);
-       }
-    }
-
+    formpost = BuildFormPost(_form);
     curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
   }
   else if (_method == HttpMethod::DELETE)
