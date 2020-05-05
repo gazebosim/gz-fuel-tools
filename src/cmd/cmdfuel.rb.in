@@ -232,6 +232,16 @@ class Cmd
 
     # check required flags
     case options['subcommand']
+    when 'delete'
+      if options['url'] == ''
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        exit(-1)
+      end
+    when 'download'
+      if options['url'] == ''
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        exit(-1)
+      end
     when 'list'
       # Resource type
       if !options.key?('type')
@@ -242,19 +252,9 @@ class Cmd
         puts "Invalid resource type, use 'model' or 'world'."
         exit(-1)
       end
-    when 'download'
-      if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
-        exit(-1)
-      end
     when 'upload'
       if options['model'] == ''
         puts "Missing model path."
-        exit(-1)
-      end
-    when 'delete'
-      if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
         exit(-1)
       end
     end
@@ -302,72 +302,61 @@ class Cmd
       end
 
       case options['subcommand']
-        # Delete
-        when 'delete'
-          Importer.extern 'int deleteUrl(const char *, const char *)'
-          if not Importer.deleteUrl(options['url'], options['header'])
+      when 'delete'
+        Importer.extern 'int deleteUrl(const char *, const char *)'
+        if not Importer.deleteUrl(options['url'], options['header'])
+          exit(-1)
+        end
+      when 'download'
+        Importer.extern 'int downloadUrl(const char *, const  char *, const char *)'
+        if not Importer.downloadUrl(options['url'], options['config'],
+            options['header'])
+          exit(-1)
+        end
+      when 'edit'
+        Importer.extern 'int editUrl(const char *, const char *, const char *)'
+        if not Importer.editUrl(options['url'], options['header'],
+            options['private'])
+          exit(-1)
+        end
+      when 'list'
+        if options['type'] == 'model'
+          Importer.extern 'int listModels(const char *, const char *, const char *, const char *)'
+          if not Importer.listModels(options['url'],
+                                     options['owner'],
+                                     options['raw'],
+                                     options['config'])
             exit(-1)
           end
-
-        # Download
-        when 'download'
-          Importer.extern 'int downloadUrl(const char *, const  char *, const char *)'
-          if not Importer.downloadUrl(options['url'], options['config'],
-              options['header'])
+        elsif options['type'] == 'world'
+          Importer.extern 'int listWorlds(const char *, const char *, const char *, const char *)'
+          if not Importer.listWorlds(options['url'],
+                                     options['owner'],
+                                     options['raw'],
+                                     options['config'])
             exit(-1)
           end
-
-        # Edit
-        when 'edit'
-          Importer.extern 'int editUrl(const char *, const char *, const char *)'
-          if not Importer.editUrl(options['url'], options['header'],
-              options['private'])
+        end
+      when 'meta'
+        if options.key?('config2pbtxt') && !options['config2pbtxt'].empty?
+          Importer.extern 'int config2Pbtxt(const char *)'
+          if not Importer.config2Pbtxt(options['config2pbtxt'])
             exit(-1)
           end
-
-        # List
-        when 'list'
-          if options['type'] == 'model'
-            Importer.extern 'int listModels(const char *, const char *, const char *, const char *)'
-            if not Importer.listModels(options['url'],
-                                       options['owner'],
-                                       options['raw'],
-                                       options['config'])
-              exit(-1)
-            end
-          elsif options['type'] == 'world'
-            Importer.extern 'int listWorlds(const char *, const char *, const char *, const char *)'
-            if not Importer.listWorlds(options['url'],
-                                       options['owner'],
-                                       options['raw'],
-                                       options['config'])
-              exit(-1)
-            end
-          end
-
-        # Meta
-        when 'meta'
-          if options.key?('config2pbtxt') && !options['config2pbtxt'].empty?
-            Importer.extern 'int config2Pbtxt(const char *)'
-            if not Importer.config2Pbtxt(options['config2pbtxt'])
-              exit(-1)
-            end
-          elsif options.key?('pbtxt2config') && !options['pbtxt2config'].empty?
-            Importer.extern 'int pbtxt2Config(const char *)'
-            if not Importer.pbtxt2Config(options['pbtxt2config'])
-              exit(-1)
-            end
-          end
-
-        # Upload
-        when 'upload'
-          Importer.extern 'int upload(const char *, const char *, const char *, const char *)'
-          if not Importer.upload(options['model'],
-                                 options['url'],
-                                 options['header'],
-                                 options['private'])
+        elsif options.key?('pbtxt2config') && !options['pbtxt2config'].empty?
+          Importer.extern 'int pbtxt2Config(const char *)'
+          if not Importer.pbtxt2Config(options['pbtxt2config'])
             exit(-1)
           end
+        end
+      when 'upload'
+        Importer.extern 'int upload(const char *, const char *, const char *, const char *)'
+        if not Importer.upload(options['model'],
+                               options['url'],
+                               options['header'],
+                               options['private'])
+          exit(-1)
+        end
       end
 
     rescue
