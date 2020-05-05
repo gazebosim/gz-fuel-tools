@@ -2,7 +2,8 @@
 
 ### Ignition Fuel Tools 4.X.X (20xx-xx-xx)
 
-
+1. Alphabetical listing of subcommands.
+    * [Pull request 65](https://github.com/ignitionrobotics/ign-fuel-tools/pull/65)
 
 ### Ignition Fuel Tools 4.1.0 (2020-02-27)
 

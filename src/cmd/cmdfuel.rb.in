@@ -45,11 +45,11 @@ COMMANDS = { 'fuel' =>
   "  ign fuel [action] [options]                                           \n"\
   "                                                                        \n"\
   "Available Actions:                                                      \n"\
-  "  list                     List available resources                     \n"\
-  "  download                 Download resources                           \n"\
-  "  upload                   Upload resources                             \n"\
   "  delete                   Delete resources                             \n"\
+  "  download                 Download resources                           \n"\
+  "  list                     List available resources                     \n"\
   "  meta                     Read and write resource metadata             \n"\
+  "  upload                   Upload resources                             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -v [ --verbose ] [arg]   Adjust the level of console output (0~4).    \n"\
@@ -59,6 +59,31 @@ COMMANDS = { 'fuel' =>
 }
 
 SUBCOMMANDS = {
+ 'delete' =>
+  "Delete simulation resources                                             \n"\
+  "                                                                        \n"\
+  "  ign fuel delete [options]                                             \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  -u [--url] arg           URL of the server that should receive        \n"\
+  "                           the model. If unspecified, the server will be\n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
+  "  --header arg             Set an HTTP header, such as                  \n"\
+  "                           --header 'authorization: Bearer JWT'.        \n" +
+  COMMON_OPTIONS,
+
+ 'download' =>
+  "Download simulation resources                                           \n"\
+  "                                                                        \n"\
+  "  ign fuel download [options]                                           \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  -u [--url] arg           Full resource URL, such as:                  \n"\
+  "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
+  "  --header arg             Set an HTTP header, such as                  \n"\
+  "                           --header 'authorization: Bearer JWT'.        \n" +
+  COMMON_OPTIONS,
+
   'list' =>
   "List simulation resources                                               \n"\
   "                                                                        \n"\
@@ -73,16 +98,17 @@ SUBCOMMANDS = {
   "  -r [--raw]               Machine-friendly output.                     \n" +
   COMMON_OPTIONS,
 
- 'download' =>
-  "Download simulation resources                                           \n"\
+  'meta' =>
+  "Read and write resource metadata                                        \n"\
   "                                                                        \n"\
-  "  ign fuel download [options]                                           \n"\
+  "  ign fuel meta [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
-  "  -u [--url] arg           Full resource URL, such as:                  \n"\
-  "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
-  "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "  --config2pbtxt arg       Convert a model.config file to a             \n"\
+  "                           metadata.pbtxt.                              \n"+
+  "  --pbtxt2config arg       Convert a metadata.pbtxt file to a           \n"\
+  "                           model.confg.                                 \n"+
+
   COMMON_OPTIONS,
 
  'upload' =>
@@ -100,32 +126,6 @@ SUBCOMMANDS = {
   "                           Otherwise, the model will be public.         \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'authorization: Bearer JWT'.        \n" +
-  COMMON_OPTIONS,
-  
- 'delete' =>
-  "Delete simulation resources                                             \n"\
-  "                                                                        \n"\
-  "  ign fuel delete [options]                                             \n"\
-  "                                                                        \n"\
-  "Available Options:                                                      \n"\
-  "  -u [--url] arg           URL of the server that should receive        \n"\
-  "                           the model. If unspecified, the server will be\n"\
-  "                           https://fuel.ignitionrobotics.org.           \n"\
-  "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
-  COMMON_OPTIONS,
-
-  'meta' =>
-  "Read and write resource metadata                                        \n"\
-  "                                                                        \n"\
-  "  ign fuel meta [options]                                               \n"\
-  "                                                                        \n"\
-  "Available Options:                                                      \n"\
-  "  --config2pbtxt arg       Convert a model.config file to a             \n"\
-  "                           metadata.pbtxt.                              \n"+
-  "  --pbtxt2config arg       Convert a metadata.pbtxt file to a           \n"\
-  "                           model.confg.                                 \n"+
-
   COMMON_OPTIONS,
 }
 
