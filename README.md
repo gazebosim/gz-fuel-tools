@@ -5,7 +5,7 @@
 Ignition Fuel Tools is composed by a client library and command line tools for
 interacting with Ignition Fuel servers.
 
-  [http://bitbucket.org/ignitionrobotics/ign-fuel-tools](http://bitbucket.org/ignitionrobotics/ign-fuel-tools)
+  [http://github.com/ignitionrobotics/ign-fuel-tools](http://github.com/ignitionrobotics/ign-fuel-tools)
 
 Test coverage reports are available at Codecov:
 
@@ -113,10 +113,6 @@ On ubuntu run
 sudo apt install ruby-ffi libzip-dev libcurl-dev libjsoncpp-dev
 ```
 
-## Continuous integration
-
-Please refer to the [Bitbucket Pipelines](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/addon/pipelines/home#!/).
-
 ## Roadmap
 
 * Create the notion of "asset repository" or similar. An asset repository abstracts an entity that can store assets. It can be local or remote. This is the interface for "asset repository":
@@ -191,5 +187,5 @@ ln -s /usr/local/share/ignition/transportlog7.yaml .
 export IGN_CONFIG_PATH=$HOME/.ignition/tools/configs
 ```
 
-This issue is tracked [here](https://bitbucket.org/ignitionrobotics/ign-tools/issues/8/too-strict-looking-for-config-paths).
+This issue is tracked [here](https://github.com/ignitionrobotics/ign-tools/issues/8).
 
