@@ -214,6 +214,16 @@ class Cmd
 
     # check required flags
     case options['subcommand']
+    when 'delete'
+      if options['url'] == ''
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        exit(-1)
+      end
+    when 'download'
+      if options['url'] == ''
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        exit(-1)
+      end
     when 'list'
       # Resource type
       if !options.key?('type')
@@ -224,19 +234,9 @@ class Cmd
         puts "Invalid resource type, use 'model' or 'world'."
         exit(-1)
       end
-    when 'download'
-      if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
-        exit(-1)
-      end
     when 'upload'
       if options['model'] == ''
         puts "Missing model path."
-        exit(-1)
-      end
-    when 'delete'
-      if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
         exit(-1)
       end
     end
@@ -284,6 +284,17 @@ class Cmd
       end
 
       case options['subcommand']
+      when 'delete'
+        Importer.extern 'int deleteUrl(const char *, const char *)'
+        if not Importer.deleteUrl(options['url'], options['header'])
+          exit(-1)
+        end
+      when 'download'
+        Importer.extern 'int downloadUrl(const char *, const  char *, const char *)'
+        if not Importer.downloadUrl(options['url'], options['config'],
+            options['header'])
+          exit(-1)
+        end
       when 'list'
         if options['type'] == 'model'
           Importer.extern 'int listModels(const char *, const char *, const char *, const char *)'
@@ -302,25 +313,6 @@ class Cmd
             exit(-1)
           end
         end
-      when 'download'
-        Importer.extern 'int downloadUrl(const char *, const  char *, const char *)'
-        if not Importer.downloadUrl(options['url'], options['config'],
-            options['header'])
-          exit(-1)
-        end
-      when 'upload'
-        Importer.extern 'int upload(const char *, const char *, const char *, const char *)'
-        if not Importer.upload(options['model'],
-                               options['url'],
-                               options['header'],
-                               options['private'])
-          exit(-1)
-        end
-      when 'delete'
-        Importer.extern 'int deleteUrl(const char *, const char *)'
-        if not Importer.deleteUrl(options['url'], options['header'])
-          exit(-1)
-        end
       when 'meta'
         if options.key?('config2pbtxt') && !options['config2pbtxt'].empty?
           Importer.extern 'int config2Pbtxt(const char *)'
@@ -332,6 +324,14 @@ class Cmd
           if not Importer.pbtxt2Config(options['pbtxt2config'])
             exit(-1)
           end
+        end
+      when 'upload'
+        Importer.extern 'int upload(const char *, const char *, const char *, const char *)'
+        if not Importer.upload(options['model'],
+                               options['url'],
+                               options['header'],
+                               options['private'])
+          exit(-1)
         end
       end
 
