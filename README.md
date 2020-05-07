@@ -9,7 +9,7 @@ interacting with Ignition Fuel servers.
 
 Test coverage reports are available at Codecov:
 
-[![codecov](https://codecov.io/bb/ignitionrobotics/ign-fuel-tools/branch/default/graph/badge.svg)](https://codecov.io/bb/ignitionrobotics/ign-fuel-tools)
+[![codecov](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools)
 
 # Building and installing
 
@@ -17,7 +17,7 @@ Test coverage reports are available at Codecov:
 cd ign-fuel-tools
 mkdir build
 cd build
-cmake ../
+cmake ..
 make
 make test
 make install
