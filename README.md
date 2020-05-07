@@ -17,7 +17,7 @@ Test coverage reports are available at Codecov:
 cd ign-fuel-tools
 mkdir build
 cd build
-cmake ../
+cmake ..
 make
 make test
 make install
