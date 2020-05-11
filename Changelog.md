@@ -4,7 +4,7 @@
 
 1. Set license information based on licenses available from a Fuel server
    and `legal` information in a `metadata.pbtxt` file.
-    * [Pull request 61](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/61)
+    * [Pull request 69](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/69)
 
 1. Alphabetical listing of subcommands.
     * [BitBucket pull request 65](https://github.com/ignitionrobotics/ign-fuel-tools/pull/65)
