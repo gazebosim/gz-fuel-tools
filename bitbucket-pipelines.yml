@@ -13,14 +13,14 @@ pipelines:
           - apt update
           - apt -y install
             cmake pkg-config python cppcheck doxygen ruby-ronn
-            mercurial libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev libtinyxml2-dev
+            git libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev libtinyxml2-dev
             lcov curl libyaml-dev
             libignition-cmake2-dev
             libignition-common3-dev
             libignition-math6-dev
             libignition-msgs5-dev
           # Ignition tools
-          - hg clone http://bitbucket.org/ignitionrobotics/ign-tools -b default
+          - git clone http://github.com/ignitionrobotics/ign-tools -b master
           - cd ign-tools
           - mkdir build
           - cd build
@@ -30,7 +30,7 @@ pipelines:
           # # Ignition msgs
           # - apt-get -y install
           #   libprotobuf-dev protobuf-compiler libprotoc-dev libtinyxml2-dev
-          # - hg clone http://bitbucket.org/ignitionrobotics/ign-msgs -b default
+          # - git clone http://github.com/ignitionrobotics/ign-msgs -b master
           # - cd ign-msgs
           # - mkdir build
           # - cd build
