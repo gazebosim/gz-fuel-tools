@@ -170,6 +170,120 @@ TEST(JSONParser, ParseWorld)
   EXPECT_EQ("banana://testServer", world.Server().Url().Str());
 }
 
+/////////////////////////////////////////////////
+TEST(JSONParser, ParseLicenses)
+{
+  std::stringstream tmpJsonStr;
+
+  // This is the exact return value from
+  // https://fuel.ignitionrobotics.org/1.0/licenses as of April 29th, 2020.
+  tmpJsonStr << R"tmpJsonStr([{
+    "ID": 1,
+    "CreatedAt": "2017-12-19T20:32:48Z",
+    "UpdatedAt": "2020-04-29T12:01:25Z",
+    "DeletedAt": null,
+    "name": "Creative Commons - Public Domain",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "image_url": "https://i.creativecommons.org/p/88x31.png"
+    },
+    {
+    "ID": 2,
+    "CreatedAt": "2017-12-19T20:32:48Z",
+    "UpdatedAt": "2020-04-29T12:00:19Z",
+    "DeletedAt": null,
+    "name": "Creative Commons - Attribution",
+    "url": "http://creativecommons.org/licenses/by/4.0/",
+    "image_url": "https://i.creativecommons.org/l/by/4.0/88x31.png"
+    },
+    {
+    "ID": 3,
+    "CreatedAt": "2017-12-19T20:32:48Z",
+    "UpdatedAt": "2017-12-19T20:32:48Z",
+    "DeletedAt": null,
+    "name": "Creative Commons - Attribution - Share Alike",
+    "url": "http://creativecommons.org/licenses/by-sa/4.0/",
+    "image_url": "https://i.creativecommons.org/l/by-sa/4.0/88x31.png"
+    },
+    {
+    "ID": 4,
+    "CreatedAt": "2017-12-19T20:32:48Z",
+    "UpdatedAt": "2017-12-19T20:32:48Z",
+    "DeletedAt": null,
+    "name": "Creative Commons - Attribution - No Derivatives",
+    "url": "http://creativecommons.org/licenses/by-nd/4.0/",
+    "image_url": "https://i.creativecommons.org/l/by-nd/4.0/88x31.png"
+    },
+    {
+    "ID": 5,
+    "CreatedAt": "2017-12-19T20:32:48Z",
+    "UpdatedAt": "2017-12-19T20:32:48Z",
+    "DeletedAt": null,
+    "name": "Creative Commons - Attribution - Non Commercial",
+    "url": "http://creativecommons.org/licenses/by-nc/4.0/",
+    "image_url": "https://i.creativecommons.org/l/by-nc/4.0/88x31.png"
+    },
+    {
+    "ID": 6,
+    "CreatedAt": "2017-12-19T20:32:48Z",
+    "UpdatedAt": "2017-12-19T20:32:48Z",
+    "DeletedAt": null,
+    "name": "Creative Commons - Attribution - Non Commercial - Share Alike",
+    "url": "http://creativecommons.org/licenses/by-nc-sa/4.0/",
+    "image_url": "https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"
+    },
+    {
+    "ID": 7,
+    "CreatedAt": "2017-12-19T20:32:48Z",
+    "UpdatedAt": "2019-11-09T05:01:35Z",
+    "DeletedAt": null,
+    "name": "Creative Commons - Attribution - Non Commercial - No Derivatives",
+    "url": "http://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "image_url": "https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png"
+    }
+    ])tmpJsonStr";
+
+
+  std::map<std::string, unsigned int> licenses;
+  EXPECT_TRUE(JSONParser::ParseLicenses(tmpJsonStr.str(), licenses));
+
+  EXPECT_EQ(7u, licenses.size());
+  for (unsigned int i = 1; i < 8; ++i)
+  {
+    switch (i)
+    {
+      case 1:
+        EXPECT_EQ(i, licenses["Creative Commons - Public Domain"]);
+        break;
+      case 2:
+        EXPECT_EQ(i, licenses["Creative Commons - Attribution"]);
+        break;
+      case 3:
+        EXPECT_EQ(i, licenses["Creative Commons - Attribution - Share Alike"]);
+        break;
+      case 4:
+        EXPECT_EQ(i,
+            licenses["Creative Commons - Attribution - No Derivatives"]);
+        break;
+      case 5:
+        EXPECT_EQ(i,
+            licenses["Creative Commons - Attribution - Non Commercial"]);
+        break;
+      case 6:
+        EXPECT_EQ(i, licenses[
+            "Creative Commons - Attribution - Non Commercial - Share Alike"]);
+        break;
+      case 7:
+        EXPECT_EQ(i, licenses[
+            "Creative Commons - Attribution - Non Commercial - No Derivatives"]
+            );
+        break;
+      default:
+        FAIL() << "Invalid license id[" << i << "]\n";
+        break;
+    }
+  }
+}
+
 //////////////////////////////////////////////////
 int main(int argc, char **argv)
 {

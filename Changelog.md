@@ -2,6 +2,10 @@
 
 ### Ignition Fuel Tools 4.X.X (20xx-xx-xx)
 
+1. Set license information based on licenses available from a Fuel server
+   and `legal` information in a `metadata.pbtxt` file.
+    * [Pull request 61](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/61)
+
 1. Alphabetical listing of subcommands.
     * [BitBucket pull request 65](https://github.com/ignitionrobotics/ign-fuel-tools/pull/65)
 
