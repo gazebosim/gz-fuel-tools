@@ -18,7 +18,9 @@
 #ifndef IGNITION_FUEL_TOOLS_JSONPARSER_HH_
 #define IGNITION_FUEL_TOOLS_JSONPARSER_HH_
 
+#include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "ignition/fuel_tools/ModelIdentifier.hh"
@@ -86,6 +88,15 @@ namespace ignition
       /// \return A JSON string representing a single world
       public: static std::string BuildWorld(WorldIter _worldIt);
 
+      /// \brief Parse a license array JSON string and return a map of
+      /// licenses.
+      /// \param[in] _json JSON string containing an array of models
+      /// \param[out] _licenses License information where the keys are license
+      /// names and values are license id's on the Fuel server.
+      /// \return True on success, false otherwise.
+      public: static bool ParseLicenses(const std::string &_json,
+                  std::map<std::string, unsigned int> &_licenses);
+
       /// \brief Parse a json object as a model.
       /// \param[in] _json JSON object containing a single model
       /// \param[out] _model a model identifier after parsing the JSON
@@ -105,6 +116,15 @@ namespace ignition
       /// \return The list of tags.
       private: static std::vector<std::string> ParseTags(
                   const Json::Value &_json);
+
+      /// \brief Parse a JSON object as a license.
+      /// \param[in] _json JSON object containing a single license.
+      /// \param[out] _license License information where the first value in
+      /// the pair is the name of the license and the second value is
+      /// the license id on the Fuel server.
+      /// \return True if parsing succeeded or false otherwise
+      private: static bool ParseLicenseImpl(const Json::Value &_json,
+                   std::pair<std::string, unsigned int> &_license);
     };
   }
 }
