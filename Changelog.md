@@ -1,6 +1,9 @@
 ## Ignition Fuel Tools 3.x
 
-### Ignition Fuel Tools 3.x.x (20xx-xx-xx)
+### Ignition Fuel Tools 3.2.1 (2020-05-xx)
+
+1. Fix URL encodings in RestClient.
+    * [Pull request XX]()
 
 1. Print message when downloading a resource.
     * [BitBucket pull request 102](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/102)
