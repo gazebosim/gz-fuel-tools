@@ -1,6 +1,6 @@
 ## Ignition Fuel Tools 3.x
 
-### Ignition Fuel Tools 3.2.1 (2020-05-xx)
+### Ignition Fuel Tools 3.2.2 (2020-05-18)
 
 1. Fix URL encodings in RestClient.
     * [Pull request 70](https://github.com/ignitionrobotics/ign-fuel-tools/pull/70)
