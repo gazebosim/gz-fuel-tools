@@ -6,6 +6,6 @@ build_*
 .DS_Store
 *.swp
 
-# server filess
+# server files
 test-server/node_modules
 test-server/npm-debug.log
