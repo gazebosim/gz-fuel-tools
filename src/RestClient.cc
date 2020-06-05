@@ -142,7 +142,15 @@ RestResponse Rest::Request(HttpMethod _method,
   std::string url = RestJoinUrl(_url, _version);
 
   CURL *curl = curl_easy_init();
-  char *encodedPath = curl_easy_escape(curl, _path.c_str(), _path.size());
+
+  // First, unescape the _path since it might have %XX encodings. If this
+  // step is not performed, then curl_easy_escape will encode the %XX
+  // encodings resulting in an incorrect URL.
+  int decodedSize;
+  char *decodedPath = curl_easy_unescape(curl,
+      _path.c_str(), _path.size(), &decodedSize);
+
+  char *encodedPath = curl_easy_escape(curl, decodedPath, decodedSize);
   url = RestJoinUrl(url, encodedPath);
 
   // Process query strings.
