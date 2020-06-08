@@ -127,7 +127,7 @@ TEST(CmdLine, ModelListCustomServerPrettyOwner)
   redirectIO(stdOutBuffer, stdErrBuffer);
 
   EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org",
-      "openrobotics"));
+      "OpenRobotics"));
 
   EXPECT_NE(stdOutBuffer.str().find(
         "https://staging-fuel.ignitionrobotics.org"),
