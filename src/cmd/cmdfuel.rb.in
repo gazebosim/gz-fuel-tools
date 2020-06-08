@@ -77,7 +77,7 @@ SUBCOMMANDS = {
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
-  "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
+  "                           https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance\n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'authorization: Bearer JWT'.        \n" +
   COMMON_OPTIONS,
@@ -161,7 +161,7 @@ class Cmd
       end
     when 'download'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
     end
