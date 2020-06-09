@@ -274,8 +274,7 @@ TEST(JSONParser, ParseLicenses)
         break;
       case 7:
         EXPECT_EQ(i, licenses[
-            "Creative Commons - Attribution - Non Commercial - No Derivatives"]
-            );
+           "Creative Commons - Attribution - Non Commercial - No Derivatives"]);
         break;
       default:
         FAIL() << "Invalid license id[" << i << "]\n";

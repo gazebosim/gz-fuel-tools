@@ -116,15 +116,6 @@ namespace ignition
       /// \return The list of tags.
       private: static std::vector<std::string> ParseTags(
                   const Json::Value &_json);
-
-      /// \brief Parse a JSON object as a license.
-      /// \param[in] _json JSON object containing a single license.
-      /// \param[out] _license License information where the first value in
-      /// the pair is the name of the license and the second value is
-      /// the license id on the Fuel server.
-      /// \return True if parsing succeeded or false otherwise
-      private: static bool ParseLicenseImpl(const Json::Value &_json,
-                   std::pair<std::string, unsigned int> &_license);
     };
   }
 }

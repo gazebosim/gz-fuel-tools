@@ -424,16 +424,22 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   // a string. Otherwise, we have to bake into each client a mapping of
   // license name to integer.
   //
-  // If there is no license information, then default to
-  // "Creative Commons - Public Domain"
-  if (this->dataPtr->licenses.empty() || !meta.has_legal())
+  // If we have legal, then attempt to fill in the correct license information.
+  if (meta.has_legal())
   {
-    form.emplace("license", "1");
-  }
-  // Otherwise, we have license information (see PopulateLicenses) and
-  // legal information
-  else
-  {
+    // Attempt to retreive the available licenses, if we have no available
+    // licenses.
+    if (this->dataPtr->licenses.empty())
+    {
+      this->PopulateLicenses(_id.Server());
+      // Fail if a license has been requested, but we couldn't get the
+      // available licenses.
+      if (this->dataPtr->licenses.empty())
+      {
+        return Result(ResultType::UPLOAD_ERROR);
+      }
+    }
+
     // Find the license by name.
     std::map<std::string, unsigned int>::const_iterator licenseIt =
       this->dataPtr->licenses.find(meta.legal().license());
@@ -447,7 +453,6 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
       std::string validLicenseNames;
       auto end = this->dataPtr->licenses.end();
       std::advance(end, -1);
-      //for (size_t i = 0; i < this->dataPtr->licenses.size(); ++i)
       for (licenseIt = this->dataPtr->licenses.begin();
            licenseIt != end; ++licenseIt)
       {
@@ -461,6 +466,12 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
 
       return Result(ResultType::UPLOAD_ERROR);
     }
+  }
+  // If there is no license information, then default to
+  // "Creative Commons - Public Domain"
+  else
+  {
+    form.emplace("license", "1");
   }
 
   // Add tags
