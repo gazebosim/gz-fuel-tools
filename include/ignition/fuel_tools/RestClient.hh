@@ -63,7 +63,10 @@ namespace ignition
       PATCH,
 
       /// \brief Post form method.
-      POST_FORM
+      POST_FORM,
+
+      /// \brief Patch form method.
+      PATCH_FORM
     };
 
     /// \brief A helper class for making REST requests.
