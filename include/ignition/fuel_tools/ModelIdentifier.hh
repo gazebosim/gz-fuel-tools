@@ -130,6 +130,16 @@ namespace ignition
       /// \return The collection of tags.
       public: std::vector<std::string> Tags() const;
 
+      /// \brief Returns the privacy setting of the model.
+      /// \return True if the model is private, false if the model is
+      /// public.
+      public: bool Private() const;
+
+      /// \brief Set the privacy setting of the model.
+      /// \param[in] True indicates the model is private, false indicates the
+      /// model is public.
+      public: void SetPrivate(bool _private) const;
+
       /// \brief Set the description of the model.
       /// \param[in] _desc The description
       /// \return True if successful.

@@ -104,4 +104,21 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(
 /// \param[in] _path Resource path.
 /// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path);
+
+/// \brief External hook to execute 'ign fuel edit [options]' from the command
+/// line.
+///
+/// Example usage, including a private access token which is required:
+///
+/// `ign fuel edit -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"` --public // NOLINT
+///
+/// \param[in] _url Resource URL.
+/// \param[in] _header An HTTP header.
+/// \param[in] _private "1" to make the resource private, "0" to make it
+///            public
+/// \return 1 if successful, 0 if not.
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
+    const char *_url, const char *_header = nullptr,
+    const char *_private = nullptr);
+
 #endif

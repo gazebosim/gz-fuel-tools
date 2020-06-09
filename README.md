@@ -28,6 +28,8 @@ Default is `/usr/local/share/ignition`.
 
 ## Examples
 
+For a complete list of commands run `ign fuel -h` on the command line.
+
 ** List all models **
 ```
 $ ign fuel list -t model -r | head
@@ -96,6 +98,7 @@ ign fuel upload -m ~/path_to_model --header 'authorization: Bearer <JWT TOKEN>'
 ```
 
 Note that the `upload` command only works for models currently, not worlds.
+** Upload a model **
 
 ## TODO
 

@@ -73,6 +73,16 @@ namespace ignition
       public: Result ModelDetails(const ModelIdentifier &_id,
                                   ModelIdentifier &_model) const;
 
+      /// \brief Fetch the details of a model.
+      /// \param[in] _id a partially filled out identifier used to fetch models
+      /// \remarks Fulfills Get-One requirement
+      /// \param[out] _model The requested model
+      /// \return Result of the fetch operation.
+      public: Result ModelDetails(const ModelIdentifier &_id,
+                  ModelIdentifier &_model,
+                  const std::vector<std::string> &_headers) const;
+
+
       /// \brief Returns an iterator that can return names of models
       /// \remarks Fulfills Get-All requirement
       /// \remarks an iterator instead of a list of names is returned in case
@@ -304,6 +314,19 @@ namespace ignition
       /// \param[in] _server Information about the server that provides
       /// license information.
       public: void PopulateLicenses(const ServerConfig &_server);
+
+      /// \brief Update a model using a PATCH request.
+      ///
+      /// Model fields that are patched by this function:
+      ///   * private
+      ///
+      /// \param[in] _model The model to patch. The contents of this model
+      ///            will be sent in the PATCH request.
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \return Result of the patch operation.
+      public: Result PatchModel(
+                  const ignition::fuel_tools::ModelIdentifier &_model,
+                  const std::vector<std::string> &_headers);
 
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;

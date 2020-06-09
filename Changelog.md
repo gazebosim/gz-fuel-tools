@@ -6,8 +6,12 @@
    and `legal` information in a `metadata.pbtxt` file.
     * [Pull request 69](https://bitbucket.org/ignitionrobotics/ign-fuel-tools/pull-requests/69)
 
+1. Added `edit` subcommand to the `ign fuel`. The edit command currently
+   supports editing a model's privacy.
+    * [Pull request 67](https://github.com/ignitionrobotics/ign-fuel-tools/pull/67)
+
 1. Alphabetical listing of subcommands.
-    * [BitBucket pull request 65](https://github.com/ignitionrobotics/ign-fuel-tools/pull/65)
+    * [Pull request 65](https://github.com/ignitionrobotics/ign-fuel-tools/pull/65)
 
 ### Ignition Fuel Tools 4.1.0 (2020-02-27)
 
@@ -30,6 +34,11 @@
 ## Ignition Fuel Tools 3.x
 
 ### Ignition Fuel Tools 3.x.x (20xx-xx-xx)
+
+### Ignition Fuel Tools 3.2.2 (2020-05-18)
+
+1. Fix URL encodings in RestClient.
+    * [Pull request 70](https://github.com/ignitionrobotics/ign-fuel-tools/pull/70)
 
 1. Print message when downloading a resource.
     * [BitBucket pull request 102](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/102)

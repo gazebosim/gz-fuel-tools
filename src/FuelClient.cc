@@ -208,6 +208,13 @@ ClientConfig &FuelClient::Config()
 Result FuelClient::ModelDetails(const ModelIdentifier &_id,
     ModelIdentifier &_model) const
 {
+  return this->ModelDetails(_id, _model, {});
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::ModelDetails(const ModelIdentifier &_id,
+    ModelIdentifier &_model, const std::vector<std::string> &_headers) const
+{
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
@@ -217,7 +224,7 @@ Result FuelClient::ModelDetails(const ModelIdentifier &_id,
   path = path / _id.Owner() / "models" / _id.Name();
 
   resp = rest.Request(HttpMethod::GET, serverUrl, version,
-      path.Str(), {}, {}, "");
+      path.Str(), {}, _headers, "");
   if (resp.statusCode != 200)
     return Result(ResultType::FETCH_ERROR);
 
@@ -1147,6 +1154,33 @@ Result FuelClient::CachedWorldFile(const common::URI &_fileUrl,
   }
 
   return Result(ResultType::FETCH_ERROR);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::PatchModel(
+    const ignition::fuel_tools::ModelIdentifier &_model,
+    const std::vector<std::string> &_headers)
+{
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  auto serverUrl = _model.Server().Url().Str();
+  auto version = _model.Server().Version();
+  common::URIPath path;
+  path = path / _model.Owner() / "models" / _model.Name();
+
+  std::multimap<std::string, std::string> form =
+  {
+    {"private", _model.Private() ? "1" : "0"}
+  };
+
+  resp = rest.Request(HttpMethod::PATCH_FORM, serverUrl, version,
+      path.Str(), {}, _headers, "", form);
+
+  if (resp.statusCode != 200)
+    return Result(ResultType::PATCH_ERROR);
+
+  return Result(ResultType::PATCH);
 }
 
 //////////////////////////////////////////////////

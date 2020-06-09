@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <chrono>
 #include <iostream>
+#include <optional>
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
@@ -709,5 +710,70 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
   }
 
   std::cout << modelConfig << std::endl;
+  return 1;
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
+    const char *_url, const char *_header, const char *_private)
+{
+  ignition::fuel_tools::ClientConfig conf;
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  ignition::fuel_tools::FuelClient client(conf);
+
+  // Store header information
+  std::vector<std::string> headers;
+  if (_header && strlen(_header) > 0)
+    headers.push_back(_header);
+
+  ignition::common::URI url(_url);
+
+  // Get a privacy change.
+  std::optional<bool> privateBool;
+  if (_private && std::strlen(_private) != 0)
+  {
+    std::string privateStr = ignition::common::lowercase(_private);
+    privateBool = privateStr == "1" || privateStr == "true";
+  }
+
+  ignition::fuel_tools::ModelIdentifier model;
+
+  // Check to see if a model has been specified in the the URI.
+  if (client.ParseModelUrl(url, model))
+  {
+    if (ignition::common::Console::Verbosity() >= 3)
+    {
+      std::cout << "Editing model: " << "\033[36m" << std::endl
+        << model.AsPrettyString("  ") << "\033[39m" << std::endl;
+    }
+
+    // Get the model details from the server
+    ignition::fuel_tools::ModelIdentifier details;
+    if (!client.ModelDetails(model, details, headers))
+    {
+      ignerr << "Failed to fetch model details for model["
+        << model.Name() << "]\n";
+      return 0;
+    }
+
+    // Change the privacy setting, if a change is present.
+    if (privateBool.has_value())
+    {
+      details.SetPrivate(*privateBool);
+
+      if (!client.PatchModel(details, headers))
+      {
+        ignerr << "Failed to patch model[" << model.Name() << "].\n";
+        return 0;
+      }
+    }
+  }
+  else
+  {
+    std::cout << "Invalid URL: only models can be edited right now."
+      << std::endl;
+    return 0;
+  }
+
   return 1;
 }
