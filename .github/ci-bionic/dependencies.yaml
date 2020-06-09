@@ -1,0 +1,5 @@
+repositories:
+  ign-msgs:
+    type: git
+    url: https://github.com/ignitionrobotics/ign-msgs
+    version: master
