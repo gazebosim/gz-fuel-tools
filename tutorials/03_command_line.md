@@ -97,3 +97,34 @@ directory, which we call the "local cache". The path is broken down as follows:
 
 > **Tip**: You can also use other tools such as `wget` to download a zipped file of a world, just add `.zip` to the end of the URL, for example: `wget https://fuel.ignitionrobotics.org/1.0/nate/worlds/Empty.zip`.
 
+## Edit resources
+
+It's possible to edit a resource from the command line after it has been
+uploaded to Fuel. Edit functionality is available through the `edit`
+sub-command. You can access the list of edit options using:
+
+```
+ign fuel edit -h
+```
+
+You must be the resource owner, or an authorized member of the organization that owns the resource, in order to edit the resource. This in turn means you must use the `--header 'Private-token: YOUR_TOKEN'` option with the `edit` sub-command.
+
+### Change resource privacy
+
+The edit sub-command supports toggling a resource's status between pubic and
+private. A public resource is accessible to everyone, while a private
+resource is accessible only to the owner. The owner of a resource could be
+an organization, in which case all members of the organization would have
+access.
+
+Use the `-p` option to make a resources private. For example:
+
+```
+ign fuel edit -p -u https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty --header 'Private-token: YOUR_TOKEN'
+```
+
+Use the `-b` option to make a resource public. For example:
+
+```
+ign fuel edit -b -u https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty --header 'Private-token: YOUR_TOKEN'
+```

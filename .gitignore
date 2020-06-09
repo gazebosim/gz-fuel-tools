@@ -6,6 +6,7 @@ build_*
 .DS_Store
 *.swp
 *.orig
+*.bak
 
 # server files
 test-server/node_modules
