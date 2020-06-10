@@ -427,7 +427,7 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   // If we have legal, then attempt to fill in the correct license information.
   if (meta.has_legal())
   {
-    // Attempt to retreive the available licenses, if we have no available
+    // Attempt to retrieve the available licenses, if we have no available
     // licenses.
     if (this->dataPtr->licenses.empty())
     {
