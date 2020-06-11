@@ -124,7 +124,7 @@ namespace ignition
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \remarks It's not yet clear if model names are unique, so this API
-      ///          allows the posibility of getting multiple models with the
+      ///          allows the possibility of getting multiple models with the
       ///          same name.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id);
@@ -133,7 +133,7 @@ namespace ignition
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \remarks It's not yet clear if model names are unique, so this API
-      ///          allows the posibility of getting multiple models with the
+      ///          allows the possibility of getting multiple models with the
       ///          same name.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id) const;
@@ -253,7 +253,7 @@ namespace ignition
       public: Result CachedWorldFile(const common::URI &_fileUrl,
                                      std::string &_path);
 
-      /// \brief Parse model identifer from model URL or unique name.
+      /// \brief Parse model identifier from model URL or unique name.
       /// \param[in] _modelUrl The unique URL of a model. It may also be a
       /// unique name, which is a URL without the server version.
       /// \param[out] _id The model identifier. It may contain incomplete
@@ -265,7 +265,7 @@ namespace ignition
       public: bool ParseModelUrl(const common::URI &_modelUrl,
                                  ModelIdentifier &_id);
 
-      /// \brief Parse world identifer from world URL or unique name.
+      /// \brief Parse world identifier from world URL or unique name.
       /// \param[in] _worldUrl The unique URL of a world. It may also be a
       /// unique name, which is a URL without the server version.
       /// \param[out] _id The world identifier. It may contain incomplete
@@ -277,7 +277,7 @@ namespace ignition
       public: bool ParseWorldUrl(const common::URI &_worldUrl,
                                  WorldIdentifier &_id);
 
-      /// \brief Parse model file identifer from model file URL.
+      /// \brief Parse model file identifier from model file URL.
       /// \param[in] _modelFileUrl The unique URL of a model file. It may also
       /// be a unique name, which is a URL without the server version.
       /// \param[out] _id The model identifier. It may contain incomplete
@@ -290,7 +290,7 @@ namespace ignition
                                      ModelIdentifier &_id,
                                      std::string &_filePath);
 
-      /// \brief Parse world file identifer from world file URL.
+      /// \brief Parse world file identifier from world file URL.
       /// \param[in] _worldFileUrl The unique URL of a world file. It may also
       /// be a unique name, which is a URL without the server version.
       /// \param[out] _id The world identifier. It may contain incomplete
@@ -302,6 +302,18 @@ namespace ignition
       public: bool ParseWorldFileUrl(const common::URI &_worldFileUrl,
                                      WorldIdentifier &_id,
                                      std::string &_filePath);
+
+      /// \brief This function requests the available licenses from the
+      ///  Fuel server and stores this information locally.
+      ///
+      /// The UploadModel function can use this information to set
+      /// appropriate license information based on a model's metadata.pbtxt
+      /// file. If license information is not available, then the
+      /// UploadModel function will default to the
+      /// "Creative Commons - Public Domain" license.
+      /// \param[in] _server Information about the server that provides
+      /// license information.
+      public: void PopulateLicenses(const ServerConfig &_server);
 
       /// \brief Update a model using a PATCH request.
       ///

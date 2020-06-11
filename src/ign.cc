@@ -591,6 +591,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     return 0;
   }
 
+  // Get the set of licenses from the server. This license information will
+  // be used during the upload process.
+  client.PopulateLicenses(model.Server());
+
   if (ignition::common::exists(
         ignition::common::joinPaths(_path, "metadata.pbtxt")) ||
       ignition::common::exists(

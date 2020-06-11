@@ -2,6 +2,10 @@
 
 ### Ignition Fuel Tools 4.X.X (20xx-xx-xx)
 
+1. Set license information based on licenses available from a Fuel server
+   and `legal` information in a `metadata.pbtxt` file.
+    * [Pull request 69](https://github.com/ignitionrobotics/ign-fuel-tools/pull/69)
+
 1. Added `edit` subcommand to the `ign fuel`. The edit command currently
    supports editing a model's privacy.
     * [Pull request 67](https://github.com/ignitionrobotics/ign-fuel-tools/pull/67)

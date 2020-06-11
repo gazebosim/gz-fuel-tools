@@ -18,7 +18,9 @@
 #ifndef IGNITION_FUEL_TOOLS_JSONPARSER_HH_
 #define IGNITION_FUEL_TOOLS_JSONPARSER_HH_
 
+#include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "ignition/fuel_tools/ModelIdentifier.hh"
@@ -85,6 +87,15 @@ namespace ignition
       /// \param[in] _worldIt A world iterator containing only one world
       /// \return A JSON string representing a single world
       public: static std::string BuildWorld(WorldIter _worldIt);
+
+      /// \brief Parse a license array JSON string and return a map of
+      /// licenses.
+      /// \param[in] _json JSON string containing an array of models
+      /// \param[out] _licenses License information where the keys are license
+      /// names and values are license id's on the Fuel server.
+      /// \return True on success, false otherwise.
+      public: static bool ParseLicenses(const std::string &_json,
+                  std::map<std::string, unsigned int> &_licenses);
 
       /// \brief Parse a json object as a model.
       /// \param[in] _json JSON object containing a single model
