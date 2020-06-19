@@ -194,11 +194,11 @@ cc_binary(
     name = "libignition_fuel_tools.so",
     srcs = sources + private_headers + public_headers,
     includes = ["include"],
-    linkopts = ["-Wl,-soname,libignition_fuel_tools.so", "-lyaml"],
+    linkopts = ["-Wl,-soname,libignition_fuel_tools.so", "-lyaml", "-ljsoncpp", "-lcurl", "-lzip"],
     linkshared = True,
     visibility = [],
     copts = [
-        "-Iexternal/json",
+        "-Iexternal/json"
     ],
     deps = [
         "//ign_common",
@@ -213,6 +213,14 @@ cc_library(
     hdrs = public_headers,
     includes = ["include"],
     visibility = ["//visibility:public"],
+    copts = [
+        "-Iexternal/json"
+    ],
+    deps = [
+        "//ign_common",
+        "//ign_msgs",
+        "@json//:headers",
+    ],
 )
 
 [cc_test(
