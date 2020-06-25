@@ -35,38 +35,6 @@ CMAKE_INSTALL_DATAROOTDIR = "/tmp"
 library_location = "/usr"
 IGN_LIBRARY_PATH = "/usr"
 
-cmds = "    - fuel   : Manage simulation resources."
-
-generate_yaml(
-    name = "yaml",
-    library_name = PROJECT_NAME, 
-    library_version = "%d.%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),
-    commands = cmds,
-    ruby_target = "//ign_fuel_tools:cmdfuel.rb",
-)
-
-# Generates config.hh based on the version numbers in CMake code.
-cmake_configure_file(
-    name = "cmdfuel.rb",
-    src = "src/cmd/cmdfuel.rb.in",
-    out = "src/cmd/cmdfuel.rb",
-    cmakelists = ["CMakeLists.txt"],
-    defines = [
-        "library_location=%s" % [library_location],
-        "PROJECT_VERSION_FULL=%d.%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),  # noqa
-        "IGN_LIBRARY_NAME=%s" % [PROJECT_NAME],
-    ],
-    visibility = ["//visibility:public"],
-)
-
-ruby_binary(
-    name = "fuel-tools-ruby",
-    srcs = ["src/cmd/cmdfuel.rb"],
-    includes = ["src/cmd"],
-    main = "src/cmd/cmdfuel.rb",
-    visibility = ["//visibility:public"],
-)
-
 # Generates config.hh based on the version numbers in CMake code.
 cmake_configure_file(
     name = "config",
@@ -191,10 +159,10 @@ public_headers = public_headers_no_gen + [
 ]
 
 cc_binary(
-    name = "libignition_fuel_tools.so",
+    name = "libignition-fuel-tools4.so",
     srcs = sources + private_headers + public_headers,
     includes = ["include"],
-    linkopts = ["-Wl,-soname,libignition_fuel_tools.so", "-lyaml", "-ljsoncpp", "-lcurl", "-lzip"],
+    linkopts = ["-Wl,-soname,libignition-fuel-tools4.so", "-lyaml", "-ljsoncpp", "-lcurl", "-lzip"],
     linkshared = True,
     visibility = [],
     copts = [
@@ -209,7 +177,7 @@ cc_binary(
 
 cc_library(
     name = "ign_fuel_tools",
-    srcs = ["libignition_fuel_tools.so"],
+    srcs = ["libignition-fuel-tools4.so"],
     hdrs = public_headers,
     includes = ["include"],
     visibility = ["//visibility:public"],
@@ -234,3 +202,5 @@ cc_library(
         "@gtest//:gtest_main",
     ],
 ) for src in test_sources]
+
+exports_files(["src/cmd/cmdfuel.rb.in"])
