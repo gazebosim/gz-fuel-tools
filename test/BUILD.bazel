@@ -3,13 +3,13 @@ load(
     "cmake_configure_file",
 )
 
-BINARY_DIR = "/tmp"
-SOURCE_DIR = "/tmp"
+BINARY_DIR = "."
+SOURCE_DIR = "./ign_fuel_tools"
 CMAKE_BINARY_DIR = "/tmp"
-IGNITION_TOOLS_BINARY_DIRS = "/tmp"
+IGNITION_TOOLS_BINARY_DIRS = "./ign_tools"
 PROJECT_NAME = "ignition-fuel-tools"
-PROJECT_MAJOR = 8
-PROJECT_MINOR = 0
+PROJECT_MAJOR = 4
+PROJECT_MINOR = 1
 PROJECT_PATCH = 0
 
 # Generates config.hh based on the version numbers in CMake code.
@@ -30,8 +30,27 @@ cmake_configure_file(
 
 cc_library(
     name = "test_utils",
-    srcs = ["test/test_config.h"],
+    srcs = ["test/test_config.h", "test_util.hh"],
     includes = ["."],
     visibility = ["//visibility:public"],
 )
 
+[
+    cc_test(
+        name = "INTEGRATION_" + test.split('/')[1].replace('.cc', ''),
+        srcs = [ test ],
+        deps = [
+          ":test_utils",
+          "//ign_common",
+          "//ign_fuel_tools",
+          "@gtest//:gtest",
+          "@gtest//:gtest_main",
+        ],
+        data = [
+            ":media",
+        ],
+        includes = [".", "integration"],
+    ) for test in glob(["integration/*.cc"])
+]
+
+exports_files(["media"])
