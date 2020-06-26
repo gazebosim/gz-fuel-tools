@@ -23,6 +23,7 @@
 #include "ignition/fuel_tools/Interface.hh"
 
 #include "test/test_config.h"
+#include "test_util.hh"
 
 #ifdef _WIN32
 #include <direct.h>
@@ -41,7 +42,10 @@ TEST(Interface, FetchResources)
   common::Console::SetVerbosity(4);
 
   // Configure to use binary path as cache
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  std::string cache_path;
+  ignition::testing::TestTmpPath(cache_path);
+
+  ASSERT_EQ(0, ChangeDirectory(cache_path.c_str()));
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
