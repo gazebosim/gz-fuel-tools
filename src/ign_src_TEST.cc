@@ -127,7 +127,7 @@ TEST(CmdLine, ModelListCustomServerPrettyOwner)
   redirectIO(stdOutBuffer, stdErrBuffer);
 
   EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org",
-      "openrobotics"));
+      "OpenRobotics"));
 
   EXPECT_NE(stdOutBuffer.str().find(
         "https://staging-fuel.ignitionrobotics.org"),
@@ -344,13 +344,12 @@ TEST(CmdLine, WorldListCustomServerPrettyOwner)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org", "nate"));
+  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org",
+      "OpenRobotics"));
 
   EXPECT_NE(stdOutBuffer.str().find(
         "https://staging-fuel.ignitionrobotics.org"), std::string::npos)
     << stdOutBuffer.str();
-  EXPECT_NE(stdOutBuffer.str().find("1 owners"), std::string::npos)
-      << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("worlds"), std::string::npos)
       << stdOutBuffer.str();
 
@@ -418,7 +417,7 @@ TEST(CmdLine, WorldDownloadUnversioned)
 
   // Download
   EXPECT_TRUE(downloadUrl(
-      "https://staging-fuel.ignitionrobotics.org/1.0/nate/worlds/Empty"));
+      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Test world"));
 
   // Check output
   EXPECT_NE(stdOutBuffer.str().find("Download succeeded"),
@@ -427,12 +426,12 @@ TEST(CmdLine, WorldDownloadUnversioned)
 
   // Check files
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty"));
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1"));
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/1"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/")
-      + "Empty/1/empty.world"));
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/")
+      + "Test world/1/test.world"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();

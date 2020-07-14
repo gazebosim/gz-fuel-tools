@@ -37,9 +37,9 @@ int main(int argc, char **argv)
   std::string usage("Download a resource.");
   usage += " Usage:\n  ./download <options>\n\n";
   usage += "  Examples:\n"
-    "\t ./download -t model -o openrobotics -n Beer\n"
+    "\t ./download -t model -o OpenRobotics -n Beer\n"
     "\t ./download -s https://fuel.ignitionrobotics.org -t world "
-    "-o openrobotics"
+    "-o OpenRobotics"
     " -n Empty\n"
     "\t ./download -c /tmp/my_config.yaml -t model -o caguero -n Beer\n";
 

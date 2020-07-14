@@ -201,7 +201,7 @@ namespace ignition
       /// \brief Download a world from ignition fuel. This will override an
       /// existing local copy of the world.
       /// \param[in] _worldUrl The unique URL of the world to download.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty
+      /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
       /// \param[out] _path Path where the world was downloaded.
       /// \return Result of the download operation.
       public: Result DownloadWorld(const common::URI &_worldUrl,
@@ -223,7 +223,7 @@ namespace ignition
 
       /// \brief Check if a world is already present in the local cache.
       /// \param[in] _worldUrl The unique URL of the world on a Fuel server.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty
+      /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
       /// \param[out] _path Local path where the world can be found.
       /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
       public: Result CachedWorld(const common::URI &_worldUrl,
@@ -231,7 +231,7 @@ namespace ignition
 
       /// \brief Check if a world exists in the cache.
       /// \param[in] _worldUrl The unique URL of the world on a Fuel server.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty
+      /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
       /// \return True if the world exists in the cache, false otherwise.
       public: bool CachedWorld(const common::URI &_worldUrl);
 
