@@ -234,12 +234,12 @@ class Cmd
     case options['subcommand']
     when 'delete'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
     when 'download'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
     when 'list'
@@ -358,7 +358,6 @@ class Cmd
           exit(-1)
         end
       end
-
     rescue
       puts "Library error: Problem running [#{options['subcommand']}]() "\
            "from @IGN_LIBRARY_NAME@."

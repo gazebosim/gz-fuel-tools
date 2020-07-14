@@ -47,10 +47,10 @@ https://fuel.ignitionrobotics.org/anonymous/test_model_380348669
 
 ** Download a model **
 ```
-$ ign fuel download -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance -v 4
+$ ign fuel download -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance -v 4
 Downloading model:
   Name: Ambulance
-  Owner: openrobotics
+  Owner: OpenRobotics
   Server:
     URL: https://fuel.ignitionrobotics.org
     Version: 1.0

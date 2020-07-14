@@ -66,7 +66,7 @@ class ignition::fuel_tools::FuelClientPrivate
     "([0-9]*|tip)"};
 
   /// \brief A world URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty/1
+  /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/1
   /// Where the API version and the world version are optional.
   public: const std::string kWorldUrlRegexStr{
     // Method
