@@ -57,34 +57,36 @@ class ignition::fuel_tools::LocalCachePrivate
   /// \brief return all models in a given Owner/models directory
   public: std::vector<Model> ModelsInPath(const std::string &_path);
 
-  /// \brief Associate model:// URI paths with paths on disk
+  /// \brief Associate model:// URI paths with Fuel URLs.
   /// \param[in] _modelVersionedDir Directory containing the model.
+  /// \param[in] _id Model's Fuel URL.
   /// \return True if the paths were fixed. False could occur if the
   /// `model.config` file is not present or contains XML errors.
-  public: bool FixPaths(const std::string &_modelVersionedDir);
+  public: bool FixPaths(const std::string &_modelVersionedDir,
+      const ModelIdentifier &_id);
 
   /// \brief Helper function to fix model:// URI paths in geometry elements.
   /// \param[in] _geomElem Pointer to the geometry element.
-  /// \param[in] _modelVersionedDir Directory containing the model.
+  /// \param[in] _id Model identifier
   /// \sa FixPaths
   public: void FixPathsInGeomElement(tinyxml2::XMLElement *_geomElem,
-              const std::string &_modelVersionedDir);
+              const ModelIdentifier &_id);
 
   /// \brief Helper function to fix model:// URI paths in material elements.
   /// \param[in] _matElem Pointer to the material element.
-  /// \param[in] _modelVersionedDir Directory containing the model.
+  /// \param[in] _id Model identifier
   /// \sa FixPaths
   public: void FixPathsInMaterialElement(
               tinyxml2::XMLElement *_matElem,
-              const std::string &_modelVersionedDir);
+              const ModelIdentifier &_id);
 
   /// \brief Helper function to fix a single model:// URI that is contained
   /// in an element.
   /// \param[in] _elem Pointer to an element tha contains a URI.
-  /// \param[in] _modelVersionedDir Directory containing the model.
+  /// \param[in] _id Model identifier
   /// \sa FixPaths
   public: void FixPathsInUri(tinyxml2::XMLElement *_elem,
-              const std::string &_modelVersionedDir);
+              const ModelIdentifier &_id);
 
   /// \brief client configuration
   public: const ClientConfig *config = nullptr;
@@ -413,8 +415,8 @@ bool LocalCache::SaveModel(
     return false;
   }
 
-  // Convert model:// URIs to locations on disk.
-  this->dataPtr->FixPaths(modelVersionedDir);
+  // Convert model:// URIs to Fuel URLs
+  this->dataPtr->FixPaths(modelVersionedDir, _id);
 
   // Cleanup the zip file.
   if (!common::removeDirectoryOrFile(zipFile))
@@ -426,7 +428,8 @@ bool LocalCache::SaveModel(
 }
 
 //////////////////////////////////////////////////
-bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
+bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir,
+    const ModelIdentifier &_id)
 {
   // Get model.config
   std::string modelConfigPath = common::joinPaths(
@@ -498,7 +501,7 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
       while (collisionElem)
       {
         this->FixPathsInGeomElement(
-            collisionElem->FirstChildElement("geometry"), _modelVersionedDir);
+            collisionElem->FirstChildElement("geometry"), _id);
         // Next collision element.
         collisionElem = collisionElem->NextSiblingElement("collision");
       }
@@ -509,9 +512,9 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
       while (visualElem)
       {
         this->FixPathsInGeomElement(
-            visualElem->FirstChildElement("geometry"), _modelVersionedDir);
+            visualElem->FirstChildElement("geometry"), _id);
         this->FixPathsInMaterialElement(
-            visualElem->FirstChildElement("material"), _modelVersionedDir);
+            visualElem->FirstChildElement("material"), _id);
         visualElem = visualElem->NextSiblingElement("visual");
       }
       linkElem = linkElem->NextSiblingElement("link");
@@ -531,7 +534,7 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
       auto filenameElem = skinElem->FirstChildElement("filename");
       if (filenameElem)
       {
-        this->FixPathsInUri(filenameElem, _modelVersionedDir);
+        this->FixPathsInUri(filenameElem, _id);
       }
       skinElem = skinElem->NextSiblingElement("skin");
     }
@@ -543,7 +546,7 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
       auto filenameElem = animationElem->FirstChildElement("filename");
       if (filenameElem)
       {
-        this->FixPathsInUri(filenameElem, _modelVersionedDir);
+        this->FixPathsInUri(filenameElem, _id);
       }
       animationElem = animationElem->NextSiblingElement("animation");
     }
@@ -556,34 +559,54 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir)
 
 //////////////////////////////////////////////////
 void LocalCachePrivate::FixPathsInUri(tinyxml2::XMLElement *_elem,
-    const std::string &_modelVersionedDir)
+    const ModelIdentifier &_id)
 {
   if (!_elem)
     return;
 
-  std::string uri = _elem->GetText();
+  std::string oldUri = _elem->GetText();
   std::string prefix =  "model://";
 
   // Make sure the URI is of the form model://
-  if (uri.find(prefix) != std::string::npos)
+  if (oldUri.find(prefix) == std::string::npos)
+    return;
+
+  int firstSlash = oldUri.find('/', prefix.size()+1);
+
+  auto resourceName = oldUri.substr(prefix.size(), firstSlash - prefix.size());
+
+  if (resourceName != _id.Name())
   {
-    int firstSlash = uri.find('/', prefix.size()+1);
-    std::string suffix = uri.substr(firstSlash);
-
-    // Convert the model:// to point to an actual file.
-    // \todo(nkoenig) Handle URIs to other models. For
-    // example, ModelA may use something from ModelB.
-    std::string diskPath = common::joinPaths("file:/",
-        _modelVersionedDir, suffix);
-
-    _elem->SetText(diskPath.c_str());
+    // On Blueprint and Citadel, just warn the user
+    // From Dome, use the name on the URI (resourceName) and assume the same
+    // owner
+    igndbg << "Model [" << _id.Name()
+           << "] loading resource from another model, named [" << resourceName
+           << "]. On Blueprint and Citadel, [" << resourceName << "] is ignored. "
+           << "From Dome, [" << _id.Name() << "] will be used. If ["
+           << resourceName << "] is not a model belonging to owner ["
+           << _id.Owner() << "], fix your SDF file!" << std::endl;
   }
+
+  auto filePath = oldUri.substr(firstSlash);
+
+  auto fuelUrl =
+      _id.Server().Url().Str() + '/' +
+      _id.Server().Version() + '/' +
+      _id.Owner() +
+      "/models/" +
+       _id.Name() + '/' +
+       _id.VersionStr() +
+      "/files/" +
+       filePath;
+
+  _elem->SetText(fuelUrl.c_str());
 }
 
 //////////////////////////////////////////////////
 void LocalCachePrivate::FixPathsInMaterialElement(
     tinyxml2::XMLElement *_matElem,
-    const std::string &_modelVersionedDir)
+    const ModelIdentifier &_id)
 {
   if (!_matElem)
     return;
@@ -597,7 +620,7 @@ void LocalCachePrivate::FixPathsInMaterialElement(
     // Convert the "model://" URI pattern to file://
     while (uriElem)
     {
-      this->FixPathsInUri(uriElem, _modelVersionedDir);
+      this->FixPathsInUri(uriElem, _id);
       uriElem = uriElem->NextSiblingElement("uri");
     }
   }
@@ -616,30 +639,30 @@ void LocalCachePrivate::FixPathsInMaterialElement(
         tinyxml2::XMLElement *albedoElem =
             workflowElem->FirstChildElement("albedo_map");
         if (albedoElem)
-          this->FixPathsInUri(albedoElem, _modelVersionedDir);
+          this->FixPathsInUri(albedoElem, _id);
         tinyxml2::XMLElement *normalElem =
             workflowElem->FirstChildElement("normal_map");
         if (normalElem)
-          this->FixPathsInUri(normalElem, _modelVersionedDir);
+          this->FixPathsInUri(normalElem, _id);
         tinyxml2::XMLElement *envElem =
             workflowElem->FirstChildElement("environment_map");
         if (envElem)
-          this->FixPathsInUri(envElem, _modelVersionedDir);
+          this->FixPathsInUri(envElem, _id);
         tinyxml2::XMLElement *emissiveElem =
             workflowElem->FirstChildElement("emissive_map");
         if (emissiveElem)
-          this->FixPathsInUri(emissiveElem, _modelVersionedDir);
+          this->FixPathsInUri(emissiveElem, _id);
         // metal workflow specific elements
         if (workflow == "metal")
         {
           tinyxml2::XMLElement *metalnessElem =
               workflowElem->FirstChildElement("metalness_map");
           if (metalnessElem)
-            this->FixPathsInUri(metalnessElem, _modelVersionedDir);
+            this->FixPathsInUri(metalnessElem, _id);
           tinyxml2::XMLElement *roughnessElem =
               workflowElem->FirstChildElement("roughness_map");
           if (roughnessElem)
-            this->FixPathsInUri(roughnessElem, _modelVersionedDir);
+            this->FixPathsInUri(roughnessElem, _id);
         }
         // specular workflow specific elements
         else if (workflow == "specular")
@@ -647,11 +670,11 @@ void LocalCachePrivate::FixPathsInMaterialElement(
           tinyxml2::XMLElement *specularElem =
               workflowElem->FirstChildElement("specular_map");
           if (specularElem)
-            this->FixPathsInUri(specularElem, _modelVersionedDir);
+            this->FixPathsInUri(specularElem, _id);
           tinyxml2::XMLElement *glossinessElem =
               workflowElem->FirstChildElement("glossiness_map");
           if (glossinessElem)
-            this->FixPathsInUri(glossinessElem, _modelVersionedDir);
+            this->FixPathsInUri(glossinessElem, _id);
         }
       }
     }
@@ -661,7 +684,7 @@ void LocalCachePrivate::FixPathsInMaterialElement(
 
 //////////////////////////////////////////////////
 void LocalCachePrivate::FixPathsInGeomElement(tinyxml2::XMLElement *_geomElem,
-    const std::string &_modelVersionedDir)
+    const ModelIdentifier &_id)
 {
   if (!_geomElem)
     return;
@@ -673,7 +696,7 @@ void LocalCachePrivate::FixPathsInGeomElement(tinyxml2::XMLElement *_geomElem,
   {
     tinyxml2::XMLElement *uriElem = meshElem->FirstChildElement("uri");
     // Convert the "model://" URI pattern to file://
-    this->FixPathsInUri(uriElem, _modelVersionedDir);
+    this->FixPathsInUri(uriElem, _id);
   }
 }
 
