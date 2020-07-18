@@ -13,6 +13,17 @@ jobs:
         id: ci
         uses: ignition-tooling/ubuntu-bionic-ci-action@master
         with:
-          apt-dependencies: 'libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev libtinyxml2-dev curl libyaml-dev libignition-cmake2-dev libignition-math4-dev libignition-common3-dev'
+          apt-dependencies: |
+            libcurl4-openssl-dev
+            libjsoncpp-dev
+            libzip-dev
+            libgflags-dev
+            libtinyxml2-dev
+            curl
+            libyaml-dev
+            libignition-cmake2-dev
+            libignition-math4-dev
+            libignition-common3-dev
+            libignition-tools-dev
           codecov-token: ${{ secrets.CODECOV_TOKEN }}
           script-after-make: ../.github/ci-bionic/after_make.sh
