@@ -5,8 +5,8 @@ set -x
 # Install
 make install
 
-# Compile examples
-cd ../examples
+# Compile example
+cd ../example
 mkdir build
 cd build
 cmake ..
