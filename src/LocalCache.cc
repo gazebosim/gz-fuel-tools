@@ -597,7 +597,7 @@ void LocalCachePrivate::FixPathsInUri(tinyxml2::XMLElement *_elem,
       "/models/" +
        _id.Name() + '/' +
        _id.VersionStr() +
-      "/files/" +
+      "/files" +
        filePath;
 
   _elem->SetText(fuelUrl.c_str());
