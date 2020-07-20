@@ -60,6 +60,7 @@ Result::operator bool() const
     case ResultType::DELETE:
     case ResultType::FETCH:
     case ResultType::FETCH_ALREADY_EXISTS:
+    case ResultType::PATCH:
     case ResultType::UPLOAD:
       return true;
     default:
@@ -92,6 +93,10 @@ std::string Result::ReadableResult() const
         return "Model already exists";
     case ResultType::UPLOAD_ERROR:
         return "Upload failed. Other errors";
+    case ResultType::PATCH_ERROR:
+        return "Patch failed.";
+    case ResultType::PATCH:
+      return "Successfully sent patch request to the server";
     case ResultType::UNKNOWN:
     default:
       return "Unknown result";

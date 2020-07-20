@@ -28,6 +28,8 @@ Default is `/usr/local/share/ignition`.
 
 ## Examples
 
+For a complete list of commands run `ign fuel -h` on the command line.
+
 ** List all models **
 ```
 $ ign fuel list -t model -r | head
@@ -45,10 +47,10 @@ https://fuel.ignitionrobotics.org/anonymous/test_model_380348669
 
 ** Download a model **
 ```
-$ ign fuel download -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance -v 4
+$ ign fuel download -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance -v 4
 Downloading model:
   Name: Ambulance
-  Owner: openrobotics
+  Owner: OpenRobotics
   Server:
     URL: https://fuel.ignitionrobotics.org
     Version: 1.0
@@ -96,6 +98,7 @@ ign fuel upload -m ~/path_to_model --header 'authorization: Bearer <JWT TOKEN>'
 ```
 
 Note that the `upload` command only works for models currently, not worlds.
+** Upload a model **
 
 ## TODO
 

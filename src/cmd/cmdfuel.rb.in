@@ -62,6 +62,7 @@ COMMANDS = { 'fuel' =>
   "Available Actions:                                                      \n"\
   "  delete                   Delete resources                             \n"\
   "  download                 Download resources                           \n"\
+  "  edit                     Edit a resource                              \n"\
   "  list                     List available resources                     \n"\
   "  meta                     Read and write resource metadata             \n"\
   "  upload                   Upload resources                             \n"\
@@ -95,6 +96,21 @@ SUBCOMMANDS = {
   "Available Options:                                                      \n"\
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
   "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
+  "  --header arg             Set an HTTP header, such as                  \n"\
+  "                           --header 'authorization: Bearer JWT'.        \n" +
+  COMMON_OPTIONS,
+
+ 'edit' =>
+  "Edit a simulation resource                                              \n"\
+  "                                                                        \n"\
+  "  ign fuel edit [options]                                               \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  -u [--url] arg           URL of the server that should receive        \n"\
+  "                           the model. If unspecified, the server will be\n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
+  "  -p [--private]           Use this argument to make the model private. \n"\
+  "  -b [--public]            Use this argument to make the model public.  \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'authorization: Bearer JWT'.        \n" +
   COMMON_OPTIONS,
@@ -163,7 +179,7 @@ class Cmd
       'model' => '',
       'config2pbtxt' => '',
       'pbtxt2config' => '',
-      'private' => 'false'
+      'private' => ''
     }
 
     usage = COMMANDS[args[0]]
@@ -219,7 +235,9 @@ class Cmd
       opts.on('-p', '--private', 'Private resource') do
         options['private'] = 'true'
       end
-
+      opts.on('-b', '--public', 'Public resource') do
+        options['private'] = 'false'
+      end
     end # opt_parser do
 
     opt_parser.parse!(args)
@@ -231,12 +249,12 @@ class Cmd
     case options['subcommand']
     when 'delete'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
     when 'download'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
     when 'list'
@@ -310,6 +328,12 @@ class Cmd
             options['header'])
           exit(-1)
         end
+      when 'edit'
+        Importer.extern 'int editUrl(const char *, const char *, const char *)'
+        if not Importer.editUrl(options['url'], options['header'],
+            options['private'])
+          exit(-1)
+        end
       when 'list'
         if options['type'] == 'model'
           Importer.extern 'int listModels(const char *, const char *, const char *, const char *)'
@@ -349,7 +373,6 @@ class Cmd
           exit(-1)
         end
       end
-
     rescue
       puts "Library error: Problem running [#{options['subcommand']}]() "\
            "from @IGN_LIBRARY_NAME@."

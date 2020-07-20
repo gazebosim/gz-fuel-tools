@@ -75,6 +75,10 @@ class ignition::fuel_tools::ModelIdentifierPrivate
 
   /// \brief Model version. Valid versions start from 1, 0 means the tip.
   public: unsigned int version{0};
+
+  /// \brief True indicates the model is private, false indicates the
+  /// model is public.
+  public: bool privacy{false};
 };
 
 //////////////////////////////////////////////////
@@ -483,4 +487,16 @@ std::string ModelIdentifier::AsPrettyString(const std::string &_prefix) const
   out << _prefix << prop << "Server:" << reset << std::endl
       << this->Server().AsPrettyString(_prefix + "  ");
   return out.str();
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::Private() const
+{
+  return this->dataPtr->privacy;
+}
+
+//////////////////////////////////////////////////
+void ModelIdentifier::SetPrivate(bool _private) const
+{
+  this->dataPtr->privacy = _private;
 }

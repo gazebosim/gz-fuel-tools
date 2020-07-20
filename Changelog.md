@@ -4,11 +4,20 @@
 
 ### Ignition Fuel Tools 5.0.0 (20xx-xx-xx)
 
-## Ignition Fuel Tools 4.x
+### Ignition Fuel Tools 4.X.X (20xx-xx-xx)
 
-### Ignition Fuel Tools 4.x.x
+1. Set license information based on licenses available from a Fuel server
+   and `legal` information in a `metadata.pbtxt` file.
+    * [Pull request 69](https://github.com/ignitionrobotics/ign-fuel-tools/pull/69)
 
-### Ignition Fuel Tools 4.1.0 (20xx-xx-xx)
+1. Added `edit` subcommand to the `ign fuel`. The edit command currently
+   supports editing a model's privacy.
+    * [Pull request 67](https://github.com/ignitionrobotics/ign-fuel-tools/pull/67)
+
+1. Alphabetical listing of subcommands.
+    * [Pull request 65](https://github.com/ignitionrobotics/ign-fuel-tools/pull/65)
+
+### Ignition Fuel Tools 4.1.0 (2020-02-27)
 
 1. Resource deletion CLI.
     * [BitBucket pull request 119](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/119)
