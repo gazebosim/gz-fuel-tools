@@ -166,7 +166,7 @@ TEST(Interface, FetchResources)
   {
     // Check it's not cached
     common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Test world"};
+      "https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Test world"};
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
@@ -178,11 +178,11 @@ TEST(Interface, FetchResources)
 
     // Check it was downloaded to `1`
     EXPECT_EQ(path, common::cwd() + "/test_cache/fuel.ignitionrobotics.org/"
-        "OpenRobotics/worlds/Test world/1");
+        "openrobotics/worlds/Test world/1");
     EXPECT_TRUE(common::exists("test_cache/fuel.ignitionrobotics.org/"
-        "OpenRobotics/worlds/Test world/1"));
+        "openrobotics/worlds/Test world/1"));
     EXPECT_TRUE(common::exists("test_cache/fuel.ignitionrobotics.org/"
-        "OpenRobotics/worlds/Test world/1/test.world"));
+        "openrobotics/worlds/Test world/1/test.world"));
 
     // Check it is cached
     {
@@ -190,7 +190,7 @@ TEST(Interface, FetchResources)
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
       EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/"
+          "/test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/"
           "Test world/1", cachedPath);
      }
   }
