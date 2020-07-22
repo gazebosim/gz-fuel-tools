@@ -582,8 +582,8 @@ void LocalCachePrivate::FixPathsInUri(tinyxml2::XMLElement *_elem,
     // owner
     igndbg << "Model [" << _id.Name()
            << "] loading resource from another model, named [" << resourceName
-           << "]. On Blueprint and Citadel, [" << resourceName << "] is ignored. "
-           << "From Dome, [" << _id.Name() << "] will be used. If ["
+           << "]. On Blueprint and Citadel, [" << resourceName << "] is "
+           << "ignored. From Dome, [" << _id.Name() << "] will be used. If ["
            << resourceName << "] is not a model belonging to owner ["
            << _id.Owner() << "], fix your SDF file!" << std::endl;
   }
