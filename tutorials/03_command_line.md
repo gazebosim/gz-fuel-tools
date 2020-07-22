@@ -21,7 +21,7 @@ You should see a list such as:
 Fetching world list from https://fuel.ignitionrobotics.org...
 Received world list (took 350ms).
 https://fuel.ignitionrobotics.org
-├── openrobotics
+├── OpenRobotics
 │   ├── Empty
 │   └── Shapes
 └── chapulina
@@ -50,8 +50,8 @@ a way that's easier for scripts to parse. For example, try:
 And you'll get a list of the world URLs similar to the one below:
 
 ```
-https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty
-https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Shapes
+https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
+https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Shapes
 https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Shapes%20copy
 ```
 
@@ -60,7 +60,7 @@ https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Shapes%20copy
 It's also possible to only list resources belonging to a given user, using the
 `--owner` flag. Try for example:
 
-`ign fuel list -t model -o openrobotics`
+`ign fuel list -t model -o OpenRobotics`
 
 ## Download resources
 
@@ -70,21 +70,21 @@ computer. We use the `ign fuel download` tool for this.
 We learned above how to get resource URLs. Now we can use these URLs to download
 them. For example, try:
 
-`ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/nate/worlds/Empty`
+`ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty`
 
 Note that we passed the `-v 4` option so we get a verbose output. You should see something like:
 
 ```
-Downloading world: 
+Downloading world:
   Name: Empty
-  Owner: nate
+  Owner: OpenRobotics
   Server:
     URL: https://fuel.ignitionrobotics.org
     Version: 1.0
 
-[Msg] Downloading world [fuel.ignitionrobotics.org/nate/worlds/Empty]
+[Msg] Downloading world [fuel.ignitionrobotics.org/OpenRobotics/worlds/Empty]
 [Msg] Saved world at:
-  /home/louise/.ignition/fuel/fuel.ignitionrobotics.org/nate/worlds/Empty/1
+  /home/louise/.ignition/fuel/fuel.ignitionrobotics.org/OpenRobotics/worlds/Empty/1
 Download succeeded.
 ```
 
@@ -95,5 +95,36 @@ directory, which we call the "local cache". The path is broken down as follows:
 
 > **Tip**: You can change the local cache path in `config.yaml`.
 
-> **Tip**: You can also use other tools such as `wget` to download a zipped file of a world, just add `.zip` to the end of the URL, for example: `wget https://fuel.ignitionrobotics.org/1.0/nate/worlds/Empty.zip`.
+> **Tip**: You can also use other tools such as `wget` to download a zipped file of a world, just add `.zip` to the end of the URL, for example: `wget https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty.zip`.
 
+## Edit resources
+
+It's possible to edit a resource from the command line after it has been
+uploaded to Fuel. Edit functionality is available through the `edit`
+sub-command. You can access the list of edit options using:
+
+```
+ign fuel edit -h
+```
+
+You must be the resource owner, or an authorized member of the organization that owns the resource, in order to edit the resource. This in turn means you must use the `--header 'Private-token: YOUR_TOKEN'` option with the `edit` sub-command.
+
+### Change resource privacy
+
+The edit sub-command supports toggling a resource's status between pubic and
+private. A public resource is accessible to everyone, while a private
+resource is accessible only to the owner. The owner of a resource could be
+an organization, in which case all members of the organization would have
+access.
+
+Use the `-p` option to make a resources private. For example:
+
+```
+ign fuel edit -p -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty --header 'Private-token: YOUR_TOKEN'
+```
+
+Use the `-b` option to make a resource public. For example:
+
+```
+ign fuel edit -b -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty --header 'Private-token: YOUR_TOKEN'
+```

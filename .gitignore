@@ -5,6 +5,8 @@ build_*
 # OS generated files
 .DS_Store
 *.swp
+*.bak
+*.orig
 
 # server files
 test-server/node_modules

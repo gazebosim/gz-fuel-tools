@@ -66,7 +66,7 @@ class ignition::fuel_tools::FuelClientPrivate
     "([0-9]*|tip)"};
 
   /// \brief A world URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty/1
+  /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/1
   /// Where the API version and the world version are optional.
   public: const std::string kWorldUrlRegexStr{
     // Method
@@ -156,6 +156,11 @@ class ignition::fuel_tools::FuelClientPrivate
 
   /// \brief Regex to parse Ignition Fuel world file URLs.
   public: std::unique_ptr<std::regex> urlWorldFileRegex;
+
+  /// \brief The set of licenses where the key is the name of the license
+  /// and the value is the license ID on a Fuel server. See the
+  /// PopulateLicenses function.
+  public: std::map<std::string, unsigned int> licenses;
 };
 
 //////////////////////////////////////////////////
@@ -203,6 +208,13 @@ ClientConfig &FuelClient::Config()
 Result FuelClient::ModelDetails(const ModelIdentifier &_id,
     ModelIdentifier &_model) const
 {
+  return this->ModelDetails(_id, _model, {});
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::ModelDetails(const ModelIdentifier &_id,
+    ModelIdentifier &_model, const std::vector<std::string> &_headers) const
+{
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
@@ -212,7 +224,7 @@ Result FuelClient::ModelDetails(const ModelIdentifier &_id,
   path = path / _id.Owner() / "models" / _id.Name();
 
   resp = rest.Request(HttpMethod::GET, serverUrl, version,
-      path.Str(), {}, {}, "");
+      path.Str(), {}, _headers, "");
   if (resp.statusCode != 200)
     return Result(ResultType::FETCH_ERROR);
 
@@ -410,10 +422,57 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   // \todo(nkoenig) The ign-fuelserver expects an integer number for the
   // license information. The fuelserver should be modified to accept
   // a string. Otherwise, we have to bake into each client a mapping of
-  // license name to integer. For now, we are making a model
-  // "Creative Commons - Public Domain
-  // if (meta.has_legal()) {....}
-  form.emplace("license", "1");
+  // license name to integer.
+  //
+  // If we have legal, then attempt to fill in the correct license information.
+  if (meta.has_legal())
+  {
+    // Attempt to retrieve the available licenses, if we have no available
+    // licenses.
+    if (this->dataPtr->licenses.empty())
+    {
+      this->PopulateLicenses(_id.Server());
+      // Fail if a license has been requested, but we couldn't get the
+      // available licenses.
+      if (this->dataPtr->licenses.empty())
+      {
+        return Result(ResultType::UPLOAD_ERROR);
+      }
+    }
+
+    // Find the license by name.
+    std::map<std::string, unsigned int>::const_iterator licenseIt =
+      this->dataPtr->licenses.find(meta.legal().license());
+    if (licenseIt != this->dataPtr->licenses.end())
+    {
+      form.emplace("license", std::to_string(licenseIt->second));
+    }
+    // No license found, print an error and return.
+    else
+    {
+      std::string validLicenseNames;
+      auto end = this->dataPtr->licenses.end();
+      std::advance(end, -1);
+      for (licenseIt = this->dataPtr->licenses.begin();
+           licenseIt != end; ++licenseIt)
+      {
+        validLicenseNames += "    " + licenseIt->first + "\n";
+      }
+      validLicenseNames += "    " + licenseIt->first;
+
+      ignerr << "Invalid license[" << meta.legal().license() << "].\n"
+             << "  Valid licenses include:\n"
+             << validLicenseNames << std::endl;
+
+      return Result(ResultType::UPLOAD_ERROR);
+    }
+  }
+  // If there is no license information, then default to
+  // "Creative Commons - Public Domain"
+  else
+  {
+    form.emplace("license", "1");
+  }
 
   // Add tags
   std::string tags;
@@ -1137,6 +1196,33 @@ Result FuelClient::CachedWorldFile(const common::URI &_fileUrl,
 }
 
 //////////////////////////////////////////////////
+Result FuelClient::PatchModel(
+    const ignition::fuel_tools::ModelIdentifier &_model,
+    const std::vector<std::string> &_headers)
+{
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  auto serverUrl = _model.Server().Url().Str();
+  auto version = _model.Server().Version();
+  common::URIPath path;
+  path = path / _model.Owner() / "models" / _model.Name();
+
+  std::multimap<std::string, std::string> form =
+  {
+    {"private", _model.Private() ? "1" : "0"}
+  };
+
+  resp = rest.Request(HttpMethod::PATCH_FORM, serverUrl, version,
+      path.Str(), {}, _headers, "", form);
+
+  if (resp.statusCode != 200)
+    return Result(ResultType::PATCH_ERROR);
+
+  return Result(ResultType::PATCH);
+}
+
+//////////////////////////////////////////////////
 void FuelClientPrivate::AllFiles(const std::string &_path,
     std::vector<std::string> &_files) const
 {
@@ -1153,3 +1239,23 @@ void FuelClientPrivate::AllFiles(const std::string &_path,
   }
 }
 
+
+//////////////////////////////////////////////////
+void FuelClient::PopulateLicenses(const ServerConfig &_server)
+{
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  // Send the request.
+  resp = rest.Request(HttpMethod::GET, _server.Url().Str(),
+      _server.Version(), "licenses", {}, {}, "");
+  if (resp.statusCode != 200)
+  {
+    ignerr << "Failed to get license information from "
+      << _server.Url().Str() << "/" << _server.Version() << std::endl;
+  }
+  else if (!JSONParser::ParseLicenses(resp.data, this->dataPtr->licenses))
+  {
+    ignerr << "Failed to parse license information[" << resp.data << "]\n";
+  }
+}

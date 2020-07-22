@@ -56,6 +56,45 @@ std::time_t ParseDateTime(const std::string &_datetime)
 }
 
 /////////////////////////////////////////////////
+/// \brief Parse a JSON object as a license.
+/// \param[in] _json JSON object containing a single license.
+/// \param[out] _license License information where the first value in
+/// the pair is the name of the license and the second value is
+/// the license id on the Fuel server.
+/// \return True if parsing succeeded or false otherwise
+bool ParseLicenseImpl(const Json::Value &_json,
+    std::pair<std::string, unsigned int> &_license)
+{
+  try
+  {
+    if (!_json.isObject())
+    {
+      ignerr << "License isn't a json object!\n";
+      return false;
+    }
+
+    if (_json.isMember("name"))
+      _license.first = _json["name"].asString();
+    if (_json.isMember("ID"))
+      _license.second = _json["ID"].asUInt();
+  }
+#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
+  catch (...)
+  {
+    std::string what;
+#else
+  catch (const Json::LogicError &error)
+  {
+    std::string what = ": [" + std::string(error.what()) + "]";
+#endif
+    ignerr << "Bad response from server" << what << "\n";
+    return false;
+  }
+
+  return true;
+}
+
+/////////////////////////////////////////////////
 std::vector<std::string> JSONParser::ParseTags(const Json::Value &_json)
 {
   std::vector<std::string> tags;
@@ -312,4 +351,37 @@ std::string JSONParser::BuildWorld(WorldIter _worldIt)
 
   Json::StreamWriterBuilder builder;
   return Json::writeString(builder, value);
+}
+
+/////////////////////////////////////////////////
+bool JSONParser::ParseLicenses(const std::string &_json,
+    std::map<std::string, unsigned int> &_licenses)
+{
+  Json::CharReaderBuilder reader;
+  Json::Value licenses;
+  std::istringstream iss(_json);
+  JSONCPP_STRING errs;
+  Json::parseFromStream(reader, iss, &licenses, &errs);
+
+  if (!licenses.isArray())
+  {
+    ignerr << "JSON response is not an array.\n";
+    return false;
+  }
+
+  for (auto licenseIt = licenses.begin();
+      licenseIt != licenses.end(); ++licenseIt)
+  {
+    Json::Value licenseJson = *licenseIt;
+    std::pair<std::string, unsigned int> license;
+    if (!ParseLicenseImpl(licenseJson, license))
+    {
+      ignerr << "License isn't a json object!\n";
+      continue;
+    }
+
+    _licenses.insert(license);
+  }
+
+  return true;
 }
