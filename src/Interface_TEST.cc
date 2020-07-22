@@ -177,15 +177,12 @@ TEST(Interface, FetchResources)
     std::string path = fetchResourceWithClient(worldUrl.Str(), client);
 
     // Check it was downloaded to `1`
-    EXPECT_EQ(path, common::cwd() +
-        "/test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/1"
-        );
-    EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/1"
-        ));
-    EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/1/"
-        "test.world"));
+    EXPECT_EQ(path, common::cwd() + "/test_cache/fuel.ignitionrobotics.org/"
+        "OpenRobotics/worlds/Test world/1");
+    EXPECT_TRUE(common::exists("test_cache/fuel.ignitionrobotics.org/"
+        "OpenRobotics/worlds/Test world/1"));
+    EXPECT_TRUE(common::exists("test_cache/fuel.ignitionrobotics.org/"
+        "OpenRobotics/worlds/Test world/1/test.world"));
 
     // Check it is cached
     {
