@@ -473,10 +473,10 @@ TEST_F(FuelClientTest, DownloadModel)
         "/test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2");
     EXPECT_TRUE(common::exists(
         "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2"));
-    const std::string model_sdf_path =
+    const std::string modelSdfPath =
         "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2/"
          "model.sdf";
-    EXPECT_TRUE(common::exists(model_sdf_path));
+    EXPECT_TRUE(common::exists(modelSdfPath));
     EXPECT_TRUE(common::exists(
        "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2/"
        "model.config"));
@@ -494,14 +494,21 @@ TEST_F(FuelClientTest, DownloadModel)
       "/test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2",
       cachedPath);
 
-    // Check that pbr paths have been updated.
-    std::ifstream ifs(model_sdf_path);
-    std::string model_sdf((std::istreambuf_iterator<char>(ifs)),
+    // Check that URIs have been updated.
+    std::ifstream ifs(modelSdfPath);
+    std::string modelSdf((std::istreambuf_iterator<char>(ifs)),
         std::istreambuf_iterator<char>());
-    EXPECT_EQ(std::string::npos, model_sdf.find("<albedo_map>model://"));
-    EXPECT_EQ(std::string::npos, model_sdf.find("<normal_map>model://"));
-    EXPECT_EQ(std::string::npos, model_sdf.find("<metalness_map>model://"));
-    EXPECT_EQ(std::string::npos, model_sdf.find("<roughness_map>model://"));
+    EXPECT_EQ(std::string::npos, modelSdf.find("<uri>model://"));
+    EXPECT_EQ(std::string::npos, modelSdf.find("<albedo_map>model://"));
+    EXPECT_EQ(std::string::npos, modelSdf.find("<normal_map>model://"));
+    EXPECT_EQ(std::string::npos, modelSdf.find("<metalness_map>model://"));
+    EXPECT_EQ(std::string::npos, modelSdf.find("<roughness_map>model://"));
+
+    EXPECT_NE(std::string::npos, modelSdf.find("<uri>https://"));
+    EXPECT_NE(std::string::npos, modelSdf.find("<albedo_map>https://"));
+    EXPECT_NE(std::string::npos, modelSdf.find("<normal_map>https://"));
+    EXPECT_NE(std::string::npos, modelSdf.find("<metalness_map>https://"));
+    EXPECT_NE(std::string::npos, modelSdf.find("<roughness_map>https://"));
   }
 
   // Try using nonexistent URL
