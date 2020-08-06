@@ -39,6 +39,23 @@
 
 ### Ignition Fuel Tools 3.x.x (20xx-xx-xx)
 
+### Ignition Fuel Tools 3.3.0 (2020-07-29)
+
+1. openrobotics to OpenRobotics
+    * [Pull request 75](https://github.com/ignitionrobotics/ign-fuel-tools/pull/75)
+
+1. Fix world tests
+    * [Pull request 76](https://github.com/ignitionrobotics/ign-fuel-tools/pull/76)
+
+1. Add missing dependency in Actions CI
+    * [Pull request 86](https://github.com/ignitionrobotics/ign-fuel-tools/pull/86)
+
+1. Backport file fetching
+    * [Pull request 84](https://github.com/ignitionrobotics/ign-fuel-tools/pull/84)
+
+1. Convert model:// to Fuel URLs instead of absolute paths
+    * [Pull request 85](https://github.com/ignitionrobotics/ign-fuel-tools/pull/85)
+
 ### Ignition Fuel Tools 3.2.2 (2020-05-18)
 
 1. Fix URL encodings in RestClient.
