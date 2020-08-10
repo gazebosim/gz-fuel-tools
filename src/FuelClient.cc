@@ -501,6 +501,14 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   if (!categories.empty())
     form.emplace("categories", categories);
 
+  // Add annotations as metadata.
+  for (const auto &annotation : meta.annotations())
+  {
+    std::string formAnnotation = std::string("{\"key\":\"") +
+      annotation.first + "\",\"value\":\"" + annotation.second + "\"}";
+    form.emplace("metadata", formAnnotation);
+  }
+
   // Recursively get all the files.
   std::vector<std::string> files;
   this->dataPtr->AllFiles(_pathToModelDir, files);
