@@ -664,6 +664,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 
     if (downloadWorlds)
     {
+      // We need a mutable worldId because DownloadWorld modifies it
       for (auto &worldId : worldIds)
       {
         // Check if any of the tasks are done

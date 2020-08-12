@@ -35,10 +35,10 @@ namespace ignition
   {
     /// \brief Forward Declaration
     class ClientConfig;
+    class CollectionIdentifier;
     class FuelClientPrivate;
     class LocalCache;
     class ModelIdentifier;
-    class CollectionIdentifier;
     class ServerConfig;
 
     /// \brief High level interface to ignition fuel
