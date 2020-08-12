@@ -428,10 +428,10 @@ TEST(CmdLine, WorldDownloadUnversioned)
   EXPECT_TRUE(ignition::common::isDirectory(
       "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/1"));
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/2"));
   EXPECT_TRUE(ignition::common::isFile(
       std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/")
-      + "Test world/1/test.world"));
+      + "Test world/2/test.world"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
