@@ -962,13 +962,13 @@ TEST_F(FuelClientTest, DownloadWorld)
     // Check it was downloaded to `1`
     EXPECT_EQ(path, common::cwd() +
         "/test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/"
-        "Test world/1");
+        "Test world/2");
     EXPECT_TRUE(common::exists(
         "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/"
-        "Test world/1"));
+        "Test world/2"));
     EXPECT_TRUE(common::exists(
        "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/"
-       "Test world/1/test.world"));
+       "Test world/2/test.world"));
 
     // Check it wasn't downloaded to world root directory
     EXPECT_FALSE(common::exists(
@@ -980,7 +980,7 @@ TEST_F(FuelClientTest, DownloadWorld)
     EXPECT_TRUE(res3);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
     EXPECT_EQ(common::cwd() + "/test_cache/fuel.ignitionrobotics.org"
-      "/OpenRobotics/worlds/Test world/1", cachedPath);
+      "/OpenRobotics/worlds/Test world/2", cachedPath);
   }
 
   // Try using nonexistent URL
