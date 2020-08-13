@@ -31,7 +31,7 @@ namespace ignition
     class CollectionIdentifierPrivate;
     class ServerConfig;
 
-    /// \brief Defines how to identify a world
+    /// \brief Defines how to identify a collection
     class IGNITION_FUEL_TOOLS_VISIBLE CollectionIdentifier
     {
       /// \brief Constructor.
@@ -55,48 +55,48 @@ namespace ignition
         /// \return True if the CollectionIdentifier names are equal.
       public: bool operator==(const CollectionIdentifier &_rhs) const;
 
-      /// \brief Returns the world name
-      /// \return World name.
+      /// \brief Returns the collection name
+      /// \return Collection name.
       public: std::string Name() const;
 
-      /// \brief Set the name of the world.
+      /// \brief Set the name of the collection.
       /// \param[in] _name The name to set.
       /// \return True if successful.
       public: bool SetName(const std::string &_name);
 
-      /// \brief Returns owner to attribute world to.
+      /// \brief Returns owner to attribute collection to.
       /// \return Owner name.
       public: std::string Owner() const;
 
-      /// \brief Set the owner of the world
+      /// \brief Set the owner of the collection
       /// \param[in] _name The name to set. Must be ascii and pass [-_a-z0-9]+
       /// \return true if successful
       public: bool SetOwner(const std::string &_name);
 
-      /// \brief Returns server information to retrieve world from.
+      /// \brief Returns server information to retrieve collection from.
       /// \return Server information.
       public: ServerConfig &Server() const;
 
-      /// \brief Set the server from which this world comes.
-      /// \param[in] _server The server to retrieve the world from.
+      /// \brief Set the server from which this collection comes.
+      /// \param[in] _server The server to retrieve the collection from.
       /// \return True if successful.
       public: bool SetServer(const ServerConfig &_server);
 
-      /// \brief Returns a unique name for the world.
+      /// \brief Returns a unique name for the collection.
       /// \remarks this is Server/Owner/Name.
-      /// \return Unique world name.
+      /// \return Unique collection name.
       public: std::string UniqueName() const;
 
-      /// \brief Returns all the world information as a string. Convenient for
-      /// debugging.
+      /// \brief Returns all the collection information as a string. Convenient
+      /// for debugging.
       /// \param[in] _prefix Optional prefix for every line of the string.
-      /// \return World information string
+      /// \return Collection information string
       public: std::string AsString(const std::string &_prefix = "") const;
 
-      /// \brief Returns all the available world information as a string using
-      /// colors for better human parsing.
+      /// \brief Returns all the available collection information as a string
+      /// using colors for better human parsing.
       /// \param[in] _prefix Optional prefix for every line of the string.
-      /// \return World information string
+      /// \return Collection information string
       public: std::string AsPrettyString(const std::string &_prefix = "") const;
 
       /// \brief PIMPL
