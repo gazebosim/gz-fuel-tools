@@ -80,7 +80,7 @@ SUBCOMMANDS = {
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
   "                           https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance\n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n"\
+  "                           --header 'Private-Token: <access_token>'.    \n"\
   "  -j [--jobs] arg          Number of parallel downloads (default: 1, max: #{MAX_PARALLEL_JOBS}). \n"\
   "  -t [--type] arg          Limit what resource type (i.e. model, world) to download \n" \
   "                           from a collection. All resources will be downloaded if\n" \

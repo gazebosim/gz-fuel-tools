@@ -561,6 +561,11 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       {
         downloadModels = false;
       }
+      else
+      {
+        ignerr << "Unknown resource type [" << _type << "] sepcified.\n";
+        return false;
+      }
     }
 
     std::vector<ignition::fuel_tools::ModelIdentifier> modelIds;
