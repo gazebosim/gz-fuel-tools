@@ -18,10 +18,10 @@
 #include <curl/curl.h>
 #include <string.h>
 #include <tinyxml2.h>
-#include <csignal>
-#include <exception>
 #include <google/protobuf/text_format.h>
 #include <ignition/msgs/fuel_metadata.pb.h>
+#include <csignal>
+#include <exception>
 #include <ignition/msgs/Utility.hh>
 
 #ifdef _WIN32
@@ -57,8 +57,8 @@
 /// \param[in] _resourceMap Key is owner name, value is vector of resources
 /// \param[in] _resourceType Type, such as "models"
 extern "C" void prettyPrint(
-    const ignition::fuel_tools::ServerConfig _serverConfig,
-    std::map<std::string, std::vector<std::string>> _resourceMap,
+    const ignition::fuel_tools::ServerConfig &_serverConfig,
+    const std::map<std::string, std::vector<std::string>> &_resourceMap,
     const std::string &_resourceType)
 {
   unsigned int ownerCount{0};
@@ -112,8 +112,8 @@ extern "C" void prettyPrint(
 /// \param[in] _resourceMap Key is owner name, value is vector of resources
 /// \param[in] _resourceType Type, such as "models"
 extern "C" void uglyPrint(
-    const ignition::fuel_tools::ServerConfig _serverConfig,
-    std::map<std::string, std::vector<std::string>> _resourceMap,
+    const ignition::fuel_tools::ServerConfig &_serverConfig,
+    const std::map<std::string, std::vector<std::string>> &_resourceMap,
     const std::string &_resourceType)
 {
   CURL *curl = curl_easy_init();
