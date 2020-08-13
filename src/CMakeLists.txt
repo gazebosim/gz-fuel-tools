@@ -1,5 +1,6 @@
 set (sources
   ClientConfig.cc
+  CollectionIdentifier.cc
   FuelClient.cc
   ign.cc
   Interface.cc
@@ -17,6 +18,7 @@ set (sources
 
 set (gtest_sources
   ClientConfig_TEST.cc
+  CollectionIdentifier_TEST.cc
   FuelClient_TEST.cc
   ign_src_TEST.cc
   Interface_TEST.cc
