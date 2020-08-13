@@ -35,6 +35,7 @@ namespace ignition
   {
     /// \brief Forward Declaration
     class ClientConfig;
+    class CollectionIdentifier;
     class FuelClientPrivate;
     class LocalCache;
     class ModelIdentifier;
@@ -128,10 +129,22 @@ namespace ignition
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id) const;
 
+      /// \brief Returns an iterator for the models found in a collection.
+      /// \param[in] _id a partially filled out identifier used to fetch a
+      /// collection.
+      /// \return An iterator of models in the collection.
+      public: ModelIter Models(const CollectionIdentifier &_id) const;
+
       /// \brief Returns worlds matching a given identifying criteria
       /// \param[in] _id A partially filled out identifier used to fetch worlds
       /// \return An iterator of worlds with names matching the criteria
       public: WorldIter Worlds(const WorldIdentifier &_id) const;
+
+      /// \brief Returns an iterator for the worlds found in a collection.
+      /// \param[in] _id a partially filled out identifier used to fetch a
+      /// collection.
+      /// \return An iterator of words in the collection.
+      public: WorldIter Worlds(const CollectionIdentifier &_id) const;
 
       /// \brief Upload a directory as a new model
       /// \param[in] _pathToModelDir a path to a directory containing a model
@@ -278,6 +291,17 @@ namespace ignition
       public: bool ParseWorldFileUrl(const common::URI &_worldFileUrl,
                                      WorldIdentifier &_id,
                                      std::string &_filePath);
+
+      /// \brief Parse Collection identifer from URL.
+      /// \param[in] _url The unique URL of a collection. It may also be a
+      /// unique name, which is a URL without the server version.
+      /// \param[out] _id The collection identifier. It may contain incomplete
+      /// information based on the passed URL and the current client config.
+      /// The server version will be overridden if that server is in the config
+      /// file.
+      /// \return True if parsed successfully.
+      public: bool ParseCollectionUrl(const common::URI &_url,
+                                      CollectionIdentifier &_id);
 
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;

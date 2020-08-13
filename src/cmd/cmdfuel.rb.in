@@ -30,6 +30,7 @@ require 'optparse'
 # Constants.
 LIBRARY_NAME = '@IGN_LIBRARY_NAME@'
 LIBRARY_VERSION = '@PROJECT_VERSION_FULL@'
+MAX_PARALLEL_JOBS = 16
 
 COMMON_OPTIONS =
                "  -c [--config] arg        Path to a configuration file.\n"\
@@ -79,7 +80,11 @@ SUBCOMMANDS = {
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
   "                           https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance\n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "                           --header 'Private-Token: <access_token>'.    \n"\
+  "  -j [--jobs] arg          Number of parallel downloads (default: 1, max: #{MAX_PARALLEL_JOBS}). \n"\
+  "  -t [--type] arg          Limit what resource type (i.e. model, world) to download \n" \
+  "                           from a collection. All resources will be downloaded if\n" \
+  "                           unspecified. Ignored if not downloading collection. \n" +
   COMMON_OPTIONS,
 }
 
@@ -140,6 +145,9 @@ class Cmd
               'Add a header to the HTTP request.') do |h|
         options['header'] = h
       end
+      opts.on('-j [JOBS]', '--jobs', String, 'Number of parallel downloads') do |jobs|
+        options['jobs'] = jobs || 1
+      end
     end # opt_parser do
 
     opt_parser.parse!(args)
@@ -163,6 +171,28 @@ class Cmd
       if options['url'] == ''
         puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
+      end
+
+      if options.key?('jobs')
+        begin
+          options['jobs_int'] = Integer(options['jobs'])
+          if (options['jobs_int'] > MAX_PARALLEL_JOBS)
+            puts "The specified number of jobs #{options['jobs_int']} exceeds the maximum of #{MAX_PARALLEL_JOBS}"
+            exit(-1)
+          end
+        rescue
+          puts "The provided 'jobs' parameter #{options['jobs']} is not an integer"
+          exit(-1)
+        end
+      else
+        options['jobs_int'] = 1
+      end
+
+      if options.key?('type')
+        if options['type'] != 'model' and options['type'] != 'world'
+          puts "Invalid resource type, use 'model' or 'world'."
+          exit(-1)
+        end
       end
     end
 
@@ -228,9 +258,9 @@ class Cmd
           end
         end
       when 'download'
-        Importer.extern 'int downloadUrl(const char *, const  char *, const char *)'
+        Importer.extern 'int downloadUrl(const char *, const  char *, const char *, const char *, unsigned int)'
         if not Importer.downloadUrl(options['url'], options['config'],
-            options['header'])
+            options['header'], options['type'], options['jobs_int'])
           exit(-1)
         end
       end
