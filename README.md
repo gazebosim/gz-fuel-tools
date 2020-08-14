@@ -13,18 +13,7 @@ Test coverage reports are available at Codecov:
 
 # Building and installing
 
-```
-cd ign-fuel-tools
-mkdir build
-cd build
-cmake ..
-make
-make test
-make install
-```
-
-Make sure `IGN_CONFIG_PATH` is set to the right install location`ign fuel` will work.
-Default is `/usr/local/share/ignition`.
+See the [installation tutorial](https://ignitionrobotics.org/api/fuel_tools/4.0/install.html).
 
 ## Examples
 
@@ -191,4 +180,3 @@ export IGN_CONFIG_PATH=$HOME/.ignition/tools/configs
 ```
 
 This issue is tracked [here](https://github.com/ignitionrobotics/ign-tools/issues/8).
-
