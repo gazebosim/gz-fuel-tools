@@ -13,7 +13,7 @@ Test coverage reports are available at Codecov:
 
 # Building and installing
 
-Review the [tutorial section](tutorials/01_installation.md).
+Review the [tutorial section](https://ignitionrobotics.org/api/fuel_tools/4.0/install.html).
 
 ## Examples
 
