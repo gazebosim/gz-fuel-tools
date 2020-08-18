@@ -18,9 +18,27 @@
 #include <gtest/gtest.h>
 #include "ignition/fuel_tools/Result.hh"
 
-namespace ignft = ignition::fuel_tools;
 using namespace ignition;
-using namespace ignft;
+using namespace fuel_tools;
+
+/////////////////////////////////////////////////
+TEST(Result, CopyConstructor)
+{
+  Result result(ResultType::UPLOAD);
+
+  Result result2(result);
+  EXPECT_EQ(ResultType::UPLOAD, result2.Type());
+}
+
+/////////////////////////////////////////////////
+TEST(Result, CopyAssignmentOperator)
+{
+  Result result(ResultType::UPLOAD);
+
+  Result result2(ResultType::DELETE);
+  result2 = result;
+  EXPECT_EQ(ResultType::UPLOAD, result2.Type());
+}
 
 /////////////////////////////////////////////////
 /// \brief Create a request object with a type and check that it

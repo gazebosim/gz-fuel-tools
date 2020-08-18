@@ -85,6 +85,10 @@ namespace ignition
       /// \param[in] _orig Result to copy.
       public: Result(const Result &_orig);
 
+      /// \brief Copy assignment operator.
+      /// \param[in] _orig Result to copy.
+      public: Result &operator=(const Result &_orig);
+
       /// \brief Get the type of result
       /// \return The type of result.
       public: ResultType Type() const;

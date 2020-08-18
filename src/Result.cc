@@ -47,9 +47,16 @@ Result::Result(const ResultType _type) : dataPtr(new ResultPrivate)
 }
 
 //////////////////////////////////////////////////
-Result::Result(const Result &_orig) : dataPtr(new ResultPrivate)
+Result::Result(const Result &_orig)
+  : dataPtr(std::make_unique<ResultPrivate>(*_orig.dataPtr))
 {
-  *(this->dataPtr) = *(_orig.dataPtr);
+}
+
+/////////////////////////////////////////////////
+Result &Result::operator=(const Result &_orig)
+{
+  *this->dataPtr = (*_orig.dataPtr);
+  return *this;
 }
 
 //////////////////////////////////////////////////
