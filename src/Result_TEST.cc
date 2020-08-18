@@ -41,6 +41,25 @@ TEST(Result, CopyAssignmentOperator)
 }
 
 /////////////////////////////////////////////////
+TEST(ResultTest, MoveConstructor)
+{
+  Result result(ResultType::UPLOAD);
+
+  Result resultMoved(std::move(result));
+  EXPECT_EQ(ResultType::UPLOAD, resultMoved.Type());
+}
+
+/////////////////////////////////////////////////
+TEST(ResultTest, MoveAssignmentOperator)
+{
+  Result result(ResultType::UPLOAD);
+
+  Result resultMoved(ResultType::DELETE);
+  resultMoved = std::move(result);
+  EXPECT_EQ(ResultType::UPLOAD, resultMoved.Type());
+}
+
+/////////////////////////////////////////////////
 /// \brief Create a request object with a type and check that it
 TEST(Result, TypeCanBeSet)
 {

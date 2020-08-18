@@ -30,9 +30,7 @@ class ignft::ResultPrivate
 
 
 //////////////////////////////////////////////////
-Result::~Result()
-{
-}
+Result::~Result() = default;
 
 //////////////////////////////////////////////////
 ResultType Result::Type() const
@@ -41,23 +39,30 @@ ResultType Result::Type() const
 }
 
 //////////////////////////////////////////////////
-Result::Result(const ResultType _type) : dataPtr(new ResultPrivate)
+Result::Result(const ResultType _type)
+  : dataPtr(std::make_unique<ResultPrivate>())
 {
   this->dataPtr->type = _type;
 }
 
 //////////////////////////////////////////////////
-Result::Result(const Result &_orig)
-  : dataPtr(std::make_unique<ResultPrivate>(*_orig.dataPtr))
+Result::Result(const Result &_result)
+  : dataPtr(std::make_unique<ResultPrivate>(*_result.dataPtr))
 {
 }
 
 /////////////////////////////////////////////////
-Result &Result::operator=(const Result &_orig)
+Result::Result(Result &&_result) noexcept = default;
+
+/////////////////////////////////////////////////
+Result &Result::operator=(const Result &_result)
 {
-  *this->dataPtr = (*_orig.dataPtr);
+  *this->dataPtr = (*_result.dataPtr);
   return *this;
 }
+
+/////////////////////////////////////////////////
+Result &Result::operator=(Result &&_result) noexcept = default;
 
 //////////////////////////////////////////////////
 Result::operator bool() const
