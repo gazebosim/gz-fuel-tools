@@ -178,11 +178,11 @@ TEST(Interface, FetchResources)
 
     // Check it was downloaded to `1`
     EXPECT_EQ(path, common::cwd() + "/test_cache/fuel.ignitionrobotics.org/"
-        "openrobotics/worlds/Test world/1");
+        "openrobotics/worlds/Test world/2");
     EXPECT_TRUE(common::exists("test_cache/fuel.ignitionrobotics.org/"
-        "openrobotics/worlds/Test world/1"));
+        "openrobotics/worlds/Test world/2"));
     EXPECT_TRUE(common::exists("test_cache/fuel.ignitionrobotics.org/"
-        "openrobotics/worlds/Test world/1/test.world"));
+        "openrobotics/worlds/Test world/2/test.world"));
 
     // Check it is cached
     {
@@ -191,7 +191,7 @@ TEST(Interface, FetchResources)
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
       EXPECT_EQ(common::cwd() +
           "/test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/"
-          "Test world/1", cachedPath);
+          "Test world/2", cachedPath);
      }
   }
 
@@ -199,9 +199,9 @@ TEST(Interface, FetchResources)
   {
     // Check neither file nor its world are cached
     common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/1/"};
+      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/2/"};
     common::URI worldFileUrl{
-      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/1/"
+      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/2/"
       "files/thumbnails/1.png"};
 
     {
@@ -220,12 +220,12 @@ TEST(Interface, FetchResources)
 
     // Check entire world was downloaded to `1`
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1"));
+        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/2"));
     EXPECT_EQ(path, common::cwd() +
-        "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1/"
+        "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/2/"
         "thumbnails/1.png");
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1/"
+        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/2/"
         "test.world"));
 
     // Check world is cached
@@ -234,7 +234,7 @@ TEST(Interface, FetchResources)
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
       EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1",
+          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/2",
           cachedPath);
      }
 
@@ -244,7 +244,7 @@ TEST(Interface, FetchResources)
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
       EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1"
+          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/2"
           "/thumbnails/1.png",
           cachedPath);
      }

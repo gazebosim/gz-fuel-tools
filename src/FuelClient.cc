@@ -31,6 +31,7 @@
 #include <ignition/msgs/Utility.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/CollectionIdentifier.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/JSONParser.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
@@ -130,6 +131,24 @@ class ignition::fuel_tools::FuelClientPrivate
     // File path
     "(.*)"};
 
+  /// \brief A collection URL,
+  /// E.g.:
+  /// https://fuel.ignitionrobotics.org/1.0/OpenRobotics/collections/TestColl
+  /// Where the API version is optional
+  public: const std::string kCollectionUrlRegexStr{
+    // Method
+    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
+    // Server
+    "([^\\/\\s]+)\\/+"
+    // API Version
+    "([0-9]+[.][0-9]+)?\\/*"
+    // Owner
+    "([^\\/\\s]+)\\/+"
+    // "collections"
+    "collections\\/+"
+    // Name
+    "([^\\/]+)\\/*"};
+
   /// \brief Recursively get all the files in the given path.
   /// \param[in] _path Path to process.
   /// \param[out] _files All the files in the given _path.
@@ -156,6 +175,9 @@ class ignition::fuel_tools::FuelClientPrivate
 
   /// \brief Regex to parse Ignition Fuel world file URLs.
   public: std::unique_ptr<std::regex> urlWorldFileRegex;
+
+  /// \brief Regex to parse Ignition Fuel Collection URLs.
+  public: std::unique_ptr<std::regex> urlCollectionRegex;
 
   /// \brief The set of licenses where the key is the name of the license
   /// and the value is the license ID on a Fuel server. See the
@@ -191,6 +213,8 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
     this->dataPtr->kModelFileUrlRegexStr));
   this->dataPtr->urlWorldFileRegex.reset(new std::regex(
     this->dataPtr->kWorldFileUrlRegexStr));
+  this->dataPtr->urlCollectionRegex.reset(new std::regex(
+    this->dataPtr->kCollectionUrlRegexStr));
 }
 
 //////////////////////////////////////////////////
@@ -337,6 +361,14 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
 }
 
 //////////////////////////////////////////////////
+ModelIter FuelClient::Models(const CollectionIdentifier &_id) const
+{
+  return ModelIterFactory::Create(
+      this->dataPtr->rest, _id.Server(),
+      common::joinPaths(_id.Owner(), "collections", _id.Name(), "models"));
+}
+
+//////////////////////////////////////////////////
 WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
 {
   // Check local cache first
@@ -355,6 +387,14 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
 
   Rest rest(this->dataPtr->rest);
   return WorldIterFactory::Create(rest, _id.Server(), path.Str());
+}
+
+//////////////////////////////////////////////////
+WorldIter FuelClient::Worlds(const CollectionIdentifier &_id) const
+{
+  return WorldIterFactory::Create(
+      this->dataPtr->rest, _id.Server(),
+      common::joinPaths(_id.Owner(), "collections", _id.Name(), "worlds"));
 }
 
 //////////////////////////////////////////////////
@@ -978,6 +1018,71 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
 
   return true;
 }
+//////////////////////////////////////////////////
+bool FuelClient::ParseCollectionUrl(const common::URI &_url,
+    CollectionIdentifier &_id)
+{
+  if (!_url.Valid())
+    return false;
+
+  auto urlStr = _url.Str();
+
+  std::smatch match;
+  std::string scheme;
+  std::string server;
+  std::string apiVersion;
+  std::string owner;
+  std::string collectionName;
+
+  bool result =
+      std::regex_match(urlStr, match, *this->dataPtr->urlCollectionRegex);
+
+  if (result && match.size() >= 5u)
+  {
+    unsigned int i{1};
+
+    scheme = match[i++];
+    server = match[i++];
+    apiVersion = match[i++];
+    owner = match[i++];
+    collectionName = match[i++];
+  }
+  else
+  {
+    return false;
+  }
+
+  // Get remaining server information from config
+  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  _id.Server().SetVersion(apiVersion);
+  for (const auto &s : this->dataPtr->config.Servers())
+  {
+    if (s.Url() == _id.Server().Url())
+    {
+      if (!apiVersion.empty() && s.Version() != _id.Server().Version())
+      {
+        ignwarn << "Requested server API version [" << apiVersion
+                << "] for server [" << s.Url().Str() << "], but will use ["
+                << s.Version() << "] as given in the config file."
+                << std::endl;
+      }
+      _id.Server() = s;
+      break;
+    }
+  }
+
+  if (_id.Server().Version().empty())
+  {
+    ignwarn << "Server configuration is incomplete:" << std::endl
+            << _id.Server().AsString();
+  }
+
+  _id.SetOwner(owner);
+  _id.SetName(collectionName);
+
+  return true;
+}
+
 
 //////////////////////////////////////////////////
 Result FuelClient::DownloadModel(const common::URI &_modelUrl,

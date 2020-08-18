@@ -428,11 +428,195 @@ TEST(CmdLine, WorldDownloadUnversioned)
   EXPECT_TRUE(ignition::common::isDirectory(
       "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/1"));
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/2"));
   EXPECT_TRUE(ignition::common::isFile(
       std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/")
-      + "Test world/1/test.world"));
+      + "Test world/2/test.world"));
 
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+class DownloadCollectionTest
+    : public ::testing::Test,
+      public ::testing::WithParamInterface<int>
+{};
+
+INSTANTIATE_TEST_CASE_P(CollectionTest, DownloadCollectionTest,
+                        ::testing::Values(1, 2, 16),); // NOLINT
+
+/////////////////////////////////////////////////
+TEST_P(DownloadCollectionTest, AllItems)
+{
+  cmdVerbosity("4");
+
+  ignition::common::removeAll("test_cache");
+  ignition::common::createDirectories("test_cache");
+  setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
+
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  // Download
+  EXPECT_TRUE(
+      downloadUrl("https://fuel.ignitionrobotics.org/1.0/OpenRobotics/"
+                  "collections/TestCollection",
+                  nullptr, nullptr, nullptr, GetParam()));
+
+  // Check output
+  EXPECT_NE(stdOutBuffer.str().find("Download succeeded"), std::string::npos)
+      << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  // Check files
+  // Model: Backpack
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack/1"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
+      "Backpack/1/model.sdf"));
+
+  // Model: TEAMBASE
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE/1"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
+      "TEAMBASE/1/model.sdf"));
+
+  // World: Test World
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
+      "Test world/2/test.world"));
+
+  // World: Test World 2
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world 2"));
+  EXPECT_TRUE(
+      ignition::common::isDirectory("test_cache/fuel.ignitionrobotics.org/"
+                                    "OpenRobotics/worlds/Test world 2/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
+      "Test world 2/2/test.world"));
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+/// Download only models
+TEST_P(DownloadCollectionTest, Models)
+{
+  cmdVerbosity("4");
+
+  ignition::common::removeAll("test_cache");
+  ignition::common::createDirectories("test_cache");
+  setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
+
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  // Download
+  EXPECT_TRUE(
+      downloadUrl("https://fuel.ignitionrobotics.org/1.0/OpenRobotics/"
+                  "collections/TestCollection",
+                  nullptr, nullptr, "model", GetParam()));
+
+  // Check output
+  EXPECT_NE(stdOutBuffer.str().find("Download succeeded"), std::string::npos)
+      << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  // Check files
+  // Model: Backpack
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack/1"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
+      "Backpack/1/model.sdf"));
+
+  // Model: TEAMBASE
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE/1"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
+      "TEAMBASE/1/model.sdf"));
+
+  // World: Test World
+  EXPECT_FALSE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
+
+  // World: Test World 2
+  EXPECT_FALSE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world 2"));
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+/// Download only worlds
+TEST_P(DownloadCollectionTest, Worlds)
+{
+  cmdVerbosity("4");
+
+  ignition::common::removeAll("test_cache");
+  ignition::common::createDirectories("test_cache");
+  setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
+
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  // Download
+  EXPECT_TRUE(
+      downloadUrl("https://fuel.ignitionrobotics.org/1.0/OpenRobotics/"
+                  "collections/TestCollection",
+                  nullptr, nullptr, "world", GetParam()));
+
+  // Check output
+  EXPECT_NE(stdOutBuffer.str().find("Download succeeded"), std::string::npos)
+      << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  // Check files
+  // Model: Backpack
+  EXPECT_FALSE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack"));
+
+  // Model: TEAMBASE
+  EXPECT_FALSE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
+
+  // World: Test World
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
+      "Test world/2/test.world"));
+
+  // World: Test World 2
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world 2"));
+  EXPECT_TRUE(
+      ignition::common::isDirectory("test_cache/fuel.ignitionrobotics.org/"
+                                    "OpenRobotics/worlds/Test world 2/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
+      "Test world 2/2/test.world"));
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
 }
