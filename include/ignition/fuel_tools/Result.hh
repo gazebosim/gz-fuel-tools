@@ -74,6 +74,9 @@ namespace ignition
     /// \brief Class describing a result of an operation.
     class IGNITION_FUEL_TOOLS_VISIBLE Result
     {
+      /// \brief Default constructor, deleted
+      public: Result() = delete;
+
       /// \brief Destructor.
       public: ~Result();
 
