@@ -90,7 +90,7 @@ namespace ignition
 
       /// \brief Move constructor
       /// \param[in] _result Result to move.
-      public: Result(Result &&_result) noexcept;
+      public: Result(Result &&_result) noexcept;  // NOLINT
 
       /// \brief Copy assignment operator.
       /// \param[in] _result Result to copy.
@@ -99,7 +99,7 @@ namespace ignition
       /// \brief Move assignment operator.
       /// \param[in] _result Result component to move.
       /// \return Reference to this.
-      public: Result &operator=(Result &&_result) noexcept;
+      public: Result &operator=(Result &&_result) noexcept;  // NOLINT
 
       /// \brief Get the type of result
       /// \return The type of result.

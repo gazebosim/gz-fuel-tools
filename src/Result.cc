@@ -57,7 +57,7 @@ Result::Result(const Result &_result)
 }
 
 /////////////////////////////////////////////////
-Result::Result(Result &&_result) noexcept = default;
+Result::Result(Result &&_result) noexcept = default;  // NOLINT
 
 /////////////////////////////////////////////////
 Result &Result::operator=(const Result &_result)
@@ -67,7 +67,7 @@ Result &Result::operator=(const Result &_result)
 }
 
 /////////////////////////////////////////////////
-Result &Result::operator=(Result &&_result) noexcept = default;
+Result &Result::operator=(Result &&_result) noexcept = default;  // NOLINT
 
 //////////////////////////////////////////////////
 Result::operator bool() const
