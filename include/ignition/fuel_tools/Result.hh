@@ -74,6 +74,9 @@ namespace ignition
     /// \brief Class describing a result of an operation.
     class IGNITION_FUEL_TOOLS_VISIBLE Result
     {
+      /// \brief Default constructor
+      public: Result();
+
       /// \brief Destructor.
       public: ~Result();
 
@@ -82,8 +85,21 @@ namespace ignition
       public: explicit Result(const ResultType _type);
 
       /// \brief Copy constructor.
-      /// \param[in] _orig Result to copy.
-      public: Result(const Result &_orig);
+      /// \param[in] _result Result to copy.
+      public: Result(const Result &_result);
+
+      /// \brief Move constructor
+      /// \param[in] _result Result to move.
+      public: Result(Result &&_result) noexcept;  // NOLINT
+
+      /// \brief Copy assignment operator.
+      /// \param[in] _result Result to copy.
+      public: Result &operator=(const Result &_result);
+
+      /// \brief Move assignment operator.
+      /// \param[in] _result Result component to move.
+      /// \return Reference to this.
+      public: Result &operator=(Result &&_result) noexcept;  // NOLINT
 
       /// \brief Get the type of result
       /// \return The type of result.
