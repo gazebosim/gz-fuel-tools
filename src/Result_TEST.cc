@@ -22,6 +22,13 @@ using namespace ignition;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
+TEST(Result, DefaultConstructor)
+{
+  Result result;
+  EXPECT_EQ(ResultType::UNKNOWN, result.Type());
+}
+
+/////////////////////////////////////////////////
 TEST(Result, CopyConstructor)
 {
   Result result(ResultType::UPLOAD);
@@ -35,7 +42,7 @@ TEST(Result, CopyAssignmentOperator)
 {
   Result result(ResultType::UPLOAD);
 
-  Result result2(ResultType::DELETE);
+  Result result2;
   result2 = result;
   EXPECT_EQ(ResultType::UPLOAD, result2.Type());
 }

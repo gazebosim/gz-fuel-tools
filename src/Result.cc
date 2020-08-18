@@ -28,6 +28,11 @@ class ignft::ResultPrivate
   public: ResultType type = ResultType::UNKNOWN;
 };
 
+//////////////////////////////////////////////////
+Result::Result()
+  : dataPtr(std::make_unique<ResultPrivate>())
+{
+}
 
 //////////////////////////////////////////////////
 Result::~Result() = default;
