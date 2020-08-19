@@ -400,9 +400,8 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   }
 
   // Route
-  std::string route = ignition::common::joinPaths(_id.Owner(),
-        "models", _id.Name(), _id.VersionStr(),
-        _id.Name() + ".zip");
+  std::string route = _id.Owner() + "/models/" + _id.Name() "/" +
+        _id.VersionStr() + "/" + _id.Name() + ".zip";
 
   ignmsg << "Downloading model [" << _id.UniqueName() << "]" << std::endl;
 
