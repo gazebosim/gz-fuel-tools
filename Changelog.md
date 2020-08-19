@@ -1,5 +1,19 @@
 ## Ignition Fuel Tools 3.x
 
+### Ignition Fuel Tools 3.4.0 (2020-07-29)
+
+1. Modernize github actions by updating to the new style.
+    * [Pull request 94](https://github.com/ignitionrobotics/ign-fuel-tools/pull/94)
+
+1. Fix test worlds.
+    * [Pull request 100](https://github.com/ignitionrobotics/ign-fuel-tools/pull/100)
+
+1. Add capability for downloading collections.
+    * [Pull request 98](https://github.com/ignitionrobotics/ign-fuel-tools/pull/98)
+
+1. Fix windows build.t
+    * [Pull request 103](https://github.com/ignitionrobotics/ign-fuel-tools/pull/013)
+
 ### Ignition Fuel Tools 3.3.0 (2020-07-29)
 
 1. openrobotics to OpenRobotics
