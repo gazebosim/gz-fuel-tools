@@ -1,6 +1,6 @@
 ## Ignition Fuel Tools 3.x
 
-### Ignition Fuel Tools 3.4.0 (2020-07-29)
+### Ignition Fuel Tools 3.4.0 (2020-08-19)
 
 1. Modernize github actions by updating to the new style.
     * [Pull request 94](https://github.com/ignitionrobotics/ign-fuel-tools/pull/94)
