@@ -68,13 +68,16 @@ TEST(CollectionIdentifier, UniqueName)
   EXPECT_EQ("https://localhost:8003/alice/collections/hello", id.UniqueName());
 #else
   id.SetServer(srv1);
-  EXPECT_EQ("https://localhost:8001\\alice\\collections\\hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8001\\alice\\collections\\hello",
+      id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ("https://localhost:8002\\alice\\collections\\hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8002\\alice\\collections\\hello",
+      id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ("https://localhost:8003\\alice\\collections\\hello", id.UniqueName());
+  EXPECT_EQ("https://localhost:8003\\alice\\collections\\hello",
+      id.UniqueName());
 #endif
 }
 

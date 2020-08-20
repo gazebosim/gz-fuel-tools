@@ -40,7 +40,6 @@ void removeFileTemp(const std::string &_path)
 #else
   ignition::common::removeFile(_path);
 #endif
-
 }
 
 /////////////////////////////////////////////////

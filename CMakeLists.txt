@@ -9,7 +9,8 @@ project(ignition-fuel_tools3 VERSION 3.3.0)
 # Find ignition-cmake
 #============================================================================
 # If you get an error at this line, you need to install ignition-cmake
-find_package(ignition-cmake2 REQUIRED)
+find_package(ignition-cmake2 2.3 REQUIRED)
+set(IGN_CMAKE_VER ${ignition-cmake2_VERSION_MAJOR})
 
 #============================================================================
 # Configure the project

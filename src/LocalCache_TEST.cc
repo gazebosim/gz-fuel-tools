@@ -42,35 +42,47 @@ using namespace fuel_tools;
 /// \brief Creates a directory structure in the build directory with 6 models
 void createLocal6Models(ClientConfig &_conf)
 {
-  common::createDirectories("test_cache/localhost:8001/alice/models/am1/2");
-  common::createDirectories("test_cache/localhost:8001/alice/models/am2/1");
-  common::createDirectories("test_cache/localhost:8001/bob/models/bm1/1");
-  common::createDirectories("test_cache/localhost:8001/bob/models/bm2/2");
-  common::createDirectories("test_cache/localhost:8001/trudy/models/tm1/3");
-  common::createDirectories("test_cache/localhost:8001/trudy/models/tm2/2");
+  auto serverPath = common::joinPaths("test_cache", "localhost:8001");
+  common::createDirectories(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "alice", "models", "am2", "1"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "bob", "models", "bm1", "1"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "bob", "models", "bm2", "2"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "models", "tm1", "3"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "models", "tm2", "2"));
 
-  std::ofstream fout(
-      "test_cache/localhost:8001/alice/models/am1/2/model.config",
+  std::ofstream fout(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2", "model.config"),
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile(
-      "test_cache/localhost:8001/alice/models/am1/2/model.config",
-      "test_cache/localhost:8001/alice/models/am2/1/model.config");
-  common::copyFile(
-      "test_cache/localhost:8001/alice/models/am1/2/model.config",
-      "test_cache/localhost:8001/bob/models/bm1/1/model.config");
-  common::copyFile(
-      "test_cache/localhost:8001/alice/models/am1/2/model.config",
-      "test_cache/localhost:8001/bob/models/bm2/2/model.config");
-  common::copyFile(
-      "test_cache/localhost:8001/alice/models/am1/2/model.config",
-      "test_cache/localhost:8001/trudy/models/tm1/3/model.config");
-  common::copyFile(
-      "test_cache/localhost:8001/alice/models/am1/2/model.config",
-      "test_cache/localhost:8001/trudy/models/tm2/2/model.config");
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2", "model.config"),
+      common::joinPaths(serverPath,
+      "alice", "models", "am2", "1", "model.config"));
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2", "model.config"),
+      common::joinPaths(serverPath,
+      "bob", "models", "bm1", "1", "model.config"));
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2", "model.config"),
+      common::joinPaths(serverPath,
+      "bob", "models", "bm2", "2", "model.config"));
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2", "model.config"),
+      common::joinPaths(serverPath,
+      "trudy", "models", "tm1", "3", "model.config"));
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2", "model.config"),
+      common::joinPaths(serverPath,
+      "trudy", "models", "tm2", "2", "model.config"));
 
   ignition::fuel_tools::ServerConfig srv;
   srv.SetUrl(common::URI("http://localhost:8001/"));
@@ -80,23 +92,29 @@ void createLocal6Models(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 3 models
 void createLocal3Models(ClientConfig &_conf)
 {
-  common::createDirectories("test_cache/localhost:8007/alice/models/am1/2");
-  common::createDirectories("test_cache/localhost:8007/bob/models/bm1/1");
-  common::createDirectories("test_cache/localhost:8007/trudy/models/tm1/3");
+  auto serverPath = common::joinPaths("test_cache", "localhost:8007");
+  common::createDirectories(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "bob", "models", "bm1", "1"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "models", "tm1", "3"));
 
-  std::ofstream fout(
-      "test_cache/localhost:8007/alice/models/am1/2/model.config",
+  std::ofstream fout(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2", "model.config"),
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile(
-      "test_cache/localhost:8007/alice/models/am1/2/model.config",
-      "test_cache/localhost:8007/bob/models/bm1/1/model.config");
-  common::copyFile(
-      "test_cache/localhost:8007/alice/models/am1/2/model.config",
-      "test_cache/localhost:8007/trudy/models/tm1/3/model.config");
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2", "model.config"),
+      common::joinPaths(serverPath,
+      "bob", "models", "bm1", "1", "model.config"));
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2", "model.config"),
+      common::joinPaths(serverPath,
+      "trudy", "models", "tm1", "3", "model.config"));
 
   ignition::fuel_tools::ServerConfig srv;
   srv.SetUrl(ignition::common::URI("http://localhost:8007/"));
@@ -106,35 +124,47 @@ void createLocal3Models(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 6 worlds
 void createLocal6Worlds(ClientConfig &_conf)
 {
-  common::createDirectories("test_cache/localhost:8001/alice/worlds/am1/2");
-  common::createDirectories("test_cache/localhost:8001/alice/worlds/am2/1");
-  common::createDirectories("test_cache/localhost:8001/bob/worlds/bm1/1");
-  common::createDirectories("test_cache/localhost:8001/bob/worlds/bm2/2");
-  common::createDirectories("test_cache/localhost:8001/trudy/worlds/tm1/3");
-  common::createDirectories("test_cache/localhost:8001/trudy/worlds/tm2/2");
+  auto serverPath = common::joinPaths("test_cache", "localhost:8001");
+  common::createDirectories(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "alice", "worlds", "am2", "1"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "bob", "worlds", "bm1", "1"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "bob", "worlds", "bm2", "2"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "worlds", "tm1", "3"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "worlds", "tm2", "2"));
 
-  std::ofstream fout(
-      "test_cache/localhost:8001/alice/worlds/am1/2/world.world",
+  std::ofstream fout(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2", "world.world"),
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile(
-      "test_cache/localhost:8001/alice/worlds/am1/2/world.world",
-      "test_cache/localhost:8001/alice/worlds/am2/1/world.world");
-  common::copyFile(
-      "test_cache/localhost:8001/alice/worlds/am1/2/world.world",
-      "test_cache/localhost:8001/bob/worlds/bm1/1/world.world");
-  common::copyFile(
-      "test_cache/localhost:8001/alice/worlds/am1/2/world.world",
-      "test_cache/localhost:8001/bob/worlds/bm2/2/world.world");
-  common::copyFile(
-      "test_cache/localhost:8001/alice/worlds/am1/2/world.world",
-      "test_cache/localhost:8001/trudy/worlds/tm1/3/world.world");
-  common::copyFile(
-      "test_cache/localhost:8001/alice/worlds/am1/2/world.world",
-      "test_cache/localhost:8001/trudy/worlds/tm2/2/world.world");
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2", "world.world"),
+      common::joinPaths(serverPath,
+      "alice", "worlds", "am2", "1", "world.world"));
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2", "world.world"),
+      common::joinPaths(serverPath,
+      "bob", "worlds", "bm1", "1", "world.world"));
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2", "world.world"),
+      common::joinPaths(serverPath,
+      "bob", "worlds", "bm2", "2", "world.world"));
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2", "world.world"),
+      common::joinPaths(serverPath,
+      "trudy", "worlds", "tm1", "3", "world.world"));
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2", "world.world"),
+      common::joinPaths(serverPath,
+      "trudy", "worlds", "tm2", "2", "world.world"));
 
   ignition::fuel_tools::ServerConfig srv;
   srv.SetUrl(ignition::common::URI("http://localhost:8001/"));
@@ -144,23 +174,29 @@ void createLocal6Worlds(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 3 worlds
 void createLocal3Worlds(ClientConfig &_conf)
 {
-  common::createDirectories("test_cache/localhost:8007/alice/worlds/am1/2");
-  common::createDirectories("test_cache/localhost:8007/bob/worlds/bm1/1");
-  common::createDirectories("test_cache/localhost:8007/trudy/worlds/tm1/3");
+  auto serverPath = common::joinPaths("test_cache", "localhost:8007");
+  common::createDirectories(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "bob", "worlds", "bm1", "1"));
+  common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "worlds", "tm1", "3"));
 
-  std::ofstream fout(
-      "test_cache/localhost:8007/alice/worlds/am1/2/world.world",
+  std::ofstream fout(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2", "world.world"),
       std::ofstream::trunc);
   fout << "<?xml version=\"1.0\"?>";
   fout.flush();
   fout.close();
 
-  common::copyFile(
-      "test_cache/localhost:8007/alice/worlds/am1/2/world.world",
-      "test_cache/localhost:8007/bob/worlds/bm1/1/world.world");
-  common::copyFile(
-      "test_cache/localhost:8007/alice/worlds/am1/2/world.world",
-      "test_cache/localhost:8007/trudy/worlds/tm1/3/world.world");
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2", "world.world"),
+      common::joinPaths(serverPath,
+      "bob", "worlds", "bm1", "1", "world.world"));
+  common::copyFile(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2", "world.world"),
+      common::joinPaths(serverPath,
+      "trudy", "worlds", "tm1", "3", "world.world"));
 
   ignition::fuel_tools::ServerConfig srv;
   srv.SetUrl(common::URI("http://localhost:8007/"));
@@ -175,7 +211,7 @@ TEST(LocalCache, AllModels)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig conf;
-  conf.SetCacheLocation(common::cwd() + "/test_cache");
+  conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
   createLocal3Models(conf);
 
@@ -203,7 +239,7 @@ TEST(LocalCache, MatchingModels)
   common::createDirectories("test_cache");
   ClientConfig conf;
   conf.Clear();
-  conf.SetCacheLocation(common::cwd() + "/test_cache");
+  conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
   createLocal3Models(conf);
 
@@ -247,7 +283,7 @@ TEST(LocalCache, MatchingModel)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig conf;
-  conf.SetCacheLocation(common::cwd() + "/test_cache");
+  conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
 
   ignition::fuel_tools::LocalCache cache(&conf);
@@ -302,7 +338,7 @@ TEST(LocalCache, AllWorlds)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig conf;
-  conf.SetCacheLocation(common::cwd() + "/test_cache");
+  conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
   createLocal3Worlds(conf);
 
@@ -330,7 +366,7 @@ TEST(LocalCache, MatchingWorlds)
   common::createDirectories("test_cache");
   ClientConfig conf;
   conf.Clear();
-  conf.SetCacheLocation(common::cwd() + "/test_cache");
+  conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
   createLocal3Worlds(conf);
 
@@ -362,7 +398,7 @@ TEST(LocalCache, MatchingWorld)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig conf;
-  conf.SetCacheLocation(common::cwd() + "/test_cache");
+  conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
 
   ignition::fuel_tools::LocalCache cache(&conf);
