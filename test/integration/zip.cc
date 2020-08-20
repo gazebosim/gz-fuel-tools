@@ -41,6 +41,7 @@ TEST_F(ZipIntegrationTest, Extract)
 {
   // extract a compressed archive
   std::string dst = std::string(PROJECT_BINARY_PATH);
+  common::changeFromUnixPath(dst);
   std::string archivePath = common::joinPaths(std::string(TEST_PATH), "media",
       "box.zip");
   EXPECT_TRUE(Zip::Extract(archivePath, dst));
