@@ -131,7 +131,7 @@ TEST(WorldIdentifier, AsString)
         "Name: \n"\
         "Owner: \n"\
         "Version: tip\n"\
-        "Unique name: fuel.ignitionrobotics.org\\\\\\\\worlds\\\\\n"
+        "Unique name: fuel.ignitionrobotics.org\\\\worlds\\\n"
         "Local path: \n"
         "Server:\n"
         "  URL: https://fuel.ignitionrobotics.org\n"

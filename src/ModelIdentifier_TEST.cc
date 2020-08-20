@@ -168,7 +168,7 @@ TEST(ModelIdentifier, AsString)
         "Name: \n"\
         "Owner: \n"\
         "Version: tip\n"\
-        "Unique name: https://fuel.ignitionrobotics.org\\\\\\models/\\\\\\n"
+        "Unique name: https://fuel.ignitionrobotics.org\\\\models\\\\n"
         "Description: \n"
         "File size: 0\n"
         "Upload date: 0\n"

@@ -17,6 +17,7 @@
 
 #include <gtest/gtest.h>
 
+#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel_tools/Zip.hh"
@@ -26,8 +27,17 @@ using namespace ignition;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
+class ZipIntegrationTest : public ::testing::Test
+{
+  public: void SetUp() override
+  {
+    ignition::common::Console::SetVerbosity(4);
+  }
+};
+
+/////////////////////////////////////////////////
 // Test compressing files in a directory into a zip archive
-TEST(Zip, Extract)
+TEST_F(ZipIntegrationTest, Extract)
 {
   // extract a compressed archive
   std::string dst = std::string(PROJECT_BINARY_PATH);
@@ -59,7 +69,7 @@ TEST(Zip, Extract)
 
 /////////////////////////////////////////////////
 // Test extracting a zip archive
-TEST(Zip, Compress)
+TEST_F(ZipIntegrationTest, Compress)
 {
   // compress a directory into a zip archive
   std::string archivePath = common::joinPaths(

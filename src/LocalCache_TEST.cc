@@ -224,7 +224,9 @@ class LocalCacheTest : public ::testing::Test
 
 /////////////////////////////////////////////////
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, AllModels)
+// Windows doesn't support colons in filenames
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
+TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -251,7 +253,10 @@ TEST_F(LocalCacheTest, AllModels)
 
 /////////////////////////////////////////////////
 /// \brief Get all models that match some fields
-TEST_F(LocalCacheTest, MatchingModels)
+/// \brief Iterate through all models in cache
+// Windows doesn't support colons in filenames
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
+TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingModels))
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -296,7 +301,10 @@ TEST_F(LocalCacheTest, MatchingModels)
 
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
-TEST_F(LocalCacheTest, MatchingModel)
+/// \brief Iterate through all models in cache
+// Windows doesn't support colons in filenames
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
+TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingModel))
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -351,7 +359,10 @@ TEST_F(LocalCacheTest, MatchingModel)
 
 /////////////////////////////////////////////////
 /// \brief Iterate through all worlds in cache
-TEST_F(LocalCacheTest, AllWorlds)
+/// \brief Iterate through all models in cache
+// Windows doesn't support colons in filenames
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
+TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllWorlds))
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -378,7 +389,10 @@ TEST_F(LocalCacheTest, AllWorlds)
 
 /////////////////////////////////////////////////
 /// \brief Get all worlds that match some fields
-TEST_F(LocalCacheTest, MatchingWorlds)
+/// \brief Iterate through all models in cache
+// Windows doesn't support colons in filenames
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
+TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorlds))
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -411,7 +425,10 @@ TEST_F(LocalCacheTest, MatchingWorlds)
 
 /////////////////////////////////////////////////
 /// \brief Get a specific world from cache
-TEST_F(LocalCacheTest, MatchingWorld)
+/// \brief Iterate through all models in cache
+// Windows doesn't support colons in filenames
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
+TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorld))
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
