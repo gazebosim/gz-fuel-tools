@@ -171,6 +171,8 @@ bool Zip::Extract(const std::string &_src,
     else
       file.write(buf, len);
 
+    igndbg << "Created file [" << dst << "]" << std::endl;
+
     delete[] buf;
     file.close();
     zip_fclose(zf);
