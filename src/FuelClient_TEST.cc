@@ -45,6 +45,8 @@ using namespace ignition::fuel_tools;
 /// Taken from LocalCache_TEST
 void createLocalModel(ClientConfig &_conf)
 {
+  igndbg << "Creating local model in [" << common::cwd() << "]" << std::endl;
+
   auto modelPath = common::joinPaths(
       "test_cache", "localhost:8007", "alice", "models", "My Model");
 
@@ -95,6 +97,8 @@ void createLocalModel(ClientConfig &_conf)
 /// Taken from LocalCache_TEST
 void createLocalWorld(ClientConfig &_conf)
 {
+  igndbg << "Creating local world in [" << common::cwd() << "]" << std::endl;
+
   auto worldPath = common::joinPaths(
       "test_cache", "localhost:8007", "banana", "worlds", "My World");
 
@@ -1170,7 +1174,9 @@ TEST_F(FuelClientTest, WorldDetails)
 }
 
 /////////////////////////////////////////////////
-TEST_F(FuelClientTest, Models)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Models))
 {
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -1202,7 +1208,9 @@ TEST_F(FuelClientTest, Models)
 }
 
 /////////////////////////////////////////////////
-TEST_F(FuelClientTest, Worlds)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Worlds))
 {
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));

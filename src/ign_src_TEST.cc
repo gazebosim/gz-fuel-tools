@@ -540,7 +540,9 @@ TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllItems))
 
 /////////////////////////////////////////////////
 /// Download only models
-TEST_P(DownloadCollectionTest, Models)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Models))
 {
   cmdVerbosity("4");
 
@@ -595,7 +597,9 @@ TEST_P(DownloadCollectionTest, Models)
 
 /////////////////////////////////////////////////
 /// Download only worlds
-TEST_P(DownloadCollectionTest, Worlds)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Worlds))
 {
   cmdVerbosity("4");
 

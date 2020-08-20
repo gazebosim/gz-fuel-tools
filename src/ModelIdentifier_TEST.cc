@@ -66,13 +66,16 @@ TEST(ModelIdentifier, UniqueName)
   id.SetName("hello");
   id.SetOwner("alice");
   id.SetServer(srv1);
-  EXPECT_EQ("https://localhost:8001/alice/models/hello", id.UniqueName());
+  EXPECT_EQ(common::joinPaths("https://localhost:8001", "alice", "models",
+      "hello"), id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ("https://localhost:8002/alice/models/hello", id.UniqueName());
+  EXPECT_EQ(common::joinPaths("https://localhost:8002", "alice", "models",
+      "hello"), id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ("https://localhost:8003/alice/models/hello", id.UniqueName());
+  EXPECT_EQ(common::joinPaths("https://localhost:8003", "alice", "models",
+      "hello"), id.UniqueName());
 }
 
 /////////////////////////////////////////////////
@@ -141,6 +144,7 @@ TEST(ModelIdentifier, AsString)
   common::Console::SetVerbosity(4);
   {
     ModelIdentifier id;
+#ifndef _WIN32
     std::string str =
         "Name: \n"\
         "Owner: \n"\
@@ -159,6 +163,26 @@ TEST(ModelIdentifier, AsString)
         "  URL: https://fuel.ignitionrobotics.org\n"
         "  Version: 1.0\n"
         "  API key: \n";
+#else
+    std::string str =
+        "Name: \n"\
+        "Owner: \n"\
+        "Version: tip\n"\
+        "Unique name: https://fuel.ignitionrobotics.org\\\\\\models/\\\\\\n"
+        "Description: \n"
+        "File size: 0\n"
+        "Upload date: 0\n"
+        "Likes: 0\n"
+        "Downloads: 0\n"
+        "License name: \n"
+        "License URL: \n"
+        "License image URL: \n"
+        "Tags: \n"
+        "Server:\n"
+        "  URL: https://fuel.ignitionrobotics.org\n"
+        "  Version: 1.0\n"
+        "  API key: \n";
+#endif
     EXPECT_EQ(str, id.AsString());
   }
 

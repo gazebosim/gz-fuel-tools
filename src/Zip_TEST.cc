@@ -27,6 +27,8 @@
 #include <unistd.h>
 #include <string>
 
+#include <ignition/common/Console.hh>
+
 /////////////////////////////////////////////////
 bool createAndSwitchToTempDir(std::string &_newTempPath)
 {
@@ -145,8 +147,17 @@ using namespace ignition;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
+class ZipTest : public ::testing::Test
+{
+  public: void SetUp() override
+  {
+    ignition::common::Console::SetVerbosity(4);
+  }
+};
+
+/////////////////////////////////////////////////
 /// \brief Test basic API
-TEST(Zip, API)
+TEST_F(ZipTest, API)
 {
   // Extract invalid paths
   EXPECT_FALSE(Zip::Extract("", ""));
@@ -159,7 +170,7 @@ TEST(Zip, API)
 
 /////////////////////////////////////////////////
 /// \brief Test compress and extract
-TEST(Zip, CompressAndExtract)
+TEST_F(ZipTest, CompressAndExtract)
 {
   std::string newTempDir;
   ASSERT_TRUE(createAndSwitchToTempDir(newTempDir));

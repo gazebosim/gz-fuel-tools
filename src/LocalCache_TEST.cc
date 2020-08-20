@@ -20,7 +20,9 @@
 #include <fstream>
 #include <set>
 #include <string>
+#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
+#include <ignition/utilities/ExtraTestMacros.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
@@ -42,6 +44,8 @@ using namespace fuel_tools;
 /// \brief Creates a directory structure in the build directory with 6 models
 void createLocal6Models(ClientConfig &_conf)
 {
+  igndbg << "Creating 6 local models in [" << common::cwd() << "]" << std::endl;
+
   auto serverPath = common::joinPaths("test_cache", "localhost:8001");
   common::createDirectories(common::joinPaths(serverPath,
       "alice", "models", "am1", "2"));
@@ -92,6 +96,8 @@ void createLocal6Models(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 3 models
 void createLocal3Models(ClientConfig &_conf)
 {
+  igndbg << "Creating 3 local models in [" << common::cwd() << "]" << std::endl;
+
   auto serverPath = common::joinPaths("test_cache", "localhost:8007");
   common::createDirectories(common::joinPaths(serverPath,
       "alice", "models", "am1", "2"));
@@ -124,6 +130,8 @@ void createLocal3Models(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 6 worlds
 void createLocal6Worlds(ClientConfig &_conf)
 {
+  igndbg << "Creating 6 local worlds in [" << common::cwd() << "]" << std::endl;
+
   auto serverPath = common::joinPaths("test_cache", "localhost:8001");
   common::createDirectories(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2"));
@@ -174,6 +182,8 @@ void createLocal6Worlds(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 3 worlds
 void createLocal3Worlds(ClientConfig &_conf)
 {
+  igndbg << "Creating 3 local worlds in [" << common::cwd() << "]" << std::endl;
+
   auto serverPath = common::joinPaths("test_cache", "localhost:8007");
   common::createDirectories(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2"));
@@ -204,8 +214,17 @@ void createLocal3Worlds(ClientConfig &_conf)
 }
 
 /////////////////////////////////////////////////
+class LocalCacheTest : public ::testing::Test
+{
+  public: void SetUp() override
+  {
+    ignition::common::Console::SetVerbosity(4);
+  }
+};
+
+/////////////////////////////////////////////////
 /// \brief Iterate through all models in cache
-TEST(LocalCache, AllModels)
+TEST_F(LocalCacheTest, AllModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -232,7 +251,7 @@ TEST(LocalCache, AllModels)
 
 /////////////////////////////////////////////////
 /// \brief Get all models that match some fields
-TEST(LocalCache, MatchingModels)
+TEST_F(LocalCacheTest, MatchingModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -277,7 +296,7 @@ TEST(LocalCache, MatchingModels)
 
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
-TEST(LocalCache, MatchingModel)
+TEST_F(LocalCacheTest, MatchingModel)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -332,7 +351,7 @@ TEST(LocalCache, MatchingModel)
 
 /////////////////////////////////////////////////
 /// \brief Iterate through all worlds in cache
-TEST(LocalCache, AllWorlds)
+TEST_F(LocalCacheTest, AllWorlds)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -359,7 +378,7 @@ TEST(LocalCache, AllWorlds)
 
 /////////////////////////////////////////////////
 /// \brief Get all worlds that match some fields
-TEST(LocalCache, MatchingWorlds)
+TEST_F(LocalCacheTest, MatchingWorlds)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -392,7 +411,7 @@ TEST(LocalCache, MatchingWorlds)
 
 /////////////////////////////////////////////////
 /// \brief Get a specific world from cache
-TEST(LocalCache, MatchingWorld)
+TEST_F(LocalCacheTest, MatchingWorld)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
