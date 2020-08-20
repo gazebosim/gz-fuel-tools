@@ -27,8 +27,6 @@
 #include <unistd.h>
 #include <string>
 
-#include <ignition/common/Console.hh>
-
 /////////////////////////////////////////////////
 bool createAndSwitchToTempDir(std::string &_newTempPath)
 {
@@ -140,6 +138,7 @@ bool createNewEmptyFile(const std::string &_filename)
 #endif
 
 #include <gtest/gtest.h>
+#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include "ignition/fuel_tools/Zip.hh"
 
