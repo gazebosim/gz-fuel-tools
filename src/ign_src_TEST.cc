@@ -511,10 +511,10 @@ TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllItems))
   EXPECT_TRUE(ignition::common::isDirectory(
       "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE/1"));
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE/2"));
   EXPECT_TRUE(ignition::common::isFile(
       std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
-      "TEAMBASE/1/model.sdf"));
+      "TEAMBASE/2/model.sdf"));
 
   // World: Test World
   EXPECT_TRUE(ignition::common::isDirectory(
@@ -579,10 +579,10 @@ TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Models))
   EXPECT_TRUE(ignition::common::isDirectory(
       "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE/1"));
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE/2"));
   EXPECT_TRUE(ignition::common::isFile(
       std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
-      "TEAMBASE/1/model.sdf"));
+      "TEAMBASE/2/model.sdf"));
 
   // World: Test World
   EXPECT_FALSE(ignition::common::isDirectory(
