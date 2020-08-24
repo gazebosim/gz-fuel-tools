@@ -34,11 +34,12 @@
 #include <ignition/common/Util.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/LocalCache.hh"
-#include "ignition/fuel_tools/ModelIterPrivate.hh"
-#include "ignition/fuel_tools/ModelPrivate.hh"
 #include "ignition/fuel_tools/Zip.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
+
+#include "LocalCache.hh"
+#include "ModelPrivate.hh"
+#include "ModelIterPrivate.hh"
+#include "WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

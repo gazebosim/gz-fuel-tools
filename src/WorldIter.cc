@@ -24,8 +24,9 @@
 #include "ignition/fuel_tools/JSONParser.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
 #include "ignition/fuel_tools/RestClient.hh"
+
+#include "WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
