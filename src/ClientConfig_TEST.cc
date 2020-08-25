@@ -28,6 +28,21 @@ using namespace ignition;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
+/// \brief Helper to remove file according to OS, while Windows
+/// has this issue:
+/// https://github.com/ignitionrobotics/ign-common/issues/51
+/// \todo(anyone) Remove this once Windows issue is solved.
+/// \param[in] _path Path to file to be removed.
+void removeFileTemp(const std::string &_path)
+{
+#ifndef _WIN32
+  EXPECT_TRUE(ignition::common::removeFile(_path));
+#else
+  ignition::common::removeFile(_path);
+#endif
+}
+
+/////////////////////////////////////////////////
 /// \brief Get home directory.
 /// \return Home directory or empty string if home wasn't found.
 /// \ToDo: Move this function to ignition::common::Filesystem
@@ -116,7 +131,7 @@ TEST(ClientConfig, CustomConfiguration)
   EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
 
   // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
+  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
@@ -147,7 +162,7 @@ TEST(ClientConfig, RepeatedServerConfiguration)
   EXPECT_FALSE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
+  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
@@ -171,7 +186,7 @@ TEST(ClientConfig, NoServerUrlConfiguration)
   EXPECT_FALSE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
+  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
@@ -195,7 +210,7 @@ TEST(ClientConfig, EmptyServerUrlConfiguration)
   EXPECT_FALSE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
+  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
@@ -216,7 +231,7 @@ TEST(ClientConfig, NoCachePathConfiguration)
   EXPECT_FALSE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
+  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
@@ -238,7 +253,7 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
   EXPECT_FALSE(config.LoadConfig(testPath));
 
   // Remove the configuration file.
-  EXPECT_TRUE(ignition::common::removeFile(testPath));
+  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
@@ -275,7 +290,11 @@ TEST(ClientConfig, AsString)
     std::string str = client.AsString();
     igndbg << str << std::endl;
 
+#ifndef _WIN32
     EXPECT_NE(str.find(".ignition/fuel"), std::string::npos);
+#else
+    EXPECT_NE(str.find(".ignition\\fuel"), std::string::npos);
+#endif
     EXPECT_NE(str.find("https://fuel.ignitionrobotics.org"), std::string::npos);
   }
 
