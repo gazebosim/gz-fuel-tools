@@ -57,13 +57,16 @@ TEST(WorldIdentifier, UniqueName)
   id.SetName("hello");
   id.SetOwner("alice");
   id.SetServer(srv1);
-  EXPECT_EQ("localhost:8001/alice/worlds/hello", id.UniqueName());
+  EXPECT_EQ(common::joinPaths("localhost:8001", "alice", "worlds", "hello"),
+      id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ("localhost:8002/alice/worlds/hello", id.UniqueName());
+  EXPECT_EQ(common::joinPaths("localhost:8002", "alice", "worlds", "hello"),
+      id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ("localhost:8003/alice/worlds/hello", id.UniqueName());
+  EXPECT_EQ(common::joinPaths("localhost:8003", "alice", "worlds", "hello"),
+      id.UniqueName());
 }
 
 /////////////////////////////////////////////////
@@ -112,6 +115,7 @@ TEST(WorldIdentifier, AsString)
   common::Console::SetVerbosity(4);
   {
     WorldIdentifier id;
+#ifndef _WIN32
     std::string str =
         "Name: \n"\
         "Owner: \n"\
@@ -122,6 +126,18 @@ TEST(WorldIdentifier, AsString)
         "  URL: https://fuel.ignitionrobotics.org\n"
         "  Version: 1.0\n"
         "  API key: \n";
+#else
+    std::string str =
+        "Name: \n"\
+        "Owner: \n"\
+        "Version: tip\n"\
+        "Unique name: fuel.ignitionrobotics.org\\\\worlds\\\n"
+        "Local path: \n"
+        "Server:\n"
+        "  URL: https://fuel.ignitionrobotics.org\n"
+        "  Version: 1.0\n"
+        "  API key: \n";
+#endif
     EXPECT_EQ(str, id.AsString());
   }
 
