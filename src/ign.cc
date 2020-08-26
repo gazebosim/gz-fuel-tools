@@ -18,11 +18,26 @@
 #include <curl/curl.h>
 #include <string.h>
 #include <tinyxml2.h>
+
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif
 #include <google/protobuf/text_format.h>
 #include <ignition/msgs/fuel_metadata.pb.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 #include <csignal>
 #include <exception>
+
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif
 #include <ignition/msgs/Utility.hh>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #ifdef _WIN32
 // DELETE is defined in winnt.h and causes a problem with REST::DELETE
