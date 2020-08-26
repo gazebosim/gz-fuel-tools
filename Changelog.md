@@ -13,6 +13,8 @@
 1. Alphabetical listing of subcommands.
     * [Pull request 65](https://github.com/ignitionrobotics/ign-fuel-tools/pull/65)
 
+1. All changes up to and including Ignition Fuel Tools 3.3.0 are included.
+
 ### Ignition Fuel Tools 4.1.0 (2020-02-27)
 
 1. Resource deletion CLI.
