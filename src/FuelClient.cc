@@ -15,8 +15,15 @@
  *
 */
 
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif
 #include <google/protobuf/text_format.h>
 #include <ignition/msgs/fuel_metadata.pb.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 #include <algorithm>
 #include <iomanip>
 #include <iostream>

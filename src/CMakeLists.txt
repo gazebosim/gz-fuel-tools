@@ -66,6 +66,7 @@ ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
 ign_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
                 LIB_DEPS
+                  ignition-cmake${IGN_CMAKE_VER}::utilities
                   ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
                   TINYXML2::TINYXML2
 )

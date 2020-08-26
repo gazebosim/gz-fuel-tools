@@ -28,11 +28,14 @@ class ignft::ResultPrivate
   public: ResultType type = ResultType::UNKNOWN;
 };
 
-
 //////////////////////////////////////////////////
-Result::~Result()
+Result::Result()
+  : dataPtr(std::make_unique<ResultPrivate>())
 {
 }
+
+//////////////////////////////////////////////////
+Result::~Result() = default;
 
 //////////////////////////////////////////////////
 ResultType Result::Type() const
@@ -41,16 +44,30 @@ ResultType Result::Type() const
 }
 
 //////////////////////////////////////////////////
-Result::Result(const ResultType _type) : dataPtr(new ResultPrivate)
+Result::Result(const ResultType _type)
+  : dataPtr(std::make_unique<ResultPrivate>())
 {
   this->dataPtr->type = _type;
 }
 
 //////////////////////////////////////////////////
-Result::Result(const Result &_orig) : dataPtr(new ResultPrivate)
+Result::Result(const Result &_result)
+  : dataPtr(std::make_unique<ResultPrivate>(*_result.dataPtr))
 {
-  *(this->dataPtr) = *(_orig.dataPtr);
 }
+
+/////////////////////////////////////////////////
+Result::Result(Result &&_result) noexcept = default;  // NOLINT
+
+/////////////////////////////////////////////////
+Result &Result::operator=(const Result &_result)
+{
+  *this->dataPtr = (*_result.dataPtr);
+  return *this;
+}
+
+/////////////////////////////////////////////////
+Result &Result::operator=(Result &&_result) noexcept = default;  // NOLINT
 
 //////////////////////////////////////////////////
 Result::operator bool() const

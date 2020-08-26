@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
+#include <ignition/utilities/ExtraTestMacros.hh>
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Interface.hh"
@@ -36,7 +37,9 @@ using namespace ignition;
 using namespace ignition::fuel_tools;
 
 /////////////////////////////////////////////////
-TEST(Interface, FetchResources)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(Interface, IGN_UTILS_TEST_DISABLED_ON_WIN32(FetchResources))
 {
   common::Console::SetVerbosity(4);
 
@@ -45,7 +48,7 @@ TEST(Interface, FetchResources)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
-  config.SetCacheLocation(common::cwd() + "/test_cache");
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
   // Create client
   FuelClient client(config);
