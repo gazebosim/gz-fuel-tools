@@ -1,5 +1,10 @@
 ## Ignition Fuel Tools 4.x
 
+### Ignition Fuel Tools 4.2.1 (2020-08-26)
+
+1. Fix `ign fuel download`, which was missing the `-j` option.
+    * [Pull request 116](https://github.com/ignitionrobotics/ign-fuel-tools/pull/116)
+
 ### Ignition Fuel Tools 4.2.0 (2020-08-26)
 
 1. Set license information based on licenses available from a Fuel server
