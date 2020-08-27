@@ -136,8 +136,9 @@ bool Zip::Extract(const std::string &_src,
       continue;
     }
 
-    // check if it's a directory
-    std::string dst = ignition::common::joinPaths(_dst, sb.name);
+    auto entryname = std::string(sb.name);
+    common::changeFromUnixPath(entryname);
+    std::string dst = ignition::common::joinPaths(_dst, entryname);
 
     // Create intermediate directories if needed.
     std::string dirname = dst;
@@ -170,6 +171,8 @@ bool Zip::Extract(const std::string &_src,
       ignerr << "Error reading " << sb.name << std::endl;
     else
       file.write(buf, len);
+
+    igndbg << "Created file [" << dst << "]" << std::endl;
 
     delete[] buf;
     file.close();

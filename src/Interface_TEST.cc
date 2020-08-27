@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
+#include <ignition/utilities/ExtraTestMacros.hh>
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Interface.hh"
@@ -36,7 +37,9 @@ using namespace ignition;
 using namespace ignition::fuel_tools;
 
 /////////////////////////////////////////////////
-TEST(Interface, FetchResources)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(Interface, IGN_UTILS_TEST_DISABLED_ON_WIN32(FetchResources))
 {
   common::Console::SetVerbosity(4);
 
@@ -45,7 +48,7 @@ TEST(Interface, FetchResources)
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
-  config.SetCacheLocation(common::cwd() + "/test_cache");
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
   // Create client
   FuelClient client(config);
@@ -199,9 +202,9 @@ TEST(Interface, FetchResources)
   {
     // Check neither file nor its world are cached
     common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/1/"};
+      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/2/"};
     common::URI worldFileUrl{
-      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/1/"
+      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/2/"
       "files/thumbnails/1.png"};
 
     {
@@ -220,12 +223,12 @@ TEST(Interface, FetchResources)
 
     // Check entire world was downloaded to `1`
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1"));
+        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/2"));
     EXPECT_EQ(path, common::cwd() +
-        "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1/"
+        "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/2/"
         "thumbnails/1.png");
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1/"
+        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/2/"
         "test.world"));
 
     // Check world is cached
@@ -234,7 +237,7 @@ TEST(Interface, FetchResources)
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
       EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1",
+          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/2",
           cachedPath);
      }
 
@@ -244,7 +247,7 @@ TEST(Interface, FetchResources)
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
       EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/1"
+          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/Test world/2"
           "/thumbnails/1.png",
           cachedPath);
      }
