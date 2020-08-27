@@ -56,10 +56,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(
 /// \param[in] _url Resource URL.
 /// \param[in] _configFile Path to a YAML configuration file.
 /// \param[in] _header An HTTP header.
+/// \param[in] _type Type of resource to download from collection
+/// \param[in] _jobs Number of parallel jobs for downloading collections.
 /// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(
     const char *_url = nullptr, const char *_configFile = nullptr,
-    const char *_header = nullptr);
+    const char *_header = nullptr, const char *_type = nullptr, int _jobs = 1);
 
 /// \brief External hook to execute 'ign fuel upload -m path' from the command
 /// line.
