@@ -23,9 +23,8 @@
 #include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
-
-#include "LocalCache.hh"
 
 #include "test/test_config.h"
 

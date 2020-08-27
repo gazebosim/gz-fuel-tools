@@ -33,13 +33,12 @@
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/JSONParser.hh"
+#include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
 #include "ModelIterPrivate.hh"
 #include "ignition/fuel_tools/RestClient.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 #include "WorldIterPrivate.hh"
-
-#include "LocalCache.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

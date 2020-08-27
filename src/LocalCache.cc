@@ -34,9 +34,9 @@
 #include <ignition/common/Util.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/Zip.hh"
 
-#include "LocalCache.hh"
 #include "ModelPrivate.hh"
 #include "ModelIterPrivate.hh"
 #include "WorldIterPrivate.hh"
