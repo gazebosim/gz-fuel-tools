@@ -148,11 +148,7 @@ SUBCOMMANDS = {
   "  -p [--private]           Use this argument to make the model private. \n"\
   "                           Otherwise, the model will be public.         \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'Private-Token: <access_token>'.    \n"\
-  "  -j [--jobs] arg          Number of parallel downloads (default: 1, max: #{MAX_PARALLEL_JOBS}). \n"\
-  "  -t [--type] arg          Limit what resource type (i.e. model, world) to download \n" \
-  "                           from a collection. All resources will be downloaded if\n" \
-  "                           unspecified. Ignored if not downloading collection. \n" +
+  "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
 }
 
