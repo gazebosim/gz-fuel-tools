@@ -138,6 +138,7 @@ bool createNewEmptyFile(const std::string &_filename)
 #endif
 
 #include <gtest/gtest.h>
+#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include "ignition/fuel_tools/Zip.hh"
 
@@ -145,8 +146,17 @@ using namespace ignition;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
+class ZipTest : public ::testing::Test
+{
+  public: void SetUp() override
+  {
+    ignition::common::Console::SetVerbosity(4);
+  }
+};
+
+/////////////////////////////////////////////////
 /// \brief Test basic API
-TEST(Zip, API)
+TEST_F(ZipTest, API)
 {
   // Extract invalid paths
   EXPECT_FALSE(Zip::Extract("", ""));
@@ -159,7 +169,7 @@ TEST(Zip, API)
 
 /////////////////////////////////////////////////
 /// \brief Test compress and extract
-TEST(Zip, CompressAndExtract)
+TEST_F(ZipTest, CompressAndExtract)
 {
   std::string newTempDir;
   ASSERT_TRUE(createAndSwitchToTempDir(newTempDir));

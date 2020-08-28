@@ -18,9 +18,26 @@
 #include <curl/curl.h>
 #include <string.h>
 #include <tinyxml2.h>
+
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif
 #include <google/protobuf/text_format.h>
 #include <ignition/msgs/fuel_metadata.pb.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
+#include <csignal>
+#include <exception>
+
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif
 #include <ignition/msgs/Utility.hh>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #ifdef _WIN32
 // DELETE is defined in winnt.h and causes a problem with REST::DELETE
@@ -29,8 +46,11 @@
 
 #include <algorithm>
 #include <chrono>
+#include <deque>
+#include <future>
 #include <iostream>
 #include <optional>
+#include <thread>
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
@@ -38,6 +58,7 @@
 #include <ignition/common/URI.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/CollectionIdentifier.hh"
 #include "ignition/fuel_tools/config.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Helpers.hh"
@@ -51,8 +72,8 @@
 /// \param[in] _resourceMap Key is owner name, value is vector of resources
 /// \param[in] _resourceType Type, such as "models"
 extern "C" void prettyPrint(
-    const ignition::fuel_tools::ServerConfig _serverConfig,
-    std::map<std::string, std::vector<std::string>> _resourceMap,
+    const ignition::fuel_tools::ServerConfig &_serverConfig,
+    const std::map<std::string, std::vector<std::string>> &_resourceMap,
     const std::string &_resourceType)
 {
   unsigned int ownerCount{0};
@@ -106,8 +127,8 @@ extern "C" void prettyPrint(
 /// \param[in] _resourceMap Key is owner name, value is vector of resources
 /// \param[in] _resourceType Type, such as "models"
 extern "C" void uglyPrint(
-    const ignition::fuel_tools::ServerConfig _serverConfig,
-    std::map<std::string, std::vector<std::string>> _resourceMap,
+    const ignition::fuel_tools::ServerConfig &_serverConfig,
+    const std::map<std::string, std::vector<std::string>> &_resourceMap,
     const std::string &_resourceType)
 {
   CURL *curl = curl_easy_init();
@@ -447,8 +468,17 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
-    const char *_configFile, const char *_header)
+    const char *_configFile, const char *_header, const char *_type, int _jobs)
 {
+  // Add signal handler for SIGTERM and SIGINT. Ctrl-C doesn't work without this
+  // handler.
+  ignition::common::SignalHandler sigHandler;
+  sigHandler.AddCallback([&](int _sig) {
+      if (SIGTERM == _sig || SIGINT == _sig)
+      {
+        std::exit(1);
+      }
+  });
   std::string urlStr{_url};
   ignition::common::URI url(urlStr);
   if (!url.Valid())
@@ -470,6 +500,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
   ignition::fuel_tools::FuelClient client(conf);
   ignition::fuel_tools::ModelIdentifier model;
   ignition::fuel_tools::WorldIdentifier world;
+  ignition::fuel_tools::CollectionIdentifier collection;
 
   // Model?
   if (client.ParseModelUrl(url, model))
@@ -532,10 +563,162 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       return false;
     }
   }
+  // Collection?
+  else if (client.ParseCollectionUrl(url, collection))
+  {
+    if (ignition::common::Console::Verbosity() >= 3)
+    {
+      std::cout << "Downloading collection: " << "\033[36m" << std::endl
+                << collection.AsPrettyString("  ") << "\033[39m" << std::endl;
+    }
+
+    bool downloadModels = true;
+    bool downloadWorlds = true;
+    if (nullptr !=_type)
+    {
+      if (strcmp(_type, "model") == 0)
+      {
+        downloadWorlds = false;
+      }
+      else if (strcmp(_type, "world") == 0)
+      {
+        downloadModels = false;
+      }
+      else
+      {
+        ignerr << "Unknown resource type [" << _type << "] sepcified.\n";
+        return false;
+      }
+    }
+
+    std::vector<ignition::fuel_tools::ModelIdentifier> modelIds;
+    std::vector<ignition::fuel_tools::WorldIdentifier> worldIds;
+
+    if (downloadModels)
+    {
+      // Get list of model identifiers in collection
+      auto modelsIter = client.Models(collection);
+      for (; modelsIter; ++modelsIter)
+      {
+        modelIds.push_back(modelsIter->Identification());
+      }
+      ignmsg << "Found " << modelIds.size() << " models in collection ["
+        << collection.Name() << "]" << std::endl;
+    }
+
+    if (downloadWorlds)
+    {
+      // Get list of world identifiers in collection
+      auto worldIter = client.Worlds(collection);
+      for (; worldIter; ++worldIter)
+      {
+        worldIds.push_back(worldIter);
+      }
+      ignmsg << "Found " << worldIds.size() << " worlds in collection ["
+        << collection.Name() << "]" << std::endl;
+    }
+
+    const std::size_t totalItemCount = modelIds.size() + worldIds.size();
+    if (totalItemCount == 0)
+    {
+      std::cout << "There are no items in collection [" << collection.Name()
+        << "]" << std::endl;
+      return false;
+    }
+
+    size_t jobs = std::max(1, _jobs);
+
+    ignmsg << "Using " << jobs << " jobs to download collection of "
+           << totalItemCount << " items" << std::endl;
+
+    std::deque<std::future<ignition::fuel_tools::Result>> tasks;
+
+    // Check for finished tasks by checking if the status of their futures is
+    // "ready". If a task is finished, check if it succeeded and print out an
+    // error message if it failed. When a task is finished, it gets erased from
+    // the tasks list to make room for other tasks to be added.
+    size_t itemCount = 0;
+    auto checkForFinishedTasks = [&itemCount, &totalItemCount, &tasks] {
+      auto finishedIt =
+          std::partition(tasks.begin(), tasks.end(), [](const auto &_task)
+              {
+                return std::future_status::ready !=
+                _task.wait_for(std::chrono::milliseconds(100));
+              });
+
+      if (finishedIt != tasks.end())
+      {
+        for (auto taskIt = finishedIt; taskIt != tasks.end(); ++taskIt)
+        {
+          ignition::fuel_tools::Result result = taskIt->get();
+          if (result)
+          {
+            ++itemCount;
+          }
+          else
+          {
+            ignerr << result.ReadableResult() << std::endl;
+          }
+        }
+
+        tasks.erase(finishedIt, tasks.end());
+        ignmsg << "Downloaded: " << itemCount << " / " << totalItemCount
+               << std::endl;
+      }
+    };
+
+    // Here we use std::async to download items in parallel. The download task
+    // is started asynchronously and gets added to the task list which is
+    // monitored for completion.
+    if (downloadModels)
+    {
+      for (const auto &modelId : modelIds)
+      {
+        // Check if any of the tasks are done. Don't start a new task until the
+        // number of tasks in the tasks lists is below the number of jobs
+        // specified by the user.
+        while (tasks.size() >= jobs)
+        {
+          checkForFinishedTasks();
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        auto handle = std::async(std::launch::async, [&modelId, &client]
+            {
+              return client.DownloadModel(modelId);
+            });
+        tasks.push_back(std::move(handle));
+      }
+    }
+
+    if (downloadWorlds)
+    {
+      // We need a mutable worldId because DownloadWorld modifies it
+      for (auto &worldId : worldIds)
+      {
+        // Check if any of the tasks are done
+        while (tasks.size() >= jobs)
+        {
+          checkForFinishedTasks();
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        auto handle = std::async(std::launch::async, [&worldId, &client]
+            {
+            return client.DownloadWorld(worldId);
+            });
+        tasks.push_back(std::move(handle));
+      }
+    }
+
+    // All the tasks have been queued. Now wait for them to finish
+    while (!tasks.empty())
+    {
+      checkForFinishedTasks();
+    }
+  }
   else
   {
-    std::cout << "Invalid URL: only models and worlds can be downloaded so far."
-              << std::endl;
+    std::cout << "Invalid URL: only models and worlds or collections can be "
+              << "downloaded so far." << std::endl;
     return false;
   }
 
