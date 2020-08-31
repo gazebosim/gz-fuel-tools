@@ -207,10 +207,20 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
   this->dataPtr->rest = _rest;
   this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 
-  if (nullptr == _cache)
+  if (nullptr == _cache){
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
     this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
+#ifndef _WIN32
+# pragma GCC diagnostic pop
+#endif
+  }
   else
+  {
     this->dataPtr->cache.reset(_cache);
+  }
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelUrlRegexStr));
