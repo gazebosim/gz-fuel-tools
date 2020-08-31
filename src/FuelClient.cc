@@ -207,7 +207,8 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
   this->dataPtr->rest = _rest;
   this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 
-  if (nullptr == _cache){
+  if (nullptr == _cache)
+  {
 #ifndef _WIN32
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
