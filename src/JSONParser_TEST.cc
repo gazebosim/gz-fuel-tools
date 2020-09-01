@@ -25,9 +25,9 @@
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/JSONParser.hh"
 #include "ignition/fuel_tools/ModelIter.hh"
-#include "ignition/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
+#include "ModelIterPrivate.hh"
+#include "WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

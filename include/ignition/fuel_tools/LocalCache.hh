@@ -47,7 +47,8 @@ namespace ignition
     {
       /// \brief Constructor
       /// \param[in] _config The configuration for the client
-      public: explicit LocalCache(const ClientConfig *_config);
+      public:
+        explicit IGN_DEPRECATED(5) LocalCache(const ClientConfig *_config);
 
       /// \brief destructor
       public: virtual ~LocalCache();

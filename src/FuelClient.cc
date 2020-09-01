@@ -43,10 +43,10 @@
 #include "ignition/fuel_tools/JSONParser.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ignition/fuel_tools/ModelIterPrivate.hh"
+#include "ModelIterPrivate.hh"
 #include "ignition/fuel_tools/RestClient.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
+#include "WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
@@ -208,9 +208,20 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
   this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 
   if (nullptr == _cache)
+  {
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
     this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
+#ifndef _WIN32
+# pragma GCC diagnostic pop
+#endif
+  }
   else
+  {
     this->dataPtr->cache.reset(_cache);
+  }
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelUrlRegexStr));
