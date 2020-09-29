@@ -2,7 +2,22 @@
 
 ### Ignition Fuel Tools 5.x.x
 
-### Ignition Fuel Tools 5.0.0 (20xx-xx-xx)
+### Ignition Fuel Tools 5.0.0 (2020-09-28)
+
+1. Added support for annotation parsing during model creation.
+    * [Pull request 95](https://github.com/ignitionrobotics/ign-fuel-tools/pull/95)
+
+1. Removed repeated installation instructions.
+    * [Pull request 101](https://github.com/ignitionrobotics/ign-fuel-tools/pull/101)
+
+1. Update codeowners.
+    * [Pull request 108](https://github.com/ignitionrobotics/ign-fuel-tools/pull/108)
+
+1. Hide Private headers and LocalCache.hh
+    * [Pull request 109](https://github.com/ignitionrobotics/ign-fuel-tools/pull/109)
+
+1. Fixed test - Download world 2
+    * [Pull request 110](https://github.com/ignitionrobotics/ign-fuel-tools/pull/110)
 
 ### Ignition Fuel Tools 4.2.1 (2020-08-26)
 
