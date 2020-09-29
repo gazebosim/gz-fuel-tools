@@ -20,8 +20,7 @@ highly articulated humanoid robot. See the full model specification
 
 ### Worlds
 
-Among the resouces hosted at Ignition Fuel there are "worlds", which describe a
+Among the resources hosted at Ignition Fuel there are "worlds", which describe a
 everything inside a simulation, from the robots to the scene properties, lights,
 physics properties, etc. You can see the full world description
 <a href="http://sdformat.org/spec?elem=world">here</a>.
-
