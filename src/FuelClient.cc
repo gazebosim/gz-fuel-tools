@@ -630,7 +630,6 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id)
 Result FuelClient::DownloadModel(const ModelIdentifier &_id,
     const std::vector<std::string> &_headers)
 {
-  ignwarn << "Downloading model" << std::endl;
   // Server config
   if (!_id.Server().Url().Valid() || _id.Server().Version().empty())
   {
@@ -644,7 +643,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   route = route / _id.Owner() / "models" / _id.Name() / _id.VersionStr() /
         (_id.Name() + ".zip");
 
-  ignmsg << "sdfDownloading model [" << _id.UniqueName() << "]" << std::endl;
+  ignmsg << "Downloading model [" << _id.UniqueName() << "]" << std::endl;
 
   // Request
   ignition::fuel_tools::Rest rest;
@@ -683,8 +682,6 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   }
   newId.SetVersion(version);
 
-  ignition::msgs::FuelMetadata meta;
-
   // Save
   // Note that the save function doesn't return the path
   if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
@@ -694,19 +691,21 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   // TODO(john): This has the potential to be an infinite loop
   // is there are cyclic dependencies
   std::string path;
+  ignition::msgs::FuelMetadata meta;
   if (this->CachedModel(ignition::common::URI(newId.UniqueName()), path))
   {
-    std::string metadataPath = ignition::common::joinPaths(path, "metadata.pbtxt");
+    std::string metadataPath =
+      ignition::common::joinPaths(path, "metadata.pbtxt");
     if (ignition::common::exists(metadataPath))
     {
       // Read the pbtxt file.
       std::ifstream inputFile(metadataPath);
       std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
-          std::istreambuf_iterator<char>());
- 
+        std::istreambuf_iterator<char>());
+
       // Parse the file into the fuel metadata message
       google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
- 
+
       for (int i = 0; i < meta.dependencies_size(); i++)
       {
         std::string dependencyPath;
