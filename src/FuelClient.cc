@@ -689,7 +689,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
 
   // Locate any dependencies and download them.
   // TODO(john): This has the potential to be an infinite loop
-  // is there are cyclic dependencies
+  // if there are cyclic dependencies
   std::string path;
   ignition::msgs::FuelMetadata meta;
   if (this->CachedModel(ignition::common::URI(newId.UniqueName()), path))
