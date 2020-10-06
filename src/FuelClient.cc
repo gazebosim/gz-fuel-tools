@@ -687,9 +687,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
     return Result(ResultType::FETCH_ERROR);
 
-  // Locate any dependencies and download them.
-  // TODO(john): This has the potential to be an infinite loop
-  // if there are cyclic dependencies
+  // Locate any dependencies from the input model and download them.
   std::string path;
   ignition::msgs::FuelMetadata meta;
   if (this->CachedModel(ignition::common::URI(newId.UniqueName()), path))
@@ -710,7 +708,11 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
       {
         std::string dependencyPath;
         ignition::common::URI dependencyURI(meta.dependencies(i).uri());
-        this->DownloadModel(dependencyURI, dependencyPath);
+
+        // If the model is not already cached, download it; this prevents
+        // any sort of cyclic dependencies fromo running infinitely
+        if (!this->CachedModel(dependencyURI, dependencyPath))
+          this->DownloadModel(dependencyURI, dependencyPath);
       }
     }
   }
