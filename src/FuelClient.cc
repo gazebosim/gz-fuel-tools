@@ -694,6 +694,8 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   {
     std::string metadataPath =
       ignition::common::joinPaths(path, "metadata.pbtxt");
+    std::string modelConfigPath =
+      ignition::common::joinPaths(path, "model.config");
     if (ignition::common::exists(metadataPath))
     {
       // Read the pbtxt file.
@@ -703,6 +705,28 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
 
       // Parse the file into the fuel metadata message
       google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+
+      for (int i = 0; i < meta.dependencies_size(); i++)
+      {
+        std::string dependencyPath;
+        ignition::common::URI dependencyURI(meta.dependencies(i).uri());
+
+        // If the model is not already cached, download it; this prevents
+        // any sort of cyclic dependencies fromo running infinitely
+        if (!this->CachedModel(dependencyURI, dependencyPath))
+          this->DownloadModel(dependencyURI, dependencyPath);
+      }
+    }
+    else if (ignition::common::exists(modelConfigPath))
+    {
+      std::ifstream inputFile(modelConfigPath);
+      std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+          std::istreambuf_iterator<char>());
+
+      if (!ignition::msgs::ConvertFuelMetadata(inputStr, meta))
+      {
+        return Result(ResultType::UPLOAD_ERROR);
+      }
 
       for (int i = 0; i < meta.dependencies_size(); i++)
       {
