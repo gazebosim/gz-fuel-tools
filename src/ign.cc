@@ -26,10 +26,14 @@
 
 #include <algorithm>
 #include <chrono>
-#include <iostream>
-#include <future>
 #include <deque>
+#include <future>
+#include <iostream>
+#include <map>
+#include <string>
 #include <thread>
+#include <utility>
+#include <vector>
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/SignalHandler.hh>
