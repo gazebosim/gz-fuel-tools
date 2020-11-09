@@ -729,7 +729,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
         ignition::common::URI dependencyURI(meta.dependencies(i).uri());
 
         // If the model is not already cached, download it; this prevents
-        // any sort of cyclic dependencies fromo running infinitely
+        // any sort of cyclic dependencies from running infinitely
         if (!this->CachedModel(dependencyURI, dependencyPath))
           this->DownloadModel(dependencyURI, dependencyPath);
       }
