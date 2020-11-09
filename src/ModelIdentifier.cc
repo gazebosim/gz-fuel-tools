@@ -21,6 +21,7 @@
 
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
+#include <ignition/common/Util.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
@@ -154,22 +155,24 @@ std::string ModelIdentifier::Name() const
 bool ModelIdentifier::SetName(const std::string &_name)
 {
   bool success = false;
-  if (this->dataPtr->ValidName(_name))
+  std::string name = common::lowercase(_name);
+  if (this->dataPtr->ValidName(name))
   {
     success = true;
-    this->dataPtr->name = _name;
+    this->dataPtr->name = name;
   }
   return success;
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifier::SetOwner(const std::string &_name)
+bool ModelIdentifier::SetOwner(const std::string &_owner)
 {
   bool success = false;
-  if (this->dataPtr->ValidName(_name))
+  std::string owner = common::lowercase(_owner);
+  if (this->dataPtr->ValidName(owner))
   {
     success = true;
-    this->dataPtr->owner = _name;
+    this->dataPtr->owner = owner;
   }
   return success;
 }

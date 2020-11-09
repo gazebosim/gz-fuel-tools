@@ -137,7 +137,7 @@ TEST(CmdLine, IGN_UTILS_TEST_DISABLED_ON_WIN32(
   redirectIO(stdOutBuffer, stdErrBuffer);
 
   EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org",
-      "OpenRobotics"));
+      "openrobotics"));
 
   EXPECT_NE(stdOutBuffer.str().find(
         "https://staging-fuel.ignitionrobotics.org"),
@@ -222,12 +222,12 @@ TEST(CmdLine, IGN_UTILS_TEST_DISABLED_ON_WIN32(ModelDownloadUnversioned))
 
   // Check files
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box"));
+      "test_cache/fuel.ignitionrobotics.org/chapulina/models/test box"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2"));
+      "test_cache/fuel.ignitionrobotics.org/chapulina/models/test box/2"));
   EXPECT_TRUE(ignition::common::isFile(
       std::string("test_cache/fuel.ignitionrobotics.org/chapulina/models") +
-      "/Test box/2/model.sdf"));
+      "/test box/2/model.sdf"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
@@ -277,7 +277,7 @@ TEST(CmdLine, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadConfigCache))
   // Check files
   auto modelPath = common::joinPaths(std::string(PROJECT_BINARY_PATH),
       "test_cache", "fuel.ignitionrobotics.org", "chapulina", "models",
-      "Test box");
+      "test box");
   EXPECT_TRUE(ignition::common::isDirectory(modelPath));
   EXPECT_TRUE(ignition::common::isDirectory(common::joinPaths(modelPath, "2")));
   EXPECT_TRUE(ignition::common::isFile(common::joinPaths(modelPath, "2",
@@ -365,7 +365,7 @@ TEST(CmdLine, WorldListCustomServerPrettyOwner)
   redirectIO(stdOutBuffer, stdErrBuffer);
 
   EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org",
-      "OpenRobotics"));
+      "openrobotics"));
 
   EXPECT_NE(stdOutBuffer.str().find(
         "https://staging-fuel.ignitionrobotics.org"), std::string::npos)
@@ -452,12 +452,12 @@ TEST(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(
 
   // Check files
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/test world"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/2"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/test world/2"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/")
-      + "Test world/2/test.world"));
+      std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/")
+      + "test world/2/test.world"));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
@@ -500,40 +500,40 @@ TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllItems))
   // Check files
   // Model: Backpack
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack/1"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack/1"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
-      "Backpack/1/model.sdf"));
+      std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/models/") +
+      "backpack/1/model.sdf"));
 
   // Model: TEAMBASE
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/teambase"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE/2"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/teambase/2"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
-      "TEAMBASE/2/model.sdf"));
+      std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/models/") +
+      "teambase/2/model.sdf"));
 
   // World: Test World
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/test world"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/2"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/test world/2"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
-      "Test world/2/test.world"));
+      std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/") +
+      "test world/2/test.world"));
 
   // World: Test World 2
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world 2"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/test world 2"));
   EXPECT_TRUE(
       ignition::common::isDirectory("test_cache/fuel.ignitionrobotics.org/"
-                                    "OpenRobotics/worlds/Test world 2/2"));
+                                    "openrobotics/worlds/test world 2/2"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
-      "Test world 2/2/test.world"));
+      std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/") +
+      "test world 2/2/test.world"));
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
 }
@@ -568,29 +568,29 @@ TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Models))
   // Check files
   // Model: Backpack
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack/1"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack/1"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
-      "Backpack/1/model.sdf"));
+      std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/models/") +
+      "backpack/1/model.sdf"));
 
   // Model: TEAMBASE
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/teambase"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE/2"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/teambase/2"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
-      "TEAMBASE/2/model.sdf"));
+      std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/models/") +
+      "teambase/2/model.sdf"));
 
   // World: Test World
   EXPECT_FALSE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/test world"));
 
   // World: Test World 2
   EXPECT_FALSE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world 2"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/test world 2"));
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
 }
@@ -625,30 +625,30 @@ TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Worlds))
   // Check files
   // Model: Backpack
   EXPECT_FALSE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack"));
 
   // Model: TEAMBASE
   EXPECT_FALSE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/teambase"));
 
   // World: Test World
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/test world"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/2"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/test world/2"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
-      "Test world/2/test.world"));
+      std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/") +
+      "test world/2/test.world"));
 
   // World: Test World 2
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world 2"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/test world 2"));
   EXPECT_TRUE(
       ignition::common::isDirectory("test_cache/fuel.ignitionrobotics.org/"
-                                    "OpenRobotics/worlds/Test world 2/2"));
+                                    "openrobotics/worlds/test world 2/2"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
-      "Test world 2/2/test.world"));
+      std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/") +
+      "test world 2/2/test.world"));
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
 }
