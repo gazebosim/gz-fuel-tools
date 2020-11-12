@@ -1,6 +1,6 @@
 # Ignition Fuel Tools
 
-** Classes and tools for interacting with Ignition Fuel **
+**Classes and tools for interacting with Ignition Fuel**
 
 Ignition Fuel Tools is composed by a client library and command line tools for
 interacting with Ignition Fuel servers.
@@ -19,7 +19,7 @@ See the [installation tutorial](https://ignitionrobotics.org/api/fuel_tools/4.0/
 
 For a complete list of commands run `ign fuel -h` on the command line.
 
-** List all models **
+**List all models**
 ```
 $ ign fuel list -t model -r | head
 https://fuel.ignitionrobotics.org/anonymous/test_model_595389531
@@ -34,7 +34,7 @@ https://fuel.ignitionrobotics.org/anonymous/test_model_834617935
 https://fuel.ignitionrobotics.org/anonymous/test_model_380348669
 ```
 
-** Download a model **
+**Download a model**
 ```
 $ ign fuel download -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance -v 4
 Downloading model:
@@ -47,7 +47,7 @@ Downloading model:
 Download succeeded.
 ```
 
-** C++ Get List models **
+**C++ Get List models**
 ```
   // Create a client (uses https://fuel.ignitionrobotics.org by default)
   ignition::fuel_tools::ClientConfig conf;
@@ -59,7 +59,7 @@ Download succeeded.
   }
 ```
 
-** Upload a model **
+**Upload a model**
 
 Create an account on
 [https://app.ignitionrobotics.org/](https://app.ignitionrobotics.org/) and log
@@ -93,7 +93,7 @@ Note that the `upload` command only works for models currently, not worlds.
 
 See issues beginning with [Fuel backend] in the title. Here are two examples.
 
-** TODO: Find a model on disk **
+**TODO: Find a model on disk**
 ```
 $ ign fuel locate --name am1
 /home/developer/.ignition/fuel/fuel.ignitionrobotics.org/alice/am1
