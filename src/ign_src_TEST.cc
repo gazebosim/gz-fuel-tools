@@ -502,10 +502,10 @@ TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllItems))
   EXPECT_TRUE(ignition::common::isDirectory(
       "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack/1"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack/2"));
   EXPECT_TRUE(ignition::common::isFile(
       std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/models/") +
-      "backpack/1/model.sdf"));
+      "backpack/2/model.sdf"));
 
   // Model: TEAMBASE
   EXPECT_TRUE(ignition::common::isDirectory(
@@ -570,10 +570,10 @@ TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Models))
   EXPECT_TRUE(ignition::common::isDirectory(
       "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack/1"));
+      "test_cache/fuel.ignitionrobotics.org/openrobotics/models/backpack/2"));
   EXPECT_TRUE(ignition::common::isFile(
       std::string("test_cache/fuel.ignitionrobotics.org/openrobotics/models/") +
-      "backpack/1/model.sdf"));
+      "backpack/2/model.sdf"));
 
   // Model: TEAMBASE
   EXPECT_TRUE(ignition::common::isDirectory(
