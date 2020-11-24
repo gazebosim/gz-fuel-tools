@@ -369,7 +369,7 @@ TEST(CmdLine, WorldListCustomServerPrettyOwner)
 
   EXPECT_NE(stdOutBuffer.str().find(
         "https://staging-fuel.ignitionrobotics.org"), std::string::npos)
-    << stdOutBuffer.str();<<<<<<< nkoenig/lowercase
+    << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("worlds"), std::string::npos)
       << stdOutBuffer.str();
 
