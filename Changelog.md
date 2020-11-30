@@ -1,5 +1,19 @@
 ## Ignition Fuel Tools 3.x
 
+### Ignition Fuel Tools 3.5.0 (2020-11-30)
+
+1. Fix windows build.
+    * [Pull request 107](https://github.com/ignitionrobotics/ign-fuel-tools/pull/107)
+
+1. Resolve updated codecheck issues.
+    * [Pull request 129](https://github.com/ignitionrobotics/ign-fuel-tools/pull/129)
+
+1. Update Backpack model to fix tests.
+    * [Pull request 132](https://github.com/ignitionrobotics/ign-fuel-tools/pull/132)
+
+1. Use lowercase resource and owner names when storing assets on disk.
+    * [Pull request 130](https://github.com/ignitionrobotics/ign-fuel-tools/pull/130)
+
 ### Ignition Fuel Tools 3.4.0 (2020-08-19)
 
 1. Modernize github actions by updating to the new style.
