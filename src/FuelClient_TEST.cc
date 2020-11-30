@@ -499,6 +499,76 @@ TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadModel))
     EXPECT_NE(std::string::npos, modelSdf.find("<roughness_map>https://"));
   }
 
+  // Download model with a dependency specified within its `metadata.pbtxt`
+  {
+    common::URI url{
+        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_red_1"};
+    common::URI depUrl{
+        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_1"};
+
+    // Check it is not cached
+    std::string cachedPath;
+    Result res1 = client.CachedModel(url, cachedPath);
+    EXPECT_FALSE(res1);
+    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
+
+    // Check the dependency is not cached
+    Result res2 = client.CachedModel(depUrl, cachedPath);
+    EXPECT_FALSE(res2);
+    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res2);
+
+    // Download
+    std::string path;
+    Result res3 = client.DownloadModel(url, path);
+    EXPECT_TRUE(res3);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
+
+    // Check it is cached
+    Result res4 = client.CachedModel(url, cachedPath);
+    EXPECT_TRUE(res4);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res4);
+
+    // Check the dependency is cached
+    Result res5 = client.CachedModel(depUrl, cachedPath);
+    EXPECT_TRUE(res5);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res5);
+  }
+
+  // Download model with a dependency specified within its `model.config`
+  {
+    common::URI url{
+        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_red_2"};
+    common::URI depUrl{
+        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_2"};
+
+    // Check it is not cached
+    std::string cachedPath;
+    Result res1 = client.CachedModel(url, cachedPath);
+    EXPECT_FALSE(res1);
+    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
+
+    // Check the dependency is not cached
+    Result res2 = client.CachedModel(depUrl, cachedPath);
+    EXPECT_FALSE(res2);
+    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res2);
+
+    // Download
+    std::string path;
+    Result res3 = client.DownloadModel(url, path);
+    EXPECT_TRUE(res3);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
+
+    // Check it is cached
+    Result res4 = client.CachedModel(url, cachedPath);
+    EXPECT_TRUE(res4);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res4);
+
+    // Check the dependency is cached
+    Result res5 = client.CachedModel(depUrl, cachedPath);
+    EXPECT_TRUE(res5);
+    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res5);
+  }
+
   // Try using nonexistent URL
   {
     std::string url{
