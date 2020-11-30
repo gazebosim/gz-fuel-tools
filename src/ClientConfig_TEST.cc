@@ -52,7 +52,7 @@ std::string homePath()
 #ifndef _WIN32
   ignition::common::env("HOME", homePath);
 #else
-  ignition::common::env("HOMEPATH", homePath);
+  ignition::common::env("USERPROFILE", homePath);
 #endif
 
   return homePath;
