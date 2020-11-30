@@ -3,7 +3,7 @@
 ### Ignition Fuel Tools 3.5.0 (2020-11-30)
 
 1. Fix windows build.
-    * [Pull request 94](https://github.com/ignitionrobotics/ign-fuel-tools/pull/94)
+    * [Pull request 107](https://github.com/ignitionrobotics/ign-fuel-tools/pull/107)
 
 1. Resolve updated codecheck issues.
     * [Pull request 129](https://github.com/ignitionrobotics/ign-fuel-tools/pull/129)
