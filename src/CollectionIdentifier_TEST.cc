@@ -145,7 +145,7 @@ TEST(CollectionIdentifier, AsString)
     std::string str =
         "Name: \n"\
         "Owner: \n"\
-        "Unique name: https://fuel.ignitionrobotics.org\\\\collections\\\n"
+        "Unique name: https://fuel.ignitionrobotics.org\\collections\n"
         "Server:\n"
         "  URL: https://fuel.ignitionrobotics.org\n"
         "  Version: 1.0\n"

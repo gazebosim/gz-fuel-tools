@@ -147,7 +147,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     EXPECT_EQ(id.Server().Url().Str(), "https://some.example.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
-    EXPECT_EQ(id.Name(), "Cardboard Box");
+    EXPECT_EQ(id.Name(), "cardboard box");
     EXPECT_EQ(id.Version(), 0u);
   }
 
@@ -166,7 +166,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
-    EXPECT_EQ(id.Name(), "Cardboard Box");
+    EXPECT_EQ(id.Name(), "cardboard box");
     EXPECT_EQ(id.Version(), 4u);
   }
 
@@ -185,7 +185,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
-    EXPECT_EQ(id.Name(), "Cardboard Box");
+    EXPECT_EQ(id.Name(), "cardboard box");
     EXPECT_EQ(id.Version(), 6u);
   }
 
@@ -202,7 +202,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ(id.Owner(), "german");
-    EXPECT_EQ(id.Name(), "Cardboard Box");
+    EXPECT_EQ(id.Name(), "cardboard box");
     EXPECT_EQ(id.Version(), 0u);
   }
 
@@ -221,7 +221,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
-    EXPECT_EQ(id.Name(), "Cardboard Box");
+    EXPECT_EQ(id.Name(), "cardboard box");
     EXPECT_EQ(id.Version(), 0u);
   }
 
@@ -292,8 +292,8 @@ TEST_F(FuelClientTest, ParseModelFileURL)
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "OpenRobotics");
-    EXPECT_EQ(id.Name(), "Cordless Drill");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "cordless drill");
     EXPECT_EQ(filePath, "meshes/cordless_drill.dae");
   }
 
@@ -305,14 +305,14 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Pine Tree/tip/"
+      "https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Pine Tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "OpenRobotics");
-    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "pine tree");
     EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
   }
 
@@ -330,8 +330,8 @@ TEST_F(FuelClientTest, ParseModelFileURL)
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "OpenRobotics");
-    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "pine tree");
     EXPECT_EQ(filePath, "model.sdf");
   }
 
@@ -341,15 +341,15 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/OpenRobotics/models/Pine Tree/tip/"
+      "https://fuel.ignitionrobotics.org/OpenRobotics/models/pine tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ("1.0", id.Server().Version());
-    EXPECT_EQ(id.Owner(), "OpenRobotics");
-    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "pine tree");
     EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
   }
 
@@ -361,14 +361,14 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/OpenRobotics/models/Pine Tree/tip/"
+      "https://fuel.ignitionrobotics.org/openrobotics/models/Pine Tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "OpenRobotics");
-    EXPECT_EQ(id.Name(), "Pine Tree");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "pine tree");
     EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
   }
 
@@ -427,7 +427,7 @@ TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadModel))
 
     // Check it was downloaded to `2`
     auto modelPath = common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "chapulina", "models", "Test box");
+        "fuel.ignitionrobotics.org", "chapulina", "models", "test box");
 
     EXPECT_EQ(path, common::joinPaths(modelPath, "2"));
     EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2")));
@@ -465,7 +465,7 @@ TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadModel))
 
     // Check it was downloaded to `2`
     auto modelPath = common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "iche033", "models", "Rescue Randy");
+        "fuel.ignitionrobotics.org", "iche033", "models", "rescue randy");
 
     EXPECT_EQ(path, common::joinPaths(modelPath, "2"));
     EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2")));
@@ -738,7 +738,7 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
-    EXPECT_EQ(id.Name(), "Cardboard Box");
+    EXPECT_EQ(id.Name(), "cardboard box");
     EXPECT_EQ(id.Version(), 0u);
   }
 
@@ -757,7 +757,7 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
-    EXPECT_EQ(id.Name(), "Cardboard Box");
+    EXPECT_EQ(id.Name(), "cardboard box");
     EXPECT_EQ(id.Version(), 4u);
   }
 
@@ -776,7 +776,7 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
-    EXPECT_EQ(id.Name(), "Cardboard Box");
+    EXPECT_EQ(id.Name(), "cardboard box");
     EXPECT_EQ(id.Version(), 6u);
   }
 
@@ -794,7 +794,7 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ("1.0", id.Server().Version());
     EXPECT_EQ(id.Owner(), "german");
-    EXPECT_EQ(id.Name(), "Cardboard Box");
+    EXPECT_EQ(id.Name(), "cardboard box");
     EXPECT_EQ(id.Version(), 0u);
   }
 
@@ -813,7 +813,7 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
-    EXPECT_EQ(id.Name(), "Cardboard Box");
+    EXPECT_EQ(id.Name(), "cardboard box");
     EXPECT_EQ(id.Version(), 0u);
   }
 
@@ -881,8 +881,8 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "OpenRobotics");
-    EXPECT_EQ(id.Name(), "Empty");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "empty");
     EXPECT_EQ(filePath, "test.world");
   }
 
@@ -900,8 +900,8 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "OpenRobotics");
-    EXPECT_EQ(id.Name(), "Empty sky");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "empty sky");
     EXPECT_EQ(filePath, "empty_sky.world");
   }
 
@@ -919,8 +919,8 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "OpenRobotics");
-    EXPECT_EQ(id.Name(), "Empty");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "empty");
     EXPECT_EQ(filePath, "test.world");
   }
 
@@ -937,8 +937,8 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ("1.0", id.Server().Version());
-    EXPECT_EQ(id.Owner(), "OpenRobotics");
-    EXPECT_EQ(id.Name(), "Empty sky");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "empty sky");
     EXPECT_EQ(filePath, "empty_sky.world");
   }
 
@@ -956,8 +956,8 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "OpenRobotics");
-    EXPECT_EQ(id.Name(), "Empty");
+    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Name(), "empty");
     EXPECT_EQ(filePath, "test.world");
   }
 
@@ -1022,7 +1022,7 @@ TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadWorld))
 
     // Check it was downloaded to `1`
     auto worldPath = common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "OpenRobotics", "worlds", "Test world");
+        "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world");
 
     EXPECT_EQ(path, common::joinPaths(worldPath, "2"));
     EXPECT_TRUE(common::exists(common::joinPaths(worldPath, "2")));
