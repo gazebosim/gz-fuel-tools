@@ -162,6 +162,22 @@ class ignition::fuel_tools::FuelClientPrivate
   public: void AllFiles(const std::string &_path,
               std::vector<std::string> &_files) const;
 
+  public: bool FillModelForm(const std::string &_pathToModelDir,
+              const ModelIdentifier &_id, bool _private,
+              std::multimap<std::string, std::string> &_form);
+
+  /// \brief This function requests the available licenses from the
+  ///  Fuel server and stores this information locally.
+  ///
+  /// The UploadModel function can use this information to set
+  /// appropriate license information based on a model's metadata.pbtxt
+  /// file. If license information is not available, then the
+  /// UploadModel function will default to the
+  /// "Creative Commons - Public Domain" license.
+  /// \param[in] _server Information about the server that provides
+  /// license information.
+  public: void PopulateLicenses(const ServerConfig &_server);
+
   /// \brief Client configuration
   public: ClientConfig config;
 
@@ -412,130 +428,9 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
-  if (!common::exists(_pathToModelDir))
-  {
-    ignerr << "The model path[" << _pathToModelDir << "] doesn't exist.\n";
+  std::multimap<std::string, std::string> form;
+  if (!this->dataPtr->FillModelForm(_pathToModelDir, _id, _private, form))
     return Result(ResultType::UPLOAD_ERROR);
-  }
-
-  ignition::msgs::FuelMetadata meta;
-
-  // Try the `metadata.pbtxt` file first since it contains more information
-  // than `model.config`.
-  if (common::exists(common::joinPaths(_pathToModelDir, "metadata.pbtxt")))
-  {
-    std::string filePath = common::joinPaths(_pathToModelDir, "metadata.pbtxt");
-
-    ignmsg << "Parsing " << filePath  << std::endl;
-
-    // Read the pbtxt file.
-    std::ifstream inputFile(filePath);
-    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
-        std::istreambuf_iterator<char>());
-
-    // Parse the file into the fuel metadata message
-    google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
-  }
-  else if (common::exists(common::joinPaths(_pathToModelDir, "model.config")))
-  {
-    std::string filePath = common::joinPaths(_pathToModelDir, "model.config");
-
-    ignmsg << "Parsing " << filePath << std::endl;
-
-    std::ifstream inputFile(filePath);
-    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
-        std::istreambuf_iterator<char>());
-
-    if (!ignition::msgs::ConvertFuelMetadata(inputStr, meta))
-    {
-      ignerr << "Unable to convert model config[" << _pathToModelDir << "].\n";
-      return Result(ResultType::UPLOAD_ERROR);
-    }
-  }
-  else
-  {
-    ignerr << "Provided model directory[" <<  _pathToModelDir
-      << "] needs a metadata.pbtxt or a model.confg file.";
-    return Result(ResultType::UPLOAD_ERROR);
-  }
-
-  std::multimap<std::string, std::string> form =
-  {
-    {"name", meta.name()},
-    {"description", meta.description()},
-    {"private", _private ? "1" : "0"},
-  };
-
-  // \todo(nkoenig) The ign-fuelserver expects an integer number for the
-  // license information. The fuelserver should be modified to accept
-  // a string. Otherwise, we have to bake into each client a mapping of
-  // license name to integer.
-  //
-  // If we have legal, then attempt to fill in the correct license information.
-  if (meta.has_legal())
-  {
-    // Attempt to retrieve the available licenses, if we have no available
-    // licenses.
-    if (this->dataPtr->licenses.empty())
-    {
-      this->PopulateLicenses(_id.Server());
-      // Fail if a license has been requested, but we couldn't get the
-      // available licenses.
-      if (this->dataPtr->licenses.empty())
-      {
-        return Result(ResultType::UPLOAD_ERROR);
-      }
-    }
-
-    // Find the license by name.
-    std::map<std::string, unsigned int>::const_iterator licenseIt =
-      this->dataPtr->licenses.find(meta.legal().license());
-    if (licenseIt != this->dataPtr->licenses.end())
-    {
-      form.emplace("license", std::to_string(licenseIt->second));
-    }
-    // No license found, print an error and return.
-    else
-    {
-      std::string validLicenseNames;
-      auto end = this->dataPtr->licenses.end();
-      std::advance(end, -1);
-      for (licenseIt = this->dataPtr->licenses.begin();
-           licenseIt != end; ++licenseIt)
-      {
-        validLicenseNames += "    " + licenseIt->first + "\n";
-      }
-      validLicenseNames += "    " + licenseIt->first;
-
-      ignerr << "Invalid license[" << meta.legal().license() << "].\n"
-             << "  Valid licenses include:\n"
-             << validLicenseNames << std::endl;
-
-      return Result(ResultType::UPLOAD_ERROR);
-    }
-  }
-  // If there is no license information, then default to
-  // "Creative Commons - Public Domain"
-  else
-  {
-    form.emplace("license", "1");
-  }
-
-  // Add tags
-  std::string tags;
-  for (int i = 0; i < meta.tags_size(); ++i)
-    tags += meta.tags(i) + ",";
-  if (!tags.empty())
-    form.emplace("tags", tags);
-
-  // Recursively get all the files.
-  std::vector<std::string> files;
-  this->dataPtr->AllFiles(_pathToModelDir, files);
-  for (const std::string &file : files)
-  {
-    form.emplace("file", std::string("@") + file + ";"
-        + file.substr(_pathToModelDir.size()+1));
-  }
 
   // Send the request.
   resp = rest.Request(HttpMethod::POST_FORM, _id.Server().Url().Str(),
@@ -1333,6 +1228,15 @@ Result FuelClient::PatchModel(
     const ignition::fuel_tools::ModelIdentifier &_model,
     const std::vector<std::string> &_headers)
 {
+  return this->PatchModel(_model, _headers, "");
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::PatchModel(
+    const ignition::fuel_tools::ModelIdentifier &_model,
+    const std::vector<std::string> &_headers,
+    const std::string &_pathToModelDir)
+{
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
@@ -1341,10 +1245,18 @@ Result FuelClient::PatchModel(
   common::URIPath path;
   path = path / _model.Owner() / "models" / _model.Name();
 
-  std::multimap<std::string, std::string> form =
+  std::multimap<std::string, std::string> form;
+
+  if (!_pathToModelDir.empty() &&
+      !this->dataPtr->FillModelForm(_pathToModelDir, _model,
+        _model.Private(), form))
   {
-    {"private", _model.Private() ? "1" : "0"}
-  };
+    return Result(ResultType::UPLOAD_ERROR);
+  }
+  else
+  {
+    form.emplace("private", _model.Private() ? "1" : "0");
+  }
 
   resp = rest.Request(HttpMethod::PATCH_FORM, serverUrl, version,
       path.Str(), {}, _headers, "", form);
@@ -1372,22 +1284,188 @@ void FuelClientPrivate::AllFiles(const std::string &_path,
   }
 }
 
-
 //////////////////////////////////////////////////
 void FuelClient::PopulateLicenses(const ServerConfig &_server)
 {
-  ignition::fuel_tools::Rest rest;
+  this->dataPtr->PopulateLicenses(_server);
+}
+
+//////////////////////////////////////////////////
+bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
+    const ModelIdentifier &_id, bool _private,
+    std::multimap<std::string, std::string> &_form)
+{
+  if (!common::exists(_pathToModelDir))
+  {
+    ignerr << "The model path[" << _pathToModelDir << "] doesn't exist.\n";
+    return false;
+  }
+
+  ignition::msgs::FuelMetadata meta;
+
+  // Try the `metadata.pbtxt` file first since it contains more information
+  // than `model.config`.
+  if (common::exists(common::joinPaths(_pathToModelDir, "metadata.pbtxt")))
+  {
+    std::string filePath = common::joinPaths(_pathToModelDir, "metadata.pbtxt");
+
+    igndbg << "Parsing " << filePath  << std::endl;
+
+    // Read the pbtxt file.
+    std::ifstream inputFile(filePath);
+    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+        std::istreambuf_iterator<char>());
+
+    // Parse the file into the fuel metadata message
+    google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+  }
+  else if (common::exists(common::joinPaths(_pathToModelDir, "model.config")))
+  {
+    std::string filePath = common::joinPaths(_pathToModelDir, "model.config");
+
+    igndbg << "Parsing " << filePath << std::endl;
+
+    std::ifstream inputFile(filePath);
+    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+        std::istreambuf_iterator<char>());
+
+    if (!ignition::msgs::ConvertFuelMetadata(inputStr, meta))
+    {
+      ignerr << "Unable to convert model config[" << _pathToModelDir << "].\n";
+      return false;
+    }
+  }
+  else
+  {
+    ignerr << "Provided model directory[" <<  _pathToModelDir
+      << "] needs a metadata.pbtxt or a model.confg file.";
+    return false;
+  }
+
+  _form =
+  {
+    {"name", meta.name()},
+    {"description", meta.description()},
+    {"private", _private ? "1" : "0"},
+  };
+
+  // \todo(nkoenig) The ign-fuelserver expects an integer number for the
+  // license information. The fuelserver should be modified to accept
+  // a string. Otherwise, we have to bake into each client a mapping of
+  // license name to integer.
+  //
+  // If we have legal, then attempt to fill in the correct license information.
+  if (meta.has_legal())
+  {
+    // Attempt to retrieve the available licenses, if we have no available
+    // licenses.
+    if (this->licenses.empty())
+    {
+      this->PopulateLicenses(_id.Server());
+      // Fail if a license has been requested, but we couldn't get the
+      // available licenses.
+      if (this->licenses.empty())
+      {
+        return false;
+      }
+    }
+
+    // Find the license by name.
+    std::map<std::string, unsigned int>::const_iterator licenseIt =
+      this->licenses.find(meta.legal().license());
+    if (licenseIt != this->licenses.end())
+    {
+      _form.emplace("license", std::to_string(licenseIt->second));
+    }
+    // No license found, print an error and return.
+    else
+    {
+      std::string validLicenseNames;
+      auto end = this->licenses.end();
+      std::advance(end, -1);
+      for (licenseIt = this->licenses.begin(); licenseIt != end; ++licenseIt)
+      {
+        validLicenseNames += "    " + licenseIt->first + "\n";
+      }
+      validLicenseNames += "    " + licenseIt->first;
+
+      ignerr << "Invalid license[" << meta.legal().license() << "].\n"
+             << "  Valid licenses include:\n"
+             << validLicenseNames << std::endl;
+
+      return false;
+    }
+  }
+  // If there is no license information, then default to
+  // "Creative Commons - Public Domain"
+  else
+  {
+    _form.emplace("license", "1");
+  }
+
+  // Add tags
+  std::string tags;
+  for (int i = 0; i < meta.tags_size(); ++i)
+    tags += meta.tags(i) + ",";
+  if (!tags.empty())
+    _form.emplace("tags", tags);
+
+  // Add categories
+  /* \todo: Uncomment in version 5.0
+  std::string categories;
+  if (meta.has_categories())
+  {
+    // Add the first category, if present.
+    if (!meta.categories().first().empty())
+      categories = meta.categories().first();
+
+    // Add the second category, if present.
+    if (!meta.categories().second().empty())
+    {
+      // Add a comma separator if the first category was not empty.
+      if (!categories.empty())
+        categories += ", ";
+      categories += meta.categories().second();
+    }
+  }
+  if (!categories.empty())
+    _form.emplace("categories", categories);
+  */
+
+  // Add annotations as metadata.
+  for (const auto &annotation : meta.annotations())
+  {
+    std::string formAnnotation = std::string("{\"key\":\"") +
+      annotation.first + "\",\"value\":\"" + annotation.second + "\"}";
+    _form.emplace("metadata", formAnnotation);
+  }
+
+  // Recursively get all the files.
+  std::vector<std::string> files;
+  this->AllFiles(_pathToModelDir, files);
+  for (const std::string &file : files)
+  {
+    _form.emplace("file", std::string("@") + file + ";"
+        + file.substr(_pathToModelDir.size()+1));
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
+void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
+{
   RestResponse resp;
 
   // Send the request.
-  resp = rest.Request(HttpMethod::GET, _server.Url().Str(),
+  resp = this->rest.Request(HttpMethod::GET, _server.Url().Str(),
       _server.Version(), "licenses", {}, {}, "");
   if (resp.statusCode != 200)
   {
     ignerr << "Failed to get license information from "
       << _server.Url().Str() << "/" << _server.Version() << std::endl;
   }
-  else if (!JSONParser::ParseLicenses(resp.data, this->dataPtr->licenses))
+  else if (!JSONParser::ParseLicenses(resp.data, this->licenses))
   {
     ignerr << "Failed to parse license information[" << resp.data << "]\n";
   }

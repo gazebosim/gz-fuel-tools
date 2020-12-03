@@ -348,6 +348,21 @@ namespace ignition
                   const ignition::fuel_tools::ModelIdentifier &_model,
                   const std::vector<std::string> &_headers);
 
+      /// \brief Update a model using a PATCH request.
+      ///
+      /// Model fields that are patched by this function:
+      ///   * private
+      ///
+      /// \param[in] _model The model to patch. The contents of this model
+      ///            will be sent in the PATCH request.
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \param[in] _pathToModelDir a path to a directory containing a model.
+      /// \return Result of the patch operation.
+      public: Result PatchModel(
+                  const ignition::fuel_tools::ModelIdentifier &_model,
+                  const std::vector<std::string> &_headers,
+                  const std::string &_pathToModelDir);
+
       /// \brief Parse Collection identifer from URL.
       /// \param[in] _url The unique URL of a collection. It may also be a
       /// unique name, which is a URL without the server version.
