@@ -162,6 +162,13 @@ class ignition::fuel_tools::FuelClientPrivate
   public: void AllFiles(const std::string &_path,
               std::vector<std::string> &_files) const;
 
+  /// \brief Populate a model form such that it can be used during
+  /// model creation and editing REST calls.
+  /// \param[in] _pathToModelDir Path to the model directory.
+  /// \param[in] _id Model identifier information.
+  /// \param[in] _private True if this model should be private.
+  /// \param[in] _form Form to fill.
+  /// \return True if the operation completed successfully.
   public: bool FillModelForm(const std::string &_pathToModelDir,
               const ModelIdentifier &_id, bool _private,
               std::multimap<std::string, std::string> &_form);
