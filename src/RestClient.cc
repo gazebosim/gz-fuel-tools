@@ -255,6 +255,15 @@ RestResponse Rest::Request(HttpMethod _method,
     }
   }
 
+  // enable TCP keep-alive for this transfer
+  curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
+
+  // keep-alive idle time to 120 seconds
+  curl_easy_setopt(curl, CURLOPT_TCP_KEEPIDLE, 120L);
+
+  // interval time between keep-alive probes: 60 seconds
+  curl_easy_setopt(curl, CURLOPT_TCP_KEEPINTVL, 60L);
+
   curl_easy_setopt(curl, CURLOPT_USERAGENT, this->userAgent.c_str());
   curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
