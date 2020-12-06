@@ -1,5 +1,6 @@
 set (sources
   ClientConfig.cc
+  CollectionIdentifier.cc
   FuelClient.cc
   ign.cc
   Interface.cc
@@ -17,6 +18,7 @@ set (sources
 
 set (gtest_sources
   ClientConfig_TEST.cc
+  CollectionIdentifier_TEST.cc
   FuelClient_TEST.cc
   ign_src_TEST.cc
   Interface_TEST.cc
@@ -64,6 +66,7 @@ ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
 ign_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
                 LIB_DEPS
+                  ignition-cmake${IGN_CMAKE_VER}::utilities
                   ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
                   TINYXML2::TINYXML2
 )

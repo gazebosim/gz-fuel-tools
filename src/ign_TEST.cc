@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <string>
+#include <ignition/utilities/ExtraTestMacros.hh>
 
 #include "ignition/fuel_tools/config.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
@@ -51,14 +52,16 @@ auto g_version = std::string(strdup(IGNITION_FUEL_TOOLS_VERSION_FULL));
 auto g_listCmd = "ign fuel list -v 4 --force-version " + g_version;
 
 /////////////////////////////////////////////////
-TEST(CmdLine, Versions)
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Versions))
 {
   auto output = custom_exec_str("ign fuel --versions");
   EXPECT_NE(output.find(g_version), std::string::npos) << output;
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, Help)
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Help))
 {
   auto output = custom_exec_str("ign fuel --force-version " + g_version +
       " --help");
@@ -72,7 +75,8 @@ TEST(CmdLine, Help)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ListFail)
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ListFail))
 {
   auto output = custom_exec_str(g_listCmd);
   EXPECT_NE(output.find("Missing resource type"), std::string::npos) << output;
@@ -90,7 +94,9 @@ TEST(CmdLine, ListFail)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelListConfigServerUgly)
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+TEST(CmdLine,
+    IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListConfigServerUgly))
 {
   auto output = custom_exec_str(g_listCmd + " -t model --raw");
   EXPECT_NE(output.find("https://fuel.ignitionrobotics.org/1.0/"),
@@ -99,7 +105,9 @@ TEST(CmdLine, ModelListConfigServerUgly)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelListCustomServerPretty)
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+TEST(CmdLine,
+    IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListCustomServerPretty))
 {
   auto output = custom_exec_str(
       g_listCmd + " -t model -u https://staging-fuel.ignitionrobotics.org");
@@ -116,7 +124,8 @@ TEST(CmdLine, ModelListCustomServerPretty)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, WorldListConfigServerUgly)
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListConfigServerUgly))
 {
   auto output = custom_exec_str(g_listCmd +
       " -t world --raw -u https://staging-fuel.ignitionrobotics.org");
@@ -126,7 +135,9 @@ TEST(CmdLine, WorldListConfigServerUgly)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, WorldListCustomServerPretty)
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+TEST(CmdLine,
+    IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListCustomServerPretty))
 {
   auto output = custom_exec_str(
       g_listCmd + " -t world -u https://staging-fuel.ignitionrobotics.org");

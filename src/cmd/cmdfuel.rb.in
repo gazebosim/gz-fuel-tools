@@ -30,14 +30,30 @@ require 'optparse'
 # Constants.
 LIBRARY_NAME = '@IGN_LIBRARY_NAME@'
 LIBRARY_VERSION = '@PROJECT_VERSION_FULL@'
+MAX_PARALLEL_JOBS = 16
 
 COMMON_OPTIONS =
-               "  -c [--config] arg        Path to a configuration file.\n"\
-               "  -h [--help]              Print this help message.\n"\
-               "                                                    \n"        +
-               "  --force-version <VERSION>  Use a specific library version.\n"\
-               "                                                    \n"        +
-               '  --versions                 Show the available versions.'
+  "  -c [--config] arg        Path to a configuration file.                 \n"\
+  "  -h [--help]              Print this help message.                      \n"\
+  "                                                                         \n"\
+  "  --force-version <VERSION>  Use a specific library version.             \n"\
+  "                                                                         \n"\
+  "  --versions               Show the available versions.                  \n"\
+  "                                                                         \n"\
+  " HTTP Headers:                                                           \n"\
+  "                                                                         \n"\
+  "   The following information is in regards to user authentication via    \n"\
+  "   the --header command line option.                                     \n"\
+  "                                                                         \n"\
+  "   Two types of credentials are supported on Ignition Fuel, Private      \n"\
+  "   Token and JSON Web Token(JWT). The Private Token method is prefered.  \n"\
+  "   Private tokens can be created through your  user settings on          \n"\
+  "   https://app.ignitionrobotics.org. Example usage:                      \n"\
+  "     1. Private token method:                                            \n"\
+  "         --header 'Private-Token: <token>'                               \n"\
+  "     2. JWT method:                                                      \n"\
+  "         --header 'authorization: Bearer <JWT>'                          \n"
+
 
 COMMANDS = { 'fuel' =>
   "Manage simulation resources.                                            \n"\
@@ -82,7 +98,13 @@ SUBCOMMANDS = {
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
   "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "                           --header 'authorization: Bearer JWT'.        \n"\
+  "  -j [--jobs] arg          Number of parallel downloads (default: 1,    \n"\
+  "                           max: #{MAX_PARALLEL_JOBS}). \n"\
+  "  -t [--type] arg          Limit what resource type (i.e. model, world) \n"\
+  "                           to download from a collection. All resources \n"\
+  "                           will be downloaded if unspecified. Ignored   \n"\
+  "                           if not downloading collection.               \n"+
   COMMON_OPTIONS,
 
  'edit' =>
@@ -141,7 +163,7 @@ SUBCOMMANDS = {
   "  -p [--private]           Use this argument to make the model private. \n"\
   "                           Otherwise, the model will be public.         \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
 }
 
@@ -223,6 +245,9 @@ class Cmd
       opts.on('-b', '--public', 'Public resource') do
         options['private'] = 'false'
       end
+      opts.on('-j [JOBS]', '--jobs', String, 'Number of parallel downloads') do |jobs|
+        options['jobs'] = jobs || 1
+      end
     end # opt_parser do
 
     opt_parser.parse!(args)
@@ -234,13 +259,35 @@ class Cmd
     case options['subcommand']
     when 'delete'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
     when 'download'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
+      end
+
+      if options.key?('jobs')
+        begin
+          options['jobs_int'] = Integer(options['jobs'])
+          if (options['jobs_int'] > MAX_PARALLEL_JOBS)
+            puts "The specified number of jobs #{options['jobs_int']} exceeds the maximum of #{MAX_PARALLEL_JOBS}"
+            exit(-1)
+          end
+        rescue
+          puts "The provided 'jobs' parameter #{options['jobs']} is not an integer"
+          exit(-1)
+        end
+      else
+        options['jobs_int'] = 1
+      end
+
+      if options.key?('type')
+        if options['type'] != 'model' and options['type'] != 'world'
+          puts "Invalid resource type, use 'model' or 'world'."
+          exit(-1)
+        end
       end
     when 'list'
       # Resource type
@@ -308,9 +355,9 @@ class Cmd
           exit(-1)
         end
       when 'download'
-        Importer.extern 'int downloadUrl(const char *, const  char *, const char *)'
+        Importer.extern 'int downloadUrl(const char *, const  char *, const char *, const char *, unsigned int)'
         if not Importer.downloadUrl(options['url'], options['config'],
-            options['header'])
+            options['header'], options['type'], options['jobs_int'])
           exit(-1)
         end
       when 'edit'
@@ -358,7 +405,6 @@ class Cmd
           exit(-1)
         end
       end
-
     rescue
       puts "Library error: Problem running [#{options['subcommand']}]() "\
            "from @IGN_LIBRARY_NAME@."

@@ -20,8 +20,9 @@
 
 #include "ignition/fuel_tools/Model.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ignition/fuel_tools/ModelPrivate.hh"
 #include "ignition/fuel_tools/Result.hh"
+
+#include "ModelPrivate.hh"
 
 namespace ignft = ignition::fuel_tools;
 using namespace ignition;

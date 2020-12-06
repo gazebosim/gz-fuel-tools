@@ -1,0 +1,11 @@
+curl
+libcurl4-openssl-dev
+libgflags-dev
+libignition-cmake2-dev
+libignition-common3-dev
+libignition-msgs6-dev
+libignition-tools-dev
+libjsoncpp-dev
+libtinyxml2-dev
+libyaml-dev
+libzip-dev

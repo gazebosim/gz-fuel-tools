@@ -29,12 +29,20 @@
 #include "ignition/fuel_tools/Result.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
 
+#ifdef _WIN32
+// Disable warning C4251 which is triggered by
+// std::unique_ptr
+#pragma warning(push)
+#pragma warning(disable: 4251)
+#endif
+
 namespace ignition
 {
   namespace fuel_tools
   {
     /// \brief Forward Declaration
     class ClientConfig;
+    class CollectionIdentifier;
     class FuelClientPrivate;
     class LocalCache;
     class ModelIdentifier;
@@ -124,7 +132,7 @@ namespace ignition
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \remarks It's not yet clear if model names are unique, so this API
-      ///          allows the posibility of getting multiple models with the
+      ///          allows the possibility of getting multiple models with the
       ///          same name.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id);
@@ -133,15 +141,27 @@ namespace ignition
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \remarks It's not yet clear if model names are unique, so this API
-      ///          allows the posibility of getting multiple models with the
+      ///          allows the possibility of getting multiple models with the
       ///          same name.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id) const;
+
+      /// \brief Returns an iterator for the models found in a collection.
+      /// \param[in] _id a partially filled out identifier used to fetch a
+      /// collection.
+      /// \return An iterator of models in the collection.
+      public: ModelIter Models(const CollectionIdentifier &_id) const;
 
       /// \brief Returns worlds matching a given identifying criteria
       /// \param[in] _id A partially filled out identifier used to fetch worlds
       /// \return An iterator of worlds with names matching the criteria
       public: WorldIter Worlds(const WorldIdentifier &_id) const;
+
+      /// \brief Returns an iterator for the worlds found in a collection.
+      /// \param[in] _id a partially filled out identifier used to fetch a
+      /// collection.
+      /// \return An iterator of words in the collection.
+      public: WorldIter Worlds(const CollectionIdentifier &_id) const;
 
       /// \brief Upload a directory as a new model
       /// \param[in] _pathToModelDir a path to a directory containing a model
@@ -201,7 +221,7 @@ namespace ignition
       /// \brief Download a world from ignition fuel. This will override an
       /// existing local copy of the world.
       /// \param[in] _worldUrl The unique URL of the world to download.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty
+      /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
       /// \param[out] _path Path where the world was downloaded.
       /// \return Result of the download operation.
       public: Result DownloadWorld(const common::URI &_worldUrl,
@@ -223,7 +243,7 @@ namespace ignition
 
       /// \brief Check if a world is already present in the local cache.
       /// \param[in] _worldUrl The unique URL of the world on a Fuel server.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty
+      /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
       /// \param[out] _path Local path where the world can be found.
       /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
       public: Result CachedWorld(const common::URI &_worldUrl,
@@ -231,7 +251,7 @@ namespace ignition
 
       /// \brief Check if a world exists in the cache.
       /// \param[in] _worldUrl The unique URL of the world on a Fuel server.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty
+      /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
       /// \return True if the world exists in the cache, false otherwise.
       public: bool CachedWorld(const common::URI &_worldUrl);
 
@@ -253,7 +273,7 @@ namespace ignition
       public: Result CachedWorldFile(const common::URI &_fileUrl,
                                      std::string &_path);
 
-      /// \brief Parse model identifer from model URL or unique name.
+      /// \brief Parse model identifier from model URL or unique name.
       /// \param[in] _modelUrl The unique URL of a model. It may also be a
       /// unique name, which is a URL without the server version.
       /// \param[out] _id The model identifier. It may contain incomplete
@@ -265,7 +285,7 @@ namespace ignition
       public: bool ParseModelUrl(const common::URI &_modelUrl,
                                  ModelIdentifier &_id);
 
-      /// \brief Parse world identifer from world URL or unique name.
+      /// \brief Parse world identifier from world URL or unique name.
       /// \param[in] _worldUrl The unique URL of a world. It may also be a
       /// unique name, which is a URL without the server version.
       /// \param[out] _id The world identifier. It may contain incomplete
@@ -277,7 +297,7 @@ namespace ignition
       public: bool ParseWorldUrl(const common::URI &_worldUrl,
                                  WorldIdentifier &_id);
 
-      /// \brief Parse model file identifer from model file URL.
+      /// \brief Parse model file identifier from model file URL.
       /// \param[in] _modelFileUrl The unique URL of a model file. It may also
       /// be a unique name, which is a URL without the server version.
       /// \param[out] _id The model identifier. It may contain incomplete
@@ -290,7 +310,7 @@ namespace ignition
                                      ModelIdentifier &_id,
                                      std::string &_filePath);
 
-      /// \brief Parse world file identifer from world file URL.
+      /// \brief Parse world file identifier from world file URL.
       /// \param[in] _worldFileUrl The unique URL of a world file. It may also
       /// be a unique name, which is a URL without the server version.
       /// \param[out] _id The world identifier. It may contain incomplete
@@ -302,6 +322,18 @@ namespace ignition
       public: bool ParseWorldFileUrl(const common::URI &_worldFileUrl,
                                      WorldIdentifier &_id,
                                      std::string &_filePath);
+
+      /// \brief This function requests the available licenses from the
+      ///  Fuel server and stores this information locally.
+      ///
+      /// The UploadModel function can use this information to set
+      /// appropriate license information based on a model's metadata.pbtxt
+      /// file. If license information is not available, then the
+      /// UploadModel function will default to the
+      /// "Creative Commons - Public Domain" license.
+      /// \param[in] _server Information about the server that provides
+      /// license information.
+      public: void PopulateLicenses(const ServerConfig &_server);
 
       /// \brief Update a model using a PATCH request.
       ///
@@ -316,10 +348,25 @@ namespace ignition
                   const ignition::fuel_tools::ModelIdentifier &_model,
                   const std::vector<std::string> &_headers);
 
+      /// \brief Parse Collection identifer from URL.
+      /// \param[in] _url The unique URL of a collection. It may also be a
+      /// unique name, which is a URL without the server version.
+      /// \param[out] _id The collection identifier. It may contain incomplete
+      /// information based on the passed URL and the current client config.
+      /// The server version will be overridden if that server is in the config
+      /// file.
+      /// \return True if parsed successfully.
+      public: bool ParseCollectionUrl(const common::URI &_url,
+                                      CollectionIdentifier &_id);
+
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;
     };
   }
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif

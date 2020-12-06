@@ -19,6 +19,8 @@
 #include <fstream>
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
+#include <ignition/utilities/ExtraTestMacros.hh>
+
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/Result.hh"
@@ -43,48 +45,45 @@ using namespace ignition::fuel_tools;
 /// Taken from LocalCache_TEST
 void createLocalModel(ClientConfig &_conf)
 {
-  common::createDirectories(
-      "test_cache/localhost:8007/alice/models/My Model/2/meshes");
-  common::createDirectories(
-      "test_cache/localhost:8007/alice/models/My Model/3/meshes");
+  igndbg << "Creating local model in [" << common::cwd() << "]" << std::endl;
+
+  auto modelPath = common::joinPaths(
+      "test_cache", "localhost:8007", "alice", "models", "My Model");
+
+  common::createDirectories(common::joinPaths(modelPath, "2", "meshes"));
+  common::createDirectories(common::joinPaths(modelPath, "3", "meshes"));
 
   {
-    std::ofstream fout(
-        "test_cache/localhost:8007/alice/models/My Model/2/model.config",
+    std::ofstream fout(common::joinPaths(modelPath, "2", "model.config"),
         std::ofstream::trunc);
     fout << "<?xml version=\"1.0\"?>";
     fout.flush();
     fout.close();
 
-    common::copyFile(
-        "test_cache/localhost:8007/alice/models/My Model/2/model.config",
-        "test_cache/localhost:8007/alice/models/My Model/3/model.config");
+    common::copyFile(common::joinPaths(modelPath, "2", "model.config"),
+        common::joinPaths(modelPath, "3", "model.config"));
   }
 
   {
-    std::ofstream fout(
-        "test_cache/localhost:8007/alice/models/My Model/2/model.sdf",
+    std::ofstream fout(common::joinPaths(modelPath, "2", "model.sdf"),
         std::ofstream::trunc);
     fout << "<?xml version=\"1.0\"?>";
     fout.flush();
     fout.close();
 
-    common::copyFile(
-        "test_cache/localhost:8007/alice/models/My Model/2/model.sdf",
-        "test_cache/localhost:8007/alice/models/My Model/3/model.sdf");
+    common::copyFile(common::joinPaths(modelPath, "2", "model.sdf"),
+        common::joinPaths(modelPath, "3", "model.sdf"));
   }
 
   {
-    std::ofstream fout(
-        "test_cache/localhost:8007/alice/models/My Model/2/meshes/model.dae",
+    std::ofstream fout(common::joinPaths(modelPath, "2", "meshes", "model.dae"),
         std::ofstream::trunc);
     fout << "<?xml version=\"1.0\"?>";
     fout.flush();
     fout.close();
 
-    common::copyFile(
-        "test_cache/localhost:8007/alice/models/My Model/2/meshes/model.dae",
-        "test_cache/localhost:8007/alice/models/My Model/3/meshes/model.dae");
+    common::copyFile(common::joinPaths(modelPath, "2", "meshes", "model.dae"),
+        common::joinPaths(modelPath, "3", "meshes", "model.dae"));
   }
 
   ignition::fuel_tools::ServerConfig srv;
@@ -98,23 +97,23 @@ void createLocalModel(ClientConfig &_conf)
 /// Taken from LocalCache_TEST
 void createLocalWorld(ClientConfig &_conf)
 {
-  common::createDirectories(
-      "test_cache/localhost:8007/banana/worlds/My World/2");
-  common::createDirectories(
-      "test_cache/localhost:8007/banana/worlds/My World/3");
+  igndbg << "Creating local world in [" << common::cwd() << "]" << std::endl;
 
+  auto worldPath = common::joinPaths(
+      "test_cache", "localhost:8007", "banana", "worlds", "My World");
+
+  common::createDirectories(common::joinPaths(worldPath, "2"));
+  common::createDirectories(common::joinPaths(worldPath, "3"));
 
   {
-    std::ofstream fout(
-        "test_cache/localhost:8007/banana/worlds/My World/2/strawberry.world",
+    std::ofstream fout(common::joinPaths(worldPath, "2", "strawberry.world"),
         std::ofstream::trunc);
     fout << "<?xml version=\"1.0\"?>";
     fout.flush();
     fout.close();
 
-    common::copyFile(
-        "test_cache/localhost:8007/banana/worlds/My World/2/strawberry.world",
-        "test_cache/localhost:8007/banana/worlds/My World/3/strawberry.world");
+    common::copyFile(common::joinPaths(worldPath, "2", "strawberry.world"),
+        common::joinPaths(worldPath, "3", "strawberry.world"));
   }
 
   ignition::fuel_tools::ServerConfig srv;
@@ -287,13 +286,13 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/models/"
+      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/"
         "Cordless Drill/tip/files/meshes/cordless_drill.dae"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Owner(), "OpenRobotics");
     EXPECT_EQ(id.Name(), "Cordless Drill");
     EXPECT_EQ(filePath, "meshes/cordless_drill.dae");
   }
@@ -306,13 +305,13 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Pine Tree/tip/"
+      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Pine Tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Owner(), "OpenRobotics");
     EXPECT_EQ(id.Name(), "Pine Tree");
     EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
   }
@@ -325,13 +324,13 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/5.0/openrobotics/models/Pine Tree/tip/"
+      "https://fuel.ignitionrobotics.org/5.0/OpenRobotics/models/Pine Tree/tip/"
       "files/model.sdf"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Owner(), "OpenRobotics");
     EXPECT_EQ(id.Name(), "Pine Tree");
     EXPECT_EQ(filePath, "model.sdf");
   }
@@ -342,14 +341,14 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/openrobotics/models/Pine Tree/tip/"
+      "https://fuel.ignitionrobotics.org/OpenRobotics/models/Pine Tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ("1.0", id.Server().Version());
-    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Owner(), "OpenRobotics");
     EXPECT_EQ(id.Name(), "Pine Tree");
     EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
   }
@@ -362,13 +361,13 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/openrobotics/models/Pine Tree/tip/"
+      "https://fuel.ignitionrobotics.org/OpenRobotics/models/Pine Tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Owner(), "OpenRobotics");
     EXPECT_EQ(id.Name(), "Pine Tree");
     EXPECT_EQ(filePath, "materials/scripts/pine_tree.material");
   }
@@ -393,14 +392,16 @@ TEST_F(FuelClientTest, ParseModelFileURL)
 }
 
 /////////////////////////////////////////////////
-TEST_F(FuelClientTest, DownloadModel)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadModel))
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
-  config.SetCacheLocation(common::cwd() + "/test_cache");
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
   // Create client
   FuelClient client(config);
@@ -425,29 +426,23 @@ TEST_F(FuelClientTest, DownloadModel)
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res2);
 
     // Check it was downloaded to `2`
-    EXPECT_EQ(path, common::cwd() +
-        "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2");
-    EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2"));
-    EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2/"
-         "model.sdf"));
-    EXPECT_TRUE(common::exists(
-       "test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2/"
-       "model.config"));
+    auto modelPath = common::joinPaths(common::cwd(), "test_cache",
+        "fuel.ignitionrobotics.org", "chapulina", "models", "Test box");
+
+    EXPECT_EQ(path, common::joinPaths(modelPath, "2"));
+    EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2")));
+    EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2", "model.sdf")));
+    EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2",
+        "model.config")));
 
     // Check it wasn't downloaded to model root directory
-    EXPECT_FALSE(common::exists(
-     "test_cache/fuel.ignitionrobotics.org/chapulina/models/"
-     "Test box/model.config"));
+    EXPECT_FALSE(common::exists(common::joinPaths(modelPath, "model.config")));
 
     // Check it is cached
     Result res3 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res3);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
-    EXPECT_EQ(common::cwd() +
-      "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2",
-      cachedPath);
+    EXPECT_EQ(common::joinPaths(modelPath, "2"), cachedPath);
   }
 
   // Download model with pbr paths from URL and check that paths are fixed
@@ -469,39 +464,39 @@ TEST_F(FuelClientTest, DownloadModel)
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res2);
 
     // Check it was downloaded to `2`
-    EXPECT_EQ(path, common::cwd() +
-        "/test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2");
-    EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2"));
-    const std::string model_sdf_path =
-        "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2/"
-         "model.sdf";
-    EXPECT_TRUE(common::exists(model_sdf_path));
-    EXPECT_TRUE(common::exists(
-       "test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2/"
-       "model.config"));
+    auto modelPath = common::joinPaths(common::cwd(), "test_cache",
+        "fuel.ignitionrobotics.org", "iche033", "models", "Rescue Randy");
+
+    EXPECT_EQ(path, common::joinPaths(modelPath, "2"));
+    EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2")));
+    EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2", "model.sdf")));
+    EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2",
+        "model.config")));
 
     // Check it wasn't downloaded to model root directory
-    EXPECT_FALSE(common::exists(
-     "test_cache/fuel.ignitionrobotics.org/iche033/models/"
-     "Rescue Randy/model.config"));
+    EXPECT_FALSE(common::exists(common::joinPaths(modelPath, "model.config")));
 
     // Check it is cached
     Result res3 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res3);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
-    EXPECT_EQ(common::cwd() +
-      "/test_cache/fuel.ignitionrobotics.org/iche033/models/Rescue Randy/2",
-      cachedPath);
+    EXPECT_EQ(common::joinPaths(modelPath, "2"), cachedPath);
 
-    // Check that pbr paths have been updated.
-    std::ifstream ifs(model_sdf_path);
-    std::string model_sdf((std::istreambuf_iterator<char>(ifs)),
+    // Check that URIs have been updated.
+    std::ifstream ifs(common::joinPaths(modelPath, "2", "model.sdf"));
+    std::string modelSdf((std::istreambuf_iterator<char>(ifs)),
         std::istreambuf_iterator<char>());
-    EXPECT_EQ(std::string::npos, model_sdf.find("<albedo_map>model://"));
-    EXPECT_EQ(std::string::npos, model_sdf.find("<normal_map>model://"));
-    EXPECT_EQ(std::string::npos, model_sdf.find("<metalness_map>model://"));
-    EXPECT_EQ(std::string::npos, model_sdf.find("<roughness_map>model://"));
+    EXPECT_EQ(std::string::npos, modelSdf.find("<uri>model://"));
+    EXPECT_EQ(std::string::npos, modelSdf.find("<albedo_map>model://"));
+    EXPECT_EQ(std::string::npos, modelSdf.find("<normal_map>model://"));
+    EXPECT_EQ(std::string::npos, modelSdf.find("<metalness_map>model://"));
+    EXPECT_EQ(std::string::npos, modelSdf.find("<roughness_map>model://"));
+
+    EXPECT_NE(std::string::npos, modelSdf.find("<uri>https://"));
+    EXPECT_NE(std::string::npos, modelSdf.find("<albedo_map>https://"));
+    EXPECT_NE(std::string::npos, modelSdf.find("<normal_map>https://"));
+    EXPECT_NE(std::string::npos, modelSdf.find("<metalness_map>https://"));
+    EXPECT_NE(std::string::npos, modelSdf.find("<roughness_map>https://"));
   }
 
   // Try using nonexistent URL
@@ -526,14 +521,16 @@ TEST_F(FuelClientTest, DownloadModel)
 }
 
 /////////////////////////////////////////////////
-TEST_F(FuelClientTest, CachedModel)
+// Windows doesn't support colons in filenames
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
+TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(CachedModel))
 {
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
-  config.SetCacheLocation(common::cwd() + "/test_cache");
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocalModel(config);
 
   // Create client
@@ -547,8 +544,8 @@ TEST_F(FuelClientTest, CachedModel)
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model/3", path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+        "alice", "models", "My Model", "3"), path);
   }
 
   // Cached model (tip)
@@ -558,8 +555,8 @@ TEST_F(FuelClientTest, CachedModel)
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model/3", path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+        "alice", "models", "My Model", "3"), path);
   }
 
   // Cached model (version number)
@@ -569,8 +566,8 @@ TEST_F(FuelClientTest, CachedModel)
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model/2", path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+        "alice", "models", "My Model", "2"), path);
   }
 
   // Cached model file (tip)
@@ -581,8 +578,8 @@ TEST_F(FuelClientTest, CachedModel)
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model/3/model.sdf", path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+        "alice", "models", "My Model", "3", "model.sdf"), path);
   }
 
   // Deeper cached model file
@@ -593,9 +590,8 @@ TEST_F(FuelClientTest, CachedModel)
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/alice/models/My Model/2/meshes/model.dae",
-        path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+        "alice", "models", "My Model", "2", "meshes", "model.dae"), path);
   }
 
   // Non-cached model
@@ -809,15 +805,15 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty/tip/"
-      "files/empty.world"};
+      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/tip/"
+      "files/test.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Owner(), "OpenRobotics");
     EXPECT_EQ(id.Name(), "Empty");
-    EXPECT_EQ(filePath, "empty.world");
+    EXPECT_EQ(filePath, "test.world");
   }
 
   // URL - with client config
@@ -828,13 +824,13 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty sky/tip/"
+      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty sky/tip/"
       "files/empty_sky.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Owner(), "OpenRobotics");
     EXPECT_EQ(id.Name(), "Empty sky");
     EXPECT_EQ(filePath, "empty_sky.world");
   }
@@ -847,15 +843,15 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/5.0/openrobotics/worlds/Empty/tip/"
-      "files/empty.world"};
+      "https://fuel.ignitionrobotics.org/5.0/OpenRobotics/worlds/Empty/tip/"
+      "files/test.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Owner(), "OpenRobotics");
     EXPECT_EQ(id.Name(), "Empty");
-    EXPECT_EQ(filePath, "empty.world");
+    EXPECT_EQ(filePath, "test.world");
   }
 
   // Unique name - without client config
@@ -864,14 +860,14 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/openrobotics/worlds/Empty sky/tip/"
+      "https://fuel.ignitionrobotics.org/OpenRobotics/worlds/Empty sky/tip/"
       "files/empty_sky.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ("1.0", id.Server().Version());
-    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Owner(), "OpenRobotics");
     EXPECT_EQ(id.Name(), "Empty sky");
     EXPECT_EQ(filePath, "empty_sky.world");
   }
@@ -884,15 +880,15 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty/tip/"
-      "files/empty.world"};
+      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/tip/"
+      "files/test.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
-    EXPECT_EQ(id.Owner(), "openrobotics");
+    EXPECT_EQ(id.Owner(), "OpenRobotics");
     EXPECT_EQ(id.Name(), "Empty");
-    EXPECT_EQ(filePath, "empty.world");
+    EXPECT_EQ(filePath, "test.world");
   }
 
   // Bad URL
@@ -915,7 +911,9 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
 }
 
 //////////////////////////////////////////////////
-TEST_F(FuelClientTest, DownloadWorld)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadWorld))
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
@@ -924,11 +922,11 @@ TEST_F(FuelClientTest, DownloadWorld)
 
   ServerConfig server;
   server.SetUrl(ignition::common::URI(
-        "https://staging-fuel.ignitionrobotics.org"));
+        "https://fuel.ignitionrobotics.org"));
 
   ClientConfig config;
   config.AddServer(server);
-  config.SetCacheLocation(common::cwd() + "/test_cache");
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
   // Create client
   FuelClient client(config);
@@ -937,8 +935,8 @@ TEST_F(FuelClientTest, DownloadWorld)
   // Download world from URL
   {
     // Unversioned URL should get the latest available version
-    common::URI url{
-        "https://staging-fuel.ignitionrobotics.org/1.0/nate/worlds/Empty"};
+    common::URI url{"https://fuel.ignitionrobotics.org/1.0/OpenRobotics/"
+                    "worlds/Test world"};
 
     // Check it is not cached
     std::string cachedPath;
@@ -953,32 +951,27 @@ TEST_F(FuelClientTest, DownloadWorld)
     EXPECT_EQ(Result(ResultType::FETCH), res2);
 
     // Check it was downloaded to `1`
-    EXPECT_EQ(path, common::cwd() +
-        "/test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1");
-    EXPECT_TRUE(common::exists(
-        "test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1"));
-    EXPECT_TRUE(common::exists(
-       "test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1/"
-       "empty.world"));
+    auto worldPath = common::joinPaths(common::cwd(), "test_cache",
+        "fuel.ignitionrobotics.org", "OpenRobotics", "worlds", "Test world");
+
+    EXPECT_EQ(path, common::joinPaths(worldPath, "2"));
+    EXPECT_TRUE(common::exists(common::joinPaths(worldPath, "2")));
+    EXPECT_TRUE(common::exists(common::joinPaths(worldPath, "2", "test.sdf")));
 
     // Check it wasn't downloaded to world root directory
-    EXPECT_FALSE(common::exists(
-          "test_cache/staging-fuel.ignitionrobotics.org/" +
-          std::string("nate/worlds/Empty/empty.world")));
+    EXPECT_FALSE(common::exists(common::joinPaths(worldPath, "test.sdf")));
 
     // Check it is cached
     auto res3 = client.CachedWorld(url, cachedPath);
     EXPECT_TRUE(res3);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
-    EXPECT_EQ(common::cwd() +
-      "/test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1",
-      cachedPath);
+    EXPECT_EQ(common::joinPaths(worldPath, "2"), cachedPath);
   }
 
   // Try using nonexistent URL
   {
     common::URI url{
-        "https://staging-fuel.ignitionrobotics.org/1.0/nate/worlds/Bad world"};
+        "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Bad world"};
     std::string path;
     auto result = client.DownloadWorld(url, path);
     EXPECT_FALSE(result);
@@ -996,14 +989,16 @@ TEST_F(FuelClientTest, DownloadWorld)
 }
 
 /////////////////////////////////////////////////
-TEST_F(FuelClientTest, CachedWorld)
+// Windows doesn't support colons in filenames
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
+TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(CachedWorld))
 {
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
   common::createDirectories("test_cache");
   ClientConfig config;
-  config.SetCacheLocation(common::cwd() + "/test_cache");
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocalWorld(config);
 
   // Create client
@@ -1017,8 +1012,8 @@ TEST_F(FuelClientTest, CachedWorld)
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/banana/worlds/My World/3", path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "localhost:8007", "banana", "worlds", "My World", "3"), path);
   }
 
   // Cached world (tip)
@@ -1028,8 +1023,8 @@ TEST_F(FuelClientTest, CachedWorld)
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/banana/worlds/My World/3", path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "localhost:8007", "banana", "worlds", "My World", "3"), path);
   }
 
   // Cached world (version number)
@@ -1039,8 +1034,8 @@ TEST_F(FuelClientTest, CachedWorld)
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/banana/worlds/My World/2", path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "localhost:8007", "banana", "worlds", "My World", "2"), path);
   }
 
   // Cached world file (tip)
@@ -1051,9 +1046,9 @@ TEST_F(FuelClientTest, CachedWorld)
     auto result = client.CachedWorldFile(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/banana/worlds/My World/3/strawberry.world",
-        path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "localhost:8007", "banana", "worlds", "My World", "3",
+        "strawberry.world"), path);
   }
 
   // Deeper cached world file
@@ -1064,9 +1059,9 @@ TEST_F(FuelClientTest, CachedWorld)
     auto result = client.CachedWorldFile(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
-    EXPECT_EQ(common::cwd() +
-        "/test_cache/localhost:8007/banana/worlds/My World/2/strawberry.world",
-        path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "localhost:8007", "banana", "worlds", "My World", "2",
+        "strawberry.world"), path);
   }
 
   // Non-cached world
@@ -1184,10 +1179,12 @@ TEST_F(FuelClientTest, WorldDetails)
 }
 
 /////////////////////////////////////////////////
-TEST_F(FuelClientTest, Models)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Models))
 {
   ClientConfig config;
-  config.SetCacheLocation(common::cwd() + "/test_cache");
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   FuelClient client(config);
   ServerConfig serverConfig;
   ModelIdentifier modelId;
@@ -1216,10 +1213,12 @@ TEST_F(FuelClientTest, Models)
 }
 
 /////////////////////////////////////////////////
-TEST_F(FuelClientTest, Worlds)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Worlds))
 {
   ClientConfig config;
-  config.SetCacheLocation(common::cwd() + "/test_cache");
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   FuelClient client(config);
   ServerConfig serverConfig;
   WorldIdentifier worldId;

@@ -26,6 +26,13 @@
 #include "ignition/fuel_tools/ModelIter.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
 
+#ifdef _WIN32
+// Disable warning C4251 which is triggered by
+// std::shared_ptr
+#pragma warning(push)
+#pragma warning(disable: 4251)
+#endif
+
 namespace ignition
 {
   namespace fuel_tools
@@ -40,7 +47,8 @@ namespace ignition
     {
       /// \brief Constructor
       /// \param[in] _config The configuration for the client
-      public: explicit LocalCache(const ClientConfig *_config);
+      public:
+        explicit IGN_DEPRECATED(5) LocalCache(const ClientConfig *_config);
 
       /// \brief destructor
       public: virtual ~LocalCache();
@@ -102,5 +110,9 @@ namespace ignition
     };
   }
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif

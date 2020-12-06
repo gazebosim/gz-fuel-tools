@@ -21,9 +21,12 @@
 
 #include <string>
 #include <ignition/common/Filesystem.hh>
+#include <ignition/utilities/ExtraTestMacros.hh>
 
 #include "ign.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
+
+using namespace ignition;
 
 // Std streams
 static std::streambuf *g_stdOutFile;
@@ -75,7 +78,9 @@ TEST(CmdLine, ModelListFail)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelListConfigServerUgly)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(CmdLine, IGN_UTILS_TEST_DISABLED_ON_WIN32(ModelListConfigServerUgly))
 {
   std::stringstream stdOutBuffer;
   std::stringstream stdErrBuffer;
@@ -93,7 +98,9 @@ TEST(CmdLine, ModelListConfigServerUgly)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelListCustomServerPretty)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(CmdLine, IGN_UTILS_TEST_DISABLED_ON_WIN32(ModelListConfigServerPretty))
 {
   std::stringstream stdOutBuffer;
   std::stringstream stdErrBuffer;
@@ -120,14 +127,17 @@ TEST(CmdLine, ModelListCustomServerPretty)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelListCustomServerPrettyOwner)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(CmdLine, IGN_UTILS_TEST_DISABLED_ON_WIN32(
+    ModelListConfigServerPrettyOwner))
 {
   std::stringstream stdOutBuffer;
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
   EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org",
-      "openrobotics"));
+      "OpenRobotics"));
 
   EXPECT_NE(stdOutBuffer.str().find(
         "https://staging-fuel.ignitionrobotics.org"),
@@ -187,7 +197,9 @@ TEST(CmdLine, ModelDownloadWrongUrl)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, ModelDownloadUnversioned)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(CmdLine, IGN_UTILS_TEST_DISABLED_ON_WIN32(ModelDownloadUnversioned))
 {
   cmdVerbosity("4");
 
@@ -222,7 +234,9 @@ TEST(CmdLine, ModelDownloadUnversioned)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, DownloadConfigCache)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(CmdLine, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadConfigCache))
 {
   cmdVerbosity("4");
 
@@ -232,8 +246,8 @@ TEST(CmdLine, DownloadConfigCache)
 
   // Test config
   std::ofstream ofs;
-  std::string testPath =
-      std::string(PROJECT_BINARY_PATH) + "/test_cache/test_conf.yaml";
+  std::string testPath = common::joinPaths(
+      std::string(PROJECT_BINARY_PATH), "test_cache", "test_conf.yaml");
   ofs.open(testPath, std::ofstream::out | std::ofstream::app);
 
   ofs << "---"                                    << std::endl
@@ -261,13 +275,13 @@ TEST(CmdLine, DownloadConfigCache)
   EXPECT_TRUE(stdErrBuffer.str().empty()) << stdErrBuffer.str();
 
   // Check files
-  EXPECT_TRUE(ignition::common::isDirectory(std::string(PROJECT_BINARY_PATH) +
-      "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box"));
-  EXPECT_TRUE(ignition::common::isDirectory(std::string(PROJECT_BINARY_PATH) +
-      "/test_cache/fuel.ignitionrobotics.org/chapulina/models/Test box/2"));
-  EXPECT_TRUE(ignition::common::isFile(std::string(PROJECT_BINARY_PATH) +
-      std::string("/test_cache/fuel.ignitionrobotics.org/chapulina/models") +
-      "/Test box/2/model.sdf"));
+  auto modelPath = common::joinPaths(std::string(PROJECT_BINARY_PATH),
+      "test_cache", "fuel.ignitionrobotics.org", "chapulina", "models",
+      "Test box");
+  EXPECT_TRUE(ignition::common::isDirectory(modelPath));
+  EXPECT_TRUE(ignition::common::isDirectory(common::joinPaths(modelPath, "2")));
+  EXPECT_TRUE(ignition::common::isFile(common::joinPaths(modelPath, "2",
+      "model.sdf")));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
@@ -291,7 +305,10 @@ TEST(CmdLine, WorldListFail)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, WorldListConfigServerUgly)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(
+    WorldListConfigServerUgly))
 {
   std::stringstream stdOutBuffer;
   std::stringstream stdErrBuffer;
@@ -311,7 +328,10 @@ TEST(CmdLine, WorldListConfigServerUgly)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, WorldListCustomServerPretty)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(
+    WorldListConfigServerPretty))
 {
   std::stringstream stdOutBuffer;
   std::stringstream stdErrBuffer;
@@ -344,13 +364,12 @@ TEST(CmdLine, WorldListCustomServerPrettyOwner)
   std::stringstream stdErrBuffer;
   redirectIO(stdOutBuffer, stdErrBuffer);
 
-  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org", "nate"));
+  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org",
+      "OpenRobotics"));
 
   EXPECT_NE(stdOutBuffer.str().find(
         "https://staging-fuel.ignitionrobotics.org"), std::string::npos)
     << stdOutBuffer.str();
-  EXPECT_NE(stdOutBuffer.str().find("1 owners"), std::string::npos)
-      << stdOutBuffer.str();
   EXPECT_NE(stdOutBuffer.str().find("worlds"), std::string::npos)
       << stdOutBuffer.str();
 
@@ -369,7 +388,10 @@ TEST(CmdLine, WorldListCustomServerPrettyOwner)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, WorldDownloadBadUrl)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(
+    WorldDownloadBadUrl))
 {
   std::stringstream stdOutBuffer;
   std::stringstream stdErrBuffer;
@@ -404,7 +426,10 @@ TEST(CmdLine, WorldDownloadWrongUrl)
 }
 
 /////////////////////////////////////////////////
-TEST(CmdLine, WorldDownloadUnversioned)
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(
+    WorldDownloadUnversioned))
 {
   cmdVerbosity("4");
 
@@ -418,7 +443,7 @@ TEST(CmdLine, WorldDownloadUnversioned)
 
   // Download
   EXPECT_TRUE(downloadUrl(
-      "https://staging-fuel.ignitionrobotics.org/1.0/nate/worlds/Empty"));
+      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Test world"));
 
   // Check output
   EXPECT_NE(stdOutBuffer.str().find("Download succeeded"),
@@ -427,13 +452,203 @@ TEST(CmdLine, WorldDownloadUnversioned)
 
   // Check files
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty"));
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
   EXPECT_TRUE(ignition::common::isDirectory(
-      "test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/Empty/1"));
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/2"));
   EXPECT_TRUE(ignition::common::isFile(
-      std::string("test_cache/staging-fuel.ignitionrobotics.org/nate/worlds/")
-      + "Empty/1/empty.world"));
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/")
+      + "Test world/2/test.world"));
 
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+class DownloadCollectionTest
+    : public ::testing::Test,
+      public ::testing::WithParamInterface<int>
+{};
+
+INSTANTIATE_TEST_CASE_P(CollectionTest, DownloadCollectionTest,
+                        ::testing::Values(1, 2, 16),); // NOLINT
+
+/////////////////////////////////////////////////
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllItems))
+{
+  cmdVerbosity("4");
+
+  ignition::common::removeAll("test_cache");
+  ignition::common::createDirectories("test_cache");
+  setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
+
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  // Download
+  EXPECT_TRUE(
+      downloadUrl("https://fuel.ignitionrobotics.org/1.0/OpenRobotics/"
+                  "collections/TestCollection",
+                  nullptr, nullptr, nullptr, GetParam()));
+
+  // Check output
+  EXPECT_NE(stdOutBuffer.str().find("Download succeeded"), std::string::npos)
+      << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  // Check files
+  // Model: Backpack
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
+      "Backpack/2/model.sdf"));
+
+  // Model: TEAMBASE
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
+      "TEAMBASE/2/model.sdf"));
+
+  // World: Test World
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
+      "Test world/2/test.world"));
+
+  // World: Test World 2
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world 2"));
+  EXPECT_TRUE(
+      ignition::common::isDirectory("test_cache/fuel.ignitionrobotics.org/"
+                                    "OpenRobotics/worlds/Test world 2/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
+      "Test world 2/2/test.world"));
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+/// Download only models
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Models))
+{
+  cmdVerbosity("4");
+
+  ignition::common::removeAll("test_cache");
+  ignition::common::createDirectories("test_cache");
+  setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
+
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  // Download
+  EXPECT_TRUE(
+      downloadUrl("https://fuel.ignitionrobotics.org/1.0/OpenRobotics/"
+                  "collections/TestCollection",
+                  nullptr, nullptr, "model", GetParam()));
+
+  // Check output
+  EXPECT_NE(stdOutBuffer.str().find("Download succeeded"), std::string::npos)
+      << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  // Check files
+  // Model: Backpack
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
+      "Backpack/2/model.sdf"));
+
+  // Model: TEAMBASE
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/") +
+      "TEAMBASE/2/model.sdf"));
+
+  // World: Test World
+  EXPECT_FALSE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
+
+  // World: Test World 2
+  EXPECT_FALSE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world 2"));
+  clearIOStreams(stdOutBuffer, stdErrBuffer);
+  restoreIO();
+}
+
+/////////////////////////////////////////////////
+/// Download only worlds
+// Protocol "https" not supported or disabled in libcurl for Windows
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+TEST_P(DownloadCollectionTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Worlds))
+{
+  cmdVerbosity("4");
+
+  ignition::common::removeAll("test_cache");
+  ignition::common::createDirectories("test_cache");
+  setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
+
+  std::stringstream stdOutBuffer;
+  std::stringstream stdErrBuffer;
+  redirectIO(stdOutBuffer, stdErrBuffer);
+
+  // Download
+  EXPECT_TRUE(
+      downloadUrl("https://fuel.ignitionrobotics.org/1.0/OpenRobotics/"
+                  "collections/TestCollection",
+                  nullptr, nullptr, "world", GetParam()));
+
+  // Check output
+  EXPECT_NE(stdOutBuffer.str().find("Download succeeded"), std::string::npos)
+      << stdOutBuffer.str();
+  EXPECT_TRUE(stdErrBuffer.str().empty());
+
+  // Check files
+  // Model: Backpack
+  EXPECT_FALSE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/Backpack"));
+
+  // Model: TEAMBASE
+  EXPECT_FALSE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/models/TEAMBASE"));
+
+  // World: Test World
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world"));
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
+      "Test world/2/test.world"));
+
+  // World: Test World 2
+  EXPECT_TRUE(ignition::common::isDirectory(
+      "test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/Test world 2"));
+  EXPECT_TRUE(
+      ignition::common::isDirectory("test_cache/fuel.ignitionrobotics.org/"
+                                    "OpenRobotics/worlds/Test world 2/2"));
+  EXPECT_TRUE(ignition::common::isFile(
+      std::string("test_cache/fuel.ignitionrobotics.org/OpenRobotics/worlds/") +
+      "Test world 2/2/test.world"));
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
 }

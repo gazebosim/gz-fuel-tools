@@ -17,6 +17,7 @@
 
 #include <gtest/gtest.h>
 
+#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel_tools/Zip.hh"
@@ -26,29 +27,40 @@ using namespace ignition;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
+class ZipIntegrationTest : public ::testing::Test
+{
+  public: void SetUp() override
+  {
+    ignition::common::Console::SetVerbosity(4);
+  }
+};
+
+/////////////////////////////////////////////////
 // Test compressing files in a directory into a zip archive
-TEST(Zip, Extract)
+TEST_F(ZipIntegrationTest, Extract)
 {
   // extract a compressed archive
   std::string dst = std::string(PROJECT_BINARY_PATH);
-  std::string archivePath = std::string(TEST_PATH) + "/media/box.zip";
+  common::changeFromUnixPath(dst);
+  std::string archivePath = common::joinPaths(std::string(TEST_PATH), "media",
+      "box.zip");
   EXPECT_TRUE(Zip::Extract(archivePath, dst));
 
   // check extracted contents
-  std::string boxPath = dst + "/box";
-  EXPECT_TRUE(ignition::common::exists(boxPath));
-  EXPECT_TRUE(ignition::common::isDirectory(boxPath));
+  std::string boxPath = common::joinPaths(dst, "box");
+  EXPECT_TRUE(ignition::common::exists(boxPath)) << boxPath;
+  EXPECT_TRUE(ignition::common::isDirectory(boxPath)) << boxPath;
 
-  std::string boxFilePath = boxPath +"/file";
-  EXPECT_TRUE(ignition::common::exists(boxFilePath));
-  EXPECT_TRUE(ignition::common::isFile(boxFilePath));
+  std::string boxFilePath = common::joinPaths(boxPath, "file");
+  EXPECT_TRUE(ignition::common::exists(boxFilePath)) << boxFilePath;
+  EXPECT_TRUE(ignition::common::isFile(boxFilePath)) << boxFilePath;
 
-  std::string boxDirPath = boxPath +"/dir";
-  EXPECT_TRUE(ignition::common::exists(boxDirPath));
-  EXPECT_TRUE(ignition::common::isDirectory(boxDirPath));
+  std::string boxDirPath = common::joinPaths(boxPath, "dir");
+  EXPECT_TRUE(ignition::common::exists(boxDirPath)) << boxDirPath;
+  EXPECT_TRUE(ignition::common::isDirectory(boxDirPath)) << boxDirPath;
 
-  std::string boxFile2Path = boxDirPath +"/file2";
-  EXPECT_TRUE(ignition::common::exists(boxFile2Path));
+  std::string boxFile2Path = common::joinPaths(boxDirPath, "file2");
+  EXPECT_TRUE(ignition::common::exists(boxFile2Path)) << boxFile2Path;
   EXPECT_TRUE(ignition::common::isFile(boxFile2Path));
 
   // cleanup
@@ -58,11 +70,12 @@ TEST(Zip, Extract)
 
 /////////////////////////////////////////////////
 // Test extracting a zip archive
-TEST(Zip, Compress)
+TEST_F(ZipIntegrationTest, Compress)
 {
   // compress a directory into a zip archive
-  std::string archivePath = std::string(PROJECT_BINARY_PATH) + "/box.zip";
-  std::string src = std::string(TEST_PATH) + "/media/box";
+  std::string archivePath = common::joinPaths(
+      std::string(PROJECT_BINARY_PATH), "box.zip");
+  std::string src = common::joinPaths(std::string(TEST_PATH), "media", "box");
   EXPECT_TRUE(Zip::Compress(src, archivePath));
 
   EXPECT_TRUE(ignition::common::exists(archivePath));
@@ -73,19 +86,19 @@ TEST(Zip, Compress)
   EXPECT_TRUE(Zip::Extract(archivePath, dst));
 
   // check extracted contents
-  std::string boxPath = dst + "/box";
+  std::string boxPath = common::joinPaths(dst, "box");
   EXPECT_TRUE(ignition::common::exists(boxPath));
   EXPECT_TRUE(ignition::common::isDirectory(boxPath));
 
-  std::string boxFilePath = boxPath +"/file";
+  std::string boxFilePath = common::joinPaths(boxPath, "file");
   EXPECT_TRUE(ignition::common::exists(boxFilePath));
   EXPECT_TRUE(ignition::common::isFile(boxFilePath));
 
-  std::string boxDirPath = boxPath +"/dir";
+  std::string boxDirPath = common::joinPaths(boxPath, "dir");
   EXPECT_TRUE(ignition::common::exists(boxDirPath));
   EXPECT_TRUE(ignition::common::isDirectory(boxDirPath));
 
-  std::string boxFile2Path = boxDirPath +"/file2";
+  std::string boxFile2Path = common::joinPaths(boxDirPath, "file2");
   EXPECT_TRUE(ignition::common::exists(boxFile2Path));
   EXPECT_TRUE(ignition::common::isFile(boxFile2Path));
 

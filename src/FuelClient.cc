@@ -15,8 +15,15 @@
  *
 */
 
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif
 #include <google/protobuf/text_format.h>
 #include <ignition/msgs/fuel_metadata.pb.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
@@ -31,14 +38,15 @@
 #include <ignition/msgs/Utility.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/CollectionIdentifier.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/JSONParser.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ignition/fuel_tools/ModelIterPrivate.hh"
+#include "ModelIterPrivate.hh"
 #include "ignition/fuel_tools/RestClient.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
+#include "WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
@@ -66,7 +74,7 @@ class ignition::fuel_tools::FuelClientPrivate
     "([0-9]*|tip)"};
 
   /// \brief A world URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Empty/1
+  /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/1
   /// Where the API version and the world version are optional.
   public: const std::string kWorldUrlRegexStr{
     // Method
@@ -130,6 +138,24 @@ class ignition::fuel_tools::FuelClientPrivate
     // File path
     "(.*)"};
 
+  /// \brief A collection URL,
+  /// E.g.:
+  /// https://fuel.ignitionrobotics.org/1.0/OpenRobotics/collections/TestColl
+  /// Where the API version is optional
+  public: const std::string kCollectionUrlRegexStr{
+    // Method
+    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
+    // Server
+    "([^\\/\\s]+)\\/+"
+    // API Version
+    "([0-9]+[.][0-9]+)?\\/*"
+    // Owner
+    "([^\\/\\s]+)\\/+"
+    // "collections"
+    "collections\\/+"
+    // Name
+    "([^\\/]+)\\/*"};
+
   /// \brief Recursively get all the files in the given path.
   /// \param[in] _path Path to process.
   /// \param[out] _files All the files in the given _path.
@@ -156,6 +182,14 @@ class ignition::fuel_tools::FuelClientPrivate
 
   /// \brief Regex to parse Ignition Fuel world file URLs.
   public: std::unique_ptr<std::regex> urlWorldFileRegex;
+
+  /// \brief Regex to parse Ignition Fuel Collection URLs.
+  public: std::unique_ptr<std::regex> urlCollectionRegex;
+
+  /// \brief The set of licenses where the key is the name of the license
+  /// and the value is the license ID on a Fuel server. See the
+  /// PopulateLicenses function.
+  public: std::map<std::string, unsigned int> licenses;
 };
 
 //////////////////////////////////////////////////
@@ -174,9 +208,20 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
   this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 
   if (nullptr == _cache)
+  {
+#ifndef _WIN32
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
     this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
+#ifndef _WIN32
+# pragma GCC diagnostic pop
+#endif
+  }
   else
+  {
     this->dataPtr->cache.reset(_cache);
+  }
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelUrlRegexStr));
@@ -186,6 +231,8 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
     this->dataPtr->kModelFileUrlRegexStr));
   this->dataPtr->urlWorldFileRegex.reset(new std::regex(
     this->dataPtr->kWorldFileUrlRegexStr));
+  this->dataPtr->urlCollectionRegex.reset(new std::regex(
+    this->dataPtr->kCollectionUrlRegexStr));
 }
 
 //////////////////////////////////////////////////
@@ -332,6 +379,14 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
 }
 
 //////////////////////////////////////////////////
+ModelIter FuelClient::Models(const CollectionIdentifier &_id) const
+{
+  return ModelIterFactory::Create(
+      this->dataPtr->rest, _id.Server(),
+      common::joinPaths(_id.Owner(), "collections", _id.Name(), "models"));
+}
+
+//////////////////////////////////////////////////
 WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
 {
   // Check local cache first
@@ -350,6 +405,14 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
 
   Rest rest(this->dataPtr->rest);
   return WorldIterFactory::Create(rest, _id.Server(), path.Str());
+}
+
+//////////////////////////////////////////////////
+WorldIter FuelClient::Worlds(const CollectionIdentifier &_id) const
+{
+  return WorldIterFactory::Create(
+      this->dataPtr->rest, _id.Server(),
+      common::joinPaths(_id.Owner(), "collections", _id.Name(), "worlds"));
 }
 
 //////////////////////////////////////////////////
@@ -417,10 +480,57 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   // \todo(nkoenig) The ign-fuelserver expects an integer number for the
   // license information. The fuelserver should be modified to accept
   // a string. Otherwise, we have to bake into each client a mapping of
-  // license name to integer. For now, we are making a model
-  // "Creative Commons - Public Domain
-  // if (meta.has_legal()) {....}
-  form.emplace("license", "1");
+  // license name to integer.
+  //
+  // If we have legal, then attempt to fill in the correct license information.
+  if (meta.has_legal())
+  {
+    // Attempt to retrieve the available licenses, if we have no available
+    // licenses.
+    if (this->dataPtr->licenses.empty())
+    {
+      this->PopulateLicenses(_id.Server());
+      // Fail if a license has been requested, but we couldn't get the
+      // available licenses.
+      if (this->dataPtr->licenses.empty())
+      {
+        return Result(ResultType::UPLOAD_ERROR);
+      }
+    }
+
+    // Find the license by name.
+    std::map<std::string, unsigned int>::const_iterator licenseIt =
+      this->dataPtr->licenses.find(meta.legal().license());
+    if (licenseIt != this->dataPtr->licenses.end())
+    {
+      form.emplace("license", std::to_string(licenseIt->second));
+    }
+    // No license found, print an error and return.
+    else
+    {
+      std::string validLicenseNames;
+      auto end = this->dataPtr->licenses.end();
+      std::advance(end, -1);
+      for (licenseIt = this->dataPtr->licenses.begin();
+           licenseIt != end; ++licenseIt)
+      {
+        validLicenseNames += "    " + licenseIt->first + "\n";
+      }
+      validLicenseNames += "    " + licenseIt->first;
+
+      ignerr << "Invalid license[" << meta.legal().license() << "].\n"
+             << "  Valid licenses include:\n"
+             << validLicenseNames << std::endl;
+
+      return Result(ResultType::UPLOAD_ERROR);
+    }
+  }
+  // If there is no license information, then default to
+  // "Creative Commons - Public Domain"
+  else
+  {
+    form.emplace("license", "1");
+  }
 
   // Add tags
   std::string tags;
@@ -428,6 +538,34 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     tags += meta.tags(i) + ",";
   if (!tags.empty())
     form.emplace("tags", tags);
+
+  // Add categories
+  std::string categories;
+  if (meta.has_categories())
+  {
+    // Add the first category, if present.
+    if (!meta.categories().first().empty())
+      categories = meta.categories().first();
+
+    // Add the second category, if present.
+    if (!meta.categories().second().empty())
+    {
+      // Add a comma separator if the first category was not empty.
+      if (!categories.empty())
+        categories += ", ";
+      categories += meta.categories().second();
+    }
+  }
+  if (!categories.empty())
+    form.emplace("categories", categories);
+
+  // Add annotations as metadata.
+  for (const auto &annotation : meta.annotations())
+  {
+    std::string formAnnotation = std::string("{\"key\":\"") +
+      annotation.first + "\",\"value\":\"" + annotation.second + "\"}";
+    form.emplace("metadata", formAnnotation);
+  }
 
   // Recursively get all the files.
   std::vector<std::string> files;
@@ -446,8 +584,16 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   {
     ignerr << "Failed to upload model." << std::endl
            << "  Server: " << _id.Server().Url().Str() << std::endl
+           << "  Server API Version: " <<  _id.Server().Version() << std::endl
            << "  Route: /models\n"
-           << "  REST response code: " << resp.statusCode << std::endl;
+           << "  Categories: " << categories << std::endl
+           << "  REST response code: " << resp.statusCode
+           << std::endl << std::endl
+           << "Suggestions" << std::endl
+           << "  1. Is the Server URL correct? Try entering it on a browser.\n"
+           << "  2. Do the categories exist? If you are using the Fuel server,"
+           << " then you can get the complete list at"
+           << " https://fuel.ignitionrobotics.org/1.0/categories." << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
 
@@ -926,6 +1072,71 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
 
   return true;
 }
+//////////////////////////////////////////////////
+bool FuelClient::ParseCollectionUrl(const common::URI &_url,
+    CollectionIdentifier &_id)
+{
+  if (!_url.Valid())
+    return false;
+
+  auto urlStr = _url.Str();
+
+  std::smatch match;
+  std::string scheme;
+  std::string server;
+  std::string apiVersion;
+  std::string owner;
+  std::string collectionName;
+
+  bool result =
+      std::regex_match(urlStr, match, *this->dataPtr->urlCollectionRegex);
+
+  if (result && match.size() >= 5u)
+  {
+    unsigned int i{1};
+
+    scheme = match[i++];
+    server = match[i++];
+    apiVersion = match[i++];
+    owner = match[i++];
+    collectionName = match[i++];
+  }
+  else
+  {
+    return false;
+  }
+
+  // Get remaining server information from config
+  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  _id.Server().SetVersion(apiVersion);
+  for (const auto &s : this->dataPtr->config.Servers())
+  {
+    if (s.Url() == _id.Server().Url())
+    {
+      if (!apiVersion.empty() && s.Version() != _id.Server().Version())
+      {
+        ignwarn << "Requested server API version [" << apiVersion
+                << "] for server [" << s.Url().Str() << "], but will use ["
+                << s.Version() << "] as given in the config file."
+                << std::endl;
+      }
+      _id.Server() = s;
+      break;
+    }
+  }
+
+  if (_id.Server().Version().empty())
+  {
+    ignwarn << "Server configuration is incomplete:" << std::endl
+            << _id.Server().AsString();
+  }
+
+  _id.SetOwner(owner);
+  _id.SetName(collectionName);
+
+  return true;
+}
+
 
 //////////////////////////////////////////////////
 Result FuelClient::DownloadModel(const common::URI &_modelUrl,
@@ -1159,3 +1370,23 @@ void FuelClientPrivate::AllFiles(const std::string &_path,
   }
 }
 
+
+//////////////////////////////////////////////////
+void FuelClient::PopulateLicenses(const ServerConfig &_server)
+{
+  ignition::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  // Send the request.
+  resp = rest.Request(HttpMethod::GET, _server.Url().Str(),
+      _server.Version(), "licenses", {}, {}, "");
+  if (resp.statusCode != 200)
+  {
+    ignerr << "Failed to get license information from "
+      << _server.Url().Str() << "/" << _server.Version() << std::endl;
+  }
+  else if (!JSONParser::ParseLicenses(resp.data, this->dataPtr->licenses))
+  {
+    ignerr << "Failed to parse license information[" << resp.data << "]\n";
+  }
+}

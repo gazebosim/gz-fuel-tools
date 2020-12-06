@@ -26,7 +26,7 @@ Install Ignition Fuel Tools:
 
 ```
 sudo apt-get update
-sudo apt-get install libignition-fuel-tools4-dev
+sudo apt-get install libignition-fuel-tools5-dev
 ```
 
 ## Mac OS X
@@ -40,7 +40,7 @@ library and rebuilding dependencies due to the use of c++11. For
 purposes of this documentation, I will assume OS X 10.11 or greater is in use.
 Here are the instructions:
 
-Install homebrew, which should also prompt you to install the XCode
+Install Homebrew, which should also prompt you to install the XCode
 command-line tools:
 
 ```
@@ -51,7 +51,7 @@ Run the following commands:
 
 ```
 brew tap osrf/simulation
-brew install ignition-fuel-tools4
+brew install ignition-fuel-tools5
 ```
 
 ## Windows
@@ -67,7 +67,7 @@ Make sure you have removed the Ubuntu pre-compiled binaries before
 installing from source:
 
 ```
-sudo apt-get remove libignition-fuel-tools4-dev
+sudo apt-get remove libignition-fuel-tools5-dev
 ```
 
 Install prerequisites. A clean Ubuntu system will need:
@@ -92,24 +92,20 @@ cd build
 
 Configure Ignition Fuel Tools (choose either method a or b below):
 
-* A.  Release mode: This will generate optimized code, but will not have debug symbols. Use this mode if you don't need to use GDB.
+* **A**. Release mode: This will generate optimized code, but will not have debug symbols. Use this mode if you don't need to use GDB.
+```
+cmake ../
+```
+Note: You can use a custom install path to make it easier to switch
+between source and Debian installs:
+```
+cmake -DCMAKE_INSTALL_PREFIX=/home/$USER/local ../
+```
 
-    ```
-    cmake ../
-    ```
-
-    Note: You can use a custom install path to make it easier to switch
-    between source and debian installs:
-
-    ```
-    cmake -DCMAKE_INSTALL_PREFIX=/home/$USER/local ../
-    ```
-
-* B. Debug mode: This will generate code with debug symbols. Ignition Fuel Tools will run slower, but you'll be able to use GDB.
-
-    ```
-    cmake -DCMAKE_BUILD_TYPE=Debug ../
-    ```
+* **B**. Debug mode: This will generate code with debug symbols. Ignition Fuel Tools will run slower, but you'll be able to use GDB.
+```
+cmake -DCMAKE_BUILD_TYPE=Debug ../
+```
 
 The output from `cmake ../` may generate a number of errors and warnings
 about missing packages. You must install the missing packages that have
@@ -146,7 +142,7 @@ echo "export LD_LIBRARY_PATH=<install_path>/local/lib:$LD_LIBRARY_PATH" >> ~/.ba
 ### Uninstalling Source-based Install
 
 If you need to uninstall Ignition Fuel Tools or switch back to a
-debian-based install when you currently have installed the library from
+Debian-based install when you currently have installed the library from
 source, navigate to your source code directory's build folders and run
 `make uninstall`:
 

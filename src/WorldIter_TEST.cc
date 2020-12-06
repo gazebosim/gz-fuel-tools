@@ -21,7 +21,8 @@
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
+
+#include "WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

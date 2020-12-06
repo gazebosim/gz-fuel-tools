@@ -1,6 +1,34 @@
-## Ignition Fuel Tools 4.x
+## Ignition Fuel Tools 5.x
 
-### Ignition Fuel Tools 4.X.X (20xx-xx-xx)
+### Ignition Fuel Tools 5.x.x
+
+### Ignition Fuel Tools 5.0.0 (2020-09-28)
+
+1. Added support for annotation parsing during model creation.
+    * [Pull request 95](https://github.com/ignitionrobotics/ign-fuel-tools/pull/95)
+
+1. Removed repeated installation instructions.
+    * [Pull request 101](https://github.com/ignitionrobotics/ign-fuel-tools/pull/101)
+
+1. Update codeowners.
+    * [Pull request 108](https://github.com/ignitionrobotics/ign-fuel-tools/pull/108)
+
+1. Hide Private headers and LocalCache.hh
+    * [Pull request 109](https://github.com/ignitionrobotics/ign-fuel-tools/pull/109)
+
+1. Fixed test - Download world 2
+    * [Pull request 110](https://github.com/ignitionrobotics/ign-fuel-tools/pull/110)
+
+### Ignition Fuel Tools 4.2.1 (2020-08-26)
+
+1. Fix `ign fuel download`, which was missing the `-j` option.
+    * [Pull request 116](https://github.com/ignitionrobotics/ign-fuel-tools/pull/116)
+
+### Ignition Fuel Tools 4.2.0 (2020-08-26)
+
+1. Set license information based on licenses available from a Fuel server
+   and `legal` information in a `metadata.pbtxt` file.
+    * [Pull request 69](https://github.com/ignitionrobotics/ign-fuel-tools/pull/69)
 
 1. Added `edit` subcommand to the `ign fuel`. The edit command currently
    supports editing a model's privacy.
@@ -8,6 +36,8 @@
 
 1. Alphabetical listing of subcommands.
     * [Pull request 65](https://github.com/ignitionrobotics/ign-fuel-tools/pull/65)
+
+1. All changes up to and including Ignition Fuel Tools 3.3.0 are included.
 
 ### Ignition Fuel Tools 4.1.0 (2020-02-27)
 
@@ -30,6 +60,23 @@
 ## Ignition Fuel Tools 3.x
 
 ### Ignition Fuel Tools 3.x.x (20xx-xx-xx)
+
+### Ignition Fuel Tools 3.3.0 (2020-07-29)
+
+1. openrobotics to OpenRobotics
+    * [Pull request 75](https://github.com/ignitionrobotics/ign-fuel-tools/pull/75)
+
+1. Fix world tests
+    * [Pull request 76](https://github.com/ignitionrobotics/ign-fuel-tools/pull/76)
+
+1. Add missing dependency in Actions CI
+    * [Pull request 86](https://github.com/ignitionrobotics/ign-fuel-tools/pull/86)
+
+1. Backport file fetching
+    * [Pull request 84](https://github.com/ignitionrobotics/ign-fuel-tools/pull/84)
+
+1. Convert model:// to Fuel URLs instead of absolute paths
+    * [Pull request 85](https://github.com/ignitionrobotics/ign-fuel-tools/pull/85)
 
 ### Ignition Fuel Tools 3.2.2 (2020-05-18)
 
