@@ -14,25 +14,32 @@ load(
     "//ign_bazel:generate_yaml.bzl",
     "generate_yaml",
 )
-
 load(
     "@bazelruby_rules_ruby//ruby:defs.bzl",
     "ruby_binary",
     "ruby_library",
-    "ruby_test",
     "ruby_rspec",
+    "ruby_test",
 )
 
 package(default_visibility = ["//visibility:public"])
 
 PROJECT_NAME = "ignition-fuel-tools"
+
 PROJECT_MAJOR = 4
+
 PROJECT_MINOR = 1
+
 PROJECT_PATCH = 0
+
 IGN_DESIGNATION = "/tmp"
+
 CMAKE_INSTALL_PREFIX = "/tmp"
+
 CMAKE_INSTALL_DATAROOTDIR = "/tmp"
+
 library_location = "/usr"
+
 IGN_LIBRARY_PATH = "/usr"
 
 # Generates config.hh based on the version numbers in CMake code.
@@ -42,30 +49,29 @@ cmake_configure_file(
     out = "include/ignition/fuel_tools/config.hh",
     cmakelists = ["CMakeLists.txt"],
     defines = [
-        "PROJECT_VERSION_MAJOR=%d" % (PROJECT_MAJOR),
-        "PROJECT_MAJOR_VERSION=%d" % (PROJECT_MAJOR),
-        "PROJECT_MINOR_VERSION=%d" % (PROJECT_MINOR),
-        "PROJECT_PATCH_VERSION=%d" % (PROJECT_PATCH),
-        "PROJECT_VERSION_PATCH=%d" % (PROJECT_PATCH),
-        "PROJECT_VERSION_MAJOR=%d" % (PROJECT_MAJOR),
-        "PROJECT_VERSION_MINOR=%d" % (PROJECT_MINOR),
+        "PROJECT_VERSION_MAJOR=%d" % PROJECT_MAJOR,
+        "PROJECT_MAJOR_VERSION=%d" % PROJECT_MAJOR,
+        "PROJECT_MINOR_VERSION=%d" % PROJECT_MINOR,
+        "PROJECT_PATCH_VERSION=%d" % PROJECT_PATCH,
+        "PROJECT_VERSION_PATCH=%d" % PROJECT_PATCH,
+        "PROJECT_VERSION_MAJOR=%d" % PROJECT_MAJOR,
+        "PROJECT_VERSION_MINOR=%d" % PROJECT_MINOR,
         "PROJECT_VERSION=%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR),
         "PROJECT_VERSION_FULL=%d.%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),  # noqa
-        "PROJECT_NAME_NO_VERSION=%s" % (PROJECT_NAME),
-        "PROJECT_NAME=%s" % (PROJECT_NAME),
-        "PROJECT_NAME_LOWER=%s" % (PROJECT_NAME),
-        "IGN_DESIGNATION=%s" % (IGN_DESIGNATION),
-        "CMAKE_INSTALL_PREFIX=%s" % (CMAKE_INSTALL_PREFIX),
-        "CMAKE_INSTALL_DATAROOTDIR=%s" % (CMAKE_INSTALL_DATAROOTDIR),
-
+        "PROJECT_NAME_NO_VERSION=%s" % PROJECT_NAME,
+        "PROJECT_NAME=%s" % PROJECT_NAME,
+        "PROJECT_NAME_LOWER=%s" % PROJECT_NAME,
+        "IGN_DESIGNATION=%s" % IGN_DESIGNATION,
+        "CMAKE_INSTALL_PREFIX=%s" % CMAKE_INSTALL_PREFIX,
+        "CMAKE_INSTALL_DATAROOTDIR=%s" % CMAKE_INSTALL_DATAROOTDIR,
     ],
     visibility = ["//visibility:private"],
 )
 
 ign_export_header(
     name = "include/ignition/fuel_tools/Export.hh",
-    lib_name = "ignition-fuel-tools",
     export_base = "IGNITION_FUEL_TOOLS",
+    lib_name = "ignition-fuel-tools",
     visibility = ["//visibility:private"],
 )
 
@@ -147,13 +153,19 @@ public_headers = public_headers_no_gen + [
 cc_binary(
     name = "libignition-fuel-tools4.so",
     srcs = sources + private_headers + public_headers,
+    copts = [
+        "-Iexternal/json",
+    ],
     includes = ["include"],
-    linkopts = ["-Wl,-soname,libignition-fuel-tools4.so", "-lyaml", "-ljsoncpp", "-lcurl", "-lzip"],
+    linkopts = [
+        "-Wl,-soname,libignition-fuel-tools4.so",
+        "-lyaml",
+        "-ljsoncpp",
+        "-lcurl",
+        "-lzip",
+    ],
     linkshared = True,
     visibility = [],
-    copts = [
-        "-Iexternal/json"
-    ],
     deps = [
         "//ign_common",
         "//ign_msgs",
@@ -165,11 +177,11 @@ cc_library(
     name = "ign_fuel_tools",
     srcs = ["libignition-fuel-tools4.so"],
     hdrs = public_headers,
+    copts = [
+        "-Iexternal/json",
+    ],
     includes = ["include"],
     visibility = ["//visibility:public"],
-    copts = [
-        "-Iexternal/json"
-    ],
     deps = [
         "//ign_common",
         "//ign_msgs",
@@ -184,7 +196,7 @@ cc_library(
         "//ign_common",
         "//ign_fuel_tools",
         "//ign_fuel_tools/test:test_utils",
-        "@gtest//:gtest",
+        "@gtest",
         "@gtest//:gtest_main",
     ],
 ) for src in test_sources]
