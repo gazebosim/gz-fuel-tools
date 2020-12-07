@@ -4,9 +4,9 @@ load(
     "IGNITION_VISIBILITY",
     "cmake_configure_file",
     "generate_include_header",
+    "generate_yaml",
     "ign_config_header",
     "ign_export_header",
-    "generate_yaml",
 )
 load(
     "@bazelruby_rules_ruby//ruby:defs.bzl",
@@ -42,13 +42,13 @@ ign_config_header(
     src = "include/ignition/fuel_tools/config.hh.in",
     out = "include/ignition/fuel_tools/config.hh",
     cmakelists = ["CMakeLists.txt"],
-    project_name = PROJECT_NAME,
-    project_version = (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),
     extra_defines = [
         "PROJECT_NAME_LOWER=ignition-fuel-tools",
         "CMAKE_INSTALL_PREFIX=./ign_fuel_tools/",
         "CMAKE_INSTALL_DATAROOTDIR=./ign_fuel_tools/",
     ],
+    project_name = PROJECT_NAME,
+    project_version = (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),
 )
 
 ign_export_header(
@@ -153,9 +153,9 @@ cc_library(
     includes = ["include"],
     visibility = ["//visibility:public"],
     deps = [
+        "//ign_bazel:utilities",
         "//ign_common",
         "//ign_msgs",
-        "//ign_bazel:utilities",
         "@json//:headers",
     ],
 )

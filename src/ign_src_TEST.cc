@@ -469,7 +469,7 @@ class DownloadCollectionTest
 {};
 
 INSTANTIATE_TEST_CASE_P(CollectionTest, DownloadCollectionTest,
-                        ::testing::Values(1, 2, 16),); // NOLINT
+                        ::testing::Values(1, 2, 16)); // NOLINT
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
