@@ -1358,6 +1358,33 @@ TEST_F(FuelClientTest, UploadModelFail)
 }
 
 //////////////////////////////////////////////////
+TEST_F(FuelClientTest, PatchModelFail)
+{
+  FuelClient client;
+  ModelIdentifier modelId;
+
+  std::vector<std::string> headers;
+
+  // Bad directory
+  Result result = client.PatchModel(modelId, headers, "bad");
+  EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
+
+  // Missing metadata.pbtxt and model.config
+  result = client.PatchModel(modelId, headers, common::cwd());
+  EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
+
+  ClientConfig config;
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
+  createLocalModel(config);
+
+  // Bad model.config
+  result = client.PatchModel(modelId, headers,
+      common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+        "alice", "models", "My Model", "3"));
+  EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
+}
+
+//////////////////////////////////////////////////
 int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);

@@ -352,6 +352,9 @@ namespace ignition
       ///
       /// Model fields that are patched by this function:
       ///   * private
+      ///   * Model files contained in _pathToModelDir.
+      ///   * Description, tags, license, and other attributes found in the
+      ///     metadata.pbtxt or model.config file.
       ///
       /// \param[in] _model The model to patch. The contents of this model
       ///            will be sent in the PATCH request.
