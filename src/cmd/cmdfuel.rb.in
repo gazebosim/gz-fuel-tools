@@ -113,6 +113,7 @@ SUBCOMMANDS = {
   "  ign fuel edit [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
+  "  -m [--model] arg         Path to directory containing the model.      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
   "                           https://fuel.ignitionrobotics.org.           \n"\
@@ -304,6 +305,15 @@ class Cmd
         puts "Missing model path."
         exit(-1)
       end
+      if options['url'] == ''
+        puts "Missing URL (e.g. --url https://fuel.ignitionrobotics.org)."
+        exit(-1)
+      end
+    when 'edit'
+      if options['url'] == ''
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
+        exit(-1)
+      end
     end
 
     options
@@ -361,9 +371,9 @@ class Cmd
           exit(-1)
         end
       when 'edit'
-        Importer.extern 'int editUrl(const char *, const char *, const char *)'
+        Importer.extern 'int editUrl(const char *, const char *, const char *, const char *)'
         if not Importer.editUrl(options['url'], options['header'],
-            options['private'])
+            options['private'], options['model'])
           exit(-1)
         end
       when 'list'
