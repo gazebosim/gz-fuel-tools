@@ -21,13 +21,29 @@ ign_configure_project(VERSION_SUFFIX)
 # Set project-specific options
 #============================================================================
 
+#--------------------------------------
+# Option: Should we use our internal copy of tinyxml2?
+if(UNIX OR APPLE)
+  option(USE_EXTERNAL_TINYXML2 "Use a system-installed version of tinyxml2" ON)
+elseif(WIN32)
+  # This is always false for Windows, so we can avoid trying to search for a
+  # system installation of tinyxml2.
+  set(USE_EXTERNAL_TINYXML2 false)
+endif()
+
 #============================================================================
 # Search for project-specific dependencies
 #============================================================================
 
 #--------------------------------------
 # Find Tinyxml2
-ign_find_package(TINYXML2 REQUIRED PRIVATE PRETTY tinyxml2)
+#--------------------------------------
+# Find Tinyxml2
+if(USE_EXTERNAL_TINYXML2)
+  ign_find_package(TINYXML2 REQUIRED PRIVATE PRETTY tinyxml2)
+else()
+  message(STATUS "Skipping search for tinyxml2 and using an internal version\n")
+endif()
 
 #--------------------------------------
 # Find libcurl
