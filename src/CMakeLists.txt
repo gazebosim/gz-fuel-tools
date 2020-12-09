@@ -59,7 +59,6 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
     ignition-msgs${IGN_MSGS_MAJOR_VER}::ignition-msgs${IGN_MSGS_MAJOR_VER}
     curl::curl
     ${JSONCPP_TARGET}
-    TINYXML2::TINYXML2
     ${YAML_TARGET}
     ZIP::ZIP
 )
