@@ -37,8 +37,6 @@ endif()
 
 #--------------------------------------
 # Find Tinyxml2
-#--------------------------------------
-# Find Tinyxml2
 if(USE_EXTERNAL_TINYXML2)
   ign_find_package(TINYXML2 REQUIRED PRIVATE PRETTY tinyxml2)
 else()
