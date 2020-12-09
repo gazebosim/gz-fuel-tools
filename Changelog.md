@@ -19,6 +19,16 @@
 1. Fixed test - Download world 2
     * [Pull request 110](https://github.com/ignitionrobotics/ign-fuel-tools/pull/110)
 
+### Ignition Fuel Tools 4.3.0 (2020-12-01)
+
+1. Improve fork experience.
+    * [Pull request 126](https://github.com/ignitionrobotics/ign-fuel-tools/pull/126)
+
+1. Download dependencies.
+    * [Pull request 123](https://github.com/ignitionrobotics/ign-fuel-tools/pull/123)
+
+1. Includes all changes up to version 3.5.0.
+
 ### Ignition Fuel Tools 4.2.1 (2020-08-26)
 
 1. Fix `ign fuel download`, which was missing the `-j` option.
