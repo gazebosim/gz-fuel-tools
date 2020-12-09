@@ -902,7 +902,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
-    const char *_url, const char *_header, const char *_private)
+    const char *_url, const char *_header, const char *_private,
+    const char *_path)
 {
   ignition::fuel_tools::ClientConfig conf;
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
@@ -925,6 +926,17 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
 
   ignition::fuel_tools::ModelIdentifier model;
 
+  std::string modelPath;
+  if (_path && std::strlen(_path) != 0)
+  {
+    if (!ignition::common::exists(_path))
+    {
+      ignerr << "The model path[" << _path << "] doesn't exist.\n";
+      return 0;
+    }
+    modelPath = _path;
+  }
+
   // Check to see if a model has been specified in the the URI.
   if (client.ParseModelUrl(url, model))
   {
@@ -944,11 +956,11 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
     }
 
     // Change the privacy setting, if a change is present.
-    if (privateBool.has_value())
+    if (privateBool.has_value() || !modelPath.empty())
     {
       details.SetPrivate(*privateBool);
 
-      if (!client.PatchModel(details, headers))
+      if (!client.PatchModel(details, headers, modelPath))
       {
         ignerr << "Failed to patch model[" << model.Name() << "].\n";
         return 0;

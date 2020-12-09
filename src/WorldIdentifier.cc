@@ -20,6 +20,7 @@
 #include <vector>
 
 #include <ignition/common/Filesystem.hh>
+#include <ignition/common/Util.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
@@ -93,7 +94,7 @@ std::string WorldIdentifier::Name() const
 //////////////////////////////////////////////////
 bool WorldIdentifier::SetName(const std::string &_name)
 {
-  this->dataPtr->name = _name;
+  this->dataPtr->name = common::lowercase(_name);
   return true;
 }
 
@@ -104,9 +105,9 @@ std::string WorldIdentifier::Owner() const
 }
 
 //////////////////////////////////////////////////
-bool WorldIdentifier::SetOwner(const std::string &_name)
+bool WorldIdentifier::SetOwner(const std::string &_owner)
 {
-  this->dataPtr->owner = _name;
+  this->dataPtr->owner = common::lowercase(_owner);
   return true;
 }
 
