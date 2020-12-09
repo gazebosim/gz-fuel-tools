@@ -290,6 +290,15 @@ class Cmd
         puts "Missing model path."
         exit(-1)
       end
+      if options['url'] == ''
+        puts "Missing URL (e.g. --url https://fuel.ignitionrobotics.org)."
+        exit(-1)
+      end
+    when 'edit'
+      if options['url'] == ''
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
+        exit(-1)
+      end
     end
 
     options

@@ -1382,6 +1382,10 @@ TEST_F(FuelClientTest, PatchModelFail)
       common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
         "alice", "models", "My Model", "3"));
   EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
+
+  // Patch error
+  result = client.PatchModel(modelId, headers);
+  EXPECT_EQ(ResultType::PATCH_ERROR, result.Type());
 }
 
 //////////////////////////////////////////////////
