@@ -1355,6 +1355,15 @@ TEST_F(FuelClientTest, UploadModelFail)
   std::vector<std::string> headers;
   Result result = client.UploadModel("path", modelId, headers);
   EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
+
+  ClientConfig config;
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
+  createLocalModel(config);
+
+  result = client.UploadModel(
+      common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+        "alice", "models", "My Model", "3"), modelId, headers);
+  EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
 }
 
 //////////////////////////////////////////////////
