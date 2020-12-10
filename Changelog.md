@@ -1,6 +1,8 @@
 ## Ignition Fuel Tools 5.x
 
-### Ignition Fuel Tools 5.x.x
+### Ignition Fuel Tools 5.1.0 (2020-12-09)
+
+1. Includes all changes up to version 4.3.0.
 
 ### Ignition Fuel Tools 5.0.0 (2020-09-28)
 
