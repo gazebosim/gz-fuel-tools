@@ -656,6 +656,10 @@ void LocalCachePrivate::FixPathsInMaterialElement(
             workflowElem->FirstChildElement("emissive_map");
         if (emissiveElem)
           this->FixPathsInUri(emissiveElem, _id);
+        tinyxml2::XMLElement *lightElem =
+            workflowElem->FirstChildElement("light_map");
+        if (lightElem)
+          this->FixPathsInUri(lightElem, _id);
         // metal workflow specific elements
         if (workflow == "metal")
         {
