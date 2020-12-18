@@ -1,5 +1,12 @@
 ## Ignition Fuel Tools 5.x
 
+### Ignition Fuel Tools 5.X.X (20XX-XX-XX)
+
+### Ignition Fuel Tools 5.1.1 (2020-12-18)
+
+1. Fix light map URI in materials
+    * [Pull request 146](https://github.com/ignitionrobotics/ign-fuel-tools/pull/146)
+
 ### Ignition Fuel Tools 5.1.0 (2020-12-09)
 
 1. Includes all changes up to version 4.3.0.
