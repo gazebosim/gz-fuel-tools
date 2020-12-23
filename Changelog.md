@@ -1,6 +1,15 @@
 ## Ignition Fuel Tools 5.x
 
-### Ignition Fuel Tools 5.x.x
+### Ignition Fuel Tools 5.X.X (20XX-XX-XX)
+
+### Ignition Fuel Tools 5.1.1 (2020-12-18)
+
+1. Fix light map URI in materials
+    * [Pull request 146](https://github.com/ignitionrobotics/ign-fuel-tools/pull/146)
+
+### Ignition Fuel Tools 5.1.0 (2020-12-09)
+
+1. Includes all changes up to version 4.3.0.
 
 ### Ignition Fuel Tools 5.0.0 (2020-09-28)
 
@@ -18,6 +27,16 @@
 
 1. Fixed test - Download world 2
     * [Pull request 110](https://github.com/ignitionrobotics/ign-fuel-tools/pull/110)
+
+### Ignition Fuel Tools 4.3.0 (2020-12-01)
+
+1. Improve fork experience.
+    * [Pull request 126](https://github.com/ignitionrobotics/ign-fuel-tools/pull/126)
+
+1. Download dependencies.
+    * [Pull request 123](https://github.com/ignitionrobotics/ign-fuel-tools/pull/123)
+
+1. Includes all changes up to version 3.5.0.
 
 ### Ignition Fuel Tools 4.2.1 (2020-08-26)
 
@@ -60,6 +79,34 @@
 ## Ignition Fuel Tools 3.x
 
 ### Ignition Fuel Tools 3.x.x (20xx-xx-xx)
+
+### Ignition Fuel Tools 3.5.0 (2020-11-30)
+
+1. Fix windows build.
+    * [Pull request 107](https://github.com/ignitionrobotics/ign-fuel-tools/pull/107)
+
+1. Resolve updated codecheck issues.
+    * [Pull request 129](https://github.com/ignitionrobotics/ign-fuel-tools/pull/129)
+
+1. Update Backpack model to fix tests.
+    * [Pull request 132](https://github.com/ignitionrobotics/ign-fuel-tools/pull/132)
+
+1. Use lowercase resource and owner names when storing assets on disk.
+    * [Pull request 130](https://github.com/ignitionrobotics/ign-fuel-tools/pull/130)
+
+### Ignition Fuel Tools 3.4.0 (2020-08-19)
+
+1. Modernize github actions by updating to the new style.
+    * [Pull request 94](https://github.com/ignitionrobotics/ign-fuel-tools/pull/94)
+
+1. Fix test worlds.
+    * [Pull request 100](https://github.com/ignitionrobotics/ign-fuel-tools/pull/100)
+
+1. Add capability for downloading collections.
+    * [Pull request 98](https://github.com/ignitionrobotics/ign-fuel-tools/pull/98)
+
+1. Fix windows build.t
+    * [Pull request 103](https://github.com/ignitionrobotics/ign-fuel-tools/pull/013)
 
 ### Ignition Fuel Tools 3.3.0 (2020-07-29)
 
