@@ -32,6 +32,7 @@
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/StringUtils.hh>
 #include <ignition/common/Util.hh>
+#include <ignition/math/SemanticVersion.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
@@ -459,11 +460,24 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir,
 
   // Get the <sdf> element with the highest (most recent) version.
   tinyxml2::XMLElement *sdfElementLatest = nullptr;
-  double maxVersion = 0.0;
+  math::SemanticVersion maxVersion{"0.0"};
   tinyxml2::XMLElement *sdfElement = modelElement->FirstChildElement("sdf");
   while (sdfElement)
   {
-    double version = std::stod(sdfElement->Attribute("version"));
+    math::SemanticVersion version;
+
+    auto versionAttribute = sdfElement->Attribute("version");
+    if (nullptr == versionAttribute)
+    {
+      version.Parse("0.0.1");
+      ignwarn << "<sdf> element missing version attribute, assuming version ["
+              << version << "]" << std::endl;
+    }
+    else
+    {
+      version.Parse(versionAttribute);
+    }
+
     if (version > maxVersion)
     {
       maxVersion = version;
