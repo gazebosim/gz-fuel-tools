@@ -118,9 +118,11 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path);
 /// \param[in] _header An HTTP header.
 /// \param[in] _private "1" to make the resource private, "0" to make it
 ///            public
+/// \param[in] _path Resource path.
 /// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
     const char *_url, const char *_header = nullptr,
-    const char *_private = nullptr);
+    const char *_private = nullptr,
+    const char *_path = nullptr);
 
 #endif
