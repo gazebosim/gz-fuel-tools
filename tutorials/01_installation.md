@@ -200,7 +200,7 @@ You can view available versions and their dependencies:
 conda search libignition-fuel-tools* --channel conda-forge --info
 ```
 
-Install dependencies, replacing `<#>` with the desired versions:
+Install Ignition dependencies, replacing `<#>` with the desired versions:
 
 ```
 conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> libignition-tools<#> --channel conda-forge
