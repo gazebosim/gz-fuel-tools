@@ -213,30 +213,23 @@ conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> lib
 #### Building from source
 
 1. Activate the Conda environment created in the prerequisites:
-
-    ```
-    conda activate ign-ws
-    ```
-
-1. Navigate to where you would like to build the library, and clone the repository.
-
-    ```
-    # Optionally, append `-b ign-fuel-tools#` (replace # with a number) to check out a specific version
-    git clone https://github.com/ignitionrobotics/ign-fuel-tools.git
-    ```
-
-1. Configure and build
-
-    ```
-    cd ign-fuel-tools
-    mkdir build
-    cd build
-    cmake .. -DBUILD_TESTING=OFF  # Optionally, -DCMAKE_INSTALL_PREFIX=path\to\install
-    cmake --build . --config Release
-    ```
-
-1. Optionally, install
-
-    ```
-    cmake --install . --config Release
-    ```
+  ```
+  conda activate ign-ws
+  ```
+2. Navigate to where you would like to build the library, and clone the repository.
+  ```
+  # Optionally, append `-b ign-fuel-tools#` (replace # with a number) to check out a specific version
+  git clone https://github.com/ignitionrobotics/ign-fuel-tools.git
+  ```
+3. Configure and build
+  ```
+  cd ign-fuel-tools
+  mkdir build
+  cd build
+  cmake .. -DBUILD_TESTING=OFF  # Optionally, -DCMAKE_INSTALL_PREFIX=path\to\install
+  cmake --build . --config Release
+  ```
+4. Optionally, install
+  ```
+  cmake --install . --config Release
+  ```
