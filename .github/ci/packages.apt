@@ -3,6 +3,7 @@ libcurl4-openssl-dev
 libgflags-dev
 libignition-cmake2-dev
 libignition-common3-dev
+libignition-math6-dev
 libignition-msgs5-dev
 libignition-tools-dev
 libjsoncpp-dev

@@ -51,6 +51,11 @@ ign_find_package(ignition-common3 REQUIRED PRIVATE)
 set(IGN_COMMON_MAJOR_VER ${ignition-common3_VERSION_MAJOR})
 
 #--------------------------------------
+# Find ignition-math
+ign_find_package(ignition-math6 REQUIRED PRIVATE)
+set(IGN_MSGS_MAJOR_VER ${ignition-math6_VERSION_MAJOR})
+
+#--------------------------------------
 # Find ignition-msgs
 ign_find_package(ignition-msgs5 REQUIRED PRIVATE)
 set(IGN_MSGS_MAJOR_VER ${ignition-msgs5_VERSION_MAJOR})
