@@ -525,7 +525,12 @@ Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
 //////////////////////////////////////////////////
 Result FuelClient::DownloadModel(const ModelIdentifier &_id)
 {
-  return this->DownloadModel(_id, {});
+  std::vector<std::string> headers;
+  if (!_id.Server().ApiKey().empty())
+  {
+    headers.push_back("Private-token: " + _id.Server().ApiKey());
+  }
+  return this->DownloadModel(_id, headers);
 }
 
 //////////////////////////////////////////////////

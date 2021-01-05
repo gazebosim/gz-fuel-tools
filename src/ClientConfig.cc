@@ -278,6 +278,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   tokens.push("root");
   std::string serverURL = "";
   std::string cacheLocationConfig = "";
+  std::string privateToken = "";
 
   do
   {
@@ -325,12 +326,21 @@ bool ClientConfig::LoadConfig(const std::string &_file)
           {
             // Sanity check: Make sure that the server is not already stored.
             bool repeated = false;
-            for (auto const savedServer : this->Servers())
+            for (auto & savedServer : this->Servers())
             {
               if (savedServer.Url().Str() == serverURL)
               {
-                ignwarn << "URL [" << serverURL << "] already exists. "
-                       << "Ignoring server" << std::endl;
+                if (!privateToken.empty())
+                {
+                  ignerr << "Setted private-token header for " << serverURL << std::endl;
+                  // savedServer.AddHeader("Private-token: " + privateToken);
+                  savedServer.SetApiKey(privateToken);
+                }
+                else
+                {
+                  ignwarn << "URL [" << serverURL << "] already exists. "
+                         << "Ignoring server" << std::endl;
+                }
                 repeated = true;
                 break;
               }
@@ -340,7 +350,12 @@ bool ClientConfig::LoadConfig(const std::string &_file)
               // Add the new server.
               ServerConfig newServer;
               newServer.SetUrl(common::URI(serverURL));
-              this->AddServer(newServer);
+              if (!privateToken.empty())
+              {
+                ignerr << "Setted private-token header for " << serverURL << std::endl;
+                // newServer.AddHeader("Private-token: " + privateToken);
+                newServer.SetApiKey(privateToken);
+              }
             }
           }
           else
@@ -370,6 +385,13 @@ bool ClientConfig::LoadConfig(const std::string &_file)
           std::string path(
             reinterpret_cast<const char *>(event.data.scalar.value));
           cacheLocationConfig = path;
+          tokens.pop();
+        }
+        else if (!tokens.empty() && tokens.top() == "private-token")
+        {
+          std::string token(
+            reinterpret_cast<const char *>(event.data.scalar.value));
+          privateToken = token;
           tokens.pop();
         }
         else
@@ -426,7 +448,7 @@ std::string ClientConfig::ConfigPath() const
 }
 
 //////////////////////////////////////////////////
-std::vector<ServerConfig> ClientConfig::Servers() const
+std::vector<ServerConfig> & ClientConfig::Servers() const
 {
   return this->dataPtr->servers;
 }
