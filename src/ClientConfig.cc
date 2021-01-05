@@ -332,8 +332,8 @@ bool ClientConfig::LoadConfig(const std::string &_file)
               {
                 if (!privateToken.empty())
                 {
-                  ignerr << "Setted private-token header for " << serverURL << std::endl;
-                  // savedServer.AddHeader("Private-token: " + privateToken);
+                  ignerr << "Setted key for " << serverURL << " server."
+                    << std::endl;
                   savedServer.SetApiKey(privateToken);
                 }
                 else
@@ -352,8 +352,8 @@ bool ClientConfig::LoadConfig(const std::string &_file)
               newServer.SetUrl(common::URI(serverURL));
               if (!privateToken.empty())
               {
-                ignerr << "Setted private-token header for " << serverURL << std::endl;
-                // newServer.AddHeader("Private-token: " + privateToken);
+                ignerr << "Setted key for " << serverURL << " server."
+                  << std::endl;
                 newServer.SetApiKey(privateToken);
               }
             }
