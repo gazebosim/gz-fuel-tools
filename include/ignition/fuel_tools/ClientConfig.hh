@@ -149,7 +149,11 @@ namespace ignition
 
       /// \brief List of servers the client will connect to.
       /// \return The list of servers.
-      public: std::vector<ServerConfig> & Servers() const;
+      public: std::vector<ServerConfig> Servers() const;
+
+      /// \brief List of servers the client will connect to.
+      /// \return The list of servers.
+      public: std::vector<ServerConfig> & MutableServers() const;
 
       /// \brief Add a server to the list.
       /// \param[in] _srv The server config.

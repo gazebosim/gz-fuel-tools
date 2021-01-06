@@ -326,21 +326,18 @@ bool ClientConfig::LoadConfig(const std::string &_file)
           {
             // Sanity check: Make sure that the server is not already stored.
             bool repeated = false;
-            for (auto & savedServer : this->Servers())
+            for (auto & savedServer : this->MutableServers())
             {
               if (savedServer.Url().Str() == serverURL)
               {
                 if (!privateToken.empty())
                 {
-                  ignerr << "Setted key for " << serverURL << " server."
+                  ignmsg << "Set private token for " << serverURL << " server."
                     << std::endl;
                   savedServer.SetApiKey(privateToken);
                 }
-                else
-                {
-                  ignwarn << "URL [" << serverURL << "] already exists. "
-                         << "Ignoring server" << std::endl;
-                }
+                ignwarn << "URL [" << serverURL << "] already exists. "
+                  << "Ignoring server" << std::endl;
                 repeated = true;
                 break;
               }
@@ -352,10 +349,11 @@ bool ClientConfig::LoadConfig(const std::string &_file)
               newServer.SetUrl(common::URI(serverURL));
               if (!privateToken.empty())
               {
-                ignerr << "Setted key for " << serverURL << " server."
+                ignmsg << "Set private token for " << serverURL << " server."
                   << std::endl;
                 newServer.SetApiKey(privateToken);
               }
+              this->AddServer(newServer);
             }
           }
           else
@@ -448,7 +446,13 @@ std::string ClientConfig::ConfigPath() const
 }
 
 //////////////////////////////////////////////////
-std::vector<ServerConfig> & ClientConfig::Servers() const
+std::vector<ServerConfig> ClientConfig::Servers() const
+{
+  return this->dataPtr->servers;
+}
+
+//////////////////////////////////////////////////
+std::vector<ServerConfig> & ClientConfig::MutableServers() const
 {
   return this->dataPtr->servers;
 }

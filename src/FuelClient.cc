@@ -664,11 +664,17 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
 
   ignmsg << "Downloading world [" << _id.UniqueName() << "]" << std::endl;
 
+  std::vector<std::string> headers;
+  if (!_id.Server().ApiKey().empty())
+  {
+    headers.push_back("Private-token: " + _id.Server().ApiKey());
+  }
+
   // Request
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
-      _id.Server().Version(), route.Str(), {}, {}, "");
+      _id.Server().Version(), route.Str(), {}, headers, "");
   if (resp.statusCode != 200)
   {
     ignerr << "Failed to download world." << std::endl
