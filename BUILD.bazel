@@ -8,15 +8,15 @@ load(
     "ign_config_header",
     "ign_export_header",
 )
-load(
-    "@bazelruby_rules_ruby//ruby:defs.bzl",
-    "ruby_binary",
-    "ruby_library",
-    "ruby_rspec",
-    "ruby_test",
+
+package(
+    default_visibility = IGNITION_VISIBILTY,
+    features = IGNITION_FEATURES,
 )
 
-package(default_visibility = ["//visibility:public"])
+licenses(["notice"])
+
+export_files(["LICENSE"])
 
 PROJECT_NAME = "ignition-fuel-tools"
 
@@ -70,6 +70,7 @@ private_headers = [
 
 sources = [
     "src/ClientConfig.cc",
+    "src/CollectionIdentifier.cc",
     "src/FuelClient.cc",
     "src/ign.cc",
     "src/Interface.cc",
@@ -120,43 +121,34 @@ public_headers = public_headers_no_gen + [
     "src/ign.hh",
 ]
 
-cc_binary(
-    name = "libignition-fuel-tools5.so",
+cc_library(
+    name = "ign_fuel_tools",
     srcs = sources + private_headers + public_headers,
     copts = [
         "-Iexternal/json",
     ],
     includes = ["include"],
     linkopts = [
-        "-Wl,-soname,libignition-fuel-tools5.so",
         "-lyaml",
         "-ljsoncpp",
         "-lcurl",
         "-lzip",
     ],
-    linkshared = True,
-    visibility = [],
     deps = [
-        "//ign_common",
-        "//ign_msgs",
+        IGNITION_ROOT + "ign_common",
+        IGNITION_ROOT + "ign_msgs",
+        IGNITION_ROOT + "ign_bazel:utilities",
         "@json//:headers",
     ],
 )
 
-cc_library(
-    name = "ign_fuel_tools",
-    srcs = ["libignition-fuel-tools5.so"],
-    hdrs = public_headers + private_headers,
-    copts = [
-        "-Iexternal/json",
-    ],
+cc_binary(
+    name = "libignition-fuel-tools5.so",
     includes = ["include"],
-    visibility = ["//visibility:public"],
+    linkopts = ["-Wl,-soname,libignition-fuel-tools5.so"],
+    linkshared = True,
     deps = [
-        "//ign_bazel:utilities",
-        "//ign_common",
-        "//ign_msgs",
-        "@json//:headers",
+        ":ign_fuel_tools",
     ],
 )
 
@@ -164,9 +156,9 @@ cc_library(
     name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
     srcs = [src] + private_headers,
     deps = [
-        "//ign_common",
-        "//ign_fuel_tools",
-        "//ign_fuel_tools/test:test_utils",
+        IGNITION_ROOT + "ign_common",
+        IGNITION_ROOT + "ign_fuel_tools",
+        IGNITION_ROOT + "ign_fuel_tools/test:test_utils",
         "@gtest",
         "@gtest//:gtest_main",
     ],
