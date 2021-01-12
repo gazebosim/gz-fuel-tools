@@ -447,7 +447,8 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     _id.Server(), headersIncludingServerConfig);
   // Send the request.
   resp = rest.Request(HttpMethod::POST_FORM, _id.Server().Url().Str(),
-      _id.Server().Version(), "models", {}, headersIncludingServerConfig, "", form);
+      _id.Server().Version(), "models", {},
+      headersIncludingServerConfig, "", form);
 
   if (resp.statusCode != 200)
   {
