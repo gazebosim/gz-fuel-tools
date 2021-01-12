@@ -17,10 +17,10 @@ Download the files `list.cc`, `details.cc`, `download.cc`,
 `CMakeLists.txt`, and save them under `/tmp/fuel_tutorial`:
 
 ```
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools5/example/list.cc
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools5/example/details.cc
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools5/example/download.cc
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools5/example/CMakeLists.txt
+wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/list.cc
+wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/details.cc
+wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/download.cc
+wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/CMakeLists.txt
 ```
 
 Let's start by compiling the examples:

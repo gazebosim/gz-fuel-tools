@@ -62,13 +62,13 @@ mkdir /tmp/conf_tutorial && cd /tmp/conf_tutorial
 Download the file `download.cc` and save it under `/tmp/conf_tutorial`:
 
 ```
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools5/example/download.cc
+wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/download.cc
 ```
 
 Also, download `CMakeLists.txt` for compiling the example:
 
 ```
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools5/example/CMakeLists.txt
+wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/CMakeLists.txt
 ```
 
 Install a dependency:
