@@ -29,6 +29,8 @@
 // std::string
 #pragma warning(push)
 #pragma warning(disable: 4251)
+// TODO: rename the DELETE method which is a reserved word in Windows
+#undef DELETE
 #endif
 
 namespace ignition
