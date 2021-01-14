@@ -2,6 +2,7 @@ load(
     "//ign_bazel:build_defs.bzl",
     "IGNITION_ROOT",
     "IGNITION_VISIBILITY",
+    "IGNITION_FEATURES",
     "cmake_configure_file",
     "generate_include_header",
     "generate_yaml",
@@ -10,13 +11,13 @@ load(
 )
 
 package(
-    default_visibility = IGNITION_VISIBILTY,
+    default_visibility = IGNITION_VISIBILITY,
     features = IGNITION_FEATURES,
 )
 
 licenses(["notice"])
 
-export_files(["LICENSE"])
+exports_files(["LICENSE"])
 
 PROJECT_NAME = "ignition-fuel-tools"
 
