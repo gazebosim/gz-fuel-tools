@@ -217,34 +217,31 @@ class ignition::fuel_tools::FuelClientPrivate
 
 //////////////////////////////////////////////////
 FuelClient::FuelClient()
-  : FuelClient(ClientConfig(), Rest(), nullptr)
+  : FuelClient(ClientConfig(), Rest())
 {
 }
 
 //////////////////////////////////////////////////
-FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
-    LocalCache *_cache)
-  : dataPtr(new FuelClientPrivate)
+FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest)
+  : dataPtr(std::make_unique<FuelClientPrivate>())
 {
   this->dataPtr->config = _config;
   this->dataPtr->rest = _rest;
   this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 
-  if (nullptr == _cache)
-  {
 #ifndef _WIN32
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#else
+# pragma warning(push)
+# pragma warning(disable: 4996)
 #endif
-    this->dataPtr->cache.reset(new LocalCache(&(this->dataPtr->config)));
+  this->dataPtr->cache = std::make_unique<LocalCache>(&(this->dataPtr->config));
 #ifndef _WIN32
 # pragma GCC diagnostic pop
+#else
+# pragma warning(pop)
 #endif
-  }
-  else
-  {
-    this->dataPtr->cache.reset(_cache);
-  }
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelUrlRegexStr));
@@ -256,6 +253,14 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
     this->dataPtr->kWorldFileUrlRegexStr));
   this->dataPtr->urlCollectionRegex.reset(new std::regex(
     this->dataPtr->kCollectionUrlRegexStr));
+}
+
+//////////////////////////////////////////////////
+FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
+      LocalCache *_cache) : FuelClient(_config, _rest)
+{
+  if (_cache != nullptr)
+    this->dataPtr->cache.reset(_cache);
 }
 
 //////////////////////////////////////////////////

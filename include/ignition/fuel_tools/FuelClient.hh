@@ -57,14 +57,21 @@ namespace ignition
       /// \brief Constructor accepts server and auth configuration
       /// \param[in] _config configuration about servers to connect to
       /// \param[in] _rest A REST request.
+      /// \remarks the client saves a copy of the config passed into it
+      public: FuelClient(const ClientConfig &_config,
+                         const Rest &_rest = Rest());
+
+      /// \brief Constructor accepts server and auth configuration
+      /// \param[in] _config configuration about servers to connect to
+      /// \param[in] _rest A REST request.
       /// \param[in] _cache Test hook. Pointer to a local cache. The FuelClient
       ///            will take ownership of the pointer and free it when
       ///            destructed. If set to nullptr the client will instantiate
       ///            it's own cache.
       /// \remarks the client saves a copy of the config passed into it
-      public: FuelClient(const ClientConfig &_config,
-                         const Rest &_rest = Rest(),
-                         LocalCache *_cache = nullptr);
+      public: IGN_DEPRECATED(6) FuelClient(const ClientConfig &_config,
+                                           const Rest &_rest,
+                                           LocalCache *_cache);
 
       /// \brief Destructor
       public: ~FuelClient();
@@ -177,9 +184,7 @@ namespace ignition
       /// \brief Remove a model from ignition fuel
       /// \param[in] _id The model identifier.
       /// \return Result of the delete operation
-      /// Deprecate this function in ign-fuel-tools6. DeleteUrl
-      /// replaces this function.
-      public: Result DeleteModel(const ModelIdentifier &_id);
+      public: Result IGN_DEPRECATED(6) DeleteModel(const ModelIdentifier &_id);
 
       /// \brief Remove a resource, such as a model or world, from Ignition Fuel
       /// \param[in] _uri The full URI of the resource, e.g:
