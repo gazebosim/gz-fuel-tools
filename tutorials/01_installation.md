@@ -12,19 +12,16 @@ Instructions to install Ignition Fuel Tools on all the platforms supported.
 
 Setup your computer to accept software from
 *packages.osrfoundation.org*:
-
 ```
 sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
 ```
 
 Setup keys:
-
 ```
 wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 ```
 
 Install Ignition Fuel Tools:
-
 ```
 sudo apt-get update
 sudo apt-get install libignition-fuel-tools4-dev
@@ -43,13 +40,11 @@ Here are the instructions:
 
 Install homebrew, which should also prompt you to install the XCode
 command-line tools:
-
 ```
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
 Run the following commands:
-
 ```
 brew tap osrf/simulation
 brew install ignition-fuel-tools4
@@ -61,7 +56,6 @@ Install [Conda package management system](https://docs.conda.io/projects/conda/e
 Miniconda suffices.
 
 Create if necessary, and activate a Conda environment:
-
 ```
 conda create -n ign-ws
 conda activate ign-ws
@@ -113,23 +107,20 @@ cd build
 Configure Ignition Fuel Tools (choose either method a or b below):
 
 * A.  Release mode: This will generate optimized code, but will not have debug symbols. Use this mode if you don't need to use GDB.
+  ```
+  cmake ../
+  ```
 
-    ```
-    cmake ../
-    ```
-
-    Note: You can use a custom install path to make it easier to switch
-    between source and debian installs:
-
-    ```
-    cmake -DCMAKE_INSTALL_PREFIX=/home/$USER/local ../
-    ```
+  Note: You can use a custom install path to make it easier to switch
+  between source and debian installs:
+  ```
+  cmake -DCMAKE_INSTALL_PREFIX=/home/$USER/local ../
+  ```
 
 * B. Debug mode: This will generate code with debug symbols. Ignition Fuel Tools will run slower, but you'll be able to use GDB.
-
-    ```
-    cmake -DCMAKE_BUILD_TYPE=Debug ../
-    ```
+  ```
+  cmake -DCMAKE_BUILD_TYPE=Debug ../
+  ```
 
 The output from `cmake ../` may generate a number of errors and warnings
 about missing packages. You must install the missing packages that have
@@ -139,26 +130,22 @@ in which you installed prerequisites).
 
 Make note of your install path, which is output from cmake and should
 look something like:
-
 ```
 -- Install prefix: /home/$USER/local
 ```
 
 Build Ignition Fuel Tools:
-
 ```
 make -j4
 ```
 
 Install Ignition Fuel Tools:
-
 ```
 sudo make install
 ```
 
 If you decide to install the library in a local directory you'll need to
 modify your `LD_LIBRARY_PATH`:
-
 ```
 echo "export LD_LIBRARY_PATH=<install_path>/local/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
 ```
@@ -169,7 +156,6 @@ If you need to uninstall Ignition Fuel Tools or switch back to a
 debian-based install when you currently have installed the library from
 source, navigate to your source code directory's build folders and run
 `make uninstall`:
-
 ```
 cd /tmp/ign-fuel-tools/build
 sudo make uninstall
@@ -184,14 +170,12 @@ First, follow the [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) tut
 Navigate to ``condabin`` if necessary to use the ``conda`` command (i.e., if Conda is not in your `PATH` environment variable. You can find the location of ``condabin`` in Anaconda Prompt, ``where conda``).
 
 Create if necessary, and activate a Conda environment:
-
 ```
 conda create -n ign-ws
 conda activate ign-ws
 ```
 
 Install dependencies:
-
 ```
 conda install jsoncpp libzip --channel conda-forge
 ```
@@ -199,13 +183,11 @@ conda install jsoncpp libzip --channel conda-forge
 Install Ignition dependencies:
 
 You can view available versions and their dependencies:
-
 ```
 conda search libignition-fuel-tools* --channel conda-forge --info
 ```
 
 Install Ignition dependencies, replacing `<#>` with the desired versions:
-
 ```
 conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> libignition-tools<#> --channel conda-forge
 ```
@@ -216,11 +198,13 @@ conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> lib
   ```
   conda activate ign-ws
   ```
+
 2. Navigate to where you would like to build the library, and clone the repository.
   ```
   # Optionally, append `-b ign-fuel-tools#` (replace # with a number) to check out a specific version
   git clone https://github.com/ignitionrobotics/ign-fuel-tools.git
   ```
+
 3. Configure and build
   ```
   cd ign-fuel-tools
@@ -229,7 +213,9 @@ conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> lib
   cmake .. -DBUILD_TESTING=OFF  # Optionally, -DCMAKE_INSTALL_PREFIX=path\to\install
   cmake --build . --config Release
   ```
+
 4. Optionally, install. You wil likely need to run a terminal with admin privileges for this call to succeed.
   ```
   cmake --install . --config Release
   ```
+
