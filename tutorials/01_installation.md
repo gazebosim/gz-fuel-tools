@@ -229,7 +229,7 @@ conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> lib
   cmake .. -DBUILD_TESTING=OFF  # Optionally, -DCMAKE_INSTALL_PREFIX=path\to\install
   cmake --build . --config Release
   ```
-4. Optionally, install
+4. Optionally, install. You wil likely need to run a terminal with admin privileges for this call to succeed.
   ```
   cmake --install . --config Release
   ```
