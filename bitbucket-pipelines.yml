@@ -16,7 +16,7 @@ pipelines:
             git libcurl4-openssl-dev libjsoncpp-dev libzip-dev libgflags-dev libtinyxml2-dev
             lcov curl libyaml-dev
             libignition-cmake2-dev
-            libignition-common3-dev
+            libignition-common4-dev
             libignition-math6-dev
             # libignition-msgs5-dev
           # Ignition tools
