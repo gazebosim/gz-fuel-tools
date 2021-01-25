@@ -11,7 +11,7 @@ call %win_lib% :download_unzip_install libzip-1.4.0_zlip-1.2.11_vc15-x64-dll-MD.
 call %win_lib% :install_ign_project ign-cmake ign-cmake2
 call %win_lib% :install_ign_project ign-tools ign-tools1
 call %win_lib% :install_ign_project ign-common ign-common3
-call %win_lib% :install_ign_project ign-msgs master
+call %win_lib% :install_ign_project ign-msgs ign-msgs6
 
 :: Set configuration variables
 @set build_type=Release
