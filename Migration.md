@@ -1,3 +1,20 @@
+## Ignition Fuel Tools 5.X to 6.X
+
+### Deprecations
+
+* **Deprecation**: `FuelClient::DeleteModel`
+* **Replacement**: `FielClient::DeleteUrl`
+
+* **Deprecation**: `FuelClient` constructor that takes `LocalCache`
+* **Replacement**: `FielClient` constructor without `LocalCache`
+
+## Ignition Fuel Tools 4.X to 5.X
+
+### Deprecations
+
+* **Deprecation**: `LocalCache`
+* **Replacement**: None
+
 ## Ignition Fuel Tools 3.X to 4.X
 
 ### Modifications
