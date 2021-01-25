@@ -57,7 +57,10 @@ COMMANDS = { 'fuel' =>
   "  -v [ --verbose ] [arg]   Adjust the level of console output (0~4).    \n"\
   "                           The default verbosity is 1, use -v without   \n"\
   "                           arguments for level 3.                       \n" +
-  COMMON_OPTIONS
+  COMMON_OPTIONS + "\n\n" +
+  "Environment variables:                                                  \n"\
+  "  IGN_FUEL_CACHE_PATH      Path to the cache where resources are        \n"\
+  " downloaded to. Defaults to $HOME/.ignition/fuel                        \n"
 }
 
 SUBCOMMANDS = {
