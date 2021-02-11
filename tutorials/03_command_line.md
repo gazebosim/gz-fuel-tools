@@ -88,6 +88,24 @@ Downloading world:
 Download succeeded.
 ```
 
+If the model is privated you can create a config file with your token. For example, create a file
+`/tmp/my_config.yaml` with the following content and edit your token:
+
+```yaml
+---
+# The list of servers.
+servers:
+  -
+    url: https://fuel.ignitionrobotics.org
+    private-token: <your private token>
+```
+
+Then try to download the model:
+
+```bash
+ign fuel download -v 4 -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty -c /tmp/my_config.yaml
+```
+
 Worlds downloaded with the tool get conveniently organized into the same
 directory, which we call the "local cache". The path is broken down as follows:
 

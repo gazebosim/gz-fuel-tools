@@ -13,7 +13,10 @@ Test coverage reports are available at Codecov:
 
 # Building and installing
 
-See the [installation tutorial](https://ignitionrobotics.org/api/fuel_tools/4.0/install.html).
+See the [installation tutorial](https://ignitionrobotics.org/api/fuel_tools/5.0/install.html).
+
+Make sure `IGN_CONFIG_PATH` is set to the right install location so that `ign fuel` will work.
+Default is `/usr/local/share/ignition`.
 
 ## Examples
 

@@ -288,8 +288,11 @@ Result FuelClient::ModelDetails(const ModelIdentifier &_id,
   common::URIPath path;
   path = path / _id.Owner() / "models" / _id.Name();
 
+  std::vector<std::string> headersIncludingServerConfig = _headers;
+  AddServerConfigParametersToHeaders(
+    _id.Server(), headersIncludingServerConfig);
   resp = rest.Request(HttpMethod::GET, serverUrl, version,
-      path.Str(), {}, _headers, "");
+      path.Str(), {}, headersIncludingServerConfig, "");
   if (resp.statusCode != 200)
     return Result(ResultType::FETCH_ERROR);
 
@@ -450,9 +453,13 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
   if (!this->dataPtr->FillModelForm(_pathToModelDir, _id, _private, form))
     return Result(ResultType::UPLOAD_ERROR);
 
+  std::vector<std::string> headersIncludingServerConfig = _headers;
+  AddServerConfigParametersToHeaders(
+    _id.Server(), headersIncludingServerConfig);
   // Send the request.
   resp = rest.Request(HttpMethod::POST_FORM, _id.Server().Url().Str(),
-      _id.Server().Version(), "models", {}, _headers, "", form);
+      _id.Server().Version(), "models", {},
+      headersIncludingServerConfig, "", form);
 
   if (resp.statusCode != 200)
   {
@@ -489,6 +496,27 @@ Result FuelClient::DeleteModel(const ModelIdentifier &)
   return Result(ResultType::DELETE_ERROR);
 }
 
+void FuelClient::AddServerConfigParametersToHeaders(
+  const ignition::fuel_tools::ServerConfig &_serverConfig,
+  std::vector<std::string> &_headers) const
+{
+  bool privateTokenDefined = false;
+  for (auto header : _headers)
+  {
+    if (header.find("Private-token:") != std::string::npos)
+    {
+      privateTokenDefined = true;
+    }
+  }
+  if (!privateTokenDefined)
+  {
+    if (!_serverConfig.ApiKey().empty())
+    {
+      _headers.push_back("Private-token: " + _serverConfig.ApiKey());
+    }
+  }
+}
+
 //////////////////////////////////////////////////
 Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
     const std::vector<std::string> &_headers)
@@ -504,6 +532,7 @@ Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
 
   ModelIdentifier modelId;
   WorldIdentifier worldId;
+  std::vector<std::string> headersIncludingServerConfig = _headers;
   if (this->ParseModelUrl(_uri, modelId))
   {
     type = "model";
@@ -511,6 +540,8 @@ Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
     server = modelId.Server().Url().Str();
     version = modelId.Server().Version();
     path = path / modelId.Owner() / "models" / modelId.Name();
+    AddServerConfigParametersToHeaders(
+      modelId.Server(), headersIncludingServerConfig);
   }
   else if (this->ParseWorldUrl(_uri, worldId))
   {
@@ -519,6 +550,8 @@ Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
     server = worldId.Server().Url().Str();
     version = worldId.Server().Version();
     path = path / worldId.Owner() / "worlds" / worldId.Name();
+    AddServerConfigParametersToHeaders(
+      worldId.Server(), headersIncludingServerConfig);
   }
   else
   {
@@ -528,7 +561,7 @@ Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
 
   // Send the request.
   resp = rest.Request(HttpMethod::DELETE, server, version, path.Str(), {},
-      _headers, "", {});
+      headersIncludingServerConfig, "", {});
 
   if (resp.statusCode != 200)
   {
@@ -572,11 +605,15 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
 
   ignmsg << "Downloading model [" << _id.UniqueName() << "]" << std::endl;
 
+  std::vector<std::string> headersIncludingServerConfig = _headers;
+  AddServerConfigParametersToHeaders(
+    _id.Server(), headersIncludingServerConfig);
   // Request
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
-      _id.Server().Version(), route.Str(), {}, _headers, "");
+      _id.Server().Version(), route.Str(), {},
+      headersIncludingServerConfig, "");
   if (resp.statusCode != 200)
   {
     ignerr << "Failed to download model." << std::endl
@@ -684,11 +721,16 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
 
   ignmsg << "Downloading world [" << _id.UniqueName() << "]" << std::endl;
 
+  std::vector<std::string> headersIncludingServerConfig;
+  AddServerConfigParametersToHeaders(
+    _id.Server(), headersIncludingServerConfig);
+
   // Request
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
-      _id.Server().Version(), route.Str(), {}, {}, "");
+      _id.Server().Version(), route.Str(), {},
+      headersIncludingServerConfig, "");
   if (resp.statusCode != 200)
   {
     ignerr << "Failed to download world." << std::endl
@@ -1290,8 +1332,11 @@ Result FuelClient::PatchModel(
     form.emplace("private", _model.Private() ? "1" : "0");
   }
 
+  std::vector<std::string> headersIncludingServerConfig = _headers;
+  AddServerConfigParametersToHeaders(
+    _model.Server(), headersIncludingServerConfig);
   resp = rest.Request(HttpMethod::PATCH_FORM, serverUrl, version,
-      path.Str(), {}, _headers, "", form);
+      path.Str(), {}, headersIncludingServerConfig, "", form);
 
   if (resp.statusCode != 200)
     return Result(ResultType::PATCH_ERROR);
