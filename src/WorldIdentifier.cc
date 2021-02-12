@@ -23,6 +23,7 @@
 #include <ignition/common/Util.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
 using namespace ignition;
@@ -79,7 +80,7 @@ WorldIdentifier::~WorldIdentifier()
 //////////////////////////////////////////////////
 std::string WorldIdentifier::UniqueName() const
 {
-  return common::joinPaths(this->dataPtr->server.Url().Path().Str(),
+  return common::joinPaths(uriToPath(this->dataPtr->server.Url()),
                            this->dataPtr->owner,
                            "worlds",
                            this->dataPtr->name);

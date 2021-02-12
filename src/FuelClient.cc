@@ -40,6 +40,7 @@
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/CollectionIdentifier.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
+#include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/JSONParser.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
@@ -1099,8 +1100,8 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   }
 
   _path = ignition::common::joinPaths(this->Config().CacheLocation(),
-      id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
-      id.VersionStr());
+       uriToPath(id.Server().Url()), id.Owner(), "models", id.Name(),
+       id.VersionStr());
 
   return result;
 }

@@ -2,6 +2,7 @@ set (sources
   ClientConfig.cc
   CollectionIdentifier.cc
   FuelClient.cc
+  Helpers.cc
   ign.cc
   Interface.cc
   JSONParser.cc
@@ -22,6 +23,7 @@ set (gtest_sources
   FuelClient_TEST.cc
   ign_src_TEST.cc
   Interface_TEST.cc
+  Helpers_TEST.cc
   JSONParser_TEST.cc
   LocalCache_TEST.cc
   ModelIdentifier_TEST.cc

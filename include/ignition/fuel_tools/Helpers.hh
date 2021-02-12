@@ -19,6 +19,7 @@
 #define IGNITION_FUEL_TOOLS_HELPERS_HH_
 
 #include <string>
+#include <ignition/common/URI.hh>
 #include <ignition/fuel_tools/Export.hh>
 
 // Use safer functions on Windows
@@ -34,5 +35,19 @@
   #define ign_strdup strdup
 #endif
 
+namespace ignition
+{
+namespace fuel_tools
+{
+/// \brief Convert a URI to a string suitable to use as a path on disk.
+/// It strips the scheme and authority's `//` prefix.
+/// \param[in] _uri URI to convert.
+/// \return String suitable to use in file paths
+IGNITION_FUEL_TOOLS_VISIBLE
+std::string uriToPath(const ignition::common::URI &_uri);
+}
+}
+
 // IGNITION_FUEL_TOOLS_HELPERS_HH_
 #endif
+

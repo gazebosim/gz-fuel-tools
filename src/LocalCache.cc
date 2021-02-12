@@ -34,6 +34,7 @@
 #include <ignition/common/Util.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
+#include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/Zip.hh"
 
@@ -231,7 +232,8 @@ ModelIter LocalCache::AllModels()
     for (auto &server : this->dataPtr->config->Servers())
     {
       std::string path = common::joinPaths(
-          this->dataPtr->config->CacheLocation(), server.Url().Path().Str());
+          this->dataPtr->config->CacheLocation(), uriToPath(server.Url()));
+
       auto srvModels = this->dataPtr->ModelsInServer(path);
       for (auto &mod : srvModels)
       {
@@ -254,7 +256,7 @@ WorldIter LocalCache::AllWorlds() const
     for (auto &server : this->dataPtr->config->Servers())
     {
       std::string path = common::joinPaths(
-          this->dataPtr->config->CacheLocation(), server.Url().Path().Str());
+          this->dataPtr->config->CacheLocation(), uriToPath(server.Url()));
 
       // Make sure the server info is correct
       auto srvWorlds = this->dataPtr->WorldsInServer(path);
@@ -386,7 +388,7 @@ bool LocalCache::SaveModel(
   std::string cacheLocation = this->dataPtr->config->CacheLocation();
 
   std::string modelRootDir = common::joinPaths(cacheLocation,
-      _id.Server().Url().Path().Str(), _id.Owner(), "models", _id.Name());
+      uriToPath(_id.Server().Url()), _id.Owner(), "models", _id.Name());
   std::string modelVersionedDir =
     common::joinPaths(modelRootDir, _id.VersionStr());
 
