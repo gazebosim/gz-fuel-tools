@@ -36,7 +36,7 @@ std::string ignition::fuel_tools::uriToPath(const common::URI &_uri)
     return path;
   }
 
-  auto authority = (*_uri.Authority()).Str();
+  auto authority = _uri.Authority()->Str();
   if (authority.find("//") == 0)
   {
     authority = authority.substr(2);
