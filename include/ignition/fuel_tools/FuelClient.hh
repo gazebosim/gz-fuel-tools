@@ -23,7 +23,6 @@
 #include <vector>
 #include <ignition/common/URI.hh>
 
-#include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/ModelIter.hh"
 #include "ignition/fuel_tools/RestClient.hh"
 #include "ignition/fuel_tools/Result.hh"

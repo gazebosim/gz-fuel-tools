@@ -87,7 +87,7 @@ void createLocalModel(ClientConfig &_conf)
   }
 
   ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(common::URI("http://localhost:8007"));
+  srv.SetUrl(common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
 
@@ -117,7 +117,7 @@ void createLocalWorld(ClientConfig &_conf)
   }
 
   ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(ignition::common::URI("http://localhost:8007"));
+  srv.SetUrl(ignition::common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
 
