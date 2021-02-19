@@ -16,16 +16,52 @@
 */
 
 #include <gtest/gtest.h>
+#include <ignition/common/Filesystem.hh>
 #include "ignition/fuel_tools/Helpers.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
-TEST(HelpersTEST, uriToPath)
+TEST(HelpersTEST, UriToPathNoAuthority)
 {
-  common::URI uri{"http://localhost:8000"};
-  EXPECT_EQ("localhost:8000", uriToPath(uri));
+  {
+    common::URI uri{"http://localhost:8000"};
+    EXPECT_EQ("localhost:8000", uriToPath(uri));
+  }
+
+  {
+    common::URI uri{"http://localhost:8000/some/path"};
+    EXPECT_EQ(common::joinPaths("localhost:8000", "some", "path"),
+        uriToPath(uri));
+  }
+
+  {
+    common::URI uri{"http://localhost:8000/some/path/"};
+    EXPECT_EQ(common::separator(common::joinPaths("localhost:8000", "some",
+        "path")), uriToPath(uri));
+  }
+}
+
+/////////////////////////////////////////////////
+TEST(HelpersTEST, UriToPathHasAuthority)
+{
+  {
+    common::URI uri{"http://localhost:8000", true};
+    EXPECT_EQ("localhost:8000", uriToPath(uri));
+  }
+
+  {
+    common::URI uri{"http://localhost:8000/some/path", true};
+    EXPECT_EQ(common::joinPaths("localhost:8000", "some", "path"),
+        uriToPath(uri));
+  }
+
+  {
+    common::URI uri{"http://localhost:8000/some/path/", true};
+    EXPECT_EQ(common::separator(common::joinPaths("localhost:8000", "some",
+        "path")), uriToPath(uri));
+  }
 }
 
 //////////////////////////////////////////////////

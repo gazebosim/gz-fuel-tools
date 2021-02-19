@@ -386,39 +386,33 @@ TEST(ServerConfig, Url)
     ServerConfig srv;
     srv.SetUrl(common::URI("http://banana:8080"));
     EXPECT_EQ("http://banana:8080", srv.Url().Str());
-    EXPECT_EQ("", srv.Url().PathSegments().Str());
     EXPECT_EQ("http", srv.Url().Scheme());
-    EXPECT_EQ("//banana:8080", srv.Url().Authority().Str());
-    EXPECT_EQ("banana", srv.Url().Authority().Host());
-    EXPECT_EQ(8080, srv.Url().Authority().Port());
+    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
+    EXPECT_TRUE(srv.Url().Authority().Str().empty());
   }
 
   // Trailing /
   {
     ServerConfig srv;
     srv.SetUrl(common::URI("http://banana:8080/"));
-    EXPECT_EQ("http://banana:8080/", srv.Url().Str());
-    EXPECT_EQ("/", srv.Url().PathSegments().Str());
+    EXPECT_EQ("http://banana:8080", srv.Url().Str());
     EXPECT_EQ("http", srv.Url().Scheme());
-    EXPECT_EQ("//banana:8080", srv.Url().Authority().Str());
-    EXPECT_EQ("banana", srv.Url().Authority().Host());
-    EXPECT_EQ(8080, srv.Url().Authority().Port());
+    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
+    EXPECT_TRUE(srv.Url().Authority().Str().empty());
   }
 
   // Set from URI
   {
     auto url = common::URI();
     url.SetScheme("http");
-    url.Authority() = common::URIAuthority("//banana:8080");
+    url.Path() = common::URIPath("banana:8080");
 
     ServerConfig srv;
     srv.SetUrl(url);
     EXPECT_EQ("http://banana:8080", srv.Url().Str());
-    EXPECT_EQ("//banana:8080", srv.Url().Authority().Str());
-    EXPECT_EQ("", srv.Url().PathSegments().Str());
     EXPECT_EQ("http", srv.Url().Scheme());
-    EXPECT_EQ("banana", srv.Url().Authority().Host());
-    EXPECT_EQ(8080, srv.Url().Authority().Port());
+    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
+    EXPECT_TRUE(srv.Url().Authority().Str().empty());
   }
 }
 

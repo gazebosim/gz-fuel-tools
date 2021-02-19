@@ -14,7 +14,7 @@
  * limitations under the License.
  *
 */
-
+#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel_tools/Helpers.hh"
@@ -25,13 +25,22 @@ using namespace fuel_tools;
 //////////////////////////////////////////////////
 std::string ignition::fuel_tools::uriToPath(const common::URI &_uri)
 {
+  auto path = _uri.Path().Str();
+  if (_uri.Path().IsAbsolute())
+  {
+    path = path.substr(1);
+  }
+
+  if (!_uri.HasAuthority())
+  {
+    return path;
+  }
+
   auto authority = _uri.Authority().Str();
   if (authority.find("//") == 0)
   {
     authority = authority.substr(2);
   }
-
-  auto path = _uri.PathSegments().Str();
 
   if (authority.empty())
   {

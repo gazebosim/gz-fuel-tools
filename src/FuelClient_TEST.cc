@@ -173,13 +173,14 @@ TEST_F(FuelClientTest, ParseModelURL)
   // * with client config
   // * with server API version different from config
   // * with model version
+  // * with trailing /
   {
     ClientConfig config;
 
     FuelClient client(config);
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/5.0/german/models/Cardboard Box/6"};
+      "https://fuel.ignitionrobotics.org/5.0/german/models/Cardboard Box/6/"};
     EXPECT_TRUE(client.ParseModelUrl(ignition::common::URI(url), id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
@@ -801,13 +802,14 @@ TEST_F(FuelClientTest, ParseWorldUrl)
   // * with client config
   // * without server API version
   // * with world version `tip`
+  // * with trailing /
   {
     ClientConfig config;
 
     FuelClient client(config);
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/german/worlds/Cardboard Box/tip"};
+      "https://fuel.ignitionrobotics.org/german/worlds/Cardboard Box/tip/"};
     EXPECT_TRUE(client.ParseWorldUrl(url, id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
