@@ -40,6 +40,7 @@
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/CollectionIdentifier.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
+#include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/JSONParser.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
@@ -71,7 +72,9 @@ class ignition::fuel_tools::FuelClientPrivate
     // Name
     "([^\\/]+)\\/*"
     // Version
-    "([0-9]*|tip)"};
+    "([0-9]*|tip)"
+    // Trailing /
+    "/?"};
 
   /// \brief A world URL,
   /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/1
@@ -90,7 +93,9 @@ class ignition::fuel_tools::FuelClientPrivate
     // Name
     "([^\\/]+)\\/*"
     // Version
-    "([0-9]*|tip)"};
+    "([0-9]*|tip)"
+    // Trailing /
+    "/?"};
 
   /// \brief A model file URL,
   /// E.g.: https://server.org/1.0/owner/models/modelname/files/meshes/mesh.dae
@@ -113,7 +118,9 @@ class ignition::fuel_tools::FuelClientPrivate
     // "files"
     "files\\/+"
     // File path
-    "(.*)"};
+    "(.*)"
+    // Trailing /
+    "/?"};
 
   /// \brief A world file URL,
   /// E.g.: https://server.org/1.0/owner/worlds/worldname/files/meshes/mesh.dae
@@ -136,7 +143,9 @@ class ignition::fuel_tools::FuelClientPrivate
     // "files"
     "files\\/+"
     // File path
-    "(.*)"};
+    "(.*)"
+    // Trailing /
+    "/?"};
 
   /// \brief A collection URL,
   /// E.g.:
@@ -750,8 +759,6 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   std::string modelName;
   std::string modelVersion;
 
-  std::regex_match(urlStr, match, *this->dataPtr->urlModelRegex);
-
   if (std::regex_match(urlStr, match, *this->dataPtr->urlModelRegex) &&
       match.size() >= 5u)
   {
@@ -817,8 +824,6 @@ bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
   std::string owner;
   std::string worldName;
   std::string worldVersion;
-
-  std::regex_match(urlStr, match, *this->dataPtr->urlWorldRegex);
 
   if (std::regex_match(urlStr, match, *this->dataPtr->urlWorldRegex) &&
       match.size() >= 5u)

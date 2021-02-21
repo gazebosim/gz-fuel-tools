@@ -388,6 +388,7 @@ TEST(ServerConfig, Url)
     EXPECT_EQ("http://banana:8080", srv.Url().Str());
     EXPECT_EQ("http", srv.Url().Scheme());
     EXPECT_EQ("banana:8080", srv.Url().Path().Str());
+    EXPECT_FALSE(srv.Url().Authority());
   }
 
   // Trailing /
@@ -395,6 +396,9 @@ TEST(ServerConfig, Url)
     ServerConfig srv;
     srv.SetUrl(common::URI("http://banana:8080/"));
     EXPECT_EQ("http://banana:8080", srv.Url().Str());
+    EXPECT_EQ("http", srv.Url().Scheme());
+    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
+    EXPECT_FALSE(srv.Url().Authority());
   }
 
   // Set from URI
@@ -408,6 +412,7 @@ TEST(ServerConfig, Url)
     EXPECT_EQ("http://banana:8080", srv.Url().Str());
     EXPECT_EQ("http", srv.Url().Scheme());
     EXPECT_EQ("banana:8080", srv.Url().Path().Str());
+    EXPECT_FALSE(srv.Url().Authority());
   }
 }
 
