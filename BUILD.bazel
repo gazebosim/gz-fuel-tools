@@ -1,8 +1,8 @@
 load(
     "//ign_bazel:build_defs.bzl",
+    "IGNITION_FEATURES",
     "IGNITION_ROOT",
     "IGNITION_VISIBILITY",
-    "IGNITION_FEATURES",
     "cmake_configure_file",
     "generate_include_header",
     "generate_yaml",
@@ -69,42 +69,18 @@ private_headers = [
     "src/WorldIterPrivate.hh",
 ]
 
-sources = [
-    "src/ClientConfig.cc",
-    "src/CollectionIdentifier.cc",
-    "src/FuelClient.cc",
-    "src/ign.cc",
-    "src/Interface.cc",
-    "src/JSONParser.cc",
-    "src/LocalCache.cc",
-    "src/Model.cc",
-    "src/ModelIdentifier.cc",
-    "src/ModelIter.cc",
-    "src/RestClient.cc",
-    "src/Result.cc",
-    "src/WorldIdentifier.cc",
-    "src/WorldIter.cc",
-    "src/Zip.cc",
-]
+sources = glob(
+    ["src/*.cc"],
+    exclude = [
+        "src/*_TEST.cc",
+        "src/ign.cc",
+    ],
+)
 
-test_sources = [
-    "src/ClientConfig_TEST.cc",
-    "src/FuelClient_TEST.cc",
-    "src/ign_src_TEST.cc",
-    # "src/ign_TEST.cc",
-    # Below test fails due to URL 404, not the code/build
-    #"src/Interface_TEST.cc",
-    "src/JSONParser_TEST.cc",
-    "src/LocalCache_TEST.cc",
-    "src/ModelIdentifier_TEST.cc",
-    "src/ModelIter_TEST.cc",
-    "src/Model_TEST.cc",
-    "src/RestClient_TEST.cc",
-    "src/Result_TEST.cc",
-    "src/WorldIdentifier_TEST.cc",
-    "src/WorldIter_TEST.cc",
-    "src/Zip_TEST.cc",
-]
+test_sources = glob(
+    ["src/*_TEST.cc"],
+    exclude = ["src/ign_*.cc"],
+)
 
 generate_include_header(
     name = "fuel_toolshh_genrule",
@@ -119,34 +95,30 @@ public_headers = public_headers_no_gen + [
     "include/ignition/fuel_tools/config.hh",
     "include/ignition/fuel_tools/Export.hh",
     "include/ignition/fuel_tools.hh",
-    "src/ign.hh",
 ]
 
 cc_library(
     name = "ign_fuel_tools",
     srcs = sources + private_headers + public_headers,
-    copts = [
-        "-Iexternal/json",
-    ],
     includes = ["include"],
-    linkopts = [
-        "-lyaml",
-        "-ljsoncpp",
-        "-lcurl",
-        "-lzip",
-    ],
     deps = [
         IGNITION_ROOT + "ign_common",
         IGNITION_ROOT + "ign_msgs",
         IGNITION_ROOT + "ign_bazel:utilities",
-        "@json//:headers",
+        "@curl",
+        "@json",
+        "@yaml",
+        "@zip",
     ],
 )
 
 cc_binary(
-    name = "libignition-fuel-tools5.so",
+    name = "libignition-fuel-tools.so",
+    srcs = [
+        "src/ign.cc",
+        "src/ign.hh",
+    ],
     includes = ["include"],
-    linkopts = ["-Wl,-soname,libignition-fuel-tools5.so"],
     linkshared = True,
     deps = [
         ":ign_fuel_tools",
@@ -165,4 +137,24 @@ cc_binary(
     ],
 ) for src in test_sources]
 
-exports_files(["src/cmd/cmdfuel.rb.in"])
+cmake_configure_file(
+    name = "fuel.rb",
+    src = "src/cmd/cmdfuel.rb.in",
+    out = "cmdfuel.rb",
+    cmakelists = ["CMakeLists.txt"],
+    defines = [
+        "library_location=libignition-fuel-tools.so",
+        "PROJECT_VERSION_FULL=%d.%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),  # noqa
+        "IGN_LIBRARY_NAME=%s" % PROJECT_NAME,
+    ],
+)
+
+CMDS = "    - fuel   : Manage simulation resources."
+
+generate_yaml(
+    name = "fuel",
+    commands = CMDS,
+    library_name = PROJECT_NAME,
+    library_version = "%d.%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),
+    ruby_target = "fuel.rb",
+)
