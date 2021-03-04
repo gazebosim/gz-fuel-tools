@@ -381,6 +381,13 @@ namespace ignition
       public: bool ParseCollectionUrl(const common::URI &_url,
                                       CollectionIdentifier &_id);
 
+      /// \brief Checked if there is any header already specify
+      /// \param[in] _serverConfig Server configuration
+      /// \param[inout] _headers Vector with headers to check
+      private: void AddServerConfigParametersToHeaders(
+        const ignition::fuel_tools::ServerConfig &_serverConfig,
+        std::vector<std::string> &_headers) const;
+
       /// \brief PIMPL
       private: std::unique_ptr<FuelClientPrivate> dataPtr;
     };

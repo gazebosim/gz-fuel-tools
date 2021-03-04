@@ -4,32 +4,30 @@ Next Tutorial: \ref configuration
 
 ## Overview
 
-Instructions to install Ignition Fuel Tools on all the platforms
-supported: major Linux distributions, Mac OS X and Windows.
+Instructions to install Ignition Fuel Tools on all the platforms supported.
 
-## Ubuntu Linux
+## Binary Install
+
+### Ubuntu Linux
 
 Setup your computer to accept software from
 *packages.osrfoundation.org*:
-
-```{.sh}
+```
 sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
 ```
 
 Setup keys:
-
 ```
 wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 ```
 
 Install Ignition Fuel Tools:
-
 ```
 sudo apt-get update
 sudo apt-get install libignition-fuel-tools6-dev
 ```
 
-## Mac OS X
+### Mac OS X
 
 Ignition Fuel Tools and several of its dependencies can be compiled on OS
 X with [Homebrew](http://brew.sh/) using the [osrf/simulation
@@ -42,23 +40,39 @@ Here are the instructions:
 
 Install Homebrew, which should also prompt you to install the XCode
 command-line tools:
-
 ```
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
 Run the following commands:
-
 ```
 brew tap osrf/simulation
 brew install ignition-fuel-tools6
 ```
 
-## Windows
+### Windows
 
-At this moment, Windows instructions are not available.
+Install [Conda package management system](https://docs.conda.io/projects/conda/en/latest/user-guide/install/download.html).
+Miniconda suffices.
 
-## Install from sources (Ubuntu Linux)
+Create if necessary, and activate a Conda environment:
+```
+conda create -n ign-ws
+conda activate ign-ws
+```
+
+Install:
+
+```
+conda install libignition-fuel-tools<#> --channel conda-forge
+```
+
+Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+which version you need.
+
+## Source Install
+
+### Ubuntu Linux
 
 For compiling the latest version of Ignition Fuel Tools you will need an
 Ubuntu distribution equal to 16.04 (Xenial) or newer.
@@ -73,7 +87,7 @@ sudo apt-get remove libignition-fuel-tools6-dev
 Install prerequisites. A clean Ubuntu system will need:
 
 ```
-sudo apt-get install git cmake pkg-config python ruby-ronn libignition-cmake2-dev libignition-common4-dev libignition-msgs5-dev libignition-tools-dev libzip-dev libjsoncpp-dev libcurl4-openssl-dev libyaml-dev
+sudo apt-get install git cmake pkg-config python ruby-ronn libignition-cmake2-dev libignition-common4-dev libignition-math6-dev libignition-msgs7-dev libignition-tools-dev libzip-dev libjsoncpp-dev libcurl4-openssl-dev libyaml-dev
 ```
 
 Clone the repository into a directory and go into it:
@@ -92,20 +106,21 @@ cd build
 
 Configure Ignition Fuel Tools (choose either method a or b below):
 
-* **A**. Release mode: This will generate optimized code, but will not have debug symbols. Use this mode if you don't need to use GDB.
-```
-cmake ../
-```
-Note: You can use a custom install path to make it easier to switch
-between source and Debian installs:
-```
-cmake -DCMAKE_INSTALL_PREFIX=/home/$USER/local ../
-```
+* A.  Release mode: This will generate optimized code, but will not have debug symbols. Use this mode if you don't need to use GDB.
+  ```
+  cmake ../
+  ```
 
-* **B**. Debug mode: This will generate code with debug symbols. Ignition Fuel Tools will run slower, but you'll be able to use GDB.
-```
-cmake -DCMAKE_BUILD_TYPE=Debug ../
-```
+  Note: You can use a custom install path to make it easier to switch
+  between source and debian installs:
+  ```
+  cmake -DCMAKE_INSTALL_PREFIX=/home/$USER/local ../
+  ```
+
+* B. Debug mode: This will generate code with debug symbols. Ignition Fuel Tools will run slower, but you'll be able to use GDB.
+  ```
+  cmake -DCMAKE_BUILD_TYPE=Debug ../
+  ```
 
 The output from `cmake ../` may generate a number of errors and warnings
 about missing packages. You must install the missing packages that have
@@ -115,38 +130,92 @@ in which you installed prerequisites).
 
 Make note of your install path, which is output from cmake and should
 look something like:
-
 ```
 -- Install prefix: /home/$USER/local
 ```
 
 Build Ignition Fuel Tools:
-
 ```
 make -j4
 ```
 
 Install Ignition Fuel Tools:
-
 ```
 sudo make install
 ```
 
 If you decide to install the library in a local directory you'll need to
 modify your `LD_LIBRARY_PATH`:
-
 ```
 echo "export LD_LIBRARY_PATH=<install_path>/local/lib:$LD_LIBRARY_PATH" >> ~/.bashrc
 ```
 
-### Uninstalling Source-based Install
+#### Uninstalling Source Install
 
 If you need to uninstall Ignition Fuel Tools or switch back to a
 Debian-based install when you currently have installed the library from
 source, navigate to your source code directory's build folders and run
 `make uninstall`:
-
-\code
+```
 cd /tmp/ign-fuel-tools/build
 sudo make uninstall
-\endcode
+```
+
+### Windows
+
+#### Prerequisites
+
+First, follow the [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) tutorial for installing Conda, Visual Studio, CMake, etc., prerequisites, and creating a Conda environment.
+
+Navigate to ``condabin`` if necessary to use the ``conda`` command (i.e., if Conda is not in your `PATH` environment variable. You can find the location of ``condabin`` in Anaconda Prompt, ``where conda``).
+
+Create if necessary, and activate a Conda environment:
+```
+conda create -n ign-ws
+conda activate ign-ws
+```
+
+Install dependencies:
+```
+conda install jsoncpp libzip --channel conda-forge
+```
+
+Install Ignition dependencies:
+
+You can view available versions and their dependencies:
+```
+conda search libignition-fuel-tools* --channel conda-forge --info
+```
+
+Install Ignition dependencies, replacing `<#>` with the desired versions:
+```
+conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> libignition-tools<#> --channel conda-forge
+```
+
+#### Building from source
+
+1. Activate the Conda environment created in the prerequisites:
+  ```
+  conda activate ign-ws
+  ```
+
+2. Navigate to where you would like to build the library, and clone the repository.
+  ```
+  # Optionally, append `-b ign-fuel-tools#` (replace # with a number) to check out a specific version
+  git clone https://github.com/ignitionrobotics/ign-fuel-tools.git
+  ```
+
+3. Configure and build
+  ```
+  cd ign-fuel-tools
+  mkdir build
+  cd build
+  cmake .. -DBUILD_TESTING=OFF  # Optionally, -DCMAKE_INSTALL_PREFIX=path\to\install
+  cmake --build . --config Release
+  ```
+
+4. Optionally, install. You wil likely need to run a terminal with admin privileges for this call to succeed.
+  ```
+  cmake --install . --config Release
+  ```
+
