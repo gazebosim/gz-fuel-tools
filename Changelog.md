@@ -1,3 +1,19 @@
+## Ignition Fuel Tools 6.x
+
+### Ignition Fuel Tools 6.0.0 (20XX-XX-XX)
+
+1. Depend on ign-common4
+    * [Pull request #163](https://github.com/ignitionrobotics/ign-fuel-tools/pull/163)
+
+1. Depend on ign-msgs7
+    * [Pull request #158](https://github.com/ignitionrobotics/ign-fuel-tools/pull/158)
+
+1. Unset DELETE method on Windows
+    * [Pull request #161](https://github.com/ignitionrobotics/ign-fuel-tools/pull/161)
+
+1. Edifice deprecations
+    * [Pull request #159](https://github.com/ignitionrobotics/ign-fuel-tools/pull/159)
+
 ## Ignition Fuel Tools 5.x
 
 ### Ignition Fuel Tools 5.X.X (20XX-XX-XX)
