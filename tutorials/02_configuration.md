@@ -10,7 +10,7 @@ or programatically.
 
 Ignition Fuel Tools accepts a YAML file with the following syntax:
 
-```
+```yaml
 ---
 # The list of servers.
 servers:
@@ -42,7 +42,7 @@ file from a custom path programmatically. Let's see how.
 
 Create a file `/tmp/my_config.yaml` with the following content:
 
-```
+```yaml
 ---
 # The list of servers.
 servers:
@@ -57,39 +57,68 @@ cache:
 Now, let's use a program that downloads a resource from a server in the custom
 configuration file. Let's start by creating a directory for storing all files:
 
-```
+```bash
 mkdir /tmp/conf_tutorial && cd /tmp/conf_tutorial
 ```
 
 Download the file `download.cc` and save it under `/tmp/conf_tutorial`:
 
-```
+```bash
+# Ubuntu and MacOS
 wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/download.cc
+
+# Windows
+## CMD
+curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/download.cc -o download.cc
+## PowerShell
+curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/download.cc -o download.cc
 ```
 
 Also, download `CMakeLists.txt` for compiling the example:
 
-```
+```bash
+# Ubuntu and MacOS
 wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/CMakeLists.txt
+
+# Windows
+## CMD
+curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/CMakeLists.txt -o CMakeLists.txt
+## PowerShell
+curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/CMakeLists.txt -o CMakeLists.txt
 ```
 
 Install a dependency:
 ```
+# Ubuntu
 sudo apt-get install libgflags-dev
+# Windows
+conda install gflags  --channel conda-forge
 ```
 
 Let's compile the example:
 
-```
+```bash
 mkdir build && cd build
 cmake ..
+```
+
+```bash
+# Ubuntu and MacOS
 make
+
+# Windows
+cmake --build . --config Release
+cmake --install . --config Release
 ```
 
 And now the fun part, execute it:
 
 ```
+# Ubuntu and MacOs
 ./download -c /tmp/my_config.yaml -o caguero -n Beer -t model
+
+# Windows
+.\Release\download.exe -o caguero -n Beer -t model
 ```
 
 Verify that you have the model in
