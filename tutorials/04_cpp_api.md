@@ -9,26 +9,50 @@ resources of a particular server, get the details of a resource or download it.
 We're going to run a few examples, so let's start by creating a directory for
 this tutorial:
 
-```
+```bash
 mkdir /tmp/fuel_tutorial && cd /tmp/fuel_tutorial
 ```
 
 Download the files `list.cc`, `details.cc`, `download.cc`,
 `CMakeLists.txt`, and save them under `/tmp/fuel_tutorial`:
 
-```
+```bash
+# Ubuntu or MacOS
 wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/list.cc
 wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/details.cc
 wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/download.cc
 wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/CMakeLists.txt
+
+# Windows
+## CMD
+curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/list.cc -o list.cc
+curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/details.cc -o details.cc
+curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/download.cc -o download.cc
+curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/CMakeLists.txt -o CMakeLists.txt
+## PowerShell
+curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/list.cc -o list.cc
+curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/details.cc -o details.cc
+curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/download.cc -o download.cc
+curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools6/example/CMakeLists.txt -o CMakeLists.txt
 ```
 
 Let's start by compiling the examples:
 
-```
+```bash
 mkdir build && cd build
 cmake ..
+```
+
+### Ubuntu and MacOS
+
+```bash
 make
+```
+
+### Windows
+
+```bash
+cmake --build . --config Release
 ```
 
 ## List resources from a Fuel server
@@ -36,9 +60,14 @@ make
 Run the following example to see the list of models hosted in the default
 server:
 
-```
-./list -t model
-```
+### Ubuntu and MacOS
+
+`./list -t world`
+
+### Windows
+
+`.\Release\list.exe -t world`
+
 
 You should see the name of the server followed by its list of models. Here's an
 example:
@@ -99,7 +128,11 @@ Run the following example to see the details of a model hosted in the default
 server:
 
 ```
+# Ubuntu and MacOS
 ./details -o caguero -n Beer -t model
+
+# Windows
+.\Release\details.exe  -o caguero -n Beer -t model
 ```
 
 You should see the details of the model.
@@ -163,7 +196,6 @@ As usual, we're iterating over the list of servers. For each server, we
 use the `ModelDetails()` or `WorldDetails()` methods to retrieve most of the
 properties of the resource. Then if the resource is retrieved successfully, we
 use the `AsPrettyString()` method to print its information to the screen.
-
 
 ## Download a resource
 
