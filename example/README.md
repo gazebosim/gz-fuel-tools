@@ -2,7 +2,20 @@
 
 These examples demonstrate various Ignition Fuel tools features.
 
- conda install gflags  --channel conda-forge
+### Dependencies
+
+Remember to install the `gflags` dependency:
+
+#### Ubuntu
+
+```bash
+sudo apt-get install libgflags-dev
+```
+
+#### Windows
+```bash
+conda install gflags  --channel conda-forge
+```
 
 ## Build
 
@@ -10,7 +23,7 @@ After installing Ignition Fuel tools, from source or from binaries, build with:
 
 ```
 git clone https://github.com/ignitionrobotics/ign-fuel-tools/
-cd ign-fuel-tools/examples
+cd ign-fuel-tools/example
 mkdir build
 cd build
 cmake ..
@@ -23,14 +36,6 @@ make
 ```
 
 ### Windows
-
-Remember to install the `gflags` dependency:
-
-```bash
-conda install gflags  --channel conda-forge
-```
-
-Then
 
 ```bash
 cmake ..
