@@ -443,6 +443,14 @@ WorldIter FuelClient::Worlds(const CollectionIdentifier &_id) const
 //////////////////////////////////////////////////
 Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     const ModelIdentifier &_id, const std::vector<std::string> &_headers,
+    bool _private)
+{
+  return this->UploadModel(_pathToModelDir, _id, _headers, _private, "");
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::UploadModel(const std::string &_pathToModelDir,
+    const ModelIdentifier &_id, const std::vector<std::string> &_headers,
     bool _private, const std::string &_owner)
 {
   ignition::fuel_tools::Rest rest;
