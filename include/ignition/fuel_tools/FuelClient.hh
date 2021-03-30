@@ -172,7 +172,8 @@ namespace ignition
       public: Result UploadModel(const std::string &_pathToModelDir,
                                  const ModelIdentifier &_id,
                                  const std::vector<std::string> &_headers,
-                                 bool _private = false);
+                                 bool _private = false,
+                                 const std::string &_owner = "");
 
       /// \brief Remove a model from ignition fuel
       /// \param[in] _id The model identifier.
