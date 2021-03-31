@@ -986,6 +986,12 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
     return false;
   }
 
+  std::vector<std::string> tokens = ignition::common::split(file, "/");
+  std::string fileTemp;
+  for (auto s: tokens)
+    fileTemp = ignition::common::joinPaths(fileTemp, s);
+  file = fileTemp;
+
   // Get remaining server information from config
   _id.Server().SetUrl(common::URI(scheme + "://" + server));
   _id.Server().SetVersion(apiVersion);
@@ -1229,6 +1235,12 @@ Result FuelClient::CachedModelFile(const common::URI &_fileUrl,
 
   // Check if file exists
   filePath = common::joinPaths(modelPath, filePath);
+
+  std::vector<std::string> tokens = ignition::common::split(filePath, "/");
+  std::string sTemp;
+  for (auto s: tokens)
+    sTemp = ignition::common::joinPaths(sTemp, s);
+  filePath = sTemp;
 
   if (common::exists(filePath))
   {
