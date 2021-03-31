@@ -1,6 +1,8 @@
 ## Ignition Fuel Tools 6.x
 
-### Ignition Fuel Tools 6.0.0 (20XX-XX-XX)
+### Ignition Fuel Tools 6.X.X (20XX-XX-XX)
+
+### Ignition Fuel Tools 6.0.0 (2021-03-30)
 
 1. Depend on ign-common4
     * [Pull request #163](https://github.com/ignitionrobotics/ign-fuel-tools/pull/163)
@@ -13,6 +15,9 @@
 
 1. Edifice deprecations
     * [Pull request #159](https://github.com/ignitionrobotics/ign-fuel-tools/pull/159)
+
+1. Include windows instructions in examples README.md
+    * [Pull request #176](https://github.com/ignitionrobotics/ign-fuel-tools/pull/176)
 
 ## Ignition Fuel Tools 5.x
 
