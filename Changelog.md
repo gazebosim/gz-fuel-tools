@@ -1,3 +1,7 @@
+## Ignition Fuel Tools 7.x
+
+### Ignition Fuel Tools 7.0.0 (20XX-XX-XX)
+
 ## Ignition Fuel Tools 6.x
 
 ### Ignition Fuel Tools 6.0.0 (20XX-XX-XX)
