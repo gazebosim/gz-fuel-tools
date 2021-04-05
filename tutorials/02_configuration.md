@@ -16,6 +16,7 @@ Ignition Fuel Tools accepts a YAML file with the following syntax:
 servers:
   -
     url: https://fuel.ignitionrobotics.org
+    private-token: <your private token>
 
   # -
     # url: https://myserver
@@ -27,6 +28,7 @@ servers:
 
 The `servers` section specifies all Fuel servers to interact with.
 For each server, you must specify the URL to send the HTTP requests.
+If the server requires auth you can specify the token filling the optional field `private-token`.
 
 The `cache` section captures options related with the local storage of the
 assets. `path` specifies the local directory where all assets will be

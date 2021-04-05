@@ -1,19 +1,30 @@
-# Ignition Fuel Tools
+# Ignition Fuel Tools: Classes and tools for interacting with Ignition Fuel
 
-**Classes and tools for interacting with Ignition Fuel**
+**Maintainer:** nate AT openrobotics DOT org
+
+[![GitHub open issues](https://img.shields.io/github/issues-raw/ignitionrobotics/ign-fuel-tools.svg)](https://github.com/ignitionrobotics/ign-fuel-tools/issues)
+[![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/ignitionrobotics/ign-fuel-tools.svg)](https://github.com/ignitionrobotics/ign-fuel-tools/pulls)
+[![Discourse topics](https://img.shields.io/discourse/https/community.gazebosim.org/topics.svg)](https://community.gazebosim.org)
+[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+
+Build | Status
+-- | --
+Test coverage | [![codecov](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools/branch/ign-fuel-tools5/graph/badge.svg)](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools)
+Ubuntu Bionic | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-ign-fuel-tools5-bionic-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-ign-fuel-tools5-bionic-amd64)
+Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-ign-fuel-tools5-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-ign-fuel-tools5-homebrew-amd64)
+Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-ign-fuel-tools5-windows7-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-ign-fuel-tools5-windows7-amd64)
 
 Ignition Fuel Tools is composed by a client library and command line tools for
 interacting with Ignition Fuel servers.
 
   [http://github.com/ignitionrobotics/ign-fuel-tools](http://github.com/ignitionrobotics/ign-fuel-tools)
 
-Test coverage reports are available at Codecov:
-
-[![codecov](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools/branch/master/graph/badge.svg)](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools)
-
 # Building and installing
 
-See the [installation tutorial](https://ignitionrobotics.org/api/fuel_tools/4.0/install.html).
+See the [installation tutorial](https://ignitionrobotics.org/api/fuel_tools/5.0/install.html).
+
+Make sure `IGN_CONFIG_PATH` is set to the right install location so that `ign fuel` will work.
+Default is `/usr/local/share/ignition`.
 
 ## Examples
 
