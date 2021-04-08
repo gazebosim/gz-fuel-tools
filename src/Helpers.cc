@@ -14,6 +14,8 @@
  * limitations under the License.
  *
 */
+#include <regex>
+
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 
@@ -26,6 +28,18 @@ using namespace fuel_tools;
 std::string ignition::fuel_tools::uriToPath(const common::URI &_uri)
 {
   auto path = _uri.Path().Str();
+#ifdef _WIN32
+  path = std::regex_replace(path, std::regex(R"(/)"), "\\");
+  std::string drive_letters;
+  // only Windows contains absolute paths starting with drive letters
+  if (path.length() > 3 && 0 == path.compare(1, 2, ":\\"))
+  {
+    drive_letters = path.substr(0, 3);
+    path = path.substr(3);
+  }
+  path = drive_letters + std::regex_replace(path, std::regex("[<>:\"|?*]"), "");
+#endif
+
   if (_uri.Path().IsAbsolute())
   {
     path = path.substr(1);

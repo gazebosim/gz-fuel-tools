@@ -27,7 +27,7 @@ TEST(HelpersTEST, UriToPathNoAuthority)
 {
   {
     common::URI uri{"http://localhost:8000"};
-    EXPECT_EQ("localhost:8000", uriToPath(uri));
+    EXPECT_EQ(common::joinPaths("localhost:8000", ""), uriToPath(uri));
   }
 
   {
