@@ -226,7 +226,7 @@ class LocalCacheTest : public ::testing::Test
 /// \brief Iterate through all models in cache
 // Windows doesn't support colons in filenames
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
-TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
+TEST_F(LocalCacheTest, AllModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -245,10 +245,12 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
     uniqueNames.insert(iter->Identification().UniqueName());
     ++iter;
   }
+#ifndef _WIN32
   EXPECT_EQ(9u, uniqueNames.size());
 
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
       "http://localhost:8001/alice/models/am1"));
+#endif
 }
 
 /////////////////////////////////////////////////
@@ -256,7 +258,7 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
 /// \brief Iterate through all models in cache
 // Windows doesn't support colons in filenames
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
-TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingModels))
+TEST_F(LocalCacheTest, MatchingModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -284,7 +286,9 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingModels))
     uniqueNames.insert(iter->Identification().UniqueName());
     ++iter;
   }
+#ifndef _WIN32
   EXPECT_EQ(1u, uniqueNames.size());
+#endif
 
   am1.SetServer(conf.Servers().back());
   auto iter2 = cache.MatchingModels(am1);
@@ -296,7 +300,9 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingModels))
     uniqueNames.insert(iter2->Identification().UniqueName());
     ++iter2;
   }
+#ifndef _WIN32
   EXPECT_EQ(2u, uniqueNames.size());
+#endif
 }
 
 /////////////////////////////////////////////////
@@ -304,7 +310,7 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingModels))
 /// \brief Iterate through all models in cache
 // Windows doesn't support colons in filenames
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
-TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingModel))
+TEST_F(LocalCacheTest, MatchingModel)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -362,7 +368,7 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingModel))
 /// \brief Iterate through all models in cache
 // Windows doesn't support colons in filenames
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
-TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllWorlds))
+TEST_F(LocalCacheTest, AllWorlds)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -381,10 +387,11 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllWorlds))
     uniqueNames.insert(iter->UniqueName());
     ++iter;
   }
+#ifndef _WIN32
   EXPECT_EQ(9u, uniqueNames.size());
-
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
       "localhost:8001/alice/worlds/am1"));
+#endif
 }
 
 /////////////////////////////////////////////////
@@ -392,7 +399,7 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllWorlds))
 /// \brief Iterate through all models in cache
 // Windows doesn't support colons in filenames
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
-TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorlds))
+TEST_F(LocalCacheTest, MatchingWorlds)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
@@ -420,7 +427,9 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorlds))
     uniqueNames.insert(iter->UniqueName());
     ++iter;
   }
+#ifndef _WIN32
   EXPECT_EQ(1u, uniqueNames.size());
+#endif
 }
 
 /////////////////////////////////////////////////
@@ -428,7 +437,7 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorlds))
 /// \brief Iterate through all models in cache
 // Windows doesn't support colons in filenames
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
-TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorld))
+TEST_F(LocalCacheTest, MatchingWorld)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");

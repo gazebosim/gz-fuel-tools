@@ -35,11 +35,7 @@ using namespace fuel_tools;
 /// \param[in] _path Path to file to be removed.
 void removeFileTemp(const std::string &_path)
 {
-#ifndef _WIN32
-  EXPECT_TRUE(ignition::common::removeFile(_path));
-#else
   ignition::common::removeFile(_path);
-#endif
 }
 
 /////////////////////////////////////////////////
@@ -56,6 +52,20 @@ std::string homePath()
 #endif
 
   return homePath;
+}
+
+/////////////////////////////////////////////////
+/// \brief Get cache directory.
+/// \return Cache directory
+/// \ToDo: Move this function to ignition::common::Filesystem
+std::string cachePath()
+{
+  std::string cachePath;
+#ifndef _WIN32
+  return std::string("/tmp/ignition/fuel");
+#else
+  return std::string("C:\\Windows\\Temp");
+#endif
 }
 
 /////////////////////////////////////////////////
@@ -115,8 +125,9 @@ TEST(ClientConfig, CustomConfiguration)
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl
-      << "  path: /tmp/ignition/fuel"             << std::endl
+      << "  path: " + cachePath()                 << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_TRUE(config.LoadConfig(testPath));
 
@@ -128,8 +139,7 @@ TEST(ClientConfig, CustomConfiguration)
   EXPECT_EQ("https://myserver",
     config.Servers().back().Url().Str());
 
-  EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
-
+  EXPECT_EQ(cachePath(), config.CacheLocation());
   // Remove the configuration file.
   removeFileTemp(testPath);
 }
@@ -156,8 +166,9 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl
-      << "  path: /tmp/ignition/fuel"             << std::endl
+      << "  path: " + cachePath()                 << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_TRUE(config.LoadConfig(testPath));
 
@@ -182,6 +193,7 @@ TEST(ClientConfig, NoServerUrlConfiguration)
       << "  -"                                    << std::endl
       << "    banana: coconut"                           << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
 
@@ -206,6 +218,7 @@ TEST(ClientConfig, EmptyServerUrlConfiguration)
       << "  -"                                    << std::endl
       << "    url: "                              << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
 
@@ -227,6 +240,7 @@ TEST(ClientConfig, NoCachePathConfiguration)
   ofs << "---"    << std::endl
       << "cache:" << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
 
@@ -249,6 +263,7 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
       << "cache:"  << std::endl
       << "  path:" << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
 
@@ -293,6 +308,7 @@ TEST(ClientConfig, AsString)
 #ifndef _WIN32
     EXPECT_NE(str.find(".ignition/fuel"), std::string::npos);
 #else
+    std::cerr << "str " << str << '\n';
     EXPECT_NE(str.find(".ignition\\fuel"), std::string::npos);
 #endif
     EXPECT_NE(str.find("https://fuel.ignitionrobotics.org"), std::string::npos);
