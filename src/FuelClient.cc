@@ -988,7 +988,7 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
 
   std::vector<std::string> tokens = ignition::common::split(file, "/");
   std::string fileTemp;
-  for (auto s: tokens)
+  for (auto s : tokens)
     fileTemp = ignition::common::joinPaths(fileTemp, s);
   file = fileTemp;
 
@@ -1239,7 +1239,7 @@ Result FuelClient::CachedModelFile(const common::URI &_fileUrl,
 
   std::vector<std::string> tokens = ignition::common::split(filePath, "/");
   std::string sTemp;
-  for (auto s: tokens)
+  for (auto s : tokens)
     sTemp = ignition::common::joinPaths(sTemp, s);
   filePath = sTemp;
 

@@ -183,7 +183,8 @@ TEST(Interface, FetchResources)
 
     // Check it was downloaded to `1`
     EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
-      "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world", "2"));
+      "fuel.ignitionrobotics.org", "openrobotics", "worlds",
+      "test world", "2"));
     EXPECT_TRUE(common::exists(common::joinPaths("test_cache",
       "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world",
       "2")));
