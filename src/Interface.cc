@@ -57,6 +57,8 @@ namespace ignition
         std::string sTemp;
         for (auto s : tokens)
           sTemp = ignition::common::joinPaths(sTemp, s);
+        if(sTemp[0] == '/')
+          sTemp.erase(0, 1);
         result = common::joinPaths(result, sTemp);
       }
       // Download the world, if it is a world URI
@@ -76,6 +78,8 @@ namespace ignition
         std::string sTemp;
         for (auto s : tokens)
           sTemp = ignition::common::joinPaths(sTemp, s);
+        if(sTemp[0] == '/')
+          sTemp.erase(0, 1);
         result = common::joinPaths(result, sTemp);
       }
 

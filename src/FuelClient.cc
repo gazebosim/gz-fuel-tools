@@ -990,6 +990,8 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
   std::string fileTemp;
   for (auto s : tokens)
     fileTemp = ignition::common::joinPaths(fileTemp, s);
+  if(fileTemp[0] == '/')
+    fileTemp.erase(0, 1);
   file = fileTemp;
 
   // Get remaining server information from config

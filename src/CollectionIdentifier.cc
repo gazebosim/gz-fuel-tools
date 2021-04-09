@@ -71,9 +71,22 @@ CollectionIdentifier::~CollectionIdentifier() = default;
 //////////////////////////////////////////////////
 std::string CollectionIdentifier::UniqueName() const
 {
-  return common::joinPaths(this->dataPtr->server.Url().Str(),
-                           this->dataPtr->owner, "collections",
-                           this->dataPtr->name);
+  std::vector<std::string> stringList = {this->dataPtr->server.Url().Str(),
+    this->dataPtr->owner, "collections", this->dataPtr->name};
+
+  // This loop is to avoid duplicated '/' and '/' at the end of the string
+  std::string result;
+  for (auto s : stringList)
+  {
+    std::string tmp = common::joinPaths(result, s);
+    if (tmp[0] == '/')
+      tmp.erase(0, 1);
+    if(tmp[tmp.length()-1] == '/')
+      tmp.erase(tmp.length()-1, 1);
+    result = tmp;
+  }
+
+  return result;
 }
 
 //////////////////////////////////////////////////
