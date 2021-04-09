@@ -71,7 +71,7 @@ TEST(Interface, FetchResources)
     std::string path = fetchResourceWithClient(modelUrl.Str(), client);
 
     // Check it was downloaded to `2`
-    EXPECT_EQ(path, common::joinPaths(common::cwd(),"test_cache",
+    EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
       "fuel.ignitionrobotics.org", "chapulina", "models", "test box", "2"));
     EXPECT_TRUE(common::exists(
         common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
@@ -183,7 +183,7 @@ TEST(Interface, FetchResources)
 
     // Check it was downloaded to `1`
     EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
-      "fuel.ignitionrobotics.org","openrobotics", "worlds", "test world", "2"));
+      "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world", "2"));
     EXPECT_TRUE(common::exists(common::joinPaths("test_cache",
       "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world",
       "2")));

@@ -56,7 +56,9 @@ namespace ignition
         std::vector<std::string> tokens = ignition::common::split(fileUrl, "/");
         std::string sTemp;
         for (auto s: tokens)
+        {
           sTemp = ignition::common::joinPaths(sTemp, s);
+        }
         result = common::joinPaths(result, sTemp);
       }
       // Download the world, if it is a world URI
@@ -75,7 +77,9 @@ namespace ignition
         std::vector<std::string> tokens = ignition::common::split(fileUrl, "/");
         std::string sTemp;
         for (auto s: tokens)
+        {
           sTemp = ignition::common::joinPaths(sTemp, s);
+        }
         result = common::joinPaths(result, sTemp);
       }
 

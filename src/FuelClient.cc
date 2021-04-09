@@ -1024,6 +1024,7 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
 
   return true;
 }
+
 //////////////////////////////////////////////////
 bool FuelClient::ParseCollectionUrl(const common::URI &_url,
     CollectionIdentifier &_id)
