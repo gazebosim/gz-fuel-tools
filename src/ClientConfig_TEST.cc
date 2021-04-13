@@ -308,7 +308,6 @@ TEST(ClientConfig, AsString)
 #ifndef _WIN32
     EXPECT_NE(str.find(".ignition/fuel"), std::string::npos);
 #else
-    std::cerr << "str " << str << '\n';
     EXPECT_NE(str.find(".ignition\\fuel"), std::string::npos);
 #endif
     EXPECT_NE(str.find("https://fuel.ignitionrobotics.org"), std::string::npos);
@@ -433,4 +432,3 @@ int main(int argc, char **argv)
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

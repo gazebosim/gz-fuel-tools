@@ -76,7 +76,7 @@ std::string CollectionIdentifier::UniqueName() const
 
   // This loop is to avoid duplicated '/' and '/' at the end of the string
   std::string result;
-  for (auto s : stringList)
+  for (const auto &s : stringList)
   {
     std::string tmp = common::joinPaths(result, s);
     if (tmp[0] == '/')
@@ -169,4 +169,3 @@ std::string CollectionIdentifier::AsPrettyString(
       << this->Server().AsPrettyString(_prefix + "  ");
   return out.str();
 }
-
