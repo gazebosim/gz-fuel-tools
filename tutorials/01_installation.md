@@ -87,7 +87,7 @@ sudo apt-get remove libignition-fuel-tools7-dev
 Install prerequisites. A clean Ubuntu system will need:
 
 ```
-sudo apt-get install git cmake pkg-config python ruby-ronn libignition-cmake2-dev libignition-common4-dev libignition-math6-dev libignition-msgs7-dev libignition-tools-dev libzip-dev libjsoncpp-dev libcurl4-openssl-dev libyaml-dev
+sudo apt-get install git cmake pkg-config python ruby-ronn libignition-cmake2-dev libignition-common4-dev libignition-math6-dev libignition-msgs8-dev libignition-tools-dev libzip-dev libjsoncpp-dev libcurl4-openssl-dev libyaml-dev
 ```
 
 Clone the repository into a directory and go into it:
