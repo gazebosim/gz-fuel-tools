@@ -245,12 +245,10 @@ TEST_F(LocalCacheTest, AllModels)
     uniqueNames.insert(iter->Identification().UniqueName());
     ++iter;
   }
-#ifndef _WIN32
   EXPECT_EQ(9u, uniqueNames.size());
 
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
       "http://localhost:8001/alice/models/am1"));
-#endif
 }
 
 /////////////////////////////////////////////////
@@ -286,9 +284,7 @@ TEST_F(LocalCacheTest, MatchingModels)
     uniqueNames.insert(iter->Identification().UniqueName());
     ++iter;
   }
-#ifndef _WIN32
   EXPECT_EQ(1u, uniqueNames.size());
-#endif
 
   am1.SetServer(conf.Servers().back());
   auto iter2 = cache.MatchingModels(am1);
@@ -300,9 +296,7 @@ TEST_F(LocalCacheTest, MatchingModels)
     uniqueNames.insert(iter2->Identification().UniqueName());
     ++iter2;
   }
-#ifndef _WIN32
   EXPECT_EQ(2u, uniqueNames.size());
-#endif
 }
 
 /////////////////////////////////////////////////
@@ -387,8 +381,8 @@ TEST_F(LocalCacheTest, AllWorlds)
     uniqueNames.insert(iter->UniqueName());
     ++iter;
   }
-#ifndef _WIN32
   EXPECT_EQ(9u, uniqueNames.size());
+#ifndef _WIN32
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
       "localhost:8001/alice/worlds/am1"));
 #endif
@@ -427,9 +421,7 @@ TEST_F(LocalCacheTest, MatchingWorlds)
     uniqueNames.insert(iter->UniqueName());
     ++iter;
   }
-#ifndef _WIN32
   EXPECT_EQ(1u, uniqueNames.size());
-#endif
 }
 
 /////////////////////////////////////////////////

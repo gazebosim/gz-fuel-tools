@@ -53,13 +53,7 @@ namespace ignition
         auto modelUri = _uri.substr(0,
             _uri.find("files", model.UniqueName().size())-1);
         _client.DownloadModel(common::URI(modelUri), result);
-        std::vector<std::string> tokens = ignition::common::split(fileUrl, "/");
-        std::string sTemp;
-        for (auto s : tokens)
-          sTemp = ignition::common::joinPaths(sTemp, s);
-        if(sTemp[0] == '/')
-          sTemp.erase(0, 1);
-        result = common::joinPaths(result, sTemp);
+        result = common::joinPaths(result, fileUrl);
       }
       // Download the world, if it is a world URI
       else if (_client.ParseWorldUrl(uri, world) &&
@@ -74,13 +68,8 @@ namespace ignition
         auto worldUri = _uri.substr(0,
             _uri.find("files", world.UniqueName().size())-1);
         _client.DownloadWorld(common::URI(worldUri), result);
-        std::vector<std::string> tokens = ignition::common::split(fileUrl, "/");
-        std::string sTemp;
-        for (auto s : tokens)
-          sTemp = ignition::common::joinPaths(sTemp, s);
-        if(sTemp[0] == '/')
-          sTemp.erase(0, 1);
-        result = common::joinPaths(result, sTemp);
+        result = common::joinPaths(result, fileUrl);
+
       }
 
       return result;
