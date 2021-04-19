@@ -447,14 +447,14 @@ TEST(FuelClientTest, WorldDownloadUnversioned)
 
   // Check files
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-        "worlds", "test world")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world")));
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world", "2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world", "2")));
   EXPECT_TRUE(ignition::common::isFile(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world", "2", "test.world")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world", "2", "test.world")));
 
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
@@ -497,47 +497,47 @@ TEST_P(DownloadCollectionTest, AllItems)
   // Check files
   // Model: Backpack
   EXPECT_TRUE(ignition::common::isDirectory(
-      ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-        "models", "backpack")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "backpack")));
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "backpack", "2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "backpack", "2")));
   EXPECT_TRUE(ignition::common::isFile(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "backpack", "2", "model.sdf")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "backpack", "2", "model.sdf")));
 
   // Model: TEAMBASE
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "teambase")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "teambase")));
   EXPECT_TRUE(ignition::common::isDirectory(
-     ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "teambase", "2")));
+     ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "teambase", "2")));
   EXPECT_TRUE(ignition::common::isFile(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-     "models", "teambase", "2", "model.sdf")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+     "openrobotics", "models", "teambase", "2", "model.sdf")));
 
   // World: Test World
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-        "worlds", "test world")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world")));
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world", "2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world", "2")));
   EXPECT_TRUE(ignition::common::isFile(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world", "2", "test.world")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world", "2", "test.world")));
 
   // World: Test World 2
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world 2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world 2")));
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world 2", "2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world 2", "2")));
   EXPECT_TRUE(ignition::common::isFile(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world 2", "2", "test.world")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world 2", "2", "test.world")));
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
 }
@@ -572,35 +572,35 @@ TEST_P(DownloadCollectionTest, Models)
   // Check files
   // Model: Backpack
   EXPECT_TRUE(ignition::common::isDirectory(
-      ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-        "models", "backpack")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "backpack")));
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "backpack", "2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "backpack", "2")));
   EXPECT_TRUE(ignition::common::isFile(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "backpack", "2", "model.sdf")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "backpack", "2", "model.sdf")));
 
   // Model: TEAMBASE
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "teambase")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "teambase")));
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "teambase", "2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "teambase", "2")));
   EXPECT_TRUE(ignition::common::isFile(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "teambase", "2", "model.sdf")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "teambase", "2", "model.sdf")));
 
   // World: Test World
   EXPECT_FALSE(ignition::common::isDirectory(
-      ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-        "worlds", "test world")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world")));
 
   // World: Test World 2
   EXPECT_FALSE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world2")));
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
 }
@@ -635,35 +635,35 @@ TEST_P(DownloadCollectionTest, Worlds)
   // Check files
   // Model: Backpack
   EXPECT_FALSE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "backpack")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "backpack")));
 
   // Model: TEAMBASE
   EXPECT_FALSE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "models", "teambase")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "models", "teambase")));
 
   // World: Test World
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world")));
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world", "2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world", "2")));
   EXPECT_TRUE(ignition::common::isFile(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world", "2", "test.world")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world", "2", "test.world")));
 
   // World: Test World 2
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world 2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world 2")));
   EXPECT_TRUE(ignition::common::isDirectory(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world 2", "2")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world 2", "2")));
   EXPECT_TRUE(ignition::common::isFile(
-    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org", "openrobotics",
-      "worlds", "test world 2", "2", "test.world")));
+    ignition::common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+      "openrobotics", "worlds", "test world 2", "2", "test.world")));
   clearIOStreams(stdOutBuffer, stdErrBuffer);
   restoreIO();
 }
