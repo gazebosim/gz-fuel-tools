@@ -143,15 +143,14 @@ bool Zip::Extract(const std::string &_src,
     // Create intermediate directories if needed.
     std::string dirname = dst;
 
-    auto pos = dirname.rfind(ignition::common::separator(""));
-    if (pos != std::string::npos && pos != dirname.size() - 1)
-      dirname.erase(pos);
-
-    if (!ignition::common::createDirectories(dirname))
-    {
-      ignerr << "Error creating directory [" << dirname << "]. "
-             << "Do you have the right permissions?" << std::endl;
-      return false;
+    auto pos = entryname.rfind(ignition::common::separator(""));
+    if (pos != std::string::npos && pos == (entryname.size() - 1)){
+      if (!ignition::common::createDirectories(dirname))
+      {
+        ignerr << "Error creating directory [" << dirname << "]. "
+               << "Do you have the right permissions?" << std::endl;
+        return false;
+      }
     }
 
     // Create and write the files.
