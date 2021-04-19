@@ -382,9 +382,12 @@ TEST_F(LocalCacheTest, AllWorlds)
     ++iter;
   }
   EXPECT_EQ(9u, uniqueNames.size());
-#ifndef _WIN32
+#ifdef _WIN32
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-      "localhost:8001/alice/worlds/am1"));
+    ignition::common::joinPaths("localhost8001", "alice", "worlds", "am1")));
+#else
+  EXPECT_NE(uniqueNames.end(), uniqueNames.find(
+    ignition::common::joinPaths("localhost:8001", "alice", "worlds", "am1")));
 #endif
 }
 
