@@ -167,10 +167,12 @@ class ignition::fuel_tools::FuelClientPrivate
   /// \param[in] _pathToModelDir Path to the model directory.
   /// \param[in] _id Model identifier information.
   /// \param[in] _private True if this model should be private.
-  /// \param[in] _form Form to fill.
+  /// \param[in] _owner Model owner name.
+  /// \param[out] _form Form to fill.
   /// \return True if the operation completed successfully.
   public: bool FillModelForm(const std::string &_pathToModelDir,
               const ModelIdentifier &_id, bool _private,
+              const std::string &_owner,
               std::multimap<std::string, std::string> &_form);
 
   /// \brief This function requests the available licenses from the
@@ -446,12 +448,23 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     const ModelIdentifier &_id, const std::vector<std::string> &_headers,
     bool _private)
 {
+  return this->UploadModel(_pathToModelDir, _id, _headers, _private, "");
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::UploadModel(const std::string &_pathToModelDir,
+    const ModelIdentifier &_id, const std::vector<std::string> &_headers,
+    bool _private, const std::string &_owner)
+{
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
   std::multimap<std::string, std::string> form;
-  if (!this->dataPtr->FillModelForm(_pathToModelDir, _id, _private, form))
+  if (!this->dataPtr->FillModelForm(_pathToModelDir, _id, _private, _owner,
+        form))
+  {
     return Result(ResultType::UPLOAD_ERROR);
+  }
 
   std::vector<std::string> headersIncludingServerConfig = _headers;
   AddServerConfigParametersToHeaders(
@@ -479,8 +492,10 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
            << "Suggestions" << std::endl
            << "  1. Is the Server URL correct? Try entering it on a browser.\n"
            << "  2. Do the categories exist? If you are using the Fuel server,"
-           << " then you can get the complete list at"
-           << " https://fuel.ignitionrobotics.org/1.0/categories." << std::endl;
+           << "     then you can get the complete list at"
+           << "     https://fuel.ignitionrobotics.org/1.0/categories.\n"
+           << "  3. If the owner is specified, make sure you have correct\n"
+           << "     permissions." << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
 
@@ -1323,7 +1338,7 @@ Result FuelClient::PatchModel(
 
   if (!_pathToModelDir.empty() &&
       !this->dataPtr->FillModelForm(_pathToModelDir, _model,
-        _model.Private(), form))
+        _model.Private(), _model.Owner(), form))
   {
     return Result(ResultType::UPLOAD_ERROR);
   }
@@ -1369,7 +1384,7 @@ void FuelClient::PopulateLicenses(const ServerConfig &_server)
 
 //////////////////////////////////////////////////
 bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
-    const ModelIdentifier &_id, bool _private,
+    const ModelIdentifier &_id, bool _private, const std::string &_owner,
     std::multimap<std::string, std::string> &_form)
 {
   if (!common::exists(_pathToModelDir))
@@ -1425,6 +1440,12 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
     {"description", meta.description()},
     {"private", _private ? "1" : "0"},
   };
+
+  // Add owner if specified.
+  if (!_owner.empty())
+  {
+    _form.emplace("owner", _owner);
+  }
 
   // \todo(nkoenig) The ign-fuelserver expects an integer number for the
   // license information. The fuelserver should be modified to accept

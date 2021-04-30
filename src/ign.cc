@@ -741,7 +741,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
-    const char *_url, const char *_header, const char *_private)
+    const char *_url, const char *_header, const char *_private,
+    const char *_owner)
 {
   ignition::common::SignalHandler handler;
   bool sigKilled{false};
@@ -789,7 +790,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
   {
     std::cout << "Uploading a model[" << _path << "]\n";
     // Upload the model
-    return client.UploadModel(_path, model, headers, privateBool);
+    return client.UploadModel(_path, model, headers, privateBool, _owner);
   }
 
   // If a model.config or metadata.pbtxt file does not exist, then assume
@@ -804,7 +805,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
          ignition::common::exists(
            ignition::common::joinPaths(*dirIter, "model.config"))))
     {
-      if (!client.UploadModel(*dirIter, model, headers, privateBool))
+      if (!client.UploadModel(*dirIter, model, headers, privateBool, _owner))
       {
         ignerr << "Failed to upload model[" << *dirIter << "]\n";
       }

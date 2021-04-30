@@ -164,6 +164,10 @@ SUBCOMMANDS = {
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
   "                           https://fuel.ignitionrobotics.org.           \n"\
+  "  -o [--owner] arg         Upload to the given owner, which can be an.  \n"\
+  "                           organization. Default behavior is to upload  \n"\
+  "                           to the user account associated with the      \n"\
+  "                           private token specified in the header.       \n"\
   "  -p [--private]           Use this argument to make the model private. \n"\
   "                           Otherwise, the model will be public.         \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
@@ -410,11 +414,12 @@ class Cmd
           end
         end
       when 'upload'
-        Importer.extern 'int upload(const char *, const char *, const char *, const char *)'
+        Importer.extern 'int upload(const char *, const char *, const char *, const char *, const char *)'
         if not Importer.upload(options['model'],
                                options['url'],
                                options['header'],
-                               options['private'])
+                               options['private'],
+                               options['owner'])
           exit(-1)
         end
       end
