@@ -128,6 +128,6 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
     const char *_path = nullptr);
 
 /// \brief TODO
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int updateModels();
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update();
 
 #endif
