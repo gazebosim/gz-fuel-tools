@@ -173,6 +173,16 @@ SUBCOMMANDS = {
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
+  'update' =>
+   "Update all models in local cache                                       \n"\
+   "                                                                       \n"\
+   "  ign fuel update [options]                                            \n"\
+   "                                                                       \n"\
+   "Available Options:                                                     \n"\
+   "  --onlymodels            Use this argument to only update models.     \n"\
+   "  --onlyworlds            Use this argument to only update worlds.     \n"\
+   "                          If not option selected, both get updated.    \n" +
+   COMMON_OPTIONS,
 }
 
 #
@@ -194,7 +204,9 @@ class Cmd
       'model' => '',
       'config2pbtxt' => '',
       'pbtxt2config' => '',
-      'private' => ''
+      'private' => '',
+      'onlymodels' => '',
+      'onlyworlds' => ''
     }
 
     usage = COMMANDS[args[0]]
@@ -255,6 +267,12 @@ class Cmd
       end
       opts.on('-j [JOBS]', '--jobs', String, 'Number of parallel downloads') do |jobs|
         options['jobs'] = jobs || 1
+      end
+      opts.on('--onlymodels', 'Only update models') do
+        options['onlymodels'] = 'true'
+      end
+      opts.on('--onlyworlds', 'Only update worlds') do
+        options['onlyworlds'] = 'true'
       end
     end # opt_parser do
 
@@ -420,6 +438,12 @@ class Cmd
                                options['header'],
                                options['private'],
                                options['owner'])
+          exit(-1)
+        end
+      when 'update'
+        Importer.extern 'int update(const char *, const char *)'
+        if not Importer.update(options['onlymodels'],
+                               options['onlyworlds'])
           exit(-1)
         end
       end

@@ -977,3 +977,42 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
 
   return 1;
 }
+
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update(
+    const char *_onlyModels, const char *_onlyWorlds)
+{
+  std::cout << "Updating fuel cache" << std::endl;
+  // Add signal handler for SIGTERM and SIGINT. Ctrl-C doesn't work without this
+  // handler.
+  ignition::common::SignalHandler sigHandler;
+  sigHandler.AddCallback([&](int _sig) {
+      if (SIGTERM == _sig || SIGINT == _sig)
+      {
+        std::exit(1);
+      }
+  });
+
+  bool onlyModelsBool = false;
+  if (_onlyModels && std::strlen(_onlyModels) != 0)
+  {
+    onlyModelsBool = true;
+  }
+  bool onlyWorldsBool = false;
+  if (_onlyWorlds && std::strlen(_onlyWorlds) != 0)
+  {
+    onlyWorldsBool = true;
+  }
+  // Client
+  ignition::fuel_tools::ClientConfig conf;
+
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+
+  ignition::fuel_tools::FuelClient client(conf);
+  if (!onlyWorldsBool && !client.UpdateModels()) {
+    return 0;
+  }
+  if (!onlyModelsBool && !client.UpdateWorlds()) {
+    return 0;
+  }
+  return 1;
+}

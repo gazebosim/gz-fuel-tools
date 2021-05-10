@@ -1566,3 +1566,63 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
     ignerr << "Failed to parse license information[" << resp.data << "]\n";
   }
 }
+
+bool FuelClient::UpdateModels()
+{
+  ignmsg << "Updating models" << std::endl;
+  std::vector<std::string> done_files;
+  for (ModelIter iter = this->dataPtr->cache->AllModels(); iter; ++iter)
+  {
+    ignition::fuel_tools::ModelIdentifier id = iter->Identification();
+    ignition::fuel_tools::ModelIdentifier cloud_id;
+    std::string urlStr = "https://fuel.ignitionrobotics.org/1.0/";
+    urlStr += id.Owner() + "/models/" + id.Name();
+    ignition::common::URI url(urlStr);
+    if (!this->ModelDetails(id, cloud_id))
+    {
+      ignerr << "Failed to fetch model details for model["
+        << id.Name() << "]\n";
+      return false;
+    }
+    if (id.Version() < cloud_id.Version() && std::find(done_files.begin(),
+        done_files.end(), id.Name()) == done_files.end())
+    {
+      ignmsg << "Updating model " << id.Name() << " up to version "
+      << cloud_id.Version() << std::endl;
+      this->DownloadModel(cloud_id);
+      done_files.push_back(id.Name());
+    }
+  }
+  ignmsg << "Finished updating models" << std::endl;
+  return true;
+}
+
+bool FuelClient::UpdateWorlds()
+{
+  ignmsg << "Updating Worlds" << std::endl;
+  std::vector<std::string> done_files;
+  for (WorldIter iter = this->dataPtr->cache->AllWorlds(); iter; ++iter)
+  {
+    ignition::fuel_tools::WorldIdentifier id = iter;
+    ignition::fuel_tools::WorldIdentifier cloud_id;
+    std::string urlStr = "https://fuel.ignitionrobotics.org/1.0/";
+    urlStr += id.Owner() + "/worlds/" + id.Name();
+    ignition::common::URI url(urlStr);
+    if (!this->WorldDetails(id, cloud_id))
+    {
+      ignerr << "Failed to fetch world details for world["
+        << id.Name() << "]\n";
+      return false;
+    }
+    if (id.Version() < cloud_id.Version() && std::find(done_files.begin(),
+        done_files.end(), id.Name()) == done_files.end())
+    {
+      ignmsg << "Updating world " << id.Name() << " up to version "
+      << cloud_id.Version() << std::endl;
+      this->DownloadWorld(cloud_id);
+      done_files.push_back(id.Name());
+    }
+  }
+  ignmsg << "Finished updating worlds" << std::endl;
+  return true;
+}

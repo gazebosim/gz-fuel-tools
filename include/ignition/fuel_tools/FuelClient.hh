@@ -391,6 +391,10 @@ namespace ignition
       public: bool ParseCollectionUrl(const common::URI &_url,
                                       CollectionIdentifier &_id);
 
+      public: bool UpdateModels();
+
+      public: bool UpdateWorlds();
+
       /// \brief Checked if there is any header already specify
       /// \param[in] _serverConfig Server configuration
       /// \param[inout] _headers Vector with headers to check
