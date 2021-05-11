@@ -118,6 +118,17 @@ TEST(CollectionIdentifier, AsString)
   common::Console::SetVerbosity(4);
   {
     CollectionIdentifier id;
+
+#ifndef _WIN32
+    std::string str =
+        "Name: \n"\
+        "Owner: \n"\
+        "Unique name: https://fuel.ignitionrobotics.org/collections/\n"
+        "Server:\n"
+        "  URL: https://fuel.ignitionrobotics.org\n"
+        "  Version: 1.0\n"
+        "  API key: \n";
+#else
     std::string str =
         "Name: \n"\
         "Owner: \n"\
@@ -126,6 +137,7 @@ TEST(CollectionIdentifier, AsString)
         "  URL: https://fuel.ignitionrobotics.org\n"
         "  Version: 1.0\n"
         "  API key: \n";
+#endif
     EXPECT_EQ(str, id.AsString());
   }
 
