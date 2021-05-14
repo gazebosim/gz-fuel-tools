@@ -35,7 +35,11 @@ using namespace fuel_tools;
 /// \param[in] _path Path to file to be removed.
 void removeFileTemp(const std::string &_path)
 {
+#ifndef _WIN32
+  EXPECT_TRUE(ignition::common::removeFile(_path));
+#else
   ignition::common::removeFile(_path);
+#endif
 }
 
 /////////////////////////////////////////////////

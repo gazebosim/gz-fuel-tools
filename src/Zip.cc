@@ -140,14 +140,13 @@ bool Zip::Extract(const std::string &_src,
     common::changeFromUnixPath(entryname);
     std::string dst = ignition::common::joinPaths(_dst, entryname);
 
-    // Create intermediate directories if needed.
-    std::string dirname = dst;
-
+    // Check if the entryname contains a / at the end. if so it's a directory 
     auto pos = entryname.rfind(ignition::common::separator(""));
-    if (pos != std::string::npos && pos == (entryname.size() - 1)){
-      if (!ignition::common::createDirectories(dirname))
+    if (pos != std::string::npos && pos == (entryname.size() - 1))
+    {
+      if (!ignition::common::createDirectories(dst))
       {
-        ignerr << "Error creating directory [" << dirname << "]. "
+        ignerr << "Error creating directory [" << dst << "]. "
                << "Do you have the right permissions?" << std::endl;
         return false;
       }
