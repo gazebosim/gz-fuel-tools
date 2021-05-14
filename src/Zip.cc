@@ -140,7 +140,7 @@ bool Zip::Extract(const std::string &_src,
     common::changeFromUnixPath(entryname);
     std::string dst = ignition::common::joinPaths(_dst, entryname);
 
-    // Check if the entryname contains a / at the end. if so it's a directory 
+    // Check if the entryname contains a / at the end. if so it's a directory
     auto pos = entryname.rfind(ignition::common::separator(""));
     if (pos != std::string::npos && pos == (entryname.size() - 1))
     {
