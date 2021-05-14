@@ -39,7 +39,7 @@ using namespace ignition::fuel_tools;
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
-TEST(Interface, IGN_UTILS_TEST_DISABLED_ON_WIN32(FetchResources))
+TEST(Interface, FetchResources)
 {
   common::Console::SetVerbosity(4);
 
@@ -71,30 +71,31 @@ TEST(Interface, IGN_UTILS_TEST_DISABLED_ON_WIN32(FetchResources))
     std::string path = fetchResourceWithClient(modelUrl.Str(), client);
 
     // Check it was downloaded to `2`
-    EXPECT_EQ(path, common::cwd() +
-        "/test_cache/fuel.ignitionrobotics.org/chapulina/models/test box/2");
+    EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
+      "fuel.ignitionrobotics.org", "chapulina", "models", "test box", "2"));
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models/test box/2"));
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "chapulina", "models", "test box", "2")));
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models/test box/2/"
-        "model.sdf"));
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "chapulina", "models", "test box", "2", "model.sdf")));
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models/test box/2/"
-        "model.config"));
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "chapulina", "models", "test box", "2", "model.config")));
 
     // Check it wasn't downloaded to model root directory
     EXPECT_FALSE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/models"
-        "/Test box/model.config"));
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "chapulina", "models", "Test box", "model.config")));
 
     // Check it is cached
     {
       Result res = client.CachedModel(modelUrl, cachedPath);
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
-      EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/chapulina/models/test box/2",
-          cachedPath);
+      EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "fuel.ignitionrobotics.org", "chapulina", "models", "test box", "2"),
+        cachedPath);
      }
   }
 
@@ -123,34 +124,36 @@ TEST(Interface, IGN_UTILS_TEST_DISABLED_ON_WIN32(FetchResources))
 
     // Check entire model was downloaded to `1`
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/openrobotics/models/bus/1"));
-    EXPECT_EQ(path, common::cwd() +
-        "/test_cache/fuel.ignitionrobotics.org/openrobotics/models/bus/1/"
-        "meshes/bus.obj");
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "openrobotics", "models", "bus", "1")));
+    EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
+      "fuel.ignitionrobotics.org", "openrobotics", "models", "bus",
+      "1", "meshes", "bus.obj"));
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/openrobotics/models/bus/1/"
-        "model.sdf"));
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        "openrobotics", "models", "bus", "1", "model.sdf")));
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/openrobotics/models/bus/1/"
-        "model.config"));
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "openrobotics", "models", "bus", "1", "model.config")));
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/openrobotics/models/bus/1/"
-        "meshes/bus.obj"));
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "openrobotics", "models", "bus", "1", "meshes/bus.obj")));
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/openrobotics/models/bus/1/"
-        "meshes/bus.mtl"));
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "openrobotics", "models", "bus", "1", "meshes/bus.mtl")));
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/openrobotics/models/bus/1/"
-        "materials/textures/bus.png"));
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "openrobotics", "models", "bus", "1", "materials", "textures",
+          "bus.png")));
 
     // Check model is cached
     {
       Result res = client.CachedModel(modelUrl, cachedPath);
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
-      EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/openrobotics/models/bus/1",
-          cachedPath);
+      EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "fuel.ignitionrobotics.org", "openrobotics", "models", "bus", "1"),
+        cachedPath);
      }
 
     // Check file is cached
@@ -158,10 +161,9 @@ TEST(Interface, IGN_UTILS_TEST_DISABLED_ON_WIN32(FetchResources))
       Result res = client.CachedModelFile(modelFileUrl, cachedPath);
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
-      EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/openrobotics/models/bus/1"
-          "/meshes/bus.obj",
-          cachedPath);
+      EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "fuel.ignitionrobotics.org", "openrobotics", "models", "bus", "1",
+        "meshes", "bus.obj"), cachedPath);
      }
   }
 
@@ -180,21 +182,24 @@ TEST(Interface, IGN_UTILS_TEST_DISABLED_ON_WIN32(FetchResources))
     std::string path = fetchResourceWithClient(worldUrl.Str(), client);
 
     // Check it was downloaded to `1`
-    EXPECT_EQ(path, common::cwd() + "/test_cache/fuel.ignitionrobotics.org/"
-        "openrobotics/worlds/test world/2");
-    EXPECT_TRUE(common::exists("test_cache/fuel.ignitionrobotics.org/"
-        "openrobotics/worlds/test world/2"));
-    EXPECT_TRUE(common::exists("test_cache/fuel.ignitionrobotics.org/"
-        "openrobotics/worlds/test world/2/test.world"));
+    EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
+      "fuel.ignitionrobotics.org", "openrobotics", "worlds",
+      "test world", "2"));
+    EXPECT_TRUE(common::exists(common::joinPaths("test_cache",
+      "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world",
+      "2")));
+    EXPECT_TRUE(common::exists(common::joinPaths("test_cache",
+      "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world", "2",
+      "test.world")));
 
     // Check it is cached
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
-      EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/openrobotics/worlds/"
-          "test world/2", cachedPath);
+      EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world",
+        "2"), cachedPath);
      }
   }
 
@@ -223,22 +228,23 @@ TEST(Interface, IGN_UTILS_TEST_DISABLED_ON_WIN32(FetchResources))
 
     // Check entire world was downloaded to `1`
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/test world/2"));
-    EXPECT_EQ(path, common::cwd() +
-        "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/test world/2/"
-        "thumbnails/1.png");
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "chapulina", "worlds", "test world", "2")));
+    EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
+      "fuel.ignitionrobotics.org", "chapulina", "worlds", "test world", "2",
+      "thumbnails", "1.png"));
     EXPECT_TRUE(common::exists(
-        "test_cache/fuel.ignitionrobotics.org/chapulina/worlds/test world/2/"
-        "test.world"));
+        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+          "chapulina", "worlds", "test world", "2", "test.world")));
 
     // Check world is cached
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
-      EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/test world/2",
-          cachedPath);
+      EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "fuel.ignitionrobotics.org", "chapulina", "worlds", "test world", "2"),
+        cachedPath);
      }
 
     // Check file is cached
@@ -246,10 +252,9 @@ TEST(Interface, IGN_UTILS_TEST_DISABLED_ON_WIN32(FetchResources))
       Result res = client.CachedWorldFile(worldFileUrl, cachedPath);
       EXPECT_TRUE(res);
       EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
-      EXPECT_EQ(common::cwd() +
-          "/test_cache/fuel.ignitionrobotics.org/chapulina/worlds/test world/2"
-          "/thumbnails/1.png",
-          cachedPath);
+      EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+        "fuel.ignitionrobotics.org", "chapulina", "worlds", "test world", "2",
+        "thumbnails", "1.png"), cachedPath);
      }
   }
 }

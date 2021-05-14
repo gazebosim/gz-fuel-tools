@@ -406,7 +406,11 @@ bool LocalCache::SaveModel(
   }
 
   auto zipFile = common::joinPaths(modelVersionedDir, _id.Name() + ".zip");
+#ifdef _WIN32
+  std::ofstream ofs(zipFile, std::ofstream::out | std::ofstream::binary);
+#else
   std::ofstream ofs(zipFile, std::ofstream::out);
+#endif
   ofs << _data;
   ofs.close();
 
@@ -750,7 +754,11 @@ bool LocalCache::SaveWorld(
   }
 
   auto zipFile = common::joinPaths(worldVersionedDir, _id.Name() + ".zip");
-  std::ofstream ofs(zipFile, std::ofstream::out);
+  #ifdef _WIN32
+    std::ofstream ofs(zipFile, std::ofstream::out | std::ofstream::binary);
+  #else
+    std::ofstream ofs(zipFile, std::ofstream::out);
+  #endif
   ofs << _data;
   ofs.close();
 
@@ -771,4 +779,3 @@ bool LocalCache::SaveWorld(
 
   return true;
 }
-
