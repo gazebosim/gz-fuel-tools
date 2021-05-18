@@ -1,0 +1,71 @@
+load(
+    "//ign_bazel:build_defs.bzl",
+    "IGNITION_ROOT",
+    "IGNITION_VISIBILITY",
+    "cmake_configure_file",
+)
+
+BINARY_DIR = "."
+
+SOURCE_DIR = "./ign_fuel_tools"
+
+CMAKE_BINARY_DIR = "/tmp"
+
+IGNITION_TOOLS_BINARY_DIRS = "./ign_tools"
+
+PROJECT_NAME = "ignition-fuel-tools"
+
+PROJECT_MAJOR = 4
+
+PROJECT_MINOR = 1
+
+PROJECT_PATCH = 0
+
+# Generates config.hh based on the version numbers in CMake code.
+cmake_configure_file(
+    name = "test_config",
+    src = "test_config.h.in",
+    out = "test/test_config.h",
+    cmakelists = ["CMakeLists.txt"],
+    defines = [
+        "PROJECT_BINARY_DIR=%s" % BINARY_DIR,
+        "PROJECT_SOURCE_DIR=%s" % SOURCE_DIR,
+        "CMAKE_BINARY_DIR=%s" % CMAKE_BINARY_DIR,
+        "IGNITION-TOOLS_BINARY_DIRS=%s" % IGNITION_TOOLS_BINARY_DIRS,
+        "PROJECT_VERSION_FULL=%d.%d.%d" % (PROJECT_MAJOR, PROJECT_MINOR, PROJECT_PATCH),  # noqa
+    ],
+    visibility = ["//visibility:private"],
+)
+
+cc_library(
+    name = "test_utils",
+    srcs = [
+        "test/test_config.h",
+    ],
+    includes = ["."],
+    visibility = ["//visibility:public"],
+)
+
+[
+    cc_test(
+        name = "INTEGRATION_" + test.split("/")[1].replace(".cc", ""),
+        srcs = [test],
+        data = [
+            ":media",
+        ],
+        includes = [
+            ".",
+            "integration",
+        ],
+        deps = [
+            ":test_utils",
+            IGNITION_ROOT + "ign_common",
+            IGNITION_ROOT + "ign_fuel_tools",
+            "@gtest",
+            "@gtest//:gtest_main",
+        ],
+    )
+    for test in glob(["integration/*.cc"])
+]
+
+exports_files(["media"])
