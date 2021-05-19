@@ -444,7 +444,8 @@ class Cmd
       when 'update'
         Importer.extern 'int update(const char *, const char *)'
         if not Importer.update(options['onlymodels'],
-                               options['onlyworlds'])
+                               options['onlyworlds'],
+                               options['header'])
           exit(-1)
         end
       end
