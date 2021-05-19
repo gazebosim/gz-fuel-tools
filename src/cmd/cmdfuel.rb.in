@@ -173,15 +173,16 @@ SUBCOMMANDS = {
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
-  'update' =>
-   "Update all models in local cache                                       \n"\
-   "                                                                       \n"\
-   "  ign fuel update [options]                                            \n"\
-   "                                                                       \n"\
-   "Available Options:                                                     \n"\
-   "  --onlymodels            Use this argument to only update models.     \n"\
-   "  --onlyworlds            Use this argument to only update worlds.     \n"\
-   "                          If not option selected, both get updated.    \n" +
+ 'update' =>
+  "Update all models and worlds in local cache                             \n"\
+  "                                                                        \n"\
+  "  ign fuel update [options]                                             \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  --onlymodels             Use this argument to only update models.     \n"\
+  "  --onlyworlds             Use this argument to only update worlds.     \n"\
+  "  --header arg             Set an HTTP header, such as                  \n"\
+  "                           --header 'authorization: Bearer JWT'.        \n" +
    COMMON_OPTIONS,
 }
 

@@ -392,12 +392,14 @@ namespace ignition
                                       CollectionIdentifier &_id);
 
       /// \brief Update all models in local cache.
+      /// \param[in] _headers Headers to set on the HTTP request.
       /// \return True if everything updated successfully.
-      public: bool UpdateModels();
+      public: bool UpdateModels(const std::vector<std::string> &_headers);
 
       /// \brief Update all worlds in local cache.
+      /// \param[in] _headers Headers to set on the HTTP request.
       /// \return True if everything updated successfully.
-      public: bool UpdateWorlds();
+      public: bool UpdateWorlds(const std::vector<std::string> &_headers);
 
       /// \brief Checked if there is any header already specify
       /// \param[in] _serverConfig Server configuration

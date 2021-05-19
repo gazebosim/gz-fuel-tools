@@ -1567,7 +1567,7 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
   }
 }
 
-bool FuelClient::UpdateModels()
+bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)
 {
   std::vector<std::string> done_files;
   for (ModelIter iter = this->dataPtr->cache->AllModels(); iter; ++iter)
@@ -1585,14 +1585,14 @@ bool FuelClient::UpdateModels()
     {
       ignmsg << "Updating model " << id.Name() << " up to version "
       << cloud_id.Version() << std::endl;
-      this->DownloadModel(cloud_id);
+      this->DownloadModel(cloud_id, _headers);
       done_files.push_back(id.Name());
     }
   }
   return true;
 }
 
-bool FuelClient::UpdateWorlds()
+bool FuelClient::UpdateWorlds(const std::vector<std::string> &/*_headers*/)
 {
   std::vector<std::string> done_files;
   for (WorldIter iter = this->dataPtr->cache->AllWorlds(); iter; ++iter)
@@ -1610,7 +1610,7 @@ bool FuelClient::UpdateWorlds()
     {
       ignmsg << "Updating world " << id.Name() << " up to version "
       << cloud_id.Version() << std::endl;
-      this->DownloadWorld(cloud_id);
+      this->DownloadWorld(cloud_id); // There is no header version for this
       done_files.push_back(id.Name());
     }
   }
