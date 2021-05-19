@@ -391,8 +391,12 @@ namespace ignition
       public: bool ParseCollectionUrl(const common::URI &_url,
                                       CollectionIdentifier &_id);
 
+      /// \brief Update all models in local cache.
+      /// \return True if everything updated successfully.
       public: bool UpdateModels();
 
+      /// \brief Update all worlds in local cache.
+      /// \return True if everything updated successfully.
       public: bool UpdateWorlds();
 
       /// \brief Checked if there is any header already specify

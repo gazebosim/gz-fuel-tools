@@ -1569,15 +1569,11 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
 
 bool FuelClient::UpdateModels()
 {
-  ignmsg << "Updating models" << std::endl;
   std::vector<std::string> done_files;
   for (ModelIter iter = this->dataPtr->cache->AllModels(); iter; ++iter)
   {
     ignition::fuel_tools::ModelIdentifier id = iter->Identification();
     ignition::fuel_tools::ModelIdentifier cloud_id;
-    std::string urlStr = "https://fuel.ignitionrobotics.org/1.0/";
-    urlStr += id.Owner() + "/models/" + id.Name();
-    ignition::common::URI url(urlStr);
     if (!this->ModelDetails(id, cloud_id))
     {
       ignerr << "Failed to fetch model details for model["
@@ -1593,21 +1589,16 @@ bool FuelClient::UpdateModels()
       done_files.push_back(id.Name());
     }
   }
-  ignmsg << "Finished updating models" << std::endl;
   return true;
 }
 
 bool FuelClient::UpdateWorlds()
 {
-  ignmsg << "Updating Worlds" << std::endl;
   std::vector<std::string> done_files;
   for (WorldIter iter = this->dataPtr->cache->AllWorlds(); iter; ++iter)
   {
     ignition::fuel_tools::WorldIdentifier id = iter;
     ignition::fuel_tools::WorldIdentifier cloud_id;
-    std::string urlStr = "https://fuel.ignitionrobotics.org/1.0/";
-    urlStr += id.Owner() + "/worlds/" + id.Name();
-    ignition::common::URI url(urlStr);
     if (!this->WorldDetails(id, cloud_id))
     {
       ignerr << "Failed to fetch world details for world["
@@ -1623,6 +1614,5 @@ bool FuelClient::UpdateWorlds()
       done_files.push_back(id.Name());
     }
   }
-  ignmsg << "Finished updating worlds" << std::endl;
   return true;
 }
