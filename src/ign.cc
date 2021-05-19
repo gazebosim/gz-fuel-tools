@@ -981,7 +981,6 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update(
     const char *_onlyModels, const char *_onlyWorlds, const char *_header)
 {
-  std::cout << "Updating fuel cache" << std::endl;
   // Add signal handler for SIGTERM and SIGINT. Ctrl-C doesn't work without this
   // handler.
   ignition::common::SignalHandler sigHandler;
