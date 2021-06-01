@@ -721,6 +721,13 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
 //////////////////////////////////////////////////
 Result FuelClient::DownloadWorld(WorldIdentifier &_id)
 {
+  return this->DownloadWorld(_id, {});
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadWorld(WorldIdentifier &_id,
+    const std::vector<std::string> &_headers)
+{
   // Server config
   if (!_id.Server().Url().Valid() || _id.Server().Version().empty())
   {
@@ -736,7 +743,7 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
 
   ignmsg << "Downloading world [" << _id.UniqueName() << "]" << std::endl;
 
-  std::vector<std::string> headersIncludingServerConfig;
+  std::vector<std::string> headersIncludingServerConfig = _headers;
   AddServerConfigParametersToHeaders(
     _id.Server(), headersIncludingServerConfig);
 
@@ -1567,51 +1574,57 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
   }
 }
 
+//////////////////////////////////////////////////
 bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)
 {
-  std::vector<std::string> done_files;
+  // Done files is used to make sure a model, which could have multiple
+  // verions on disks, is only updated once.
+  std::vector<std::string> doneFiles;
   for (ModelIter iter = this->dataPtr->cache->AllModels(); iter; ++iter)
   {
     ignition::fuel_tools::ModelIdentifier id = iter->Identification();
-    ignition::fuel_tools::ModelIdentifier cloud_id;
-    if (!this->ModelDetails(id, cloud_id))
+    ignition::fuel_tools::ModelIdentifier cloudId;
+    if (!this->ModelDetails(id, cloudId))
     {
       ignerr << "Failed to fetch model details for model["
         << id.Name() << "]\n";
       return false;
     }
-    if (id.Version() < cloud_id.Version() && std::find(done_files.begin(),
-        done_files.end(), id.Name()) == done_files.end())
+    if (id.Version() < cloudId.Version() && std::find(doneFiles.begin(),
+        doneFiles.end(), id.Name()) == doneFiles.end())
     {
       ignmsg << "Updating model " << id.Name() << " up to version "
-      << cloud_id.Version() << std::endl;
-      this->DownloadModel(cloud_id, _headers);
-      done_files.push_back(id.Name());
+      << cloudId.Version() << std::endl;
+      this->DownloadModel(cloudId, _headers);
+      doneFiles.push_back(id.Name());
     }
   }
   return true;
 }
 
-bool FuelClient::UpdateWorlds(const std::vector<std::string> &/*_headers*/)
+//////////////////////////////////////////////////
+bool FuelClient::UpdateWorlds(const std::vector<std::string> &_headers)
 {
-  std::vector<std::string> done_files;
+  // Done files is used to make sure a world, which could have multiple
+  // verions on disks, is only updated once.
+  std::vector<std::string> doneFiles;
   for (WorldIter iter = this->dataPtr->cache->AllWorlds(); iter; ++iter)
   {
     ignition::fuel_tools::WorldIdentifier id = iter;
-    ignition::fuel_tools::WorldIdentifier cloud_id;
-    if (!this->WorldDetails(id, cloud_id))
+    ignition::fuel_tools::WorldIdentifier cloudId;
+    if (!this->WorldDetails(id, cloudId))
     {
       ignerr << "Failed to fetch world details for world["
         << id.Name() << "]\n";
       return false;
     }
-    if (id.Version() < cloud_id.Version() && std::find(done_files.begin(),
-        done_files.end(), id.Name()) == done_files.end())
+    if (id.Version() < cloudId.Version() && std::find(doneFiles.begin(),
+        doneFiles.end(), id.Name()) == doneFiles.end())
     {
       ignmsg << "Updating world " << id.Name() << " up to version "
-      << cloud_id.Version() << std::endl;
-      this->DownloadWorld(cloud_id); // There is no header version for this
-      done_files.push_back(id.Name());
+      << cloudId.Version() << std::endl;
+      this->DownloadWorld(cloudId, _headers);
+      doneFiles.push_back(id.Name());
     }
   }
   return true;

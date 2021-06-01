@@ -89,7 +89,7 @@ SUBCOMMANDS = {
   "                           the model. If unspecified, the server will be\n"\
   "                           https://fuel.ignitionrobotics.org.           \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
 
  'download' =>
@@ -101,7 +101,7 @@ SUBCOMMANDS = {
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
   "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n"\
+  "                           --header 'Private-Token: <access_token>'.    \n"\
   "  -j [--jobs] arg          Number of parallel downloads (default: 1,    \n"\
   "                           max: #{MAX_PARALLEL_JOBS}). \n"\
   "  -t [--type] arg          Limit what resource type (i.e. model, world) \n"\
@@ -123,7 +123,7 @@ SUBCOMMANDS = {
   "  -p [--private]           Use this argument to make the model private. \n"\
   "  -b [--public]            Use this argument to make the model public.  \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
 
   'list' =>
@@ -150,7 +150,6 @@ SUBCOMMANDS = {
   "                           metadata.pbtxt.                              \n"+
   "  --pbtxt2config arg       Convert a metadata.pbtxt file to a           \n"\
   "                           model.confg.                                 \n"+
-
   COMMON_OPTIONS,
 
  'upload' =>
@@ -173,6 +172,7 @@ SUBCOMMANDS = {
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
+
  'update' =>
   "Update all models and worlds in local cache                             \n"\
   "                                                                        \n"\
@@ -182,8 +182,8 @@ SUBCOMMANDS = {
   "  --onlymodels             Use this argument to only update models.     \n"\
   "  --onlyworlds             Use this argument to only update worlds.     \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
-   COMMON_OPTIONS,
+  "                           --header 'Private-Token: <access_token>'.    \n" +
+  COMMON_OPTIONS
 }
 
 #

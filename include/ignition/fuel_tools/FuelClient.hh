@@ -223,6 +223,14 @@ namespace ignition
       /// \return Result of the download operation
       public: Result DownloadWorld(WorldIdentifier &_id);
 
+      /// \brief Download a world from Ignition Fuel. This will override an
+      /// existing local copy of the world.
+      /// \param[out] _id The world identifier, with local path updated.
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \return Result of the download operation
+      public: Result DownloadWorld(WorldIdentifier &_id,
+                  const std::vector<std::string> &_headers);
+
       /// \brief Download a model from ignition fuel. This will override an
       /// existing local copy of the model.
       /// \param[in] _modelUrl The unique URL of the model to download.
