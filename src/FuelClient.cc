@@ -1630,8 +1630,6 @@ bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)
 //////////////////////////////////////////////////
 bool FuelClient::UpdateWorlds(const std::vector<std::string> &_headers)
 {
-  std::cout << "Updating worlds\n";
-
   // Get a list of the most recent world versions in the cache.
   std::map<std::string, ignition::fuel_tools::WorldIdentifier> toProcess;
   for (WorldIter iter = this->dataPtr->cache->AllWorlds(); iter; ++iter)
