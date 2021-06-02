@@ -67,6 +67,7 @@ COMMANDS = { 'fuel' =>
   "  list                     List available resources                     \n"\
   "  meta                     Read and write resource metadata             \n"\
   "  upload                   Upload resources                             \n"\
+  "  update                   Update resources                             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -v [ --verbose ] [arg]   Adjust the level of console output (0~4).    \n"\
@@ -206,8 +207,8 @@ class Cmd
       'config2pbtxt' => '',
       'pbtxt2config' => '',
       'private' => '',
-      'onlymodels' => '',
-      'onlyworlds' => ''
+      'onlymodels' => '0',
+      'onlyworlds' => '0'
     }
 
     usage = COMMANDS[args[0]]
@@ -270,10 +271,10 @@ class Cmd
         options['jobs'] = jobs || 1
       end
       opts.on('--onlymodels', 'Only update models') do
-        options['onlymodels'] = 'true'
+        options['onlymodels'] = '1'
       end
       opts.on('--onlyworlds', 'Only update worlds') do
-        options['onlyworlds'] = 'true'
+        options['onlyworlds'] = '1'
       end
     end # opt_parser do
 
@@ -442,7 +443,7 @@ class Cmd
           exit(-1)
         end
       when 'update'
-        Importer.extern 'int update(const char *, const char *)'
+        Importer.extern 'int update(const char *, const char *, const char *)'
         if not Importer.update(options['onlymodels'],
                                options['onlyworlds'],
                                options['header'])

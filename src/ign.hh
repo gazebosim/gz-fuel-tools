@@ -135,6 +135,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
 /// \param[in] _header An HTTP header.
 /// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update(
-    const char *_onlyModels, const char *_onlyWorlds, const char *_header);
+    const char *_onlyModels = nullptr, const char *_onlyWorlds = nullptr,
+    const char *_header = nullptr);
 
 #endif

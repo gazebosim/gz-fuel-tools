@@ -978,6 +978,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
   return 1;
 }
 
+//////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update(
     const char *_onlyModels, const char *_onlyWorlds, const char *_header)
 {
@@ -994,12 +995,14 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update(
   bool onlyModelsBool = false;
   if (_onlyModels && std::strlen(_onlyModels) != 0)
   {
-    onlyModelsBool = true;
+    std::string str = ignition::common::lowercase(_onlyModels);
+    onlyModelsBool = str == "1" || str == "true";
   }
   bool onlyWorldsBool = false;
   if (_onlyWorlds && std::strlen(_onlyWorlds) != 0)
   {
-    onlyWorldsBool = true;
+    std::string str = ignition::common::lowercase(_onlyWorlds);
+    onlyWorldsBool = str == "1" || str == "true";
   }
   // Client
   ignition::fuel_tools::ClientConfig conf;
@@ -1011,13 +1014,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update(
   // Headers
   std::vector<std::string> headers;
   if (_header && strlen(_header) > 0)
-  {
     headers.push_back(_header);
-  }
-  else
-  {
-    headers = {};
-  }
+
   if (!onlyWorldsBool && !client.UpdateModels(headers)) {
     return 0;
   }

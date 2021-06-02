@@ -85,6 +85,7 @@ namespace ignition
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \param[out] _model The requested model
+      /// \param[in] _headers Headers to set on the HTTP request.
       /// \return Result of the fetch operation.
       public: Result ModelDetails(const ModelIdentifier &_id,
                   ModelIdentifier &_model,
@@ -119,6 +120,15 @@ namespace ignition
       /// \return Result of the fetch operation.
       public: Result WorldDetails(const WorldIdentifier &_id,
                                   WorldIdentifier &_world) const;
+
+      /// \brief Fetch the details of a world.
+      /// \param[in] _id a partially filled out identifier used to fetch worlds
+      /// \param[out] _world The requested world
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \return Result of the fetch operation.
+      public: Result WorldDetails(const WorldIdentifier &_id,
+                                WorldIdentifier &_world,
+                                const std::vector<std::string> &_headers) const;
 
       /// \brief Returns an iterator that can return information of worlds
       /// \remarks An iterator instead of a list of names, to be able to
