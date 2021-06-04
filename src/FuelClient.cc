@@ -333,6 +333,14 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
 Result FuelClient::WorldDetails(const WorldIdentifier &_id,
     WorldIdentifier &_world) const
 {
+
+  return this->WorldDetails(_id, _world, {});
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::WorldDetails(const WorldIdentifier &_id,
+    WorldIdentifier &_world, const std::vector<std::string> &_headers) const
+{
   auto serverUrl = _id.Server().Url().Str();
 
   if (serverUrl.empty() || _id.Owner().empty() || _id.Name().empty())
@@ -344,6 +352,10 @@ Result FuelClient::WorldDetails(const WorldIdentifier &_id,
   auto version = _id.Server().Version();
   common::URIPath path;
   path = path / _id.Owner() / "worlds" / _id.Name();
+
+  std::vector<std::string> headersIncludingServerConfig = _headers;
+  AddServerConfigParametersToHeaders(
+    _id.Server(), headersIncludingServerConfig);
 
   resp = rest.Request(HttpMethod::GET, serverUrl, version,
       path.Str(), {}, {}, "");
@@ -721,6 +733,13 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
 //////////////////////////////////////////////////
 Result FuelClient::DownloadWorld(WorldIdentifier &_id)
 {
+  return this->DownloadWorld(_id, {});
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadWorld(WorldIdentifier &_id,
+    const std::vector<std::string> &_headers)
+{
   // Server config
   if (!_id.Server().Url().Valid() || _id.Server().Version().empty())
   {
@@ -736,7 +755,7 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
 
   ignmsg << "Downloading world [" << _id.UniqueName() << "]" << std::endl;
 
-  std::vector<std::string> headersIncludingServerConfig;
+  std::vector<std::string> headersIncludingServerConfig = _headers;
   AddServerConfigParametersToHeaders(
     _id.Server(), headersIncludingServerConfig);
 
@@ -1565,4 +1584,86 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
   {
     ignerr << "Failed to parse license information[" << resp.data << "]\n";
   }
+}
+
+//////////////////////////////////////////////////
+bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)
+{
+  // Get a list of the most recent model versions in the cache.
+  std::map<std::string, ignition::fuel_tools::ModelIdentifier> toProcess;
+  for (ModelIter iter = this->dataPtr->cache->AllModels(); iter; ++iter)
+  {
+    auto processIter = toProcess.find(iter->Identification().UniqueName());
+    if (processIter == toProcess.end() ||
+        processIter->second.Version() < iter->Identification().Version())
+    {
+      toProcess[iter->Identification().UniqueName()] = iter->Identification();
+    }
+  }
+
+  // Attempt to update each model.
+  for (const auto id : toProcess)
+  {
+    ignition::fuel_tools::ModelIdentifier cloudId;
+
+    if (!this->ModelDetails(id.second, cloudId, _headers))
+    {
+      ignerr << "Failed to fetch model details for model["
+        << id.second.Owner()  << "/" << id.second.Name() << "]\n";
+    }
+    else if (id.second.Version() < cloudId.Version())
+    {
+      ignmsg << "Updating model " << id.second.Owner() << "/"
+        << id.second.Name() << " up to version "
+        << cloudId.Version() << std::endl;
+      this->DownloadModel(cloudId, _headers);
+    }
+    else
+    {
+      ignmsg << "Model " << id.second.Owner() << "/"
+        << id.second.Name() << " is up to date." << std::endl;
+    }
+  }
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool FuelClient::UpdateWorlds(const std::vector<std::string> &_headers)
+{
+  // Get a list of the most recent world versions in the cache.
+  std::map<std::string, ignition::fuel_tools::WorldIdentifier> toProcess;
+  for (WorldIter iter = this->dataPtr->cache->AllWorlds(); iter; ++iter)
+  {
+    auto processIter = toProcess.find(iter->UniqueName());
+    if (processIter == toProcess.end() ||
+        processIter->second.Version() < iter->Version())
+    {
+      toProcess[iter->UniqueName()] = *iter;
+    }
+  }
+
+  // Attempt to update each world.
+  for (const auto id : toProcess)
+  {
+    ignition::fuel_tools::WorldIdentifier cloudId;
+
+    if (!this->WorldDetails(id.second, cloudId, _headers))
+    {
+      ignerr << "Failed to fetch world details for world["
+        << id.second.Owner() << "/" << id.second.Name() << "]\n";
+    }
+    else if (id.second.Version() < cloudId.Version())
+    {
+      ignmsg << "Updating world " << id.second.Owner() << "/"
+        << id.second.Name() << " up to version "
+        << cloudId.Version() << std::endl;
+      this->DownloadWorld(cloudId, _headers);
+    }
+    else
+    {
+      ignmsg << "World " << id.second.Owner() << "/"
+        << id.second.Name() << " is up to date." << std::endl;
+    }
+  }
+  return true;
 }

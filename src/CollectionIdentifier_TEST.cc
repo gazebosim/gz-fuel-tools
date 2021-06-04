@@ -68,15 +68,15 @@ TEST(CollectionIdentifier, UniqueName)
   EXPECT_EQ("https://localhost:8003/alice/collections/hello", id.UniqueName());
 #else
   id.SetServer(srv1);
-  EXPECT_EQ("https://localhost:8001\\alice\\collections\\hello",
+  EXPECT_EQ("https://localhost:8001/alice/collections/hello",
       id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ("https://localhost:8002\\alice\\collections\\hello",
+  EXPECT_EQ("https://localhost:8002/alice/collections/hello",
       id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ("https://localhost:8003\\alice\\collections\\hello",
+  EXPECT_EQ("https://localhost:8003/alice/collections/hello",
       id.UniqueName());
 #endif
 }
@@ -136,7 +136,7 @@ TEST(CollectionIdentifier, AsString)
     std::string str =
         "Name: \n"\
         "Owner: \n"\
-        "Unique name: https://fuel.ignitionrobotics.org//collections/\n"
+        "Unique name: https://fuel.ignitionrobotics.org/collections/\n"
         "Server:\n"
         "  URL: https://fuel.ignitionrobotics.org\n"
         "  Version: 1.0\n"
@@ -145,7 +145,7 @@ TEST(CollectionIdentifier, AsString)
     std::string str =
         "Name: \n"\
         "Owner: \n"\
-        "Unique name: https://fuel.ignitionrobotics.org\\collections\n"
+        "Unique name: https://fuel.ignitionrobotics.org/collections\n"
         "Server:\n"
         "  URL: https://fuel.ignitionrobotics.org\n"
         "  Version: 1.0\n"

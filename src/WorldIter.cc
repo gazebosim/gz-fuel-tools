@@ -228,6 +228,12 @@ WorldIdentifier *WorldIter::operator->()
 }
 
 //////////////////////////////////////////////////
+WorldIdentifier &WorldIter::operator*()
+{
+  return this->dataPtr->worldId;
+}
+
+//////////////////////////////////////////////////
 WorldIter::operator WorldIdentifier() const
 {
   return this->dataPtr->worldId;
