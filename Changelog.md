@@ -1,5 +1,36 @@
 ## Ignition Fuel Tools 4.x
 
+### Ignition Fuel Tools 4.X.X (202X-XX-XX)
+
+### Ignition Fuel Tools 4.4.0 (2021-06-17)
+
+1. Remove `tools/code_check` and update codecov
+    * [Pull request #187](https://github.com/ignitionrobotics/ign-fuel-tools/pull/187)
+
+1. Fixed windows download
+    * [Pull request #178](https://github.com/ignitionrobotics/ign-fuel-tools/pull/178)
+
+1. Master branch updates
+    * [Pull request #170](https://github.com/ignitionrobotics/ign-fuel-tools/pull/170)
+
+1. Support private-token in `config.yaml`
+    * [Pull request #156](https://github.com/ignitionrobotics/ign-fuel-tools/pull/156)
+
+1. Add Windows Installation
+    * [Pull request #162](https://github.com/ignitionrobotics/ign-fuel-tools/pull/162)
+
+1. Use semantic version and prevent crash if version is missing
+    * [Pull request #151](https://github.com/ignitionrobotics/ign-fuel-tools/pull/151)
+
+1. Document `IGN_FUEL_CACHE_PATH` on command line
+    * [Pull request #149](https://github.com/ignitionrobotics/ign-fuel-tools/pull/149)
+
+1. Support editing/patching model files
+    * [Pull request #140](https://github.com/ignitionrobotics/ign-fuel-tools/pull/140)
+
+1. Set keep alive on
+    * [Pull request #141](https://github.com/ignitionrobotics/ign-fuel-tools/pull/141)
+
 ### Ignition Fuel Tools 4.3.0 (2020-12-01)
 
 1. Improve fork experience.
