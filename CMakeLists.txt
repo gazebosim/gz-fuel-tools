@@ -62,10 +62,7 @@ set(IGN_MSGS_MAJOR_VER ${ignition-msgs6_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-tools
-ign_find_package(ignition-tools QUIET)
-if (ignition-tools_FOUND)
-  set (HAVE_IGN_TOOLS TRUE)
-endif()
+find_program(HAVE_IGN_TOOLS ign)
 
 #============================================================================
 # Configure the build
