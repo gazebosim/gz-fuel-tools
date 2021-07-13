@@ -53,7 +53,7 @@ namespace ignition
         auto modelUri = _uri.substr(0,
             _uri.find("files", model.UniqueName().size())-1);
         _client.DownloadModel(common::URI(modelUri), result);
-        result += "/" + fileUrl;
+        result = common::joinPaths(result, fileUrl);
       }
       // Download the world, if it is a world URI
       else if (_client.ParseWorldUrl(uri, world) &&
@@ -68,7 +68,8 @@ namespace ignition
         auto worldUri = _uri.substr(0,
             _uri.find("files", world.UniqueName().size())-1);
         _client.DownloadWorld(common::URI(worldUri), result);
-        result += "/" + fileUrl;
+        result = common::joinPaths(result, fileUrl);
+
       }
 
       return result;

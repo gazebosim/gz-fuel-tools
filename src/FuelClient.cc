@@ -1077,6 +1077,7 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
 
   return true;
 }
+
 //////////////////////////////////////////////////
 bool FuelClient::ParseCollectionUrl(const common::URI &_url,
     CollectionIdentifier &_id)
@@ -1288,6 +1289,12 @@ Result FuelClient::CachedModelFile(const common::URI &_fileUrl,
 
   // Check if file exists
   filePath = common::joinPaths(modelPath, filePath);
+
+  std::vector<std::string> tokens = ignition::common::split(filePath, "/");
+  std::string sTemp;
+  for (auto s : tokens)
+    sTemp = ignition::common::joinPaths(sTemp, s);
+  filePath = sTemp;
 
   if (common::exists(filePath))
   {
