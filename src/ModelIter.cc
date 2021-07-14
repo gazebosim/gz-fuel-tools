@@ -16,6 +16,7 @@
 */
 
 #include <memory>
+#include <regex>
 #include <string>
 #include <vector>
 #include <ignition/common/Console.hh>
@@ -169,7 +170,9 @@ IterRestIds::IterRestIds(const Rest &_rest, const ServerConfig &_config,
 
     // Fire the request.
     resp = this->rest.Request(method, this->config.Url().Str(),
-      this->config.Version(), path, {queryStrPage}, headers, "");
+      this->config.Version(),
+      std::regex_replace(path, std::regex(R"(\\)"), "/"),
+      {queryStrPage}, headers, "");
 
     // TODO(nkoenig): resp.statusCode should return != 200 when the page
     // requested does
