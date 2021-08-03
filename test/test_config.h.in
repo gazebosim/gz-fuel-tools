@@ -55,7 +55,7 @@ namespace ignition
         if (common::env("TEST_SRCDIR", _sourceDir))
         {
           _sourceDir = common::joinPaths(
-              _sourceDir, "__main__", "ign_common");
+              _sourceDir, "__main__", "ign_fuel_tools");
           return true;
         }
         else

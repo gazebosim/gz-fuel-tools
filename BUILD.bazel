@@ -27,16 +27,6 @@ PROJECT_MINOR = 0
 
 PROJECT_PATCH = 0
 
-IGN_DESIGNATION = "fuel-tools"
-
-CMAKE_INSTALL_PREFIX = "/tmp"
-
-CMAKE_INSTALL_DATAROOTDIR = "/tmp"
-
-library_location = "/usr"
-
-IGN_LIBRARY_PATH = "/usr"
-
 # Generates config.hh based on the version numbers in CMake code.
 ign_config_header(
     name = "config",
