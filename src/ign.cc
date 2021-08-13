@@ -741,7 +741,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
-    const char *_url, const char *_header, const char *_private)
+    const char *_url, const char *_header, const char *_private,
+    const char *_owner)
 {
   ignition::common::SignalHandler handler;
   bool sigKilled{false};
@@ -789,7 +790,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
   {
     std::cout << "Uploading a model[" << _path << "]\n";
     // Upload the model
-    return client.UploadModel(_path, model, headers, privateBool);
+    return client.UploadModel(_path, model, headers, privateBool, _owner);
   }
 
   // If a model.config or metadata.pbtxt file does not exist, then assume
@@ -804,7 +805,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
          ignition::common::exists(
            ignition::common::joinPaths(*dirIter, "model.config"))))
     {
-      if (!client.UploadModel(*dirIter, model, headers, privateBool))
+      if (!client.UploadModel(*dirIter, model, headers, privateBool, _owner))
       {
         ignerr << "Failed to upload model[" << *dirIter << "]\n";
       }
@@ -974,5 +975,52 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
     return 0;
   }
 
+  return 1;
+}
+
+//////////////////////////////////////////////////
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update(
+    const char *_onlyModels, const char *_onlyWorlds, const char *_header)
+{
+  // Add signal handler for SIGTERM and SIGINT. Ctrl-C doesn't work without this
+  // handler.
+  ignition::common::SignalHandler sigHandler;
+  sigHandler.AddCallback([&](int _sig) {
+      if (SIGTERM == _sig || SIGINT == _sig)
+      {
+        std::exit(1);
+      }
+  });
+
+  bool onlyModelsBool = false;
+  if (_onlyModels && std::strlen(_onlyModels) != 0)
+  {
+    std::string str = ignition::common::lowercase(_onlyModels);
+    onlyModelsBool = str == "1" || str == "true";
+  }
+  bool onlyWorldsBool = false;
+  if (_onlyWorlds && std::strlen(_onlyWorlds) != 0)
+  {
+    std::string str = ignition::common::lowercase(_onlyWorlds);
+    onlyWorldsBool = str == "1" || str == "true";
+  }
+  // Client
+  ignition::fuel_tools::ClientConfig conf;
+
+  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+
+  ignition::fuel_tools::FuelClient client(conf);
+
+  // Headers
+  std::vector<std::string> headers;
+  if (_header && strlen(_header) > 0)
+    headers.push_back(_header);
+
+  if (!onlyWorldsBool && !client.UpdateModels(headers)) {
+    return 0;
+  }
+  if (!onlyModelsBool && !client.UpdateWorlds(headers)) {
+    return 0;
+  }
   return 1;
 }

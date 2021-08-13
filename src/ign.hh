@@ -75,10 +75,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(
 /// \param[in] _header An HTTP header.
 /// \param[in] _private "1" to make the resource private, "0" to make it
 /// public.
+/// \param[in] _owner Upload the resource to the provided owner, or nullptr
+/// to upload to the account specified by the token in the header.
 /// \return 1 if successful, 0 if not.
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     const char *_url, const char *_header = nullptr,
-    const char *_private = nullptr);
+    const char *_private = nullptr, const char *_owner = nullptr);
 
 /// \brief External hook to execute 'ign fuel delete [options]' from the command
 /// line.
@@ -124,5 +126,16 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
     const char *_url, const char *_header = nullptr,
     const char *_private = nullptr,
     const char *_path = nullptr);
+
+/// \brief External hook to execute 'ign fuel update [options] from the command'
+/// line
+///
+/// \param[in] _onlyModels "1" to only update models.
+/// \param[in] _onlyWorlds "1" to only update worlds.
+/// \param[in] _header An HTTP header.
+/// \return 1 if successful, 0 if not.
+extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update(
+    const char *_onlyModels = nullptr, const char *_onlyWorlds = nullptr,
+    const char *_header = nullptr);
 
 #endif

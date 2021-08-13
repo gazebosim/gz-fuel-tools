@@ -67,6 +67,7 @@ COMMANDS = { 'fuel' =>
   "  list                     List available resources                     \n"\
   "  meta                     Read and write resource metadata             \n"\
   "  upload                   Upload resources                             \n"\
+  "  update                   Update resources                             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -v [ --verbose ] [arg]   Adjust the level of console output (0~4).    \n"\
@@ -89,7 +90,7 @@ SUBCOMMANDS = {
   "                           the model. If unspecified, the server will be\n"\
   "                           https://fuel.ignitionrobotics.org.           \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
 
  'download' =>
@@ -101,7 +102,7 @@ SUBCOMMANDS = {
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
   "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n"\
+  "                           --header 'Private-Token: <access_token>'.    \n"\
   "  -j [--jobs] arg          Number of parallel downloads (default: 1,    \n"\
   "                           max: #{MAX_PARALLEL_JOBS}). \n"\
   "  -t [--type] arg          Limit what resource type (i.e. model, world) \n"\
@@ -123,7 +124,7 @@ SUBCOMMANDS = {
   "  -p [--private]           Use this argument to make the model private. \n"\
   "  -b [--public]            Use this argument to make the model public.  \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
-  "                           --header 'authorization: Bearer JWT'.        \n" +
+  "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
 
   'list' =>
@@ -150,7 +151,6 @@ SUBCOMMANDS = {
   "                           metadata.pbtxt.                              \n"+
   "  --pbtxt2config arg       Convert a metadata.pbtxt file to a           \n"\
   "                           model.confg.                                 \n"+
-
   COMMON_OPTIONS,
 
  'upload' =>
@@ -164,11 +164,27 @@ SUBCOMMANDS = {
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
   "                           https://fuel.ignitionrobotics.org.           \n"\
+  "  -o [--owner] arg         Upload to the given owner, which can be an.  \n"\
+  "                           organization. Default behavior is to upload  \n"\
+  "                           to the user account associated with the      \n"\
+  "                           private token specified in the header.       \n"\
   "  -p [--private]           Use this argument to make the model private. \n"\
   "                           Otherwise, the model will be public.         \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
+
+ 'update' =>
+  "Update all models and worlds in local cache                             \n"\
+  "                                                                        \n"\
+  "  ign fuel update [options]                                             \n"\
+  "                                                                        \n"\
+  "Available Options:                                                      \n"\
+  "  --onlymodels             Use this argument to only update models.     \n"\
+  "  --onlyworlds             Use this argument to only update worlds.     \n"\
+  "  --header arg             Set an HTTP header, such as                  \n"\
+  "                           --header 'Private-Token: <access_token>'.    \n" +
+  COMMON_OPTIONS
 }
 
 #
@@ -190,7 +206,9 @@ class Cmd
       'model' => '',
       'config2pbtxt' => '',
       'pbtxt2config' => '',
-      'private' => ''
+      'private' => '',
+      'onlymodels' => '0',
+      'onlyworlds' => '0'
     }
 
     usage = COMMANDS[args[0]]
@@ -251,6 +269,12 @@ class Cmd
       end
       opts.on('-j [JOBS]', '--jobs', String, 'Number of parallel downloads') do |jobs|
         options['jobs'] = jobs || 1
+      end
+      opts.on('--onlymodels', 'Only update models') do
+        options['onlymodels'] = '1'
+      end
+      opts.on('--onlyworlds', 'Only update worlds') do
+        options['onlyworlds'] = '1'
       end
     end # opt_parser do
 
@@ -410,11 +434,19 @@ class Cmd
           end
         end
       when 'upload'
-        Importer.extern 'int upload(const char *, const char *, const char *, const char *)'
+        Importer.extern 'int upload(const char *, const char *, const char *, const char *, const char *)'
         if not Importer.upload(options['model'],
                                options['url'],
                                options['header'],
-                               options['private'])
+                               options['private'],
+                               options['owner'])
+          exit(-1)
+        end
+      when 'update'
+        Importer.extern 'int update(const char *, const char *, const char *)'
+        if not Importer.update(options['onlymodels'],
+                               options['onlyworlds'],
+                               options['header'])
           exit(-1)
         end
       end
