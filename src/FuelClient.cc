@@ -176,10 +176,12 @@ class ignition::fuel_tools::FuelClientPrivate
   /// \param[in] _pathToModelDir Path to the model directory.
   /// \param[in] _id Model identifier information.
   /// \param[in] _private True if this model should be private.
-  /// \param[in] _form Form to fill.
+  /// \param[in] _owner Model owner name.
+  /// \param[out] _form Form to fill.
   /// \return True if the operation completed successfully.
   public: bool FillModelForm(const std::string &_pathToModelDir,
               const ModelIdentifier &_id, bool _private,
+              const std::string &_owner,
               std::multimap<std::string, std::string> &_form);
 
   /// \brief This function requests the available licenses from the
@@ -345,6 +347,14 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
 Result FuelClient::WorldDetails(const WorldIdentifier &_id,
     WorldIdentifier &_world) const
 {
+
+  return this->WorldDetails(_id, _world, {});
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::WorldDetails(const WorldIdentifier &_id,
+    WorldIdentifier &_world, const std::vector<std::string> &_headers) const
+{
   auto serverUrl = _id.Server().Url().Str();
 
   if (serverUrl.empty() || _id.Owner().empty() || _id.Name().empty())
@@ -356,6 +366,10 @@ Result FuelClient::WorldDetails(const WorldIdentifier &_id,
   auto version = _id.Server().Version();
   common::URIPath path;
   path = path / _id.Owner() / "worlds" / _id.Name();
+
+  std::vector<std::string> headersIncludingServerConfig = _headers;
+  AddServerConfigParametersToHeaders(
+    _id.Server(), headersIncludingServerConfig);
 
   resp = rest.Request(HttpMethod::GET, serverUrl, version,
       path.Str(), {}, {}, "");
@@ -460,12 +474,23 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     const ModelIdentifier &_id, const std::vector<std::string> &_headers,
     bool _private)
 {
+  return this->UploadModel(_pathToModelDir, _id, _headers, _private, "");
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::UploadModel(const std::string &_pathToModelDir,
+    const ModelIdentifier &_id, const std::vector<std::string> &_headers,
+    bool _private, const std::string &_owner)
+{
   ignition::fuel_tools::Rest rest;
   RestResponse resp;
 
   std::multimap<std::string, std::string> form;
-  if (!this->dataPtr->FillModelForm(_pathToModelDir, _id, _private, form))
+  if (!this->dataPtr->FillModelForm(_pathToModelDir, _id, _private, _owner,
+        form))
+  {
     return Result(ResultType::UPLOAD_ERROR);
+  }
 
   std::vector<std::string> headersIncludingServerConfig = _headers;
   AddServerConfigParametersToHeaders(
@@ -493,8 +518,10 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
            << "Suggestions" << std::endl
            << "  1. Is the Server URL correct? Try entering it on a browser.\n"
            << "  2. Do the categories exist? If you are using the Fuel server,"
-           << " then you can get the complete list at"
-           << " https://fuel.ignitionrobotics.org/1.0/categories." << std::endl;
+           << "     then you can get the complete list at"
+           << "     https://fuel.ignitionrobotics.org/1.0/categories.\n"
+           << "  3. If the owner is specified, make sure you have correct\n"
+           << "     permissions." << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
 
@@ -720,6 +747,13 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
 //////////////////////////////////////////////////
 Result FuelClient::DownloadWorld(WorldIdentifier &_id)
 {
+  return this->DownloadWorld(_id, {});
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadWorld(WorldIdentifier &_id,
+    const std::vector<std::string> &_headers)
+{
   // Server config
   if (!_id.Server().Url().Valid() || _id.Server().Version().empty())
   {
@@ -735,7 +769,7 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
 
   ignmsg << "Downloading world [" << _id.UniqueName() << "]" << std::endl;
 
-  std::vector<std::string> headersIncludingServerConfig;
+  std::vector<std::string> headersIncludingServerConfig = _headers;
   AddServerConfigParametersToHeaders(
     _id.Server(), headersIncludingServerConfig);
 
@@ -1053,6 +1087,7 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
 
   return true;
 }
+
 //////////////////////////////////////////////////
 bool FuelClient::ParseCollectionUrl(const common::URI &_url,
     CollectionIdentifier &_id)
@@ -1265,6 +1300,12 @@ Result FuelClient::CachedModelFile(const common::URI &_fileUrl,
   // Check if file exists
   filePath = common::joinPaths(modelPath, filePath);
 
+  std::vector<std::string> tokens = ignition::common::split(filePath, "/");
+  std::string sTemp;
+  for (auto s : tokens)
+    sTemp = ignition::common::joinPaths(sTemp, s);
+  filePath = sTemp;
+
   if (common::exists(filePath))
   {
     _path = filePath;
@@ -1333,7 +1374,7 @@ Result FuelClient::PatchModel(
 
   if (!_pathToModelDir.empty() &&
       !this->dataPtr->FillModelForm(_pathToModelDir, _model,
-        _model.Private(), form))
+        _model.Private(), _model.Owner(), form))
   {
     return Result(ResultType::UPLOAD_ERROR);
   }
@@ -1379,7 +1420,7 @@ void FuelClient::PopulateLicenses(const ServerConfig &_server)
 
 //////////////////////////////////////////////////
 bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
-    const ModelIdentifier &_id, bool _private,
+    const ModelIdentifier &_id, bool _private, const std::string &_owner,
     std::multimap<std::string, std::string> &_form)
 {
   if (!common::exists(_pathToModelDir))
@@ -1435,6 +1476,12 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
     {"description", meta.description()},
     {"private", _private ? "1" : "0"},
   };
+
+  // Add owner if specified.
+  if (!_owner.empty())
+  {
+    _form.emplace("owner", _owner);
+  }
 
   // \todo(nkoenig) The ign-fuelserver expects an integer number for the
   // license information. The fuelserver should be modified to accept
@@ -1554,4 +1601,86 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
   {
     ignerr << "Failed to parse license information[" << resp.data << "]\n";
   }
+}
+
+//////////////////////////////////////////////////
+bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)
+{
+  // Get a list of the most recent model versions in the cache.
+  std::map<std::string, ignition::fuel_tools::ModelIdentifier> toProcess;
+  for (ModelIter iter = this->dataPtr->cache->AllModels(); iter; ++iter)
+  {
+    auto processIter = toProcess.find(iter->Identification().UniqueName());
+    if (processIter == toProcess.end() ||
+        processIter->second.Version() < iter->Identification().Version())
+    {
+      toProcess[iter->Identification().UniqueName()] = iter->Identification();
+    }
+  }
+
+  // Attempt to update each model.
+  for (const auto id : toProcess)
+  {
+    ignition::fuel_tools::ModelIdentifier cloudId;
+
+    if (!this->ModelDetails(id.second, cloudId, _headers))
+    {
+      ignerr << "Failed to fetch model details for model["
+        << id.second.Owner()  << "/" << id.second.Name() << "]\n";
+    }
+    else if (id.second.Version() < cloudId.Version())
+    {
+      ignmsg << "Updating model " << id.second.Owner() << "/"
+        << id.second.Name() << " up to version "
+        << cloudId.Version() << std::endl;
+      this->DownloadModel(cloudId, _headers);
+    }
+    else
+    {
+      ignmsg << "Model " << id.second.Owner() << "/"
+        << id.second.Name() << " is up to date." << std::endl;
+    }
+  }
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool FuelClient::UpdateWorlds(const std::vector<std::string> &_headers)
+{
+  // Get a list of the most recent world versions in the cache.
+  std::map<std::string, ignition::fuel_tools::WorldIdentifier> toProcess;
+  for (WorldIter iter = this->dataPtr->cache->AllWorlds(); iter; ++iter)
+  {
+    auto processIter = toProcess.find(iter->UniqueName());
+    if (processIter == toProcess.end() ||
+        processIter->second.Version() < iter->Version())
+    {
+      toProcess[iter->UniqueName()] = *iter;
+    }
+  }
+
+  // Attempt to update each world.
+  for (const auto id : toProcess)
+  {
+    ignition::fuel_tools::WorldIdentifier cloudId;
+
+    if (!this->WorldDetails(id.second, cloudId, _headers))
+    {
+      ignerr << "Failed to fetch world details for world["
+        << id.second.Owner() << "/" << id.second.Name() << "]\n";
+    }
+    else if (id.second.Version() < cloudId.Version())
+    {
+      ignmsg << "Updating world " << id.second.Owner() << "/"
+        << id.second.Name() << " up to version "
+        << cloudId.Version() << std::endl;
+      this->DownloadWorld(cloudId, _headers);
+    }
+    else
+    {
+      ignmsg << "World " << id.second.Owner() << "/"
+        << id.second.Name() << " is up to date." << std::endl;
+    }
+  }
+  return true;
 }
