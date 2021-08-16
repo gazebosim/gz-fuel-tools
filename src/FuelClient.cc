@@ -565,6 +565,28 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id)
 Result FuelClient::DownloadModel(const ModelIdentifier &_id,
     const std::vector<std::string> &_headers)
 {
+  std::vector<ModelIdentifier> dependencies;
+  auto res = this->DownloadModel(_id, _headers, dependencies);
+
+  if(!res)
+    return res;
+
+  for (auto dep: dependencies)
+  {
+    auto dep_res = this->DownloadModel(dep, _headers);
+
+    if(!dep_res)
+      return dep_res;
+  }
+
+  return res;
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadModel(const ModelIdentifier &_id,
+    const std::vector<std::string> &_headers,
+    std::vector<ModelIdentifier> &_dependencies)
+{
   // Server config
   if (!_id.Server().Url().Valid() || _id.Server().Version().empty())
   {
@@ -626,10 +648,19 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
     return Result(ResultType::FETCH_ERROR);
 
+  return this->ModelDependencies(_id, _dependencies); 
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
+    std::vector<ModelIdentifier> &_dependencies)
+{
+  _dependencies.clear();
+
   // Locate any dependencies from the input model and download them.
   std::string path;
   ignition::msgs::FuelMetadata meta;
-  if (this->CachedModel(ignition::common::URI(newId.UniqueName()), path))
+  if (this->CachedModel(ignition::common::URI(_id.UniqueName()), path))
   {
     std::string metadataPath =
       ignition::common::joinPaths(path, "metadata.pbtxt");
@@ -667,13 +698,22 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
         std::string dependencyPath;
         ignition::common::URI dependencyURI(meta.dependencies(i).uri());
 
-        // If the model is not already cached, download it; this prevents
-        // any sort of cyclic dependencies from running infinitely
-        if (!this->CachedModel(dependencyURI, dependencyPath))
-          this->DownloadModel(dependencyURI, dependencyPath);
+        ModelIdentifier dependencyID;
+        this->ParseModelUrl(dependencyURI, dependencyID);
+        _dependencies.push_back(dependencyID);
       }
     }
   }
+
+  return Result(ResultType::FETCH);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadModels(
+    const std::vector<ModelIdentifier> &_ids,
+    size_t _jobs)
+{
+  std::deque<ModelIdentifier> idsToDownload(_ids.begin(), _ids.end());
 
   return Result(ResultType::FETCH);
 }
