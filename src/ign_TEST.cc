@@ -102,16 +102,16 @@ TEST(CmdLine, ModelListConfigServerUgly)
 TEST(CmdLine, ModelListCustomServerPretty)
 {
   auto output = custom_exec_str(
-      g_listCmd + " -t model -u https://staging-api.ignitionfuel.org");
+      g_listCmd + " -t model -u https://fuel.ignitionrobotics.org");
 
-  EXPECT_NE(output.find("https://staging-api.ignitionfuel.org"),
+  EXPECT_NE(output.find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << output;
   EXPECT_NE(output.find("owners"), std::string::npos) << output;
   EXPECT_NE(output.find("models"), std::string::npos) << output;
 
   EXPECT_EQ(output.find("https://api.ignitionfuel.org"), std::string::npos)
       << output;
-  EXPECT_EQ(output.find("https://staging-api.ignitionfuel.org/1.0/"),
+  EXPECT_EQ(output.find("https://fuel.ignitionrobotics.org/1.0/"),
       std::string::npos) << output;
 }
 
@@ -119,8 +119,8 @@ TEST(CmdLine, ModelListCustomServerPretty)
 TEST(CmdLine, WorldListConfigServerUgly)
 {
   auto output = custom_exec_str(g_listCmd +
-      " -t world --raw -u https://staging-api.ignitionfuel.org");
-  EXPECT_NE(output.find("https://staging-api.ignitionfuel.org/1.0/"),
+      " -t world --raw -u https://fuel.ignitionrobotics.org");
+  EXPECT_NE(output.find("https://fuel.ignitionrobotics.org/1.0/"),
       std::string::npos) << output;
   EXPECT_EQ(output.find("owners"), std::string::npos) << output;
 }
@@ -129,9 +129,9 @@ TEST(CmdLine, WorldListConfigServerUgly)
 TEST(CmdLine, WorldListCustomServerPretty)
 {
   auto output = custom_exec_str(
-      g_listCmd + " -t world -u https://staging-api.ignitionfuel.org");
+      g_listCmd + " -t world -u https://fuel.ignitionrobotics.org");
 
-  EXPECT_NE(output.find("https://staging-api.ignitionfuel.org"),
+  EXPECT_NE(output.find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << output;
   EXPECT_NE(output.find("owners"), std::string::npos) << output;
   EXPECT_NE(output.find("worlds"), std::string::npos) << output;
