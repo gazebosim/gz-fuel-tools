@@ -6,7 +6,7 @@ set -x
 make install
 
 # Compile examples
-cd ../examples
+cd ../example
 mkdir build
 cd build
 cmake ..
