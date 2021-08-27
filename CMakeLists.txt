@@ -9,13 +9,13 @@ project(ignition-fuel_tools7 VERSION 7.0.0)
 # Find ignition-cmake
 #============================================================================
 # If you get an error at this line, you need to install ignition-cmake
-find_package(ignition-cmake2 2.3 REQUIRED)
+find_package(ignition-cmake2 2.8.0 REQUIRED)
 set(IGN_CMAKE_VER ${ignition-cmake2_VERSION_MAJOR})
 
 #============================================================================
 # Configure the project
 #============================================================================
-ign_configure_project(VERSION_SUFFIX pre1)
+ign_configure_project(VERSION_SUFFIX)
 
 #============================================================================
 # Set project-specific options
@@ -62,10 +62,7 @@ set(IGN_MSGS_MAJOR_VER ${ignition-msgs8_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-tools
-ign_find_package(ignition-tools QUIET)
-if (ignition-tools_FOUND)
-  set (HAVE_IGN_TOOLS TRUE)
-endif()
+find_program(HAVE_IGN_TOOLS ign)
 
 #============================================================================
 # Configure the build

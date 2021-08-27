@@ -70,6 +70,10 @@ namespace ignition
       /// \return Internal world identifier
       public: WorldIdentifier *operator->();
 
+      /// \brief Derefence operator
+      /// \return Internal world identifier
+      public: WorldIdentifier &operator*();
+
       /// \brief Private data pointer.
       private: std::unique_ptr<WorldIterPrivate> dataPtr;
     };

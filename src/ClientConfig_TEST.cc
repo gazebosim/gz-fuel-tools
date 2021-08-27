@@ -59,6 +59,20 @@ std::string homePath()
 }
 
 /////////////////////////////////////////////////
+/// \brief Get cache directory.
+/// \return Cache directory
+/// \ToDo: Move this function to ignition::common::Filesystem
+std::string cachePath()
+{
+  std::string cachePath;
+#ifndef _WIN32
+  return std::string("/tmp/ignition/fuel");
+#else
+  return std::string("C:\\Windows\\Temp");
+#endif
+}
+
+/////////////////////////////////////////////////
 /// \brief Initially only the default server in config
 TEST(ClientConfig, InitiallyDefaultServers)
 {
@@ -115,8 +129,9 @@ TEST(ClientConfig, CustomConfiguration)
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl
-      << "  path: /tmp/ignition/fuel"             << std::endl
+      << "  path: " + cachePath()                 << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_TRUE(config.LoadConfig(testPath));
 
@@ -128,8 +143,7 @@ TEST(ClientConfig, CustomConfiguration)
   EXPECT_EQ("https://myserver",
     config.Servers().back().Url().Str());
 
-  EXPECT_EQ("/tmp/ignition/fuel", config.CacheLocation());
-
+  EXPECT_EQ(cachePath(), config.CacheLocation());
   // Remove the configuration file.
   removeFileTemp(testPath);
 }
@@ -156,8 +170,9 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl
-      << "  path: /tmp/ignition/fuel"             << std::endl
+      << "  path: " + cachePath()                 << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_TRUE(config.LoadConfig(testPath));
 
@@ -182,6 +197,7 @@ TEST(ClientConfig, NoServerUrlConfiguration)
       << "  -"                                    << std::endl
       << "    banana: coconut"                           << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
 
@@ -206,6 +222,7 @@ TEST(ClientConfig, EmptyServerUrlConfiguration)
       << "  -"                                    << std::endl
       << "    url: "                              << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
 
@@ -227,6 +244,7 @@ TEST(ClientConfig, NoCachePathConfiguration)
   ofs << "---"    << std::endl
       << "cache:" << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
 
@@ -249,6 +267,7 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
       << "cache:"  << std::endl
       << "  path:" << std::endl
       << std::endl;
+  ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
 
@@ -422,4 +441,3 @@ int main(int argc, char **argv)
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

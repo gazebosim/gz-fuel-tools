@@ -91,6 +91,7 @@ namespace ignition
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
       /// \param[out] _model The requested model
+      /// \param[in] _headers Headers to set on the HTTP request.
       /// \return Result of the fetch operation.
       public: Result ModelDetails(const ModelIdentifier &_id,
                   ModelIdentifier &_model,
@@ -125,6 +126,15 @@ namespace ignition
       /// \return Result of the fetch operation.
       public: Result WorldDetails(const WorldIdentifier &_id,
                                   WorldIdentifier &_world) const;
+
+      /// \brief Fetch the details of a world.
+      /// \param[in] _id a partially filled out identifier used to fetch worlds
+      /// \param[out] _world The requested world
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \return Result of the fetch operation.
+      public: Result WorldDetails(const WorldIdentifier &_id,
+                                WorldIdentifier &_world,
+                                const std::vector<std::string> &_headers) const;
 
       /// \brief Returns an iterator that can return information of worlds
       /// \remarks An iterator instead of a list of names, to be able to
@@ -180,6 +190,20 @@ namespace ignition
                                  const std::vector<std::string> &_headers,
                                  bool _private = false);
 
+      /// \brief Upload a directory as a new model
+      /// \param[in] _pathToModelDir a path to a directory containing a model
+      /// \param[in] _id An identifier to assign to this new model
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \param[in] _private True to make the model private.
+      /// \param[in] _owner Name of the owner. Empty string indicates that
+      /// the owner is specified by the private token in the headers.
+      /// \return Result of the upload operation
+      public: Result UploadModel(const std::string &_pathToModelDir,
+                                 const ModelIdentifier &_id,
+                                 const std::vector<std::string> &_headers,
+                                 bool _private,
+                                 const std::string &_owner);
+
       /// \brief Remove a model from ignition fuel
       /// \param[in] _id The model identifier.
       /// \return Result of the delete operation
@@ -212,6 +236,14 @@ namespace ignition
       /// \param[out] _id The world identifier, with local path updated.
       /// \return Result of the download operation
       public: Result DownloadWorld(WorldIdentifier &_id);
+
+      /// \brief Download a world from Ignition Fuel. This will override an
+      /// existing local copy of the world.
+      /// \param[out] _id The world identifier, with local path updated.
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \return Result of the download operation
+      public: Result DownloadWorld(WorldIdentifier &_id,
+                  const std::vector<std::string> &_headers);
 
       /// \brief Download a model from ignition fuel. This will override an
       /// existing local copy of the model.
@@ -380,6 +412,16 @@ namespace ignition
       /// \return True if parsed successfully.
       public: bool ParseCollectionUrl(const common::URI &_url,
                                       CollectionIdentifier &_id);
+
+      /// \brief Update all models in local cache.
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \return True if everything updated successfully.
+      public: bool UpdateModels(const std::vector<std::string> &_headers);
+
+      /// \brief Update all worlds in local cache.
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \return True if everything updated successfully.
+      public: bool UpdateWorlds(const std::vector<std::string> &_headers);
 
       /// \brief Checked if there is any header already specify
       /// \param[in] _serverConfig Server configuration
