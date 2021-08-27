@@ -49,10 +49,7 @@ set(IGN_COMMON_MAJOR_VER ${ignition-common1_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-tools
-ign_find_package(ignition-tools QUIET)
-if (ignition-tools_FOUND)
-  set (HAVE_IGN_TOOLS TRUE)
-endif()
+find_program(HAVE_IGN_TOOLS ign)
 
 #============================================================================
 # Configure the build

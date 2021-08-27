@@ -47,7 +47,7 @@ https://ignitionfuel.org/anonymous/test_model_380348669
 ** Find a model on disk **
 ```
 $ ign fuel locate --name am1
-/home/developer/.ignition/fuel/staging_ignitionfuel/alice/am1
+/home/developer/.ignition/fuel/fuel.ignitionrobotics.org/alice/am1
 ```
 
 ** C++ Get List models **
