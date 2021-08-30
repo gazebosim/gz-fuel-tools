@@ -129,7 +129,6 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
 
 /// \brief External hook to execute 'ign fuel update [options] from the command'
 /// line
-///
 /// \param[in] _onlyModels "1" to only update models.
 /// \param[in] _onlyWorlds "1" to only update worlds.
 /// \param[in] _header An HTTP header.

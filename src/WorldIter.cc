@@ -118,7 +118,6 @@ WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
   do
   {
     // Fire the request.
-    // Fire the request.
     resp = this->rest.Request(method, this->config.Url().Str(),
       this->config.Version(),
       std::regex_replace(_path, std::regex(R"(\\)"), "/"),
