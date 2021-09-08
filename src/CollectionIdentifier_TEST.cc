@@ -57,28 +57,19 @@ TEST(CollectionIdentifier, UniqueName)
   CollectionIdentifier id;
   id.SetName("hello");
   id.SetOwner("alice");
-#ifndef _WIN32
+
   id.SetServer(srv1);
-  EXPECT_EQ("https://localhost:8001/alice/collections/hello", id.UniqueName());
+  EXPECT_EQ(common::joinPaths("https://localhost:8001",
+    "alice", "collections", "hello"), id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ("https://localhost:8002/alice/collections/hello", id.UniqueName());
+  EXPECT_EQ(common::joinPaths("https://localhost:8002",
+    "alice", "collections", "hello"), id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ("https://localhost:8003/alice/collections/hello", id.UniqueName());
-#else
-  id.SetServer(srv1);
-  EXPECT_EQ("https://localhost:8001\\alice\\collections\\hello",
-      id.UniqueName());
+  EXPECT_EQ(common::joinPaths("https://localhost:8003",
+    "alice", "collections", "hello"), id.UniqueName());
 
-  id.SetServer(srv2);
-  EXPECT_EQ("https://localhost:8002\\alice\\collections\\hello",
-      id.UniqueName());
-
-  id.SetServer(srv3);
-  EXPECT_EQ("https://localhost:8003\\alice\\collections\\hello",
-      id.UniqueName());
-#endif
 }
 
 /////////////////////////////////////////////////
@@ -136,7 +127,7 @@ TEST(CollectionIdentifier, AsString)
     std::string str =
         "Name: \n"\
         "Owner: \n"\
-        "Unique name: https://fuel.ignitionrobotics.org//collections/\n"
+        "Unique name: https://fuel.ignitionrobotics.org/collections/\n"
         "Server:\n"
         "  URL: https://fuel.ignitionrobotics.org\n"
         "  Version: 1.0\n"
