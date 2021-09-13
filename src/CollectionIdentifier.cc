@@ -156,4 +156,3 @@ std::string CollectionIdentifier::AsPrettyString(
       << this->Server().AsPrettyString(_prefix + "  ");
   return out.str();
 }
-

@@ -395,7 +395,7 @@ TEST_F(FuelClientTest, ParseModelFileURL)
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
-TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadModel))
+TEST_F(FuelClientTest, DownloadModel)
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
@@ -594,7 +594,7 @@ TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadModel))
 /////////////////////////////////////////////////
 // Windows doesn't support colons in filenames
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
-TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(CachedModel))
+TEST_F(FuelClientTest, CachedModel)
 {
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
@@ -985,7 +985,7 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
 //////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
-TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadWorld))
+TEST_F(FuelClientTest, DownloadWorld)
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
@@ -1063,7 +1063,7 @@ TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(DownloadWorld))
 /////////////////////////////////////////////////
 // Windows doesn't support colons in filenames
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
-TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(CachedWorld))
+TEST_F(FuelClientTest, CachedWorld)
 {
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
@@ -1253,7 +1253,7 @@ TEST_F(FuelClientTest, WorldDetails)
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
-TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Models))
+TEST_F(FuelClientTest, Models)
 {
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -1287,7 +1287,7 @@ TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Models))
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
-TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(Worlds))
+TEST_F(FuelClientTest, Worlds)
 {
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));

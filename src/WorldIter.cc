@@ -16,6 +16,7 @@
 */
 
 #include <memory>
+#include <regex>
 #include <string>
 #include <vector>
 #include <ignition/common/Console.hh>
@@ -118,7 +119,9 @@ WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
   {
     // Fire the request.
     resp = this->rest.Request(method, this->config.Url().Str(),
-      this->config.Version(), _path, {queryStrPage}, headers, "");
+      this->config.Version(),
+      std::regex_replace(_path, std::regex(R"(\\)"), "/"),
+      {queryStrPage}, headers, "");
 
     // Reset the query string
     queryStrPage = "";
@@ -225,6 +228,12 @@ WorldIter &WorldIter::operator++()
 WorldIdentifier *WorldIter::operator->()
 {
   return &(this->dataPtr->worldId);
+}
+
+//////////////////////////////////////////////////
+WorldIdentifier &WorldIter::operator*()
+{
+  return this->dataPtr->worldId;
 }
 
 //////////////////////////////////////////////////
