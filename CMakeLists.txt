@@ -31,7 +31,7 @@ ign_find_package(TINYXML2 REQUIRED PRIVATE PRETTY tinyxml2)
 
 #--------------------------------------
 # Find libcurl
-ign_find_package(IgnCURL REQUIRED PRIVATE)
+ign_find_package(IgnCURL REQUIRED PRIVATE PRETTY curl)
 
 #--------------------------------------
 # Find jsoncpp
