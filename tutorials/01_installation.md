@@ -161,6 +161,31 @@ cd /tmp/ign-fuel-tools/build
 sudo make uninstall
 ```
 
+### macOS
+
+1. Clone the repository
+  ```
+  git clone https://github.com/ignitionrobotics/ign-fuel-tools -b ign-fuel-tools<#>
+  ```
+  Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+  which version you need.
+
+2. Install dependencies
+  ```
+  brew install --only-dependencies ignition-fuel-tools<#>
+  ```
+  Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+  which version you need.
+
+3. Configure and build
+  ```
+  cd ign-fuel-tools
+  mkdir build
+  cd build
+  cmake ..
+  make
+  ```
+
 ### Windows
 
 #### Prerequisites
@@ -218,4 +243,3 @@ conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> lib
   ```
   cmake --install . --config Release
   ```
-
