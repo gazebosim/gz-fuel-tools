@@ -217,7 +217,7 @@ namespace ignition
                   const std::vector<ModelIdentifier> &_ids,
                   size_t _jobs = 2);
 
-      /// \brief Retrieve the list of dependencies for a model. 
+      /// \brief Retrieve the list of dependencies for a model.
       /// \param[in] _id The model identifier.
       /// \param[out] _dependencies The list of dependencies.
       /// \return Result of the operation

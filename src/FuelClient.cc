@@ -571,7 +571,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   if(!res)
     return res;
 
-  for (auto dep: dependencies)
+  for (auto dep : dependencies)
   {
     auto dep_res = this->DownloadModel(dep, _headers);
 
@@ -648,7 +648,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
     return Result(ResultType::FETCH_ERROR);
 
-  return this->ModelDependencies(_id, _dependencies); 
+  return this->ModelDependencies(_id, _dependencies);
 }
 
 //////////////////////////////////////////////////
