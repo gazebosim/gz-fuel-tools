@@ -1,6 +1,6 @@
 ## Ignition Fuel Tools 7.x
 
-### Ignition Fuel Tools 7.0.0 (2021-09-XX)
+### Ignition Fuel Tools 7.0.0 (2021-09-28)
 
 1. Depend on ign-msgs8
     * [Pull request #182](https://github.com/ignitionrobotics/ign-fuel-tools/pull/182)
