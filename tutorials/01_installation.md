@@ -24,8 +24,11 @@ wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 Install Ignition Fuel Tools:
 ```
 sudo apt-get update
-sudo apt-get install libignition-fuel-tools7-dev
+sudo apt-get install libignition-fuel-tools<#>-dev
 ```
+
+Be sure to replace `<#>` with a number value, such as 6 or 7, depending on
+which version you need.
 
 ### Mac OS X
 
@@ -47,7 +50,7 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 Run the following commands:
 ```
 brew tap osrf/simulation
-brew install ignition-fuel-tools7
+brew install ignition-fuel-tools<#>
 ```
 
 ### Windows
@@ -81,7 +84,7 @@ Make sure you have removed the Ubuntu pre-compiled binaries before
 installing from source:
 
 ```
-sudo apt-get remove libignition-fuel-tools7-dev
+sudo apt-get remove libignition-fuel-tools<#>-dev
 ```
 
 Install prerequisites. A clean Ubuntu system will need:
