@@ -2,6 +2,24 @@
 
 ### Ignition Fuel Tools 6.X.X (20XX-XX-XX)
 
+### Ignition Fuel Tools 6.1.0 (2021-10-15)
+
+1. Detect ign instead of using cmake module to check for ignition-tools
+    * [Pull request #191](https://github.com/ignitionrobotics/ign-fuel-tools/pull/191)
+
+1. Added fuel update command
+    * [Pull request #185](https://github.com/ignitionrobotics/ign-fuel-tools/pull/185)
+
+1. Fixed windows download
+    * [Pull request #178](https://github.com/ignitionrobotics/ign-fuel-tools/pull/178)
+
+1. Owner upload
+    * [Pull request #179](https://github.com/ignitionrobotics/ign-fuel-tools/pull/179)
+
+1. Infrastructure
+    * [Pull request #187](https://github.com/ignitionrobotics/ign-fuel-tools/pull/187)
+    * [Pull request #196](https://github.com/ignitionrobotics/ign-fuel-tools/pull/196)
+
 ### Ignition Fuel Tools 6.0.0 (2021-03-30)
 
 1. Depend on ign-common4
