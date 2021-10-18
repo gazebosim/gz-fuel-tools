@@ -709,14 +709,37 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DownloadModels(
+Result FuelClient::ModelDependencies(
     const std::vector<ModelIdentifier> &_ids,
-    size_t _jobs)
+    std::vector<ModelIdentifier> &_dependencies)
 {
-  std::deque<ModelIdentifier> idsToDownload(_ids.begin(), _ids.end());
+  std::vector<ModelIdentifier> newDeps;
+  for (auto modelId: _ids)
+  {
+    std::vector<ModelIdentifier> modelDeps;
+    auto result = this->ModelDependencies(modelId, modelDeps);
 
+    if (!modelDeps.empty())
+    {
+      std::vector<ModelIdentifier> recursiveDeps;
+      this->ModelDependencies(modelDeps, recursiveDeps);
+
+      for (auto dep: modelDeps)
+      {
+        newDeps.push_back(dep);
+      }
+
+      for (auto dep: recursiveDeps)
+      {
+        newDeps.push_back(dep);
+      }
+    }
+  }
+
+  _dependencies = std::vector<ModelIdentifier>(newDeps.begin(), newDeps.end());
   return Result(ResultType::FETCH);
 }
+
 
 //////////////////////////////////////////////////
 Result FuelClient::DownloadWorld(WorldIdentifier &_id)
@@ -781,6 +804,173 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
   // Save
   if (!this->dataPtr->cache->SaveWorld(_id, resp.data, true))
     return Result(ResultType::FETCH_ERROR);
+
+  return Result(ResultType::FETCH);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadModels(
+    const std::vector<ModelIdentifier> &_ids,
+    size_t _jobs)
+{
+  std::vector<ModelIdentifier> idsToDownload(_ids.begin(), _ids.end());
+  std::deque<std::future<ignition::fuel_tools::Result>> tasks;
+  // Check for finished tasks by checking if the status of their futures is
+  // "ready". If a task is finished, check if it succeeded and print out an
+  // error message if it failed. When a task is finished, it gets erased from
+  // the tasks list to make room for other tasks to be added.
+  size_t itemCount = 0;
+  const size_t totalItemCount = idsToDownload.size();
+
+  ignmsg << "Using " << _jobs << " jobs to download collection of "
+         << totalItemCount << " items" << std::endl;
+
+  auto checkForFinishedTasks = [&itemCount, &totalItemCount, &tasks] {
+    auto finishedIt =
+        std::partition(tasks.begin(), tasks.end(), [](const auto &_task)
+            {
+              return std::future_status::ready !=
+              _task.wait_for(std::chrono::milliseconds(100));
+            });
+
+    if (finishedIt != tasks.end())
+    {
+      for (auto taskIt = finishedIt; taskIt != tasks.end(); ++taskIt)
+      {
+        ignition::fuel_tools::Result result = taskIt->get();
+        if (result)
+        {
+          ++itemCount;
+        }
+        else
+        {
+          ignerr << result.ReadableResult() << std::endl;
+        }
+      }
+
+      tasks.erase(finishedIt, tasks.end());
+      ignmsg << "Downloaded: " << itemCount << " / " << totalItemCount
+             << std::endl;
+    }
+  };
+
+  std::mutex depsMutex;
+  std::vector<ModelIdentifier> depsToDownload;
+
+  for (auto id: idsToDownload)
+  {
+    while (tasks.size() >= _jobs)
+    {
+      checkForFinishedTasks();
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    auto handle = std::async(std::launch::async, [&id, this, &depsToDownload, &depsMutex]
+        {
+          auto res = this->DownloadModel(id);
+
+          if (!res)
+          {
+            return res;
+          }
+
+          std::vector<ModelIdentifier> deps;
+          res = this->ModelDependencies(id, deps);
+
+          if (!deps.empty())
+          {
+
+            ignmsg << "Adding: " << deps.size() << " depencencies from: " << id.Name() << "\n";
+            for (auto dep: deps)
+            {
+              std::lock_guard<std::mutex> lock(depsMutex);
+              depsToDownload.push_back(dep);
+            }
+          }
+
+          return res;
+        });
+    tasks.push_back(std::move(handle));
+  }
+
+  while (!tasks.empty())
+  {
+    checkForFinishedTasks();
+  }
+
+  if (!depsToDownload.empty())
+  {
+    return this->DownloadModels(depsToDownload, _jobs);
+  }
+  else
+  {
+    return Result(ResultType::FETCH);
+  }
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::DownloadWorlds(
+    const std::vector<WorldIdentifier> &_ids, size_t _jobs)
+{
+  std::deque<std::future<ignition::fuel_tools::Result>> tasks;
+  // Check for finished tasks by checking if the status of their futures is
+  // "ready". If a task is finished, check if it succeeded and print out an
+  // error message if it failed. When a task is finished, it gets erased from
+  // the tasks list to make room for other tasks to be added.
+  size_t itemCount = 0;
+  const size_t totalItemCount = _ids.size();
+
+  ignmsg << "Using " << _jobs << " jobs to download collection of "
+         << totalItemCount << " items" << std::endl;
+
+  auto checkForFinishedTasks = [&itemCount, &totalItemCount, &tasks] {
+    auto finishedIt =
+        std::partition(tasks.begin(), tasks.end(), [](const auto &_task)
+            {
+              return std::future_status::ready !=
+              _task.wait_for(std::chrono::milliseconds(100));
+            });
+
+    if (finishedIt != tasks.end())
+    {
+      for (auto taskIt = finishedIt; taskIt != tasks.end(); ++taskIt)
+      {
+        ignition::fuel_tools::Result result = taskIt->get();
+        if (result)
+        {
+          ++itemCount;
+        }
+        else
+        {
+          ignerr << result.ReadableResult() << std::endl;
+        }
+      }
+
+      tasks.erase(finishedIt, tasks.end());
+      ignmsg << "Downloaded: " << itemCount << " / " << totalItemCount
+             << std::endl;
+    }
+  };
+
+  // We need a mutable worldId because DownloadWorld modifies it
+  for (auto& id: _ids)
+  {
+    while (tasks.size() >= _jobs)
+    {
+      checkForFinishedTasks();
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    auto handle = std::async(std::launch::async, [&id, this]
+        {
+          WorldIdentifier tempId = id;
+          return this->DownloadWorld(tempId);
+        });
+    tasks.push_back(std::move(handle));
+  }
+
+  while (!tasks.empty())
+  {
+    checkForFinishedTasks();
+  }
 
   return Result(ResultType::FETCH);
 }

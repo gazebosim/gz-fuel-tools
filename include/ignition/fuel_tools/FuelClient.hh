@@ -213,15 +213,19 @@ namespace ignition
                   const std::vector<std::string> &_headers,
                   std::vector<ModelIdentifier> &_dependencies);
 
-      public: Result DownloadModels(
-                  const std::vector<ModelIdentifier> &_ids,
-                  size_t _jobs = 2);
-
       /// \brief Retrieve the list of dependencies for a model.
       /// \param[in] _id The model identifier.
       /// \param[out] _dependencies The list of dependencies.
       /// \return Result of the operation
       public: Result ModelDependencies(const ModelIdentifier &_id,
+                  std::vector<ModelIdentifier> &_dependencies);
+
+      /// \brief Retrieve the list of dependencies for a list of models.
+      /// \param[in] _id The list of model identifiers.
+      /// \param[out] _dependencies The list of dependencies.
+      /// \return Result of the operation
+      public: Result ModelDependencies(
+                  const std::vector<ModelIdentifier> &_id,
                   std::vector<ModelIdentifier> &_dependencies);
 
       /// \brief Download a world from Ignition Fuel. This will override an
@@ -247,6 +251,14 @@ namespace ignition
       /// \return Result of the download operation.
       public: Result DownloadWorld(const common::URI &_worldUrl,
                                    std::string &_path);
+
+      public: Result DownloadModels(
+                  const std::vector<ModelIdentifier> &_ids,
+                  size_t _jobs = 2);
+
+      public: Result DownloadWorlds(
+                  const std::vector<WorldIdentifier> &_ids,
+                  size_t _jobs = 2);
 
       /// \brief Check if a model is already present in the local cache.
       /// \param[in] _modelUrl The unique URL of the model on a Fuel server.
