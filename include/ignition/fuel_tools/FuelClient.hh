@@ -260,6 +260,13 @@ namespace ignition
                   const std::vector<WorldIdentifier> &_ids,
                   size_t _jobs = 2);
 
+      using ModelResult = std::tuple<ModelIdentifier, Result>;
+
+      public: std::vector<ModelResult> DownloadModelsNew(
+                  const std::vector<ModelIdentifier> &_ids,
+                  size_t _jobs = 2);
+
+
       /// \brief Check if a model is already present in the local cache.
       /// \param[in] _modelUrl The unique URL of the model on a Fuel server.
       /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer

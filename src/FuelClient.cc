@@ -809,6 +809,95 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
 }
 
 //////////////////////////////////////////////////
+std::vector<FuelClient::ModelResult> FuelClient::DownloadModelsNew(
+    const std::vector<ModelIdentifier> &_ids,
+    size_t _jobs)
+{
+  std::mutex resultMutex;
+  std::vector<FuelClient::ModelResult> result;
+
+  std::mutex idsMutex;
+  std::deque<ModelIdentifier> idsToDownload(_ids.begin(), _ids.end());
+  std::unordered_set<ModelIdentifier> uniqueIds(_ids.begin(), _ids.end());
+
+  std::atomic<bool> running = true;
+
+  auto downloadWorker = [&](){
+    ModelIdentifier id;
+
+    while(running)
+    {
+      // Pop the next ID off the queue
+      {
+        std::lock_guard<std::mutex> lock(idsMutex);
+
+        if (idsToDownload.empty())
+        {
+          std::this_thread::sleep_for(std::chrono::milliseconds(10));
+          continue;
+        }
+
+        id = idsToDownload.front();
+        idsToDownload.pop_front();
+      }
+
+      std::vector<ModelIdentifier> dependencies;
+      auto modelResult = this->DownloadModel(id, {}, dependencies);
+
+      {
+        std::lock_guard<std::mutex> lock(resultMutex);
+        result.push_back(std::make_tuple(id, modelResult));
+      }
+
+      if (!dependencies.empty())
+      {
+        std::lock_guard<std::mutex> lock(idsMutex);
+        igndbg << "Adding " << dependencies.size() 
+          << " model dependencies to queue from " << id.Name() << "\n";
+        for (auto dep: dependencies)
+        {
+          if (uniqueIds.count(dep) == 0)
+          {
+            idsToDownload.push_back(dep);
+          }
+        }
+      }
+    }
+  };
+
+  std::vector<std::thread> workers;
+
+  for (size_t ii = 0; ii < _jobs; ++ii)
+  {
+    workers.push_back(std::thread(downloadWorker));
+  }
+
+  ignmsg << "Preparing to download " 
+    << idsToDownload.size() << " models with "
+    << _jobs << " worker threads\n";
+
+
+  while (running)
+  {
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+    if(idsToDownload.empty())
+    {
+      running = false;
+    }
+  }
+
+  for (auto& worker : workers)
+  {
+    worker.join();
+  }
+
+  ignmsg << "Finished, downloaded " << result.size() << " models in total\n";
+
+  return result;
+}
+
+//////////////////////////////////////////////////
 Result FuelClient::DownloadModels(
     const std::vector<ModelIdentifier> &_ids,
     size_t _jobs)
