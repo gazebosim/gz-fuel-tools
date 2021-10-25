@@ -67,6 +67,11 @@ if (ignition-tools_FOUND)
   set (HAVE_IGN_TOOLS TRUE)
 endif()
 
+# Windows Required option to build c++ code dealing with std exception handling
+if(MSVC)
+  set (CMAKE_CXX_FLAGS "/EHsc")
+endif(MSVC)
+
 #============================================================================
 # Configure the build
 #============================================================================
