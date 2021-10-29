@@ -695,7 +695,6 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
 
       for (int i = 0; i < meta.dependencies_size(); ++i)
       {
-        std::string dependencyPath;
         ignition::common::URI dependencyURI(meta.dependencies(i).uri());
 
         ModelIdentifier dependencyID;
