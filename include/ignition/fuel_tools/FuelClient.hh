@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 #include <ignition/common/URI.hh>
 
@@ -252,20 +253,27 @@ namespace ignition
       public: Result DownloadWorld(const common::URI &_worldUrl,
                                    std::string &_path);
 
-      public: Result DownloadModels(
+      using ModelResult = std::tuple<ModelIdentifier, Result>;
+
+      /// \brief Download a list of models from ignition fuel.
+      /// \param[in] _ids The list of model ids to download.
+      ///   This will also find all recursive dependencies of the models
+      /// \param[in] _jobs Number of parallel jobs to use to download models
+      /// \return Result of the download operation.
+      //    The resulting vector will be at least the size of the _ids input
+      //    vector, but may be larger depending on the number of depedencies
+      //    downloaded
+      public: std::vector<ModelResult> DownloadModels(
                   const std::vector<ModelIdentifier> &_ids,
                   size_t _jobs = 2);
 
+      /// \brief Download a list of mworlds from ignition fuel.
+      /// \param[in] _ids The list of world ids to download.
+      /// \param[in] _jobs Number of parallel jobs to use to download worlds.
+      /// \return Result of the download operation.
       public: Result DownloadWorlds(
                   const std::vector<WorldIdentifier> &_ids,
                   size_t _jobs = 2);
-
-      using ModelResult = std::tuple<ModelIdentifier, Result>;
-
-      public: std::vector<ModelResult> DownloadModelsNew(
-                  const std::vector<ModelIdentifier> &_ids,
-                  size_t _jobs = 2);
-
 
       /// \brief Check if a model is already present in the local cache.
       /// \param[in] _modelUrl The unique URL of the model on a Fuel server.

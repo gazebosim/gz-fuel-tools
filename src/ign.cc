@@ -632,13 +632,14 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 
     if (downloadModels)
     {
-      auto result = client.DownloadModelsNew(modelIds, _jobs);
+      auto result = client.DownloadModels(modelIds, _jobs);
     }
 
     if (downloadWorlds)
     {
       auto result = client.DownloadWorlds(worldIds, _jobs);
-      ignerr << "Failed to download worlds for collection [" << collection.Name()
+      ignerr << "Failed to download worlds for collection ["
+          << collection.Name()
           << "]" << std::endl;
     }
   }

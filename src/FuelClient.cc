@@ -714,7 +714,7 @@ Result FuelClient::ModelDependencies(
     std::vector<ModelIdentifier> &_dependencies)
 {
   std::vector<ModelIdentifier> newDeps;
-  for (auto modelId: _ids)
+  for (auto modelId : _ids)
   {
     std::vector<ModelIdentifier> modelDeps;
     auto result = this->ModelDependencies(modelId, modelDeps);
@@ -724,12 +724,12 @@ Result FuelClient::ModelDependencies(
       std::vector<ModelIdentifier> recursiveDeps;
       this->ModelDependencies(modelDeps, recursiveDeps);
 
-      for (auto dep: modelDeps)
+      for (auto dep : modelDeps)
       {
         newDeps.push_back(dep);
       }
 
-      for (auto dep: recursiveDeps)
+      for (auto dep : recursiveDeps)
       {
         newDeps.push_back(dep);
       }
@@ -809,7 +809,19 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
 }
 
 //////////////////////////////////////////////////
-std::vector<FuelClient::ModelResult> FuelClient::DownloadModelsNew(
+namespace std
+{
+  template<> struct hash<ModelIdentifier>
+  {
+    std::size_t operator()(const ModelIdentifier &_id) const noexcept
+    {
+      return std::hash<std::string>{}(_id.AsString());
+    }
+  };
+}
+
+//////////////////////////////////////////////////
+std::vector<FuelClient::ModelResult> FuelClient::DownloadModels(
     const std::vector<ModelIdentifier> &_ids,
     size_t _jobs)
 {
@@ -852,9 +864,9 @@ std::vector<FuelClient::ModelResult> FuelClient::DownloadModelsNew(
       if (!dependencies.empty())
       {
         std::lock_guard<std::mutex> lock(idsMutex);
-        igndbg << "Adding " << dependencies.size() 
+        igndbg << "Adding " << dependencies.size()
           << " model dependencies to queue from " << id.Name() << "\n";
-        for (auto dep: dependencies)
+        for (auto dep : dependencies)
         {
           if (uniqueIds.count(dep) == 0)
           {
@@ -872,7 +884,7 @@ std::vector<FuelClient::ModelResult> FuelClient::DownloadModelsNew(
     workers.push_back(std::thread(downloadWorker));
   }
 
-  ignmsg << "Preparing to download " 
+  ignmsg << "Preparing to download "
     << idsToDownload.size() << " models with "
     << _jobs << " worker threads\n";
 
@@ -895,105 +907,6 @@ std::vector<FuelClient::ModelResult> FuelClient::DownloadModelsNew(
   ignmsg << "Finished, downloaded " << result.size() << " models in total\n";
 
   return result;
-}
-
-//////////////////////////////////////////////////
-Result FuelClient::DownloadModels(
-    const std::vector<ModelIdentifier> &_ids,
-    size_t _jobs)
-{
-  std::vector<ModelIdentifier> idsToDownload(_ids.begin(), _ids.end());
-  std::deque<std::future<ignition::fuel_tools::Result>> tasks;
-  // Check for finished tasks by checking if the status of their futures is
-  // "ready". If a task is finished, check if it succeeded and print out an
-  // error message if it failed. When a task is finished, it gets erased from
-  // the tasks list to make room for other tasks to be added.
-  size_t itemCount = 0;
-  const size_t totalItemCount = idsToDownload.size();
-
-  ignmsg << "Using " << _jobs << " jobs to download collection of "
-         << totalItemCount << " items" << std::endl;
-
-  auto checkForFinishedTasks = [&itemCount, &totalItemCount, &tasks] {
-    auto finishedIt =
-        std::partition(tasks.begin(), tasks.end(), [](const auto &_task)
-            {
-              return std::future_status::ready !=
-              _task.wait_for(std::chrono::milliseconds(100));
-            });
-
-    if (finishedIt != tasks.end())
-    {
-      for (auto taskIt = finishedIt; taskIt != tasks.end(); ++taskIt)
-      {
-        ignition::fuel_tools::Result result = taskIt->get();
-        if (result)
-        {
-          ++itemCount;
-        }
-        else
-        {
-          ignerr << result.ReadableResult() << std::endl;
-        }
-      }
-
-      tasks.erase(finishedIt, tasks.end());
-      ignmsg << "Downloaded: " << itemCount << " / " << totalItemCount
-             << std::endl;
-    }
-  };
-
-  std::mutex depsMutex;
-  std::vector<ModelIdentifier> depsToDownload;
-
-  for (auto id: idsToDownload)
-  {
-    while (tasks.size() >= _jobs)
-    {
-      checkForFinishedTasks();
-    }
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    auto handle = std::async(std::launch::async, [&id, this, &depsToDownload, &depsMutex]
-        {
-          auto res = this->DownloadModel(id);
-
-          if (!res)
-          {
-            return res;
-          }
-
-          std::vector<ModelIdentifier> deps;
-          res = this->ModelDependencies(id, deps);
-
-          if (!deps.empty())
-          {
-
-            ignmsg << "Adding: " << deps.size() << " depencencies from: " << id.Name() << "\n";
-            for (auto dep: deps)
-            {
-              std::lock_guard<std::mutex> lock(depsMutex);
-              depsToDownload.push_back(dep);
-            }
-          }
-
-          return res;
-        });
-    tasks.push_back(std::move(handle));
-  }
-
-  while (!tasks.empty())
-  {
-    checkForFinishedTasks();
-  }
-
-  if (!depsToDownload.empty())
-  {
-    return this->DownloadModels(depsToDownload, _jobs);
-  }
-  else
-  {
-    return Result(ResultType::FETCH);
-  }
 }
 
 //////////////////////////////////////////////////
@@ -1041,7 +954,7 @@ Result FuelClient::DownloadWorlds(
   };
 
   // We need a mutable worldId because DownloadWorld modifies it
-  for (auto& id: _ids)
+  for (auto& id : _ids)
   {
     while (tasks.size() >= _jobs)
     {
