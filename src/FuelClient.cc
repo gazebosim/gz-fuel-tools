@@ -695,7 +695,6 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
 
       for (int i = 0; i < meta.dependencies_size(); ++i)
       {
-        std::string dependencyPath;
         ignition::common::URI dependencyURI(meta.dependencies(i).uri());
 
         ModelIdentifier dependencyID;
@@ -881,6 +880,7 @@ std::vector<FuelClient::ModelResult> FuelClient::DownloadModels(
           if (uniqueIds.count(dep) == 0)
           {
             idsToDownload.push_back(dep);
+            uniqueIds.insert(dep);
           }
         }
       }
