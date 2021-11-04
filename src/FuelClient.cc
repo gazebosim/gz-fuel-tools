@@ -699,8 +699,18 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
         ignition::common::URI dependencyURI(meta.dependencies(i).uri());
 
         ModelIdentifier dependencyID;
-        this->ParseModelUrl(dependencyURI, dependencyID);
-        _dependencies.push_back(dependencyID);
+        if(!this->ParseModelUrl(dependencyURI, dependencyID))
+        {
+          // There is a potential that depdencies are specified via
+          // [model://model_name], which is valid, but not something that we
+          // can fetch from Fuel. In that case, warn the user so they have
+          // a chance to update their specified dependencies.
+          ignwarn << "Error resolving URL for dependency [" <<
+            meta.dependencies(i).uri() << "] of model [" <<
+            _id.UniqueName() <<"]: Skipping" << std::endl;
+        } else {
+          _dependencies.push_back(dependencyID);
+        }
       }
     }
   }
