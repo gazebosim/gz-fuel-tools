@@ -630,93 +630,17 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       return false;
     }
 
-    size_t jobs = std::max(1, _jobs);
-
-    ignmsg << "Using " << jobs << " jobs to download collection of "
-           << totalItemCount << " items" << std::endl;
-
-    std::deque<std::future<ignition::fuel_tools::Result>> tasks;
-
-    // Check for finished tasks by checking if the status of their futures is
-    // "ready". If a task is finished, check if it succeeded and print out an
-    // error message if it failed. When a task is finished, it gets erased from
-    // the tasks list to make room for other tasks to be added.
-    size_t itemCount = 0;
-    auto checkForFinishedTasks = [&itemCount, &totalItemCount, &tasks] {
-      auto finishedIt =
-          std::partition(tasks.begin(), tasks.end(), [](const auto &_task)
-              {
-                return std::future_status::ready !=
-                _task.wait_for(std::chrono::milliseconds(100));
-              });
-
-      if (finishedIt != tasks.end())
-      {
-        for (auto taskIt = finishedIt; taskIt != tasks.end(); ++taskIt)
-        {
-          ignition::fuel_tools::Result result = taskIt->get();
-          if (result)
-          {
-            ++itemCount;
-          }
-          else
-          {
-            ignerr << result.ReadableResult() << std::endl;
-          }
-        }
-
-        tasks.erase(finishedIt, tasks.end());
-        ignmsg << "Downloaded: " << itemCount << " / " << totalItemCount
-               << std::endl;
-      }
-    };
-
-    // Here we use std::async to download items in parallel. The download task
-    // is started asynchronously and gets added to the task list which is
-    // monitored for completion.
     if (downloadModels)
     {
-      for (const auto &modelId : modelIds)
-      {
-        // Check if any of the tasks are done. Don't start a new task until the
-        // number of tasks in the tasks lists is below the number of jobs
-        // specified by the user.
-        while (tasks.size() >= jobs)
-        {
-          checkForFinishedTasks();
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        auto handle = std::async(std::launch::async, [&modelId, &client]
-            {
-              return client.DownloadModel(modelId);
-            });
-        tasks.push_back(std::move(handle));
-      }
+      auto result = client.DownloadModels(modelIds, _jobs);
     }
 
     if (downloadWorlds)
     {
-      // We need a mutable worldId because DownloadWorld modifies it
-      for (auto &worldId : worldIds)
-      {
-        // Check if any of the tasks are done
-        while (tasks.size() >= jobs)
-        {
-          checkForFinishedTasks();
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        auto handle = std::async(std::launch::async, [&worldId, &client]
-            {
-            return client.DownloadWorld(worldId);
-            });
-        tasks.push_back(std::move(handle));
-      }
-    }
-
-    // All the tasks have been queued. Now wait for them to finish
-    while (!tasks.empty())
-    {
-      checkForFinishedTasks();
+      auto result = client.DownloadWorlds(worldIds, _jobs);
+      ignerr << "Failed to download worlds for collection ["
+          << collection.Name()
+          << "]" << std::endl;
     }
   }
   else
