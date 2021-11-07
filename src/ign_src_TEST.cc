@@ -492,7 +492,8 @@ TEST_P(DownloadCollectionTest, AllItems)
   // Check output
   EXPECT_NE(stdOutBuffer.str().find("Download succeeded"), std::string::npos)
       << stdOutBuffer.str();
-  EXPECT_TRUE(stdErrBuffer.str().empty());
+  EXPECT_TRUE(stdErrBuffer.str().empty())
+      << stdErrBuffer.str();
 
   // Check files
   // Model: Backpack
