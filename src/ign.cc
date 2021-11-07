@@ -638,9 +638,6 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
     if (downloadWorlds)
     {
       auto result = client.DownloadWorlds(worldIds, _jobs);
-      ignerr << "Failed to download worlds for collection ["
-          << collection.Name()
-          << "]" << std::endl;
     }
   }
   else
