@@ -25,6 +25,7 @@
 #endif
 
 #include <algorithm>
+#include <deque>
 #include <iomanip>
 #include <iostream>
 #include <memory>
