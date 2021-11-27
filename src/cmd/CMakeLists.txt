@@ -3,6 +3,8 @@
 # Ex: cmdfuel0.rb
 if (APPLE)
   set(IGN_LIBRARY_NAME lib${PROJECT_NAME_LOWER}.dylib)
+elseif(MSVC)
+  set(IGN_LIBRARY_NAME ${PROJECT_NAME_LOWER}.dll)
 else()
   set(IGN_LIBRARY_NAME lib${PROJECT_NAME_LOWER}.so)
 endif()
