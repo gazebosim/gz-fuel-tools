@@ -57,8 +57,8 @@ set(IGN_MSGS_MAJOR_VER ${ignition-math6_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-msgs
-ign_find_package(ignition-msgs8 REQUIRED PRIVATE)
-set(IGN_MSGS_MAJOR_VER ${ignition-msgs8_VERSION_MAJOR})
+ign_find_package(ignition-msgs9 REQUIRED PRIVATE)
+set(IGN_MSGS_MAJOR_VER ${ignition-msgs9_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-tools
