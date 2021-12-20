@@ -20,7 +20,6 @@
 #include <stdlib.h>
 
 #include <string>
-#include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/utilities/ExtraTestMacros.hh>
 
@@ -69,7 +68,10 @@ class CmdLine : public ::testing::Test
     std::cerr.rdbuf(g_stdErrFile);
   }
 
+  /// \brief Buffer for std::cout
   public: std::stringstream stdOutBuffer;
+
+  /// \brief Buffer for std::cerr
   public: std::stringstream stdErrBuffer;
 
   /// \brief Path for a test cache within the build folder
@@ -204,7 +206,7 @@ TEST_F(CmdLine, DownloadConfigCache)
 
   // Test config
   std::ofstream ofs;
-  std::string testPath = common::joinPaths(this->testCachePath, "test_conf.yaml");
+  auto testPath = common::joinPaths(this->testCachePath, "test_conf.yaml");
   ofs.open(testPath, std::ofstream::out | std::ofstream::app);
 
   ofs << "---"                                    << std::endl
@@ -376,8 +378,8 @@ TEST_P(DownloadCollectionTest, AllItems)
                   nullptr, nullptr, nullptr, GetParam()));
 
   // Check output
-  EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"), std::string::npos)
-      << this->stdOutBuffer.str();
+  EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"),
+      std::string::npos) << this->stdOutBuffer.str();
   EXPECT_TRUE(this->stdErrBuffer.str().empty()) << this->stdErrBuffer.str();
 
   // Check files
@@ -439,8 +441,8 @@ TEST_P(DownloadCollectionTest, Models)
                   nullptr, nullptr, "model", GetParam()));
 
   // Check output
-  EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"), std::string::npos)
-      << this->stdOutBuffer.str();
+  EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"),
+      std::string::npos) << this->stdOutBuffer.str();
   EXPECT_TRUE(this->stdErrBuffer.str().empty()) << this->stdErrBuffer.str();
 
   // Check files
@@ -490,8 +492,8 @@ TEST_P(DownloadCollectionTest, Worlds)
                   nullptr, nullptr, "world", GetParam()));
 
   // Check output
-  EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"), std::string::npos)
-      << this->stdOutBuffer.str();
+  EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"),
+      std::string::npos) << this->stdOutBuffer.str();
   EXPECT_TRUE(this->stdErrBuffer.str().empty()) << this->stdErrBuffer.str();
 
   // Check files
