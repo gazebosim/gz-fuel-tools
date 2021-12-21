@@ -1,6 +1,43 @@
 ## Ignition Fuel Tools 5.x
 
-### Ignition Fuel Tools 5.X.X (20XX-XX-XX)
+### Ignition Fuel Tools 5.2.0 (2021-12-20)
+
+1. FuelClient.cc: include `<deque>`
+    * [Pull request #213](https://github.com/ignitionrobotics/ign-fuel-tools/pull/213)
+
+1. APIs for retrieving models in parallel
+    * [Pull request #199](https://github.com/ignitionrobotics/ign-fuel-tools/pull/199)
+
+1. Detect `ign` instead of using cmake module to check for ignition-tools
+    * [Pull request #191](https://github.com/ignitionrobotics/ign-fuel-tools/pull/191)
+
+1. Added `ign fuel update` command
+    * [Pull request #185](https://github.com/ignitionrobotics/ign-fuel-tools/pull/185)
+
+1. Fixed Windows download and CI
+    * [Pull request #178](https://github.com/ignitionrobotics/ign-fuel-tools/pull/178)
+    * [Pull request #164](https://github.com/ignitionrobotics/ign-fuel-tools/pull/164)
+
+1. Choose which owner to upload to
+    * [Pull request #179](https://github.com/ignitionrobotics/ign-fuel-tools/pull/179)
+
+1. Included private-token to `config.yaml`
+    * [Pull request #156](https://github.com/ignitionrobotics/ign-fuel-tools/pull/156)
+
+1. Add Windows Installation instructions
+    * [Pull request #162](https://github.com/ignitionrobotics/ign-fuel-tools/pull/162)
+
+1. Use semantic version and prevent crash if version is missing
+    * [Pull request #151](https://github.com/ignitionrobotics/ign-fuel-tools/pull/151)
+
+1. Document `IGN_FUEL_CACHE_PATH` on command line
+    * [Pull request #149](https://github.com/ignitionrobotics/ign-fuel-tools/pull/149)
+
+1. Infrastructure
+    * [Pull request #187](https://github.com/ignitionrobotics/ign-fuel-tools/pull/187)
+    * [Pull request #170](https://github.com/ignitionrobotics/ign-fuel-tools/pull/170)
+    * [Pull request #167](https://github.com/ignitionrobotics/ign-fuel-tools/pull/167)
+    * [Pull request #165](https://github.com/ignitionrobotics/ign-fuel-tools/pull/165)
 
 ### Ignition Fuel Tools 5.1.1 (2020-12-18)
 
