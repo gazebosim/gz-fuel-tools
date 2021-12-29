@@ -50,8 +50,10 @@ void createLocalModel(ClientConfig &_conf)
   auto modelPath = common::joinPaths(
       "test_cache", "localhost:8007", "alice", "models", "My Model");
 
-  common::createDirectories(common::joinPaths(modelPath, "2", "meshes"));
-  common::createDirectories(common::joinPaths(modelPath, "3", "meshes"));
+  EXPECT_TRUE(common::createDirectories(
+      common::joinPaths(modelPath, "2", "meshes")));
+  EXPECT_TRUE(common::createDirectories(
+      common::joinPaths(modelPath, "3", "meshes")));
 
   {
     std::ofstream fout(common::joinPaths(modelPath, "2", "model.config"),
@@ -60,8 +62,9 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    common::copyFile(common::joinPaths(modelPath, "2", "model.config"),
-        common::joinPaths(modelPath, "3", "model.config"));
+    EXPECT_TRUE(common::copyFile(
+        common::joinPaths(modelPath, "2", "model.config"),
+        common::joinPaths(modelPath, "3", "model.config")));
   }
 
   {
@@ -71,8 +74,9 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    common::copyFile(common::joinPaths(modelPath, "2", "model.sdf"),
-        common::joinPaths(modelPath, "3", "model.sdf"));
+    EXPECT_TRUE(common::copyFile(
+        common::joinPaths(modelPath, "2", "model.sdf"),
+        common::joinPaths(modelPath, "3", "model.sdf")));
   }
 
   {
@@ -82,8 +86,9 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    common::copyFile(common::joinPaths(modelPath, "2", "meshes", "model.dae"),
-        common::joinPaths(modelPath, "3", "meshes", "model.dae"));
+    EXPECT_TRUE(common::copyFile(
+        common::joinPaths(modelPath, "2", "meshes", "model.dae"),
+        common::joinPaths(modelPath, "3", "meshes", "model.dae")));
   }
 
   ignition::fuel_tools::ServerConfig srv;
@@ -418,13 +423,13 @@ TEST_F(FuelClientTest, DownloadModel)
     std::string cachedPath;
     Result res1 = client.CachedModel(url, cachedPath);
     EXPECT_FALSE(res1);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
+    EXPECT_EQ(ResultType::FETCH_ERROR, res1.Type());
 
     // Download
     std::string path;
     Result res2 = client.DownloadModel(url, path);
     EXPECT_TRUE(res2);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res2);
+    EXPECT_EQ(ResultType::FETCH, res2.Type());
 
     // Check it was downloaded to `2`
     auto modelPath = common::joinPaths(common::cwd(), "test_cache",
@@ -442,7 +447,7 @@ TEST_F(FuelClientTest, DownloadModel)
     // Check it is cached
     Result res3 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res3);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res3.Type());
     EXPECT_EQ(common::joinPaths(modelPath, "2"), cachedPath);
   }
 
@@ -456,13 +461,13 @@ TEST_F(FuelClientTest, DownloadModel)
     std::string cachedPath;
     Result res1 = client.CachedModel(url, cachedPath);
     EXPECT_FALSE(res1);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
+    EXPECT_EQ(ResultType::FETCH_ERROR, res1.Type());
 
     // Download
     std::string path;
     Result res2 = client.DownloadModel(url, path);
     EXPECT_TRUE(res2);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res2);
+    EXPECT_EQ(ResultType::FETCH, res2.Type());
 
     // Check it was downloaded to `2`
     auto modelPath = common::joinPaths(common::cwd(), "test_cache",
@@ -480,7 +485,7 @@ TEST_F(FuelClientTest, DownloadModel)
     // Check it is cached
     Result res3 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res3);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res3.Type());
     EXPECT_EQ(common::joinPaths(modelPath, "2"), cachedPath);
 
     // Check that URIs have been updated.
@@ -511,28 +516,28 @@ TEST_F(FuelClientTest, DownloadModel)
     std::string cachedPath;
     Result res1 = client.CachedModel(url, cachedPath);
     EXPECT_FALSE(res1);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
+    EXPECT_EQ(ResultType::FETCH_ERROR, res1.Type());
 
     // Check the dependency is not cached
     Result res2 = client.CachedModel(depUrl, cachedPath);
     EXPECT_FALSE(res2);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res2);
+    EXPECT_EQ(ResultType::FETCH_ERROR, res2.Type());
 
     // Download
     std::string path;
     Result res3 = client.DownloadModel(url, path);
     EXPECT_TRUE(res3);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
+    EXPECT_EQ(ResultType::FETCH, res3.Type());
 
     // Check it is cached
     Result res4 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res4);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res4);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res4.Type());
 
     // Check the dependency is cached
     Result res5 = client.CachedModel(depUrl, cachedPath);
     EXPECT_TRUE(res5);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res5);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res5.Type());
   }
 
   // Download model with a dependency specified within its `model.config`
@@ -546,28 +551,28 @@ TEST_F(FuelClientTest, DownloadModel)
     std::string cachedPath;
     Result res1 = client.CachedModel(url, cachedPath);
     EXPECT_FALSE(res1);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
+    EXPECT_EQ(ResultType::FETCH_ERROR, res1.Type());
 
     // Check the dependency is not cached
     Result res2 = client.CachedModel(depUrl, cachedPath);
     EXPECT_FALSE(res2);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res2);
+    EXPECT_EQ(ResultType::FETCH_ERROR, res2.Type());
 
     // Download
     std::string path;
     Result res3 = client.DownloadModel(url, path);
     EXPECT_TRUE(res3);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
+    EXPECT_EQ(ResultType::FETCH, res3.Type());
 
     // Check it is cached
     Result res4 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res4);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res4);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res4.Type());
 
     // Check the dependency is cached
     Result res5 = client.CachedModel(depUrl, cachedPath);
     EXPECT_TRUE(res5);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res5);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res5.Type());
   }
 
   // Try using nonexistent URL
@@ -578,7 +583,7 @@ TEST_F(FuelClientTest, DownloadModel)
     std::string path;
     Result result = client.DownloadModel(common::URI(url), path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Try using bad URL
@@ -587,7 +592,7 @@ TEST_F(FuelClientTest, DownloadModel)
     std::string path;
     Result result = client.DownloadModel(common::URI(url), path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 }
 
@@ -614,7 +619,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
     EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
         "alice", "models", "My Model", "3"), path);
   }
@@ -625,7 +630,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
     EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
         "alice", "models", "My Model", "3"), path);
   }
@@ -636,7 +641,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
     EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
         "alice", "models", "My Model", "2"), path);
   }
@@ -648,7 +653,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
     EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
         "alice", "models", "My Model", "3", "model.sdf"), path);
   }
@@ -660,7 +665,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
     EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
         "alice", "models", "My Model", "2", "meshes", "model.dae"), path);
   }
@@ -671,7 +676,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Non-cached model (when looking for file)
@@ -680,7 +685,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Non-cached model file
@@ -691,7 +696,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Model root URL to model file
@@ -700,7 +705,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Bad model URL
@@ -709,7 +714,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Bad model file URL
@@ -718,7 +723,7 @@ TEST_F(FuelClientTest, CachedModel)
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 }
 
@@ -1014,13 +1019,13 @@ TEST_F(FuelClientTest, DownloadWorld)
     std::string cachedPath;
     auto res1 = client.CachedWorld(url, cachedPath);
     EXPECT_FALSE(res1);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), res1);
+    EXPECT_EQ(ResultType::FETCH_ERROR, res1.Type());
 
     // Download
     std::string path;
     auto res2 = client.DownloadWorld(url, path);
     EXPECT_TRUE(res2);
-    EXPECT_EQ(Result(ResultType::FETCH), res2);
+    EXPECT_EQ(ResultType::FETCH, res2.Type());
 
     // Check it was downloaded to `1`
     auto worldPath = common::joinPaths(common::cwd(), "test_cache",
@@ -1036,7 +1041,7 @@ TEST_F(FuelClientTest, DownloadWorld)
     // Check it is cached
     auto res3 = client.CachedWorld(url, cachedPath);
     EXPECT_TRUE(res3);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res3);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res3.Type());
     EXPECT_EQ(common::joinPaths(worldPath, "2"), cachedPath);
   }
 
@@ -1047,7 +1052,7 @@ TEST_F(FuelClientTest, DownloadWorld)
     std::string path;
     auto result = client.DownloadWorld(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Try using bad URL
@@ -1056,7 +1061,7 @@ TEST_F(FuelClientTest, DownloadWorld)
     std::string path;
     auto result = client.DownloadWorld(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 }
 
@@ -1083,7 +1088,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
     EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "localhost:8007", "banana", "worlds", "My World", "3"), path);
   }
@@ -1094,7 +1099,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
     EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "localhost:8007", "banana", "worlds", "My World", "3"), path);
   }
@@ -1105,7 +1110,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
     EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "localhost:8007", "banana", "worlds", "My World", "2"), path);
   }
@@ -1117,7 +1122,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorldFile(url, path);
     EXPECT_TRUE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
     EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "localhost:8007", "banana", "worlds", "My World", "3",
         "strawberry.world"), path);
@@ -1130,7 +1135,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorldFile(url, path);
     EXPECT_TRUE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), result);
+    EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
     EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "localhost:8007", "banana", "worlds", "My World", "2",
         "strawberry.world"), path);
@@ -1142,7 +1147,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorld(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Non-cached world (when looking for file)
@@ -1152,7 +1157,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorldFile(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Non-cached world file
@@ -1162,7 +1167,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorldFile(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // World root URL to world file
@@ -1171,7 +1176,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorldFile(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Bad world URL
@@ -1180,7 +1185,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorld(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 
   // Bad world file URL
@@ -1189,7 +1194,7 @@ TEST_F(FuelClientTest, CachedWorld)
     std::string path;
     auto result = client.CachedWorldFile(url, path);
     EXPECT_FALSE(result);
-    EXPECT_EQ(Result(ResultType::FETCH_ERROR), result);
+    EXPECT_EQ(ResultType::FETCH_ERROR, result.Type());
   }
 }
 

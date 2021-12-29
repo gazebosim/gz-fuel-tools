@@ -47,13 +47,13 @@ ign_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find ignition-common
-ign_find_package(ignition-common4 REQUIRED PRIVATE)
-set(IGN_COMMON_MAJOR_VER ${ignition-common4_VERSION_MAJOR})
+ign_find_package(ignition-common5 REQUIRED PRIVATE)
+set(IGN_COMMON_MAJOR_VER ${ignition-common5_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-math
-ign_find_package(ignition-math6 REQUIRED PRIVATE)
-set(IGN_MSGS_MAJOR_VER ${ignition-math6_VERSION_MAJOR})
+ign_find_package(ignition-math7 REQUIRED PRIVATE)
+set(IGN_MSGS_MAJOR_VER ${ignition-math7_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-msgs
