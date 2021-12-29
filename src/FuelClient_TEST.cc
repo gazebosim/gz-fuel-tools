@@ -50,8 +50,10 @@ void createLocalModel(ClientConfig &_conf)
   auto modelPath = common::joinPaths(
       "test_cache", "localhost:8007", "alice", "models", "My Model");
 
-  common::createDirectories(common::joinPaths(modelPath, "2", "meshes"));
-  common::createDirectories(common::joinPaths(modelPath, "3", "meshes"));
+  EXPECT_TRUE(common::createDirectories(
+      common::joinPaths(modelPath, "2", "meshes")));
+  EXPECT_TRUE(common::createDirectories(
+      common::joinPaths(modelPath, "3", "meshes")));
 
   {
     std::ofstream fout(common::joinPaths(modelPath, "2", "model.config"),
@@ -60,8 +62,9 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    common::copyFile(common::joinPaths(modelPath, "2", "model.config"),
-        common::joinPaths(modelPath, "3", "model.config"));
+    EXPECT_TRUE(common::copyFile(
+        common::joinPaths(modelPath, "2", "model.config"),
+        common::joinPaths(modelPath, "3", "model.config")));
   }
 
   {
@@ -71,8 +74,9 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    common::copyFile(common::joinPaths(modelPath, "2", "model.sdf"),
-        common::joinPaths(modelPath, "3", "model.sdf"));
+    EXPECT_TRUE(common::copyFile(
+        common::joinPaths(modelPath, "2", "model.sdf"),
+        common::joinPaths(modelPath, "3", "model.sdf")));
   }
 
   {
@@ -82,8 +86,9 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    common::copyFile(common::joinPaths(modelPath, "2", "meshes", "model.dae"),
-        common::joinPaths(modelPath, "3", "meshes", "model.dae"));
+    EXPECT_TRUE(common::copyFile(
+        common::joinPaths(modelPath, "2", "meshes", "model.dae"),
+        common::joinPaths(modelPath, "3", "meshes", "model.dae")));
   }
 
   ignition::fuel_tools::ServerConfig srv;
