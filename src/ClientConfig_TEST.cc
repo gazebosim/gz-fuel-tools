@@ -64,7 +64,6 @@ std::string homePath()
 /// \ToDo: Move this function to ignition::common::Filesystem
 std::string cachePath()
 {
-  std::string cachePath;
 #ifndef _WIN32
   return std::string("/tmp/ignition/fuel");
 #else
