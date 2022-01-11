@@ -879,13 +879,14 @@ TEST_F(FuelClientTest, ParseWorldUrl)
   // * with client config
   // * without server API version
   // * with world version `tip`
+  // * with trailing /
   {
     ClientConfig config;
 
     FuelClient client(config);
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/german/worlds/Cardboard Box/tip"};
+      "https://fuel.ignitionrobotics.org/german/worlds/Cardboard Box/tip/"};
     EXPECT_TRUE(client.ParseWorldUrl(url, id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
