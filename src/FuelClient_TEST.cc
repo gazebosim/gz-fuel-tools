@@ -50,9 +50,9 @@ void createLocalModel(ClientConfig &_conf)
   auto modelPath = common::joinPaths(
       "test_cache", "localhost:8007", "alice", "models", "My Model");
 
-  EXPECT_TRUE(common::createDirectories(
+  ASSERT_TRUE(common::createDirectories(
       common::joinPaths(modelPath, "2", "meshes")));
-  EXPECT_TRUE(common::createDirectories(
+  ASSERT_TRUE(common::createDirectories(
       common::joinPaths(modelPath, "3", "meshes")));
 
   {
@@ -62,7 +62,7 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    EXPECT_TRUE(common::copyFile(common::joinPaths(modelPath, "2",
+    ASSERT_TRUE(common::copyFile(common::joinPaths(modelPath, "2",
         "model.config"), common::joinPaths(modelPath, "3", "model.config")));
   }
 
@@ -73,7 +73,7 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    EXPECT_TRUE(common::copyFile(common::joinPaths(modelPath, "2", "model.sdf"),
+    ASSERT_TRUE(common::copyFile(common::joinPaths(modelPath, "2", "model.sdf"),
         common::joinPaths(modelPath, "3", "model.sdf")));
   }
 
@@ -84,7 +84,7 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    EXPECT_TRUE(common::copyFile(common::joinPaths(modelPath, "2", "meshes",
+    ASSERT_TRUE(common::copyFile(common::joinPaths(modelPath, "2", "meshes",
         "model.dae"), common::joinPaths(modelPath, "3", "meshes",
         "model.dae")));
   }
@@ -105,8 +105,8 @@ void createLocalWorld(ClientConfig &_conf)
   auto worldPath = common::joinPaths(
       "test_cache", "localhost:8007", "banana", "worlds", "My World");
 
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(worldPath, "2")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(worldPath, "3")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(worldPath, "2")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(worldPath, "3")));
 
   {
     std::ofstream fout(common::joinPaths(worldPath, "2", "strawberry.world"),
@@ -115,7 +115,7 @@ void createLocalWorld(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    EXPECT_TRUE(common::copyFile(common::joinPaths(worldPath, "2",
+    ASSERT_TRUE(common::copyFile(common::joinPaths(worldPath, "2",
         "strawberry.world"), common::joinPaths(worldPath, "3",
         "strawberry.world")));
   }
@@ -403,7 +403,7 @@ TEST_F(FuelClientTest, DownloadModel)
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
@@ -602,7 +602,7 @@ TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
@@ -676,7 +676,7 @@ TEST_F(FuelClientTest, CachedModel)
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocalModel(config);
@@ -1067,7 +1067,7 @@ TEST_F(FuelClientTest, DownloadWorld)
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
 
   ServerConfig server;
   server.SetUrl(ignition::common::URI(
@@ -1145,7 +1145,7 @@ TEST_F(FuelClientTest, CachedWorld)
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocalWorld(config);
