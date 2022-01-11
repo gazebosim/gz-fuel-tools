@@ -50,7 +50,7 @@ class CmdLine : public ::testing::Test
     // Clear and recreate the cache at the start of every test. Doing it here
     // instead of on teardown leaves the folder intact for debugging if needed
     common::removeAll(testCachePath);
-    common::createDirectories(testCachePath);
+    ASSERT_TRUE(common::createDirectories(testCachePath));
     setenv("IGN_FUEL_CACHE_PATH", this->testCachePath.c_str(), true);
   }
 
@@ -186,13 +186,13 @@ TEST_F(CmdLine, ModelDownloadUnversioned)
   EXPECT_TRUE(this->stdErrBuffer.str().empty()) << this->stdErrBuffer.str();
 
   // Check files
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "chapulina", "models", "test box")));
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "chapulina", "models", "test box", "2")));
-  EXPECT_TRUE(ignition::common::isFile(
+  EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "chapulina", "models", "test box", "2", "model.sdf")));
 }
@@ -233,9 +233,9 @@ TEST_F(CmdLine, DownloadConfigCache)
   // Check files
   auto modelPath = common::joinPaths(this->testCachePath,
       "fuel.ignitionrobotics.org", "chapulina", "models", "test box");
-  EXPECT_TRUE(ignition::common::isDirectory(modelPath));
-  EXPECT_TRUE(ignition::common::isDirectory(common::joinPaths(modelPath, "2")));
-  EXPECT_TRUE(ignition::common::isFile(common::joinPaths(modelPath, "2",
+  EXPECT_TRUE(common::isDirectory(modelPath));
+  EXPECT_TRUE(common::isDirectory(common::joinPaths(modelPath, "2")));
+  EXPECT_TRUE(common::isFile(common::joinPaths(modelPath, "2",
       "model.sdf")));
 }
 
@@ -347,13 +347,13 @@ TEST_F(CmdLine, WorldDownloadUnversioned)
   EXPECT_TRUE(this->stdErrBuffer.str().empty()) << this->stdErrBuffer.str();
 
   // Check files
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world")));
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world", "2")));
-  EXPECT_TRUE(ignition::common::isFile(
+  EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world", "2", "test.world")));
 }
@@ -384,46 +384,46 @@ TEST_P(DownloadCollectionTest, AllItems)
 
   // Check files
   // Model: Backpack
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "backpack")));
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "backpack", "2")));
-  EXPECT_TRUE(ignition::common::isFile(
+  EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "backpack", "2", "model.sdf")));
 
   // Model: TEAMBASE
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "teambase")));
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "teambase", "2")));
-  EXPECT_TRUE(ignition::common::isFile(
+  EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
      "openrobotics", "models", "teambase", "2", "model.sdf")));
 
   // World: Test World
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world")));
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world", "2")));
-  EXPECT_TRUE(ignition::common::isFile(
+  EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world", "2", "test.world")));
 
   // World: Test World 2
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world 2")));
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world 2", "2")));
-  EXPECT_TRUE(ignition::common::isFile(
+  EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world 2", "2", "test.world")));
 }
@@ -447,34 +447,34 @@ TEST_P(DownloadCollectionTest, Models)
 
   // Check files
   // Model: Backpack
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "backpack")));
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "backpack", "2")));
-  EXPECT_TRUE(ignition::common::isFile(
+  EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "backpack", "2", "model.sdf")));
 
   // Model: TEAMBASE
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "teambase")));
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "teambase", "2")));
-  EXPECT_TRUE(ignition::common::isFile(
+  EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "teambase", "2", "model.sdf")));
 
   // World: Test World
-  EXPECT_FALSE(ignition::common::isDirectory(
+  EXPECT_FALSE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world")));
 
   // World: Test World 2
-  EXPECT_FALSE(ignition::common::isDirectory(
+  EXPECT_FALSE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world2")));
 }
@@ -498,34 +498,34 @@ TEST_P(DownloadCollectionTest, Worlds)
 
   // Check files
   // Model: Backpack
-  EXPECT_FALSE(ignition::common::isDirectory(
+  EXPECT_FALSE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "backpack")));
 
   // Model: TEAMBASE
-  EXPECT_FALSE(ignition::common::isDirectory(
+  EXPECT_FALSE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "models", "teambase")));
 
   // World: Test World
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world")));
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world", "2")));
-  EXPECT_TRUE(ignition::common::isFile(
+  EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world", "2", "test.world")));
 
   // World: Test World 2
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world 2")));
-  EXPECT_TRUE(ignition::common::isDirectory(
+  EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world 2", "2")));
-  EXPECT_TRUE(ignition::common::isFile(
+  EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
       "openrobotics", "worlds", "test world 2", "2", "test.world")));
 }
