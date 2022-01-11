@@ -202,7 +202,7 @@ TEST(CmdLine, ModelDownloadUnversioned)
 {
   cmdVerbosity("4");
 
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
 
@@ -240,7 +240,7 @@ TEST(CmdLine, DownloadConfigCache)
   cmdVerbosity("4");
 
   unsetenv("IGN_FUEL_CACHE_PATH");
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
 
   // Test config
@@ -428,7 +428,7 @@ TEST(FuelClientTest, WorldDownloadUnversioned)
 {
   cmdVerbosity("4");
 
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
 
@@ -475,7 +475,7 @@ TEST_P(DownloadCollectionTest, AllItems)
 {
   cmdVerbosity("4");
 
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
 
@@ -551,7 +551,7 @@ TEST_P(DownloadCollectionTest, Models)
 {
   cmdVerbosity("4");
 
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
 
@@ -614,7 +614,7 @@ TEST_P(DownloadCollectionTest, Worlds)
 {
   cmdVerbosity("4");
 
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   setenv("IGN_FUEL_CACHE_PATH", "test_cache", true);
 

@@ -402,7 +402,7 @@ TEST_F(FuelClientTest, DownloadModel)
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -601,7 +601,7 @@ TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -675,7 +675,7 @@ TEST_F(FuelClientTest, CachedModel)
 {
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -1066,7 +1066,7 @@ TEST_F(FuelClientTest, DownloadWorld)
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
 
   ServerConfig server;
@@ -1144,7 +1144,7 @@ TEST_F(FuelClientTest, CachedWorld)
 {
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));

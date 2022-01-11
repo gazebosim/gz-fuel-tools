@@ -227,7 +227,7 @@ class LocalCacheTest : public ::testing::Test
 TEST_F(LocalCacheTest, AllModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -255,7 +255,7 @@ TEST_F(LocalCacheTest, AllModels)
 TEST_F(LocalCacheTest, MatchingModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.Clear();
@@ -301,7 +301,7 @@ TEST_F(LocalCacheTest, MatchingModels)
 TEST_F(LocalCacheTest, MatchingModel)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -357,7 +357,7 @@ TEST_F(LocalCacheTest, MatchingModel)
 TEST_F(LocalCacheTest, AllWorlds)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -389,7 +389,7 @@ TEST_F(LocalCacheTest, AllWorlds)
 TEST_F(LocalCacheTest, MatchingWorlds)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
+  common::removeAll("test_cache");
   EXPECT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.Clear();
@@ -423,8 +423,8 @@ TEST_F(LocalCacheTest, MatchingWorlds)
 TEST_F(LocalCacheTest, MatchingWorld)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
- EXPECT_TRUE(common::createDirectories("test_cache"));
+  common::removeAll("test_cache");
+  EXPECT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
