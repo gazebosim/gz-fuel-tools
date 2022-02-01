@@ -21,9 +21,11 @@
 #include <stack>
 #include <string>
 #include <vector>
+
 #include <ignition/common/Console.hh>
 #include <ignition/common/Filesystem.hh>
 #include <ignition/common/Util.hh>
+#include <ignition/utils/ImplPtr.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/config.hh"
@@ -33,10 +35,10 @@ using namespace fuel_tools;
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class ignition::fuel_tools::ClientConfigPrivate
+class ignition::fuel_tools::ClientConfig::Implementation
 {
   /// \brief Constructor.
-  public: ClientConfigPrivate()
+  public: Implementation()
           {
             std::string homePath;
             ignition::common::env(IGN_HOMEDIR, homePath);
@@ -72,7 +74,7 @@ class ignition::fuel_tools::ClientConfigPrivate
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class ignition::fuel_tools::ServerConfigPrivate
+class ignition::fuel_tools::ServerConfig::Implementation
 {
   /// \brief Clear values.
   public: void Clear()
@@ -94,33 +96,14 @@ class ignition::fuel_tools::ServerConfigPrivate
 
 //////////////////////////////////////////////////
 ServerConfig::ServerConfig()
-  : dataPtr (new ServerConfigPrivate)
+  : dataPtr (ignition::utils::MakeImpl<Implementation>())
 {
-}
-
-//////////////////////////////////////////////////
-ServerConfig::ServerConfig(const ServerConfig &_orig)
-  : dataPtr(new ServerConfigPrivate)
-{
-  *(this->dataPtr) = *(_orig.dataPtr);
 }
 
 //////////////////////////////////////////////////
 void ServerConfig::Clear()
 {
   this->dataPtr->Clear();
-}
-
-//////////////////////////////////////////////////
-ServerConfig &ServerConfig::operator=(const ServerConfig &_orig)
-{
-  *(this->dataPtr) = *(_orig.dataPtr);
-  return *this;
-}
-
-//////////////////////////////////////////////////
-ServerConfig::~ServerConfig()
-{
 }
 
 //////////////////////////////////////////////////
@@ -199,7 +182,8 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
 }
 
 //////////////////////////////////////////////////
-ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
+ClientConfig::ClientConfig() 
+  : dataPtr (ignition::utils::MakeImpl<Implementation>())
 {
   std::string ignFuelPath = "";
   if (ignition::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
@@ -211,26 +195,6 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
     }
     this->SetCacheLocation(ignFuelPath);
   }
-}
-
-//////////////////////////////////////////////////
-ClientConfig::ClientConfig(const ClientConfig &_copy)
-  : dataPtr(new ClientConfigPrivate)
-{
-  *(this->dataPtr) = *(_copy.dataPtr);
-}
-
-//////////////////////////////////////////////////
-ClientConfig &ClientConfig::operator=(const ClientConfig &_rhs)
-{
-  *(this->dataPtr) = *(_rhs.dataPtr);
-
-  return *this;
-}
-
-//////////////////////////////////////////////////
-ClientConfig::~ClientConfig()
-{
 }
 
 //////////////////////////////////////////////////
@@ -452,7 +416,7 @@ std::vector<ServerConfig> ClientConfig::Servers() const
 }
 
 //////////////////////////////////////////////////
-std::vector<ServerConfig> & ClientConfig::MutableServers() const
+std::vector<ServerConfig> & ClientConfig::MutableServers()
 {
   return this->dataPtr->servers;
 }

@@ -18,47 +18,23 @@
 #ifndef IGNITION_FUEL_TOOLS_CLIENTCONFIG_HH_
 #define IGNITION_FUEL_TOOLS_CLIENTCONFIG_HH_
 
-#include <memory>
 #include <string>
 #include <vector>
 
 #include <ignition/common/URI.hh>
+#include <ignition/utils/ImplPtr.hh>
 
 #include "ignition/fuel_tools/Export.hh"
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
 
 namespace ignition
 {
   namespace fuel_tools
   {
-    /// \brief forward declaration
-    class ServerConfigPrivate;
-
-    /// \brief Forward Declaration
-    class ClientConfigPrivate;
-
     /// \brief Describes options needed for a server.
     class IGNITION_FUEL_TOOLS_VISIBLE ServerConfig
     {
       /// \brief Constructor.
       public: ServerConfig();
-
-      /// \brief Copy constructor.
-      /// \param[in] _orig The server config to copy.
-      public: ServerConfig(const ServerConfig &_orig);
-
-      /// \brief Assignment operator overload.
-      /// \param[in] _orig The server config to copy.
-      public: ServerConfig &operator=(const ServerConfig &_orig);
-
-      /// \brief Destructor.
-      public: ~ServerConfig();
 
       /// \brief Clear the server config. This will set all values to empty
       /// strings, except the version string which will be set to its default
@@ -100,8 +76,8 @@ namespace ignition
       /// \return Model information string
       public: std::string AsPrettyString(const std::string &_prefix = "") const;
 
-      /// \brief PIMPL
-      private: std::unique_ptr<ServerConfigPrivate> dataPtr;
+      /// \brief Pointer to private implementation
+      IGN_UTILS_IMPL_PTR(dataPtr)
     };
 
     /// \brief High level interface to ignition fuel.
@@ -110,17 +86,6 @@ namespace ignition
     {
       /// \brief Constructor.
       public: ClientConfig();
-
-      /// \brief Copy constructor.
-      /// \param[in] _copy ClientConfig to copy.
-      public: ClientConfig(const ClientConfig &_copy);
-
-      /// \brief Assignment operator overload.
-      /// \param[in] _copy ClientConfig to copy.
-      public: ClientConfig &operator=(const ClientConfig &_copy);
-
-      /// \brief Destructor.
-      public: ~ClientConfig();
 
       /// \brief Clear the client config. This will set all values to empty
       /// strings, except the user agent which will be set to its default
@@ -153,7 +118,7 @@ namespace ignition
 
       /// \brief List of servers the client will connect to.
       /// \return The list of servers.
-      public: std::vector<ServerConfig> & MutableServers() const;
+      public: std::vector<ServerConfig> & MutableServers();
 
       /// \brief Add a server to the list.
       /// \param[in] _srv The server config.
@@ -172,14 +137,9 @@ namespace ignition
       /// \return Client information string
       public: std::string AsString(const std::string &_prefix = "") const;
 
-      /// \brief PIMPL
-      private: std::unique_ptr<ClientConfigPrivate> dataPtr;
+      /// \brief Pointer to private implementation
+      IGN_UTILS_IMPL_PTR(dataPtr)
     };
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
 #endif
