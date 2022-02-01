@@ -49,6 +49,7 @@ ign_create_core_library(SOURCES ${sources} CXX_STANDARD 17)
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
     ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
+    ignition-utils${IGN_UTILS_MAJOR_VER}::ignition-utils${IGN_UTILS_MAJOR_VER}
   PRIVATE
     ignition-msgs${IGN_MSGS_MAJOR_VER}::ignition-msgs${IGN_MSGS_MAJOR_VER}
     curl::curl
