@@ -267,14 +267,6 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest)
 }
 
 //////////////////////////////////////////////////
-FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
-      LocalCache *_cache) : FuelClient(_config, _rest)
-{
-  if (_cache != nullptr)
-    this->dataPtr->cache.reset(_cache);
-}
-
-//////////////////////////////////////////////////
 FuelClient::~FuelClient()
 {
 }
@@ -529,14 +521,6 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DeleteModel(const ModelIdentifier &)
-{
-  ignerr << "Model deletion requires a private-token or JWT to be specified"
-    << " in a header. No action is performed.\n";
-
-  return Result(ResultType::DELETE_ERROR);
-}
-
 void FuelClient::AddServerConfigParametersToHeaders(
   const ignition::fuel_tools::ServerConfig &_serverConfig,
   std::vector<std::string> &_headers) const

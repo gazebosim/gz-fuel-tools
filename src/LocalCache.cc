@@ -213,13 +213,6 @@ std::vector<WorldIdentifier> LocalCachePrivate::WorldsInServer(
 }
 
 //////////////////////////////////////////////////
-LocalCache::LocalCache(const ClientConfig *_config)
-  : dataPtr(new LocalCachePrivate)
-{
-  this->dataPtr->config = _config;
-}
-
-//////////////////////////////////////////////////
 LocalCache::~LocalCache()
 {
 }

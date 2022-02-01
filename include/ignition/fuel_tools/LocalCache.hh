@@ -45,11 +45,6 @@ namespace ignition
     /// \brief Class for managing stuff in the local cache
     class IGNITION_FUEL_TOOLS_VISIBLE LocalCache
     {
-      /// \brief Constructor
-      /// \param[in] _config The configuration for the client
-      public:
-        explicit IGN_DEPRECATED(5) LocalCache(const ClientConfig *_config);
-
       /// \brief destructor
       public: virtual ~LocalCache();
 
