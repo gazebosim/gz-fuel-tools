@@ -21,21 +21,11 @@
 #include <memory>
 #include <string>
 
-#include "ignition/fuel_tools/Helpers.hh"
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-
 namespace ignition
 {
   namespace fuel_tools
   {
-    /// \brief Forward Declaration
-    class CollectionIdentifierPrivate;
+    /// \brief Forward Declarations
     class ServerConfig;
 
     /// \brief Defines how to identify a collection
@@ -44,22 +34,9 @@ namespace ignition
       /// \brief Constructor.
       public: CollectionIdentifier();
 
-      /// \brief Copy Constructor.
-      /// \param[in] _orig CollectionIdentifier to copy.
-      public: CollectionIdentifier(const CollectionIdentifier &_orig);
-
-      /// \brief Destructor.
-      public: ~CollectionIdentifier();
-
-      /// \brief Assignment operator
-      /// \param[in] _orig CollectionIdentifier to copy.
-      /// \return Reference to this object.
-      public: CollectionIdentifier
-              &operator=(const CollectionIdentifier &_orig);
-
-        /// \brief Equality operator.
-        /// \param[in] _rhs CollectionIdentifier to compare.
-        /// \return True if the CollectionIdentifier names are equal.
+      /// \brief Equality operator.
+      /// \param[in] _rhs CollectionIdentifier to compare.
+      /// \return True if the CollectionIdentifier names are equal.
       public: bool operator==(const CollectionIdentifier &_rhs) const;
 
       /// \brief Returns the collection name
@@ -82,7 +59,11 @@ namespace ignition
 
       /// \brief Returns server information to retrieve collection from.
       /// \return Server information.
-      public: ServerConfig &Server() const;
+      public: const ServerConfig &Server() const;
+
+      /// \brief Returns server information to retrieve collection from.
+      /// \return Server information.
+      public: ServerConfig &Server();
 
       /// \brief Set the server from which this collection comes.
       /// \param[in] _server The server to retrieve the collection from.
@@ -106,14 +87,9 @@ namespace ignition
       /// \return Collection information string
       public: std::string AsPrettyString(const std::string &_prefix = "") const;
 
-      /// \brief PIMPL
-      private: std::unique_ptr<CollectionIdentifierPrivate> dataPtr;
+      /// \brief Pointer to private implementation
+      IGN_UTILS_IMPL_PTR(dataPtr)
     };
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
 #endif
