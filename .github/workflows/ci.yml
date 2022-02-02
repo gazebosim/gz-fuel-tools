@@ -1,6 +1,14 @@
 name: Ubuntu CI
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+    - main 
+    - ign-fuel-tools*
+  pull_request:
+    branches:
+    - main 
+    - ign-fuel-tools*
 
 jobs:
   bionic-ci:
