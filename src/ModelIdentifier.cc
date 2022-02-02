@@ -29,7 +29,7 @@
 using namespace ignition;
 using namespace fuel_tools;
 
-class ignition::fuel_tools::ModelIdentifierPrivate
+class ignition::fuel_tools::ModelIdentifier::Implementation
 {
   /// \brief returns true if name follows rules
   /// \param[in] _name Name to validate
@@ -83,7 +83,7 @@ class ignition::fuel_tools::ModelIdentifierPrivate
 };
 
 //////////////////////////////////////////////////
-bool ModelIdentifierPrivate::ValidName(const std::string &_name)
+bool ModelIdentifier::Implementation::ValidName(const std::string &_name)
 {
   // ToDo: Enable name validation when model names are prepared for this.
   return true;
@@ -112,32 +112,14 @@ bool ModelIdentifierPrivate::ValidName(const std::string &_name)
 
 //////////////////////////////////////////////////
 ModelIdentifier::ModelIdentifier()
-  : dataPtr(new ModelIdentifierPrivate)
+  : dataPtr (ignition::utils::MakeImpl<Implementation>())
 {
-}
-
-//////////////////////////////////////////////////
-ModelIdentifier::ModelIdentifier(const ModelIdentifier &_orig)
-{
-  this->dataPtr.reset(new ModelIdentifierPrivate(*(_orig.dataPtr.get())));
-}
-
-//////////////////////////////////////////////////
-ModelIdentifier &ModelIdentifier::operator=(const ModelIdentifier &_orig)
-{
-  this->dataPtr.reset(new ModelIdentifierPrivate(*(_orig.dataPtr.get())));
-  return *this;
 }
 
 //////////////////////////////////////////////////
 bool ModelIdentifier::operator==(const ModelIdentifier &_rhs) const
 {
   return this->UniqueName() == _rhs.UniqueName();
-}
-
-//////////////////////////////////////////////////
-ModelIdentifier::~ModelIdentifier()
-{
 }
 
 //////////////////////////////////////////////////
@@ -197,7 +179,13 @@ std::string ModelIdentifier::Owner() const
 }
 
 //////////////////////////////////////////////////
-ServerConfig &ModelIdentifier::Server() const
+ServerConfig &ModelIdentifier::Server()
+{
+  return this->dataPtr->server;
+}
+
+//////////////////////////////////////////////////
+const ServerConfig &ModelIdentifier::Server() const
 {
   return this->dataPtr->server;
 }
