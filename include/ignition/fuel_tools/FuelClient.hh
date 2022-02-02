@@ -60,18 +60,6 @@ namespace ignition
       public: FuelClient(const ClientConfig &_config,
                          const Rest &_rest = Rest());
 
-      /// \brief Constructor accepts server and auth configuration
-      /// \param[in] _config configuration about servers to connect to
-      /// \param[in] _rest A REST request.
-      /// \param[in] _cache Test hook. Pointer to a local cache. The FuelClient
-      ///            will take ownership of the pointer and free it when
-      ///            destructed. If set to nullptr the client will instantiate
-      ///            it's own cache.
-      /// \remarks the client saves a copy of the config passed into it
-      public: IGN_DEPRECATED(6) FuelClient(const ClientConfig &_config,
-                                           const Rest &_rest,
-                                           LocalCache *_cache);
-
       /// \brief Destructor
       public: ~FuelClient();
 
@@ -203,11 +191,6 @@ namespace ignition
                                  const std::vector<std::string> &_headers,
                                  bool _private,
                                  const std::string &_owner);
-
-      /// \brief Remove a model from ignition fuel
-      /// \param[in] _id The model identifier.
-      /// \return Result of the delete operation
-      public: Result IGN_DEPRECATED(6) DeleteModel(const ModelIdentifier &_id);
 
       /// \brief Remove a resource, such as a model or world, from Ignition Fuel
       /// \param[in] _uri The full URI of the resource, e.g:

@@ -1344,23 +1344,6 @@ TEST_F(FuelClientTest, DownloadWorldFail)
 }
 
 /////////////////////////////////////////////////
-TEST_F(FuelClientTest, DeleteModelFail)
-{
-  FuelClient client;
-  ModelIdentifier modelId;
-
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-  Result result = client.DeleteModel(modelId);
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-  EXPECT_EQ(ResultType::DELETE_ERROR, result.Type());
-}
-
-/////////////////////////////////////////////////
 TEST_F(FuelClientTest, UploadModelFail)
 {
   FuelClient client;
