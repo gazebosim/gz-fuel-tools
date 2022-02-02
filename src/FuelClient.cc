@@ -42,11 +42,12 @@
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/JSONParser.hh"
-#include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ModelIterPrivate.hh"
 #include "ignition/fuel_tools/RestClient.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
+
+#include "LocalCache.hh"
+#include "ModelIterPrivate.hh"
 #include "WorldIterPrivate.hh"
 
 using namespace ignition;
@@ -240,19 +241,7 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest)
   this->dataPtr->rest = _rest;
   this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#else
-# pragma warning(push)
-# pragma warning(disable: 4996)
-#endif
   this->dataPtr->cache = std::make_unique<LocalCache>(&(this->dataPtr->config));
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#else
-# pragma warning(pop)
-#endif
 
   this->dataPtr->urlModelRegex.reset(new std::regex(
     this->dataPtr->kModelUrlRegexStr));
@@ -264,14 +253,6 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest)
     this->dataPtr->kWorldFileUrlRegexStr));
   this->dataPtr->urlCollectionRegex.reset(new std::regex(
     this->dataPtr->kCollectionUrlRegexStr));
-}
-
-//////////////////////////////////////////////////
-FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest,
-      LocalCache *_cache) : FuelClient(_config, _rest)
-{
-  if (_cache != nullptr)
-    this->dataPtr->cache.reset(_cache);
 }
 
 //////////////////////////////////////////////////
@@ -529,14 +510,6 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DeleteModel(const ModelIdentifier &)
-{
-  ignerr << "Model deletion requires a private-token or JWT to be specified"
-    << " in a header. No action is performed.\n";
-
-  return Result(ResultType::DELETE_ERROR);
-}
-
 void FuelClient::AddServerConfigParametersToHeaders(
   const ignition::fuel_tools::ServerConfig &_serverConfig,
   std::vector<std::string> &_headers) const
