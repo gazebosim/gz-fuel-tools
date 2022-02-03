@@ -242,13 +242,16 @@ TEST_F(LocalCacheTest, AllModels)
   std::set<std::string> uniqueNames;
   while (iter)
   {
+    std::cerr << iter->Identification().UniqueName() << std::endl;
     uniqueNames.insert(iter->Identification().UniqueName());
     ++iter;
   }
   EXPECT_EQ(9u, uniqueNames.size());
 
-  EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-      "http://localhost:8001/alice/models/am1"));
+  auto toFind = ignition::common::joinPaths(
+    "http://localhost:8001/", "alice", "models", "am1");
+
+  EXPECT_NE(uniqueNames.end(), uniqueNames.find(toFind));
 }
 
 /////////////////////////////////////////////////
