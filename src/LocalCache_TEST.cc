@@ -25,9 +25,9 @@
 #include <ignition/utilities/ExtraTestMacros.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
+#include "LocalCache.hh"
 #include "test/test_config.h"
 
 #ifdef _WIN32
@@ -236,14 +236,7 @@ TEST_F(LocalCacheTest, AllModels)
   createLocal6Models(conf);
   createLocal3Models(conf);
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   ignition::fuel_tools::LocalCache cache(&conf);
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
 
   auto iter = cache.AllModels();
   std::set<std::string> uniqueNames;
@@ -274,14 +267,7 @@ TEST_F(LocalCacheTest, MatchingModels)
   createLocal6Models(conf);
   createLocal3Models(conf);
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   ignition::fuel_tools::LocalCache cache(&conf);
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
 
   ModelIdentifier am1;
   am1.SetServer(conf.Servers().front());
@@ -327,15 +313,7 @@ TEST_F(LocalCacheTest, MatchingModel)
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   ignition::fuel_tools::LocalCache cache(&conf);
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-
 
   ignition::fuel_tools::ServerConfig srv1;
   srv1.SetUrl(common::URI("http://localhost:8001/"));
@@ -394,15 +372,7 @@ TEST_F(LocalCacheTest, AllWorlds)
   createLocal6Worlds(conf);
   createLocal3Worlds(conf);
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   ignition::fuel_tools::LocalCache cache(&conf);
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-
 
   auto iter = cache.AllWorlds();
   std::set<std::string> uniqueNames;
@@ -437,15 +407,7 @@ TEST_F(LocalCacheTest, MatchingWorlds)
   createLocal6Worlds(conf);
   createLocal3Worlds(conf);
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   ignition::fuel_tools::LocalCache cache(&conf);
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-
 
   WorldIdentifier am1;
   am1.SetServer(conf.Servers().front());
@@ -479,15 +441,7 @@ TEST_F(LocalCacheTest, MatchingWorld)
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
 
-#ifndef _WIN32
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
   ignition::fuel_tools::LocalCache cache(&conf);
-#ifndef _WIN32
-# pragma GCC diagnostic pop
-#endif
-
 
   ignition::fuel_tools::ServerConfig srv1;
   srv1.SetUrl(ignition::common::URI("http://localhost:8001/"));
