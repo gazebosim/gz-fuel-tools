@@ -70,6 +70,11 @@ TEST(Interface, FetchResources)
     // Download model
     std::string path = fetchResourceWithClient(modelUrl.Str(), client);
 
+    std::string sdfPath = sdfFromPath(path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+      "fuel.ignitionrobotics.org", "chapulina", "models", "test box", "2",
+      "model.sdf"), sdfPath);
+
     // Check it was downloaded to `2`
     EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
       "fuel.ignitionrobotics.org", "chapulina", "models", "test box", "2"));
@@ -122,6 +127,7 @@ TEST(Interface, FetchResources)
     // Download model file
     std::string path = fetchResourceWithClient(modelFileUrl.Str(), client);
 
+
     // Check entire model was downloaded to `1`
     EXPECT_TRUE(common::exists(
         common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
@@ -154,7 +160,14 @@ TEST(Interface, FetchResources)
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "fuel.ignitionrobotics.org", "openrobotics", "models", "bus", "1"),
         cachedPath);
-     }
+    }
+
+    {
+      std::string sdfFile = sdfFromPath(cachedPath);
+      EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+            "fuel.ignitionrobotics.org", "openrobotics", "models", "bus",
+            "1", "model.sdf"), sdfFile);
+    }
 
     // Check file is cached
     {
@@ -176,6 +189,8 @@ TEST(Interface, FetchResources)
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
       EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      std::string sdfFile = sdfFromPath(cachedPath);
+      EXPECT_TRUE(sdfFile.empty());
     }
 
     // Download world
@@ -245,7 +260,14 @@ TEST(Interface, FetchResources)
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "fuel.ignitionrobotics.org", "chapulina", "worlds", "test world", "2"),
         cachedPath);
-     }
+    }
+
+    {
+      std::string sdfFile = sdfFromPath(cachedPath);
+      EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+            "fuel.ignitionrobotics.org", "chapulina", "worlds", "test world",
+            "2", "test.sdf"), sdfFile);
+    }
 
     // Check file is cached
     {
