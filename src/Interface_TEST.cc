@@ -127,7 +127,6 @@ TEST(Interface, FetchResources)
     // Download model file
     std::string path = fetchResourceWithClient(modelFileUrl.Str(), client);
 
-
     // Check entire model was downloaded to `1`
     EXPECT_TRUE(common::exists(
         common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
