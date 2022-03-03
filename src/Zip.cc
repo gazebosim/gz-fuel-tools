@@ -150,6 +150,7 @@ bool Zip::Extract(const std::string &_src,
                << "Do you have the right permissions?" << std::endl;
         return false;
       }
+      continue;
     }
 
     // Create and write the files.
