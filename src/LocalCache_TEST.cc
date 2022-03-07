@@ -351,7 +351,7 @@ TEST_F(LocalCacheTest, MatchingModel)
   ASSERT_TRUE(am1Model);
   EXPECT_EQ("alice", am1Model.Identification().Owner());
   EXPECT_EQ("am1", am1Model.Identification().Name());
-  EXPECT_EQ("http://localhost:8001",
+  EXPECT_EQ("http://localhost:8001/",
       am1Model.Identification().Server().Url().Str());
 
   ModelIdentifier tm2;
@@ -502,7 +502,7 @@ TEST_F(LocalCacheTest, MatchingWorld)
   EXPECT_TRUE(cache.MatchingWorld(am1));
   EXPECT_EQ("alice", am1.Owner());
   EXPECT_EQ("am1", am1.Name());
-  EXPECT_EQ("http://localhost:8001", am1.Server().Url().Str());
+  EXPECT_EQ("http://localhost:8001/", am1.Server().Url().Str());
 
   WorldIdentifier tm2;
   tm2.SetServer(srv1);
