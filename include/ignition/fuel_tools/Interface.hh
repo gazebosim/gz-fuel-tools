@@ -37,5 +37,26 @@ namespace ignition
     /// \return Path to the downloaded asset. Empty on error.
     IGNITION_FUEL_TOOLS_VISIBLE std::string fetchResourceWithClient(
         const std::string &_uri, ignition::fuel_tools::FuelClient &_client);
+
+    /// \brief Get the SDF file path for a model or world based on a directory
+    /// containing a Fuel model or world. Here is a typical use case:
+    ///
+    ///   1. Fetch a Fuel resource:
+    ///   `std::string resourcePath = fetchResource("https://...")`
+    ///   2. Get the SDF file for the resource:
+    ///   `std::string resourceSdf = sdfFromPath(resourcePath)`
+    ///   3. Parse the SDF file using libsdformat.
+    ///
+    /// This function will determine the SDF file according to the following:
+    ///   1. Check for a metadata.pbtxt file, and return the SDF file specified
+    /// within the metadata.pbtxt file.
+    ///   2. Check for a model.config file, and return the SDF file specified
+    /// withing the model.config file.
+    ///   3. Return the first file with an `.sdf` extension.
+    /// \param[in] _path Filesystem path to a Fuel model or world directory.
+    /// \return Full path to the model or world SDF file, or empty string if
+    /// the SDF file coult not be determined.
+    IGNITION_FUEL_TOOLS_VISIBLE std::string sdfFromPath(
+        const std::string &_path);
   }
 }
