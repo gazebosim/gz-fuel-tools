@@ -46,7 +46,7 @@ TEST(Interface, FetchResources)
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
@@ -64,7 +64,7 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedModel(modelUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
     }
 
     // Download model
@@ -97,7 +97,7 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedModel(modelUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "fuel.ignitionrobotics.org", "chapulina", "models", "test box", "2"),
         cachedPath);
@@ -116,12 +116,12 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedModel(modelUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
     }
     {
       Result res = client.CachedModelFile(modelFileUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
     }
 
     // Download model file
@@ -155,7 +155,7 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedModel(modelUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "fuel.ignitionrobotics.org", "openrobotics", "models", "bus", "1"),
         cachedPath);
@@ -172,7 +172,7 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedModelFile(modelFileUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "fuel.ignitionrobotics.org", "openrobotics", "models", "bus", "1",
         "meshes", "bus.obj"), cachedPath);
@@ -187,7 +187,7 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
       std::string sdfFile = sdfFromPath(cachedPath);
       EXPECT_TRUE(sdfFile.empty());
     }
@@ -210,7 +210,7 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world",
         "2"), cachedPath);
@@ -229,12 +229,12 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
     }
     {
       Result res = client.CachedWorldFile(worldFileUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
     }
 
     // Download world file
@@ -255,7 +255,7 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "fuel.ignitionrobotics.org", "chapulina", "worlds", "test world", "2"),
         cachedPath);
@@ -272,7 +272,7 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedWorldFile(worldFileUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
         "fuel.ignitionrobotics.org", "chapulina", "worlds", "test world", "2",
         "thumbnails", "1.png"), cachedPath);
