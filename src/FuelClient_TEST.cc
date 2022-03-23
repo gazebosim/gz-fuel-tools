@@ -50,9 +50,9 @@ void createLocalModel(ClientConfig &_conf)
   auto modelPath = common::joinPaths(
       "test_cache", "localhost:8007", "alice", "models", "My Model");
 
-  EXPECT_TRUE(common::createDirectories(
+  ASSERT_TRUE(common::createDirectories(
       common::joinPaths(modelPath, "2", "meshes")));
-  EXPECT_TRUE(common::createDirectories(
+  ASSERT_TRUE(common::createDirectories(
       common::joinPaths(modelPath, "3", "meshes")));
 
   {
@@ -62,9 +62,8 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    EXPECT_TRUE(common::copyFile(
-        common::joinPaths(modelPath, "2", "model.config"),
-        common::joinPaths(modelPath, "3", "model.config")));
+    ASSERT_TRUE(common::copyFile(common::joinPaths(modelPath, "2",
+        "model.config"), common::joinPaths(modelPath, "3", "model.config")));
   }
 
   {
@@ -74,8 +73,7 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    EXPECT_TRUE(common::copyFile(
-        common::joinPaths(modelPath, "2", "model.sdf"),
+    ASSERT_TRUE(common::copyFile(common::joinPaths(modelPath, "2", "model.sdf"),
         common::joinPaths(modelPath, "3", "model.sdf")));
   }
 
@@ -86,9 +84,9 @@ void createLocalModel(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    EXPECT_TRUE(common::copyFile(
-        common::joinPaths(modelPath, "2", "meshes", "model.dae"),
-        common::joinPaths(modelPath, "3", "meshes", "model.dae")));
+    ASSERT_TRUE(common::copyFile(common::joinPaths(modelPath, "2", "meshes",
+        "model.dae"), common::joinPaths(modelPath, "3", "meshes",
+        "model.dae")));
   }
 
   ignition::fuel_tools::ServerConfig srv;
@@ -107,8 +105,8 @@ void createLocalWorld(ClientConfig &_conf)
   auto worldPath = common::joinPaths(
       "test_cache", "localhost:8007", "banana", "worlds", "My World");
 
-  common::createDirectories(common::joinPaths(worldPath, "2"));
-  common::createDirectories(common::joinPaths(worldPath, "3"));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(worldPath, "2")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(worldPath, "3")));
 
   {
     std::ofstream fout(common::joinPaths(worldPath, "2", "strawberry.world"),
@@ -117,8 +115,9 @@ void createLocalWorld(ClientConfig &_conf)
     fout.flush();
     fout.close();
 
-    common::copyFile(common::joinPaths(worldPath, "2", "strawberry.world"),
-        common::joinPaths(worldPath, "3", "strawberry.world"));
+    ASSERT_TRUE(common::copyFile(common::joinPaths(worldPath, "2",
+        "strawberry.world"), common::joinPaths(worldPath, "3",
+        "strawberry.world")));
   }
 
   ignition::fuel_tools::ServerConfig srv;
@@ -405,7 +404,7 @@ TEST_F(FuelClientTest, DownloadModel)
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
@@ -599,12 +598,86 @@ TEST_F(FuelClientTest, DownloadModel)
 /////////////////////////////////////////////////
 // Windows doesn't support colons in filenames
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
+TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
+{
+  // Configure to use binary path as cache
+  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
+  common::removeAll("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
+  ClientConfig config;
+  config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
+
+  // Create client
+  FuelClient client(config);
+  EXPECT_EQ(config.CacheLocation(), client.Config().CacheLocation());
+
+  // Download model with a dependency specified within its `metadata.pbtxt`
+  {
+    common::URI url{
+        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_red_1"};
+    common::URI depUrl{
+        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_1"};
+
+    ModelIdentifier id;
+    ModelIdentifier depId;
+
+    ASSERT_TRUE(client.ParseModelUrl(url, id));
+    ASSERT_TRUE(client.ParseModelUrl(depUrl, depId));
+
+    // Check it is not cached
+    std::string cachedPath;
+    Result res1 = client.CachedModel(url, cachedPath);
+    EXPECT_FALSE(res1);
+    EXPECT_EQ(ResultType::FETCH_ERROR, res1.Type());
+
+    // Check the dependency is not cached
+    Result res2 = client.CachedModel(depUrl, cachedPath);
+    EXPECT_FALSE(res2);
+    EXPECT_EQ(ResultType::FETCH_ERROR, res2.Type());
+
+    // Download on the model, do not download dependencies
+    {
+      std::vector<ModelIdentifier> dependencies;
+      Result res3 = client.DownloadModel(id, {}, dependencies);
+      EXPECT_TRUE(res3);
+      EXPECT_EQ(ResultType::FETCH, res3.Type());
+      EXPECT_EQ(1u, dependencies.size());
+    }
+
+    // Check that the model is cached
+    {
+      Result res4 = client.CachedModel(url, cachedPath);
+      EXPECT_TRUE(res4);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res4.Type());
+    }
+
+    // Check the dependency is not cached
+    {
+      Result res5 = client.CachedModel(depUrl, cachedPath);
+      EXPECT_FALSE(res5);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res5.Type());
+    }
+
+    // Check that the dependencies are populated
+    {
+      std::vector<ModelIdentifier> dependencies;
+      Result res6 = client.ModelDependencies(id, dependencies);
+      EXPECT_TRUE(res6);
+      EXPECT_EQ(1u, dependencies.size());
+    }
+  }
+}
+
+
+/////////////////////////////////////////////////
+// Windows doesn't support colons in filenames
+// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(FuelClientTest, CachedModel)
 {
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocalModel(config);
@@ -995,7 +1068,7 @@ TEST_F(FuelClientTest, DownloadWorld)
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
 
   ServerConfig server;
   server.SetUrl(ignition::common::URI(
@@ -1073,7 +1146,7 @@ TEST_F(FuelClientTest, CachedWorld)
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocalWorld(config);

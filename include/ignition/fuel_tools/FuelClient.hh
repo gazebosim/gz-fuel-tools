@@ -20,6 +20,7 @@
 
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 #include <ignition/common/URI.hh>
 
@@ -214,6 +215,31 @@ namespace ignition
       public: Result DownloadModel(const ModelIdentifier &_id,
                   const std::vector<std::string> &_headers);
 
+      /// \brief Download a model from ignition fuel. This will override an
+      /// existing local copy of the model.
+      /// \param[in] _id The model identifier.
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \param[out] _dependencies List of models that this model depends on.
+      /// \return Result of the download operation
+      public: Result DownloadModel(const ModelIdentifier &_id,
+                  const std::vector<std::string> &_headers,
+                  std::vector<ModelIdentifier> &_dependencies);
+
+      /// \brief Retrieve the list of dependencies for a model.
+      /// \param[in] _id The model identifier.
+      /// \param[out] _dependencies The list of dependencies.
+      /// \return Result of the operation
+      public: Result ModelDependencies(const ModelIdentifier &_id,
+                  std::vector<ModelIdentifier> &_dependencies);
+
+      /// \brief Retrieve the list of dependencies for a list of models.
+      /// \param[in] _id The list of model identifiers.
+      /// \param[out] _dependencies The list of dependencies.
+      /// \return Result of the operation
+      public: Result ModelDependencies(
+                  const std::vector<ModelIdentifier> &_id,
+                  std::vector<ModelIdentifier> &_dependencies);
+
       /// \brief Download a world from Ignition Fuel. This will override an
       /// existing local copy of the world.
       /// \param[out] _id The world identifier, with local path updated.
@@ -245,6 +271,28 @@ namespace ignition
       /// \return Result of the download operation.
       public: Result DownloadWorld(const common::URI &_worldUrl,
                                    std::string &_path);
+
+      using ModelResult = std::tuple<ModelIdentifier, Result>;
+
+      /// \brief Download a list of models from ignition fuel.
+      /// \param[in] _ids The list of model ids to download.
+      ///   This will also find all recursive dependencies of the models
+      /// \param[in] _jobs Number of parallel jobs to use to download models
+      /// \return Result of the download operation.
+      //    The resulting vector will be at least the size of the _ids input
+      //    vector, but may be larger depending on the number of depedencies
+      //    downloaded
+      public: std::vector<ModelResult> DownloadModels(
+                  const std::vector<ModelIdentifier> &_ids,
+                  size_t _jobs = 2);
+
+      /// \brief Download a list of mworlds from ignition fuel.
+      /// \param[in] _ids The list of world ids to download.
+      /// \param[in] _jobs Number of parallel jobs to use to download worlds.
+      /// \return Result of the download operation.
+      public: Result DownloadWorlds(
+                  const std::vector<WorldIdentifier> &_ids,
+                  size_t _jobs = 2);
 
       /// \brief Check if a model is already present in the local cache.
       /// \param[in] _modelUrl The unique URL of the model on a Fuel server.
