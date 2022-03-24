@@ -150,6 +150,7 @@ bool Zip::Extract(const std::string &_src,
                << "Do you have the right permissions?" << std::endl;
         return false;
       }
+      continue;
     }
 
     // Create and write the files.
@@ -168,9 +169,17 @@ bool Zip::Extract(const std::string &_src,
     if (len < 0)
       ignerr << "Error reading " << sb.name << std::endl;
     else
+    {
       file.write(buf, len);
-
-    igndbg << "Created file [" << dst << "]" << std::endl;
+      if (file.fail())
+      {
+        ignerr << "Failed to write file [" << dst << "]" << std::endl;
+      }
+      else
+      {
+        igndbg << "Created file [" << dst << "]" << std::endl;
+      }
+    }
 
     delete[] buf;
     file.close();
