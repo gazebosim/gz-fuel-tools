@@ -15,6 +15,16 @@
  *
 */
 
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif
+#include <google/protobuf/text_format.h>
+#include <ignition/msgs/fuel_metadata.pb.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
+#include <ignition/msgs/Utility.hh>
 #include "ignition/common/Console.hh"
 #include "ignition/fuel_tools/Interface.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
@@ -73,6 +83,70 @@ namespace ignition
       }
 
       return result;
+    }
+
+    //////////////////////////////////////////////
+    std::string sdfFromPath(const std::string &_path)
+    {
+      ignition::msgs::FuelMetadata meta;
+      std::string metadataPath =
+        ignition::common::joinPaths(_path, "metadata.pbtxt");
+      std::string modelConfigPath =
+        ignition::common::joinPaths(_path, "model.config");
+
+      bool foundMetadataPath = ignition::common::exists(metadataPath);
+      bool foundModelConfigPath = ignition::common::exists(modelConfigPath);
+
+      // Use the metadata.pbtxt or model.config first.
+      if (foundMetadataPath || foundModelConfigPath)
+      {
+        std::string modelPath =
+          (foundMetadataPath) ? metadataPath : modelConfigPath;
+
+        // Read the pbtxt or config file.
+        std::ifstream inputFile(modelPath);
+        std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+            std::istreambuf_iterator<char>());
+
+        if (foundMetadataPath)
+        {
+          // Parse the file into the fuel metadata message
+          google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+        }
+        else
+        {
+          if (!ignition::msgs::ConvertFuelMetadata(inputStr, meta))
+            return "";
+        }
+
+        if (meta.has_model())
+          return ignition::common::joinPaths(_path, meta.model().file());
+        else if (meta.has_world())
+          return ignition::common::joinPaths(_path, meta.world().file());
+        return "";
+      }
+
+      // Otherwise, use the first ".sdf" file found in the given path.
+      common::DirIter dirIter(_path);
+      common::DirIter end;
+      while (dirIter != end)
+      {
+        if (common::isFile(*dirIter))
+        {
+          std::string basename = ignition::common::basename(*dirIter);
+          // Just some safety checks.
+          if (!basename.empty() && basename.find(".sdf") != std::string::npos)
+          {
+            std::string extension = basename.substr(
+                basename.find_last_of(".") + 1);
+            if (extension == "sdf")
+              return *dirIter;
+          }
+        }
+        ++dirIter;
+      }
+
+      return "";
     }
   }
 }
