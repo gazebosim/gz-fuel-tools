@@ -38,10 +38,3 @@ TEST(Model, ConstructorDoesNotCrash)
   std::string path = model.PathToModel();
   EXPECT_TRUE(path.empty());
 }
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

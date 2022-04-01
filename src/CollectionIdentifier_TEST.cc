@@ -165,10 +165,3 @@ TEST(CollectionIdentifier, AsPrettyString)
     EXPECT_NE(str.find("raspberry"), std::string::npos);
   }
 }
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

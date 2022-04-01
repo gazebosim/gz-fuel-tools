@@ -470,10 +470,3 @@ TEST_F(LocalCacheTest, MatchingWorld)
   bogus3.SetName("tm3");
   EXPECT_FALSE(cache.MatchingWorld(bogus3));
 }
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

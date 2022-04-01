@@ -1457,10 +1457,3 @@ TEST_F(FuelClientTest, PatchModelFail)
   result = client.PatchModel(modelId, headers);
   EXPECT_EQ(ResultType::PATCH_ERROR, result.Type());
 }
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

@@ -114,10 +114,3 @@ TEST(Result, TrueOnSuccess)
   EXPECT_FALSE(Result(ResultType::UPLOAD_ALREADY_EXISTS));
   EXPECT_FALSE(Result(ResultType::UPLOAD_ERROR));
 }
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
