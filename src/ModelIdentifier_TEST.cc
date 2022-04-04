@@ -227,10 +227,3 @@ TEST(ModelIdentifier, AsPrettyString)
     EXPECT_NE(str.find("2048"), std::string::npos);
   }
 }
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

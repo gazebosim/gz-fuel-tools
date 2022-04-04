@@ -183,10 +183,3 @@ TEST(WorldIdentifier, AsPrettyString)
     EXPECT_NE(str.find("55"), std::string::npos);
   }
 }
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}

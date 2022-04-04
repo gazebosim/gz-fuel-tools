@@ -29,10 +29,3 @@ TEST(RestClient, UserAgent)
   rest.SetUserAgent("my_user_agent");
   EXPECT_EQ("my_user_agent", rest.UserAgent());
 }
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
