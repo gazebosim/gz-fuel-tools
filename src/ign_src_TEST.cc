@@ -24,7 +24,7 @@
 #include <ignition/utilities/ExtraTestMacros.hh>
 
 #include "ign.hh"
-#include "test/test_config.h"  // NOLINT(build/include)
+#include "test_config.h"
 
 using namespace ignition;
 

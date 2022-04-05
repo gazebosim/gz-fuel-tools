@@ -23,7 +23,7 @@
 #include <ignition/utilities/ExtraTestMacros.hh>
 
 #include "ignition/fuel_tools/config.hh"
-#include "test/test_config.h"  // NOLINT(build/include)
+#include "test_config.h"
 
 /////////////////////////////////////////////////
 std::string custom_exec_str(std::string _cmd)
