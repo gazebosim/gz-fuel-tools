@@ -26,7 +26,7 @@
 #include "ignition/fuel_tools/Result.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
-#include "test/test_config.h"
+#include "test_config.h"
 
 #ifdef _WIN32
 #include <direct.h>

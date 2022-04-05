@@ -21,7 +21,7 @@
 #include <ignition/common/Filesystem.hh>
 
 #include "ignition/fuel_tools/Zip.hh"
-#include "test/test_config.h"
+#include "test_config.h"
 
 using namespace ignition;
 using namespace fuel_tools;

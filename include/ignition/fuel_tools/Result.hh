@@ -93,7 +93,7 @@ namespace ignition
       public: Result();
 
       /// \brief Destructor.
-      public: ~Result();
+      public: virtual ~Result();
 
       /// \brief Constructor
       /// \param[in] _type Result type

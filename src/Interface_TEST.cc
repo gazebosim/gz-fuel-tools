@@ -23,7 +23,7 @@
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Interface.hh"
 
-#include "test/test_config.h"
+#include "test_config.h"
 
 #ifdef _WIN32
 #include <direct.h>
