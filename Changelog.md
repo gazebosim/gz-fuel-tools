@@ -11,7 +11,28 @@
 
 ## Ignition Fuel Tools 6.x
 
-### Ignition Fuel Tools 6.X.X (20XX-XX-XX)
+### Ignition Fuel Tools 6.2.0 (2022-03-25)
+
+1. Fix trailing slashes in failing tests
+    * [Pull request #237](https://github.com/ignitionrobotics/ign-fuel-tools/pull/237)
+
+1. Print error when unzipping fails to save a file
+    * [Pull request #235](https://github.com/ignitionrobotics/ign-fuel-tools/pull/235)
+
+1. More checks when manipulating file system in tests
+    * [Pull request #227](https://github.com/ignitionrobotics/ign-fuel-tools/pull/227)
+
+1. Move test cache to build folder
+    * [Pull request #222](https://github.com/ignitionrobotics/ign-fuel-tools/pull/222)
+
+1. Improve and fix ResultType tests
+    * [Pull request #225](https://github.com/ignitionrobotics/ign-fuel-tools/pull/225)
+
+1. `FuelClient.cc`: `include <deque>`
+    * [Pull request #213](https://github.com/ignitionrobotics/ign-fuel-tools/pull/213)
+
+1. APIs for retrieving models in parallel
+    * [Pull request #199](https://github.com/ignitionrobotics/ign-fuel-tools/pull/199)
 
 ### Ignition Fuel Tools 6.1.0 (2021-10-15)
 
