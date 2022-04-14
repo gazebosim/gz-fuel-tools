@@ -46,6 +46,11 @@ ign_find_package(YAML REQUIRED PRIVATE)
 ign_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
+# Find ignition-utils
+ign_find_package(ignition-utils2 REQUIRED)
+set(IGN_UTILS_VER ${ignition-utils2_VERSION_MAJOR})
+
+#--------------------------------------
 # Find ignition-common
 ign_find_package(ignition-common5 REQUIRED PRIVATE)
 set(IGN_COMMON_MAJOR_VER ${ignition-common5_VERSION_MAJOR})
