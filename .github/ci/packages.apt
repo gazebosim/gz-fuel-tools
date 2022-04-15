@@ -1,11 +1,12 @@
 curl
 libcurl4-openssl-dev
 libgflags-dev
-libignition-cmake2-dev
+libignition-cmake3-dev
 libignition-common5-dev
 libignition-math7-dev
 libignition-msgs9-dev
-libignition-tools-dev
+libignition-tools2-dev
+libignition-utils2-dev
 libjsoncpp-dev
 libtinyxml2-dev
 libyaml-dev

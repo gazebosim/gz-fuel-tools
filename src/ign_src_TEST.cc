@@ -21,7 +21,7 @@
 
 #include <string>
 #include <ignition/common/Filesystem.hh>
-#include <ignition/utilities/ExtraTestMacros.hh>
+#include <ignition/utils/ExtraTestMacros.hh>
 
 #include "ign.hh"
 #include "test_config.h"

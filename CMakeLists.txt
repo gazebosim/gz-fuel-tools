@@ -9,8 +9,8 @@ project(ignition-fuel_tools8 VERSION 8.0.0)
 # Find ignition-cmake
 #============================================================================
 # If you get an error at this line, you need to install ignition-cmake
-find_package(ignition-cmake2 2.8.0 REQUIRED)
-set(IGN_CMAKE_VER ${ignition-cmake2_VERSION_MAJOR})
+find_package(ignition-cmake3 REQUIRED)
+set(IGN_CMAKE_VER ${ignition-cmake3_VERSION_MAJOR})
 
 #============================================================================
 # Configure the project
@@ -44,6 +44,11 @@ ign_find_package(YAML REQUIRED PRIVATE)
 #--------------------------------------
 # Find libzip
 ign_find_package(ZIP REQUIRED PRIVATE)
+
+#--------------------------------------
+# Find ignition-utils
+ign_find_package(ignition-utils2 REQUIRED)
+set(IGN_UTILS_VER ${ignition-utils2_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-common
