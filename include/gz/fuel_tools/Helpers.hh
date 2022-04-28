@@ -15,12 +15,12 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_HELPERS_HH_
-#define IGNITION_FUEL_TOOLS_HELPERS_HH_
+#ifndef GZ_FUEL_TOOLS_HELPERS_HH_
+#define GZ_FUEL_TOOLS_HELPERS_HH_
 
 #include <string>
-#include <ignition/common/URI.hh>
-#include <ignition/fuel_tools/Export.hh>
+#include <gz/common/URI.hh>
+#include <gz/fuel_tools/Export.hh>
 
 // Use safer functions on Windows
 #ifdef _MSC_VER

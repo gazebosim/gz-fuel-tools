@@ -14,15 +14,15 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_FUEL_TOOLS_RESTCLIENT_HH_
-#define IGNITION_FUEL_TOOLS_RESTCLIENT_HH_
+#ifndef GZ_FUEL_TOOLS_RESTCLIENT_HH_
+#define GZ_FUEL_TOOLS_RESTCLIENT_HH_
 
 #include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "ignition/fuel_tools/Export.hh"
+#include "gz/fuel_tools/Export.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by

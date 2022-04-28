@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_MODELIDENTIFIER_HH_
-#define IGNITION_FUEL_TOOLS_MODELIDENTIFIER_HH_
+#ifndef GZ_FUEL_TOOLS_MODELIDENTIFIER_HH_
+#define GZ_FUEL_TOOLS_MODELIDENTIFIER_HH_
 
 #include <cstdint>
 #include <ctime>
@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include "ignition/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Helpers.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by

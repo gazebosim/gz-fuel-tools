@@ -106,10 +106,10 @@ TEST_F(CmdLine, ModelListConfigServerUgly)
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
 TEST_F(CmdLine, ModelListConfigServerPretty)
 {
-  EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org"));
+  EXPECT_TRUE(listModels("https://staging-fuel.gazebosim.org"));
 
   EXPECT_NE(this->stdOutBuffer.str().find(
-        "https://staging-fuel.ignitionrobotics.org"),
+        "https://staging-fuel.gazebosim.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_NE(this->stdOutBuffer.str().find("owners"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -119,7 +119,7 @@ TEST_F(CmdLine, ModelListConfigServerPretty)
   EXPECT_EQ(this->stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find(
-      "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
+      "https://staging-fuel.gazebosim.org/1.0/"), std::string::npos)
       << this->stdOutBuffer.str();
 }
 
@@ -128,11 +128,11 @@ TEST_F(CmdLine, ModelListConfigServerPretty)
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
 TEST_F(CmdLine, ModelListConfigServerPrettyOwner)
 {
-  EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org",
+  EXPECT_TRUE(listModels("https://staging-fuel.gazebosim.org",
       "openrobotics"));
 
   EXPECT_NE(this->stdOutBuffer.str().find(
-        "https://staging-fuel.ignitionrobotics.org"),
+        "https://staging-fuel.gazebosim.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_NE(this->stdOutBuffer.str().find("1 owners"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -146,7 +146,7 @@ TEST_F(CmdLine, ModelListConfigServerPrettyOwner)
   EXPECT_EQ(this->stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find(
-      "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
+      "https://staging-fuel.gazebosim.org/1.0/"), std::string::npos)
       << this->stdOutBuffer.str();
 }
 
@@ -255,10 +255,10 @@ TEST_F(CmdLine, WorldListFail)
 TEST_F(CmdLine, WorldListConfigServerUgly)
 {
   EXPECT_TRUE(listWorlds(
-        "https://staging-fuel.ignitionrobotics.org", "", "true"));
+        "https://staging-fuel.gazebosim.org", "", "true"));
 
   EXPECT_NE(this->stdOutBuffer.str().find(
-        "https://staging-fuel.ignitionrobotics.org"),
+        "https://staging-fuel.gazebosim.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find("owners"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -269,10 +269,10 @@ TEST_F(CmdLine, WorldListConfigServerUgly)
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
 TEST_F(CmdLine, WorldListConfigServerPretty)
 {
-  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org"));
+  EXPECT_TRUE(listWorlds("https://staging-fuel.gazebosim.org"));
 
   EXPECT_NE(this->stdOutBuffer.str().find(
-        "https://staging-fuel.ignitionrobotics.org"), std::string::npos)
+        "https://staging-fuel.gazebosim.org"), std::string::npos)
     << this->stdOutBuffer.str();
   EXPECT_NE(this->stdOutBuffer.str().find("owners"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -282,18 +282,18 @@ TEST_F(CmdLine, WorldListConfigServerPretty)
   EXPECT_EQ(this->stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find(
-      "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
+      "https://staging-fuel.gazebosim.org/1.0/"), std::string::npos)
       << this->stdOutBuffer.str();
 }
 
 /////////////////////////////////////////////////
 TEST_F(CmdLine, WorldListCustomServerPrettyOwner)
 {
-  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org",
+  EXPECT_TRUE(listWorlds("https://staging-fuel.gazebosim.org",
       "openrobotics"));
 
   EXPECT_NE(this->stdOutBuffer.str().find(
-        "https://staging-fuel.ignitionrobotics.org"), std::string::npos)
+        "https://staging-fuel.gazebosim.org"), std::string::npos)
     << this->stdOutBuffer.str();
   EXPECT_NE(this->stdOutBuffer.str().find("worlds"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -305,7 +305,7 @@ TEST_F(CmdLine, WorldListCustomServerPrettyOwner)
   EXPECT_EQ(this->stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find(
-      "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
+      "https://staging-fuel.gazebosim.org/1.0/"), std::string::npos)
       << this->stdOutBuffer.str();
 }
 
