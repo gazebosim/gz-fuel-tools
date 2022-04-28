@@ -15,18 +15,18 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_JSONPARSER_HH_
-#define IGNITION_FUEL_TOOLS_JSONPARSER_HH_
+#ifndef GZ_FUEL_TOOLS_JSONPARSER_HH_
+#define GZ_FUEL_TOOLS_JSONPARSER_HH_
 
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ignition/fuel_tools/ModelIter.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/WorldIter.hh"
+#include "gz/fuel_tools/ModelIdentifier.hh"
+#include "gz/fuel_tools/ModelIter.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/WorldIter.hh"
 
 namespace Json
 {

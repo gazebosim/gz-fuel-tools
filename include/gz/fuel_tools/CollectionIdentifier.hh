@@ -15,13 +15,13 @@
  *
  */
 
-#ifndef IGNITION_FUEL_TOOLS_COLLECTIONIDENTIFIER_HH_
-#define IGNITION_FUEL_TOOLS_COLLECTIONIDENTIFIER_HH_
+#ifndef GZ_FUEL_TOOLS_COLLECTIONIDENTIFIER_HH_
+#define GZ_FUEL_TOOLS_COLLECTIONIDENTIFIER_HH_
 
 #include <memory>
 #include <string>
 
-#include "ignition/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Helpers.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
