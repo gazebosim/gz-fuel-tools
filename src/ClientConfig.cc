@@ -132,7 +132,6 @@ common::URI ServerConfig::Url() const
 //////////////////////////////////////////////////
 void ServerConfig::SetUrl(const common::URI &_url)
 {
-  std::cout << "\n\nSetting URIL[" << _url.Str() << "]\n\n\n";
   this->dataPtr->url = _url;
 }
 

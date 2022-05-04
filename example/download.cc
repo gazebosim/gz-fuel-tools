@@ -37,11 +37,11 @@ int main(int argc, char **argv)
   std::string usage("Download a resource.");
   usage += " Usage:\n  ./download <options>\n\n";
   usage += "  Examples:\n"
-    "\t ./download -t model -o OpenRobotics -n Beer\n"
+    "\t ./download -t model -o openrobotics -n beer\n"
     "\t ./download -s https://fuel.gazebosim.org -t world "
-    "-o OpenRobotics"
-    " -n Empty\n"
-    "\t ./download -c /tmp/my_config.yaml -t model -o caguero -n Beer\n";
+    "-o openrobotics"
+    " -n test_shapes\n"
+    "\t ./download -c /tmp/my_config.yaml -t model -o caguero -n beer\n";
 
   gflags::SetUsageMessage(usage);
 

@@ -1024,6 +1024,9 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
     return false;
   }
 
+  // Swap `fuel.ignitionrobotics.org` for `fuel.gazebosim.org`. This is
+  // needed for dependency handling. The gazebosim and ignitionrobotics
+  // servers are the same.
   if (server == "fuel.ignitionrobotics.org")
     server = "fuel.gazebosim.org";
 
