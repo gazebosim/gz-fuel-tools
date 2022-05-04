@@ -56,7 +56,7 @@ using namespace fuel_tools;
 class ignition::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer/2
+  /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer/2
   /// Where the API version and the model version are optional.
   public: const std::string kModelUrlRegexStr{
     // Method
@@ -75,7 +75,7 @@ class ignition::fuel_tools::FuelClientPrivate
     "([0-9]*|tip)"};
 
   /// \brief A world URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/1
+  /// E.g.: https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty/1
   /// Where the API version and the world version are optional.
   public: const std::string kWorldUrlRegexStr{
     // Method
@@ -141,7 +141,7 @@ class ignition::fuel_tools::FuelClientPrivate
 
   /// \brief A collection URL,
   /// E.g.:
-  /// https://fuel.ignitionrobotics.org/1.0/OpenRobotics/collections/TestColl
+  /// https://fuel.gazebosim.org/1.0/OpenRobotics/collections/TestColl
   /// Where the API version is optional
   public: const std::string kCollectionUrlRegexStr{
     // Method
@@ -1023,6 +1023,9 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   {
     return false;
   }
+
+  if (server == "fuel.ignitionrobotics.org")
+    server = "fuel.gazebosim.org";
 
   // Get remaining server information from config
   _id.Server().SetUrl(common::URI(scheme + "://" + server));

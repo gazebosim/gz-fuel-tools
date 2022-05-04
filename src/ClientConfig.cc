@@ -83,7 +83,7 @@ class ignition::fuel_tools::ServerConfigPrivate
           }
 
   /// \brief URL to reach server
-  public: common::URI url{"https://fuel.ignitionrobotics.org"};
+  public: common::URI url{"https://fuel.gazebosim.org"};
 
   /// \brief A key to auth with the server
   public: std::string key = "";
@@ -132,6 +132,7 @@ common::URI ServerConfig::Url() const
 //////////////////////////////////////////////////
 void ServerConfig::SetUrl(const common::URI &_url)
 {
+  std::cout << "\n\nSetting URIL[" << _url.Str() << "]\n\n\n";
   this->dataPtr->url = _url;
 }
 

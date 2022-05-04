@@ -2,12 +2,12 @@
 # The list of servers.
 servers:
   -
-    name: osrf
-    url: https://fuel.ignitionrobotics.org
+    name: gazebo
+    url: https://fuel.gazebosim.org
 
-  # -
-    # name: another_server
-    # url: https://myserver
+  -
+    name: ignition
+    url: https://fuel.ignition.org
 
 # Where are the assets stored in disk.
 # cache:
