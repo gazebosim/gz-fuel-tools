@@ -16,3 +16,4 @@
  */
 
 #include <gz/fuel_tools/ModelIdentifier.hh>
+#include <ignition/fuel_tools/config.hh>
