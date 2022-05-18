@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_LOCALCACHE_HH_
-#define IGNITION_FUEL_TOOLS_LOCALCACHE_HH_
+#ifndef GZ_FUEL_TOOLS_LOCALCACHE_HH_
+#define GZ_FUEL_TOOLS_LOCALCACHE_HH_
 
 #include <memory>
 #include <string>

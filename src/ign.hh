@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_FUELTOOLS_IGN_HH_
-#define IGNITION_FUELTOOLS_IGN_HH_
+#ifndef GZ_FUELTOOLS_GZ_HH_
+#define GZ_FUELTOOLS_GZ_HH_
 
 #include "ignition/fuel_tools/Export.hh"
 
