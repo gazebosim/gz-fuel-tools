@@ -15,4 +15,14 @@
  *
  */
 
+#ifndef IGNITION_FUEL_TOOLS__CONFIG_HH_
+#define IGNITION_FUEL_TOOLS__CONFIG_HH_
+
 #include <gz/fuel_tools/config.hh>
+
+namespace [[deprecated("Use gz namespace.")]]  ignition
+{
+  using namespace gz;
+}
+
+#endif
