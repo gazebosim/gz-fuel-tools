@@ -61,9 +61,9 @@ Download succeeded.
 **C++ Get List models**
 ```
   // Create a client (uses https://fuel.ignitionrobotics.org by default)
-  ignition::fuel_tools::ClientConfig conf;
-  ignition::fuel_tools::FuelClient client(conf);
-  ignition::fuel_tools::ModelIter iter = client.Models();
+  gz::fuel_tools::ClientConfig conf;
+  gz::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::ModelIter iter = client.Models();
   while (iter)
   {
     std::cout << "Got model: " << iter->Identification().Name() << "\n";

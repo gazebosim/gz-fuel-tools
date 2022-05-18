@@ -36,8 +36,8 @@
 #define ChangeDirectory chdir
 #endif
 
-using namespace ignition;
-using namespace ignition::fuel_tools;
+using namespace gz;
+using namespace gz::fuel_tools;
 
 //////////////////////////////////////////////////
 /// \brief Creates a directory structure in the build directory with 1 model
@@ -89,7 +89,7 @@ void createLocalModel(ClientConfig &_conf)
         "model.dae")));
   }
 
-  ignition::fuel_tools::ServerConfig srv;
+  gz::fuel_tools::ServerConfig srv;
   srv.SetUrl(common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
@@ -120,8 +120,8 @@ void createLocalWorld(ClientConfig &_conf)
         "strawberry.world")));
   }
 
-  ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(ignition::common::URI("http://localhost:8007/"));
+  gz::fuel_tools::ServerConfig srv;
+  srv.SetUrl(gz::common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
 
@@ -130,7 +130,7 @@ class FuelClientTest : public ::testing::Test
 {
   public: void SetUp() override
   {
-    ignition::common::Console::SetVerbosity(4);
+    gz::common::Console::SetVerbosity(4);
   }
 };
 
@@ -146,7 +146,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     ModelIdentifier id;
     const std::string url{
       "https://some.example.org/1.0/german/models/Cardboard Box"};
-    EXPECT_TRUE(client.ParseModelUrl(ignition::common::URI(url), id));
+    EXPECT_TRUE(client.ParseModelUrl(gz::common::URI(url), id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://some.example.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
@@ -165,7 +165,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     ModelIdentifier id;
     const std::string url{
       "https://fuel.ignitionrobotics.org/1.0/german/models/Cardboard Box/4"};
-    EXPECT_TRUE(client.ParseModelUrl(ignition::common::URI(url), id));
+    EXPECT_TRUE(client.ParseModelUrl(gz::common::URI(url), id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
@@ -185,7 +185,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     ModelIdentifier id;
     const std::string url{
       "https://fuel.ignitionrobotics.org/5.0/german/models/Cardboard Box/6/"};
-    EXPECT_TRUE(client.ParseModelUrl(ignition::common::URI(url), id));
+    EXPECT_TRUE(client.ParseModelUrl(gz::common::URI(url), id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
@@ -202,7 +202,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     ModelIdentifier id;
     const std::string url{
       "https://fuel.ignitionrobotics.org/german/models/Cardboard Box"};
-    EXPECT_TRUE(client.ParseModelUrl(ignition::common::URI(url), id));
+    EXPECT_TRUE(client.ParseModelUrl(gz::common::URI(url), id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_FALSE(id.Server().Version().empty());
@@ -221,7 +221,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     ModelIdentifier id;
     const std::string url{
       "https://fuel.ignitionrobotics.org/german/models/Cardboard Box/tip"};
-    EXPECT_TRUE(client.ParseModelUrl(ignition::common::URI(url), id));
+    EXPECT_TRUE(client.ParseModelUrl(gz::common::URI(url), id));
 
     EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
@@ -234,7 +234,7 @@ TEST_F(FuelClientTest, ParseModelURL)
   {
     FuelClient client;
     ModelIdentifier id;
-    EXPECT_FALSE(client.ParseModelUrl(ignition::common::URI("http://bad.url"),
+    EXPECT_FALSE(client.ParseModelUrl(gz::common::URI("http://bad.url"),
           id));
   }
 
@@ -242,13 +242,13 @@ TEST_F(FuelClientTest, ParseModelURL)
   {
     FuelClient client;
     ModelIdentifier id;
-    EXPECT_FALSE(client.ParseModelUrl(ignition::common::URI("bad url"),
+    EXPECT_FALSE(client.ParseModelUrl(gz::common::URI("bad url"),
           id));
   }
   {
     FuelClient client;
     ModelIdentifier id;
-    EXPECT_FALSE(client.ParseModelUrl(ignition::common::URI("ba://url"),
+    EXPECT_FALSE(client.ParseModelUrl(gz::common::URI("ba://url"),
           id));
   }
   {
@@ -256,21 +256,21 @@ TEST_F(FuelClientTest, ParseModelURL)
     ModelIdentifier id;
     const std::string url{
       "https://fuel.ignitionrobotics.org/german/models/Cardboard Box/banana"};
-    EXPECT_FALSE(client.ParseModelUrl(ignition::common::URI(url), id));
+    EXPECT_FALSE(client.ParseModelUrl(gz::common::URI(url), id));
   }
   {
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
       "https://fuel.ignitionrobotics.org/banana/german/models/Cardboard Box"};
-    EXPECT_FALSE(client.ParseModelUrl(ignition::common::URI(url), id));
+    EXPECT_FALSE(client.ParseModelUrl(gz::common::URI(url), id));
   }
   {
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
       "https://fuel.ignitionrobotics.org/99/german/models/Cardboard Box"};
-    EXPECT_FALSE(client.ParseModelUrl(ignition::common::URI(url), id));
+    EXPECT_FALSE(client.ParseModelUrl(gz::common::URI(url), id));
   }
   {
     FuelClient client;
@@ -278,7 +278,7 @@ TEST_F(FuelClientTest, ParseModelURL)
     const std::string url{
       "https://fuel.ignitionrobotics.org/2/2/german/models"
         "/Cardboard Box/banana"};
-    EXPECT_FALSE(client.ParseModelUrl(ignition::common::URI(url), id));
+    EXPECT_FALSE(client.ParseModelUrl(gz::common::URI(url), id));
   }
 }
 
@@ -1071,7 +1071,7 @@ TEST_F(FuelClientTest, DownloadWorld)
   ASSERT_TRUE(common::createDirectories("test_cache"));
 
   ServerConfig server;
-  server.SetUrl(ignition::common::URI(
+  server.SetUrl(gz::common::URI(
         "https://fuel.ignitionrobotics.org"));
 
   ClientConfig config;

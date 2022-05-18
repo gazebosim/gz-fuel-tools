@@ -18,8 +18,8 @@
 #include <gtest/gtest.h>
 #include "ignition/fuel_tools/Model.hh"
 
-namespace ignft = ignition::fuel_tools;
-using namespace ignition;
+namespace ignft = gz::fuel_tools;
+using namespace gz;
 using namespace ignft;
 
 /////////////////////////////////////////////////

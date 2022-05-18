@@ -29,7 +29,7 @@
 
 #include "WorldIterPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 //////////////////////////////////////////////////
@@ -129,7 +129,7 @@ WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
     // Get the next page from the headers.
     if (resp.headers.find("Link") != resp.headers.end())
     {
-      std::vector<std::string> links = ignition::common::split(
+      std::vector<std::string> links = gz::common::split(
           resp.headers["Link"], ",");
       for (const auto &l : links)
       {

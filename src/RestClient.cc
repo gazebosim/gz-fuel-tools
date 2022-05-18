@@ -30,7 +30,7 @@
 
 #include "ignition/fuel_tools/RestClient.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 // List of known file extensions and associated mime type.
@@ -144,7 +144,7 @@ struct curl_httppost *BuildFormPost(
       std::string path = value.substr(1);
 
       // Default upload filename
-      std::string uploadFilename = ignition::common::basename(path);
+      std::string uploadFilename = gz::common::basename(path);
 
       // If the value has a semicolon, then use the string preceding the
       // semicolon as the local filesystem path and the string following
@@ -155,7 +155,7 @@ struct curl_httppost *BuildFormPost(
         uploadFilename = value.substr(value.find(";") + 1);
       }
 
-      std::string basename = ignition::common::basename(path);
+      std::string basename = gz::common::basename(path);
       std::string contentType = "application/octet-stream";
 
       // Figure out the content type based on the file extension.
@@ -163,7 +163,7 @@ struct curl_httppost *BuildFormPost(
       if (dotIdx != std::string::npos)
       {
         std::string extension =
-          ignition::common::lowercase(basename.substr(dotIdx));
+          gz::common::lowercase(basename.substr(dotIdx));
         if (kContentTypes.find(extension) != kContentTypes.end())
         {
           contentType = kContentTypes.at(extension);

@@ -43,10 +43,10 @@
 #include "WorldIterPrivate.hh"
 #include "LocalCache.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
-class ignition::fuel_tools::LocalCachePrivate
+class gz::fuel_tools::LocalCachePrivate
 {
   /// \brief return all models in a given directory
   /// \param[in] _path A directory for the local server cache

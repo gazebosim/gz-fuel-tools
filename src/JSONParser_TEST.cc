@@ -29,7 +29,7 @@
 #include "ModelIterPrivate.hh"
 #include "WorldIterPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////

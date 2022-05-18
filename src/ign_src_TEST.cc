@@ -26,7 +26,7 @@
 #include "ign.hh"
 #include "test_config.h"
 
-using namespace ignition;
+using namespace gz;
 
 // Std streams
 static std::streambuf *g_stdOutFile;

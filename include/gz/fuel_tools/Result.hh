@@ -32,7 +32,7 @@
 #undef DELETE
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {

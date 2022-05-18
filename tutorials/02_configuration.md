@@ -130,13 +130,13 @@ Let's jump to the interesting parts of the program:
 
 ```
 // Setup ClientConfig.
-ignition::fuel_tools::ClientConfig conf;
+gz::fuel_tools::ClientConfig conf;
 
 if (FLAGS_s != "")
 {
   // The user specified a Fuel server via command line.
-  ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(ignition::common::URI(FLAGS_s));
+  gz::fuel_tools::ServerConfig srv;
+  srv.SetUrl(gz::common::URI(FLAGS_s));
 
   // Add the extra Fuel server.
   conf.AddServer(srv);
@@ -167,7 +167,7 @@ if (!conf.LoadConfig())
 }
 
 // Instantiate the FuelClient object with the configuration.
-ignition::fuel_tools::FuelClient client(conf);
+gz::fuel_tools::FuelClient client(conf);
 ```
 
 Here, we check if the user specified a `-c` (config) option. If so, we need to
@@ -186,8 +186,8 @@ example.
 
 ```
 // Set the properties of the resource that we want to download.
-ignition::fuel_tools::ModelIdentifier modelIdentifier;
-ignition::fuel_tools::WorldIdentifier worldIdentifier;
+gz::fuel_tools::ModelIdentifier modelIdentifier;
+gz::fuel_tools::WorldIdentifier worldIdentifier;
 
 if (FLAGS_t == "model")
 {

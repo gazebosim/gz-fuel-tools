@@ -26,10 +26,10 @@
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
-class ignition::fuel_tools::WorldIdentifierPrivate
+class gz::fuel_tools::WorldIdentifierPrivate
 {
   /// \brief a name given to this world by a user
   public: std::string name;

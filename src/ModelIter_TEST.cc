@@ -25,10 +25,10 @@
 #include "ModelIterPrivate.hh"
 #include "ModelPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -45,7 +45,7 @@ namespace ignition
 
       public: static ModelIter ModelIterThreeModelIds()
         {
-          ignition::fuel_tools::ServerConfig srv;
+          gz::fuel_tools::ServerConfig srv;
           srv.SetUrl(common::URI("https://ignitionrobotics.org"));
 
           std::vector<ModelIdentifier> ids;
@@ -67,7 +67,7 @@ namespace ignition
 
       public: static ModelIter ModelIterThreeModels()
         {
-          ignition::fuel_tools::ServerConfig srv;
+          gz::fuel_tools::ServerConfig srv;
           srv.SetUrl(common::URI("https://ignitionrobotics.org"));
 
           std::vector<Model> models;

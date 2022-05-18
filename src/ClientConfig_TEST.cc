@@ -24,7 +24,7 @@
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "test_config.h"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
@@ -36,23 +36,23 @@ using namespace fuel_tools;
 void removeFileTemp(const std::string &_path)
 {
 #ifndef _WIN32
-  EXPECT_TRUE(ignition::common::removeFile(_path));
+  EXPECT_TRUE(gz::common::removeFile(_path));
 #else
-  ignition::common::removeFile(_path);
+  gz::common::removeFile(_path);
 #endif
 }
 
 /////////////////////////////////////////////////
 /// \brief Get home directory.
 /// \return Home directory or empty string if home wasn't found.
-/// \ToDo: Move this function to ignition::common::Filesystem
+/// \ToDo: Move this function to gz::common::Filesystem
 std::string homePath()
 {
   std::string homePath;
 #ifndef _WIN32
-  ignition::common::env("HOME", homePath);
+  gz::common::env("HOME", homePath);
 #else
-  ignition::common::env("USERPROFILE", homePath);
+  gz::common::env("USERPROFILE", homePath);
 #endif
 
   return homePath;
@@ -61,7 +61,7 @@ std::string homePath()
 /////////////////////////////////////////////////
 /// \brief Get cache directory.
 /// \return Cache directory
-/// \ToDo: Move this function to ignition::common::Filesystem
+/// \ToDo: Move this function to gz::common::Filesystem
 std::string cachePath()
 {
 #ifndef _WIN32
@@ -101,7 +101,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().front().Url().Str());
 
-  std::string defaultCacheLocation = ignition::common::joinPaths(
+  std::string defaultCacheLocation = gz::common::joinPaths(
     homePath(), ".ignition", "fuel");
   EXPECT_EQ(defaultCacheLocation, config.CacheLocation());
 }

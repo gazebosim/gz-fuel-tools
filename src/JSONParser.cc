@@ -23,7 +23,7 @@
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/JSONParser.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 #if defined(_WIN32) && !defined(timegm)

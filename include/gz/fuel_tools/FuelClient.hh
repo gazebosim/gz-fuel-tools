@@ -36,7 +36,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -198,7 +198,7 @@ namespace ignition
       /// https://fuel.ignitionrobotics.org/1.0/openrobotcs/model/my_model
       /// \param[in] _headers Headers to set on the HTTP request.
       /// \return Result of the delete operation
-      public: Result DeleteUrl(const ignition::common::URI &_uri,
+      public: Result DeleteUrl(const gz::common::URI &_uri,
                   const std::vector<std::string> &_headers);
 
       /// \brief Download a model from ignition fuel. This will override an
@@ -412,7 +412,7 @@ namespace ignition
       /// \param[in] _headers Headers to set on the HTTP request.
       /// \return Result of the patch operation.
       public: Result PatchModel(
-                  const ignition::fuel_tools::ModelIdentifier &_model,
+                  const gz::fuel_tools::ModelIdentifier &_model,
                   const std::vector<std::string> &_headers);
 
       /// \brief Update a model using a PATCH request.
@@ -429,7 +429,7 @@ namespace ignition
       /// \param[in] _pathToModelDir a path to a directory containing a model.
       /// \return Result of the patch operation.
       public: Result PatchModel(
-                  const ignition::fuel_tools::ModelIdentifier &_model,
+                  const gz::fuel_tools::ModelIdentifier &_model,
                   const std::vector<std::string> &_headers,
                   const std::string &_pathToModelDir);
 
@@ -458,7 +458,7 @@ namespace ignition
       /// \param[in] _serverConfig Server configuration
       /// \param[inout] _headers Vector with headers to check
       private: void AddServerConfigParametersToHeaders(
-        const ignition::fuel_tools::ServerConfig &_serverConfig,
+        const gz::fuel_tools::ServerConfig &_serverConfig,
         std::vector<std::string> &_headers) const;
 
       /// \brief PIMPL

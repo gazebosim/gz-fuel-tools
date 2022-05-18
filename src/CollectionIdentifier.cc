@@ -24,10 +24,10 @@
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/CollectionIdentifier.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
-class ignition::fuel_tools::CollectionIdentifierPrivate
+class gz::fuel_tools::CollectionIdentifierPrivate
 {
   /// \brief a name given to this collection by a user
   public: std::string name;

@@ -33,8 +33,8 @@
 #define ChangeDirectory chdir
 #endif
 
-using namespace ignition;
-using namespace ignition::fuel_tools;
+using namespace gz;
+using namespace gz::fuel_tools;
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows

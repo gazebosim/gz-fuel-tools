@@ -23,7 +23,7 @@
 /////////////////////////////////////////////////
 TEST(RestClient, UserAgent)
 {
-  ignition::fuel_tools::Rest rest;
+  gz::fuel_tools::Rest rest;
   EXPECT_TRUE(rest.UserAgent().empty());
 
   rest.SetUserAgent("my_user_agent");

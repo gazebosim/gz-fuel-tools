@@ -31,7 +31,7 @@
 #include "ModelIterPrivate.hh"
 #include "ModelPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 //////////////////////////////////////////////////

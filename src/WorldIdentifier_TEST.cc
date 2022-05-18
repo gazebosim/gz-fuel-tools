@@ -22,7 +22,7 @@
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
@@ -43,15 +43,15 @@ TEST(WorldIdentifier, SetFields)
 /// \brief Unique Name
 TEST(WorldIdentifier, UniqueName)
 {
-  ignition::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(ignition::common::URI("https://localhost:8001/"));
+  gz::fuel_tools::ServerConfig srv1;
+  srv1.SetUrl(gz::common::URI("https://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(ignition::common::URI("https://localhost:8002"));
+  gz::fuel_tools::ServerConfig srv2;
+  srv2.SetUrl(gz::common::URI("https://localhost:8002"));
 
-  ignition::fuel_tools::ServerConfig srv3;
+  gz::fuel_tools::ServerConfig srv3;
 
-  srv3.SetUrl(ignition::common::URI("https://localhost:8003/"));
+  srv3.SetUrl(gz::common::URI("https://localhost:8003/"));
 
   WorldIdentifier id;
   id.SetName("hello");
