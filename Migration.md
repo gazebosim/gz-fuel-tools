@@ -7,6 +7,8 @@
 
 * **Deprecation**: `FuelClient` constructor that takes `LocalCache`
 * **Replacement**: `FielClient` constructor without `LocalCache`
+* **Deprecation**: `ignition` namespace
+* **Replacement**: `gz` namespace
 
 ## Ignition Fuel Tools 4.X to 5.X
 
