@@ -35,37 +35,37 @@
 ### Modifications
 
 1. Renamed the REST class to Rest.
-    * [BitBucket pull request #53](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/53)
+    * [BitBucket pull request #53](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/53)
 
 1. All setters (functions that set class variables) have been prefixed
    with `Set` and existing functions deprecated. Acronyms within class and
    function names have been changed from all-caps (e.g URL) to camel-case
    (eg. Url).
-    * [BitBucket pull request #49](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/49)
-    * [BitBucket pull request #51](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/51)
-    * [BitBucket pull request #52](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/52)
+    * [BitBucket pull request #49](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/49)
+    * [BitBucket pull request #51](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/51)
+    * [BitBucket pull request #52](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/52)
 
 1. Deprecated `env` function. Please use `igition::common::env`.
-    * [BitBucket pull request #50](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/50)
+    * [BitBucket pull request #50](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/50)
 
 1. Deprecated the `ModelIdentifier::Category` functions. The Category concept does not exist on fuelserver.
-    * [BitBucket pull request #52](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/52)
+    * [BitBucket pull request #52](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/52)
 
 1. Deprecated the accessor `ModelIdentifier::Likes` for `ModelIdentifier::LikeCount`, and the mutator `ModelIdentifier::Likes` for `ModelIdentifier::SetLikeCount`.
-    * [BitBucket pull request #52](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/52)
+    * [BitBucket pull request #52](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/52)
 
 1. Deprecated the accessor `ModelIdentifier::Downloads` for `ModelIdentifier::DownloadCount`, and the mutator `ModelIdentifier::Downloads` for `ModelIdentifier::SetDownloadCount`.
-    * [BitBucket pull request #52](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/52)
+    * [BitBucket pull request #52](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/52)
 
 
 1. ResultTypes have moved from a plain `enum` inside the `Result` class to
    an `enum class ResultType` outside the `Result` class scope.
-    * [BitBucket pull request #51](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/51/update-result-style/diff#chg-include/ignition/fuel_tools/Result.hh)
+    * [BitBucket pull request #51](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/51/update-result-style/diff#chg-include/ignition/fuel_tools/Result.hh)
 
 1. `ResultType Result::Type() const` now returns an `enum class`
    instead of a plain `enum`. This should not affect you unless you have
    been mapping `ResultType` to an `int`.
-    * [BitBucket pull request #51](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/51/update-result-style/diff#chg-include/ignition/fuel_tools/Result.hh)
+    * [BitBucket pull request #51](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/51/update-result-style/diff#chg-include/ignition/fuel_tools/Result.hh)
 
 ## Ignition Fuel Tools 1.2 to 1.X
 

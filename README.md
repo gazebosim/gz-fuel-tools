@@ -2,14 +2,14 @@
 
 **Maintainer:** nate AT openrobotics DOT org
 
-[![GitHub open issues](https://img.shields.io/github/issues-raw/ignitionrobotics/ign-fuel-tools.svg)](https://github.com/ignitionrobotics/ign-fuel-tools/issues)
-[![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/ignitionrobotics/ign-fuel-tools.svg)](https://github.com/ignitionrobotics/ign-fuel-tools/pulls)
+[![GitHub open issues](https://img.shields.io/github/issues-raw/gazebosim/gz-fuel-tools.svg)](https://github.com/gazebosim/gz-fuel-tools/issues)
+[![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/gazebosim/gz-fuel-tools.svg)](https://github.com/gazebosim/gz-fuel-tools/pulls)
 [![Discourse topics](https://img.shields.io/discourse/https/community.gazebosim.org/topics.svg)](https://community.gazebosim.org)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools/branch/main/graph/badge.svg)](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-fuel-tools/branch/main/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-fuel-tools)
 Ubuntu Focal | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-focal-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-focal-amd64)
 Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-homebrew-amd64)
 Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-windows7-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-windows7-amd64)
@@ -17,7 +17,7 @@ Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/ico
 Ignition Fuel Tools is composed by a client library and command line tools for
 interacting with Ignition Fuel servers.
 
-  [http://github.com/ignitionrobotics/ign-fuel-tools](http://github.com/ignitionrobotics/ign-fuel-tools)
+  [http://github.com/gazebosim/gz-fuel-tools](http://github.com/gazebosim/gz-fuel-tools)
 
 # Building and installing
 
@@ -190,4 +190,4 @@ ln -s /usr/local/share/ignition/transportlog7.yaml .
 export GZ_CONFIG_PATH=$HOME/.ignition/tools/configs
 ```
 
-This issue is tracked [here](https://github.com/ignitionrobotics/ign-tools/issues/8).
+This issue is tracked [here](https://github.com/gazebosim/gz-tools/issues/8).

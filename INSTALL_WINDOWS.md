@@ -27,7 +27,7 @@ need to [disable the Windows firewall](http://windows.microsoft.com/en-us/window
 
 1. Clone Ignition Fuel-Tools:
 
-        git clone https://github.com/ignitionrobotics/ign-fuel-tools
+        git clone https://github.com/gazebosim/gz-fuel-tools
         cd ign-fuel-tools
         mkdir build
 

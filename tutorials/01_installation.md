@@ -96,7 +96,7 @@ sudo apt-get install git cmake pkg-config python ruby-ronn libignition-cmake3-de
 Clone the repository into a directory and go into it:
 
 ```
-git clone https://github.com/ignitionrobotics/ign-fuel-tools /tmp/ign-fuel-tools
+git clone https://github.com/gazebosim/gz-fuel-tools /tmp/ign-fuel-tools
 cd /tmp/ign-fuel-tools
 ```
 
@@ -168,7 +168,7 @@ sudo make uninstall
 
 1. Clone the repository
   ```
-  git clone https://github.com/ignitionrobotics/ign-fuel-tools -b ign-fuel-tools<#>
+  git clone https://github.com/gazebosim/gz-fuel-tools -b ign-fuel-tools<#>
   ```
   Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
   which version you need.
@@ -193,7 +193,7 @@ sudo make uninstall
 
 #### Prerequisites
 
-First, follow the [ign-cmake](https://github.com/ignitionrobotics/ign-cmake) tutorial for installing Conda, Visual Studio, CMake, etc., prerequisites, and creating a Conda environment.
+First, follow the [ign-cmake](https://github.com/gazebosim/gz-cmake) tutorial for installing Conda, Visual Studio, CMake, etc., prerequisites, and creating a Conda environment.
 
 Navigate to ``condabin`` if necessary to use the ``conda`` command (i.e., if Conda is not in your `PATH` environment variable. You can find the location of ``condabin`` in Anaconda Prompt, ``where conda``).
 
@@ -230,7 +230,7 @@ conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> lib
 2. Navigate to where you would like to build the library, and clone the repository.
   ```
   # Optionally, append `-b ign-fuel-tools#` (replace # with a number) to check out a specific version
-  git clone https://github.com/ignitionrobotics/ign-fuel-tools.git
+  git clone https://github.com/gazebosim/gz-fuel-tools.git
   ```
 
 3. Configure and build
