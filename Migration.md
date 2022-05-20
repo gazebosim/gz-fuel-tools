@@ -1,14 +1,20 @@
+## Ignition Fuel Tools 7.X to 8.X
+
+### Deprecations
+
+* **Deprecation**: `ignition` namespace
+* **Replacement**: `gz` namespace
+* **Deprecation**: `ignition/...` headers
+* **Replacement**: `gz/...` headers
+
 ## Ignition Fuel Tools 5.X to 6.X
 
 ### Deprecations
 
 * **Deprecation**: `FuelClient::DeleteModel`
-* **Replacement**: `FielClient::DeleteUrl`
-
+* **Replacement**: `FuelClient::DeleteUrl`
 * **Deprecation**: `FuelClient` constructor that takes `LocalCache`
-* **Replacement**: `FielClient` constructor without `LocalCache`
-* **Deprecation**: `ignition` namespace
-* **Replacement**: `gz` namespace
+* **Replacement**: `FuelClient` constructor without `LocalCache`
 
 ## Ignition Fuel Tools 4.X to 5.X
 
