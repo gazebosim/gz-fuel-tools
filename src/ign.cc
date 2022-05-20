@@ -518,7 +518,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 
     if (model.Version() != 0)
     {
-      ignwarn << "Requested version [" << model.VersionStr()  << "], but "
+      gzwarn << "Requested version [" << model.VersionStr()  << "], but "
               << "currently only the model's latest (tip) version is supported."
               << std::endl;
     }
@@ -553,7 +553,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 
     if (world.Version() != 0)
     {
-      ignwarn << "Requested version [" << world.VersionStr()  << "], but "
+      gzwarn << "Requested version [" << world.VersionStr()  << "], but "
               << "currently only the world's latest (tip) version is supported."
               << std::endl;
     }
@@ -590,7 +590,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       }
       else
       {
-        ignerr << "Unknown resource type [" << _type << "] sepcified.\n";
+        gzerr << "Unknown resource type [" << _type << "] sepcified.\n";
         return false;
       }
     }
@@ -606,7 +606,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       {
         modelIds.push_back(modelsIter->Identification());
       }
-      ignmsg << "Found " << modelIds.size() << " models in collection ["
+      gzmsg << "Found " << modelIds.size() << " models in collection ["
         << collection.Name() << "]" << std::endl;
     }
 
@@ -618,7 +618,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       {
         worldIds.push_back(worldIter);
       }
-      ignmsg << "Found " << worldIds.size() << " worlds in collection ["
+      gzmsg << "Found " << worldIds.size() << " worlds in collection ["
         << collection.Name() << "]" << std::endl;
     }
 
@@ -696,7 +696,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 
   if (!gz::common::exists(_path))
   {
-    ignerr << "The model path[" << _path << "] doesn't exist.\n";
+    gzerr << "The model path[" << _path << "] doesn't exist.\n";
     return 0;
   }
 
@@ -728,7 +728,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     {
       if (!client.UploadModel(*dirIter, model, headers, privateBool, _owner))
       {
-        ignerr << "Failed to upload model[" << *dirIter << "]\n";
+        gzerr << "Failed to upload model[" << *dirIter << "]\n";
       }
     }
     ++dirIter;
@@ -789,7 +789,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int config2Pbtxt(const char *_path)
 
   if (!gz::msgs::ConvertFuelMetadata(inputStr, meta))
   {
-    ignerr << "Unable to convert model config[" << _path << "].\n";
+    gzerr << "Unable to convert model config[" << _path << "].\n";
     return 0;
   }
 
@@ -853,7 +853,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int editUrl(
   {
     if (!gz::common::exists(_path))
     {
-      ignerr << "The model path[" << _path << "] doesn't exist.\n";
+      gzerr << "The model path[" << _path << "] doesn't exist.\n";
       return 0;
     }
     modelPath = _path;
@@ -872,7 +872,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int editUrl(
     gz::fuel_tools::ModelIdentifier details;
     if (!client.ModelDetails(model, details, headers))
     {
-      ignerr << "Failed to fetch model details for model["
+      gzerr << "Failed to fetch model details for model["
         << model.Name() << "]\n";
       return 0;
     }
@@ -884,7 +884,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int editUrl(
 
       if (!client.PatchModel(details, headers, modelPath))
       {
-        ignerr << "Failed to patch model[" << model.Name() << "].\n";
+        gzerr << "Failed to patch model[" << model.Name() << "].\n";
         return 0;
       }
     }

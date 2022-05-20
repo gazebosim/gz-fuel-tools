@@ -170,7 +170,7 @@ struct curl_httppost *BuildFormPost(
         }
         else
         {
-          ignwarn << "Unknown mime type for file[" << path
+          gzwarn << "Unknown mime type for file[" << path
             << "]. The mime type '" << contentType << "' will be used.\n";
         }
       }
@@ -243,7 +243,7 @@ RestResponse Rest::Request(HttpMethod _method,
     headers = curl_slist_append(headers, header.c_str());
     if (!headers)
     {
-      ignerr << "[Rest::Request()]: Error processing header.\n  ["
+      gzerr << "[Rest::Request()]: Error processing header.\n  ["
                 << header.c_str() << "]" << std::endl;
 
       // cleanup
@@ -313,7 +313,7 @@ RestResponse Rest::Request(HttpMethod _method,
   }
   else
   {
-    ignerr << "Unsupported method" << std::endl;
+    gzerr << "Unsupported method" << std::endl;
 
     // Cleanup.
     curl_slist_free_all(headers);
@@ -324,7 +324,7 @@ RestResponse Rest::Request(HttpMethod _method,
   CURLcode success = curl_easy_perform(curl);
   if (success != CURLE_OK)
   {
-    ignerr << "Error in REST request" << std::endl;
+    gzerr << "Error in REST request" << std::endl;
     size_t len = strlen(errbuf);
     fprintf(stderr, "\nlibcurl: (%d) ", success);
     if (len)

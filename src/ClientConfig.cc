@@ -206,7 +206,7 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
   {
     if (!gz::common::isDirectory(ignFuelPath))
     {
-      ignerr << "[" << ignFuelPath << "] is not a directory" << std::endl;
+      gzerr << "[" << ignFuelPath << "] is not a directory" << std::endl;
       return;
     }
     this->SetCacheLocation(ignFuelPath);
@@ -245,7 +245,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   // Sanity check: Verify that the configuration file exists.
   if (!gz::common::exists(_file))
   {
-    ignerr << "Unable to find configuration file [" << _file<< "]" << std::endl;
+    gzerr << "Unable to find configuration file [" << _file<< "]" << std::endl;
     return false;
   }
 
@@ -253,7 +253,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   FILE *fh = fopen(_file.c_str(), "r");
   if (!fh)
   {
-    ignerr << "Failed to open configuration file ["
+    gzerr << "Failed to open configuration file ["
       << _file << "]" << std::endl;
     return false;
   }
@@ -264,7 +264,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   yaml_parser_t parser;
   if (!yaml_parser_initialize(&parser))
   {
-    ignerr << "Failed to initialize YAML parser" << std::endl;
+    gzerr << "Failed to initialize YAML parser" << std::endl;
     fclose(fh);
     return false;
   }
@@ -284,7 +284,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   {
     if (!yaml_parser_parse(&parser, &event))
     {
-      ignerr << "Parser error [" << parser.error << "]" << std::endl;
+      gzerr << "Parser error [" << parser.error << "]" << std::endl;
       res = false;
       break;
     }
@@ -316,7 +316,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
         {
           if (cacheLocationConfig.empty())
           {
-            ignerr << "[path] parameter is required for a cache" << std::endl;
+            gzerr << "[path] parameter is required for a cache" << std::endl;
             res = false;
           }
         }
@@ -332,11 +332,11 @@ bool ClientConfig::LoadConfig(const std::string &_file)
               {
                 if (!privateToken.empty())
                 {
-                  ignmsg << "Set private token for " << serverURL << " server."
+                  gzmsg << "Set private token for " << serverURL << " server."
                     << std::endl;
                   savedServer.SetApiKey(privateToken);
                 }
-                ignwarn << "URL [" << serverURL << "] already exists. "
+                gzwarn << "URL [" << serverURL << "] already exists. "
                   << "Ignoring server" << std::endl;
                 repeated = true;
                 break;
@@ -349,7 +349,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
               newServer.SetUrl(common::URI(serverURL));
               if (!privateToken.empty())
               {
-                ignmsg << "Set private token for " << serverURL << " server."
+                gzmsg << "Set private token for " << serverURL << " server."
                   << std::endl;
                 newServer.SetApiKey(privateToken);
               }
@@ -358,7 +358,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
           }
           else
           {
-            ignerr << "[url] parameter is required for a server"
+            gzerr << "[url] parameter is required for a server"
                       << std::endl;
             res = false;
           }
@@ -403,7 +403,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
         break;
       default:
       {
-        ignerr << "Unknown event type [" << event.type << "]" << std::endl;
+        gzerr << "Unknown event type [" << event.type << "]" << std::endl;
         res = false;
       }
     }
@@ -426,7 +426,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   std::string ignFuelPath = "";
   if (gz::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
   {
-    ignwarn << "IGN_FUEL_CACHE_PATH is set to [" << ignFuelPath << "]. The "
+    gzwarn << "IGN_FUEL_CACHE_PATH is set to [" << ignFuelPath << "]. The "
             << "path in the configuration file will be ignored" << std::endl;
     cacheLocation = ignFuelPath;
   }

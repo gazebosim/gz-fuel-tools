@@ -314,7 +314,7 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
   if (!iter)
   {
     // Return just the cached models
-    ignwarn << "Failed to fetch models from server, returning cached models."
+    gzwarn << "Failed to fetch models from server, returning cached models."
             << std::endl << _server.AsString() << std::endl;
 
     ModelIdentifier id;
@@ -372,7 +372,7 @@ WorldIter FuelClient::Worlds(const ServerConfig &_server) const
   if (!iter)
   {
     // Return just the cached worlds
-    ignwarn << "Failed to fetch worlds from server, returning cached worlds."
+    gzwarn << "Failed to fetch worlds from server, returning cached worlds."
             << std::endl << _server.AsString() << std::endl;
 
     WorldIdentifier id;
@@ -408,7 +408,7 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
   if (path.Str().empty())
     return localIter;
 
-  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+  gzmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
   return ModelIterFactory::Create(this->dataPtr->rest, _id.Server(),
       path.Str());
@@ -430,7 +430,7 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
   if (localIter)
     return localIter;
 
-  ignmsg << _id.UniqueName() << " not found in cache, attempting download\n";
+  gzmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
   // Note: ign-fuel-server doesn't like URLs ending in /
   common::URIPath path;
@@ -490,7 +490,7 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
       categories = form.find("categories")->second;
     }
 
-    ignerr << "Failed to upload model." << std::endl
+    gzerr << "Failed to upload model." << std::endl
            << "  Server: " << _id.Server().Url().Str() << std::endl
            << "  Server API Version: " <<  _id.Server().Version() << std::endl
            << "  Route: /models\n"
@@ -570,7 +570,7 @@ Result FuelClient::DeleteUrl(const gz::common::URI &_uri,
   }
   else
   {
-    ignerr << "Unable to parse URI[" << _uri.Str() << "]\n";
+    gzerr << "Unable to parse URI[" << _uri.Str() << "]\n";
     return Result(ResultType::DELETE_ERROR);
   }
 
@@ -580,7 +580,7 @@ Result FuelClient::DeleteUrl(const gz::common::URI &_uri,
 
   if (resp.statusCode != 200)
   {
-    ignerr << "Failed to delete resource." << std::endl
+    gzerr << "Failed to delete resource." << std::endl
            << "  Server: " << server << std::endl
            << "  API Version: " << version << std::endl
            << "  Route: " << path.Str() << std::endl
@@ -589,7 +589,7 @@ Result FuelClient::DeleteUrl(const gz::common::URI &_uri,
   }
   else
   {
-    ignmsg << "Deleted " << type << " [" << name << "]" << std::endl;
+    gzmsg << "Deleted " << type << " [" << name << "]" << std::endl;
   }
 
   return Result(ResultType::DELETE);
@@ -630,7 +630,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   // Server config
   if (!_id.Server().Url().Valid() || _id.Server().Version().empty())
   {
-    ignerr << "Can't download model, server configuration incomplete: "
+    gzerr << "Can't download model, server configuration incomplete: "
           << std::endl << _id.Server().AsString() << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
@@ -640,7 +640,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   route = route / _id.Owner() / "models" / _id.Name() / _id.VersionStr() /
         (_id.Name() + ".zip");
 
-  ignmsg << "Downloading model [" << _id.UniqueName() << "]" << std::endl;
+  gzmsg << "Downloading model [" << _id.UniqueName() << "]" << std::endl;
 
   std::vector<std::string> headersIncludingServerConfig = _headers;
   AddServerConfigParametersToHeaders(
@@ -653,7 +653,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
       headersIncludingServerConfig, "");
   if (resp.statusCode != 200)
   {
-    ignerr << "Failed to download model." << std::endl
+    gzerr << "Failed to download model." << std::endl
            << "  Server: " << _id.Server().Url().Str() << std::endl
            << "  Route: " << route.Str() << std::endl
            << "  REST response code: " << resp.statusCode << std::endl;
@@ -671,14 +671,14 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
     }
     catch(std::invalid_argument &)
     {
-      ignwarn << "Failed to convert X-Ign-Resource-Version header value ["
+      gzwarn << "Failed to convert X-Ign-Resource-Version header value ["
               << resp.headers["X-Ign-Resource-Version"]
               << "] to integer. Hardcoding version 1." << std::endl;
     }
   }
   else
   {
-    ignwarn << "Missing X-Ign-Resource-Version in REST response headers."
+    gzwarn << "Missing X-Ign-Resource-Version in REST response headers."
             << " Hardcoding version 1." << std::endl;
   }
   newId.SetVersion(version);
@@ -744,7 +744,7 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
           // [model://model_name], which is valid, but not something that we
           // can fetch from Fuel. In that case, warn the user so they have
           // a chance to update their specified dependencies.
-          ignwarn << "Error resolving URL for dependency [" <<
+          gzwarn << "Error resolving URL for dependency [" <<
             meta.dependencies(i).uri() << "] of model [" <<
             _id.UniqueName() <<"]: Skipping" << std::endl;
         } else {
@@ -803,7 +803,7 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id,
   // Server config
   if (!_id.Server().Url().Valid() || _id.Server().Version().empty())
   {
-    ignerr << "Can't download world, server configuration incomplete: "
+    gzerr << "Can't download world, server configuration incomplete: "
           << std::endl << _id.Server().AsString() << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
@@ -813,7 +813,7 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id,
   route = route / _id.Owner() / "worlds" / _id.Name() / _id.VersionStr() /
         (_id.Name() + ".zip");
 
-  ignmsg << "Downloading world [" << _id.UniqueName() << "]" << std::endl;
+  gzmsg << "Downloading world [" << _id.UniqueName() << "]" << std::endl;
 
   std::vector<std::string> headersIncludingServerConfig = _headers;
   AddServerConfigParametersToHeaders(
@@ -827,7 +827,7 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id,
       headersIncludingServerConfig, "");
   if (resp.statusCode != 200)
   {
-    ignerr << "Failed to download world." << std::endl
+    gzerr << "Failed to download world." << std::endl
            << "  Server: " << _id.Server().Url().Str() << std::endl
            << "  Route: " << route.Str() << std::endl
            << "  REST response code: " << resp.statusCode << std::endl;
@@ -845,14 +845,14 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id,
     }
     catch(std::invalid_argument &)
     {
-      ignwarn << "Failed to convert X-Ign-Resource-Version header value ["
+      gzwarn << "Failed to convert X-Ign-Resource-Version header value ["
               << resp.headers["X-Ign-Resource-Version"]
               << "] to integer. Hardcoding version 1." << std::endl;
     }
   }
   else
   {
-    ignwarn << "Missing X-Ign-Resource-Version in REST response headers."
+    gzwarn << "Missing X-Ign-Resource-Version in REST response headers."
             << " Hardcoding version 1." << std::endl;
   }
   _id.SetVersion(version);
@@ -941,7 +941,7 @@ std::vector<FuelClient::ModelResult> FuelClient::DownloadModels(
     workers.push_back(std::thread(downloadWorker));
   }
 
-  ignmsg << "Preparing to download "
+  gzmsg << "Preparing to download "
     << idsToDownload.size() << " models with "
     << _jobs << " worker threads\n";
 
@@ -961,7 +961,7 @@ std::vector<FuelClient::ModelResult> FuelClient::DownloadModels(
     worker.join();
   }
 
-  ignmsg << "Finished, downloaded " << result.size() << " models in total\n";
+  gzmsg << "Finished, downloaded " << result.size() << " models in total\n";
 
   return result;
 }
@@ -978,7 +978,7 @@ Result FuelClient::DownloadWorlds(
   size_t itemCount = 0;
   const size_t totalItemCount = _ids.size();
 
-  ignmsg << "Using " << _jobs << " jobs to download collection of "
+  gzmsg << "Using " << _jobs << " jobs to download collection of "
          << totalItemCount << " items" << std::endl;
 
   auto checkForFinishedTasks = [&itemCount, &totalItemCount, &tasks] {
@@ -1000,12 +1000,12 @@ Result FuelClient::DownloadWorlds(
         }
         else
         {
-          ignerr << result.ReadableResult() << std::endl;
+          gzerr << result.ReadableResult() << std::endl;
         }
       }
 
       tasks.erase(finishedIt, tasks.end());
-      ignmsg << "Downloaded: " << itemCount << " / " << totalItemCount
+      gzmsg << "Downloaded: " << itemCount << " / " << totalItemCount
              << std::endl;
     }
   };
@@ -1077,7 +1077,7 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
     {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
-        ignwarn << "Requested server API version [" << apiVersion
+        gzwarn << "Requested server API version [" << apiVersion
                 << "] for server [" << s.Url().Str() << "], but will use ["
                 << s.Version() << "] as given in the config file."
                 << std::endl;
@@ -1089,7 +1089,7 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
 
   if (_id.Server().Version().empty())
   {
-    ignwarn << "Server configuration is incomplete:" << std::endl
+    gzwarn << "Server configuration is incomplete:" << std::endl
             << _id.Server().AsString();
   }
 
@@ -1143,7 +1143,7 @@ bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
     {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
-        ignwarn << "Requested server API version [" << apiVersion
+        gzwarn << "Requested server API version [" << apiVersion
                 << "] for server [" << s.Url().Str() << "], but will use ["
                 << s.Version() << "] as given in the config file."
                 << std::endl;
@@ -1155,7 +1155,7 @@ bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
 
   if (_id.Server().Version().empty())
   {
-    ignwarn << "Server configuration is incomplete:" << std::endl
+    gzwarn << "Server configuration is incomplete:" << std::endl
             << _id.Server().AsString();
   }
 
@@ -1211,7 +1211,7 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
     {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
-        ignwarn << "Requested server API version [" << apiVersion
+        gzwarn << "Requested server API version [" << apiVersion
                 << "] for server [" << s.Url().Str() << "], but will use ["
                 << s.Version() << "] as given in the config file."
                 << std::endl;
@@ -1223,7 +1223,7 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
 
   if (_id.Server().Version().empty())
   {
-    ignwarn << "Server configuration is incomplete:" << std::endl
+    gzwarn << "Server configuration is incomplete:" << std::endl
             << _id.Server().AsString();
   }
 
@@ -1280,7 +1280,7 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
     {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
-        ignwarn << "Requested server API version [" << apiVersion
+        gzwarn << "Requested server API version [" << apiVersion
                 << "] for server [" << s.Url().Str() << "], but will use ["
                 << s.Version() << "] as given in the config file."
                 << std::endl;
@@ -1292,7 +1292,7 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
 
   if (_id.Server().Version().empty())
   {
-    ignwarn << "Server configuration is incomplete:" << std::endl
+    gzwarn << "Server configuration is incomplete:" << std::endl
             << _id.Server().AsString();
   }
 
@@ -1347,7 +1347,7 @@ bool FuelClient::ParseCollectionUrl(const common::URI &_url,
     {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
-        ignwarn << "Requested server API version [" << apiVersion
+        gzwarn << "Requested server API version [" << apiVersion
                 << "] for server [" << s.Url().Str() << "], but will use ["
                 << s.Version() << "] as given in the config file."
                 << std::endl;
@@ -1359,7 +1359,7 @@ bool FuelClient::ParseCollectionUrl(const common::URI &_url,
 
   if (_id.Server().Version().empty())
   {
-    ignwarn << "Server configuration is incomplete:" << std::endl
+    gzwarn << "Server configuration is incomplete:" << std::endl
             << _id.Server().AsString();
   }
 
@@ -1641,7 +1641,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
 {
   if (!common::exists(_pathToModelDir))
   {
-    ignerr << "The model path[" << _pathToModelDir << "] doesn't exist.\n";
+    gzerr << "The model path[" << _pathToModelDir << "] doesn't exist.\n";
     return false;
   }
 
@@ -1675,13 +1675,13 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
 
     if (!gz::msgs::ConvertFuelMetadata(inputStr, meta))
     {
-      ignerr << "Unable to convert model config[" << _pathToModelDir << "].\n";
+      gzerr << "Unable to convert model config[" << _pathToModelDir << "].\n";
       return false;
     }
   }
   else
   {
-    ignerr << "Provided model directory[" <<  _pathToModelDir
+    gzerr << "Provided model directory[" <<  _pathToModelDir
       << "] needs a metadata.pbtxt or a model.confg file.";
     return false;
   }
@@ -1739,7 +1739,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
       }
       validLicenseNames += "    " + licenseIt->first;
 
-      ignerr << "Invalid license[" << meta.legal().license() << "].\n"
+      gzerr << "Invalid license[" << meta.legal().license() << "].\n"
              << "  Valid licenses include:\n"
              << validLicenseNames << std::endl;
 
@@ -1810,12 +1810,12 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
       _server.Version(), "licenses", {}, {}, "");
   if (resp.statusCode != 200)
   {
-    ignerr << "Failed to get license information from "
+    gzerr << "Failed to get license information from "
       << _server.Url().Str() << "/" << _server.Version() << std::endl;
   }
   else if (!JSONParser::ParseLicenses(resp.data, this->licenses))
   {
-    ignerr << "Failed to parse license information[" << resp.data << "]\n";
+    gzerr << "Failed to parse license information[" << resp.data << "]\n";
   }
 }
 
@@ -1841,19 +1841,19 @@ bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)
 
     if (!this->ModelDetails(id.second, cloudId, _headers))
     {
-      ignerr << "Failed to fetch model details for model["
+      gzerr << "Failed to fetch model details for model["
         << id.second.Owner()  << "/" << id.second.Name() << "]\n";
     }
     else if (id.second.Version() < cloudId.Version())
     {
-      ignmsg << "Updating model " << id.second.Owner() << "/"
+      gzmsg << "Updating model " << id.second.Owner() << "/"
         << id.second.Name() << " up to version "
         << cloudId.Version() << std::endl;
       this->DownloadModel(cloudId, _headers);
     }
     else
     {
-      ignmsg << "Model " << id.second.Owner() << "/"
+      gzmsg << "Model " << id.second.Owner() << "/"
         << id.second.Name() << " is up to date." << std::endl;
     }
   }
@@ -1882,19 +1882,19 @@ bool FuelClient::UpdateWorlds(const std::vector<std::string> &_headers)
 
     if (!this->WorldDetails(id.second, cloudId, _headers))
     {
-      ignerr << "Failed to fetch world details for world["
+      gzerr << "Failed to fetch world details for world["
         << id.second.Owner() << "/" << id.second.Name() << "]\n";
     }
     else if (id.second.Version() < cloudId.Version())
     {
-      ignmsg << "Updating world " << id.second.Owner() << "/"
+      gzmsg << "Updating world " << id.second.Owner() << "/"
         << id.second.Name() << " up to version "
         << cloudId.Version() << std::endl;
       this->DownloadWorld(cloudId, _headers);
     }
     else
     {
-      ignmsg << "World " << id.second.Owner() << "/"
+      gzmsg << "World " << id.second.Owner() << "/"
         << id.second.Name() << " is up to date." << std::endl;
     }
   }
