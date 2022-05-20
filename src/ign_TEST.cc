@@ -47,7 +47,7 @@ std::string custom_exec_str(std::string _cmd)
   return result;
 }
 
-auto g_version = std::string(strdup(IGNITION_FUEL_TOOLS_VERSION_FULL));
+auto g_version = std::string(strdup(GZ_FUEL_TOOLS_VERSION_FULL));
 
 auto g_listCmd = "ign fuel list -v 4 --force-version " + g_version;
 

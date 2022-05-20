@@ -287,7 +287,7 @@ extern "C" bool getOwnerWorlds(
 //////////////////////////////////////////////////
 extern "C" GZ_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 {
-  return strdup(IGNITION_FUEL_TOOLS_VERSION_FULL);
+  return strdup(GZ_FUEL_TOOLS_VERSION_FULL);
 }
 
 //////////////////////////////////////////////////
@@ -324,7 +324,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     conf.AddServer(serverConf);
   }
 
-  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  conf.SetUserAgent("FuelTools " GZ_FUEL_TOOLS_VERSION_FULL);
 
   // Filter
   gz::fuel_tools::ModelIdentifier modelId;
@@ -414,7 +414,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
     conf.AddServer(serverConf);
   }
 
-  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  conf.SetUserAgent("FuelTools " GZ_FUEL_TOOLS_VERSION_FULL);
 
   // Filter
   gz::fuel_tools::WorldIdentifier worldId;
@@ -499,7 +499,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
     conf.LoadConfig(_configFile);
   }
 
-  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  conf.SetUserAgent("FuelTools " GZ_FUEL_TOOLS_VERSION_FULL);
 
   gz::fuel_tools::FuelClient client(conf);
   gz::fuel_tools::ModelIdentifier model;
@@ -673,7 +673,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
   });
 
   gz::fuel_tools::ClientConfig conf;
-  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  conf.SetUserAgent("FuelTools " GZ_FUEL_TOOLS_VERSION_FULL);
   gz::fuel_tools::FuelClient client(conf);
   gz::fuel_tools::ModelIdentifier model;
 
@@ -741,7 +741,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int deleteUrl(
     const char *_url, const char *_header)
 {
   gz::fuel_tools::ClientConfig conf;
-  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  conf.SetUserAgent("FuelTools " GZ_FUEL_TOOLS_VERSION_FULL);
   gz::fuel_tools::FuelClient client(conf);
 
   // Store header information
@@ -828,7 +828,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int editUrl(
     const char *_path)
 {
   gz::fuel_tools::ClientConfig conf;
-  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  conf.SetUserAgent("FuelTools " GZ_FUEL_TOOLS_VERSION_FULL);
   gz::fuel_tools::FuelClient client(conf);
 
   // Store header information
@@ -928,7 +928,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int update(
   // Client
   gz::fuel_tools::ClientConfig conf;
 
-  conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
+  conf.SetUserAgent("FuelTools " GZ_FUEL_TOOLS_VERSION_FULL);
 
   gz::fuel_tools::FuelClient client(conf);
 

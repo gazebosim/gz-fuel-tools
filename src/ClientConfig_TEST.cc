@@ -278,7 +278,7 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
 TEST(ClientConfig, UserAgent)
 {
   ClientConfig config;
-  EXPECT_EQ("IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL,
+  EXPECT_EQ("IgnitionFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL,
             config.UserAgent());
 
   config.SetUserAgent("my_user_agent");
