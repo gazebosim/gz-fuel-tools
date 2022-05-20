@@ -19,15 +19,15 @@
 #pragma warning(push, 0)
 #endif
 #include <google/protobuf/text_format.h>
-#include <ignition/msgs/fuel_metadata.pb.h>
+#include <gz/msgs/fuel_metadata.pb.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-#include <ignition/msgs/Utility.hh>
-#include "ignition/common/Console.hh"
-#include "ignition/fuel_tools/Interface.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include <gz/msgs/Utility.hh>
+#include "gz/common/Console.hh"
+#include "gz/fuel_tools/Interface.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
 namespace gz
 {

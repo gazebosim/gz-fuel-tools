@@ -20,9 +20,9 @@
 #include <stdlib.h>
 
 #include <string>
-#include <ignition/utils/ExtraTestMacros.hh>
+#include <gz/utils/ExtraTestMacros.hh>
 
-#include "ignition/fuel_tools/config.hh"
+#include "gz/fuel_tools/config.hh"
 #include "test_config.h"
 
 /////////////////////////////////////////////////

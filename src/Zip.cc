@@ -22,10 +22,10 @@
 #include <fstream>
 #include <string>
 
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
 
-#include "ignition/fuel_tools/Zip.hh"
+#include "gz/fuel_tools/Zip.hh"
 
 using namespace gz;
 using namespace fuel_tools;

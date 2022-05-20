@@ -42,7 +42,7 @@
 #endif
 
 #include "gtest/gtest.h"
-#include "ignition/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Helpers.hh"
 
 #ifdef _MSC_VER
 #  define popen _popen

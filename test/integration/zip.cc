@@ -17,10 +17,10 @@
 
 #include <gtest/gtest.h>
 
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
 
-#include "ignition/fuel_tools/Zip.hh"
+#include "gz/fuel_tools/Zip.hh"
 #include "test_config.h"
 
 using namespace gz;

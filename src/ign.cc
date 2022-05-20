@@ -23,7 +23,7 @@
 #pragma warning(push, 0)
 #endif
 #include <google/protobuf/text_format.h>
-#include <ignition/msgs/fuel_metadata.pb.h>
+#include <gz/msgs/fuel_metadata.pb.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -34,7 +34,7 @@
 #ifdef _MSC_VER
 #pragma warning(push, 0)
 #endif
-#include <ignition/msgs/Utility.hh>
+#include <gz/msgs/Utility.hh>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -56,19 +56,19 @@
 #include <utility>
 #include <vector>
 
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/common/SignalHandler.hh>
-#include <ignition/common/URI.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/common/SignalHandler.hh>
+#include <gz/common/URI.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/CollectionIdentifier.hh"
-#include "ignition/fuel_tools/config.hh"
-#include "ignition/fuel_tools/FuelClient.hh"
-#include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/Result.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/CollectionIdentifier.hh"
+#include "gz/fuel_tools/config.hh"
+#include "gz/fuel_tools/FuelClient.hh"
+#include "gz/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Result.hh"
 #include "ign.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
 //////////////////////////////////////////////////
 /// \brief Print resources in a human readable manner

@@ -20,8 +20,8 @@
 #include <stdlib.h>
 
 #include <string>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/utils/ExtraTestMacros.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/utils/ExtraTestMacros.hh>
 
 #include "ign.hh"
 #include "test_config.h"

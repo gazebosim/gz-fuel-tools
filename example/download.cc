@@ -19,8 +19,8 @@
 
 #include <iostream>
 
-#include <ignition/common/URI.hh>
-#include <ignition/fuel_tools.hh>
+#include <gz/common/URI.hh>
+#include <gz/fuel_tools.hh>
 
 DEFINE_bool(h, false, "Show help");
 
