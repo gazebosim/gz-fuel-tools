@@ -1,10 +1,10 @@
-## Ignition Fuel Tools 8.x
+## Gazebo Fuel Tools 8.x
 
-### Ignition Fuel Tools 8.0.0 (202X-XX-XX)
+### Gazebo Fuel Tools 8.0.0 (202X-XX-XX)
 
-## Ignition Fuel Tools 7.x
+## Gazebo Fuel Tools 7.x
 
-### Ignition Fuel Tools 7.0.0 (2021-09-28)
+### Gazebo Fuel Tools 7.0.0 (2021-09-28)
 
 1. Depend on ign-msgs8
     * [Pull request #182](https://github.com/gazebosim/gz-fuel-tools/pull/182)
@@ -13,7 +13,7 @@
     * [Pull request #184](https://github.com/gazebosim/gz-fuel-tools/pull/184)
     * [Pull request #181](https://github.com/gazebosim/gz-fuel-tools/pull/181)
 
-## Ignition Fuel Tools 6.x
+## Gazebo Fuel Tools 6.x
 
 ### Ignition Fuel Tools 6.2.0 (2022-03-25)
 
@@ -56,7 +56,7 @@
     * [Pull request #187](https://github.com/gazebosim/gz-fuel-tools/pull/187)
     * [Pull request #196](https://github.com/gazebosim/gz-fuel-tools/pull/196)
 
-### Ignition Fuel Tools 6.0.0 (2021-03-30)
+### Gazebo Fuel Tools 6.0.0 (2021-03-30)
 
 1. Depend on ign-common4
     * [Pull request #163](https://github.com/gazebosim/gz-fuel-tools/pull/163)
@@ -73,9 +73,9 @@
 1. Include windows instructions in examples README.md
     * [Pull request #176](https://github.com/gazebosim/gz-fuel-tools/pull/176)
 
-## Ignition Fuel Tools 5.x
+## Gazebo Fuel Tools 5.x
 
-### Ignition Fuel Tools 5.2.0 (2021-12-20)
+### Gazebo Fuel Tools 5.2.0 (2021-12-20)
 
 1. FuelClient.cc: include `<deque>`
     * [Pull request #213](https://github.com/gazebosim/gz-fuel-tools/pull/213)
@@ -114,16 +114,16 @@
     * [Pull request #167](https://github.com/gazebosim/gz-fuel-tools/pull/167)
     * [Pull request #165](https://github.com/gazebosim/gz-fuel-tools/pull/165)
 
-### Ignition Fuel Tools 5.1.1 (2020-12-18)
+### Gazebo Fuel Tools 5.1.1 (2020-12-18)
 
 1. Fix light map URI in materials
     * [Pull request 146](https://github.com/gazebosim/gz-fuel-tools/pull/146)
 
-### Ignition Fuel Tools 5.1.0 (2020-12-09)
+### Gazebo Fuel Tools 5.1.0 (2020-12-09)
 
 1. Includes all changes up to version 4.3.0.
 
-### Ignition Fuel Tools 5.0.0 (2020-09-28)
+### Gazebo Fuel Tools 5.0.0 (2020-09-28)
 
 1. Added support for annotation parsing during model creation.
     * [Pull request 95](https://github.com/gazebosim/gz-fuel-tools/pull/95)
@@ -140,9 +140,9 @@
 1. Fixed test - Download world 2
     * [Pull request 110](https://github.com/gazebosim/gz-fuel-tools/pull/110)
 
-### Ignition Fuel Tools 4.X.X (202X-XX-XX)
+### Gazebo Fuel Tools 4.X.X (202X-XX-XX)
 
-### Ignition Fuel Tools 4.4.0 (2021-06-17)
+### Gazebo Fuel Tools 4.4.0 (2021-06-17)
 
 1. Remove `tools/code_check` and update codecov
     * [Pull request #187](https://github.com/gazebosim/gz-fuel-tools/pull/187)
@@ -171,7 +171,7 @@
 1. Set keep alive on
     * [Pull request #141](https://github.com/gazebosim/gz-fuel-tools/pull/141)
 
-### Ignition Fuel Tools 4.3.0 (2020-12-01)
+### Gazebo Fuel Tools 4.3.0 (2020-12-01)
 
 1. Improve fork experience.
     * [Pull request 126](https://github.com/gazebosim/gz-fuel-tools/pull/126)
@@ -181,12 +181,12 @@
 
 1. Includes all changes up to version 3.5.0.
 
-### Ignition Fuel Tools 4.2.1 (2020-08-26)
+### Gazebo Fuel Tools 4.2.1 (2020-08-26)
 
 1. Fix `ign fuel download`, which was missing the `-j` option.
     * [Pull request 116](https://github.com/gazebosim/gz-fuel-tools/pull/116)
 
-### Ignition Fuel Tools 4.2.0 (2020-08-26)
+### Gazebo Fuel Tools 4.2.0 (2020-08-26)
 
 1. Set license information based on licenses available from a Fuel server
    and `legal` information in a `metadata.pbtxt` file.
@@ -199,9 +199,9 @@
 1. Alphabetical listing of subcommands.
     * [Pull request 65](https://github.com/gazebosim/gz-fuel-tools/pull/65)
 
-1. All changes up to and including Ignition Fuel Tools 3.3.0 are included.
+1. All changes up to and including Gazebo Fuel Tools 3.3.0 are included.
 
-### Ignition Fuel Tools 4.1.0 (2020-02-27)
+### Gazebo Fuel Tools 4.1.0 (2020-02-27)
 
 1. Resource deletion CLI.
     * [BitBucket pull request 119](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/119)
@@ -214,16 +214,16 @@
     * [BitBucket pull request 114](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/114)
     * [BitBucket pull request 115](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/115)
 
-### Ignition Fuel Tools 4.0.0 (2019-12-10)
+### Gazebo Fuel Tools 4.0.0 (2019-12-10)
 
 1. Model upload CLI, resource metadata CLI, depend on ign-msgs5.
     * [BitBucket pull request 108](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/108)
 
-## Ignition Fuel Tools 3.x
+## Gazebo Fuel Tools 3.x
 
-### Ignition Fuel Tools 3.x.x (20xx-xx-xx)
+### Gazebo Fuel Tools 3.x.x (20xx-xx-xx)
 
-### Ignition Fuel Tools 3.5.0 (2020-11-30)
+### Gazebo Fuel Tools 3.5.0 (2020-11-30)
 
 1. Fix windows build.
     * [Pull request 107](https://github.com/gazebosim/gz-fuel-tools/pull/107)
@@ -237,7 +237,7 @@
 1. Use lowercase resource and owner names when storing assets on disk.
     * [Pull request 130](https://github.com/gazebosim/gz-fuel-tools/pull/130)
 
-### Ignition Fuel Tools 3.4.0 (2020-08-19)
+### Gazebo Fuel Tools 3.4.0 (2020-08-19)
 
 1. Modernize github actions by updating to the new style.
     * [Pull request 94](https://github.com/gazebosim/gz-fuel-tools/pull/94)
@@ -251,7 +251,7 @@
 1. Fix windows build.t
     * [Pull request 103](https://github.com/gazebosim/gz-fuel-tools/pull/013)
 
-### Ignition Fuel Tools 3.3.0 (2020-07-29)
+### Gazebo Fuel Tools 3.3.0 (2020-07-29)
 
 1. openrobotics to OpenRobotics
     * [Pull request 75](https://github.com/gazebosim/gz-fuel-tools/pull/75)
@@ -268,7 +268,7 @@
 1. Convert model:// to Fuel URLs instead of absolute paths
     * [Pull request 85](https://github.com/gazebosim/gz-fuel-tools/pull/85)
 
-### Ignition Fuel Tools 3.2.2 (2020-05-18)
+### Gazebo Fuel Tools 3.2.2 (2020-05-18)
 
 1. Fix URL encodings in RestClient.
     * [Pull request 70](https://github.com/gazebosim/gz-fuel-tools/pull/70)
@@ -288,24 +288,24 @@
 1. Remove std::experimental for filesystem (support for VS2019).
     * [BitBucket pull request 120](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/120)
 
-### Ignition Fuel Tools 3.2.1 (2019-08-12)
+### Gazebo Fuel Tools 3.2.1 (2019-08-12)
 
 1. Support actors
     * [BitBucket pull request 101](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/101)
 
-### Ignition Fuel Tools 3.2.0 (2019-06-14)
+### Gazebo Fuel Tools 3.2.0 (2019-06-14)
 
 1. FuelClient::DownloadModel accepts HTTP headers, and the `ign fuel
    download` command can accept a single HTTP header.
     * [BitBucket pull request 100](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/100)
 
-### Ignition Fuel Tools 3.1.0 (2019-05-xx)
+### Gazebo Fuel Tools 3.1.0 (2019-05-xx)
 
 1. Fix PBR material URI
     * [BitBucket pull request 95](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/95)
     * [BitBucket pull request 96](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/96)
 
-### Ignition Fuel Tools 3.0.0 (2018-02-28)
+### Gazebo Fuel Tools 3.0.0 (2018-02-28)
 
 1. Integration with ign-gazebo. The following set of pull requests update
    fuel-tools to use ign-cmake2, sets api.ignitionfuel.org as the default
@@ -319,14 +319,14 @@
     * [BitBucket pull request 88](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/88)
     * [BitBucket pull request 89](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/89)
 
-## Ignition Fuel Tools 1.x
+## Gazebo Fuel Tools 1.x
 
-### Ignition Fuel Tools 1.x.x (20xx-xx-xx)
+### Gazebo Fuel Tools 1.x.x (20xx-xx-xx)
 
 1. Use `${YAML_TARGET}` instead of `YAML::YAML` imported target.
     * [BitBucket pull request 103](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/103)
 
-### Ignition Fuel Tools 1.2.0 (2018-05-30)
+### Gazebo Fuel Tools 1.2.0 (2018-05-30)
 
 1. Get cached model resource file
     * [BitBucket pull request 63](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/63)
@@ -387,4 +387,4 @@
     * [BitBucket pull request 69](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/69)
     * [BitBucket pull request 67](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/67)
 
-### Ignition Fuel Tools 1.0.0 (2018-01-25)
+### Gazebo Fuel Tools 1.0.0 (2018-01-25)

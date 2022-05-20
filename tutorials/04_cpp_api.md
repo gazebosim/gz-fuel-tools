@@ -2,8 +2,8 @@
 
 ## Overview
 
-Ignition Fuel Tools lets you perform a set of operations over the resources
-hosted in any Ignition Fuel server. These operations allow you to list all
+Gazebo Fuel Tools lets you perform a set of operations over the resources
+hosted in any Gazebo Fuel server. These operations allow you to list all
 resources of a particular server, get the details of a resource or download it.
 
 We're going to run a few examples, so let's start by creating a directory for

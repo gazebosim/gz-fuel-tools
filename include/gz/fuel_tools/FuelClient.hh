@@ -193,7 +193,7 @@ namespace gz
                                  bool _private,
                                  const std::string &_owner);
 
-      /// \brief Remove a resource, such as a model or world, from Ignition Fuel
+      /// \brief Remove a resource, such as a model or world, from Gazebo Fuel
       /// \param[in] _uri The full URI of the resource, e.g:
       /// https://fuel.ignitionrobotics.org/1.0/openrobotcs/model/my_model
       /// \param[in] _headers Headers to set on the HTTP request.
@@ -240,13 +240,13 @@ namespace gz
                   const std::vector<ModelIdentifier> &_id,
                   std::vector<ModelIdentifier> &_dependencies);
 
-      /// \brief Download a world from Ignition Fuel. This will override an
+      /// \brief Download a world from Gazebo Fuel. This will override an
       /// existing local copy of the world.
       /// \param[out] _id The world identifier, with local path updated.
       /// \return Result of the download operation
       public: Result DownloadWorld(WorldIdentifier &_id);
 
-      /// \brief Download a world from Ignition Fuel. This will override an
+      /// \brief Download a world from Gazebo Fuel. This will override an
       /// existing local copy of the world.
       /// \param[out] _id The world identifier, with local path updated.
       /// \param[in] _headers Headers to set on the HTTP request.

@@ -1,6 +1,6 @@
 # Examples
 
-These examples demonstrate various Ignition Fuel tools features.
+These examples demonstrate various Gazebo Fuel tools features.
 
 ### Dependencies
 
@@ -19,7 +19,7 @@ conda install gflags  --channel conda-forge
 
 ## Build
 
-After installing Ignition Fuel tools, from source or from binaries, build with:
+After installing Gazebo Fuel tools, from source or from binaries, build with:
 
 ```
 git clone https://github.com/gazebosim/gz-fuel-tools/

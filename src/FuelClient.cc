@@ -207,19 +207,19 @@ class gz::fuel_tools::FuelClientPrivate
   /// \brief Local Cache
   public: std::shared_ptr<LocalCache> cache;
 
-  /// \brief Regex to parse Ignition Fuel model URLs.
+  /// \brief Regex to parse Gazebo Fuel model URLs.
   public: std::unique_ptr<std::regex> urlModelRegex;
 
-  /// \brief Regex to parse Ignition Fuel world URLs.
+  /// \brief Regex to parse Gazebo Fuel world URLs.
   public: std::unique_ptr<std::regex> urlWorldRegex;
 
-  /// \brief Regex to parse Ignition Fuel model file URLs.
+  /// \brief Regex to parse Gazebo Fuel model file URLs.
   public: std::unique_ptr<std::regex> urlModelFileRegex;
 
-  /// \brief Regex to parse Ignition Fuel world file URLs.
+  /// \brief Regex to parse Gazebo Fuel world file URLs.
   public: std::unique_ptr<std::regex> urlWorldFileRegex;
 
-  /// \brief Regex to parse Ignition Fuel Collection URLs.
+  /// \brief Regex to parse Gazebo Fuel Collection URLs.
   public: std::unique_ptr<std::regex> urlCollectionRegex;
 
   /// \brief The set of licenses where the key is the name of the license

@@ -25,7 +25,7 @@ need to [disable the Windows firewall](http://windows.microsoft.com/en-us/window
 
         "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
 
-1. Clone Ignition Fuel-Tools:
+1. Clone Gazebo Fuel-Tools:
 
         git clone https://github.com/gazebosim/gz-fuel-tools
         cd ign-fuel-tools
@@ -38,7 +38,7 @@ need to [disable the Windows firewall](http://windows.microsoft.com/en-us/window
         nmake install
 
 
-    You should now have an installation of Ignition Fuel-Tools in ign-ws/ign-fuel-tools/build/install.
+    You should now have an installation of Gazebo Fuel-Tools in ign-ws/ign-fuel-tools/build/install.
 
 ## Run tests
 

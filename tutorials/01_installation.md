@@ -4,7 +4,7 @@ Next Tutorial: \ref configuration
 
 ## Overview
 
-Instructions to install Ignition Fuel Tools on all the platforms supported.
+Instructions to install Gazebo Fuel Tools on all the platforms supported.
 
 ## Binary Install
 
@@ -21,7 +21,7 @@ Setup keys:
 wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 ```
 
-Install Ignition Fuel Tools:
+Install Gazebo Fuel Tools:
 ```
 sudo apt-get update
 sudo apt-get install libignition-fuel-tools<#>-dev
@@ -32,9 +32,9 @@ which version you need.
 
 ### Mac OS X
 
-Ignition Fuel Tools and several of its dependencies can be compiled on OS
+Gazebo Fuel Tools and several of its dependencies can be compiled on OS
 X with [Homebrew](http://brew.sh/) using the [osrf/simulation
-tap](https://github.com/osrf/homebrew-simulation). Ignition Fuel Tools can
+tap](https://github.com/osrf/homebrew-simulation). Gazebo Fuel Tools can
 be installed on Mac OS X 10.11 (El Capitan) or higher.
 Installation on older versions requires changing the default standard
 library and rebuilding dependencies due to the use of c++11. For
@@ -77,7 +77,7 @@ which version you need.
 
 ### Ubuntu Linux
 
-For compiling the latest version of Ignition Fuel Tools you will need an
+For compiling the latest version of Gazebo Fuel Tools you will need an
 Ubuntu distribution equal to 16.04 (Xenial) or newer.
 
 Make sure you have removed the Ubuntu pre-compiled binaries before
@@ -107,7 +107,7 @@ mkdir build
 cd build
 ```
 
-Configure Ignition Fuel Tools (choose either method a or b below):
+Configure Gazebo Fuel Tools (choose either method a or b below):
 
 * A.  Release mode: This will generate optimized code, but will not have debug symbols. Use this mode if you don't need to use GDB.
   ```
@@ -120,7 +120,7 @@ Configure Ignition Fuel Tools (choose either method a or b below):
   cmake -DCMAKE_INSTALL_PREFIX=/home/$USER/local ../
   ```
 
-* B. Debug mode: This will generate code with debug symbols. Ignition Fuel Tools will run slower, but you'll be able to use GDB.
+* B. Debug mode: This will generate code with debug symbols. Gazebo Fuel Tools will run slower, but you'll be able to use GDB.
   ```
   cmake -DCMAKE_BUILD_TYPE=Debug ../
   ```
@@ -137,12 +137,12 @@ look something like:
 -- Install prefix: /home/$USER/local
 ```
 
-Build Ignition Fuel Tools:
+Build Gazebo Fuel Tools:
 ```
 make -j4
 ```
 
-Install Ignition Fuel Tools:
+Install Gazebo Fuel Tools:
 ```
 sudo make install
 ```
@@ -155,7 +155,7 @@ echo "export LD_LIBRARY_PATH=<install_path>/local/lib:$LD_LIBRARY_PATH" >> ~/.ba
 
 #### Uninstalling Source Install
 
-If you need to uninstall Ignition Fuel Tools or switch back to a
+If you need to uninstall Gazebo Fuel Tools or switch back to a
 Debian-based install when you currently have installed the library from
 source, navigate to your source code directory's build folders and run
 `make uninstall`:

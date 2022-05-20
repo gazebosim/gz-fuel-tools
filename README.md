@@ -1,4 +1,4 @@
-# Ignition Fuel Tools: Classes and tools for interacting with Ignition Fuel
+# Gazebo Fuel Tools: Classes and tools for interacting with Gazebo Fuel
 
 **Maintainer:** nate AT openrobotics DOT org
 
@@ -14,8 +14,8 @@ Ubuntu Focal | [![Build Status](https://build.osrfoundation.org/buildStatus/icon
 Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-homebrew-amd64)
 Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-windows7-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-windows7-amd64)
 
-Ignition Fuel Tools is composed by a client library and command line tools for
-interacting with Ignition Fuel servers.
+Gazebo Fuel Tools is composed by a client library and command line tools for
+interacting with Gazebo Fuel servers.
 
   [http://github.com/gazebosim/gz-fuel-tools](http://github.com/gazebosim/gz-fuel-tools)
 

@@ -1,4 +1,4 @@
-## Ignition Fuel Tools 7.X to 8.X
+## Gazebo Fuel Tools 7.X to 8.X
 
 ### Deprecations
 
@@ -7,7 +7,7 @@
 * **Deprecation**: `ignition/...` headers
 * **Replacement**: `gz/...` headers
 
-## Ignition Fuel Tools 5.X to 6.X
+## Gazebo Fuel Tools 5.X to 6.X
 
 ### Deprecations
 
@@ -16,21 +16,21 @@
 * **Deprecation**: `FuelClient` constructor that takes `LocalCache`
 * **Replacement**: `FuelClient` constructor without `LocalCache`
 
-## Ignition Fuel Tools 4.X to 5.X
+## Gazebo Fuel Tools 4.X to 5.X
 
 ### Deprecations
 
 * **Deprecation**: `LocalCache`
 * **Replacement**: None
 
-## Ignition Fuel Tools 3.X to 4.X
+## Gazebo Fuel Tools 3.X to 4.X
 
 ### Modifications
 
 1. `FuelClient::UploadModel` takes 2 more arguments now.
 1. `RestClient::Request`'s `_form` argument is now an `std::multimap` instead of `std::map`.
 
-## Ignition Fuel Tools 1.X to 2.X
+## Gazebo Fuel Tools 1.X to 2.X
 
 ### Modifications
 
@@ -67,13 +67,13 @@
    been mapping `ResultType` to an `int`.
     * [BitBucket pull request #51](https://osrf-migration.github.io/ignition-gh-pages/#!/gazebosim/gz-fuel-tools/pull-requests/51/update-result-style/diff#chg-include/ignition/fuel_tools/Result.hh)
 
-## Ignition Fuel Tools 1.2 to 1.X
+## Gazebo Fuel Tools 1.2 to 1.X
 
 ### Modifications
 
 
 
-## Ignition Fuel Tools 1.0 to 1.2
+## Gazebo Fuel Tools 1.0 to 1.2
 
 ### Modifications
 

@@ -4,11 +4,11 @@ Next Tutorial: \ref cmdline
 
 ## Overview
 
-Some aspects of Ignition Fuel Tools can be configured according to the needs of
+Some aspects of Gazebo Fuel Tools can be configured according to the needs of
 the library users. This configuration can be done via a YAML configuration file
 or programatically.
 
-Ignition Fuel Tools accepts a YAML file with the following syntax:
+Gazebo Fuel Tools accepts a YAML file with the following syntax:
 
 ```yaml
 ---
@@ -36,7 +36,7 @@ downloaded. If not used, all assets are stored under `$HOME/.ignition/fuel`.
 
 ## Custom configuration file path
 
-Ignition Fuel's default configuration file is stored under
+Gazebo Fuel's default configuration file is stored under
 `$HOME/.ignition/fuel/config.yaml`, but it is possible to load a configuration
 file from a custom path programmatically. Let's see how.
 
