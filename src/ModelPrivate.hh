@@ -35,7 +35,7 @@ namespace gz
   namespace fuel_tools
   {
     /// \brief Private class, do not use
-    class IGNITION_FUEL_TOOLS_VISIBLE ModelPrivate
+    class GZ_FUEL_TOOLS_VISIBLE ModelPrivate
     {
       /// \brief How this model is ID'd
       public: ModelIdentifier id;

@@ -42,7 +42,7 @@ namespace gz
     class ServerConfig;
 
     /// \brief Defines how to identify a model
-    class IGNITION_FUEL_TOOLS_VISIBLE ModelIdentifier
+    class GZ_FUEL_TOOLS_VISIBLE ModelIdentifier
     {
       /// \brief Constructor.
       public: ModelIdentifier();

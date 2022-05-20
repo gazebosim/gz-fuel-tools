@@ -49,7 +49,7 @@ namespace gz
     class ServerConfig;
 
     /// \brief High level interface to ignition fuel
-    class IGNITION_FUEL_TOOLS_VISIBLE FuelClient
+    class GZ_FUEL_TOOLS_VISIBLE FuelClient
     {
       /// \brief Default constructor.
       public: FuelClient();

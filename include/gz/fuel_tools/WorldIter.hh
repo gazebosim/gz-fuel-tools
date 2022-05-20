@@ -39,7 +39,7 @@ namespace gz
     class WorldIterFactory;
 
     /// \brief class for iterating through worlds
-    class IGNITION_FUEL_TOOLS_VISIBLE WorldIter
+    class GZ_FUEL_TOOLS_VISIBLE WorldIter
     {
       friend WorldIterFactory;
 

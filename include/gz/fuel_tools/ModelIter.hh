@@ -40,7 +40,7 @@ namespace gz
     class ModelIterFactory;
 
     /// \brief class for iterating through models
-    class IGNITION_FUEL_TOOLS_VISIBLE ModelIter
+    class GZ_FUEL_TOOLS_VISIBLE ModelIter
     {
       friend ModelIterFactory;
 

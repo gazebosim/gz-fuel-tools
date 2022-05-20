@@ -43,7 +43,7 @@ namespace fuel_tools
 /// It strips the scheme and authority's `//` prefix.
 /// \param[in] _uri URI to convert.
 /// \return String suitable to use in file paths
-IGNITION_FUEL_TOOLS_VISIBLE
+GZ_FUEL_TOOLS_VISIBLE
 std::string uriToPath(const gz::common::URI &_uri);
 }
 }

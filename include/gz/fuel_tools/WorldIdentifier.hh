@@ -39,7 +39,7 @@ namespace gz
     class ServerConfig;
 
     /// \brief Defines how to identify a world
-    class IGNITION_FUEL_TOOLS_VISIBLE WorldIdentifier
+    class GZ_FUEL_TOOLS_VISIBLE WorldIdentifier
     {
       /// \brief Constructor.
       public: WorldIdentifier();

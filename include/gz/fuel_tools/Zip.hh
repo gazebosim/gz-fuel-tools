@@ -28,7 +28,7 @@ namespace gz
   namespace fuel_tools
   {
     /// \brief A helper class for making REST requests.
-    class IGNITION_FUEL_TOOLS_VISIBLE Zip
+    class GZ_FUEL_TOOLS_VISIBLE Zip
     {
       /// \brief Compress a file or directory
       /// \param[in] _src Path to file or directory to compress

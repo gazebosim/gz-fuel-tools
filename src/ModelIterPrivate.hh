@@ -41,7 +41,7 @@ namespace gz
     class ModelIter;
 
     /// \brief Private class, do not include or instantiate
-    class IGNITION_FUEL_TOOLS_VISIBLE ModelIterFactory
+    class GZ_FUEL_TOOLS_VISIBLE ModelIterFactory
     {
       /// \brief Create a model iterator from a vector of model identifiers
       /// \param[in] _ids Model identifiers
@@ -67,7 +67,7 @@ namespace gz
     };
 
     /// \brief Private class, do not include or instantiate
-    class IGNITION_FUEL_TOOLS_VISIBLE ModelIterPrivate
+    class GZ_FUEL_TOOLS_VISIBLE ModelIterPrivate
     {
       /// \brief Destructor
       public: virtual ~ModelIterPrivate();
@@ -85,7 +85,7 @@ namespace gz
 
     /// \brief class for iterating through model ids where all are known
     ///        in advance
-    class IGNITION_FUEL_TOOLS_VISIBLE IterIds : public ModelIterPrivate
+    class GZ_FUEL_TOOLS_VISIBLE IterIds : public ModelIterPrivate
     {
       /// \brief Constructor
       public: explicit IterIds(std::vector<ModelIdentifier> _ids);
@@ -108,7 +108,7 @@ namespace gz
 
     /// \brief class for iterating through model ids where all are known
     ///        in advance
-    class IGNITION_FUEL_TOOLS_VISIBLE IterModels: public ModelIterPrivate
+    class GZ_FUEL_TOOLS_VISIBLE IterModels: public ModelIterPrivate
     {
       /// \brief Constructor
       public: explicit IterModels(std::vector<Model> _models);
@@ -130,7 +130,7 @@ namespace gz
     };
 
     /// \brief class for iterating through model ids from a rest API
-    class IGNITION_FUEL_TOOLS_VISIBLE IterRestIds: public ModelIterPrivate
+    class GZ_FUEL_TOOLS_VISIBLE IterRestIds: public ModelIterPrivate
     {
       /// \brief constructor
       public: IterRestIds(const Rest &_rest,

@@ -87,7 +87,7 @@ namespace gz
     };
 
     /// \brief Class describing a result of an operation.
-    class IGNITION_FUEL_TOOLS_VISIBLE Result
+    class GZ_FUEL_TOOLS_VISIBLE Result
     {
       /// \brief Default constructor
       public: Result();

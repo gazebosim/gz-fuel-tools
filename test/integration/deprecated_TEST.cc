@@ -28,3 +28,5 @@ TEST(Deprecated, IgnitionNamespace)
 {
   ignition::fuel_tools::Model model;
 }
+
+#undef SUPPRESS_IGNITION_HEADER_DEPRECATION

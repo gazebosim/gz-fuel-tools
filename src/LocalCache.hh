@@ -43,7 +43,7 @@ namespace gz
     class ModelIdentifier;
 
     /// \brief Class for managing stuff in the local cache
-    class IGNITION_FUEL_TOOLS_VISIBLE LocalCache
+    class GZ_FUEL_TOOLS_VISIBLE LocalCache
     {
       /// \brief Constructor
       /// \param[in] _config The configuration for the client

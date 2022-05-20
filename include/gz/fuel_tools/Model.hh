@@ -64,7 +64,7 @@ namespace gz
     class ModelIterTest;
 
     /// \brief Defines how to identify a model.
-    class IGNITION_FUEL_TOOLS_VISIBLE Model
+    class GZ_FUEL_TOOLS_VISIBLE Model
     {
       friend IterIds;
       friend IterRESTIds;

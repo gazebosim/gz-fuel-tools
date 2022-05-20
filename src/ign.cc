@@ -285,13 +285,13 @@ extern "C" bool getOwnerWorlds(
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion()
+extern "C" GZ_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 {
   return strdup(IGNITION_FUEL_TOOLS_VERSION_FULL);
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
+extern "C" GZ_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     const char *_owner, const char *_raw, const char *_configFile)
 {
   std::string urlStr{_url};
@@ -381,7 +381,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
+extern "C" GZ_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
     const char *_owner, const char *_raw, const char *_configFile)
 {
   std::string urlStr{_url};
@@ -471,7 +471,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
+extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
     const char *_configFile, const char *_header, const char *_type, int _jobs)
 {
   // Add signal handler for SIGTERM and SIGINT. Ctrl-C doesn't work without this
@@ -655,13 +655,13 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
+extern "C" GZ_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 {
   gz::common::Console::SetVerbosity(std::atoi(_verbosity));
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
+extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     const char *_url, const char *_header, const char *_private,
     const char *_owner)
 {
@@ -737,7 +737,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteUrl(
+extern "C" GZ_FUEL_TOOLS_VISIBLE int deleteUrl(
     const char *_url, const char *_header)
 {
   gz::fuel_tools::ClientConfig conf;
@@ -779,7 +779,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteUrl(
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(const char *_path)
+extern "C" GZ_FUEL_TOOLS_VISIBLE int config2Pbtxt(const char *_path)
 {
   gz::msgs::FuelMetadata meta;
 
@@ -799,7 +799,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(const char *_path)
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
+extern "C" GZ_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
 {
   gz::msgs::FuelMetadata meta;
 
@@ -823,7 +823,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
+extern "C" GZ_FUEL_TOOLS_VISIBLE int editUrl(
     const char *_url, const char *_header, const char *_private,
     const char *_path)
 {
@@ -900,7 +900,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
 }
 
 //////////////////////////////////////////////////
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update(
+extern "C" GZ_FUEL_TOOLS_VISIBLE int update(
     const char *_onlyModels, const char *_onlyWorlds, const char *_header)
 {
   // Add signal handler for SIGTERM and SIGINT. Ctrl-C doesn't work without this
