@@ -31,6 +31,10 @@
 
 #define IGNITION_FUEL_INITIAL_CONFIG_PATH GZ_FUEL_INITIAL_CONFIG_PATH
 
+namespace gz
+{
+}
+
 namespace ignition
 {
   #ifndef SUPPRESS_IGNITION_HEADER_DEPRECATION
