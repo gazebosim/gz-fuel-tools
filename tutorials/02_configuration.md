@@ -15,7 +15,7 @@ Gazebo Fuel Tools accepts a YAML file with the following syntax:
 # The list of servers.
 servers:
   -
-    url: https://fuel.gazebosim.org
+    url: https://fuel.ignitionrobotics.org
     private-token: <your private token>
 
   # -
@@ -47,7 +47,7 @@ Create a file `/tmp/my_config.yaml` with the following content:
 # The list of servers.
 servers:
   -
-    url: https://fuel.gazebosim.org
+    url: https://fuel.ignitionrobotics.org
 
 # Where are the assets stored in disk.
 cache:
@@ -121,7 +121,7 @@ And now the fun part, execute it:
 ```
 
 Verify that you have the model in
-`/tmp/ignition/fuel/fuel.gazebosim.org/caguero/models/Beer`,
+`/tmp/ignition/fuel/fuel.ignitionrobotics.org/caguero/models/Beer`,
 as you configured in your YAML file.
 
 ## Walkthrough

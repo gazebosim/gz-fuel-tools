@@ -88,7 +88,7 @@ SUBCOMMANDS = {
   "Available Options:                                                      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
-  "                           https://fuel.gazebosim.org.           \n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
@@ -100,7 +100,7 @@ SUBCOMMANDS = {
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
-  "                           https://fuel.gazebosim.org/1.0/openrobotics/models/Ambulance\n"\
+  "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'Private-Token: <access_token>'.    \n"\
   "  -j [--jobs] arg          Number of parallel downloads (default: 1,    \n"\
@@ -120,7 +120,7 @@ SUBCOMMANDS = {
   "  -m [--model] arg         Path to directory containing the model.      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
-  "                           https://fuel.gazebosim.org.           \n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
   "  -p [--private]           Use this argument to make the model private. \n"\
   "  -b [--public]            Use this argument to make the model public.  \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
@@ -137,7 +137,7 @@ SUBCOMMANDS = {
   "  -o [--owner] arg         Return only resources for given owner.       \n"\
   "  -u [--url] arg           URL of a server the resource comes from,     \n"\
   "                           if unspecified, it will be                   \n"\
-  "                           https://fuel.gazebosim.org.           \n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
   "  -r [--raw]               Machine-friendly output.                     \n" +
   COMMON_OPTIONS,
 
@@ -163,7 +163,7 @@ SUBCOMMANDS = {
   "                           multiple models each in a subdirectory.      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
-  "                           https://fuel.gazebosim.org.           \n"\
+  "                           https://fuel.ignitionrobotics.org.           \n"\
   "  -o [--owner] arg         Upload to the given owner, which can be an.  \n"\
   "                           organization. Default behavior is to upload  \n"\
   "                           to the user account associated with the      \n"\
@@ -287,12 +287,12 @@ class Cmd
     case options['subcommand']
     when 'delete'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
     when 'download'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
 
@@ -333,12 +333,12 @@ class Cmd
         exit(-1)
       end
       if options['url'] == ''
-        puts "Missing URL (e.g. --url https://fuel.gazebosim.org)."
+        puts "Missing URL (e.g. --url https://fuel.ignitionrobotics.org)."
         exit(-1)
       end
     when 'edit'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
     end

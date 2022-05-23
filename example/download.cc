@@ -38,7 +38,7 @@ int main(int argc, char **argv)
   usage += " Usage:\n  ./download <options>\n\n";
   usage += "  Examples:\n"
     "\t ./download -t model -o OpenRobotics -n Beer\n"
-    "\t ./download -s https://fuel.gazebosim.org -t world "
+    "\t ./download -s https://fuel.ignitionrobotics.org -t world "
     "-o OpenRobotics"
     " -n Empty\n"
     "\t ./download -c /tmp/my_config.yaml -t model -o caguero -n Beer\n";
