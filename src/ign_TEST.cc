@@ -99,7 +99,7 @@ TEST(CmdLine,
     IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListConfigServerUgly))
 {
   auto output = custom_exec_str(g_listCmd + " -t model --raw");
-  EXPECT_NE(output.find("https://fuel.ignitionrobotics.org/1.0/"),
+  EXPECT_NE(output.find("https://fuel.gazebosim.org/1.0/"),
             std::string::npos) << output;
   EXPECT_EQ(output.find("owners"), std::string::npos) << output;
 }
@@ -117,7 +117,7 @@ TEST(CmdLine,
   EXPECT_NE(output.find("owners"), std::string::npos) << output;
   EXPECT_NE(output.find("models"), std::string::npos) << output;
 
-  EXPECT_EQ(output.find("https://fuel.ignitionrobotics.org"), std::string::npos)
+  EXPECT_EQ(output.find("https://fuel.gazebosim.org"), std::string::npos)
       << output;
   EXPECT_EQ(output.find("https://staging-fuel.gazebosim.org/1.0/"),
       std::string::npos) << output;

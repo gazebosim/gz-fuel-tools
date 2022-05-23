@@ -21,7 +21,7 @@ interacting with Gazebo Fuel servers.
 
 # Building and installing
 
-See the [installation tutorial](https://ignitionrobotics.org/api/fuel_tools/5.0/install.html).
+See the [installation tutorial](https://gazebosim.org/api/fuel_tools/5.0/install.html).
 
 Make sure `GZ_CONFIG_PATH` is set to the right install location so that `ign fuel` will work.
 Default is `/usr/local/share/ignition`.
@@ -33,26 +33,26 @@ For a complete list of commands run `ign fuel -h` on the command line.
 **List all models**
 ```
 $ ign fuel list -t model -r | head
-https://fuel.ignitionrobotics.org/anonymous/test_model_595389531
-https://fuel.ignitionrobotics.org/anonymous/test_model_122023392
-https://fuel.ignitionrobotics.org/anonymous/test_model_429486665
-https://fuel.ignitionrobotics.org/anonymous/test_model_887243621
-https://fuel.ignitionrobotics.org/anonymous/test_model_084900530
-https://fuel.ignitionrobotics.org/anonymous/test_model_240061059
-https://fuel.ignitionrobotics.org/anonymous/test_model_464734097
-https://fuel.ignitionrobotics.org/anonymous/test_model_658598990
-https://fuel.ignitionrobotics.org/anonymous/test_model_834617935
-https://fuel.ignitionrobotics.org/anonymous/test_model_380348669
+https://fuel.gazebosim.org/anonymous/test_model_595389531
+https://fuel.gazebosim.org/anonymous/test_model_122023392
+https://fuel.gazebosim.org/anonymous/test_model_429486665
+https://fuel.gazebosim.org/anonymous/test_model_887243621
+https://fuel.gazebosim.org/anonymous/test_model_084900530
+https://fuel.gazebosim.org/anonymous/test_model_240061059
+https://fuel.gazebosim.org/anonymous/test_model_464734097
+https://fuel.gazebosim.org/anonymous/test_model_658598990
+https://fuel.gazebosim.org/anonymous/test_model_834617935
+https://fuel.gazebosim.org/anonymous/test_model_380348669
 ```
 
 **Download a model**
 ```
-$ ign fuel download -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance -v 4
+$ ign fuel download -u https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ambulance -v 4
 Downloading model:
   Name: Ambulance
   Owner: OpenRobotics
   Server:
-    URL: https://fuel.ignitionrobotics.org
+    URL: https://fuel.gazebosim.org
     Version: 1.0
 
 Download succeeded.
@@ -60,7 +60,7 @@ Download succeeded.
 
 **C++ Get List models**
 ```
-  // Create a client (uses https://fuel.ignitionrobotics.org by default)
+  // Create a client (uses https://fuel.gazebosim.org by default)
   gz::fuel_tools::ClientConfig conf;
   gz::fuel_tools::FuelClient client(conf);
   gz::fuel_tools::ModelIter iter = client.Models();
@@ -73,7 +73,7 @@ Download succeeded.
 **Upload a model**
 
 Create an account on
-[https://app.ignitionrobotics.org/](https://app.ignitionrobotics.org/) and log
+[https://app.gazebosim.org/](https://app.gazebosim.org/) and log
 in.
 
 While logged in, obtain the JWT token of the account from the browser.
@@ -107,7 +107,7 @@ See issues beginning with [Fuel backend] in the title. Here are two examples.
 **TODO: Find a model on disk**
 ```
 $ ign fuel locate --name am1
-/home/developer/.ignition/fuel/fuel.ignitionrobotics.org/alice/am1
+/home/developer/.ignition/fuel/fuel.gazebosim.org/alice/am1
 ```
 
 ## Dependencies

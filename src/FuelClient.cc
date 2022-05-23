@@ -58,7 +58,7 @@ using namespace fuel_tools;
 class gz::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer/2
+  /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer/2
   /// Where the API version and the model version are optional.
   public: const std::string kModelUrlRegexStr{
     // Method
@@ -79,7 +79,7 @@ class gz::fuel_tools::FuelClientPrivate
     "/?"};
 
   /// \brief A world URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/1
+  /// E.g.: https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty/1
   /// Where the API version and the world version are optional.
   public: const std::string kWorldUrlRegexStr{
     // Method
@@ -151,7 +151,7 @@ class gz::fuel_tools::FuelClientPrivate
 
   /// \brief A collection URL,
   /// E.g.:
-  /// https://fuel.ignitionrobotics.org/1.0/OpenRobotics/collections/TestColl
+  /// https://fuel.gazebosim.org/1.0/OpenRobotics/collections/TestColl
   /// Where the API version is optional
   public: const std::string kCollectionUrlRegexStr{
     // Method
@@ -501,7 +501,7 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
            << "  1. Is the Server URL correct? Try entering it on a browser.\n"
            << "  2. Do the categories exist? If you are using the Fuel server,"
            << "     then you can get the complete list at"
-           << "     https://fuel.ignitionrobotics.org/1.0/categories.\n"
+           << "     https://fuel.gazebosim.org/1.0/categories.\n"
            << "  3. If the owner is specified, make sure you have correct\n"
            << "     permissions." << std::endl;
     return Result(ResultType::FETCH_ERROR);
