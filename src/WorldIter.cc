@@ -166,7 +166,7 @@ WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
   this->worldId = *(this->idIter);
   this->worldId.SetServer(this->config);
 
-  igndbg << "Got response [" << resp.data << "]\n";
+  gzdbg << "Got response [" << resp.data << "]\n";
 }
 
 //////////////////////////////////////////////////

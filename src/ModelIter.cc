@@ -199,7 +199,7 @@ IterRestIds::IterRestIds(const Rest &_rest, const ServerConfig &_config,
   ptr->id.SetServer(this->config);
   this->model = Model(ptr);
 
-  igndbg << "Got response [" << resp.data << "]\n";
+  gzdbg << "Got response [" << resp.data << "]\n";
 }
 
 //////////////////////////////////////////////////

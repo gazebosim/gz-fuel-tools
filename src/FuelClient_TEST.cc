@@ -45,7 +45,7 @@ using namespace gz::fuel_tools;
 /// Taken from LocalCache_TEST
 void createLocalModel(ClientConfig &_conf)
 {
-  igndbg << "Creating local model in [" << common::cwd() << "]" << std::endl;
+  gzdbg << "Creating local model in [" << common::cwd() << "]" << std::endl;
 
   auto modelPath = common::joinPaths(
       "test_cache", "localhost:8007", "alice", "models", "My Model");
@@ -100,7 +100,7 @@ void createLocalModel(ClientConfig &_conf)
 /// Taken from LocalCache_TEST
 void createLocalWorld(ClientConfig &_conf)
 {
-  igndbg << "Creating local world in [" << common::cwd() << "]" << std::endl;
+  gzdbg << "Creating local world in [" << common::cwd() << "]" << std::endl;
 
   auto worldPath = common::joinPaths(
       "test_cache", "localhost:8007", "banana", "worlds", "My World");

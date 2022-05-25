@@ -601,7 +601,7 @@ void LocalCachePrivate::FixPathsInUri(tinyxml2::XMLElement *_elem,
     // On Blueprint and Citadel, just warn the user
     // From Dome, use the name on the URI (resourceName) and assume the same
     // owner
-    igndbg << "Model [" << _id.Name()
+    gzdbg << "Model [" << _id.Name()
            << "] loading resource from another model, named [" << resourceName
            << "]. On Blueprint (ign-fuel-tools 3) and Citadel "
            << "(ign-fuel-tools 4), [" << resourceName << "] is ignored. "

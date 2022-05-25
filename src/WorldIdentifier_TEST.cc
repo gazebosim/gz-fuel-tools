@@ -148,7 +148,7 @@ TEST(WorldIdentifier, AsString)
     id.SetVersionStr("55");
 
     auto str = id.AsString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("hello"), std::string::npos);
     EXPECT_NE(str.find("raspberry"), std::string::npos);
@@ -176,7 +176,7 @@ TEST(WorldIdentifier, AsPrettyString)
     id.SetVersionStr("55");
 
     auto str = id.AsPrettyString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("hello"), std::string::npos);
     EXPECT_NE(str.find("raspberry"), std::string::npos);

@@ -44,7 +44,7 @@ using namespace fuel_tools;
 /// \brief Creates a directory structure in the build directory with 6 models
 void createLocal6Models(ClientConfig &_conf)
 {
-  igndbg << "Creating 6 local models in [" << common::cwd() << "]" << std::endl;
+  gzdbg << "Creating 6 local models in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8001");
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -96,7 +96,7 @@ void createLocal6Models(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 3 models
 void createLocal3Models(ClientConfig &_conf)
 {
-  igndbg << "Creating 3 local models in [" << common::cwd() << "]" << std::endl;
+  gzdbg << "Creating 3 local models in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8007");
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -130,7 +130,7 @@ void createLocal3Models(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 6 worlds
 void createLocal6Worlds(ClientConfig &_conf)
 {
-  igndbg << "Creating 6 local worlds in [" << common::cwd() << "]" << std::endl;
+  gzdbg << "Creating 6 local worlds in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8001");
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -182,7 +182,7 @@ void createLocal6Worlds(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 3 worlds
 void createLocal3Worlds(ClientConfig &_conf)
 {
-  igndbg << "Creating 3 local worlds in [" << common::cwd() << "]" << std::endl;
+  gzdbg << "Creating 3 local worlds in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8007");
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,

@@ -920,7 +920,7 @@ std::vector<FuelClient::ModelResult> FuelClient::DownloadModels(
       if (!dependencies.empty())
       {
         std::lock_guard<std::mutex> lock(idsMutex);
-        igndbg << "Adding " << dependencies.size()
+        gzdbg << "Adding " << dependencies.size()
           << " model dependencies to queue from " << id.Name() << "\n";
         for (auto dep : dependencies)
         {
@@ -1653,7 +1653,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
   {
     std::string filePath = common::joinPaths(_pathToModelDir, "metadata.pbtxt");
 
-    igndbg << "Parsing " << filePath  << std::endl;
+    gzdbg << "Parsing " << filePath  << std::endl;
 
     // Read the pbtxt file.
     std::ifstream inputFile(filePath);
@@ -1667,7 +1667,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
   {
     std::string filePath = common::joinPaths(_pathToModelDir, "model.config");
 
-    igndbg << "Parsing " << filePath << std::endl;
+    gzdbg << "Parsing " << filePath << std::endl;
 
     std::ifstream inputFile(filePath);
     std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
