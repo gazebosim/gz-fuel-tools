@@ -45,7 +45,7 @@ namespace gz
       public: static WorldIter WorldIterThreeWorldIds()
         {
           gz::fuel_tools::ServerConfig srv;
-          srv.SetUrl(gz::common::URI("https://gazebosim.org"));
+          srv.SetUrl(gz::common::URI("https://ignitionrobotics.org"));
 
           std::vector<WorldIdentifier> ids;
           for (int i = 0; i < 3; i++)
