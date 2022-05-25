@@ -173,11 +173,11 @@ bool Zip::Extract(const std::string &_src,
       file.write(buf, len);
       if (file.fail())
       {
-        ignerr << "Failed to write file [" << dst << "]" << std::endl;
+        gzerr << "Failed to write file [" << dst << "]" << std::endl;
       }
       else
       {
-        igndbg << "Created file [" << dst << "]" << std::endl;
+        gzdbg << "Created file [" << dst << "]" << std::endl;
       }
     }
 

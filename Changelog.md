@@ -15,7 +15,7 @@
 
 ## Gazebo Fuel Tools 6.x
 
-### Ignition Fuel Tools 6.2.0 (2022-03-25)
+### Gazebo Fuel Tools 6.2.0 (2022-03-25)
 
 1. Fix trailing slashes in failing tests
     * [Pull request #237](https://github.com/ignitionrobotics/ign-fuel-tools/pull/237)
@@ -38,7 +38,7 @@
 1. APIs for retrieving models in parallel
     * [Pull request #199](https://github.com/ignitionrobotics/ign-fuel-tools/pull/199)
 
-### Ignition Fuel Tools 6.1.0 (2021-10-15)
+### Gazebo Fuel Tools 6.1.0 (2021-10-15)
 
 1. Detect ign instead of using cmake module to check for ignition-tools
     * [Pull request #191](https://github.com/gazebosim/gz-fuel-tools/pull/191)
