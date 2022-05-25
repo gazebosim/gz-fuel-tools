@@ -12,7 +12,7 @@ simulation, such as models and worlds.
 
 ### Models
 
-A common asset stored in an Gazebo Fuel server is a model. A model represents
+A common asset stored in a Gazebo Fuel server is a model. A model represents
 an object in simulation. A model has a name and a description of its visual and
 physical properties. Models can be as simple as a sphere or complicated as a
 highly articulated humanoid robot. See the full model specification
