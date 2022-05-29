@@ -17,12 +17,12 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/ModelIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/ModelIdentifier.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
@@ -57,13 +57,13 @@ TEST(ModelIdentifier, SetFields)
 /// \brief Unique Name
 TEST(ModelIdentifier, UniqueName)
 {
-  ignition::fuel_tools::ServerConfig srv1;
+  gz::fuel_tools::ServerConfig srv1;
   srv1.SetUrl(common::URI("https://localhost:8001"));
 
-  ignition::fuel_tools::ServerConfig srv2;
+  gz::fuel_tools::ServerConfig srv2;
   srv2.SetUrl(common::URI("https://localhost:8002"));
 
-  ignition::fuel_tools::ServerConfig srv3;
+  gz::fuel_tools::ServerConfig srv3;
   srv3.SetUrl(common::URI("https://localhost:8003"));
 
   ModelIdentifier id;
@@ -183,7 +183,7 @@ TEST(ModelIdentifier, AsString)
     id.SetUploadDate(d2);
 
     auto str = id.AsString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("hello"), std::string::npos);
     EXPECT_NE(str.find("raspberry"), std::string::npos);
@@ -219,7 +219,7 @@ TEST(ModelIdentifier, AsPrettyString)
     id.SetUploadDate(d2);
 
     auto str = id.AsPrettyString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("hello"), std::string::npos);
     EXPECT_NE(str.find("raspberry"), std::string::npos);

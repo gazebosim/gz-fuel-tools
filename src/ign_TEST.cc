@@ -20,9 +20,9 @@
 #include <stdlib.h>
 
 #include <string>
-#include <ignition/utils/ExtraTestMacros.hh>
+#include <gz/utils/ExtraTestMacros.hh>
 
-#include "ignition/fuel_tools/config.hh"
+#include "gz/fuel_tools/config.hh"
 #include "test_config.h"
 
 /////////////////////////////////////////////////
@@ -47,12 +47,12 @@ std::string custom_exec_str(std::string _cmd)
   return result;
 }
 
-auto g_version = std::string(strdup(IGNITION_FUEL_TOOLS_VERSION_FULL));
+auto g_version = std::string(strdup(GZ_FUEL_TOOLS_VERSION_FULL));
 
 auto g_listCmd = "ign fuel list -v 4 --force-version " + g_version;
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Versions))
 {
   auto output = custom_exec_str("ign fuel --versions");
@@ -60,7 +60,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Versions))
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Help))
 {
   auto output = custom_exec_str("ign fuel --force-version " + g_version +
@@ -75,7 +75,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Help))
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ListFail))
 {
   auto output = custom_exec_str(g_listCmd);
@@ -94,7 +94,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ListFail))
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine,
     IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListConfigServerUgly))
 {
@@ -105,44 +105,44 @@ TEST(CmdLine,
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine,
     IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListCustomServerPretty))
 {
   auto output = custom_exec_str(
-      g_listCmd + " -t model -u https://staging-fuel.gazebosim.org");
+      g_listCmd + " -t model -u https://staging-fuel.ignitionrobotics.org");
 
-  EXPECT_NE(output.find("https://staging-fuel.gazebosim.org"),
+  EXPECT_NE(output.find("https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << output;
   EXPECT_NE(output.find("owners"), std::string::npos) << output;
   EXPECT_NE(output.find("models"), std::string::npos) << output;
 
   EXPECT_EQ(output.find("https://fuel.ignitionrobotics.org"), std::string::npos)
       << output;
-  EXPECT_EQ(output.find("https://staging-fuel.gazebosim.org/1.0/"),
+  EXPECT_EQ(output.find("https://staging-fuel.ignitionrobotics.org/1.0/"),
       std::string::npos) << output;
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListConfigServerUgly))
 {
   auto output = custom_exec_str(g_listCmd +
-      " -t world --raw -u https://staging-fuel.gazebosim.org");
-  EXPECT_NE(output.find("https://staging-fuel.gazebosim.org"),
+      " -t world --raw -u https://staging-fuel.ignitionrobotics.org");
+  EXPECT_NE(output.find("https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << output;
   EXPECT_EQ(output.find("owners"), std::string::npos) << output;
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine,
     IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListCustomServerPretty))
 {
   auto output = custom_exec_str(
-      g_listCmd + " -t world -u https://staging-fuel.gazebosim.org");
+      g_listCmd + " -t world -u https://staging-fuel.ignitionrobotics.org");
 
-  EXPECT_NE(output.find("https://staging-fuel.gazebosim.org"),
+  EXPECT_NE(output.find("https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << output;
   EXPECT_NE(output.find("owners"), std::string::npos) << output;
   EXPECT_NE(output.find("worlds"), std::string::npos) << output;

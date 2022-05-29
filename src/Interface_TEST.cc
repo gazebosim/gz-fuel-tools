@@ -16,12 +16,12 @@
 */
 
 #include <gtest/gtest.h>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/utils/ExtraTestMacros.hh>
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/FuelClient.hh"
-#include "ignition/fuel_tools/Interface.hh"
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/utils/ExtraTestMacros.hh>
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/FuelClient.hh"
+#include "gz/fuel_tools/Interface.hh"
 
 #include "test_config.h"
 
@@ -33,12 +33,12 @@
 #define ChangeDirectory chdir
 #endif
 
-using namespace ignition;
-using namespace ignition::fuel_tools;
+using namespace gz;
+using namespace gz::fuel_tools;
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST(Interface, FetchResources)
 {
   common::Console::SetVerbosity(4);

@@ -18,41 +18,41 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/common/Util.hh>
-#include "ignition/fuel_tools/ClientConfig.hh"
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/common/Util.hh>
+#include "gz/fuel_tools/ClientConfig.hh"
 #include "test_config.h"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
 /// \brief Helper to remove file according to OS, while Windows
 /// has this issue:
-/// https://github.com/ignitionrobotics/ign-common/issues/51
+/// https://github.com/gazebosim/gz-common/issues/51
 /// \todo(anyone) Remove this once Windows issue is solved.
 /// \param[in] _path Path to file to be removed.
 void removeFileTemp(const std::string &_path)
 {
 #ifndef _WIN32
-  EXPECT_TRUE(ignition::common::removeFile(_path));
+  EXPECT_TRUE(gz::common::removeFile(_path));
 #else
-  ignition::common::removeFile(_path);
+  gz::common::removeFile(_path);
 #endif
 }
 
 /////////////////////////////////////////////////
 /// \brief Get home directory.
 /// \return Home directory or empty string if home wasn't found.
-/// \ToDo: Move this function to ignition::common::Filesystem
+/// \ToDo: Move this function to gz::common::Filesystem
 std::string homePath()
 {
   std::string homePath;
 #ifndef _WIN32
-  ignition::common::env("HOME", homePath);
+  gz::common::env("HOME", homePath);
 #else
-  ignition::common::env("USERPROFILE", homePath);
+  gz::common::env("USERPROFILE", homePath);
 #endif
 
   return homePath;
@@ -61,7 +61,7 @@ std::string homePath()
 /////////////////////////////////////////////////
 /// \brief Get cache directory.
 /// \return Cache directory
-/// \ToDo: Move this function to ignition::common::Filesystem
+/// \ToDo: Move this function to gz::common::Filesystem
 std::string cachePath()
 {
 #ifndef _WIN32
@@ -101,7 +101,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().front().Url().Str());
 
-  std::string defaultCacheLocation = ignition::common::joinPaths(
+  std::string defaultCacheLocation = gz::common::joinPaths(
     homePath(), ".ignition", "fuel");
   EXPECT_EQ(defaultCacheLocation, config.CacheLocation());
 }
@@ -278,7 +278,7 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
 TEST(ClientConfig, UserAgent)
 {
   ClientConfig config;
-  EXPECT_EQ("IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL,
+  EXPECT_EQ("IgnitionFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL,
             config.UserAgent());
 
   config.SetUserAgent("my_user_agent");
@@ -306,7 +306,7 @@ TEST(ClientConfig, AsString)
     ClientConfig client;
 
     std::string str = client.AsString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
 #ifndef _WIN32
     EXPECT_NE(str.find(".ignition/fuel"), std::string::npos);
@@ -337,7 +337,7 @@ TEST(ClientConfig, AsString)
     srv.SetApiKey("ABCD");
 
     auto str = srv.AsString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
     EXPECT_EQ(str.find("local_name"), std::string::npos);
@@ -354,7 +354,7 @@ TEST(ClientConfig, AsString)
     client.AddServer(srv);
 
     auto str = client.AsString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("cache/location"), std::string::npos);
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
@@ -380,7 +380,7 @@ TEST(ClientConfig, AsPrettyString)
     srv.SetApiKey("ABCD");
 
     auto str = srv.AsPrettyString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
     EXPECT_EQ(str.find("local_name"), std::string::npos);

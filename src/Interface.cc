@@ -19,37 +19,37 @@
 #pragma warning(push, 0)
 #endif
 #include <google/protobuf/text_format.h>
-#include <ignition/msgs/fuel_metadata.pb.h>
+#include <gz/msgs/fuel_metadata.pb.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-#include <ignition/msgs/Utility.hh>
-#include "ignition/common/Console.hh"
-#include "ignition/fuel_tools/Interface.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include <gz/msgs/Utility.hh>
+#include "gz/common/Console.hh"
+#include "gz/fuel_tools/Interface.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
     //////////////////////////////////////////////
     std::string fetchResource(const std::string &_uri)
     {
-      ignition::fuel_tools::FuelClient client;
+      gz::fuel_tools::FuelClient client;
       return fetchResourceWithClient(_uri, client);
     }
 
     //////////////////////////////////////////////
     std::string fetchResourceWithClient(const std::string &_uri,
-        ignition::fuel_tools::FuelClient &_client)
+        gz::fuel_tools::FuelClient &_client)
     {
       std::string result;
 
-      ignition::fuel_tools::ModelIdentifier model;
-      ignition::fuel_tools::WorldIdentifier world;
+      gz::fuel_tools::ModelIdentifier model;
+      gz::fuel_tools::WorldIdentifier world;
       std::string fileUrl;
-      ignition::common::URI uri(_uri);
+      gz::common::URI uri(_uri);
       // Download the model, if it is a model URI
       if (_client.ParseModelUrl(uri, model) &&
           !_client.CachedModel(uri, result))
@@ -88,14 +88,14 @@ namespace ignition
     //////////////////////////////////////////////
     std::string sdfFromPath(const std::string &_path)
     {
-      ignition::msgs::FuelMetadata meta;
+      gz::msgs::FuelMetadata meta;
       std::string metadataPath =
-        ignition::common::joinPaths(_path, "metadata.pbtxt");
+        gz::common::joinPaths(_path, "metadata.pbtxt");
       std::string modelConfigPath =
-        ignition::common::joinPaths(_path, "model.config");
+        gz::common::joinPaths(_path, "model.config");
 
-      bool foundMetadataPath = ignition::common::exists(metadataPath);
-      bool foundModelConfigPath = ignition::common::exists(modelConfigPath);
+      bool foundMetadataPath = gz::common::exists(metadataPath);
+      bool foundModelConfigPath = gz::common::exists(modelConfigPath);
 
       // Use the metadata.pbtxt or model.config first.
       if (foundMetadataPath || foundModelConfigPath)
@@ -115,14 +115,14 @@ namespace ignition
         }
         else
         {
-          if (!ignition::msgs::ConvertFuelMetadata(inputStr, meta))
+          if (!gz::msgs::ConvertFuelMetadata(inputStr, meta))
             return "";
         }
 
         if (meta.has_model())
-          return ignition::common::joinPaths(_path, meta.model().file());
+          return gz::common::joinPaths(_path, meta.model().file());
         else if (meta.has_world())
-          return ignition::common::joinPaths(_path, meta.world().file());
+          return gz::common::joinPaths(_path, meta.world().file());
         return "";
       }
 
@@ -133,7 +133,7 @@ namespace ignition
       {
         if (common::isFile(*dirIter))
         {
-          std::string basename = ignition::common::basename(*dirIter);
+          std::string basename = gz::common::basename(*dirIter);
           // Just some safety checks.
           if (!basename.empty() && basename.find(".sdf") != std::string::npos)
           {

@@ -30,7 +30,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -39,7 +39,7 @@ namespace ignition
     class ServerConfig;
 
     /// \brief Defines how to identify a world
-    class IGNITION_FUEL_TOOLS_VISIBLE WorldIdentifier
+    class GZ_FUEL_TOOLS_VISIBLE WorldIdentifier
     {
       /// \brief Constructor.
       public: WorldIdentifier();

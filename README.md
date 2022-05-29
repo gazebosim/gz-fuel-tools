@@ -1,29 +1,29 @@
-# Ignition Fuel Tools: Classes and tools for interacting with Ignition Fuel
+# Gazebo Fuel Tools: Classes and tools for interacting with Gazebo Fuel
 
 **Maintainer:** nate AT openrobotics DOT org
 
-[![GitHub open issues](https://img.shields.io/github/issues-raw/ignitionrobotics/ign-fuel-tools.svg)](https://github.com/ignitionrobotics/ign-fuel-tools/issues)
-[![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/ignitionrobotics/ign-fuel-tools.svg)](https://github.com/ignitionrobotics/ign-fuel-tools/pulls)
+[![GitHub open issues](https://img.shields.io/github/issues-raw/gazebosim/gz-fuel-tools.svg)](https://github.com/gazebosim/gz-fuel-tools/issues)
+[![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/gazebosim/gz-fuel-tools.svg)](https://github.com/gazebosim/gz-fuel-tools/pulls)
 [![Discourse topics](https://img.shields.io/discourse/https/community.gazebosim.org/topics.svg)](https://community.gazebosim.org)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools/branch/main/graph/badge.svg)](https://codecov.io/gh/ignitionrobotics/ign-fuel-tools)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-fuel-tools/branch/main/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-fuel-tools)
 Ubuntu Focal | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-focal-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-focal-amd64)
 Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-homebrew-amd64)
 Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-windows7-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-windows7-amd64)
 
-Ignition Fuel Tools is composed by a client library and command line tools for
-interacting with Ignition Fuel servers.
+Gazebo Fuel Tools is composed by a client library and command line tools for
+interacting with Gazebo Fuel servers.
 
-  [http://github.com/ignitionrobotics/ign-fuel-tools](http://github.com/ignitionrobotics/ign-fuel-tools)
+  [http://github.com/gazebosim/gz-fuel-tools](http://github.com/gazebosim/gz-fuel-tools)
 
 # Building and installing
 
-See the [installation tutorial](https://ignitionrobotics.org/api/fuel_tools/5.0/install.html).
+See the [installation tutorial](https://gazebosim.org/api/fuel_tools/5.0/install.html).
 
-Make sure `IGN_CONFIG_PATH` is set to the right install location so that `ign fuel` will work.
+Make sure `GZ_CONFIG_PATH` is set to the right install location so that `ign fuel` will work.
 Default is `/usr/local/share/ignition`.
 
 ## Examples
@@ -61,9 +61,9 @@ Download succeeded.
 **C++ Get List models**
 ```
   // Create a client (uses https://fuel.ignitionrobotics.org by default)
-  ignition::fuel_tools::ClientConfig conf;
-  ignition::fuel_tools::FuelClient client(conf);
-  ignition::fuel_tools::ModelIter iter = client.Models();
+  gz::fuel_tools::ClientConfig conf;
+  gz::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::ModelIter iter = client.Models();
   while (iter)
   {
     std::cout << "Got model: " << iter->Identification().Name() << "\n";
@@ -73,7 +73,7 @@ Download succeeded.
 **Upload a model**
 
 Create an account on
-[https://app.ignitionrobotics.org/](https://app.ignitionrobotics.org/) and log
+[https://app.gazebosim.org/](https://app.gazebosim.org/) and log
 in.
 
 While logged in, obtain the JWT token of the account from the browser.
@@ -169,10 +169,10 @@ In the event that the installation is a mix of Debian and from source, command
 line tools from `ign-tools` may not work correctly.
 
 A workaround for a single package is to define the environment variable
-`IGN_CONFIG_PATH` to point to the location of the Ignition library installation,
+`GZ_CONFIG_PATH` to point to the location of the Ignition library installation,
 where the YAML file for the package is found, such as
 ```
-export IGN_CONFIG_PATH=/usr/local/share/ignition
+export GZ_CONFIG_PATH=/usr/local/share/ignition
 ```
 
 However, that environment variable only takes a single path, which means if the
@@ -187,7 +187,7 @@ ln -s /usr/local/share/ignition/fuel4.yaml .
 ln -s /usr/local/share/ignition/transport7.yaml .
 ln -s /usr/local/share/ignition/transportlog7.yaml .
 ...
-export IGN_CONFIG_PATH=$HOME/.ignition/tools/configs
+export GZ_CONFIG_PATH=$HOME/.ignition/tools/configs
 ```
 
-This issue is tracked [here](https://github.com/ignitionrobotics/ign-tools/issues/8).
+This issue is tracked [here](https://github.com/gazebosim/gz-tools/issues/8).

@@ -29,7 +29,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -39,7 +39,7 @@ namespace ignition
     class WorldIterFactory;
 
     /// \brief class for iterating through worlds
-    class IGNITION_FUEL_TOOLS_VISIBLE WorldIter
+    class GZ_FUEL_TOOLS_VISIBLE WorldIter
     {
       friend WorldIterFactory;
 

@@ -33,12 +33,12 @@
 #undef DELETE
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
     /// \brief Stores a response to a RESTful request
-    struct IGNITION_FUEL_TOOLS_VISIBLE RestResponse
+    struct GZ_FUEL_TOOLS_VISIBLE RestResponse
     {
       /// \brief The returned status code. E.g.: 200
       // cppcheck-suppress unusedStructMember
@@ -79,7 +79,7 @@ namespace ignition
     };
 
     /// \brief A helper class for making REST requests.
-    class IGNITION_FUEL_TOOLS_VISIBLE Rest
+    class GZ_FUEL_TOOLS_VISIBLE Rest
     {
       /// \brief Default constructor.
       public: Rest() = default;

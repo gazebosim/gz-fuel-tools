@@ -16,10 +16,10 @@
 */
 
 #include <gtest/gtest.h>
-#include <ignition/common/Filesystem.hh>
-#include "ignition/fuel_tools/Helpers.hh"
+#include <gz/common/Filesystem.hh>
+#include "gz/fuel_tools/Helpers.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////

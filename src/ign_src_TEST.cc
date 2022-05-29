@@ -20,13 +20,13 @@
 #include <stdlib.h>
 
 #include <string>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/utils/ExtraTestMacros.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/utils/ExtraTestMacros.hh>
 
 #include "ign.hh"
 #include "test_config.h"
 
-using namespace ignition;
+using namespace gz;
 
 // Std streams
 static std::streambuf *g_stdOutFile;
@@ -90,7 +90,7 @@ TEST_F(CmdLine, ModelListFail)
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, ModelListConfigServerUgly)
 {
   EXPECT_TRUE(listModels("", "", "true"));
@@ -103,13 +103,13 @@ TEST_F(CmdLine, ModelListConfigServerUgly)
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, ModelListConfigServerPretty)
 {
-  EXPECT_TRUE(listModels("https://staging-fuel.gazebosim.org"));
+  EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org"));
 
   EXPECT_NE(this->stdOutBuffer.str().find(
-        "https://staging-fuel.gazebosim.org"),
+        "https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_NE(this->stdOutBuffer.str().find("owners"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -119,20 +119,20 @@ TEST_F(CmdLine, ModelListConfigServerPretty)
   EXPECT_EQ(this->stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find(
-      "https://staging-fuel.gazebosim.org/1.0/"), std::string::npos)
+      "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
       << this->stdOutBuffer.str();
 }
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, ModelListConfigServerPrettyOwner)
 {
-  EXPECT_TRUE(listModels("https://staging-fuel.gazebosim.org",
+  EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org",
       "openrobotics"));
 
   EXPECT_NE(this->stdOutBuffer.str().find(
-        "https://staging-fuel.gazebosim.org"),
+        "https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_NE(this->stdOutBuffer.str().find("1 owners"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -146,7 +146,7 @@ TEST_F(CmdLine, ModelListConfigServerPrettyOwner)
   EXPECT_EQ(this->stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find(
-      "https://staging-fuel.gazebosim.org/1.0/"), std::string::npos)
+      "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
       << this->stdOutBuffer.str();
 }
 
@@ -173,7 +173,7 @@ TEST_F(CmdLine, ModelDownloadWrongUrl)
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, ModelDownloadUnversioned)
 {
   // Download
@@ -199,7 +199,7 @@ TEST_F(CmdLine, ModelDownloadUnversioned)
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, DownloadConfigCache)
 {
   unsetenv("IGN_FUEL_CACHE_PATH");
@@ -251,14 +251,14 @@ TEST_F(CmdLine, WorldListFail)
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, WorldListConfigServerUgly)
 {
   EXPECT_TRUE(listWorlds(
-        "https://staging-fuel.gazebosim.org", "", "true"));
+        "https://staging-fuel.ignitionrobotics.org", "", "true"));
 
   EXPECT_NE(this->stdOutBuffer.str().find(
-        "https://staging-fuel.gazebosim.org"),
+        "https://staging-fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find("owners"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -266,13 +266,13 @@ TEST_F(CmdLine, WorldListConfigServerUgly)
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, WorldListConfigServerPretty)
 {
-  EXPECT_TRUE(listWorlds("https://staging-fuel.gazebosim.org"));
+  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org"));
 
   EXPECT_NE(this->stdOutBuffer.str().find(
-        "https://staging-fuel.gazebosim.org"), std::string::npos)
+        "https://staging-fuel.ignitionrobotics.org"), std::string::npos)
     << this->stdOutBuffer.str();
   EXPECT_NE(this->stdOutBuffer.str().find("owners"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -282,18 +282,18 @@ TEST_F(CmdLine, WorldListConfigServerPretty)
   EXPECT_EQ(this->stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find(
-      "https://staging-fuel.gazebosim.org/1.0/"), std::string::npos)
+      "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
       << this->stdOutBuffer.str();
 }
 
 /////////////////////////////////////////////////
 TEST_F(CmdLine, WorldListCustomServerPrettyOwner)
 {
-  EXPECT_TRUE(listWorlds("https://staging-fuel.gazebosim.org",
+  EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org",
       "openrobotics"));
 
   EXPECT_NE(this->stdOutBuffer.str().find(
-        "https://staging-fuel.gazebosim.org"), std::string::npos)
+        "https://staging-fuel.ignitionrobotics.org"), std::string::npos)
     << this->stdOutBuffer.str();
   EXPECT_NE(this->stdOutBuffer.str().find("worlds"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -305,13 +305,13 @@ TEST_F(CmdLine, WorldListCustomServerPrettyOwner)
   EXPECT_EQ(this->stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find(
-      "https://staging-fuel.gazebosim.org/1.0/"), std::string::npos)
+      "https://staging-fuel.ignitionrobotics.org/1.0/"), std::string::npos)
       << this->stdOutBuffer.str();
 }
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, WorldDownloadBadUrl)
 {
   EXPECT_FALSE(downloadUrl("fake_url"));
@@ -334,7 +334,7 @@ TEST_F(CmdLine, WorldDownloadWrongUrl)
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, WorldDownloadUnversioned)
 {
   // Download
@@ -368,7 +368,7 @@ INSTANTIATE_TEST_CASE_P(CollectionTest, DownloadCollectionTest,
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_P(DownloadCollectionTest, AllItems)
 {
   // Download
@@ -431,7 +431,7 @@ TEST_P(DownloadCollectionTest, AllItems)
 /////////////////////////////////////////////////
 /// Download only models
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_P(DownloadCollectionTest, Models)
 {
   // Download
@@ -482,7 +482,7 @@ TEST_P(DownloadCollectionTest, Models)
 /////////////////////////////////////////////////
 /// Download only worlds
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_P(DownloadCollectionTest, Worlds)
 {
   // Download

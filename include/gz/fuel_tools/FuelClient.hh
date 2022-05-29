@@ -36,7 +36,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -49,7 +49,7 @@ namespace ignition
     class ServerConfig;
 
     /// \brief High level interface to ignition fuel
-    class IGNITION_FUEL_TOOLS_VISIBLE FuelClient
+    class GZ_FUEL_TOOLS_VISIBLE FuelClient
     {
       /// \brief Default constructor.
       public: FuelClient();
@@ -193,12 +193,12 @@ namespace ignition
                                  bool _private,
                                  const std::string &_owner);
 
-      /// \brief Remove a resource, such as a model or world, from Ignition Fuel
+      /// \brief Remove a resource, such as a model or world, from Gazebo Fuel
       /// \param[in] _uri The full URI of the resource, e.g:
       /// https://fuel.ignitionrobotics.org/1.0/openrobotcs/model/my_model
       /// \param[in] _headers Headers to set on the HTTP request.
       /// \return Result of the delete operation
-      public: Result DeleteUrl(const ignition::common::URI &_uri,
+      public: Result DeleteUrl(const gz::common::URI &_uri,
                   const std::vector<std::string> &_headers);
 
       /// \brief Download a model from ignition fuel. This will override an
@@ -240,13 +240,13 @@ namespace ignition
                   const std::vector<ModelIdentifier> &_id,
                   std::vector<ModelIdentifier> &_dependencies);
 
-      /// \brief Download a world from Ignition Fuel. This will override an
+      /// \brief Download a world from Gazebo Fuel. This will override an
       /// existing local copy of the world.
       /// \param[out] _id The world identifier, with local path updated.
       /// \return Result of the download operation
       public: Result DownloadWorld(WorldIdentifier &_id);
 
-      /// \brief Download a world from Ignition Fuel. This will override an
+      /// \brief Download a world from Gazebo Fuel. This will override an
       /// existing local copy of the world.
       /// \param[out] _id The world identifier, with local path updated.
       /// \param[in] _headers Headers to set on the HTTP request.
@@ -412,7 +412,7 @@ namespace ignition
       /// \param[in] _headers Headers to set on the HTTP request.
       /// \return Result of the patch operation.
       public: Result PatchModel(
-                  const ignition::fuel_tools::ModelIdentifier &_model,
+                  const gz::fuel_tools::ModelIdentifier &_model,
                   const std::vector<std::string> &_headers);
 
       /// \brief Update a model using a PATCH request.
@@ -429,7 +429,7 @@ namespace ignition
       /// \param[in] _pathToModelDir a path to a directory containing a model.
       /// \return Result of the patch operation.
       public: Result PatchModel(
-                  const ignition::fuel_tools::ModelIdentifier &_model,
+                  const gz::fuel_tools::ModelIdentifier &_model,
                   const std::vector<std::string> &_headers,
                   const std::string &_pathToModelDir);
 
@@ -458,7 +458,7 @@ namespace ignition
       /// \param[in] _serverConfig Server configuration
       /// \param[inout] _headers Vector with headers to check
       private: void AddServerConfigParametersToHeaders(
-        const ignition::fuel_tools::ServerConfig &_serverConfig,
+        const gz::fuel_tools::ServerConfig &_serverConfig,
         std::vector<std::string> &_headers) const;
 
       /// \brief PIMPL

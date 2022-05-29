@@ -35,7 +35,7 @@
   #define ign_strdup strdup
 #endif
 
-namespace ignition
+namespace gz
 {
 namespace fuel_tools
 {
@@ -43,8 +43,8 @@ namespace fuel_tools
 /// It strips the scheme and authority's `//` prefix.
 /// \param[in] _uri URI to convert.
 /// \return String suitable to use in file paths
-IGNITION_FUEL_TOOLS_VISIBLE
-std::string uriToPath(const ignition::common::URI &_uri);
+GZ_FUEL_TOOLS_VISIBLE
+std::string uriToPath(const gz::common::URI &_uri);
 }
 }
 

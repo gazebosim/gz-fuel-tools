@@ -19,7 +19,7 @@
 #include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/FuelClient.hh"
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -27,7 +27,7 @@ namespace ignition
     /// fuel tools. This will place the asset in ~/.ignition/fuel.
     /// \param[in] _uri URI to the asset.
     /// \return Path to the downloaded asset. Empty on error.
-    IGNITION_FUEL_TOOLS_VISIBLE std::string fetchResource(
+    GZ_FUEL_TOOLS_VISIBLE std::string fetchResource(
         const std::string &_uri);
 
     /// \brief Download the specified resource using the ClientConfig
@@ -35,8 +35,8 @@ namespace ignition
     /// \param[in] _uri URI to the asset.
     /// \param[in] _client Custom FuelClient configuration.
     /// \return Path to the downloaded asset. Empty on error.
-    IGNITION_FUEL_TOOLS_VISIBLE std::string fetchResourceWithClient(
-        const std::string &_uri, ignition::fuel_tools::FuelClient &_client);
+    GZ_FUEL_TOOLS_VISIBLE std::string fetchResourceWithClient(
+        const std::string &_uri, gz::fuel_tools::FuelClient &_client);
 
     /// \brief Get the SDF file path for a model or world based on a directory
     /// containing a Fuel model or world. Here is a typical use case:
@@ -56,7 +56,7 @@ namespace ignition
     /// \param[in] _path Filesystem path to a Fuel model or world directory.
     /// \return Full path to the model or world SDF file, or empty string if
     /// the SDF file coult not be determined.
-    IGNITION_FUEL_TOOLS_VISIBLE std::string sdfFromPath(
+    GZ_FUEL_TOOLS_VISIBLE std::string sdfFromPath(
         const std::string &_path);
   }
 }

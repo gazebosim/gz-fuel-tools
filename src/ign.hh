@@ -15,18 +15,18 @@
  *
 */
 
-#ifndef IGNITION_FUELTOOLS_IGN_HH_
-#define IGNITION_FUELTOOLS_IGN_HH_
+#ifndef GZ_FUELTOOLS_GZ_HH_
+#define GZ_FUELTOOLS_GZ_HH_
 
-#include "ignition/fuel_tools/Export.hh"
+#include "gz/fuel_tools/Export.hh"
 
 /// \brief External hook to read the library version.
 /// \return C-string representing the version. Ex.: 0.1.2
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE char *ignitionVersion();
+extern "C" GZ_FUEL_TOOLS_VISIBLE char *ignitionVersion();
 
 /// \brief Set verbosity level
 /// \param[in] _verbosity 0 to 4
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(
+extern "C" GZ_FUEL_TOOLS_VISIBLE void cmdVerbosity(
     const char *_verbosity);
 
 /// \brief External hook to execute 'ign fuel list -t model' from the command
@@ -36,7 +36,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(
 /// \param[in] _raw 'true' for machine readable output.
 /// \param[in] _configFile Path to a YAML configuration file.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(
+extern "C" GZ_FUEL_TOOLS_VISIBLE int listModels(
     const char *_url = nullptr, const char *_owner = "",
     const char *_raw = "false", const char *_configFile = nullptr);
 
@@ -47,7 +47,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(
 /// \param[in] _raw 'true' for machine readable output.
 /// \param[in] _configFile Path to a YAML configuration file.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(
+extern "C" GZ_FUEL_TOOLS_VISIBLE int listWorlds(
     const char *_url = nullptr, const char *_owner = "",
     const char *_raw = "false", const char *_configFile = nullptr);
 
@@ -59,7 +59,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(
 /// \param[in] _type Type of resource to download from collection
 /// \param[in] _jobs Number of parallel jobs for downloading collections.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(
+extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(
     const char *_url = nullptr, const char *_configFile = nullptr,
     const char *_header = nullptr, const char *_type = nullptr, int _jobs = 1);
 
@@ -78,7 +78,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(
 /// \param[in] _owner Upload the resource to the provided owner, or nullptr
 /// to upload to the account specified by the token in the header.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
+extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     const char *_url, const char *_header = nullptr,
     const char *_private = nullptr, const char *_owner = nullptr);
 
@@ -92,14 +92,14 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 /// \param[in] _url Resource URL.
 /// \param[in] _header An HTTP header.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteUrl(
+extern "C" GZ_FUEL_TOOLS_VISIBLE int deleteUrl(
     const char *_url, const char *_header = nullptr);
 
 /// \brief External hook to execute 'ign fuel meta --config2pbtxt path'
 /// from the command line.
 /// \param[in] _path Resource path.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(
+extern "C" GZ_FUEL_TOOLS_VISIBLE int config2Pbtxt(
     const char *_path = nullptr);
 
 
@@ -107,7 +107,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(
 /// from the command line.
 /// \param[in] _path Resource path.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path);
+extern "C" GZ_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path);
 
 /// \brief External hook to execute 'ign fuel edit [options]' from the command
 /// line.
@@ -122,7 +122,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path);
 ///            public
 /// \param[in] _path Resource path.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
+extern "C" GZ_FUEL_TOOLS_VISIBLE int editUrl(
     const char *_url, const char *_header = nullptr,
     const char *_private = nullptr,
     const char *_path = nullptr);
@@ -133,7 +133,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
 /// \param[in] _onlyWorlds "1" to only update worlds.
 /// \param[in] _header An HTTP header.
 /// \return 1 if successful, 0 if not.
-extern "C" IGNITION_FUEL_TOOLS_VISIBLE int update(
+extern "C" GZ_FUEL_TOOLS_VISIBLE int update(
     const char *_onlyModels = nullptr, const char *_onlyWorlds = nullptr,
     const char *_header = nullptr);
 

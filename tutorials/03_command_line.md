@@ -30,7 +30,7 @@ https://fuel.ignitionrobotics.org
 
 By default, Fuel will list resources from all the servers listed in your
 `config.yaml` file. See the
-[configuration tutorial](https://ignitionrobotics.org/tutorials/fuel_tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_02_configuration.html)
+[configuration tutorial](https://gazebosim.org/tutorials/fuel_tools/1.0/md__data_ignition_ign-fuel-tools_tutorials_02_configuration.html)
 for more details.
 
 > **Tip**: If you want to see resources from a different Fuel server, add it to

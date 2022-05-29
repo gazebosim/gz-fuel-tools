@@ -2,8 +2,8 @@
 
 ## Overview
 
-Ignition Fuel Tools lets you perform a set of operations over the resources
-hosted in any Ignition Fuel server. These operations allow you to list all
+Gazebo Fuel Tools lets you perform a set of operations over the resources
+hosted in any Gazebo Fuel server. These operations allow you to list all
 resources of a particular server, get the details of a resource or download it.
 
 We're going to run a few examples, so let's start by creating a directory for
@@ -18,22 +18,22 @@ Download the files `list.cc`, `details.cc`, `download.cc`,
 
 ```bash
 # Ubuntu or MacOS
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/list.cc
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/details.cc
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/download.cc
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/CMakeLists.txt
+wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/list.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/details.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt
 
 # Windows
 ## CMD
-curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/list.cc -o list.cc
-curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/details.cc -o details.cc
-curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/download.cc -o download.cc
-curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/list.cc -o list.cc
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/details.cc -o details.cc
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc -o download.cc
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
 ## PowerShell
-curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/list.cc -o list.cc
-curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/details.cc -o details.cc
-curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/download.cc -o download.cc
-curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
+curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/list.cc -o list.cc
+curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/details.cc -o details.cc
+curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc -o download.cc
+curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
 ```
 
 Let's start by compiling the examples:
@@ -171,7 +171,7 @@ for (const auto &server : client.Config().Servers())
     auto id = modelIdentifier;
     id.SetServer(server);
 
-    ignition::fuel_tools::ModelIdentifier model;
+    gz::fuel_tools::ModelIdentifier model;
     if (!client.ModelDetails(server, id, model))
       continue;
 
@@ -183,7 +183,7 @@ for (const auto &server : client.Config().Servers())
     auto id = worldIdentifier;
     id.SetServer(server);
 
-    ignition::fuel_tools::WorldIdentifier world;
+    gz::fuel_tools::WorldIdentifier world;
     if (!client.WorldDetails(id, world))
       continue;
 

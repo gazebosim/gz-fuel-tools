@@ -19,17 +19,17 @@
 #include <regex>
 #include <string>
 #include <vector>
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/JSONParser.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/WorldIter.hh"
-#include "ignition/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/JSONParser.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/WorldIter.hh"
+#include "gz/fuel_tools/RestClient.hh"
 
 #include "WorldIterPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 //////////////////////////////////////////////////
@@ -129,7 +129,7 @@ WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
     // Get the next page from the headers.
     if (resp.headers.find("Link") != resp.headers.end())
     {
-      std::vector<std::string> links = ignition::common::split(
+      std::vector<std::string> links = gz::common::split(
           resp.headers["Link"], ",");
       for (const auto &l : links)
       {
@@ -166,7 +166,7 @@ WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
   this->worldId = *(this->idIter);
   this->worldId.SetServer(this->config);
 
-  igndbg << "Got response [" << resp.data << "]\n";
+  gzdbg << "Got response [" << resp.data << "]\n";
 }
 
 //////////////////////////////////////////////////

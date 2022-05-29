@@ -33,14 +33,14 @@ namespace Json
   class Value;
 }
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
     class ServerConfig;
 
     /// \brief A helper class for making REST requests.
-    class IGNITION_FUEL_TOOLS_VISIBLE JSONParser
+    class GZ_FUEL_TOOLS_VISIBLE JSONParser
     {
       /// \brief Parse a model JSON string and return a model identifier
       /// \param[in] _json JSON string containing a model.

@@ -10,7 +10,7 @@
 @set IGN_FUEL-TOOLS_PATH=%cd%\..\..\build\install\%build_type%
 
 cmake -G "NMake Makefiles"^
-      -DCMAKE_PREFIX_PATH="%IGN_PATH_PATH%\lib\cmake\ignition-fuel-tools0;"^
+      -DCMAKE_PREFIX_PATH="%GZ_PATH%\lib\cmake\ignition-fuel-tools0;"^
       -DCMAKE_INSTALL_PREFIX="install"^
       -DCMAKE_BUILD_TYPE=%build_type%^
       ..

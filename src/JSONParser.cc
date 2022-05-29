@@ -18,12 +18,12 @@
 #include <json/json.h>
 #include <string>
 #include <vector>
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/JSONParser.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/JSONParser.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 #if defined(_WIN32) && !defined(timegm)
@@ -69,7 +69,7 @@ bool ParseLicenseImpl(const Json::Value &_json,
   {
     if (!_json.isObject())
     {
-      ignerr << "License isn't a json object!\n";
+      gzerr << "License isn't a json object!\n";
       return false;
     }
 
@@ -87,7 +87,7 @@ bool ParseLicenseImpl(const Json::Value &_json,
   {
     std::string what = ": [" + std::string(error.what()) + "]";
 #endif
-    ignerr << "Bad response from server" << what << "\n";
+    gzerr << "Bad response from server" << what << "\n";
     return false;
   }
 
@@ -100,7 +100,7 @@ std::vector<std::string> JSONParser::ParseTags(const Json::Value &_json)
   std::vector<std::string> tags;
   if (!_json.isArray())
   {
-    ignerr << "JSON tags are not an array\n";
+    gzerr << "JSON tags are not an array\n";
     return tags;
   }
 
@@ -118,7 +118,7 @@ std::vector<std::string> JSONParser::ParseTags(const Json::Value &_json)
   {
     std::string what = ": [" + std::string(error.what()) + "]";
 #endif
-    ignerr << "Exception parsing tags" << what << "\n";
+    gzerr << "Exception parsing tags" << what << "\n";
     return std::vector<std::string>();
   }
 
@@ -158,7 +158,7 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json,
 
   if (!models.isArray())
   {
-    ignerr << "JSON response is not an array\n";
+    gzerr << "JSON response is not an array\n";
   }
   else
   {
@@ -168,7 +168,7 @@ std::vector<ModelIdentifier> JSONParser::ParseModels(const std::string &_json,
       ModelIdentifier id;
       if (!ParseModelImpl(model, id))
       {
-        ignerr << "Model isn't a json object!\n";
+        gzerr << "Model isn't a json object!\n";
         break;
       }
 
@@ -190,7 +190,7 @@ bool JSONParser::ParseModelImpl(
   {
     if (!_json.isObject())
     {
-      ignerr << "Model isn't a json object!\n";
+      gzerr << "Model isn't a json object!\n";
       return false;
     }
 
@@ -230,7 +230,7 @@ bool JSONParser::ParseModelImpl(
   {
     std::string what = ": [" + std::string(error.what()) + "]";
 #endif
-    ignerr << "Bad response from server" << what << "\n";
+    gzerr << "Bad response from server" << what << "\n";
     return false;
   }
 
@@ -283,7 +283,7 @@ std::vector<WorldIdentifier> JSONParser::ParseWorlds(const std::string &_json,
 
   if (!worlds.isArray())
   {
-    ignerr << "JSON response is not an array\n";
+    gzerr << "JSON response is not an array\n";
   }
   else
   {
@@ -293,7 +293,7 @@ std::vector<WorldIdentifier> JSONParser::ParseWorlds(const std::string &_json,
       WorldIdentifier id;
       if (!ParseWorldImpl(world, id))
       {
-        ignerr << "World isn't a json object!\n";
+        gzerr << "World isn't a json object!\n";
         break;
       }
 
@@ -315,7 +315,7 @@ bool JSONParser::ParseWorldImpl(
   {
     if (!_json.isObject())
     {
-      ignerr << "World isn't a json object!\n";
+      gzerr << "World isn't a json object!\n";
       return false;
     }
 
@@ -335,7 +335,7 @@ bool JSONParser::ParseWorldImpl(
   {
     std::string what = ": [" + std::string(error.what()) + "]";
 #endif
-    ignerr << "Bad response from server" << what << "\n";
+    gzerr << "Bad response from server" << what << "\n";
     return false;
   }
 
@@ -365,7 +365,7 @@ bool JSONParser::ParseLicenses(const std::string &_json,
 
   if (!licenses.isArray())
   {
-    ignerr << "JSON response is not an array.\n";
+    gzerr << "JSON response is not an array.\n";
     return false;
   }
 
@@ -376,7 +376,7 @@ bool JSONParser::ParseLicenses(const std::string &_json,
     std::pair<std::string, unsigned int> license;
     if (!ParseLicenseImpl(licenseJson, license))
     {
-      ignerr << "License isn't a json object!\n";
+      gzerr << "License isn't a json object!\n";
       continue;
     }
 

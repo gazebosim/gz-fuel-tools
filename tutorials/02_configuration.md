@@ -4,11 +4,11 @@ Next Tutorial: \ref cmdline
 
 ## Overview
 
-Some aspects of Ignition Fuel Tools can be configured according to the needs of
+Some aspects of Gazebo Fuel Tools can be configured according to the needs of
 the library users. This configuration can be done via a YAML configuration file
 or programatically.
 
-Ignition Fuel Tools accepts a YAML file with the following syntax:
+Gazebo Fuel Tools accepts a YAML file with the following syntax:
 
 ```yaml
 ---
@@ -36,7 +36,7 @@ downloaded. If not used, all assets are stored under `$HOME/.ignition/fuel`.
 
 ## Custom configuration file path
 
-Ignition Fuel's default configuration file is stored under
+Gazebo Fuel's default configuration file is stored under
 `$HOME/.ignition/fuel/config.yaml`, but it is possible to load a configuration
 file from a custom path programmatically. Let's see how.
 
@@ -65,26 +65,26 @@ Download the file `download.cc` and save it under `/tmp/conf_tutorial`:
 
 ```bash
 # Ubuntu and MacOS
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/download.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc
 
 # Windows
 ## CMD
-curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/download.cc -o download.cc
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc -o download.cc
 ## PowerShell
-curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/download.cc -o download.cc
+curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc -o download.cc
 ```
 
 Also, download `CMakeLists.txt` for compiling the example:
 
 ```bash
 # Ubuntu and MacOS
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/CMakeLists.txt
+wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt
 
 # Windows
 ## CMD
-curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
 ## PowerShell
-curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
+curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
 ```
 
 Install a dependency:
@@ -130,13 +130,13 @@ Let's jump to the interesting parts of the program:
 
 ```
 // Setup ClientConfig.
-ignition::fuel_tools::ClientConfig conf;
+gz::fuel_tools::ClientConfig conf;
 
 if (FLAGS_s != "")
 {
   // The user specified a Fuel server via command line.
-  ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(ignition::common::URI(FLAGS_s));
+  gz::fuel_tools::ServerConfig srv;
+  srv.SetUrl(gz::common::URI(FLAGS_s));
 
   // Add the extra Fuel server.
   conf.AddServer(srv);
@@ -167,7 +167,7 @@ if (!conf.LoadConfig())
 }
 
 // Instantiate the FuelClient object with the configuration.
-ignition::fuel_tools::FuelClient client(conf);
+gz::fuel_tools::FuelClient client(conf);
 ```
 
 Here, we check if the user specified a `-c` (config) option. If so, we need to
@@ -186,8 +186,8 @@ example.
 
 ```
 // Set the properties of the resource that we want to download.
-ignition::fuel_tools::ModelIdentifier modelIdentifier;
-ignition::fuel_tools::WorldIdentifier worldIdentifier;
+gz::fuel_tools::ModelIdentifier modelIdentifier;
+gz::fuel_tools::WorldIdentifier worldIdentifier;
 
 if (FLAGS_t == "model")
 {

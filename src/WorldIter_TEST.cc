@@ -19,15 +19,15 @@
 #include <cstdio>
 #include <string>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/WorldIter.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/WorldIter.hh"
 
 #include "WorldIterPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -44,8 +44,8 @@ namespace ignition
 
       public: static WorldIter WorldIterThreeWorldIds()
         {
-          ignition::fuel_tools::ServerConfig srv;
-          srv.SetUrl(ignition::common::URI("https://ignitionrobotics.org"));
+          gz::fuel_tools::ServerConfig srv;
+          srv.SetUrl(gz::common::URI("https://ignitionrobotics.org"));
 
           std::vector<WorldIdentifier> ids;
           for (int i = 0; i < 3; i++)

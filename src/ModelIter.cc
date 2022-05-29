@@ -19,19 +19,19 @@
 #include <regex>
 #include <string>
 #include <vector>
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/JSONParser.hh"
-#include "ignition/fuel_tools/Model.hh"
-#include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ignition/fuel_tools/ModelIter.hh"
-#include "ignition/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/JSONParser.hh"
+#include "gz/fuel_tools/Model.hh"
+#include "gz/fuel_tools/ModelIdentifier.hh"
+#include "gz/fuel_tools/ModelIter.hh"
+#include "gz/fuel_tools/RestClient.hh"
 
 #include "ModelIterPrivate.hh"
 #include "ModelPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 //////////////////////////////////////////////////
@@ -199,7 +199,7 @@ IterRestIds::IterRestIds(const Rest &_rest, const ServerConfig &_config,
   ptr->id.SetServer(this->config);
   this->model = Model(ptr);
 
-  igndbg << "Got response [" << resp.data << "]\n";
+  gzdbg << "Got response [" << resp.data << "]\n";
 }
 
 //////////////////////////////////////////////////

@@ -33,7 +33,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -44,7 +44,7 @@ namespace ignition
     class ClientConfigPrivate;
 
     /// \brief Describes options needed for a server.
-    class IGNITION_FUEL_TOOLS_VISIBLE ServerConfig
+    class GZ_FUEL_TOOLS_VISIBLE ServerConfig
     {
       /// \brief Constructor.
       public: ServerConfig();
@@ -106,7 +106,7 @@ namespace ignition
 
     /// \brief High level interface to ignition fuel.
     ///
-    class IGNITION_FUEL_TOOLS_VISIBLE ClientConfig
+    class GZ_FUEL_TOOLS_VISIBLE ClientConfig
     {
       /// \brief Constructor.
       public: ClientConfig();

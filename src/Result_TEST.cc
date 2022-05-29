@@ -16,9 +16,9 @@
 */
 
 #include <gtest/gtest.h>
-#include "ignition/fuel_tools/Result.hh"
+#include "gz/fuel_tools/Result.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
@@ -81,7 +81,7 @@ TEST(Result, TypeCanBeSet)
 /// \brief Check that there are readable strings returned
 TEST(Result, ReadableStringsHaveLength)
 {
-  ignition::fuel_tools::Result r(ResultType::FETCH);
+  gz::fuel_tools::Result r(ResultType::FETCH);
 
   EXPECT_FALSE(Result(ResultType::DELETE).ReadableResult().empty());
   EXPECT_FALSE(Result(ResultType::FETCH).ReadableResult().empty());
