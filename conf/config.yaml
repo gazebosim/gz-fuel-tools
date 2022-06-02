@@ -7,7 +7,7 @@ servers:
 
   -
     name: ignition
-    url: https://fuel.ignition.org
+    url: https://fuel.ignitionrobotics.org
 
 # Where are the assets stored in disk.
 # cache:

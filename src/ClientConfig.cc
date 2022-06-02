@@ -53,7 +53,7 @@ class ignition::fuel_tools::ClientConfigPrivate
             this->cacheLocation = "";
             this->configPath = "";
             this->userAgent =
-              "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
+              "GzFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
           }
 
   /// \brief A list of servers.
@@ -67,7 +67,7 @@ class ignition::fuel_tools::ClientConfigPrivate
 
   /// \brief Name of the user agent.
   public: std::string userAgent =
-          "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
+          "GzFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
 };
 
 //////////////////////////////////////////////////
