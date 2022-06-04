@@ -102,7 +102,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
     config.Servers().front().Url().Str());
 
   std::string defaultCacheLocation = gz::common::joinPaths(
-    homePath(), ".ignition", "fuel");
+    homePath(), ".gz", "fuel");
   EXPECT_EQ(defaultCacheLocation, config.CacheLocation());
 }
 
