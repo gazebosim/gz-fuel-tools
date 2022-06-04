@@ -41,7 +41,7 @@ class gz::fuel_tools::ClientConfigPrivate
             std::string homePath;
             gz::common::env(IGN_HOMEDIR, homePath);
             this->cacheLocation = common::joinPaths(
-                homePath, ".ignition", "fuel");
+                homePath, ".gz", "fuel");
 
             this->servers.push_back(ServerConfig());
           }
@@ -201,16 +201,28 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
-  std::string ignFuelPath = "";
-  if (gz::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
+  std::string gzFuelPath = "";
+  if (!gz::common::env("GZ_FUEL_CACHE_PATH", gzFuelPath))
   {
-    if (!gz::common::isDirectory(ignFuelPath))
+    // TODO(CH3): Deprecated. Remove on tock.
+    if (gz::common::env("IGN_FUEL_CACHE_PATH", gzFuelPath))
     {
-      gzerr << "[" << ignFuelPath << "] is not a directory" << std::endl;
+      gzwarn << "Using deprecated environment variable [IGN_FUEL_CACHE_PATH] "
+             << "set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
+             << std::endl;
+    }
+    else
+    {
       return;
     }
-    this->SetCacheLocation(ignFuelPath);
   }
+
+  if (!gz::common::isDirectory(gzFuelPath))
+  {
+    gzerr << "[" << gzFuelPath << "] is not a directory" << std::endl;
+    return;
+  }
+  this->SetCacheLocation(gzFuelPath);
 }
 
 //////////////////////////////////////////////////
@@ -416,19 +428,31 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   std::string homePath;
   gz::common::env(IGN_HOMEDIR, homePath);
   std::string cacheLocation = gz::common::joinPaths(
-    homePath, ".ignition", "fuel");
+    homePath, ".gz", "fuel");
 
   // The user wants to overwrite the default cache path.
   if (!cacheLocationConfig.empty())
     cacheLocation = cacheLocationConfig;
 
-  // Do not overwrite the cache location if IGN_FUEL_CACHE_PATH is set.
-  std::string ignFuelPath = "";
-  if (gz::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
+  // Do not overwrite the cache location if GZ_FUEL_CACHE_PATH is set.
+  std::string gzFuelPath = "";
+  if (gz::common::env("GZ_FUEL_CACHE_PATH", gzFuelPath))
   {
-    gzwarn << "IGN_FUEL_CACHE_PATH is set to [" << ignFuelPath << "]. The "
+    gzwarn << "GZ_FUEL_CACHE_PATH is set to [" << gzFuelPath << "]. The "
             << "path in the configuration file will be ignored" << std::endl;
-    cacheLocation = ignFuelPath;
+    cacheLocation = gzFuelPath;
+  }
+  // TODO(CH3): Deprecated. Remove on tock.
+  else if (gz::common::env("IGN_FUEL_CACHE_PATH", gzFuelPath))
+  {
+    gzwarn << "Using deprecated environment variable [IGN_FUEL_CACHE_PATH] "
+           << "set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
+           << std::endl;
+
+    gzwarn << "GZ_FUEL_CACHE_PATH is set to [" << gzFuelPath << "]. The "
+            << "path in the configuration file will be ignored" << std::endl;
+
+    cacheLocation = gzFuelPath;
   }
   this->SetCacheLocation(cacheLocation);
 

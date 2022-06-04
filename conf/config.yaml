@@ -11,4 +11,4 @@ servers:
 
 # Where are the assets stored in disk.
 # cache:
-#   path: /tmp/ignition/fuel
+#   path: /tmp/gz/fuel
