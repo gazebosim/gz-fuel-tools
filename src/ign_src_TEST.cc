@@ -386,9 +386,11 @@ TEST_P(DownloadCollectionTest, AllItems)
                   nullptr, nullptr, nullptr, GetParam()));
 
   // Check output
-  EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"),
-      std::string::npos) << this->stdOutBuffer.str();
-  EXPECT_TRUE(this->stdErrBuffer.str().empty()) << this->stdErrBuffer.str();
+  auto resultStr = this->stdOutBuffer.str();
+  auto errorStr = this->stdErrBuffer.str();
+  EXPECT_NE(resultStr.find("Download succeeded"),
+      std::string::npos) << resultStr;
+  EXPECT_TRUE(errorStr.empty()) << errorStr;
 
   // Check files
   // Model: Backpack
@@ -449,9 +451,11 @@ TEST_P(DownloadCollectionTest, Models)
                   nullptr, nullptr, "model", GetParam()));
 
   // Check output
-  EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"),
-      std::string::npos) << this->stdOutBuffer.str();
-  EXPECT_TRUE(this->stdErrBuffer.str().empty()) << this->stdErrBuffer.str();
+  auto resultStr = this->stdOutBuffer.str();
+  auto errorStr = this->stdErrBuffer.str();
+  EXPECT_NE(resultStr.find("Download succeeded"),
+      std::string::npos) << resultStr;
+  EXPECT_TRUE(errorStr.empty()) << errorStr;
 
   // Check files
   // Model: Backpack
