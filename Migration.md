@@ -6,6 +6,10 @@
 * **Replacement**: `gz` namespace
 * **Deprecation**: `ignition/...` headers
 * **Replacement**: `gz/...` headers
+* The following `ign_` prefixed macros are deprecated and will be removed in future versions.
+  Use the `gz_` prefix instead.
+  * `ign_strcat`, `ign_strcpy`, `ign_sprintf`, `ign_strdup`
+
 
 ## Gazebo Fuel Tools 5.X to 6.X
 

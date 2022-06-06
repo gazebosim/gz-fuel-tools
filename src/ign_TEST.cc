@@ -53,7 +53,7 @@ auto g_listCmd = "ign fuel list -v 4 --force-version " + g_version;
 
 /////////////////////////////////////////////////
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
-TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Versions))
+TEST(CmdLine, GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Versions))
 {
   auto output = custom_exec_str("ign fuel --versions");
   EXPECT_NE(output.find(g_version), std::string::npos) << output;
@@ -61,7 +61,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Versions))
 
 /////////////////////////////////////////////////
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
-TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Help))
+TEST(CmdLine, GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Help))
 {
   auto output = custom_exec_str("ign fuel --force-version " + g_version +
       " --help");
@@ -76,7 +76,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Help))
 
 /////////////////////////////////////////////////
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
-TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ListFail))
+TEST(CmdLine, GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ListFail))
 {
   auto output = custom_exec_str(g_listCmd);
   EXPECT_NE(output.find("Missing resource type"), std::string::npos) << output;
@@ -96,7 +96,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ListFail))
 /////////////////////////////////////////////////
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine,
-    IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListConfigServerUgly))
+    GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListConfigServerUgly))
 {
   auto output = custom_exec_str(g_listCmd + " -t model --raw");
   EXPECT_NE(output.find("https://fuel.ignitionrobotics.org/1.0/"),
@@ -107,7 +107,7 @@ TEST(CmdLine,
 /////////////////////////////////////////////////
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine,
-    IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListCustomServerPretty))
+    GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListCustomServerPretty))
 {
   auto output = custom_exec_str(
       g_listCmd + " -t model -u https://staging-fuel.ignitionrobotics.org");
@@ -125,7 +125,7 @@ TEST(CmdLine,
 
 /////////////////////////////////////////////////
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
-TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListConfigServerUgly))
+TEST(CmdLine, GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListConfigServerUgly))
 {
   auto output = custom_exec_str(g_listCmd +
       " -t world --raw -u https://staging-fuel.ignitionrobotics.org");
@@ -137,7 +137,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListConfigServerUgly))
 /////////////////////////////////////////////////
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine,
-    IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListCustomServerPretty))
+    GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListCustomServerPretty))
 {
   auto output = custom_exec_str(
       g_listCmd + " -t world -u https://staging-fuel.ignitionrobotics.org");

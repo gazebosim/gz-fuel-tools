@@ -24,15 +24,15 @@
 
 // Use safer functions on Windows
 #ifdef _MSC_VER
-  #define ign_strcat strcat_s
-  #define ign_strcpy strcpy_s
-  #define ign_sprintf sprintf_s
-  #define ign_strdup _strdup
+  #define gz_strcat strcat_s
+  #define gz_strcpy strcpy_s
+  #define gz_sprintf sprintf_s
+  #define gz_strdup _strdup
 #else
-  #define ign_strcat std::strcat
-  #define ign_strcpy std::strcpy
-  #define ign_sprintf std::sprintf
-  #define ign_strdup strdup
+  #define gz_strcat std::strcat
+  #define gz_strcpy std::strcpy
+  #define gz_sprintf std::sprintf
+  #define gz_strdup strdup
 #endif
 
 namespace gz
@@ -50,4 +50,3 @@ std::string uriToPath(const gz::common::URI &_uri);
 
 // IGNITION_FUEL_TOOLS_HELPERS_HH_
 #endif
-
