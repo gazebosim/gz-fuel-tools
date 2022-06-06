@@ -7,6 +7,7 @@
 * **Deprecation**: `ignition/...` headers
 * **Replacement**: `gz/...` headers
 * The following `ign_` prefixed macros are deprecated and will be removed in future versions.
+  Additionally, they will only be available when including the corresponding `ignition/...` header.
   Use the `gz_` prefix instead.
   * `ign_strcat`, `ign_strcpy`, `ign_sprintf`, `ign_strdup`
 
@@ -105,4 +106,3 @@
                        └── modelname
                              ├── 1
                              └── 2
-
