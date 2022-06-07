@@ -104,7 +104,7 @@ namespace gz
       private: std::unique_ptr<ServerConfigPrivate> dataPtr;
     };
 
-    /// \brief High level interface to ignition fuel.
+    /// \brief High level interface to Gazebo Fuel.
     ///
     class GZ_FUEL_TOOLS_VISIBLE ClientConfig
     {
