@@ -15,6 +15,9 @@
  *
 */
 
+#ifndef IGNITION_FUEL_TOOLS_INTERFACE_HH_
+#define IGNITION_FUEL_TOOLS_INTERFACE_HH_
+
 #include <string>
 #include "ignition/fuel_tools/Export.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
@@ -60,3 +63,5 @@ namespace ignition
         const std::string &_path);
   }
 }
+
+#endif
