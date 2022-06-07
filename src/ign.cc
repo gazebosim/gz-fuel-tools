@@ -290,7 +290,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE char *gzVersion()
   return strdup(GZ_FUEL_TOOLS_VERSION_FULL);
 }
 
-extern "C" GZ_FUEL_TOOLS_VISIBLE char GZ_DEPRECATED(8) *ignitionVersion()
+extern "C" GZ_FUEL_TOOLS_VISIBLE char *ignitionVersion()
 {
   return gzVersion();
 }
