@@ -152,7 +152,7 @@ sudo apt install ruby-ffi libzip-dev libcurl-dev libjsoncpp-dev
 * Think about how to detect when new versions of remote models have been uploaded.
     * Idea of a hash.
 
-* Add ignition fuel command line utilities for:
+* Add Gazebo Fuel command line utilities for:
     * detail
     * create
     * delete
