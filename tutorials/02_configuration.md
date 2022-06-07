@@ -23,7 +23,7 @@ servers:
 
 # Where are the assets stored in disk.
 # cache:
-#   path: /tmp/ignition/fuel
+#   path: /tmp/gz/fuel
 ```
 
 The `servers` section specifies all Fuel servers to interact with.
@@ -51,7 +51,7 @@ servers:
 
 # Where are the assets stored in disk.
 cache:
-  path: /tmp/ignition/fuel
+  path: /tmp/gz/fuel
 ```
 
 Now, let's use a program that downloads a resource from a server in the custom
@@ -121,7 +121,7 @@ And now the fun part, execute it:
 ```
 
 Verify that you have the model in
-`/tmp/ignition/fuel/fuel.ignitionrobotics.org/caguero/models/Beer`,
+`/tmp/gz/fuel/fuel.ignitionrobotics.org/caguero/models/Beer`,
 as you configured in your YAML file.
 
 ## Walkthrough

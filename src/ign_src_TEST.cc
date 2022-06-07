@@ -51,7 +51,7 @@ class CmdLine : public ::testing::Test
     // instead of on teardown leaves the folder intact for debugging if needed
     common::removeAll(testCachePath);
     ASSERT_TRUE(common::createDirectories(testCachePath));
-    setenv("IGN_FUEL_CACHE_PATH", this->testCachePath.c_str(), true);
+    setenv("GZ_FUEL_CACHE_PATH", this->testCachePath.c_str(), true);
   }
 
   // Documentation inherited
@@ -202,7 +202,7 @@ TEST_F(CmdLine, ModelDownloadUnversioned)
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, DownloadConfigCache)
 {
-  unsetenv("IGN_FUEL_CACHE_PATH");
+  unsetenv("GZ_FUEL_CACHE_PATH");
 
   // Test config
   std::ofstream ofs;
