@@ -208,7 +208,7 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
     if (gz::common::env("IGN_FUEL_CACHE_PATH", gzFuelPath))
     {
       gzwarn << "Using deprecated environment variable [IGN_FUEL_CACHE_PATH] "
-             << "set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
+             << "to set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
              << std::endl;
     }
     else
@@ -446,7 +446,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   else if (gz::common::env("IGN_FUEL_CACHE_PATH", gzFuelPath))
   {
     gzwarn << "Using deprecated environment variable [IGN_FUEL_CACHE_PATH] "
-           << "set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
+           << "to set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
            << std::endl;
 
     gzwarn << "GZ_FUEL_CACHE_PATH is set to [" << gzFuelPath << "]. The "
