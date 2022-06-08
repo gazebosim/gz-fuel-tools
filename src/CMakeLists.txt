@@ -36,7 +36,7 @@ set (gtest_sources
   Zip_TEST.cc
 )
 
-if (HAVE_IGN_TOOLS)
+if (HAVE_GZ_TOOLS)
   set (gtest_sources ${gtest_sources}
     ign_TEST.cc
   )
@@ -48,9 +48,9 @@ gz_create_core_library(SOURCES ${sources} CXX_STANDARD 17)
 # Link the libraries that we always need.
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
-    ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
+    gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
   PRIVATE
-    ignition-msgs${IGN_MSGS_MAJOR_VER}::ignition-msgs${IGN_MSGS_MAJOR_VER}
+    gz-msgs${GZ_MSGS_VER}::gz-msgs${GZ_MSGS_VER}
     curl::curl
     ${JSONCPP_TARGET}
     TINYXML2::TINYXML2
@@ -59,8 +59,8 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
 )
 
 gz_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
-  ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
-  ignition-msgs${IGN_MSGS_MAJOR_VER}::ignition-msgs${IGN_MSGS_MAJOR_VER}
+  gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
+  gz-msgs${GZ_MSGS_VER}::gz-msgs${GZ_MSGS_VER}
 )
 
 
@@ -68,7 +68,7 @@ gz_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
 gz_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
                 LIB_DEPS
-                  ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
+                  gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
                   TINYXML2::TINYXML2
 )
 
