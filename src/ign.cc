@@ -290,11 +290,6 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE char *gzVersion()
   return strdup(GZ_FUEL_TOOLS_VERSION_FULL);
 }
 
-extern "C" GZ_FUEL_TOOLS_VISIBLE char *ignitionVersion()
-{
-  return gzVersion();
-}
-
 //////////////////////////////////////////////////
 extern "C" GZ_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     const char *_owner, const char *_raw, const char *_configFile)
