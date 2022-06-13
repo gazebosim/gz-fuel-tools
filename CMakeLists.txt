@@ -69,7 +69,7 @@ set(IGN_MSGS_MAJOR_VER ${ignition-msgs9_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-tools
-find_program(HAVE_IGN_TOOLS ign)
+find_program(HAVE_GZ_TOOLS gz)
 
 #============================================================================
 # Configure the build
@@ -77,7 +77,7 @@ find_program(HAVE_IGN_TOOLS ign)
 gz_configure_build(QUIT_IF_BUILD_ERRORS)
 
 #============================================================================
-# ign command line support
+# gz command line support
 #============================================================================
 add_subdirectory(conf)
 

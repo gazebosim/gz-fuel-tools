@@ -60,8 +60,8 @@ Miniconda suffices.
 
 Create if necessary, and activate a Conda environment:
 ```
-conda create -n ign-ws
-conda activate ign-ws
+conda create -n gz-ws
+conda activate gz-ws
 ```
 
 Install:
@@ -199,8 +199,8 @@ Navigate to ``condabin`` if necessary to use the ``conda`` command (i.e., if Con
 
 Create if necessary, and activate a Conda environment:
 ```
-conda create -n ign-ws
-conda activate ign-ws
+conda create -n gz-ws
+conda activate gz-ws
 ```
 
 Install dependencies:
@@ -224,7 +224,7 @@ conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> lib
 
 1. Activate the Conda environment created in the prerequisites:
   ```
-  conda activate ign-ws
+  conda activate gz-ws
   ```
 
 2. Navigate to where you would like to build the library, and clone the repository.

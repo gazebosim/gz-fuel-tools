@@ -49,13 +49,13 @@ std::string custom_exec_str(std::string _cmd)
 
 auto g_version = std::string(strdup(GZ_FUEL_TOOLS_VERSION_FULL));
 
-auto g_listCmd = "ign fuel list -v 4 --force-version " + g_version;
+auto g_listCmd = "gz fuel list -v 4 --force-version " + g_version;
 
 /////////////////////////////////////////////////
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine, GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Versions))
 {
-  auto output = custom_exec_str("ign fuel --versions");
+  auto output = custom_exec_str("gz fuel --versions");
   EXPECT_NE(output.find(g_version), std::string::npos) << output;
 }
 
@@ -63,14 +63,14 @@ TEST(CmdLine, GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Versions))
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine, GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Help))
 {
-  auto output = custom_exec_str("ign fuel --force-version " + g_version +
+  auto output = custom_exec_str("gz fuel --force-version " + g_version +
       " --help");
   EXPECT_NE(output.find("list"), std::string::npos) << output;
 
-  output = custom_exec_str("ign fuel --force-version " + g_version + " -h");
+  output = custom_exec_str("gz fuel --force-version " + g_version + " -h");
   EXPECT_NE(output.find("list"), std::string::npos) << output;
 
-  output = custom_exec_str("ign fuel --force-version " + g_version);
+  output = custom_exec_str("gz fuel --force-version " + g_version);
   EXPECT_NE(output.find("list"), std::string::npos) << output;
 }
 

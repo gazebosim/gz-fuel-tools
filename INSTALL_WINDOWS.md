@@ -18,8 +18,8 @@ need to [disable the Windows firewall](http://windows.microsoft.com/en-us/window
 
 1. Make a directory to work in, e.g.:
 
-        mkdir ign-ws
-        cd ign-ws
+        mkdir gz-ws
+        cd gz-ws
 
 1. In a Windows Command Prompt, load your compiler setup, e.g.:
 
@@ -38,7 +38,7 @@ need to [disable the Windows firewall](http://windows.microsoft.com/en-us/window
         nmake install
 
 
-    You should now have an installation of Gazebo Fuel-Tools in ign-ws/ign-fuel-tools/build/install.
+    You should now have an installation of Gazebo Fuel-Tools in gz-ws/ign-fuel-tools/build/install.
 
 ## Run tests
 

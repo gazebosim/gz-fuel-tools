@@ -29,7 +29,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE char *gzVersion();
 extern "C" GZ_FUEL_TOOLS_VISIBLE void cmdVerbosity(
     const char *_verbosity);
 
-/// \brief External hook to execute 'ign fuel list -t model' from the command
+/// \brief External hook to execute 'gz fuel list -t model' from the command
 /// line.
 /// \param[in] _url Optional server URL.
 /// \param[in] _owner Optional owner name
@@ -40,7 +40,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int listModels(
     const char *_url = nullptr, const char *_owner = "",
     const char *_raw = "false", const char *_configFile = nullptr);
 
-/// \brief External hook to execute 'ign fuel list -t world' from the command
+/// \brief External hook to execute 'gz fuel list -t world' from the command
 /// line.
 /// \param[in] _url Optional server URL.
 /// \param[in] _owner Optional owner name
@@ -51,7 +51,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int listWorlds(
     const char *_url = nullptr, const char *_owner = "",
     const char *_raw = "false", const char *_configFile = nullptr);
 
-/// \brief External hook to execute 'ign fuel download -u URL' from the command
+/// \brief External hook to execute 'gz fuel download -u URL' from the command
 /// line.
 /// \param[in] _url Resource URL.
 /// \param[in] _configFile Path to a YAML configuration file.
@@ -63,12 +63,12 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(
     const char *_url = nullptr, const char *_configFile = nullptr,
     const char *_header = nullptr, const char *_type = nullptr, int _jobs = 1);
 
-/// \brief External hook to execute 'ign fuel upload -m path' from the command
+/// \brief External hook to execute 'gz fuel upload -m path' from the command
 /// line.
 ///
 /// Example usage, including a private access token which is required:
 ///
-/// `ign fuel upload -m ~/my_model --header "Private-Token: <access_token>"`
+/// `gz fuel upload -m ~/my_model --header "Private-Token: <access_token>"`
 ///
 /// \param[in] _path Resource path.
 /// \param[in] _url Server URL.
@@ -82,12 +82,12 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     const char *_url, const char *_header = nullptr,
     const char *_private = nullptr, const char *_owner = nullptr);
 
-/// \brief External hook to execute 'ign fuel delete [options]' from the command
+/// \brief External hook to execute 'gz fuel delete [options]' from the command
 /// line.
 ///
 /// Example usage, including a private access token which is required:
 ///
-/// `ign fuel delete -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"` // NOLINT
+/// `gz fuel delete -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"` // NOLINT
 ///
 /// \param[in] _url Resource URL.
 /// \param[in] _header An HTTP header.
@@ -95,7 +95,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 extern "C" GZ_FUEL_TOOLS_VISIBLE int deleteUrl(
     const char *_url, const char *_header = nullptr);
 
-/// \brief External hook to execute 'ign fuel meta --config2pbtxt path'
+/// \brief External hook to execute 'gz fuel meta --config2pbtxt path'
 /// from the command line.
 /// \param[in] _path Resource path.
 /// \return 1 if successful, 0 if not.
@@ -103,18 +103,18 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int config2Pbtxt(
     const char *_path = nullptr);
 
 
-/// \brief External hook to execute 'ign fuel meta --pbtxt2config path'
+/// \brief External hook to execute 'gz fuel meta --pbtxt2config path'
 /// from the command line.
 /// \param[in] _path Resource path.
 /// \return 1 if successful, 0 if not.
 extern "C" GZ_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path);
 
-/// \brief External hook to execute 'ign fuel edit [options]' from the command
+/// \brief External hook to execute 'gz fuel edit [options]' from the command
 /// line.
 ///
 /// Example usage, including a private access token which is required:
 ///
-/// `ign fuel edit -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"` --public // NOLINT
+/// `gz fuel edit -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"` --public // NOLINT
 ///
 /// \param[in] _url Resource URL.
 /// \param[in] _header An HTTP header.
@@ -127,7 +127,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int editUrl(
     const char *_private = nullptr,
     const char *_path = nullptr);
 
-/// \brief External hook to execute 'ign fuel update [options] from the command'
+/// \brief External hook to execute 'gz fuel update [options] from the command'
 /// line
 /// \param[in] _onlyModels "1" to only update models.
 /// \param[in] _onlyWorlds "1" to only update worlds.

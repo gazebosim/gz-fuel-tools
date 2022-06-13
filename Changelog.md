@@ -40,7 +40,7 @@
 
 ### Gazebo Fuel Tools 6.1.0 (2021-10-15)
 
-1. Detect ign instead of using cmake module to check for ignition-tools
+1. Detect gz instead of using cmake module to check for ignition-tools
     * [Pull request #191](https://github.com/gazebosim/gz-fuel-tools/pull/191)
 
 1. Added fuel update command
@@ -83,10 +83,10 @@
 1. APIs for retrieving models in parallel
     * [Pull request #199](https://github.com/gazebosim/gz-fuel-tools/pull/199)
 
-1. Detect `ign` instead of using cmake module to check for ignition-tools
+1. Detect `gz` instead of using cmake module to check for ignition-tools
     * [Pull request #191](https://github.com/gazebosim/gz-fuel-tools/pull/191)
 
-1. Added `ign fuel update` command
+1. Added `gz fuel update` command
     * [Pull request #185](https://github.com/gazebosim/gz-fuel-tools/pull/185)
 
 1. Fixed Windows download and CI
@@ -183,7 +183,7 @@
 
 ### Gazebo Fuel Tools 4.2.1 (2020-08-26)
 
-1. Fix `ign fuel download`, which was missing the `-j` option.
+1. Fix `gz fuel download`, which was missing the `-j` option.
     * [Pull request 116](https://github.com/gazebosim/gz-fuel-tools/pull/116)
 
 ### Gazebo Fuel Tools 4.2.0 (2020-08-26)
@@ -192,7 +192,7 @@
    and `legal` information in a `metadata.pbtxt` file.
     * [Pull request 69](https://github.com/gazebosim/gz-fuel-tools/pull/69)
 
-1. Added `edit` subcommand to the `ign fuel`. The edit command currently
+1. Added `edit` subcommand to the `gz fuel`. The edit command currently
    supports editing a model's privacy.
     * [Pull request 67](https://github.com/gazebosim/gz-fuel-tools/pull/67)
 
@@ -295,7 +295,7 @@
 
 ### Gazebo Fuel Tools 3.2.0 (2019-06-14)
 
-1. FuelClient::DownloadModel accepts HTTP headers, and the `ign fuel
+1. FuelClient::DownloadModel accepts HTTP headers, and the `gz fuel
    download` command can accept a single HTTP header.
     * [BitBucket pull request 100](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/100)
 
