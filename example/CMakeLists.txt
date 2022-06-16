@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
+project(fuel-tools-examples)
+
 # Find the Gazebo Fuel Tools library
 find_package(gz-fuel_tools8 QUIET REQUIRED)
 set(GZ_FUEL_TOOLS_VER ${gz-fuel_tools8_VERSION_MAJOR})
