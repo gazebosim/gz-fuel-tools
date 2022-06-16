@@ -15,7 +15,7 @@ set(IGN_CMAKE_VER ${ignition-cmake3_VERSION_MAJOR})
 #============================================================================
 # Configure the project
 #============================================================================
-ign_configure_project(
+gz_configure_project(
   REPLACE_IGNITION_INCLUDE_PATH gz/fuel_tools
   VERSION_SUFFIX pre1)
 
@@ -29,42 +29,42 @@ ign_configure_project(
 
 #--------------------------------------
 # Find Tinyxml2
-ign_find_package(TINYXML2 REQUIRED PRIVATE PRETTY tinyxml2)
+gz_find_package(TINYXML2 REQUIRED PRIVATE PRETTY tinyxml2)
 
 #--------------------------------------
 # Find libcurl
-ign_find_package(IgnCURL REQUIRED PRIVATE PRETTY curl)
+gz_find_package(IgnCURL REQUIRED PRIVATE PRETTY curl)
 
 #--------------------------------------
 # Find jsoncpp
-ign_find_package(JSONCPP REQUIRED PRIVATE)
+gz_find_package(JSONCPP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find libyaml
-ign_find_package(YAML REQUIRED PRIVATE)
+gz_find_package(YAML REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find libzip
-ign_find_package(ZIP REQUIRED PRIVATE)
+gz_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find ignition-utils
-ign_find_package(ignition-utils2 REQUIRED)
+gz_find_package(ignition-utils2 REQUIRED)
 set(IGN_UTILS_VER ${ignition-utils2_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-common
-ign_find_package(ignition-common5 REQUIRED PRIVATE)
+gz_find_package(ignition-common5 REQUIRED PRIVATE)
 set(IGN_COMMON_MAJOR_VER ${ignition-common5_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-math
-ign_find_package(ignition-math7 REQUIRED PRIVATE)
+gz_find_package(ignition-math7 REQUIRED PRIVATE)
 set(IGN_MSGS_MAJOR_VER ${ignition-math7_VERSION_MAJOR})
 
 #--------------------------------------
 # Find ignition-msgs
-ign_find_package(ignition-msgs9 REQUIRED PRIVATE)
+gz_find_package(ignition-msgs9 REQUIRED PRIVATE)
 set(IGN_MSGS_MAJOR_VER ${ignition-msgs9_VERSION_MAJOR})
 
 #--------------------------------------
@@ -74,7 +74,7 @@ find_program(HAVE_IGN_TOOLS ign)
 #============================================================================
 # Configure the build
 #============================================================================
-ign_configure_build(QUIT_IF_BUILD_ERRORS)
+gz_configure_build(QUIT_IF_BUILD_ERRORS)
 
 #============================================================================
 # ign command line support
@@ -84,7 +84,7 @@ add_subdirectory(conf)
 #============================================================================
 # Create package information
 #============================================================================
-ign_create_packages()
+gz_create_packages()
 
 #============================================================================
 # Configure documentation
@@ -92,7 +92,7 @@ ign_create_packages()
 configure_file(${CMAKE_SOURCE_DIR}/api.md.in ${CMAKE_BINARY_DIR}/api.md)
 configure_file(${CMAKE_SOURCE_DIR}/tutorials.md.in ${CMAKE_BINARY_DIR}/tutorials.md)
 
-ign_create_docs(
+gz_create_docs(
   API_MAINPAGE_MD "${CMAKE_BINARY_DIR}/api.md"
   TUTORIALS_MAINPAGE_MD "${CMAKE_BINARY_DIR}/tutorials.md"
   TAGFILES
