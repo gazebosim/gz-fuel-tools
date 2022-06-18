@@ -24,7 +24,7 @@ namespace gz
   namespace fuel_tools
   {
     /// \brief Download the specified resource into the default configuration of
-    /// fuel tools. This will place the asset in ~/.ignition/fuel.
+    /// fuel tools. This will place the asset in ~/.gz/fuel.
     /// \param[in] _uri URI to the asset.
     /// \return Path to the downloaded asset. Empty on error.
     GZ_FUEL_TOOLS_VISIBLE std::string fetchResource(

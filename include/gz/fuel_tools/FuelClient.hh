@@ -48,7 +48,7 @@ namespace gz
     class ModelIdentifier;
     class ServerConfig;
 
-    /// \brief High level interface to ignition fuel
+    /// \brief High level interface to Gazebo Fuel
     class GZ_FUEL_TOOLS_VISIBLE FuelClient
     {
       /// \brief Default constructor.
@@ -201,13 +201,13 @@ namespace gz
       public: Result DeleteUrl(const gz::common::URI &_uri,
                   const std::vector<std::string> &_headers);
 
-      /// \brief Download a model from ignition fuel. This will override an
+      /// \brief Download a model from Gazebo Fuel. This will override an
       /// existing local copy of the model.
       /// \param[in] _id The model identifier.
       /// \return Result of the download operation
       public: Result DownloadModel(const ModelIdentifier &_id);
 
-      /// \brief Download a model from ignition fuel. This will override an
+      /// \brief Download a model from Gazebo Fuel. This will override an
       /// existing local copy of the model.
       /// \param[in] _id The model identifier.
       /// \param[in] _headers Headers to set on the HTTP request.
@@ -215,7 +215,7 @@ namespace gz
       public: Result DownloadModel(const ModelIdentifier &_id,
                   const std::vector<std::string> &_headers);
 
-      /// \brief Download a model from ignition fuel. This will override an
+      /// \brief Download a model from Gazebo Fuel. This will override an
       /// existing local copy of the model.
       /// \param[in] _id The model identifier.
       /// \param[in] _headers Headers to set on the HTTP request.
@@ -254,7 +254,7 @@ namespace gz
       public: Result DownloadWorld(WorldIdentifier &_id,
                   const std::vector<std::string> &_headers);
 
-      /// \brief Download a model from ignition fuel. This will override an
+      /// \brief Download a model from Gazebo Fuel. This will override an
       /// existing local copy of the model.
       /// \param[in] _modelUrl The unique URL of the model to download.
       /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer
@@ -263,7 +263,7 @@ namespace gz
       public: Result DownloadModel(const common::URI &_modelUrl,
                                    std::string &_path);
 
-      /// \brief Download a world from ignition fuel. This will override an
+      /// \brief Download a world from Gazebo Fuel. This will override an
       /// existing local copy of the world.
       /// \param[in] _worldUrl The unique URL of the world to download.
       /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
@@ -274,7 +274,7 @@ namespace gz
 
       using ModelResult = std::tuple<ModelIdentifier, Result>;
 
-      /// \brief Download a list of models from ignition fuel.
+      /// \brief Download a list of models from Gazebo Fuel.
       /// \param[in] _ids The list of model ids to download.
       ///   This will also find all recursive dependencies of the models
       /// \param[in] _jobs Number of parallel jobs to use to download models
@@ -286,7 +286,7 @@ namespace gz
                   const std::vector<ModelIdentifier> &_ids,
                   size_t _jobs = 2);
 
-      /// \brief Download a list of mworlds from ignition fuel.
+      /// \brief Download a list of mworlds from Gazebo Fuel.
       /// \param[in] _ids The list of world ids to download.
       /// \param[in] _jobs Number of parallel jobs to use to download worlds.
       /// \return Result of the download operation.

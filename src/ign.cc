@@ -285,7 +285,7 @@ extern "C" bool getOwnerWorlds(
 }
 
 //////////////////////////////////////////////////
-extern "C" GZ_FUEL_TOOLS_VISIBLE char *ignitionVersion()
+extern "C" GZ_FUEL_TOOLS_VISIBLE char *gzVersion()
 {
   return strdup(GZ_FUEL_TOOLS_VERSION_FULL);
 }

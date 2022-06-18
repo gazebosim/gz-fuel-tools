@@ -22,7 +22,7 @@
 
 /// \brief External hook to read the library version.
 /// \return C-string representing the version. Ex.: 0.1.2
-extern "C" GZ_FUEL_TOOLS_VISIBLE char *ignitionVersion();
+extern "C" GZ_FUEL_TOOLS_VISIBLE char *gzVersion();
 
 /// \brief Set verbosity level
 /// \param[in] _verbosity 0 to 4

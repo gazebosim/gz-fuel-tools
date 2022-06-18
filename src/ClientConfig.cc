@@ -39,7 +39,7 @@ class gz::fuel_tools::ClientConfigPrivate
   public: ClientConfigPrivate()
           {
             std::string homePath;
-            gz::common::env(IGN_HOMEDIR, homePath);
+            gz::common::env(GZ_HOMEDIR, homePath);
             this->cacheLocation = common::joinPaths(
                 homePath, ".ignition", "fuel");
 
@@ -208,7 +208,7 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
     if (gz::common::env("IGN_FUEL_CACHE_PATH", gzFuelPath))
     {
       gzwarn << "Using deprecated environment variable [IGN_FUEL_CACHE_PATH] "
-             << "set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
+             << "to set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
              << std::endl;
     }
     else
@@ -426,7 +426,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
 
   // Default cache path.
   std::string homePath;
-  gz::common::env(IGN_HOMEDIR, homePath);
+  gz::common::env(GZ_HOMEDIR, homePath);
   std::string cacheLocation = gz::common::joinPaths(
     homePath, ".ignition", "fuel");
 
@@ -446,7 +446,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   else if (gz::common::env("IGN_FUEL_CACHE_PATH", gzFuelPath))
   {
     gzwarn << "Using deprecated environment variable [IGN_FUEL_CACHE_PATH] "
-           << "set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
+           << "to set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
            << std::endl;
 
     gzwarn << "GZ_FUEL_CACHE_PATH is set to [" << gzFuelPath << "]. The "

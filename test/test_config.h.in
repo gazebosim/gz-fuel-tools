@@ -119,9 +119,9 @@ namespace testing
     PROCESS_INFORMATION processInfo;
 
     char cmd[500];
-    ign_strcpy(cmd, _command);
-    ign_strcat(cmd, " ");
-    ign_strcat(cmd, _partition);
+    gz_strcpy(cmd, _command);
+    gz_strcat(cmd, " ");
+    gz_strcat(cmd, _partition);
 
     if (!CreateProcess(NULL, const_cast<LPSTR>(cmd), NULL, NULL,
           TRUE, 0, NULL, NULL, &info, &processInfo))

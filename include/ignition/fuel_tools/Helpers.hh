@@ -17,3 +17,8 @@
 
 #include <gz/fuel_tools/Helpers.hh>
 #include <ignition/fuel_tools/config.hh>
+
+#define ign_strcat gz_strcat
+#define ign_strcpy gz_strcpy
+#define ign_sprintf gz_sprintf
+#define ign_strdup gz_strdup
