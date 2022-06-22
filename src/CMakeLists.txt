@@ -67,10 +67,18 @@ gz_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
 # Build the unit tests.
 gz_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
+                TEST_LIST test_targets
                 LIB_DEPS
                   ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
                   TINYXML2::TINYXML2
 )
+
+foreach(test ${test_targets})
+
+  target_compile_definitions(${test} PRIVATE
+    "GZ_PATH=\"${HAVE_GZ_TOOLS}\"")
+
+endforeach()
 
 # Command line support.
 add_subdirectory(cmd)
