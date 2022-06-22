@@ -104,7 +104,9 @@ TEST_F(CmdLine, ModelListConfigServerUgly)
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
-TEST_F(CmdLine, ModelListConfigServerPretty)
+// https://github.com/gazebosim/gz-fuel-tools/issues/254
+TEST_F(CmdLine,
+       DETAIL_GZ_UTILS_ADD_DISABLED_PREFIX(ModelListConfigServerPretty))
 {
   EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org"));
 
@@ -126,7 +128,9 @@ TEST_F(CmdLine, ModelListConfigServerPretty)
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
-TEST_F(CmdLine, ModelListConfigServerPrettyOwner)
+// https://github.com/gazebosim/gz-fuel-tools/issues/254
+TEST_F(CmdLine,
+       DETAIL_GZ_UTILS_ADD_DISABLED_PREFIX(ModelListConfigServerPrettyOwner))
 {
   EXPECT_TRUE(listModels("https://staging-fuel.ignitionrobotics.org",
       "openrobotics"));
@@ -252,7 +256,9 @@ TEST_F(CmdLine, WorldListFail)
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
-TEST_F(CmdLine, WorldListConfigServerUgly)
+// https://github.com/gazebosim/gz-fuel-tools/issues/254
+TEST_F(CmdLine,
+       DETAIL_GZ_UTILS_ADD_DISABLED_PREFIX(WorldListConfigServerUgly))
 {
   EXPECT_TRUE(listWorlds(
         "https://staging-fuel.ignitionrobotics.org", "", "true"));
@@ -267,7 +273,9 @@ TEST_F(CmdLine, WorldListConfigServerUgly)
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
-TEST_F(CmdLine, WorldListConfigServerPretty)
+// https://github.com/gazebosim/gz-fuel-tools/issues/254
+TEST_F(CmdLine,
+       DETAIL_GZ_UTILS_ADD_DISABLED_PREFIX(WorldListConfigServerPretty))
 {
   EXPECT_TRUE(listWorlds("https://staging-fuel.ignitionrobotics.org"));
 

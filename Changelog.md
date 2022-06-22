@@ -140,9 +140,30 @@
 1. Fixed test - Download world 2
     * [Pull request 110](https://github.com/gazebosim/gz-fuel-tools/pull/110)
 
-### Gazebo Fuel Tools 4.X.X (202X-XX-XX)
+### Ignition Fuel Tools 4.5.0 (2022-06-01)
 
-### Gazebo Fuel Tools 4.4.0 (2021-06-17)
+1. APIs for retrieving models in parallel
+    * [Pull request #199](https://github.com/gazebosim/gz-fuel-tools/pull/199)
+
+1. Add missing header guard for Interface.hh
+    * [Pull request #249](https://github.com/gazebosim/gz-fuel-tools/pull/249)
+
+1. Print error when unzipping fails to save a file
+    * [Pull request #235](https://github.com/gazebosim/gz-fuel-tools/pull/235)
+
+1. More checks when manipulating file system in tests
+    * [Pull request #227](https://github.com/gazebosim/gz-fuel-tools/pull/227)
+
+1. Move test cache to build folder
+    * [Pull request #222](https://github.com/gazebosim/gz-fuel-tools/pull/222)
+
+1. Improve and fix `ResultType` tests
+    * [Pull request #225](https://github.com/gazebosim/gz-fuel-tools/pull/225)
+
+1. FuelClient.cc: include <deque>
+    * [Pull request #213](https://github.com/gazebosim/gz-fuel-tools/pull/213)
+
+### Ignition Fuel Tools 4.4.0 (2021-06-17)
 
 1. Remove `tools/code_check` and update codecov
     * [Pull request #187](https://github.com/gazebosim/gz-fuel-tools/pull/187)

@@ -106,8 +106,9 @@ TEST(CmdLine,
 
 /////////////////////////////////////////////////
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/254
 TEST(CmdLine,
-    GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListCustomServerPretty))
+    DETAIL_GZ_UTILS_ADD_DISABLED_PREFIX(ModelListCustomServerPretty))
 {
   auto output = custom_exec_str(
       g_listCmd + " -t model -u https://staging-fuel.ignitionrobotics.org");
@@ -136,8 +137,9 @@ TEST(CmdLine, GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListConfigServerUgly))
 
 /////////////////////////////////////////////////
 // https://github.com/gazebosim/gz-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/254
 TEST(CmdLine,
-    GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListCustomServerPretty))
+    DETAIL_GZ_UTILS_ADD_DISABLED_PREFIX(WorldListCustomServerPretty))
 {
   auto output = custom_exec_str(
       g_listCmd + " -t world -u https://staging-fuel.ignitionrobotics.org");
