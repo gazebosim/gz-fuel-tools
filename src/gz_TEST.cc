@@ -67,7 +67,9 @@ TEST(CmdLine, GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Help))
       " --help");
   EXPECT_NE(output.find("list"), std::string::npos) << output;
 
-  output = custom_exec_str(g_exec + " fuel --force-version " + g_version + " -h");
+  output = custom_exec_str(
+    g_exec + " fuel --force-version " + g_version + " -h"
+  );
   EXPECT_NE(output.find("list"), std::string::npos) << output;
 
   output = custom_exec_str(g_exec + " fuel --force-version " + g_version);
