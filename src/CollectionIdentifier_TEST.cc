@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <ignition/common/Console.hh>
+#include <ignition/utilities/ExtraTestMacros.hh>
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/CollectionIdentifier.hh"
@@ -43,7 +44,8 @@ TEST(CollectionIdentifier, SetFields)
 
 /////////////////////////////////////////////////
 /// \brief Unique Name
-TEST(CollectionIdentifier, UniqueName)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/231
+TEST(CollectionIdentifier, IGN_UTILS_TEST_DISABLED_ON_WIN32(UniqueName))
 {
   ignition::fuel_tools::ServerConfig srv1;
   srv1.SetUrl(common::URI("https://localhost:8001/"));
