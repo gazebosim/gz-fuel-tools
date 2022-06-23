@@ -23,16 +23,16 @@ interacting with Gazebo Fuel servers.
 
 See the [installation tutorial](https://gazebosim.org/api/fuel_tools/5.0/install.html).
 
-Make sure `GZ_CONFIG_PATH` is set to the right install location so that `ign fuel` will work.
-Default is `/usr/local/share/ignition`.
+Make sure `GZ_CONFIG_PATH` is set to the right install location so that `gz fuel` will work.
+Default is `/usr/local/share/gz`.
 
 ## Examples
 
-For a complete list of commands run `ign fuel -h` on the command line.
+For a complete list of commands run `gz fuel -h` on the command line.
 
 **List all models**
 ```
-$ ign fuel list -t model -r | head
+$ gz fuel list -t model -r | head
 https://fuel.ignitionrobotics.org/anonymous/test_model_595389531
 https://fuel.ignitionrobotics.org/anonymous/test_model_122023392
 https://fuel.ignitionrobotics.org/anonymous/test_model_429486665
@@ -47,7 +47,7 @@ https://fuel.ignitionrobotics.org/anonymous/test_model_380348669
 
 **Download a model**
 ```
-$ ign fuel download -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance -v 4
+$ gz fuel download -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance -v 4
 Downloading model:
   Name: Ambulance
   Owner: OpenRobotics
@@ -94,7 +94,7 @@ Its Value can be copied.
 
 The JWT token can then used to upload the model:
 ```
-ign fuel upload -m ~/path_to_model --header 'authorization: Bearer <JWT TOKEN>'
+gz fuel upload -m ~/path_to_model --header 'authorization: Bearer <JWT TOKEN>'
 ```
 
 Note that the `upload` command only works for models currently, not worlds.
@@ -106,7 +106,7 @@ See issues beginning with [Fuel backend] in the title. Here are two examples.
 
 **TODO: Find a model on disk**
 ```
-$ ign fuel locate --name am1
+$ gz fuel locate --name am1
 /home/developer/.ignition/fuel/fuel.ignitionrobotics.org/alice/am1
 ```
 
@@ -172,7 +172,7 @@ A workaround for a single package is to define the environment variable
 `GZ_CONFIG_PATH` to point to the location of the Ignition library installation,
 where the YAML file for the package is found, such as
 ```
-export GZ_CONFIG_PATH=/usr/local/share/ignition
+export GZ_CONFIG_PATH=/usr/local/share/gz
 ```
 
 However, that environment variable only takes a single path, which means if the
@@ -183,9 +183,9 @@ line is using symbolic links to each library's YAML file.
 ```
 mkdir ~/.ignition/tools/configs -p
 cd ~/.ignition/tools/configs/
-ln -s /usr/local/share/ignition/fuel4.yaml .
-ln -s /usr/local/share/ignition/transport7.yaml .
-ln -s /usr/local/share/ignition/transportlog7.yaml .
+ln -s /usr/local/share/gz/fuel4.yaml .
+ln -s /usr/local/share/gz/transport7.yaml .
+ln -s /usr/local/share/gz/transportlog7.yaml .
 ...
 export GZ_CONFIG_PATH=$HOME/.ignition/tools/configs
 ```

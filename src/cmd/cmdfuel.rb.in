@@ -58,7 +58,7 @@ COMMON_OPTIONS =
 COMMANDS = { 'fuel' =>
   "Manage simulation resources.                                            \n"\
   "                                                                        \n"\
-  "  ign fuel [action] [options]                                           \n"\
+  "  gz fuel [action] [options]                                           \n"\
   "                                                                        \n"\
   "Available Actions:                                                      \n"\
   "  delete                   Delete resources                             \n"\
@@ -83,7 +83,7 @@ SUBCOMMANDS = {
  'delete' =>
   "Delete simulation resources                                             \n"\
   "                                                                        \n"\
-  "  ign fuel delete [options]                                             \n"\
+  "  gz fuel delete [options]                                             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
@@ -96,7 +96,7 @@ SUBCOMMANDS = {
  'download' =>
   "Download simulation resources                                           \n"\
   "                                                                        \n"\
-  "  ign fuel download [options]                                           \n"\
+  "  gz fuel download [options]                                           \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
@@ -114,7 +114,7 @@ SUBCOMMANDS = {
  'edit' =>
   "Edit a simulation resource                                              \n"\
   "                                                                        \n"\
-  "  ign fuel edit [options]                                               \n"\
+  "  gz fuel edit [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -m [--model] arg         Path to directory containing the model.      \n"\
@@ -130,7 +130,7 @@ SUBCOMMANDS = {
   'list' =>
   "List simulation resources                                               \n"\
   "                                                                        \n"\
-  "  ign fuel list [options]                                               \n"\
+  "  gz fuel list [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -t [--type] arg          Resource type (i.e. model, world). Required. \n"\
@@ -144,7 +144,7 @@ SUBCOMMANDS = {
   'meta' =>
   "Read and write resource metadata                                        \n"\
   "                                                                        \n"\
-  "  ign fuel meta [options]                                               \n"\
+  "  gz fuel meta [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  --config2pbtxt arg       Convert a model.config file to a             \n"\
@@ -156,7 +156,7 @@ SUBCOMMANDS = {
  'upload' =>
   "Upload simulation resources                                             \n"\
   "                                                                        \n"\
-  "  ign fuel upload [options]                                             \n"\
+  "  gz fuel upload [options]                                             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -m [--model] arg         Path to directory containing a model, or     \n"\
@@ -177,7 +177,7 @@ SUBCOMMANDS = {
  'update' =>
   "Update all models and worlds in local cache                             \n"\
   "                                                                        \n"\
-  "  ign fuel update [options]                                             \n"\
+  "  gz fuel update [options]                                             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  --onlymodels             Use this argument to only update models.     \n"\

@@ -7,7 +7,7 @@ configure_file(
   "fuel.yaml.in"
     "${CMAKE_BINARY_DIR}/test/conf/fuel${PROJECT_VERSION_MAJOR}.yaml" @ONLY)
 
-set(gz_library_path "${CMAKE_INSTALL_PREFIX}/lib/ruby/ignition/cmdfuel${PROJECT_VERSION_MAJOR}")
+set(gz_library_path "${CMAKE_INSTALL_PREFIX}/lib/ruby/gz/cmdfuel${PROJECT_VERSION_MAJOR}")
 
 # Generate a configuration file.
 # Note that the major version of the library is included in the name.

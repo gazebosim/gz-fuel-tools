@@ -3,7 +3,7 @@ set (sources
   CollectionIdentifier.cc
   FuelClient.cc
   Helpers.cc
-  ign.cc
+  gz.cc
   Interface.cc
   JSONParser.cc
   LocalCache.cc
@@ -21,7 +21,7 @@ set (gtest_sources
   ClientConfig_TEST.cc
   CollectionIdentifier_TEST.cc
   FuelClient_TEST.cc
-  ign_src_TEST.cc
+  gz_src_TEST.cc
   Interface_TEST.cc
   Helpers_TEST.cc
   JSONParser_TEST.cc
@@ -36,9 +36,9 @@ set (gtest_sources
   Zip_TEST.cc
 )
 
-if (HAVE_IGN_TOOLS)
+if (HAVE_GZ_TOOLS)
   set (gtest_sources ${gtest_sources}
-    ign_TEST.cc
+    gz_TEST.cc
   )
 endif()
 
@@ -67,10 +67,18 @@ gz_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
 # Build the unit tests.
 gz_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
+                TEST_LIST test_targets
                 LIB_DEPS
                   ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
                   TINYXML2::TINYXML2
 )
+
+foreach(test ${test_targets})
+
+  target_compile_definitions(${test} PRIVATE
+    "GZ_PATH=\"${HAVE_GZ_TOOLS}\"")
+
+endforeach()
 
 # Command line support.
 add_subdirectory(cmd)

@@ -23,7 +23,7 @@
 #include <gz/common/Filesystem.hh>
 #include <gz/utils/ExtraTestMacros.hh>
 
-#include "ign.hh"
+#include "gz.hh"
 #include "test_config.h"
 
 using namespace gz;
