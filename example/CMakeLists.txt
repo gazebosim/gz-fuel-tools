@@ -6,7 +6,7 @@ project(fuel-tools-examples)
 find_package(gz-fuel_tools8 QUIET REQUIRED)
 set(GZ_FUEL_TOOLS_VER ${gz-fuel_tools8_VERSION_MAJOR})
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-FUEL-TOOLS_CXX_FLAGS}")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GZ-FUEL-TOOLS_CXX_FLAGS}")
 
 # GFlags
 find_library(gflags_LIBRARIES NAMES gflags)
