@@ -2080,7 +2080,7 @@ SKIP_FUNCTION_MACROS   = NO
 # run, you must also specify the path to the tagfile here.
 
 TAGFILES               = "@IGNITION_CMAKE_DOXYGEN_DIR@/cppreference.tag.xml = http://en.cppreference.com/w" \
-                         "IGNITION-MSGS_DOXYGEN_TAGFILE@ = @IGNITION-MSGS_API_URL@"
+                         "GZ-MSGS_DOXYGEN_TAGFILE@ = @GZ-MSGS_API_URL@"
 
 # When a file name is specified after GENERATE_TAGFILE, doxygen will create a
 # tag file that is based on the input files it reads. See section "Linking to

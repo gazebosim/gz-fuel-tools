@@ -3,14 +3,14 @@ cmake_minimum_required(VERSION 3.5.1 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(ignition-fuel_tools8 VERSION 8.0.0)
+project(gz-fuel_tools8 VERSION 8.0.0)
 
 #============================================================================
-# Find ignition-cmake
+# Find gz-cmake
 #============================================================================
-# If you get an error at this line, you need to install ignition-cmake
-find_package(ignition-cmake3 REQUIRED)
-set(IGN_CMAKE_VER ${ignition-cmake3_VERSION_MAJOR})
+# If you get an error at this line, you need to install gz-cmake
+find_package(gz-cmake3 REQUIRED)
+set(GZ_CMAKE_VER ${gz-cmake3_VERSION_MAJOR})
 
 #============================================================================
 # Configure the project
@@ -48,27 +48,27 @@ gz_find_package(YAML REQUIRED PRIVATE)
 gz_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
-# Find ignition-utils
-gz_find_package(ignition-utils2 REQUIRED)
-set(IGN_UTILS_VER ${ignition-utils2_VERSION_MAJOR})
+# Find gz-utils
+gz_find_package(gz-utils2 REQUIRED)
+set(GZ_UTILS_VER ${gz-utils2_VERSION_MAJOR})
 
 #--------------------------------------
-# Find ignition-common
-gz_find_package(ignition-common5 REQUIRED PRIVATE)
-set(IGN_COMMON_MAJOR_VER ${ignition-common5_VERSION_MAJOR})
+# Find gz-common
+gz_find_package(gz-common5 REQUIRED PRIVATE)
+set(GZ_COMMON_VER ${gz-common5_VERSION_MAJOR})
 
 #--------------------------------------
-# Find ignition-math
-gz_find_package(ignition-math7 REQUIRED PRIVATE)
-set(IGN_MSGS_MAJOR_VER ${ignition-math7_VERSION_MAJOR})
+# Find gz-math
+gz_find_package(gz-math7 REQUIRED PRIVATE)
+set(GZ_MATH_VER ${gz-math7_VERSION_MAJOR})
 
 #--------------------------------------
-# Find ignition-msgs
-gz_find_package(ignition-msgs9 REQUIRED PRIVATE)
-set(IGN_MSGS_MAJOR_VER ${ignition-msgs9_VERSION_MAJOR})
+# Find gz-msgs
+gz_find_package(gz-msgs9 REQUIRED PRIVATE)
+set(GZ_MSGS_VER ${gz-msgs9_VERSION_MAJOR})
 
 #--------------------------------------
-# Find ignition-tools
+# Find gz-tools
 find_program(HAVE_GZ_TOOLS gz)
 
 #============================================================================
@@ -96,5 +96,5 @@ gz_create_docs(
   API_MAINPAGE_MD "${CMAKE_BINARY_DIR}/api.md"
   TUTORIALS_MAINPAGE_MD "${CMAKE_BINARY_DIR}/tutorials.md"
   TAGFILES
-   "${IGNITION-COMMON_DOXYGEN_TAGFILE} = ${IGNITION-COMMON_API_URL}"
+   "${GZ-COMMON_DOXYGEN_TAGFILE} = ${GZ-COMMON_API_URL}"
   )
