@@ -182,7 +182,7 @@ sudo make uninstall
 
 3. Configure and build
   ```
-  cd ign-fuel-tools
+  cd gz-fuel-tools
   mkdir build
   cd build
   cmake ..
@@ -193,7 +193,7 @@ sudo make uninstall
 
 #### Prerequisites
 
-First, follow the [ign-cmake](https://github.com/gazebosim/gz-cmake) tutorial for installing Conda, Visual Studio, CMake, etc., prerequisites, and creating a Conda environment.
+First, follow the [gz-cmake](https://github.com/gazebosim/gz-cmake) tutorial for installing Conda, Visual Studio, CMake, etc., prerequisites, and creating a Conda environment.
 
 Navigate to ``condabin`` if necessary to use the ``conda`` command (i.e., if Conda is not in your `PATH` environment variable. You can find the location of ``condabin`` in Anaconda Prompt, ``where conda``).
 
@@ -208,14 +208,14 @@ Install dependencies:
 conda install jsoncpp libzip --channel conda-forge
 ```
 
-Install Ignition dependencies:
+Install Gazebo dependencies:
 
 You can view available versions and their dependencies:
 ```
 conda search libignition-fuel-tools* --channel conda-forge --info
 ```
 
-Install Ignition dependencies, replacing `<#>` with the desired versions:
+Install Gazebo dependencies, replacing `<#>` with the desired versions:
 ```
 conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> libignition-tools<#> --channel conda-forge
 ```
@@ -235,7 +235,7 @@ conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> lib
 
 3. Configure and build
   ```
-  cd ign-fuel-tools
+  cd gz-fuel-tools
   mkdir build
   cd build
   cmake .. -DBUILD_TESTING=OFF  # Optionally, -DCMAKE_INSTALL_PREFIX=path\to\install

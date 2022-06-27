@@ -166,10 +166,10 @@ sudo apt install ruby-ffi libzip-dev libcurl-dev libjsoncpp-dev
 # Known issue of command line tools
 
 In the event that the installation is a mix of Debian and from source, command
-line tools from `ign-tools` may not work correctly.
+line tools from `gz-tools` may not work correctly.
 
 A workaround for a single package is to define the environment variable
-`GZ_CONFIG_PATH` to point to the location of the Ignition library installation,
+`GZ_CONFIG_PATH` to point to the location of the Gazebo library installation,
 where the YAML file for the package is found, such as
 ```
 export GZ_CONFIG_PATH=/usr/local/share/gz
@@ -178,7 +178,7 @@ export GZ_CONFIG_PATH=/usr/local/share/gz
 However, that environment variable only takes a single path, which means if the
 installations from source are in different locations, only one can be specified.
 
-Another workaround for working with multiple Ignition libraries on the command
+Another workaround for working with multiple Gazebo libraries on the command
 line is using symbolic links to each library's YAML file.
 ```
 mkdir ~/.ignition/tools/configs -p

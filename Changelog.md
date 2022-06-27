@@ -140,7 +140,7 @@
 1. Fixed test - Download world 2
     * [Pull request 110](https://github.com/gazebosim/gz-fuel-tools/pull/110)
 
-### Ignition Fuel Tools 4.5.0 (2022-06-01)
+### Gazebo Fuel Tools 4.5.0 (2022-06-01)
 
 1. APIs for retrieving models in parallel
     * [Pull request #199](https://github.com/gazebosim/gz-fuel-tools/pull/199)
@@ -163,7 +163,7 @@
 1. FuelClient.cc: include <deque>
     * [Pull request #213](https://github.com/gazebosim/gz-fuel-tools/pull/213)
 
-### Ignition Fuel Tools 4.4.0 (2021-06-17)
+### Gazebo Fuel Tools 4.4.0 (2021-06-17)
 
 1. Remove `tools/code_check` and update codecov
     * [Pull request #187](https://github.com/gazebosim/gz-fuel-tools/pull/187)
@@ -328,8 +328,8 @@
 
 ### Gazebo Fuel Tools 3.0.0 (2018-02-28)
 
-1. Integration with ign-gazebo. The following set of pull requests update
-   fuel-tools to use ign-cmake2, sets api.ignitionfuel.org as the default
+1. Integration with gz-sim. The following set of pull requests update
+   fuel-tools to use gz-cmake2, sets api.ignitionfuel.org as the default
    server, fixes codecheck errors, removes old deprecations, and parses
    model.config files using tinyxml2.
     * [BitBucket pull request 82](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/82)
