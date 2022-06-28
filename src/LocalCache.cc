@@ -603,9 +603,9 @@ void LocalCachePrivate::FixPathsInUri(tinyxml2::XMLElement *_elem,
     // owner
     gzdbg << "Model [" << _id.Name()
            << "] loading resource from another model, named [" << resourceName
-           << "]. On Blueprint (ign-fuel-tools 3) and Citadel "
-           << "(ign-fuel-tools 4), [" << resourceName << "] is ignored. "
-           << "From Dome (ign-fuel-tools 5), [" << _id.Name()
+           << "]. On Blueprint (gz-fuel-tools 3) and Citadel "
+           << "(gz-fuel-tools 4), [" << resourceName << "] is ignored. "
+           << "From Dome (gz-fuel-tools 5), [" << _id.Name()
            << "] will be used. If [" << resourceName
            << "] is not a model belonging to owner [" << _id.Owner()
            << "], fix your SDF file!" << std::endl;

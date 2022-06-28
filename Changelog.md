@@ -40,7 +40,7 @@
 
 ### Gazebo Fuel Tools 6.1.0 (2021-10-15)
 
-1. Detect gz instead of using cmake module to check for ignition-tools
+1. Detect gz instead of using cmake module to check for gz-tools
     * [Pull request #191](https://github.com/gazebosim/gz-fuel-tools/pull/191)
 
 1. Added fuel update command
@@ -83,7 +83,7 @@
 1. APIs for retrieving models in parallel
     * [Pull request #199](https://github.com/gazebosim/gz-fuel-tools/pull/199)
 
-1. Detect `gz` instead of using cmake module to check for ignition-tools
+1. Detect `gz` instead of using cmake module to check for gz-tools
     * [Pull request #191](https://github.com/gazebosim/gz-fuel-tools/pull/191)
 
 1. Added `gz fuel update` command

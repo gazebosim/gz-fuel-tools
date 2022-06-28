@@ -5,7 +5,7 @@ set -x
 # Install
 make install
 
-# So ign-tools finds fuel-tools
+# So gz-tools finds fuel-tools
 export GZ_CONFIG_PATH=/usr/local/share/ignition
 export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
 
