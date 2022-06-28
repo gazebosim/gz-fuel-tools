@@ -4,7 +4,7 @@ Next Tutorial: \ref cppapi
 
 ## Overview
 
-The `gz fuel` command line tool provides a convenient way to handle Ignition
+The `gz fuel` command line tool provides a convenient way to handle Gazebo
 Fuel resources from a terminal.
 
 ## List resources

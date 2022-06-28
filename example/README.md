@@ -23,7 +23,7 @@ After installing Gazebo Fuel tools, from source or from binaries, build with:
 
 ```
 git clone https://github.com/gazebosim/gz-fuel-tools/
-cd ign-fuel-tools/example
+cd gz-fuel-tools/example
 mkdir build
 cd build
 cmake ..

@@ -25,7 +25,7 @@ using namespace fuel_tools;
 /////////////////////////////////////////////////
 TEST(HelpersTEST, UriToPathNoAuthority)
 {
-// TO-DO: Update this test after ign-fuel-tools#204 is addressed
+// TO-DO: Update this test after gz-fuel-tools#204 is addressed
 #ifdef WIN32
   const std::string testStr1 = R"(localhost:8000\some\path)";
   const std::string testStr2 = R"(localhost:8000\some\path\)";
