@@ -26,7 +26,7 @@
 #include "gz/fuel_tools/Result.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
-#include "test_config.h"
+#include "test_config.hh"
 
 #ifdef _WIN32
 #include <direct.h>

@@ -23,7 +23,7 @@
 #include <gz/utils/ExtraTestMacros.hh>
 
 #include "gz/fuel_tools/config.hh"
-#include "test_config.h"
+#include "test_config.hh"
 
 /////////////////////////////////////////////////
 std::string custom_exec_str(std::string _cmd)

@@ -24,7 +24,7 @@
 #include <gz/utils/ExtraTestMacros.hh>
 
 #include "gz.hh"
-#include "test_config.h"
+#include "test_config.hh"
 
 using namespace gz;
 
@@ -371,8 +371,8 @@ class DownloadCollectionTest
       public ::testing::WithParamInterface<int>
 {};
 
-INSTANTIATE_TEST_CASE_P(CollectionTest, DownloadCollectionTest,
-                        ::testing::Values(1, 2, 16),); // NOLINT
+INSTANTIATE_TEST_SUITE_P(CollectionTest, DownloadCollectionTest,
+                        ::testing::Values(1, 2, 16));
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
