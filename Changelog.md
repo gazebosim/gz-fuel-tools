@@ -6,7 +6,7 @@
 
 ### Gazebo Fuel Tools 7.0.0 (2021-09-28)
 
-1. Depend on ign-msgs8
+1. Depend on gz-msgs8
     * [Pull request #182](https://github.com/gazebosim/gz-fuel-tools/pull/182)
 
 1. Infrastructure
@@ -58,10 +58,10 @@
 
 ### Gazebo Fuel Tools 6.0.0 (2021-03-30)
 
-1. Depend on ign-common4
+1. Depend on gz-common4
     * [Pull request #163](https://github.com/gazebosim/gz-fuel-tools/pull/163)
 
-1. Depend on ign-msgs7
+1. Depend on gz-msgs7
     * [Pull request #158](https://github.com/gazebosim/gz-fuel-tools/pull/158)
 
 1. Unset DELETE method on Windows
@@ -237,7 +237,7 @@
 
 ### Gazebo Fuel Tools 4.0.0 (2019-12-10)
 
-1. Model upload CLI, resource metadata CLI, depend on ign-msgs5.
+1. Model upload CLI, resource metadata CLI, depend on gz-msgs5.
     * [BitBucket pull request 108](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/108)
 
 ## Gazebo Fuel Tools 3.x
