@@ -18,7 +18,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include "gz/fuel_tools/RestClient.hh"
-#include "test_config.h"
+#include "test_config.hh"
 
 /////////////////////////////////////////////////
 TEST(RestClient, UserAgent)

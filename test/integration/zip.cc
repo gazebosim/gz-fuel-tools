@@ -21,7 +21,7 @@
 #include <gz/common/Filesystem.hh>
 
 #include "gz/fuel_tools/Zip.hh"
-#include "test_config.h"
+#include "test_config.hh"
 
 using namespace gz;
 using namespace fuel_tools;

@@ -28,7 +28,7 @@
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
 #include "LocalCache.hh"
-#include "test_config.h"
+#include "test_config.hh"
 
 #ifdef _WIN32
 #include <direct.h>
