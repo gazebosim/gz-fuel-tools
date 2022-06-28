@@ -6,7 +6,7 @@
 
 ### Gazebo Fuel Tools 7.0.0 (2021-09-28)
 
-1. Depend on ign-msgs8
+1. Depend on gz-msgs8
     * [Pull request #182](https://github.com/gazebosim/gz-fuel-tools/pull/182)
 
 1. Infrastructure
@@ -40,7 +40,7 @@
 
 ### Gazebo Fuel Tools 6.1.0 (2021-10-15)
 
-1. Detect gz instead of using cmake module to check for ignition-tools
+1. Detect gz instead of using cmake module to check for gz-tools
     * [Pull request #191](https://github.com/gazebosim/gz-fuel-tools/pull/191)
 
 1. Added fuel update command
@@ -58,10 +58,10 @@
 
 ### Gazebo Fuel Tools 6.0.0 (2021-03-30)
 
-1. Depend on ign-common4
+1. Depend on gz-common4
     * [Pull request #163](https://github.com/gazebosim/gz-fuel-tools/pull/163)
 
-1. Depend on ign-msgs7
+1. Depend on gz-msgs7
     * [Pull request #158](https://github.com/gazebosim/gz-fuel-tools/pull/158)
 
 1. Unset DELETE method on Windows
@@ -83,7 +83,7 @@
 1. APIs for retrieving models in parallel
     * [Pull request #199](https://github.com/gazebosim/gz-fuel-tools/pull/199)
 
-1. Detect `gz` instead of using cmake module to check for ignition-tools
+1. Detect `gz` instead of using cmake module to check for gz-tools
     * [Pull request #191](https://github.com/gazebosim/gz-fuel-tools/pull/191)
 
 1. Added `gz fuel update` command
@@ -140,7 +140,7 @@
 1. Fixed test - Download world 2
     * [Pull request 110](https://github.com/gazebosim/gz-fuel-tools/pull/110)
 
-### Ignition Fuel Tools 4.5.0 (2022-06-01)
+### Gazebo Fuel Tools 4.5.0 (2022-06-01)
 
 1. APIs for retrieving models in parallel
     * [Pull request #199](https://github.com/gazebosim/gz-fuel-tools/pull/199)
@@ -163,7 +163,7 @@
 1. FuelClient.cc: include <deque>
     * [Pull request #213](https://github.com/gazebosim/gz-fuel-tools/pull/213)
 
-### Ignition Fuel Tools 4.4.0 (2021-06-17)
+### Gazebo Fuel Tools 4.4.0 (2021-06-17)
 
 1. Remove `tools/code_check` and update codecov
     * [Pull request #187](https://github.com/gazebosim/gz-fuel-tools/pull/187)
@@ -237,7 +237,7 @@
 
 ### Gazebo Fuel Tools 4.0.0 (2019-12-10)
 
-1. Model upload CLI, resource metadata CLI, depend on ign-msgs5.
+1. Model upload CLI, resource metadata CLI, depend on gz-msgs5.
     * [BitBucket pull request 108](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/108)
 
 ## Gazebo Fuel Tools 3.x
@@ -328,8 +328,8 @@
 
 ### Gazebo Fuel Tools 3.0.0 (2018-02-28)
 
-1. Integration with ign-gazebo. The following set of pull requests update
-   fuel-tools to use ign-cmake2, sets api.ignitionfuel.org as the default
+1. Integration with gz-sim. The following set of pull requests update
+   fuel-tools to use gz-cmake2, sets api.ignitionfuel.org as the default
    server, fixes codecheck errors, removes old deprecations, and parses
    model.config files using tinyxml2.
     * [BitBucket pull request 82](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/82)

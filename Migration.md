@@ -11,6 +11,14 @@
   Use the `gz_` prefix instead.
   * `ign_strcat`, `ign_strcpy`, `ign_sprintf`, `ign_strdup`
 
+### Breaking Changes
+
+* The project name has been changed to use the `gz-` prefix, you **must** use the `gz` prefix!
+  * This also means that any generated code that use the project name (e.g. CMake variables, in-source macros) would have to be migrated.
+  * Some non-exhaustive examples of this include:
+    * `GZ_<PROJECT>_<VISIBLE/HIDDEN>`
+    * CMake `-config` files
+    * Paths that depend on the project name
 
 ## Gazebo Fuel Tools 5.X to 6.X
 

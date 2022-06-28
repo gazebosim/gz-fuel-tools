@@ -28,12 +28,12 @@ need to [disable the Windows firewall](http://windows.microsoft.com/en-us/window
 1. Clone Gazebo Fuel-Tools:
 
         git clone https://github.com/gazebosim/gz-fuel-tools
-        cd ign-fuel-tools
+        cd gz-fuel-tools
         mkdir build
 
 1. In the Windows Command Prompt, configure and build:
 
-	    cd ign-fuel-tools\build
+	    cd gz-fuel-tools\build
         ..\configure
         nmake install
 
@@ -44,5 +44,5 @@ need to [disable the Windows firewall](http://windows.microsoft.com/en-us/window
 
 1. In the Windows Command Prompt, run the test suite:
 
-    cd ign-fuel-tools\build
+    cd gz-fuel-tools\build
     ctest
