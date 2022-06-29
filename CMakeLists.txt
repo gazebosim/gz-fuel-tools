@@ -56,7 +56,7 @@ set(GZ_UTILS_VER ${gz-utils2_VERSION_MAJOR})
 
 #--------------------------------------
 # Find gz-common
-gz_find_package(gz-common5 REQUIRED PRIVATE COMPONENTS testing)
+gz_find_package(gz-common5 REQUIRED PRIVATE)
 set(GZ_COMMON_VER ${gz-common5_VERSION_MAJOR})
 
 #--------------------------------------
