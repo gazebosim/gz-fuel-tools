@@ -38,7 +38,7 @@ need to [disable the Windows firewall](http://windows.microsoft.com/en-us/window
         nmake install
 
 
-    You should now have an installation of Gazebo Fuel-Tools in gz-ws/ign-fuel-tools/build/install.
+    You should now have an installation of Gazebo Fuel-Tools in gz-ws/gz-fuel-tools/build/install.
 
 ## Run tests
 

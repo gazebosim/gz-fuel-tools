@@ -398,7 +398,7 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
     return localIter;
 
   // TODO(nkoenig) try to fetch model directly from a server
-  // Note: ign-fuel-server doesn't like URLs ending in /
+  // Note: gz-fuel-server doesn't like URLs ending in /
   common::URIPath path;
   if (!_id.Name().empty() && !_id.Owner().empty())
     path = path / _id.Owner() / "models" / _id.Name();
@@ -432,7 +432,7 @@ WorldIter FuelClient::Worlds(const WorldIdentifier &_id) const
 
   gzmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 
-  // Note: ign-fuel-server doesn't like URLs ending in /
+  // Note: gz-fuel-server doesn't like URLs ending in /
   common::URIPath path;
   if (!_id.Name().empty())
     path = path / _id.Owner() / "worlds" / _id.Name();
@@ -1699,7 +1699,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
     _form.emplace("owner", _owner);
   }
 
-  // \todo(nkoenig) The ign-fuelserver expects an integer number for the
+  // \todo(nkoenig) The gz-fuelserver expects an integer number for the
   // license information. The fuelserver should be modified to accept
   // a string. Otherwise, we have to bake into each client a mapping of
   // license name to integer.

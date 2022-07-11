@@ -693,7 +693,7 @@ FILE_VERSION_FILTER    =
 # DoxygenLayout.xml, doxygen will parse it automatically even if the LAYOUT_FILE
 # tag is left empty.
 
-LAYOUT_FILE            = "@IGNITION_CMAKE_DOXYGEN_DIR@/layout.xml"
+LAYOUT_FILE            = "@GZ_CMAKE_DOXYGEN_DIR@/layout.xml"
 
 # The CITE_BIB_FILES tag can be used to specify one or more bib files containing
 # the reference definitions. This must be a list of .bib files. The .bib
@@ -781,7 +781,7 @@ WARN_LOGFILE           = /tmp/gz-fuel-tools.warn
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = @CMAKE_SOURCE_DIR@/README.md \
-                         @CMAKE_SOURCE_DIR@/include/ignition/fuel_tools
+                         @CMAKE_SOURCE_DIR@/include/gz/fuel_tools
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -2079,7 +2079,7 @@ SKIP_FUNCTION_MACROS   = NO
 # the path). If a tag file is not located in the directory in which doxygen is
 # run, you must also specify the path to the tagfile here.
 
-TAGFILES               = "@IGNITION_CMAKE_DOXYGEN_DIR@/cppreference.tag.xml = http://en.cppreference.com/w" \
+TAGFILES               = "@GZ_CMAKE_DOXYGEN_DIR@/cppreference.tag.xml = http://en.cppreference.com/w" \
                          "GZ-MSGS_DOXYGEN_TAGFILE@ = @GZ-MSGS_API_URL@"
 
 # When a file name is specified after GENERATE_TAGFILE, doxygen will create a

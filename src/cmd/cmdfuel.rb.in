@@ -28,7 +28,7 @@ end
 require 'optparse'
 
 # Constants.
-LIBRARY_NAME = '@IGN_LIBRARY_NAME@'
+LIBRARY_NAME = '@GZ_LIBRARY_NAME@'
 LIBRARY_VERSION = '@PROJECT_VERSION_FULL@'
 MAX_PARALLEL_JOBS = 16
 
@@ -76,7 +76,7 @@ COMMANDS = { 'fuel' =>
   COMMON_OPTIONS + "\n\n" +
   "Environment variables:                                                  \n"\
   "  GZ_FUEL_CACHE_PATH      Path to the cache where resources are        \n"\
-  " downloaded to. Defaults to $HOME/.ignition/fuel                        \n"
+  " downloaded to. Defaults to $HOME/.gz/fuel                        \n"
 }
 
 SUBCOMMANDS = {
@@ -452,7 +452,7 @@ class Cmd
       end
     rescue
       puts "Library error: Problem running [#{options['subcommand']}]() "\
-           "from @IGN_LIBRARY_NAME@."
+           "from @GZ_LIBRARY_NAME@."
     end # begin
   end # execute
 end # class
