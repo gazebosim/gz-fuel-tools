@@ -7,7 +7,7 @@
 @if not "%2"=="" set build_bitness=%2
 @echo Configuring for build type %build_type%
 
-@set IGN_FUEL-TOOLS_PATH=%cd%\..\..\build\install\%build_type%
+@set GZ_FUEL-TOOLS_PATH=%cd%\..\..\build\install\%build_type%
 
 cmake -G "NMake Makefiles"^
       -DCMAKE_PREFIX_PATH="%GZ_PATH%\lib\cmake\ignition-fuel-tools0;"^

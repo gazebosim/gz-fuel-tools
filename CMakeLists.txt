@@ -16,7 +16,7 @@ set(GZ_CMAKE_VER ${gz-cmake3_VERSION_MAJOR})
 # Configure the project
 #============================================================================
 gz_configure_project(
-  REPLACE_IGNITION_INCLUDE_PATH gz/fuel_tools
+  REPLACE_GZ_INCLUDE_PATH gz/fuel_tools
   VERSION_SUFFIX pre1)
 
 #============================================================================
@@ -35,7 +35,7 @@ gz_find_package(TINYXML2 REQUIRED PRIVATE PRETTY tinyxml2)
 
 #--------------------------------------
 # Find libcurl
-gz_find_package(IgnCURL REQUIRED PRIVATE PRETTY curl)
+gz_find_package(GzCURL REQUIRED PRIVATE PRETTY curl)
 
 #--------------------------------------
 # Find jsoncpp

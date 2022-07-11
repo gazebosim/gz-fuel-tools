@@ -693,7 +693,7 @@ FILE_VERSION_FILTER    =
 # DoxygenLayout.xml, doxygen will parse it automatically even if the LAYOUT_FILE
 # tag is left empty.
 
-LAYOUT_FILE            = "@IGNITION_CMAKE_DOXYGEN_DIR@/layout.xml"
+LAYOUT_FILE            = "@GZ_CMAKE_DOXYGEN_DIR@/layout.xml"
 
 # The CITE_BIB_FILES tag can be used to specify one or more bib files containing
 # the reference definitions. This must be a list of .bib files. The .bib
@@ -2079,7 +2079,7 @@ SKIP_FUNCTION_MACROS   = NO
 # the path). If a tag file is not located in the directory in which doxygen is
 # run, you must also specify the path to the tagfile here.
 
-TAGFILES               = "@IGNITION_CMAKE_DOXYGEN_DIR@/cppreference.tag.xml = http://en.cppreference.com/w" \
+TAGFILES               = "@GZ_CMAKE_DOXYGEN_DIR@/cppreference.tag.xml = http://en.cppreference.com/w" \
                          "GZ-MSGS_DOXYGEN_TAGFILE@ = @GZ-MSGS_API_URL@"
 
 # When a file name is specified after GENERATE_TAGFILE, doxygen will create a

@@ -24,7 +24,7 @@ wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 Install Gazebo Fuel Tools:
 ```
 sudo apt-get update
-sudo apt-get install libignition-fuel-tools<#>-dev
+sudo apt-get install libgz-fuel-tools<#>-dev
 ```
 
 Be sure to replace `<#>` with a number value, such as 6 or 7, depending on
@@ -50,7 +50,7 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 Run the following commands:
 ```
 brew tap osrf/simulation
-brew install ignition-fuel-tools<#>
+brew install gz-fuel-tools<#>
 ```
 
 ### Windows
@@ -67,7 +67,7 @@ conda activate gz-ws
 Install:
 
 ```
-conda install libignition-fuel-tools<#> --channel conda-forge
+conda install libgz-fuel-tools<#> --channel conda-forge
 ```
 
 Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
@@ -84,13 +84,13 @@ Make sure you have removed the Ubuntu pre-compiled binaries before
 installing from source:
 
 ```
-sudo apt-get remove libignition-fuel-tools<#>-dev
+sudo apt-get remove libgz-fuel-tools<#>-dev
 ```
 
 Install prerequisites. A clean Ubuntu system will need:
 
 ```
-sudo apt-get install git cmake pkg-config python ruby-ronn libignition-cmake3-dev libignition-common5-dev libignition-math7-dev libignition-msgs9-dev libignition-tools2-dev libzip-dev libjsoncpp-dev libcurl4-openssl-dev libyaml-dev
+sudo apt-get install git cmake pkg-config python ruby-ronn libgz-cmake3-dev libgz-common5-dev libgz-math7-dev libgz-msgs9-dev libgz-tools2-dev libzip-dev libjsoncpp-dev libcurl4-openssl-dev libyaml-dev
 ```
 
 Clone the repository into a directory and go into it:
@@ -212,12 +212,12 @@ Install Gazebo dependencies:
 
 You can view available versions and their dependencies:
 ```
-conda search libignition-fuel-tools* --channel conda-forge --info
+conda search libgz-fuel-tools* --channel conda-forge --info
 ```
 
 Install Gazebo dependencies, replacing `<#>` with the desired versions:
 ```
-conda install libignition-cmake<#> libignition-common<#> libignition-msgs<#> libignition-tools<#> --channel conda-forge
+conda install libgz-cmake<#> libgz-common<#> libgz-msgs<#> libgz-tools<#> --channel conda-forge
 ```
 
 #### Building from source
