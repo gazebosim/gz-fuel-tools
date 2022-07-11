@@ -96,8 +96,8 @@ sudo apt-get install git cmake pkg-config python ruby-ronn libgz-cmake3-dev libg
 Clone the repository into a directory and go into it:
 
 ```
-git clone https://github.com/gazebosim/gz-fuel-tools /tmp/ign-fuel-tools
-cd /tmp/ign-fuel-tools
+git clone https://github.com/gazebosim/gz-fuel-tools /tmp/gz-fuel-tools
+cd /tmp/gz-fuel-tools
 ```
 
 Create a build directory and go there:
@@ -160,7 +160,7 @@ Debian-based install when you currently have installed the library from
 source, navigate to your source code directory's build folders and run
 `make uninstall`:
 ```
-cd /tmp/ign-fuel-tools/build
+cd /tmp/gz-fuel-tools/build
 sudo make uninstall
 ```
 

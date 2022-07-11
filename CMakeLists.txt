@@ -16,7 +16,7 @@ set(GZ_CMAKE_VER ${gz-cmake3_VERSION_MAJOR})
 # Configure the project
 #============================================================================
 gz_configure_project(
-  REPLACE_GZ_INCLUDE_PATH gz/fuel_tools
+  REPLACE_INCLUDE_PATH gz/fuel_tools
   VERSION_SUFFIX pre1)
 
 #============================================================================
