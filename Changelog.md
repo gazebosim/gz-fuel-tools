@@ -105,7 +105,7 @@
 1. Use semantic version and prevent crash if version is missing
     * [Pull request #151](https://github.com/gazebosim/gz-fuel-tools/pull/151)
 
-1. Document `IGN_FUEL_CACHE_PATH` on command line
+1. Document `GZ_FUEL_CACHE_PATH` on command line
     * [Pull request #149](https://github.com/gazebosim/gz-fuel-tools/pull/149)
 
 1. Infrastructure
@@ -183,7 +183,7 @@
 1. Use semantic version and prevent crash if version is missing
     * [Pull request #151](https://github.com/gazebosim/gz-fuel-tools/pull/151)
 
-1. Document `IGN_FUEL_CACHE_PATH` on command line
+1. Document `GZ_FUEL_CACHE_PATH` on command line
     * [Pull request #149](https://github.com/gazebosim/gz-fuel-tools/pull/149)
 
 1. Support editing/patching model files

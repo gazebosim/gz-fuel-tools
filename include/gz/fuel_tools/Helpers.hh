@@ -48,5 +48,5 @@ std::string uriToPath(const gz::common::URI &_uri);
 }
 }
 
-// IGNITION_FUEL_TOOLS_HELPERS_HH_
+// GZ_FUEL_TOOLS_HELPERS_HH_
 #endif
