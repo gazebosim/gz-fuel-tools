@@ -225,7 +225,7 @@ class LocalCacheTest : public ::testing::Test
 /////////////////////////////////////////////////
 /// \brief Iterate through all models in cache
 // See https://github.com/gazebosim/gz-fuel-tools/issues/231
-TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   EXPECT_TRUE(common::removeAll("test_cache"));
