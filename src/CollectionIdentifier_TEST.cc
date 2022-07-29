@@ -43,7 +43,8 @@ TEST(CollectionIdentifier, SetFields)
 
 /////////////////////////////////////////////////
 /// \brief Unique Name
-TEST(CollectionIdentifier, UniqueName)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/231
+TEST(CollectionIdentifier, GZ_UTILS_TEST_DISABLED_ON_WIN32(UniqueName))
 {
   gz::fuel_tools::ServerConfig srv1;
   srv1.SetUrl(common::URI("https://localhost:8001"));

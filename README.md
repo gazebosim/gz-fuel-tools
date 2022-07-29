@@ -9,10 +9,10 @@
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-fuel-tools/branch/main/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-fuel-tools)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-fuel-tools/branch/main/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-fuel-tools/branch/main)
 Ubuntu Focal | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-focal-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-focal-amd64)
 Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-homebrew-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-homebrew-amd64)
-Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ignition_fuel-tools-ci-main-windows7-amd64)](https://build.osrfoundation.org/job/ignition_fuel-tools-ci-main-windows7-amd64)
+Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=ign_fuel-tools-ci-win)](https://build.osrfoundation.org/job/ign_fuel-tools-ci-win/)
 
 Gazebo Fuel Tools is composed by a client library and command line tools for
 interacting with Gazebo Fuel servers.
@@ -47,12 +47,12 @@ https://fuel.ignitionrobotics.org/anonymous/test_model_380348669
 
 **Download a model**
 ```
-$ gz fuel download -u https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance -v 4
+$ gz fuel download -u https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ambulance -v 4
 Downloading model:
   Name: Ambulance
-  Owner: OpenRobotics
+  Owner: openrobotics
   Server:
-    URL: https://fuel.ignitionrobotics.org
+    URL: https://fuel.gazebosim.org
     Version: 1.0
 
 Download succeeded.
@@ -60,7 +60,7 @@ Download succeeded.
 
 **C++ Get List models**
 ```
-  // Create a client (uses https://fuel.ignitionrobotics.org by default)
+  // Create a client (uses https://fuel.gazebosim.org by default)
   gz::fuel_tools::ClientConfig conf;
   gz::fuel_tools::FuelClient client(conf);
   gz::fuel_tools::ModelIter iter = client.Models();
