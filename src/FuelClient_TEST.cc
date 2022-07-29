@@ -671,8 +671,9 @@ TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
 
 /////////////////////////////////////////////////
 // Windows doesn't support colons in filenames
-// https://github.com/gazebosim/gz-fuel-tools/issues/106
-TEST_F(FuelClientTest, CachedModel)
+// https://github.com/gazebosim/ign-fuel-tools/issues/106
+// See https://github.com/gazebosim/gz-fuel-tools/issues/231
+TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(CachedModel))
 {
   // Configure to use binary path as cache and populate it
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));

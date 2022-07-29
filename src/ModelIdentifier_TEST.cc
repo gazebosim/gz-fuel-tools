@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <gz/common/Console.hh>
+#include <gz/utils/ExtraTestMacros.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/ModelIdentifier.hh"
@@ -55,7 +56,8 @@ TEST(ModelIdentifier, SetFields)
 
 /////////////////////////////////////////////////
 /// \brief Unique Name
-TEST(ModelIdentifier, UniqueName)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/231
+TEST(ModelIdentifier, GZ_UTILS_TEST_DISABLED_ON_WIN32(UniqueName))
 {
   gz::fuel_tools::ServerConfig srv1;
   srv1.SetUrl(common::URI("https://localhost:8001"));
