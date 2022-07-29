@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include <gz/common/Console.hh>
+#include <gz/utils/ExtraTestMacros.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/CollectionIdentifier.hh"
