@@ -1,3 +1,7 @@
+## Gazebo Fuel Tools 9.x
+
+### Gazebo Fuel Tools 9.0.0 (202X-XX-XX)
+
 ## Gazebo Fuel Tools 8.x
 
 ### Gazebo Fuel Tools 8.0.0 (202X-XX-XX)
