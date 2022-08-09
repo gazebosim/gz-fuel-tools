@@ -39,7 +39,7 @@ class ignition::fuel_tools::ClientConfigPrivate
   public: ClientConfigPrivate()
           {
             std::string homePath;
-            ignition::common::env(IGN_HOMEDIR, homePath);
+            common::env(IGN_HOMEDIR, homePath);
             this->cacheLocation = common::joinPaths(
                 homePath, ".ignition", "fuel");
 
@@ -202,9 +202,9 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
   std::string ignFuelPath = "";
-  if (ignition::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
+  if (common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
   {
-    if (!ignition::common::isDirectory(ignFuelPath))
+    if (!common::isDirectory(ignFuelPath))
     {
       ignerr << "[" << ignFuelPath << "] is not a directory" << std::endl;
       return;
@@ -243,7 +243,7 @@ void ClientConfig::Clear()
 bool ClientConfig::LoadConfig(const std::string &_file)
 {
   // Sanity check: Verify that the configuration file exists.
-  if (!ignition::common::exists(_file))
+  if (!common::exists(_file))
   {
     ignerr << "Unable to find configuration file [" << _file<< "]" << std::endl;
     return false;
@@ -414,8 +414,8 @@ bool ClientConfig::LoadConfig(const std::string &_file)
 
   // Default cache path.
   std::string homePath;
-  ignition::common::env(IGN_HOMEDIR, homePath);
-  std::string cacheLocation = ignition::common::joinPaths(
+  common::env(IGN_HOMEDIR, homePath);
+  std::string cacheLocation = common::joinPaths(
     homePath, ".ignition", "fuel");
 
   // The user wants to overwrite the default cache path.
@@ -424,7 +424,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
 
   // Do not overwrite the cache location if IGN_FUEL_CACHE_PATH is set.
   std::string ignFuelPath = "";
-  if (ignition::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
+  if (common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
   {
     ignwarn << "IGN_FUEL_CACHE_PATH is set to [" << ignFuelPath << "]. The "
             << "path in the configuration file will be ignored" << std::endl;
