@@ -57,13 +57,13 @@ TEST(ModelIdentifier, SetFields)
 /// \brief Unique Name
 TEST(ModelIdentifier, UniqueName)
 {
-  ignition::fuel_tools::ServerConfig srv1;
+  ServerConfig srv1;
   srv1.SetUrl(common::URI("https://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv2;
+  ServerConfig srv2;
   srv2.SetUrl(common::URI("https://localhost:8002"));
 
-  ignition::fuel_tools::ServerConfig srv3;
+  ServerConfig srv3;
   srv3.SetUrl(common::URI("https://localhost:8003"));
 
   ModelIdentifier id;

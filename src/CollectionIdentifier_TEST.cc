@@ -32,7 +32,7 @@ TEST(CollectionIdentifier, SetFields)
   CollectionIdentifier id;
   id.SetName("hello");
   id.SetOwner("osrf");
-  ignition::fuel_tools::ServerConfig srv1;
+  ServerConfig srv1;
   srv1.SetUrl(common::URI("https://localhost:8001/"));
   id.SetServer(srv1);
 
@@ -45,13 +45,13 @@ TEST(CollectionIdentifier, SetFields)
 /// \brief Unique Name
 TEST(CollectionIdentifier, UniqueName)
 {
-  ignition::fuel_tools::ServerConfig srv1;
+  ServerConfig srv1;
   srv1.SetUrl(common::URI("https://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv2;
+  ServerConfig srv2;
   srv2.SetUrl(common::URI("https://localhost:8002"));
 
-  ignition::fuel_tools::ServerConfig srv3;
+  ServerConfig srv3;
   srv3.SetUrl(common::URI("https://localhost:8003"));
 
   CollectionIdentifier id;
@@ -75,7 +75,7 @@ TEST(CollectionIdentifier, CopyConstructorDeepCopy)
   id.SetName("hello");
   id.SetOwner("watermelon");
 
-  ignition::fuel_tools::ServerConfig srv;
+  ServerConfig srv;
   srv.SetUrl(common::URI("https://localhost:8001"));
   id.SetServer(srv);
 
@@ -96,7 +96,7 @@ TEST(CollectionIdentifier, AssignmentOperatorDeepCopy)
   CollectionIdentifier id;
   id.SetName("hello");
   id.SetOwner("pineapple");
-  ignition::fuel_tools::ServerConfig srv;
+  ServerConfig srv;
   srv.SetUrl(common::URI("https://localhost:8001"));
   id.SetServer(srv);
 
