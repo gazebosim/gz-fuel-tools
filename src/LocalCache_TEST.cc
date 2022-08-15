@@ -47,18 +47,18 @@ void createLocal6Models(ClientConfig &_conf)
   igndbg << "Creating 6 local models in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8001");
-  common::createDirectories(common::joinPaths(serverPath,
-      "alice", "models", "am1", "2"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "alice", "models", "am2", "1"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "bob", "models", "bm1", "1"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "bob", "models", "bm2", "2"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "trudy", "models", "tm1", "3"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "trudy", "models", "tm2", "2"));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "alice", "models", "am2", "1")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "bob", "models", "bm1", "1")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "bob", "models", "bm2", "2")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "models", "tm1", "3")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "models", "tm2", "2")));
 
   std::ofstream fout(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
@@ -67,28 +67,28 @@ void createLocal6Models(ClientConfig &_conf)
   fout.flush();
   fout.close();
 
-  common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
-      "alice", "models", "am2", "1", "model.config"));
-  common::copyFile(common::joinPaths(serverPath,
+      "alice", "models", "am2", "1", "model.config")));
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
-      "bob", "models", "bm1", "1", "model.config"));
-  common::copyFile(common::joinPaths(serverPath,
+      "bob", "models", "bm1", "1", "model.config")));
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
-      "bob", "models", "bm2", "2", "model.config"));
-  common::copyFile(common::joinPaths(serverPath,
+      "bob", "models", "bm2", "2", "model.config")));
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
-      "trudy", "models", "tm1", "3", "model.config"));
-  common::copyFile(common::joinPaths(serverPath,
+      "trudy", "models", "tm1", "3", "model.config")));
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
-      "trudy", "models", "tm2", "2", "model.config"));
+      "trudy", "models", "tm2", "2", "model.config")));
 
-  ignition::fuel_tools::ServerConfig srv;
+  ServerConfig srv;
   srv.SetUrl(common::URI("http://localhost:8001/"));
   _conf.AddServer(srv);
 }
@@ -99,12 +99,12 @@ void createLocal3Models(ClientConfig &_conf)
   igndbg << "Creating 3 local models in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8007");
-  common::createDirectories(common::joinPaths(serverPath,
-      "alice", "models", "am1", "2"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "bob", "models", "bm1", "1"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "trudy", "models", "tm1", "3"));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "alice", "models", "am1", "2")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "bob", "models", "bm1", "1")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "models", "tm1", "3")));
 
   std::ofstream fout(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
@@ -113,17 +113,17 @@ void createLocal3Models(ClientConfig &_conf)
   fout.flush();
   fout.close();
 
-  common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
-      "bob", "models", "bm1", "1", "model.config"));
-  common::copyFile(common::joinPaths(serverPath,
+      "bob", "models", "bm1", "1", "model.config")));
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
-      "trudy", "models", "tm1", "3", "model.config"));
+      "trudy", "models", "tm1", "3", "model.config")));
 
-  ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(ignition::common::URI("http://localhost:8007/"));
+  ServerConfig srv;
+  srv.SetUrl(common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
 
@@ -133,18 +133,18 @@ void createLocal6Worlds(ClientConfig &_conf)
   igndbg << "Creating 6 local worlds in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8001");
-  common::createDirectories(common::joinPaths(serverPath,
-      "alice", "worlds", "am1", "2"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "alice", "worlds", "am2", "1"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "bob", "worlds", "bm1", "1"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "bob", "worlds", "bm2", "2"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "trudy", "worlds", "tm1", "3"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "trudy", "worlds", "tm2", "2"));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "alice", "worlds", "am2", "1")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "bob", "worlds", "bm1", "1")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "bob", "worlds", "bm2", "2")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "worlds", "tm1", "3")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "worlds", "tm2", "2")));
 
   std::ofstream fout(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
@@ -153,29 +153,29 @@ void createLocal6Worlds(ClientConfig &_conf)
   fout.flush();
   fout.close();
 
-  common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
-      "alice", "worlds", "am2", "1", "world.world"));
-  common::copyFile(common::joinPaths(serverPath,
+      "alice", "worlds", "am2", "1", "world.world")));
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
-      "bob", "worlds", "bm1", "1", "world.world"));
-  common::copyFile(common::joinPaths(serverPath,
+      "bob", "worlds", "bm1", "1", "world.world")));
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
-      "bob", "worlds", "bm2", "2", "world.world"));
-  common::copyFile(common::joinPaths(serverPath,
+      "bob", "worlds", "bm2", "2", "world.world")));
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
-      "trudy", "worlds", "tm1", "3", "world.world"));
-  common::copyFile(common::joinPaths(serverPath,
+      "trudy", "worlds", "tm1", "3", "world.world")));
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
-      "trudy", "worlds", "tm2", "2", "world.world"));
+      "trudy", "worlds", "tm2", "2", "world.world")));
 
-  ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(ignition::common::URI("http://localhost:8001/"));
+  ServerConfig srv;
+  srv.SetUrl(common::URI("http://localhost:8001/"));
   _conf.AddServer(srv);
 }
 
@@ -185,12 +185,12 @@ void createLocal3Worlds(ClientConfig &_conf)
   igndbg << "Creating 3 local worlds in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8007");
-  common::createDirectories(common::joinPaths(serverPath,
-      "alice", "worlds", "am1", "2"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "bob", "worlds", "bm1", "1"));
-  common::createDirectories(common::joinPaths(serverPath,
-      "trudy", "worlds", "tm1", "3"));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "alice", "worlds", "am1", "2")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "bob", "worlds", "bm1", "1")));
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+      "trudy", "worlds", "tm1", "3")));
 
   std::ofstream fout(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
@@ -199,16 +199,16 @@ void createLocal3Worlds(ClientConfig &_conf)
   fout.flush();
   fout.close();
 
-  common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
-      "bob", "worlds", "bm1", "1", "world.world"));
-  common::copyFile(common::joinPaths(serverPath,
+      "bob", "worlds", "bm1", "1", "world.world")));
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
-      "trudy", "worlds", "tm1", "3", "world.world"));
+      "trudy", "worlds", "tm1", "3", "world.world")));
 
-  ignition::fuel_tools::ServerConfig srv;
+  ServerConfig srv;
   srv.SetUrl(common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
@@ -218,19 +218,17 @@ class LocalCacheTest : public ::testing::Test
 {
   public: void SetUp() override
   {
-    ignition::common::Console::SetVerbosity(4);
+    common::Console::SetVerbosity(4);
   }
 };
 
 /////////////////////////////////////////////////
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, AllModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
@@ -240,7 +238,7 @@ TEST_F(LocalCacheTest, AllModels)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
@@ -261,13 +259,11 @@ TEST_F(LocalCacheTest, AllModels)
 /////////////////////////////////////////////////
 /// \brief Get all models that match some fields
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, MatchingModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.Clear();
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -278,7 +274,7 @@ TEST_F(LocalCacheTest, MatchingModels)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
@@ -316,13 +312,11 @@ TEST_F(LocalCacheTest, MatchingModels)
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, MatchingModel)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
@@ -331,16 +325,15 @@ TEST_F(LocalCacheTest, MatchingModel)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
 
-
-  ignition::fuel_tools::ServerConfig srv1;
+  ServerConfig srv1;
   srv1.SetUrl(common::URI("http://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv2;
+  ServerConfig srv2;
   srv2.SetUrl(common::URI("http://localhost:8002/"));
 
   ModelIdentifier am1;
@@ -382,13 +375,11 @@ TEST_F(LocalCacheTest, MatchingModel)
 /////////////////////////////////////////////////
 /// \brief Iterate through all worlds in cache
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, AllWorlds)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
@@ -398,7 +389,7 @@ TEST_F(LocalCacheTest, AllWorlds)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
@@ -414,23 +405,21 @@ TEST_F(LocalCacheTest, AllWorlds)
   EXPECT_EQ(9u, uniqueNames.size());
 #ifdef _WIN32
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    ignition::common::joinPaths("localhost8001", "alice", "worlds", "am1")));
+    common::joinPaths("localhost8001", "alice", "worlds", "am1")));
 #else
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    ignition::common::joinPaths("localhost:8001", "alice", "worlds", "am1")));
+    common::joinPaths("localhost:8001", "alice", "worlds", "am1")));
 #endif
 }
 
 /////////////////////////////////////////////////
 /// \brief Get all worlds that match some fields
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, MatchingWorlds)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.Clear();
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -441,7 +430,7 @@ TEST_F(LocalCacheTest, MatchingWorlds)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
@@ -468,13 +457,11 @@ TEST_F(LocalCacheTest, MatchingWorlds)
 /////////////////////////////////////////////////
 /// \brief Get a specific world from cache
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, MatchingWorld)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
@@ -483,17 +470,16 @@ TEST_F(LocalCacheTest, MatchingWorld)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
 
+  ServerConfig srv1;
+  srv1.SetUrl(common::URI("http://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(ignition::common::URI("http://localhost:8001/"));
-
-  ignition::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(ignition::common::URI("http://localhost:8002/"));
+  ServerConfig srv2;
+  srv2.SetUrl(common::URI("http://localhost:8002/"));
 
   WorldIdentifier am1;
   am1.SetServer(srv1);

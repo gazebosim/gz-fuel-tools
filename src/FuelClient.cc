@@ -283,7 +283,7 @@ Result FuelClient::ModelDetails(const ModelIdentifier &_id,
 Result FuelClient::ModelDetails(const ModelIdentifier &_id,
     ModelIdentifier &_model, const std::vector<std::string> &_headers) const
 {
-  ignition::fuel_tools::Rest rest;
+  Rest rest;
   RestResponse resp;
 
   auto serverUrl = _id.Server().Url().Str();
@@ -347,7 +347,7 @@ Result FuelClient::WorldDetails(const WorldIdentifier &_id,
   if (serverUrl.empty() || _id.Owner().empty() || _id.Name().empty())
     return Result(ResultType::FETCH_ERROR);
 
-  ignition::fuel_tools::Rest rest;
+  Rest rest;
   RestResponse resp;
 
   auto version = _id.Server().Version();
@@ -469,7 +469,7 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
     const ModelIdentifier &_id, const std::vector<std::string> &_headers,
     bool _private, const std::string &_owner)
 {
-  ignition::fuel_tools::Rest rest;
+  Rest rest;
   RestResponse resp;
 
   std::multimap<std::string, std::string> form;
@@ -525,7 +525,7 @@ Result FuelClient::DeleteModel(const ModelIdentifier &)
 }
 
 void FuelClient::AddServerConfigParametersToHeaders(
-  const ignition::fuel_tools::ServerConfig &_serverConfig,
+  const ServerConfig &_serverConfig,
   std::vector<std::string> &_headers) const
 {
   bool privateTokenDefined = false;
@@ -549,7 +549,7 @@ void FuelClient::AddServerConfigParametersToHeaders(
 Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
     const std::vector<std::string> &_headers)
 {
-  ignition::fuel_tools::Rest rest;
+  Rest rest;
   RestResponse resp;
 
   std::string server;
@@ -624,12 +624,16 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   if(!res)
     return res;
 
-  for (auto dep : dependencies)
+  for (ModelIdentifier dep : dependencies)
   {
-    auto dep_res = this->DownloadModel(dep, _headers);
+    // Download dependency if not in the local cache
+    if (!this->dataPtr->cache->MatchingModel(dep))
+    {
+      auto dep_res = this->DownloadModel(dep, _headers);
 
-    if(!dep_res)
-      return dep_res;
+      if(!dep_res)
+        return dep_res;
+    }
   }
 
   return res;
@@ -659,7 +663,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   AddServerConfigParametersToHeaders(
     _id.Server(), headersIncludingServerConfig);
   // Request
-  ignition::fuel_tools::Rest rest;
+  Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
       _id.Server().Version(), route.Str(), {},
@@ -712,16 +716,16 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
 
   // Locate any dependencies from the input model and download them.
   std::string path;
-  ignition::msgs::FuelMetadata meta;
-  if (this->CachedModel(ignition::common::URI(_id.UniqueName()), path))
+  msgs::FuelMetadata meta;
+  if (this->CachedModel(common::URI(_id.UniqueName()), path))
   {
     std::string metadataPath =
-      ignition::common::joinPaths(path, "metadata.pbtxt");
+      common::joinPaths(path, "metadata.pbtxt");
     std::string modelConfigPath =
-      ignition::common::joinPaths(path, "model.config");
+      common::joinPaths(path, "model.config");
 
-    bool foundMetadataPath = ignition::common::exists(metadataPath);
-    bool foundModelConfigPath = ignition::common::exists(modelConfigPath);
+    bool foundMetadataPath = common::exists(metadataPath);
+    bool foundModelConfigPath = common::exists(modelConfigPath);
 
     if (foundMetadataPath || foundModelConfigPath)
     {
@@ -740,7 +744,7 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
       }
       else
       {
-        if (!ignition::msgs::ConvertFuelMetadata(inputStr, meta))
+        if (!msgs::ConvertFuelMetadata(inputStr, meta))
         {
           return Result(ResultType::UPLOAD_ERROR);
         }
@@ -748,7 +752,7 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
 
       for (int i = 0; i < meta.dependencies_size(); ++i)
       {
-        ignition::common::URI dependencyURI(meta.dependencies(i).uri());
+        common::URI dependencyURI(meta.dependencies(i).uri());
 
         ModelIdentifier dependencyID;
         if(!this->ParseModelUrl(dependencyURI, dependencyID))
@@ -833,7 +837,7 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id,
     _id.Server(), headersIncludingServerConfig);
 
   // Request
-  ignition::fuel_tools::Rest rest;
+  Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
       _id.Server().Version(), route.Str(), {},
@@ -983,7 +987,7 @@ std::vector<FuelClient::ModelResult> FuelClient::DownloadModels(
 Result FuelClient::DownloadWorlds(
     const std::vector<WorldIdentifier> &_ids, size_t _jobs)
 {
-  std::deque<std::future<ignition::fuel_tools::Result>> tasks;
+  std::deque<std::future<Result>> tasks;
   // Check for finished tasks by checking if the status of their futures is
   // "ready". If a task is finished, check if it succeeded and print out an
   // error message if it failed. When a task is finished, it gets erased from
@@ -1006,7 +1010,7 @@ Result FuelClient::DownloadWorlds(
     {
       for (auto taskIt = finishedIt; taskIt != tasks.end(); ++taskIt)
       {
-        ignition::fuel_tools::Result result = taskIt->get();
+        Result result = taskIt->get();
         if (result)
         {
           ++itemCount;
@@ -1413,7 +1417,7 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
     id.SetVersion(model.Identification().Version());
   }
 
-  _path = ignition::common::joinPaths(this->Config().CacheLocation(),
+  _path = common::joinPaths(this->Config().CacheLocation(),
       id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
       id.VersionStr());
 
@@ -1533,10 +1537,10 @@ Result FuelClient::CachedModelFile(const common::URI &_fileUrl,
   // Check if file exists
   filePath = common::joinPaths(modelPath, filePath);
 
-  std::vector<std::string> tokens = ignition::common::split(filePath, "/");
+  std::vector<std::string> tokens = common::split(filePath, "/");
   std::string sTemp;
   for (auto s : tokens)
-    sTemp = ignition::common::joinPaths(sTemp, s);
+    sTemp = common::joinPaths(sTemp, s);
   filePath = sTemp;
 
   if (common::exists(filePath))
@@ -1583,7 +1587,7 @@ Result FuelClient::CachedWorldFile(const common::URI &_fileUrl,
 
 //////////////////////////////////////////////////
 Result FuelClient::PatchModel(
-    const ignition::fuel_tools::ModelIdentifier &_model,
+    const ModelIdentifier &_model,
     const std::vector<std::string> &_headers)
 {
   return this->PatchModel(_model, _headers, "");
@@ -1591,11 +1595,11 @@ Result FuelClient::PatchModel(
 
 //////////////////////////////////////////////////
 Result FuelClient::PatchModel(
-    const ignition::fuel_tools::ModelIdentifier &_model,
+    const ModelIdentifier &_model,
     const std::vector<std::string> &_headers,
     const std::string &_pathToModelDir)
 {
-  ignition::fuel_tools::Rest rest;
+  Rest rest;
   RestResponse resp;
 
   auto serverUrl = _model.Server().Url().Str();
@@ -1662,7 +1666,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
     return false;
   }
 
-  ignition::msgs::FuelMetadata meta;
+  msgs::FuelMetadata meta;
 
   // Try the `metadata.pbtxt` file first since it contains more information
   // than `model.config`.
@@ -1690,7 +1694,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
     std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
         std::istreambuf_iterator<char>());
 
-    if (!ignition::msgs::ConvertFuelMetadata(inputStr, meta))
+    if (!msgs::ConvertFuelMetadata(inputStr, meta))
     {
       ignerr << "Unable to convert model config[" << _pathToModelDir << "].\n";
       return false;
@@ -1840,7 +1844,7 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
 bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)
 {
   // Get a list of the most recent model versions in the cache.
-  std::map<std::string, ignition::fuel_tools::ModelIdentifier> toProcess;
+  std::map<std::string, ModelIdentifier> toProcess;
   for (ModelIter iter = this->dataPtr->cache->AllModels(); iter; ++iter)
   {
     auto processIter = toProcess.find(iter->Identification().UniqueName());
@@ -1854,7 +1858,7 @@ bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)
   // Attempt to update each model.
   for (const auto id : toProcess)
   {
-    ignition::fuel_tools::ModelIdentifier cloudId;
+    ModelIdentifier cloudId;
 
     if (!this->ModelDetails(id.second, cloudId, _headers))
     {
@@ -1881,7 +1885,7 @@ bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)
 bool FuelClient::UpdateWorlds(const std::vector<std::string> &_headers)
 {
   // Get a list of the most recent world versions in the cache.
-  std::map<std::string, ignition::fuel_tools::WorldIdentifier> toProcess;
+  std::map<std::string, WorldIdentifier> toProcess;
   for (WorldIter iter = this->dataPtr->cache->AllWorlds(); iter; ++iter)
   {
     auto processIter = toProcess.find(iter->UniqueName());
@@ -1895,7 +1899,7 @@ bool FuelClient::UpdateWorlds(const std::vector<std::string> &_headers)
   // Attempt to update each world.
   for (const auto id : toProcess)
   {
-    ignition::fuel_tools::WorldIdentifier cloudId;
+    WorldIdentifier cloudId;
 
     if (!this->WorldDetails(id.second, cloudId, _headers))
     {

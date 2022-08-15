@@ -36,23 +36,23 @@ using namespace fuel_tools;
 void removeFileTemp(const std::string &_path)
 {
 #ifndef _WIN32
-  EXPECT_TRUE(ignition::common::removeFile(_path));
+  EXPECT_TRUE(common::removeFile(_path));
 #else
-  ignition::common::removeFile(_path);
+  common::removeFile(_path);
 #endif
 }
 
 /////////////////////////////////////////////////
 /// \brief Get home directory.
 /// \return Home directory or empty string if home wasn't found.
-/// \ToDo: Move this function to ignition::common::Filesystem
+/// \ToDo: Move this function to common::Filesystem
 std::string homePath()
 {
   std::string homePath;
 #ifndef _WIN32
-  ignition::common::env("HOME", homePath);
+  common::env("HOME", homePath);
 #else
-  ignition::common::env("USERPROFILE", homePath);
+  common::env("USERPROFILE", homePath);
 #endif
 
   return homePath;
@@ -61,7 +61,7 @@ std::string homePath()
 /////////////////////////////////////////////////
 /// \brief Get cache directory.
 /// \return Cache directory
-/// \ToDo: Move this function to ignition::common::Filesystem
+/// \ToDo: Move this function to common::Filesystem
 std::string cachePath()
 {
 #ifndef _WIN32
@@ -76,7 +76,7 @@ std::string cachePath()
 TEST(ClientConfig, InitiallyDefaultServers)
 {
   ClientConfig config;
-  EXPECT_EQ(1u, config.Servers().size());
+  EXPECT_EQ(2u, config.Servers().size());
 }
 
 /////////////////////////////////////////////////
@@ -88,7 +88,7 @@ TEST(ClientConfig, ServersCanBeAdded)
   srv.SetUrl(common::URI("http://asdf"));
   config.AddServer(srv);
 
-  ASSERT_EQ(2u, config.Servers().size());
+  ASSERT_EQ(3u, config.Servers().size());
   EXPECT_EQ(std::string("http://asdf"), config.Servers().back().Url().Str());
 }
 
@@ -97,11 +97,13 @@ TEST(ClientConfig, ServersCanBeAdded)
 TEST(ClientConfig, CustomDefaultConfiguration)
 {
   ClientConfig config;
-  ASSERT_EQ(1u, config.Servers().size());
+  ASSERT_EQ(2u, config.Servers().size());
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().front().Url().Str());
+  EXPECT_EQ("https://fuel.gazebosim.org",
+    config.Servers()[1].Url().Str());
 
-  std::string defaultCacheLocation = ignition::common::joinPaths(
+  std::string defaultCacheLocation = common::joinPaths(
     homePath(), ".ignition", "fuel");
   EXPECT_EQ(defaultCacheLocation, config.CacheLocation());
 }
@@ -134,11 +136,13 @@ TEST(ClientConfig, CustomConfiguration)
 
   EXPECT_TRUE(config.LoadConfig(testPath));
 
-  ASSERT_EQ(3u, config.Servers().size());
+  ASSERT_EQ(4u, config.Servers().size());
   EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://api.ignitionfuel.org",
+  EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers()[1].Url().Str());
+  EXPECT_EQ("https://api.ignitionfuel.org",
+    config.Servers()[2].Url().Str());
   EXPECT_EQ("https://myserver",
     config.Servers().back().Url().Str());
 
@@ -413,6 +417,8 @@ TEST(ServerConfig, Url)
     ServerConfig srv;
     srv.SetUrl(common::URI("http://banana:8080/"));
     EXPECT_EQ("http://banana:8080", srv.Url().Str());
+    EXPECT_EQ("http", srv.Url().Scheme());
+    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
   }
 
   // Set from URI

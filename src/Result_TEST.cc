@@ -81,7 +81,7 @@ TEST(Result, TypeCanBeSet)
 /// \brief Check that there are readable strings returned
 TEST(Result, ReadableStringsHaveLength)
 {
-  ignition::fuel_tools::Result r(ResultType::FETCH);
+  Result r(ResultType::FETCH);
 
   EXPECT_FALSE(Result(ResultType::DELETE).ReadableResult().empty());
   EXPECT_FALSE(Result(ResultType::FETCH).ReadableResult().empty());

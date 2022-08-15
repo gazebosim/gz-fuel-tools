@@ -57,13 +57,13 @@ TEST(ModelIdentifier, SetFields)
 /// \brief Unique Name
 TEST(ModelIdentifier, UniqueName)
 {
-  ignition::fuel_tools::ServerConfig srv1;
+  ServerConfig srv1;
   srv1.SetUrl(common::URI("https://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv2;
+  ServerConfig srv2;
   srv2.SetUrl(common::URI("https://localhost:8002"));
 
-  ignition::fuel_tools::ServerConfig srv3;
+  ServerConfig srv3;
   srv3.SetUrl(common::URI("https://localhost:8003"));
 
   ModelIdentifier id;
@@ -105,10 +105,12 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
   EXPECT_EQ(d2, id2.UploadDate());
+  EXPECT_EQ(id, id2);
 
   id2.SetName("hello2");
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("hello2"), id2.Name());
+  EXPECT_NE(id, id2);
 }
 
 /////////////////////////////////////////////////

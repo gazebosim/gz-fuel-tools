@@ -35,7 +35,7 @@ using namespace fuel_tools;
 bool CompressFile(zip *_archive, const std::string &_file,
     const std::string &_entry)
 {
-  if (ignition::common::isDirectory(_file))
+  if (common::isDirectory(_file))
   {
     if (zip_add_dir(_archive, _entry.c_str()) < 0)
     {
@@ -43,12 +43,12 @@ bool CompressFile(zip *_archive, const std::string &_file,
       return false;
     }
 
-    ignition::common::DirIter endIt;
-    for (ignition::common::DirIter dirIt(_file); dirIt != endIt; ++dirIt)
+    common::DirIter endIt;
+    for (common::DirIter dirIt(_file); dirIt != endIt; ++dirIt)
     {
       std::string file = *dirIt;
-      std::string entryName = ignition::common::joinPaths(_entry,
-          ignition::common::basename(file));
+      std::string entryName = common::joinPaths(_entry,
+          common::basename(file));
 
       if (!CompressFile(_archive, file, entryName))
       {
@@ -56,7 +56,7 @@ bool CompressFile(zip *_archive, const std::string &_file,
       }
     }
   }
-  else if (ignition::common::isFile(_file))
+  else if (common::isFile(_file))
   {
     std::ifstream in(_file.c_str(),
         std::ifstream::ate | std::ifstream::binary);
@@ -83,7 +83,7 @@ bool CompressFile(zip *_archive, const std::string &_file,
 /////////////////////////////////////////////////
 bool Zip::Compress(const std::string &_src, const std::string &_dst)
 {
-  if (!ignition::common::exists(_src))
+  if (!common::exists(_src))
   {
     ignerr << "Directory does not exist: " << _src << std::endl;
     return false;
@@ -97,7 +97,7 @@ bool Zip::Compress(const std::string &_src, const std::string &_dst)
     return false;
   }
 
-  std::string entry = ignition::common::basename(_src);
+  std::string entry = common::basename(_src);
   if (!CompressFile(archive, _src, entry))
   {
     ignerr << "Error compressing file: " << _src << std::endl;
@@ -113,7 +113,7 @@ bool Zip::Compress(const std::string &_src, const std::string &_dst)
 bool Zip::Extract(const std::string &_src,
     const std::string &_dst)
 {
-  if (!ignition::common::exists(_src))
+  if (!common::exists(_src))
   {
     ignerr << "Source archive does not exist: " << _src << std::endl;
     return false;
@@ -138,18 +138,19 @@ bool Zip::Extract(const std::string &_src,
 
     auto entryname = std::string(sb.name);
     common::changeFromUnixPath(entryname);
-    std::string dst = ignition::common::joinPaths(_dst, entryname);
+    std::string dst = common::joinPaths(_dst, entryname);
 
     // Check if the entryname contains a / at the end. if so it's a directory
-    auto pos = entryname.rfind(ignition::common::separator(""));
+    auto pos = entryname.rfind(common::separator(""));
     if (pos != std::string::npos && pos == (entryname.size() - 1))
     {
-      if (!ignition::common::createDirectories(dst))
+      if (!common::createDirectories(dst))
       {
         ignerr << "Error creating directory [" << dst << "]. "
                << "Do you have the right permissions?" << std::endl;
         return false;
       }
+      continue;
     }
 
     // Create and write the files.
@@ -168,9 +169,17 @@ bool Zip::Extract(const std::string &_src,
     if (len < 0)
       ignerr << "Error reading " << sb.name << std::endl;
     else
+    {
       file.write(buf, len);
-
-    igndbg << "Created file [" << dst << "]" << std::endl;
+      if (file.fail())
+      {
+        ignerr << "Failed to write file [" << dst << "]" << std::endl;
+      }
+      else
+      {
+        igndbg << "Created file [" << dst << "]" << std::endl;
+      }
+    }
 
     delete[] buf;
     file.close();
