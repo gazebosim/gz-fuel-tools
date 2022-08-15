@@ -41,7 +41,7 @@ class gz::fuel_tools::ClientConfigPrivate
             std::string homePath;
             gz::common::env(GZ_HOMEDIR, homePath);
             this->cacheLocation = common::joinPaths(
-                homePath, ".ignition", "fuel");
+                homePath, ".gz", "fuel");
 
             this->servers.push_back(ServerConfig());
           }
