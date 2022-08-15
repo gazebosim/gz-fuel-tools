@@ -36,23 +36,23 @@ using namespace fuel_tools;
 void removeFileTemp(const std::string &_path)
 {
 #ifndef _WIN32
-  EXPECT_TRUE(ignition::common::removeFile(_path));
+  EXPECT_TRUE(common::removeFile(_path));
 #else
-  ignition::common::removeFile(_path);
+  common::removeFile(_path);
 #endif
 }
 
 /////////////////////////////////////////////////
 /// \brief Get home directory.
 /// \return Home directory or empty string if home wasn't found.
-/// \ToDo: Move this function to ignition::common::Filesystem
+/// \ToDo: Move this function to common::Filesystem
 std::string homePath()
 {
   std::string homePath;
 #ifndef _WIN32
-  ignition::common::env("HOME", homePath);
+  common::env("HOME", homePath);
 #else
-  ignition::common::env("USERPROFILE", homePath);
+  common::env("USERPROFILE", homePath);
 #endif
 
   return homePath;
@@ -61,7 +61,7 @@ std::string homePath()
 /////////////////////////////////////////////////
 /// \brief Get cache directory.
 /// \return Cache directory
-/// \ToDo: Move this function to ignition::common::Filesystem
+/// \ToDo: Move this function to common::Filesystem
 std::string cachePath()
 {
 #ifndef _WIN32
@@ -103,7 +103,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers()[1].Url().Str());
 
-  std::string defaultCacheLocation = ignition::common::joinPaths(
+  std::string defaultCacheLocation = common::joinPaths(
     homePath(), ".ignition", "fuel");
   EXPECT_EQ(defaultCacheLocation, config.CacheLocation());
 }
