@@ -105,10 +105,12 @@ TEST(ModelIdentifier, CopyConstructorDeepCopy)
   EXPECT_EQ(2048u, id2.FileSize());
   EXPECT_EQ(d1, id2.ModifyDate());
   EXPECT_EQ(d2, id2.UploadDate());
+  EXPECT_EQ(id, id2);
 
   id2.SetName("hello2");
   EXPECT_EQ(std::string("hello"), id.Name());
   EXPECT_EQ(std::string("hello2"), id2.Name());
+  EXPECT_NE(id, id2);
 }
 
 /////////////////////////////////////////////////

@@ -538,12 +538,14 @@ TEST_F(FuelClientTest, DownloadModel)
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res5.Type());
   }
 
-  // Download model with a dependency specified within its `model.config`
+  // Download model with a dependency specified within its `model.config`.
+  // The dependency points to fuel.gazebosim.org.
   {
     common::URI url{
-        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_red_2"};
+      "https://fuel.ignitionrobotics.org/1.0/openrobotics/models/hatchback red"
+    };
     common::URI depUrl{
-        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_2"};
+      "https://fuel.gazebosim.org/1.0/openrobotics/models/hatchback"};
 
     // Check it is not cached
     std::string cachedPath;
