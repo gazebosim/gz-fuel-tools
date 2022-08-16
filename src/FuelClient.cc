@@ -611,12 +611,16 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   if(!res)
     return res;
 
-  for (auto dep : dependencies)
+  for (ModelIdentifier dep : dependencies)
   {
-    auto dep_res = this->DownloadModel(dep, _headers);
+    // Download dependency if not in the local cache
+    if (!this->dataPtr->cache->MatchingModel(dep))
+    {
+      auto depRes = this->DownloadModel(dep, _headers);
 
-    if(!dep_res)
-      return dep_res;
+      if(!depRes)
+        return depRes;
+    }
   }
 
   return res;

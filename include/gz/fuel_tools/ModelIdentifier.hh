@@ -64,6 +64,11 @@ namespace gz
       /// \return True if the ModelIdentifier names are equal.
       public: bool operator==(const ModelIdentifier &_rhs) const;
 
+      /// \brief Inequality operator.
+      /// \param[in] _rhs ModelIdentifier to compare.
+      /// \return True if the ModelIdentifier names are not equal.
+      public: bool operator!=(const ModelIdentifier &_rhs) const;
+
       /// \brief Returns just the last part of the model name.
       /// \return Model name.
       public: std::string Name() const;
