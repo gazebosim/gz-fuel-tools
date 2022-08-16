@@ -1,4 +1,24 @@
-## Ignition Fuel Tools 4.x
+## Gazebo Fuel Tools 4.x
+
+### Gazebo Fuel Tools 4.6.0 (2022-08-15)
+
+. Ignition to Gazebo server rename
+    * [Pull request #263](https://github.com/gazebosim/gz-fuel-tools/pull/263)
+
+1. Remove redundant namespace references
+    * [Pull request #284](https://github.com/gazebosim/gz-fuel-tools/pull/284)
+
+1. Change `IGN_DESIGNATION` to `GZ_DESIGNATION`
+    * [Pull request #278](https://github.com/gazebosim/gz-fuel-tools/pull/278)
+
+1. Ignition -> Gazebo
+    * [Pull request #276](https://github.com/gazebosim/gz-fuel-tools/pull/276)
+
+1. Remove unused files (bitbucket-pipelines, docs)
+    * [Pull request #273](https://github.com/gazebosim/gz-fuel-tools/pull/273)
+
+1. Disable `staging-fuel.ignitionrobotics.org` test
+    * [Pull request #257](https://github.com/gazebosim/gz-fuel-tools/pull/257)
 
 ### Ignition Fuel Tools 4.5.0 (2022-06-01)
 
