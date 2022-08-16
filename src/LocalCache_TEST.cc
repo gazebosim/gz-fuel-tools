@@ -88,7 +88,7 @@ void createLocal6Models(ClientConfig &_conf)
       common::joinPaths(serverPath,
       "trudy", "models", "tm2", "2", "model.config")));
 
-  ignition::fuel_tools::ServerConfig srv;
+  ServerConfig srv;
   srv.SetUrl(common::URI("http://localhost:8001/"));
   _conf.AddServer(srv);
 }
@@ -122,8 +122,8 @@ void createLocal3Models(ClientConfig &_conf)
       common::joinPaths(serverPath,
       "trudy", "models", "tm1", "3", "model.config")));
 
-  ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(ignition::common::URI("http://localhost:8007/"));
+  ServerConfig srv;
+  srv.SetUrl(common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
 
@@ -174,8 +174,8 @@ void createLocal6Worlds(ClientConfig &_conf)
       common::joinPaths(serverPath,
       "trudy", "worlds", "tm2", "2", "world.world")));
 
-  ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(ignition::common::URI("http://localhost:8001/"));
+  ServerConfig srv;
+  srv.SetUrl(common::URI("http://localhost:8001/"));
   _conf.AddServer(srv);
 }
 
@@ -208,7 +208,7 @@ void createLocal3Worlds(ClientConfig &_conf)
       common::joinPaths(serverPath,
       "trudy", "worlds", "tm1", "3", "world.world")));
 
-  ignition::fuel_tools::ServerConfig srv;
+  ServerConfig srv;
   srv.SetUrl(common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
@@ -218,7 +218,7 @@ class LocalCacheTest : public ::testing::Test
 {
   public: void SetUp() override
   {
-    ignition::common::Console::SetVerbosity(4);
+    common::Console::SetVerbosity(4);
   }
 };
 
@@ -239,7 +239,7 @@ TEST_F(LocalCacheTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
@@ -275,7 +275,7 @@ TEST_F(LocalCacheTest, MatchingModels)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
@@ -326,16 +326,15 @@ TEST_F(LocalCacheTest, MatchingModel)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
 
-
-  ignition::fuel_tools::ServerConfig srv1;
+  ServerConfig srv1;
   srv1.SetUrl(common::URI("http://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv2;
+  ServerConfig srv2;
   srv2.SetUrl(common::URI("http://localhost:8002/"));
 
   ModelIdentifier am1;
@@ -391,7 +390,7 @@ TEST_F(LocalCacheTest, AllWorlds)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
@@ -407,10 +406,10 @@ TEST_F(LocalCacheTest, AllWorlds)
   EXPECT_EQ(9u, uniqueNames.size());
 #ifdef _WIN32
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    ignition::common::joinPaths("localhost8001", "alice", "worlds", "am1")));
+    common::joinPaths("localhost8001", "alice", "worlds", "am1")));
 #else
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    ignition::common::joinPaths("localhost:8001", "alice", "worlds", "am1")));
+    common::joinPaths("localhost:8001", "alice", "worlds", "am1")));
 #endif
 }
 
@@ -432,7 +431,7 @@ TEST_F(LocalCacheTest, MatchingWorlds)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
@@ -472,17 +471,16 @@ TEST_F(LocalCacheTest, MatchingWorld)
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif
-  ignition::fuel_tools::LocalCache cache(&conf);
+  LocalCache cache(&conf);
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #endif
 
+  ServerConfig srv1;
+  srv1.SetUrl(common::URI("http://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(ignition::common::URI("http://localhost:8001/"));
-
-  ignition::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(ignition::common::URI("http://localhost:8002/"));
+  ServerConfig srv2;
+  srv2.SetUrl(common::URI("http://localhost:8002/"));
 
   WorldIdentifier am1;
   am1.SetServer(srv1);

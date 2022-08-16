@@ -101,10 +101,7 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
 {
   std::vector<Model> models;
   if (!common::isDirectory(_path))
-  {
-    ignwarn << "Server directory does not exist [" << _path << "]\n";
     return models;
-  }
 
   common::DirIter end;
   common::DirIter ownIter(_path);
