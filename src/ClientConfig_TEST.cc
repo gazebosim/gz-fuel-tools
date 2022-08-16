@@ -76,7 +76,7 @@ std::string cachePath()
 TEST(ClientConfig, InitiallyDefaultServers)
 {
   ClientConfig config;
-  EXPECT_EQ(2u, config.Servers().size());
+  EXPECT_EQ(1u, config.Servers().size());
 }
 
 /////////////////////////////////////////////////
@@ -88,7 +88,7 @@ TEST(ClientConfig, ServersCanBeAdded)
   srv.SetUrl(common::URI("http://asdf"));
   config.AddServer(srv);
 
-  ASSERT_EQ(3u, config.Servers().size());
+  ASSERT_EQ(2u, config.Servers().size());
   EXPECT_EQ(std::string("http://asdf"), config.Servers().back().Url().Str());
 }
 
@@ -97,11 +97,9 @@ TEST(ClientConfig, ServersCanBeAdded)
 TEST(ClientConfig, CustomDefaultConfiguration)
 {
   ClientConfig config;
-  ASSERT_EQ(2u, config.Servers().size());
+  ASSERT_EQ(1u, config.Servers().size());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://fuel.ignitionrobotics.org",
-    config.Servers()[1].Url().Str());
 
   std::string defaultCacheLocation = gz::common::joinPaths(
     homePath(), ".gz", "fuel");
@@ -136,13 +134,11 @@ TEST(ClientConfig, CustomConfiguration)
 
   EXPECT_TRUE(config.LoadConfig(testPath));
 
-  ASSERT_EQ(4u, config.Servers().size());
+  ASSERT_EQ(3u, config.Servers().size());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://fuel.ignitionrobotics.org",
-    config.Servers()[1].Url().Str());
   EXPECT_EQ("https://api.gazebosim.org",
-    config.Servers()[2].Url().Str());
+    config.Servers()[1].Url().Str());
   EXPECT_EQ("https://myserver",
     config.Servers().back().Url().Str());
 
@@ -166,10 +162,10 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
+      << "    url: https://fuel.gazebosim.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
+      << "    url: https://fuel.gazebosim.org"  << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl
@@ -282,7 +278,7 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
 TEST(ClientConfig, UserAgent)
 {
   ClientConfig config;
-  EXPECT_EQ("IgnitionFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL,
+  EXPECT_EQ("GzFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL,
             config.UserAgent());
 
   config.SetUserAgent("my_user_agent");
@@ -317,7 +313,7 @@ TEST(ClientConfig, AsString)
 #else
     EXPECT_NE(str.find(".gz\\fuel"), std::string::npos);
 #endif
-    EXPECT_NE(str.find("https://fuel.ignitionrobotics.org"), std::string::npos);
+    EXPECT_NE(str.find("https://fuel.gazebosim.org"), std::string::npos);
   }
 
   {

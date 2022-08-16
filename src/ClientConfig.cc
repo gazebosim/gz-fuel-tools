@@ -44,13 +44,6 @@ class gz::fuel_tools::ClientConfigPrivate
                 homePath, ".gz", "fuel");
 
             this->servers.push_back(ServerConfig());
-
-            // Add in fuel.gazebosim.org as another default server config.
-            ServerConfig gzServerConfig;
-            gzServerConfig.SetUrl(
-                common::URI("https://fuel.ignitionrobotics.org"));
-            gzServerConfig.SetVersion("1.0");
-            this->servers.push_back(gzServerConfig);
           }
 
   /// \brief Clear values.
@@ -60,7 +53,7 @@ class gz::fuel_tools::ClientConfigPrivate
             this->cacheLocation = "";
             this->configPath = "";
             this->userAgent =
-              "IgnitionFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL;
+              "GzFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL;
           }
 
   /// \brief A list of servers.
@@ -74,7 +67,7 @@ class gz::fuel_tools::ClientConfigPrivate
 
   /// \brief Name of the user agent.
   public: std::string userAgent =
-          "IgnitionFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL;
+          "GzFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL;
 };
 
 //////////////////////////////////////////////////
