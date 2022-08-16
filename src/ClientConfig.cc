@@ -428,7 +428,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   std::string homePath;
   gz::common::env(GZ_HOMEDIR, homePath);
   std::string cacheLocation = gz::common::joinPaths(
-    homePath, ".ignition", "fuel");
+    homePath, ".gz", "fuel");
 
   // The user wants to overwrite the default cache path.
   if (!cacheLocationConfig.empty())
