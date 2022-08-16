@@ -102,7 +102,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
     config.Servers().front().Url().Str());
 
   std::string defaultCacheLocation = gz::common::joinPaths(
-    homePath(), ".ignition", "fuel");
+    homePath(), ".gz", "fuel");
   EXPECT_EQ(defaultCacheLocation, config.CacheLocation());
 }
 
@@ -309,9 +309,9 @@ TEST(ClientConfig, AsString)
     gzdbg << str << std::endl;
 
 #ifndef _WIN32
-    EXPECT_NE(str.find(".ignition/fuel"), std::string::npos);
+    EXPECT_NE(str.find(".gz/fuel"), std::string::npos);
 #else
-    EXPECT_NE(str.find(".ignition\\fuel"), std::string::npos);
+    EXPECT_NE(str.find(".gz\\fuel"), std::string::npos);
 #endif
     EXPECT_NE(str.find("https://fuel.ignitionrobotics.org"), std::string::npos);
   }
