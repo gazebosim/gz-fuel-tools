@@ -44,6 +44,13 @@ class gz::fuel_tools::ClientConfigPrivate
                 homePath, ".gz", "fuel");
 
             this->servers.push_back(ServerConfig());
+
+            // Add in fuel.gazebosim.org as another default server config.
+            ServerConfig gzServerConfig;
+            gzServerConfig.SetUrl(
+                common::URI("https://fuel.ignitionrobotics.org"));
+            gzServerConfig.SetVersion("1.0");
+            this->servers.push_back(gzServerConfig);
           }
 
   /// \brief Clear values.
@@ -83,7 +90,7 @@ class gz::fuel_tools::ServerConfigPrivate
           }
 
   /// \brief URL to reach server
-  public: common::URI url{"https://fuel.ignitionrobotics.org"};
+  public: common::URI url{"https://fuel.gazebosim.org"};
 
   /// \brief A key to auth with the server
   public: std::string key = "";
