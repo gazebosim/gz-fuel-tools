@@ -136,6 +136,12 @@ bool ModelIdentifier::operator==(const ModelIdentifier &_rhs) const
 }
 
 //////////////////////////////////////////////////
+bool ModelIdentifier::operator!=(const ModelIdentifier &_rhs) const
+{
+  return !(*this == _rhs);
+}
+
+//////////////////////////////////////////////////
 ModelIdentifier::~ModelIdentifier()
 {
 }

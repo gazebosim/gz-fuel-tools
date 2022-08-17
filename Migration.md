@@ -10,6 +10,7 @@
   Additionally, they will only be available when including the corresponding `ignition/...` header.
   Use the `gz_` prefix instead.
   * `ign_strcat`, `ign_strcpy`, `ign_sprintf`, `ign_strdup`
+* The default cache location has moved from `~/.ignition/fuel` to `~/.gz/fuel`.
 
 ### Breaking Changes
 
