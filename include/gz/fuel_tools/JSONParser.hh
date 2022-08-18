@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_JSONPARSER_HH_
-#define IGNITION_FUEL_TOOLS_JSONPARSER_HH_
+#ifndef GZ_FUEL_TOOLS_JSONPARSER_HH_
+#define GZ_FUEL_TOOLS_JSONPARSER_HH_
 
 #include <map>
 #include <string>
@@ -33,7 +33,7 @@ namespace Json
   class Value;
 }
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {

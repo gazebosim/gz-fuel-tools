@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_HELPERS_HH_
-#define IGNITION_FUEL_TOOLS_HELPERS_HH_
+#ifndef GZ_FUEL_TOOLS_HELPERS_HH_
+#define GZ_FUEL_TOOLS_HELPERS_HH_
 
 #include <string>
 #include <ignition/fuel_tools/Export.hh>
@@ -32,7 +32,5 @@
   #define ign_strcpy std::strcpy
   #define ign_sprintf std::sprintf
   #define ign_strdup strdup
-#endif
-
-// IGNITION_FUEL_TOOLS_HELPERS_HH_
+#endif  // GZ_FUEL_TOOLS_HELPERS_HH_
 #endif

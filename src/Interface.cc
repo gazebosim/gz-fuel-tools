@@ -19,27 +19,27 @@
 #include "ignition/fuel_tools/Interface.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
     //////////////////////////////////////////////
     std::string fetchResource(const std::string &_uri)
     {
-      ignition::fuel_tools::FuelClient client;
+      gz::fuel_tools::FuelClient client;
       return fetchResourceWithClient(_uri, client);
     }
 
     //////////////////////////////////////////////
     std::string fetchResourceWithClient(const std::string &_uri,
-        ignition::fuel_tools::FuelClient &_client)
+        gz::fuel_tools::FuelClient &_client)
     {
       std::string result;
 
-      ignition::fuel_tools::ModelIdentifier model;
-      ignition::fuel_tools::WorldIdentifier world;
+      gz::fuel_tools::ModelIdentifier model;
+      gz::fuel_tools::WorldIdentifier world;
       std::string fileUrl;
-      ignition::common::URI uri(_uri);
+      gz::common::URI uri(_uri);
       // Download the model, if it is a model URI
       if (_client.ParseModelUrl(uri, model) &&
           !_client.CachedModel(uri, result))

@@ -21,12 +21,12 @@
 
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
+#include "gz/fuel_tools/WorldIterPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {

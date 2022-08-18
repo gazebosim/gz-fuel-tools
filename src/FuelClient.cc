@@ -44,16 +44,16 @@
 #include "ignition/fuel_tools/JSONParser.hh"
 #include "ignition/fuel_tools/LocalCache.hh"
 #include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ignition/fuel_tools/ModelIterPrivate.hh"
+#include "gz/fuel_tools/ModelIterPrivate.hh"
 #include "ignition/fuel_tools/RestClient.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
+#include "gz/fuel_tools/WorldIterPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /// \brief Private Implementation
-class ignition::fuel_tools::FuelClientPrivate
+class gz::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL,
   /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer/2
@@ -494,7 +494,7 @@ void FuelClient::AddServerConfigParametersToHeaders(
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
+Result FuelClient::DeleteUrl(const gz::common::URI &_uri,
     const std::vector<std::string> &_headers)
 {
   Rest rest;

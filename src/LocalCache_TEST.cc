@@ -38,7 +38,7 @@
 #define ChangeDirectory chdir
 #endif
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /// \brief Creates a directory structure in the build directory with 6 models

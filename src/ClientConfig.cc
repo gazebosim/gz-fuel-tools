@@ -28,12 +28,12 @@
 #include "ignition/fuel_tools/ClientConfig.hh"
 #include "ignition/fuel_tools/config.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class ignition::fuel_tools::ClientConfigPrivate
+class gz::fuel_tools::ClientConfigPrivate
 {
   /// \brief Constructor.
   public: ClientConfigPrivate()
@@ -78,7 +78,7 @@ class ignition::fuel_tools::ClientConfigPrivate
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class ignition::fuel_tools::ServerConfigPrivate
+class gz::fuel_tools::ServerConfigPrivate
 {
   /// \brief Clear values.
   public: void Clear()

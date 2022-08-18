@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_MODELPRIVATE_HH_
-#define IGNITION_FUEL_TOOLS_MODELPRIVATE_HH_
+#ifndef GZ_FUEL_TOOLS_MODELPRIVATE_HH_
+#define GZ_FUEL_TOOLS_MODELPRIVATE_HH_
 
 #include <string>
 
@@ -30,7 +30,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {

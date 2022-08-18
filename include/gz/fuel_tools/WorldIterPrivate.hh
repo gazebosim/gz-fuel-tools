@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_WORLDITERPRIVATE_HH_
-#define IGNITION_FUEL_TOOLS_WORLDITERPRIVATE_HH_
+#ifndef GZ_FUEL_TOOLS_WORLDITERPRIVATE_HH_
+#define GZ_FUEL_TOOLS_WORLDITERPRIVATE_HH_
 
 #include <string>
 #include <vector>
@@ -32,7 +32,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {

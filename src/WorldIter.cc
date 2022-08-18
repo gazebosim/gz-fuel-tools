@@ -25,10 +25,10 @@
 #include "ignition/fuel_tools/JSONParser.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 #include "ignition/fuel_tools/WorldIter.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
+#include "gz/fuel_tools/WorldIterPrivate.hh"
 #include "ignition/fuel_tools/RestClient.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 //////////////////////////////////////////////////

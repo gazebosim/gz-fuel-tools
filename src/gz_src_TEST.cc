@@ -26,7 +26,7 @@
 #include "gz.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
 
-using namespace ignition;
+using namespace gz;
 
 // Std streams
 static std::streambuf *g_stdOutFile;

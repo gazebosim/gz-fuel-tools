@@ -14,8 +14,8 @@
  * limitations under the License.
  *
 */
-#ifndef IGNITION_FUEL_TOOLS_ZIP_HH_
-#define IGNITION_FUEL_TOOLS_ZIP_HH_
+#ifndef GZ_FUEL_TOOLS_ZIP_HH_
+#define GZ_FUEL_TOOLS_ZIP_HH_
 
 #include <memory>
 #include <string>
@@ -23,7 +23,7 @@
 
 #include "ignition/fuel_tools/Export.hh"
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {

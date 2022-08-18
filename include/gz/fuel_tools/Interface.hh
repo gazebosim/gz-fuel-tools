@@ -15,14 +15,14 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_INTERFACE_HH_
-#define IGNITION_FUEL_TOOLS_INTERFACE_HH_
+#ifndef GZ_FUEL_TOOLS_INTERFACE_HH_
+#define GZ_FUEL_TOOLS_INTERFACE_HH_
 
 #include <string>
 #include "ignition/fuel_tools/Export.hh"
 #include "ignition/fuel_tools/FuelClient.hh"
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -39,7 +39,7 @@ namespace ignition
     /// \param[in] _client Custom FuelClient configuration.
     /// \return Path to the downloaded asset. Empty on error.
     IGNITION_FUEL_TOOLS_VISIBLE std::string fetchResourceWithClient(
-        const std::string &_uri, ignition::fuel_tools::FuelClient &_client);
+        const std::string &_uri, gz::fuel_tools::FuelClient &_client);
   }
 }
 
