@@ -23,7 +23,7 @@
 #include <ignition/common/Filesystem.hh>
 #include <ignition/utilities/ExtraTestMacros.hh>
 
-#include "ign.hh"
+#include "gz.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
 
 using namespace ignition;

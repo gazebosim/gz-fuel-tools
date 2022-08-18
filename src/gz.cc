@@ -67,7 +67,7 @@
 #include "ignition/fuel_tools/FuelClient.hh"
 #include "ignition/fuel_tools/Helpers.hh"
 #include "ignition/fuel_tools/Result.hh"
-#include "ign.hh"
+#include "gz.hh"
 #include "ignition/fuel_tools/WorldIdentifier.hh"
 
 //////////////////////////////////////////////////
