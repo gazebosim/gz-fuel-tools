@@ -20,8 +20,8 @@
 
 #include <string>
 
-#include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/ModelIdentifier.hh"
+#include "gz/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/ModelIdentifier.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by

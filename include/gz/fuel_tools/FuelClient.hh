@@ -22,13 +22,13 @@
 #include <string>
 #include <tuple>
 #include <vector>
-#include <ignition/common/URI.hh>
+#include <gz/common/URI.hh>
 
-#include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/ModelIter.hh"
-#include "ignition/fuel_tools/RestClient.hh"
-#include "ignition/fuel_tools/Result.hh"
-#include "ignition/fuel_tools/WorldIter.hh"
+#include "gz/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/ModelIter.hh"
+#include "gz/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/Result.hh"
+#include "gz/fuel_tools/WorldIter.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by

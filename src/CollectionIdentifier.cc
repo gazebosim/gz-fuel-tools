@@ -19,10 +19,10 @@
 #include <string>
 #include <vector>
 
-#include <ignition/common/Filesystem.hh>
+#include <gz/common/Filesystem.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/CollectionIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/CollectionIdentifier.hh"
 
 using namespace gz;
 using namespace fuel_tools;

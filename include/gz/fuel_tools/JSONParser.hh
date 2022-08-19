@@ -23,10 +23,10 @@
 #include <utility>
 #include <vector>
 
-#include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ignition/fuel_tools/ModelIter.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/WorldIter.hh"
+#include "gz/fuel_tools/ModelIdentifier.hh"
+#include "gz/fuel_tools/ModelIter.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/WorldIter.hh"
 
 namespace Json
 {

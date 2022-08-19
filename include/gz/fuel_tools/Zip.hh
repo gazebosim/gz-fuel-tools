@@ -21,7 +21,7 @@
 #include <string>
 #include <vector>
 
-#include "ignition/fuel_tools/Export.hh"
+#include "gz/fuel_tools/Export.hh"
 
 namespace gz
 {

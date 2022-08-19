@@ -19,8 +19,8 @@
 #include <cstdio>
 #include <string>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/ModelIter.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/ModelIter.hh"
 #include "gz/fuel_tools/ModelIterPrivate.hh"
 #include "gz/fuel_tools/ModelPrivate.hh"
 

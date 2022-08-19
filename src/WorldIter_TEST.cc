@@ -19,8 +19,8 @@
 #include <cstdio>
 #include <string>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/WorldIter.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/WorldIter.hh"
 #include "gz/fuel_tools/WorldIterPrivate.hh"
 
 using namespace gz;

@@ -19,8 +19,8 @@
 #define GZ_FUEL_TOOLS_INTERFACE_HH_
 
 #include <string>
-#include "ignition/fuel_tools/Export.hh"
-#include "ignition/fuel_tools/FuelClient.hh"
+#include "gz/fuel_tools/Export.hh"
+#include "gz/fuel_tools/FuelClient.hh"
 
 namespace gz
 {

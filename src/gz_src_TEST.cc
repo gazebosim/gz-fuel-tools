@@ -20,8 +20,8 @@
 #include <stdlib.h>
 
 #include <string>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/utilities/ExtraTestMacros.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/utilities/ExtraTestMacros.hh>
 
 #include "gz.hh"
 #include "test/test_config.h"  // NOLINT(build/include)

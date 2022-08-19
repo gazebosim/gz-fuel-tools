@@ -15,9 +15,9 @@
  *
 */
 
-#include "ignition/common/Console.hh"
-#include "ignition/fuel_tools/Interface.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "gz/common/Console.hh"
+#include "gz/fuel_tools/Interface.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
 namespace gz
 {

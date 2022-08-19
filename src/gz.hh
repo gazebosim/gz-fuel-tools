@@ -18,7 +18,7 @@
 #ifndef GZ_FUELTOOLS_IGN_HH_
 #define GZ_FUELTOOLS_IGN_HH_
 
-#include "ignition/fuel_tools/Export.hh"
+#include "gz/fuel_tools/Export.hh"
 
 /// \brief External hook to read the library version.
 /// \return C-string representing the version. Ex.: 0.1.2

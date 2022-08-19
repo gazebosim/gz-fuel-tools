@@ -19,14 +19,14 @@
 #include <regex>
 #include <string>
 #include <vector>
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/JSONParser.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/WorldIter.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/JSONParser.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/WorldIter.hh"
 #include "gz/fuel_tools/WorldIterPrivate.hh"
-#include "ignition/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/RestClient.hh"
 
 using namespace gz;
 using namespace fuel_tools;

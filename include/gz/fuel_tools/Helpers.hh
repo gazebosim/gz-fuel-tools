@@ -19,7 +19,7 @@
 #define GZ_FUEL_TOOLS_HELPERS_HH_
 
 #include <string>
-#include <ignition/fuel_tools/Export.hh>
+#include <gz/fuel_tools/Export.hh>
 
 // Use safer functions on Windows
 #ifdef _MSC_VER

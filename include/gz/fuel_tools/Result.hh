@@ -21,7 +21,7 @@
 #include <memory>
 #include <string>
 
-#include "ignition/fuel_tools/Export.hh"
+#include "gz/fuel_tools/Export.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by

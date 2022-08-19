@@ -17,7 +17,7 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include "ignition/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/RestClient.hh"
 #include "test/test_config.h"
 
 /////////////////////////////////////////////////
