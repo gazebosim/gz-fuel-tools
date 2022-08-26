@@ -28,7 +28,7 @@
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/config.hh"
 
-using namespace gz;
+using namespace ignition;
 using namespace fuel_tools;
 
 //////////////////////////////////////////////////

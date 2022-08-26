@@ -23,7 +23,7 @@
 
 #include "gz/fuel_tools/Export.hh"
 
-namespace gz
+namespace ignition
 {
   namespace fuel_tools
   {

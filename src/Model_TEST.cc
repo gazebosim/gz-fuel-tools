@@ -19,7 +19,7 @@
 #include "gz/fuel_tools/Model.hh"
 
 namespace ignft = gz::fuel_tools;
-using namespace gz;
+using namespace ignition;
 using namespace ignft;
 
 /////////////////////////////////////////////////

@@ -30,7 +30,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace gz
+namespace ignition
 {
   namespace fuel_tools
   {

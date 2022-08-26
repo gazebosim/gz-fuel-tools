@@ -22,7 +22,7 @@
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/CollectionIdentifier.hh"
 
-using namespace gz;
+using namespace ignition;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////

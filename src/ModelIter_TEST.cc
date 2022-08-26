@@ -24,10 +24,10 @@
 #include "gz/fuel_tools/ModelIterPrivate.hh"
 #include "gz/fuel_tools/ModelPrivate.hh"
 
-using namespace gz;
+using namespace ignition;
 using namespace fuel_tools;
 
-namespace gz
+namespace ignition
 {
   namespace fuel_tools
   {

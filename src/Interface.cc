@@ -19,7 +19,7 @@
 #include "gz/fuel_tools/Interface.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
-namespace gz
+namespace ignition
 {
   namespace fuel_tools
   {

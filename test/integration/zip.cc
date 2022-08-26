@@ -23,7 +23,7 @@
 #include "gz/fuel_tools/Zip.hh"
 #include "test/test_config.h"
 
-using namespace gz;
+using namespace ignition;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////

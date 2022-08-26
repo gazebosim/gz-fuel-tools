@@ -33,7 +33,7 @@ namespace Json
   class Value;
 }
 
-namespace gz
+namespace ignition
 {
   namespace fuel_tools
   {

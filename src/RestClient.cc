@@ -30,7 +30,7 @@
 
 #include "gz/fuel_tools/RestClient.hh"
 
-using namespace gz;
+using namespace ignition;
 using namespace fuel_tools;
 
 // List of known file extensions and associated mime type.

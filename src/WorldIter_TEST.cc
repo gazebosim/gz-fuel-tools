@@ -23,10 +23,10 @@
 #include "gz/fuel_tools/WorldIter.hh"
 #include "gz/fuel_tools/WorldIterPrivate.hh"
 
-using namespace gz;
+using namespace ignition;
 using namespace fuel_tools;
 
-namespace gz
+namespace ignition
 {
   namespace fuel_tools
   {

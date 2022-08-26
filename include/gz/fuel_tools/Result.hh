@@ -22,6 +22,7 @@
 #include <string>
 
 #include "gz/fuel_tools/Export.hh"
+#include <gz/fuel_tools/config.hh>
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
@@ -30,7 +31,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace gz
+namespace ignition
 {
   namespace fuel_tools
   {

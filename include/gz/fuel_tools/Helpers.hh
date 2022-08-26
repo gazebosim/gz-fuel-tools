@@ -20,6 +20,7 @@
 
 #include <string>
 #include <gz/fuel_tools/Export.hh>
+#include <gz/fuel_tools/config.hh>
 
 // Use safer functions on Windows
 #ifdef _MSC_VER

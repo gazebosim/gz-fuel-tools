@@ -49,7 +49,7 @@
 #include "gz/fuel_tools/WorldIdentifier.hh"
 #include "gz/fuel_tools/WorldIterPrivate.hh"
 
-using namespace gz;
+using namespace ignition;
 using namespace fuel_tools;
 
 /// \brief Private Implementation

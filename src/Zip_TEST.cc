@@ -142,7 +142,7 @@ bool createNewEmptyFile(const std::string &_filename)
 #include <gz/common/Filesystem.hh>
 #include "gz/fuel_tools/Zip.hh"
 
-using namespace gz;
+using namespace ignition;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////

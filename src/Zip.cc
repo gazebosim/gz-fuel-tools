@@ -27,7 +27,7 @@
 
 #include "gz/fuel_tools/Zip.hh"
 
-using namespace gz;
+using namespace ignition;
 using namespace fuel_tools;
 
 

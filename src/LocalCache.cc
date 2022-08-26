@@ -41,7 +41,7 @@
 #include "gz/fuel_tools/Zip.hh"
 #include "gz/fuel_tools/WorldIterPrivate.hh"
 
-using namespace gz;
+using namespace ignition;
 using namespace fuel_tools;
 
 class gz::fuel_tools::LocalCachePrivate
