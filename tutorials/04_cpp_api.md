@@ -73,7 +73,7 @@ You should see the name of the server followed by its list of models. Here's an
 example:
 
 ```
-[https://fuel.ignitionrobotics.org]
+[https://fuel.gazebosim.org]
 
   Beer
   Wastebasket
@@ -150,7 +150,7 @@ License name: Creative Commons - Attribution
 License URL: http://creativecommons.org/licenses/by/4.0
 License image URL: https://i.creativecommons.org/l/by/4.0/88x31.png
 Server:
-  URL: https://fuel.ignitionrobotics.org
+  URL: https://fuel.gazebosim.org
   Version: 1.0
 ```
 

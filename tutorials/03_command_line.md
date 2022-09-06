@@ -30,7 +30,7 @@ https://fuel.gazebosim.org
 
 By default, Fuel will list resources from all the servers listed in your
 `config.yaml` file. See the
-[configuration tutorial](https://gazebosim.org/api/fuel_tools/8/configuration.html)
+[configuration tutorial](configuration.html)
 for more details.
 
 > **Tip**: If you want to see resources from a different Fuel server, add it to
