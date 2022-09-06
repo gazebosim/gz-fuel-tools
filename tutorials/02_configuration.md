@@ -28,16 +28,17 @@ servers:
 
 The `servers` section specifies all Fuel servers to interact with.
 For each server, you must specify the URL to send the HTTP requests.
-If the server requires auth you can specify the token filling the optional field `private-token`.
+If the server requires authentication, you can specify the token by filling
+the optional field `private-token`.
 
 The `cache` section captures options related with the local storage of the
 assets. `path` specifies the local directory where all assets will be
-downloaded. If not used, all assets are stored under `$HOME/.ignition/fuel`.
+downloaded. If not used, all assets are stored under `$HOME/.gz/fuel`.
 
 ## Custom configuration file path
 
 Gazebo Fuel's default configuration file is stored under
-`$HOME/.ignition/fuel/config.yaml`, but it is possible to load a configuration
+`$HOME/.gz/fuel/config.yaml`, but it is possible to load a configuration
 file from a custom path programmatically. Let's see how.
 
 Create a file `/tmp/my_config.yaml` with the following content:
@@ -87,7 +88,7 @@ curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.
 curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
 ```
 
-Install a dependency:
+Install the gflags dependency:
 ```
 # Ubuntu
 sudo apt-get install libgflags-dev
@@ -176,7 +177,7 @@ purpose we use `SetConfigPath()`. As we're interested in using a configuration
 file, we need to call `LoadConfig()`. It's important to note that if we call
 `LoadConfig()` without calling `SetConfigPath()` beforehand, a default
 configuration file will be loaded (and created if it doesn't already exist under
-`$HOME/.ignition/fuel/config.yaml`). If the user doesn't call `LoadConfig()`, no
+`$HOME/.gz/fuel/config.yaml`). If the user doesn't call `LoadConfig()`, no
 configuration file will be used at all.
 
 Once we have all our configuration ready and captured in the `conf` object,
