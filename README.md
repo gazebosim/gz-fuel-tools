@@ -33,16 +33,16 @@ For a complete list of commands run `gz fuel -h` on the command line.
 **List all models**
 ```
 $ gz fuel list -t model -r | head
-https://fuel.ignitionrobotics.org/anonymous/test_model_595389531
-https://fuel.ignitionrobotics.org/anonymous/test_model_122023392
-https://fuel.ignitionrobotics.org/anonymous/test_model_429486665
-https://fuel.ignitionrobotics.org/anonymous/test_model_887243621
-https://fuel.ignitionrobotics.org/anonymous/test_model_084900530
-https://fuel.ignitionrobotics.org/anonymous/test_model_240061059
-https://fuel.ignitionrobotics.org/anonymous/test_model_464734097
-https://fuel.ignitionrobotics.org/anonymous/test_model_658598990
-https://fuel.ignitionrobotics.org/anonymous/test_model_834617935
-https://fuel.ignitionrobotics.org/anonymous/test_model_380348669
+https://fuel.gazebosim.org/1.0/09ubberboy90/models/box%205cm
+https://fuel.gazebosim.org/1.0/accurrent/models/mbari%20tethys%20lrauv
+https://fuel.gazebosim.org/1.0/adlarkin/models/construction%20cone%20label%20test
+https://fuel.gazebosim.org/1.0/aknyunus0/models/shoe
+https://fuel.gazebosim.org/1.0/aknyunus0/models/mens_asv_billfish_boat_shoe_in_tan_leather_wmuj5pbwanc
+https://fuel.gazebosim.org/1.0/amangupta/models/start
+https://fuel.gazebosim.org/1.0/amelhassan/models/backpack
+https://fuel.gazebosim.org/1.0/amrelsersy/models/house%203
+https://fuel.gazebosim.org/1.0/amrelsersy/models/coro_mike_sensor_config_2
+https://fuel.gazebosim.org/1.0/andreamcr/models/stecca%20centrale
 ```
 
 **Download a model**
@@ -76,30 +76,13 @@ Create an account on
 [https://app.gazebosim.org/](https://app.gazebosim.org/) and log
 in.
 
-While logged in, obtain the JWT token of the account from the browser.
-In Chrome and Firefox, this can be done by opening Developer Tools (
-`Ctrl+Shift+I`). Click on the Console tab, and type in
-```
-localStorage.id_token
-```
-This will print out the token.
+Create a private token at
+[https://app.gazebosim.org/settings#access_tokens](https://app.gazebosim.org/settings#access_tokens). Store the generated token someplace safe.
 
-The token can also be obtained through the Developer Tools GUI.
-Click on the Application tab in Chrome (or Storage tab in Firefox), and expand
-the Local Storage item.
-In Firefox versions < 71.0, this may be under Web Developer, then Storage
-Inspector.
-Click on the URL displayed, and select Key `id_token`.
-Its Value can be copied.
-
-The JWT token can then used to upload the model:
+The private token can then used to upload a model:
 ```
-gz fuel upload -m ~/path_to_model --header 'authorization: Bearer <JWT TOKEN>'
+gz fuel upload -m ~/path_to_model --header 'Private-token: <TOKEN>'
 ```
-
-Note that the `upload` command only works for models currently, not worlds.
-** Upload a model **
-
 ## TODO
 
 See issues beginning with [Fuel backend] in the title. Here are two examples.
@@ -162,32 +145,3 @@ sudo apt install ruby-ffi libzip-dev libcurl-dev libjsoncpp-dev
     * Directly against the real backend (staging?)
     * Clone, and compile a local backend?
     * Mocking the backend has the problem of not being in sync with the real backend and missing potential issues.
-
-# Known issue of command line tools
-
-In the event that the installation is a mix of Debian and from source, command
-line tools from `gz-tools` may not work correctly.
-
-A workaround for a single package is to define the environment variable
-`GZ_CONFIG_PATH` to point to the location of the Gazebo library installation,
-where the YAML file for the package is found, such as
-```
-export GZ_CONFIG_PATH=/usr/local/share/gz
-```
-
-However, that environment variable only takes a single path, which means if the
-installations from source are in different locations, only one can be specified.
-
-Another workaround for working with multiple Gazebo libraries on the command
-line is using symbolic links to each library's YAML file.
-```
-mkdir ~/.gz/tools/configs -p
-cd ~/.gz/tools/configs/
-ln -s /usr/local/share/gz/fuel4.yaml .
-ln -s /usr/local/share/gz/transport7.yaml .
-ln -s /usr/local/share/gz/transportlog7.yaml .
-...
-export GZ_CONFIG_PATH=$HOME/.gz/tools/configs
-```
-
-This issue is tracked [here](https://github.com/gazebosim/gz-tools/issues/8).
