@@ -48,7 +48,7 @@ Create a file `/tmp/my_config.yaml` with the following content:
 # The list of servers.
 servers:
   -
-    url: https://fuel.ignitionrobotics.org
+    url: https://fuel.gazebosim.org
 
 # Where are the assets stored in disk.
 cache:
@@ -66,26 +66,26 @@ Download the file `download.cc` and save it under `/tmp/conf_tutorial`:
 
 ```bash
 # Ubuntu and MacOS
-wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/download.cc
 
 # Windows
 ## CMD
-curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc -o download.cc
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/download.cc -o download.cc
 ## PowerShell
-curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc -o download.cc
+curl https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/download.cc -o download.cc
 ```
 
 Also, download `CMakeLists.txt` for compiling the example:
 
 ```bash
 # Ubuntu and MacOS
-wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/CMakeLists.txt
 
 # Windows
 ## CMD
-curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/CMakeLists.txt -o CMakeLists.txt
 ## PowerShell
-curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
+curl https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/CMakeLists.txt -o CMakeLists.txt
 ```
 
 Install the gflags dependency:
@@ -122,7 +122,7 @@ And now the fun part, execute it:
 ```
 
 Verify that you have the model in
-`/tmp/gz/fuel/fuel.ignitionrobotics.org/caguero/models/Beer`,
+`/tmp/gz/fuel/fuel.gazebosim.org/caguero/models/beer`,
 as you configured in your YAML file.
 
 ## Walkthrough
