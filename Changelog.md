@@ -31,6 +31,11 @@
     * [Pull request #239](https://github.com/gazebosim/gz-fuel-tools/pull/239)
     * [Pull request #247](https://github.com/gazebosim/gz-fuel-tools/pull/247)
 
+1. Improve documentation
+    * [Pull request #298](https://github.com/gazebosim/gz-fuel-tools/pull/298)
+    * [Pull request #299](https://github.com/gazebosim/gz-fuel-tools/pull/299)
+    * [Pull request #300](https://github.com/gazebosim/gz-fuel-tools/pull/300)
+
 ## Gazebo Fuel Tools 7.x
 
 ### Gazebo Fuel Tools 7.1.0 (2021-08-16)
