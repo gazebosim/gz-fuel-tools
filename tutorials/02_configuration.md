@@ -64,13 +64,13 @@ mkdir /tmp/conf_tutorial && cd /tmp/conf_tutorial
 Download the file `download.cc` and save it under `/tmp/conf_tutorial`:
 
 ```
-wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools5/example/download.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools4/example/download.cc
 ```
 
 Also, download `CMakeLists.txt` for compiling the example:
 
 ```
-wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools5/example/CMakeLists.txt
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools4/example/CMakeLists.txt
 ```
 
 Install a dependency:

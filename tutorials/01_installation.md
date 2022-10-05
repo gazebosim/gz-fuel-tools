@@ -47,7 +47,7 @@ ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/
 Run the following commands:
 ```
 brew tap osrf/simulation
-brew install gz-fuel-tools5
+brew install gz-fuel-tools4
 ```
 
 ### Windows
