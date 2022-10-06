@@ -4,9 +4,99 @@
 
 ## Gazebo Fuel Tools 8.x
 
-### Gazebo Fuel Tools 8.0.0 (202X-XX-XX)
+### Gazebo Fuel Tools 8.0.0
+
+1. Update test infrastruture
+    * [Pull request #245](https://github.com/gazebosim/gz-fuel-tools/pull/245)
+    * [Pull request #246](https://github.com/gazebosim/gz-fuel-tools/pull/246)
+    * [Pull request #269](https://github.com/gazebosim/gz-fuel-tools/pull/269)
+    * [Pull request #270](https://github.com/gazebosim/gz-fuel-tools/pull/270)
+
+1. Ignition to Gazebo rename.
+    * [Pull request #248](https://github.com/gazebosim/gz-fuel-tools/pull/248)
+    * [Pull request #251](https://github.com/gazebosim/gz-fuel-tools/pull/251)
+    * [Pull request #256](https://github.com/gazebosim/gz-fuel-tools/pull/256)
+    * [Pull request #259](https://github.com/gazebosim/gz-fuel-tools/pull/259)
+    * [Pull request #262](https://github.com/gazebosim/gz-fuel-tools/pull/262)
+    * [Pull request #264](https://github.com/gazebosim/gz-fuel-tools/pull/264)
+    * [Pull request #267](https://github.com/gazebosim/gz-fuel-tools/pull/267)
+    * [Pull request #268](https://github.com/gazebosim/gz-fuel-tools/pull/268)
+    * [Pull request #272](https://github.com/gazebosim/gz-fuel-tools/pull/272)
+    * [Pull request #275](https://github.com/gazebosim/gz-fuel-tools/pull/275)
+    * [Pull request #282](https://github.com/gazebosim/gz-fuel-tools/pull/282)
+    * [Pull request #287](https://github.com/gazebosim/gz-fuel-tools/pull/287)
+    * [Pull request #295](https://github.com/gazebosim/gz-fuel-tools/pull/295)
+    * [Pull request #296](https://github.com/gazebosim/gz-fuel-tools/pull/296)
+    * [Pull request #297](https://github.com/gazebosim/gz-fuel-tools/pull/297)
+
+1. Bumps in versions for Garden and removal of deprecations
+    * [Pull request #224](https://github.com/gazebosim/gz-fuel-tools/pull/224)
+    * [Pull request #229](https://github.com/gazebosim/gz-fuel-tools/pull/229)
+    * [Pull request #239](https://github.com/gazebosim/gz-fuel-tools/pull/239)
+    * [Pull request #247](https://github.com/gazebosim/gz-fuel-tools/pull/247)
+
+1. Improve documentation
+    * [Pull request #298](https://github.com/gazebosim/gz-fuel-tools/pull/298)
+    * [Pull request #299](https://github.com/gazebosim/gz-fuel-tools/pull/299)
+    * [Pull request #300](https://github.com/gazebosim/gz-fuel-tools/pull/300)
 
 ## Gazebo Fuel Tools 7.x
+
+### Gazebo Fuel Tools 7.1.0 (2021-08-16)
+
+1. Ignition to Gazebo server rename effort
+    * [Pull request #263](https://github.com/gazebosim/gz-fuel-tools/pull/263)
+
+1. Remove redundant namespace references
+    * [Pull request #284](https://github.com/gazebosim/gz-fuel-tools/pull/284)
+
+1. Change `IGN_DESIGNATION` to `GZ_DESIGNATION`
+    * [Pull request #278](https://github.com/gazebosim/gz-fuel-tools/pull/278)
+
+1. Ignition -> Gazebo docs
+    * [Pull request #276](https://github.com/gazebosim/gz-fuel-tools/pull/276)
+
+1. Remove unused files (`bitbucket-pipelines`, `docs`)
+    * [Pull request #273](https://github.com/gazebosim/gz-fuel-tools/pull/273)
+
+1. Disable failing windows tests
+    * [Pull request #266](https://github.com/gazebosim/gz-fuel-tools/pull/266)
+
+1. Disable staging-fuel.ignitionrobotics.org test
+    * [Pull request #257](https://github.com/gazebosim/gz-fuel-tools/pull/257)
+
+1. Add missing header guard for `Interface.hh`
+    * [Pull request #249](https://github.com/gazebosim/gz-fuel-tools/pull/249)
+
+1. SDF from path helper
+    * [Pull request #233](https://github.com/gazebosim/gz-fuel-tools/pull/233)
+
+1.  Add Ubuntu Jammy CI
+    * [Pull request #236](https://github.com/gazebosim/gz-fuel-tools/pull/236)
+
+1. Fix trailing slashes in failing tests
+    * [Pull request #237](https://github.com/gazebosim/gz-fuel-tools/pull/237)
+
+1. Print error when unzipping fails to save a file
+    * [Pull request #235](https://github.com/gazebosim/gz-fuel-tools/pull/235)
+
+1. More checks when manipulating file system in tests
+    * [Pull request #227](https://github.com/gazebosim/gz-fuel-tools/pull/227)
+
+1. Move test cache to build folder
+    * [Pull request #222](https://github.com/gazebosim/gz-fuel-tools/pull/222)
+
+1. Improve and fix `ResultType` tests
+    * [Pull request #225](https://github.com/gazebosim/gz-fuel-tools/pull/225)
+
+1. Fix `cmdfuel` ruby script generation on Windows with MSVC
+    * [Pull request #219](https://github.com/gazebosim/gz-fuel-tools/pull/219)
+
+1. `FuelClient.cc`: include `<deque>`
+    * [Pull request #213](https://github.com/gazebosim/gz-fuel-tools/pull/213)
+
+1. APIs for retrieving models in parallel
+    * [Pull request #199](https://github.com/gazebosim/gz-fuel-tools/pull/199)
 
 ### Gazebo Fuel Tools 7.0.0 (2021-09-28)
 
