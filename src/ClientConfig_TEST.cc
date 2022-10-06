@@ -98,7 +98,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
 {
   ClientConfig config;
   ASSERT_EQ(2u, config.Servers().size());
-  EXPECT_EQ("https://fuel.ignitionrobotics.org",
+  EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers()[1].Url().Str());
@@ -137,7 +137,7 @@ TEST(ClientConfig, CustomConfiguration)
   EXPECT_TRUE(config.LoadConfig(testPath));
 
   ASSERT_EQ(4u, config.Servers().size());
-  EXPECT_EQ("https://fuel.ignitionrobotics.org",
+  EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers()[1].Url().Str());
@@ -166,10 +166,10 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
+      << "    url: https://fuel.gazebosim.org"  << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
+      << "    url: https://fuel.gazebosim.org"  << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl
@@ -317,7 +317,7 @@ TEST(ClientConfig, AsString)
 #else
     EXPECT_NE(str.find(".ignition\\fuel"), std::string::npos);
 #endif
-    EXPECT_NE(str.find("https://fuel.ignitionrobotics.org"), std::string::npos);
+    EXPECT_NE(str.find("https://fuel.gazebosim.org"), std::string::npos);
   }
 
   {

@@ -3,7 +3,7 @@
 servers:
   -
     name: osrf
-    url: https://fuel.ignitionrobotics.org
+    url: https://fuel.gazebosim.org
 
   # -
     # name: another_server

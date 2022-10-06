@@ -164,10 +164,10 @@ TEST_F(FuelClientTest, ParseModelURL)
     FuelClient client(config);
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/1.0/german/models/Cardboard Box/4"};
+      "https://fuel.gazebosim.org/1.0/german/models/Cardboard Box/4"};
     EXPECT_TRUE(client.ParseModelUrl(common::URI(url), id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "cardboard box");
@@ -183,10 +183,10 @@ TEST_F(FuelClientTest, ParseModelURL)
     FuelClient client(config);
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/5.0/german/models/Cardboard Box/6"};
+      "https://fuel.gazebosim.org/5.0/german/models/Cardboard Box/6"};
     EXPECT_TRUE(client.ParseModelUrl(common::URI(url), id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "cardboard box");
@@ -200,10 +200,10 @@ TEST_F(FuelClientTest, ParseModelURL)
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/german/models/Cardboard Box"};
+      "https://fuel.gazebosim.org/german/models/Cardboard Box"};
     EXPECT_TRUE(client.ParseModelUrl(common::URI(url), id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "cardboard box");
@@ -219,10 +219,10 @@ TEST_F(FuelClientTest, ParseModelURL)
     FuelClient client(config);
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/german/models/Cardboard Box/tip"};
+      "https://fuel.gazebosim.org/german/models/Cardboard Box/tip"};
     EXPECT_TRUE(client.ParseModelUrl(common::URI(url), id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "cardboard box");
@@ -254,28 +254,28 @@ TEST_F(FuelClientTest, ParseModelURL)
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/german/models/Cardboard Box/banana"};
+      "https://fuel.gazebosim.org/german/models/Cardboard Box/banana"};
     EXPECT_FALSE(client.ParseModelUrl(common::URI(url), id));
   }
   {
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/banana/german/models/Cardboard Box"};
+      "https://fuel.gazebosim.org/banana/german/models/Cardboard Box"};
     EXPECT_FALSE(client.ParseModelUrl(common::URI(url), id));
   }
   {
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/99/german/models/Cardboard Box"};
+      "https://fuel.gazebosim.org/99/german/models/Cardboard Box"};
     EXPECT_FALSE(client.ParseModelUrl(common::URI(url), id));
   }
   {
     FuelClient client;
     ModelIdentifier id;
     const std::string url{
-      "https://fuel.ignitionrobotics.org/2/2/german/models"
+      "https://fuel.gazebosim.org/2/2/german/models"
         "/Cardboard Box/banana"};
     EXPECT_FALSE(client.ParseModelUrl(common::URI(url), id));
   }
@@ -290,11 +290,11 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/"
+      "https://fuel.gazebosim.org/1.0/OpenRobotics/models/"
         "Cordless Drill/tip/files/meshes/cordless_drill.dae"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "cordless drill");
@@ -309,11 +309,11 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Pine Tree/tip/"
+      "https://fuel.gazebosim.org/1.0/openrobotics/models/Pine Tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "pine tree");
@@ -328,11 +328,11 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/5.0/OpenRobotics/models/Pine Tree/tip/"
+      "https://fuel.gazebosim.org/5.0/OpenRobotics/models/Pine Tree/tip/"
       "files/model.sdf"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "pine tree");
@@ -345,11 +345,11 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/OpenRobotics/models/pine tree/tip/"
+      "https://fuel.gazebosim.org/OpenRobotics/models/pine tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ("1.0", id.Server().Version());
     EXPECT_EQ(id.Owner(), "openrobotics");
@@ -365,11 +365,11 @@ TEST_F(FuelClientTest, ParseModelFileURL)
     ModelIdentifier id;
     std::string filePath;
     const common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/openrobotics/models/Pine Tree/tip/"
+      "https://fuel.gazebosim.org/openrobotics/models/Pine Tree/tip/"
       "files/materials/scripts/pine_tree.material"};
     EXPECT_TRUE(client.ParseModelFileUrl(modelUrl, id, filePath));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "pine tree");
@@ -415,7 +415,7 @@ TEST_F(FuelClientTest, DownloadModel)
   {
     // Unversioned URL should get the latest available version
     common::URI url{
-        "https://fuel.ignitionrobotics.org/1.0/chapulina/models/Test box"};
+        "https://fuel.gazebosim.org/1.0/chapulina/models/Test box"};
 
     // Check it is not cached
     std::string cachedPath;
@@ -431,7 +431,7 @@ TEST_F(FuelClientTest, DownloadModel)
 
     // Check it was downloaded to `2`
     auto modelPath = common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "chapulina", "models", "test box");
+        "fuel.gazebosim.org", "chapulina", "models", "test box");
 
     EXPECT_EQ(path, common::joinPaths(modelPath, "2"));
     EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2")));
@@ -453,7 +453,7 @@ TEST_F(FuelClientTest, DownloadModel)
   {
     // Unversioned URL should get the latest available version
     common::URI url{
-        "https://fuel.ignitionrobotics.org/1.0/iche033/models/Rescue Randy"};
+        "https://fuel.gazebosim.org/1.0/iche033/models/Rescue Randy"};
 
     // Check it is not cached
     std::string cachedPath;
@@ -469,7 +469,7 @@ TEST_F(FuelClientTest, DownloadModel)
 
     // Check it was downloaded to `2`
     auto modelPath = common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "iche033", "models", "rescue randy");
+        "fuel.gazebosim.org", "iche033", "models", "rescue randy");
 
     EXPECT_EQ(path, common::joinPaths(modelPath, "2"));
     EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2")));
@@ -506,9 +506,9 @@ TEST_F(FuelClientTest, DownloadModel)
   // Download model with a dependency specified within its `metadata.pbtxt`
   {
     common::URI url{
-        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_red_1"};
+        "https://fuel.gazebosim.org/1.0/openrobotics/models/hatchback red"};
     common::URI depUrl{
-        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_1"};
+        "https://fuel.gazebosim.org/1.0/openrobotics/models/hatchback"};
 
     // Check it is not cached
     std::string cachedPath;
@@ -542,10 +542,10 @@ TEST_F(FuelClientTest, DownloadModel)
   // The dependency points to fuel.gazebosim.org.
   {
     common::URI url{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/models/hatchback red"
+      "https://fuel.gazebosim.org/1.0/openrobotics/models/hatchback red copy"
     };
     common::URI depUrl{
-      "https://fuel.gazebosim.org/1.0/openrobotics/models/hatchback"};
+      "https://fuel.gazebosim.org/1.0/openrobotics/models/hatchback copy"};
 
     // Check it is not cached
     std::string cachedPath;
@@ -578,7 +578,7 @@ TEST_F(FuelClientTest, DownloadModel)
   // Try using nonexistent URL
   {
     std::string url{
-        "https://fuel.ignitionrobotics.org/1.0/chapulina/models/"
+        "https://fuel.gazebosim.org/1.0/chapulina/models/"
           "Inexistent model"};
     std::string path;
     Result result = client.DownloadModel(common::URI(url), path);
@@ -615,9 +615,9 @@ TEST_F(FuelClientTest, IGN_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
   // Download model with a dependency specified within its `metadata.pbtxt`
   {
     common::URI url{
-        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_red_1"};
+        "https://fuel.gazebosim.org/1.0/openrobotics/models/hatchback red"};
     common::URI depUrl{
-        "https://fuel.ignitionrobotics.org/1.0/JShep1/models/hatchback_1"};
+        "https://fuel.gazebosim.org/1.0/openrobotics/models/hatchback"};
 
     ModelIdentifier id;
     ModelIdentifier depId;
@@ -812,10 +812,10 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     FuelClient client;
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/1.0/german/worlds/Cardboard Box"};
+      "https://fuel.gazebosim.org/1.0/german/worlds/Cardboard Box"};
     EXPECT_TRUE(client.ParseWorldUrl(url, id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "cardboard box");
@@ -831,10 +831,10 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     FuelClient client(config);
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/1.0/german/worlds/Cardboard Box/4"};
+      "https://fuel.gazebosim.org/1.0/german/worlds/Cardboard Box/4"};
     EXPECT_TRUE(client.ParseWorldUrl(url, id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "cardboard box");
@@ -850,10 +850,10 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     FuelClient client(config);
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/5.0/german/worlds/Cardboard Box/6"};
+      "https://fuel.gazebosim.org/5.0/german/worlds/Cardboard Box/6"};
     EXPECT_TRUE(client.ParseWorldUrl(url, id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "cardboard box");
@@ -867,10 +867,10 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     FuelClient client;
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/german/worlds/Cardboard Box"};
+      "https://fuel.gazebosim.org/german/worlds/Cardboard Box"};
     EXPECT_TRUE(client.ParseWorldUrl(url, id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ("1.0", id.Server().Version());
     EXPECT_EQ(id.Owner(), "german");
@@ -888,10 +888,10 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     FuelClient client(config);
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/german/worlds/Cardboard Box/tip/"};
+      "https://fuel.gazebosim.org/german/worlds/Cardboard Box/tip/"};
     EXPECT_TRUE(client.ParseWorldUrl(url, id));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "german");
     EXPECT_EQ(id.Name(), "cardboard box");
@@ -920,28 +920,28 @@ TEST_F(FuelClientTest, ParseWorldUrl)
     FuelClient client;
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/german/worlds/Cardboard Box/banana"};
+      "https://fuel.gazebosim.org/german/worlds/Cardboard Box/banana"};
     EXPECT_FALSE(client.ParseWorldUrl(url, id));
   }
   {
     FuelClient client;
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/banana/german/worlds/Cardboard Box"};
+      "https://fuel.gazebosim.org/banana/german/worlds/Cardboard Box"};
     EXPECT_FALSE(client.ParseWorldUrl(url, id));
   }
   {
     FuelClient client;
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/99/german/worlds/Cardboard Box"};
+      "https://fuel.gazebosim.org/99/german/worlds/Cardboard Box"};
     EXPECT_FALSE(client.ParseWorldUrl(url, id));
   }
   {
     FuelClient client;
     WorldIdentifier id;
     const common::URI url{
-      "https://fuel.ignitionrobotics.org/2/2/german/worlds/Cardboard Box"
+      "https://fuel.gazebosim.org/2/2/german/worlds/Cardboard Box"
         "/banana"};
     EXPECT_FALSE(client.ParseWorldUrl(url, id));
   }
@@ -956,11 +956,11 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/tip/"
+      "https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty/tip/"
       "files/test.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "empty");
@@ -975,11 +975,11 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty sky/tip/"
+      "https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty sky/tip/"
       "files/empty_sky.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "empty sky");
@@ -994,11 +994,11 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/5.0/OpenRobotics/worlds/Empty/tip/"
+      "https://fuel.gazebosim.org/5.0/OpenRobotics/worlds/Empty/tip/"
       "files/test.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "empty");
@@ -1011,11 +1011,11 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/OpenRobotics/worlds/Empty sky/tip/"
+      "https://fuel.gazebosim.org/OpenRobotics/worlds/Empty sky/tip/"
       "files/empty_sky.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_FALSE(id.Server().Version().empty());
     EXPECT_EQ("1.0", id.Server().Version());
     EXPECT_EQ(id.Owner(), "openrobotics");
@@ -1031,11 +1031,11 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
     WorldIdentifier id;
     std::string filePath;
     const common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/tip/"
+      "https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty/tip/"
       "files/test.world"};
     EXPECT_TRUE(client.ParseWorldFileUrl(worldUrl, id, filePath));
 
-    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.ignitionrobotics.org");
+    EXPECT_EQ(id.Server().Url().Str(), "https://fuel.gazebosim.org");
     EXPECT_EQ(id.Server().Version(), "1.0");
     EXPECT_EQ(id.Owner(), "openrobotics");
     EXPECT_EQ(id.Name(), "empty");
@@ -1073,7 +1073,7 @@ TEST_F(FuelClientTest, DownloadWorld)
 
   ServerConfig server;
   server.SetUrl(common::URI(
-        "https://fuel.ignitionrobotics.org"));
+        "https://fuel.gazebosim.org"));
 
   ClientConfig config;
   config.AddServer(server);
@@ -1086,7 +1086,7 @@ TEST_F(FuelClientTest, DownloadWorld)
   // Download world from URL
   {
     // Unversioned URL should get the latest available version
-    common::URI url{"https://fuel.ignitionrobotics.org/1.0/OpenRobotics/"
+    common::URI url{"https://fuel.gazebosim.org/1.0/OpenRobotics/"
                     "worlds/Test world"};
 
     // Check it is not cached
@@ -1103,7 +1103,7 @@ TEST_F(FuelClientTest, DownloadWorld)
 
     // Check it was downloaded to `1`
     auto worldPath = common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world");
+        "fuel.gazebosim.org", "openrobotics", "worlds", "test world");
 
     EXPECT_EQ(path, common::joinPaths(worldPath, "2"));
     EXPECT_TRUE(common::exists(common::joinPaths(worldPath, "2")));
@@ -1122,7 +1122,7 @@ TEST_F(FuelClientTest, DownloadWorld)
   // Try using nonexistent URL
   {
     common::URI url{
-        "https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Bad world"};
+        "https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Bad world"};
     std::string path;
     auto result = client.DownloadWorld(url, path);
     EXPECT_FALSE(result);
@@ -1351,7 +1351,7 @@ TEST_F(FuelClientTest, Models)
   }
 
   {
-    // Uses fuel.ignitionrobotics.org by default
+    // Uses fuel.gazebosim.org by default
     ModelIter iter = client.Models(serverConfig);
     EXPECT_TRUE(iter);
   }
@@ -1385,7 +1385,7 @@ TEST_F(FuelClientTest, Worlds)
   }
 
   {
-    // Uses fuel.ignitionrobotics.org by default
+    // Uses fuel.gazebosim.org by default
     WorldIter iter = client.Worlds(serverConfig);
     EXPECT_TRUE(iter);
   }

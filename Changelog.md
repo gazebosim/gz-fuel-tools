@@ -17,7 +17,7 @@
 1. Remove unused files (bitbucket-pipelines, docs)
     * [Pull request #273](https://github.com/gazebosim/gz-fuel-tools/pull/273)
 
-1. Disable `staging-fuel.ignitionrobotics.org` test
+1. Disable `staging-fuel.gazebosim.org` test
     * [Pull request #257](https://github.com/gazebosim/gz-fuel-tools/pull/257)
 
 ### Ignition Fuel Tools 4.5.0 (2022-06-01)
