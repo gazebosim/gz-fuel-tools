@@ -17,10 +17,10 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

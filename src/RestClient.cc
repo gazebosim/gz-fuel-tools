@@ -26,9 +26,9 @@
 #include <string>
 #include <vector>
 
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
 
-#include "ignition/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/RestClient.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

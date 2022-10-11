@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Open Source Robotics Foundation
+ * Copyright (C) 2022 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,41 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
-#ifndef IGNITION_FUEL_TOOLS_MODELPRIVATE_HH_
-#define IGNITION_FUEL_TOOLS_MODELPRIVATE_HH_
-
-#include <string>
-
-#include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/ModelIdentifier.hh"
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::string
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-
-namespace ignition
-{
-  namespace fuel_tools
-  {
-    /// \brief Private class, do not use
-    class IGNITION_FUEL_TOOLS_VISIBLE ModelPrivate
-    {
-      /// \brief How this model is ID'd
-      public: ModelIdentifier id;
-
-      /// \brief Where this model is on disk
-      public: std::string pathOnDisk;
-    };
-  }
-}
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
-#endif
+#include <gz/fuel_tools/ModelPrivate.hh>
+#include <ignition/fuel_tools/config.hh>
