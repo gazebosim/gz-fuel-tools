@@ -16,7 +16,7 @@
 */
 
 #include <gtest/gtest.h>
-#include "ignition/fuel_tools/Result.hh"
+#include "gz/fuel_tools/Result.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

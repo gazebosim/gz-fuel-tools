@@ -18,10 +18,10 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/common/Util.hh>
-#include "ignition/fuel_tools/ClientConfig.hh"
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/common/Util.hh>
+#include "gz/fuel_tools/ClientConfig.hh"
 #include "test/test_config.h"
 
 using namespace ignition;

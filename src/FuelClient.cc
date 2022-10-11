@@ -19,7 +19,7 @@
 #pragma warning(push, 0)
 #endif
 #include <google/protobuf/text_format.h>
-#include <ignition/msgs/fuel_metadata.pb.h>
+#include <gz/msgs/fuel_metadata.pb.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -32,28 +32,28 @@
 #include <regex>
 #include <string>
 
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/common/Util.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/common/Util.hh>
 
-#include <ignition/msgs/Utility.hh>
+#include <gz/msgs/Utility.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/CollectionIdentifier.hh"
-#include "ignition/fuel_tools/FuelClient.hh"
-#include "ignition/fuel_tools/JSONParser.hh"
-#include "ignition/fuel_tools/LocalCache.hh"
-#include "ignition/fuel_tools/ModelIdentifier.hh"
-#include "ignition/fuel_tools/ModelIterPrivate.hh"
-#include "ignition/fuel_tools/RestClient.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/CollectionIdentifier.hh"
+#include "gz/fuel_tools/FuelClient.hh"
+#include "gz/fuel_tools/JSONParser.hh"
+#include "gz/fuel_tools/LocalCache.hh"
+#include "gz/fuel_tools/ModelIdentifier.hh"
+#include "gz/fuel_tools/ModelIterPrivate.hh"
+#include "gz/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
 
 /// \brief Private Implementation
-class ignition::fuel_tools::FuelClientPrivate
+class gz::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL,
   /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer/2
@@ -494,7 +494,7 @@ void FuelClient::AddServerConfigParametersToHeaders(
 }
 
 //////////////////////////////////////////////////
-Result FuelClient::DeleteUrl(const ignition::common::URI &_uri,
+Result FuelClient::DeleteUrl(const gz::common::URI &_uri,
     const std::vector<std::string> &_headers)
 {
   Rest rest;

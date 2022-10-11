@@ -23,7 +23,7 @@
 #pragma warning(push, 0)
 #endif
 #include <google/protobuf/text_format.h>
-#include <ignition/msgs/fuel_metadata.pb.h>
+#include <gz/msgs/fuel_metadata.pb.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -34,7 +34,7 @@
 #ifdef _MSC_VER
 #pragma warning(push, 0)
 #endif
-#include <ignition/msgs/Utility.hh>
+#include <gz/msgs/Utility.hh>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -56,19 +56,19 @@
 #include <utility>
 #include <vector>
 
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/common/SignalHandler.hh>
-#include <ignition/common/URI.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/common/SignalHandler.hh>
+#include <gz/common/URI.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/CollectionIdentifier.hh"
-#include "ignition/fuel_tools/config.hh"
-#include "ignition/fuel_tools/FuelClient.hh"
-#include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/Result.hh"
-#include "ign.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/CollectionIdentifier.hh"
+#include "gz/fuel_tools/config.hh"
+#include "gz/fuel_tools/FuelClient.hh"
+#include "gz/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Result.hh"
+#include "gz.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
 //////////////////////////////////////////////////
 /// \brief Print resources in a human readable manner
@@ -76,7 +76,7 @@
 /// \param[in] _resourceMap Key is owner name, value is vector of resources
 /// \param[in] _resourceType Type, such as "models"
 extern "C" void prettyPrint(
-    const ignition::fuel_tools::ServerConfig &_serverConfig,
+    const gz::fuel_tools::ServerConfig &_serverConfig,
     const std::map<std::string, std::vector<std::string>> &_resourceMap,
     const std::string &_resourceType)
 {
@@ -131,7 +131,7 @@ extern "C" void prettyPrint(
 /// \param[in] _resourceMap Key is owner name, value is vector of resources
 /// \param[in] _resourceType Type, such as "models"
 extern "C" void uglyPrint(
-    const ignition::fuel_tools::ServerConfig &_serverConfig,
+    const gz::fuel_tools::ServerConfig &_serverConfig,
     const std::map<std::string, std::vector<std::string>> &_resourceMap,
     const std::string &_resourceType)
 {
@@ -158,8 +158,8 @@ extern "C" void uglyPrint(
 /// \return True if successful, will fail if there's a server error or if the
 /// server has no models yet.
 extern "C" bool getAllModels(
-    const ignition::fuel_tools::FuelClient &_client,
-    const ignition::fuel_tools::ServerConfig &_server,
+    const gz::fuel_tools::FuelClient &_client,
+    const gz::fuel_tools::ServerConfig &_server,
     std::map<std::string, std::vector<std::string>> &_resourceMap)
 {
   auto iter = _client.Models(_server);
@@ -192,8 +192,8 @@ extern "C" bool getAllModels(
 /// \return True if successful, will fail if there's a server error or if the
 /// server has no worlds yet.
 extern "C" bool getAllWorlds(
-    const ignition::fuel_tools::FuelClient &_client,
-    const ignition::fuel_tools::ServerConfig &_server,
+    const gz::fuel_tools::FuelClient &_client,
+    const gz::fuel_tools::ServerConfig &_server,
     std::map<std::string, std::vector<std::string>> &_resourceMap)
 {
   auto iter = _client.Worlds(_server);
@@ -225,11 +225,11 @@ extern "C" bool getAllWorlds(
 /// \return True if successful, will fail if there's a server error or if the
 /// server has no models yet.
 extern "C" bool getOwnerModels(
-    const ignition::fuel_tools::FuelClient &_client,
-    const ignition::fuel_tools::ModelIdentifier &_modelId,
+    const gz::fuel_tools::FuelClient &_client,
+    const gz::fuel_tools::ModelIdentifier &_modelId,
     std::map<std::string, std::vector<std::string>> &_resourceMap)
 {
-  ignition::fuel_tools::ModelIter iter = _client.Models(_modelId);
+  gz::fuel_tools::ModelIter iter = _client.Models(_modelId);
 
   if (!iter)
   {
@@ -259,8 +259,8 @@ extern "C" bool getOwnerModels(
 /// \return True if successful, will fail if there's a server error or if the
 /// server has no worlds yet.
 extern "C" bool getOwnerWorlds(
-    const ignition::fuel_tools::FuelClient &_client,
-    const ignition::fuel_tools::WorldIdentifier &_worldId,
+    const gz::fuel_tools::FuelClient &_client,
+    const gz::fuel_tools::WorldIdentifier &_worldId,
     std::map<std::string, std::vector<std::string>> &_resourceMap)
 {
   auto iter = _client.Worlds(_worldId);
@@ -295,13 +295,13 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
     const char *_owner, const char *_raw, const char *_configFile)
 {
   std::string urlStr{_url};
-  if (!urlStr.empty() && !ignition::common::URI::Valid(_url))
+  if (!urlStr.empty() && !gz::common::URI::Valid(_url))
   {
     std::cout << "Invalid URL [" << _url << "]" << std::endl;
     return 0;
   }
 
-  ignition::common::URI url(urlStr);
+  gz::common::URI url(urlStr);
   std::string owner{_owner};
   std::string rawStr{_raw};
   std::transform(rawStr.begin(), rawStr.end(),
@@ -309,7 +309,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
   bool pretty = rawStr != "true";
 
   // Client
-  ignition::fuel_tools::ClientConfig conf;
+  gz::fuel_tools::ClientConfig conf;
   if (_configFile && strlen(_configFile) > 0)
   {
     conf.Clear();
@@ -319,19 +319,19 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listModels(const char *_url,
   if (url.Valid())
   {
     conf.Clear();
-    ignition::fuel_tools::ServerConfig serverConf;
-    serverConf.SetUrl(ignition::common::URI(url));
+    gz::fuel_tools::ServerConfig serverConf;
+    serverConf.SetUrl(gz::common::URI(url));
     conf.AddServer(serverConf);
   }
 
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
 
   // Filter
-  ignition::fuel_tools::ModelIdentifier modelId;
+  gz::fuel_tools::ModelIdentifier modelId;
   if (!owner.empty())
     modelId.SetOwner(owner);
 
-  ignition::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::FuelClient client(conf);
 
   // Get models
   for (auto server : conf.Servers())
@@ -385,13 +385,13 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
     const char *_owner, const char *_raw, const char *_configFile)
 {
   std::string urlStr{_url};
-  if (!urlStr.empty() && !ignition::common::URI::Valid(_url))
+  if (!urlStr.empty() && !gz::common::URI::Valid(_url))
   {
     std::cout << "Invalid URL [" << _url << "]" << std::endl;
     return 0;
   }
 
-  ignition::common::URI url(urlStr);
+  gz::common::URI url(urlStr);
   std::string owner{_owner};
   std::string rawStr{_raw};
   std::transform(rawStr.begin(), rawStr.end(),
@@ -399,7 +399,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
   bool pretty = rawStr != "true";
 
   // Client
-  ignition::fuel_tools::ClientConfig conf;
+  gz::fuel_tools::ClientConfig conf;
   if (_configFile && strlen(_configFile) > 0)
   {
     conf.Clear();
@@ -409,7 +409,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
   if (url.Valid())
   {
     conf.Clear();
-    ignition::fuel_tools::ServerConfig serverConf;
+    gz::fuel_tools::ServerConfig serverConf;
     serverConf.SetUrl(url);
     conf.AddServer(serverConf);
   }
@@ -417,11 +417,11 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
 
   // Filter
-  ignition::fuel_tools::WorldIdentifier worldId;
+  gz::fuel_tools::WorldIdentifier worldId;
   if (!owner.empty())
     worldId.SetOwner(owner);
 
-  ignition::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::FuelClient client(conf);
 
   // Get worlds
   for (auto server : conf.Servers())
@@ -476,7 +476,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 {
   // Add signal handler for SIGTERM and SIGINT. Ctrl-C doesn't work without this
   // handler.
-  ignition::common::SignalHandler sigHandler;
+  gz::common::SignalHandler sigHandler;
   sigHandler.AddCallback([&](int _sig) {
       if (SIGTERM == _sig || SIGINT == _sig)
       {
@@ -484,7 +484,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       }
   });
   std::string urlStr{_url};
-  ignition::common::URI url(urlStr);
+  gz::common::URI url(urlStr);
   if (!url.Valid())
   {
     std::cout << "Download failed: Malformed URL" << std::endl;
@@ -492,7 +492,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
   }
 
   // Client
-  ignition::fuel_tools::ClientConfig conf;
+  gz::fuel_tools::ClientConfig conf;
   if (_configFile && strlen(_configFile) > 0)
   {
     conf.Clear();
@@ -501,16 +501,16 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
 
-  ignition::fuel_tools::FuelClient client(conf);
-  ignition::fuel_tools::ModelIdentifier model;
-  ignition::fuel_tools::WorldIdentifier world;
-  ignition::fuel_tools::CollectionIdentifier collection;
+  gz::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::ModelIdentifier model;
+  gz::fuel_tools::WorldIdentifier world;
+  gz::fuel_tools::CollectionIdentifier collection;
 
   // Model?
   if (client.ParseModelUrl(url, model))
   {
     // Download
-    if (ignition::common::Console::Verbosity() >= 3)
+    if (gz::common::Console::Verbosity() >= 3)
     {
       std::cout << "Downloading model: " << "\033[36m" << std::endl
                 << model.AsPrettyString("  ") << "\033[39m" << std::endl;
@@ -545,7 +545,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
   else if (client.ParseWorldUrl(url, world))
   {
     // Download
-    if (ignition::common::Console::Verbosity() >= 3)
+    if (gz::common::Console::Verbosity() >= 3)
     {
       std::cout << "Downloading world: " << "\033[36m" << std::endl
                 << world.AsPrettyString("  ") << "\033[39m" << std::endl;
@@ -558,7 +558,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
               << std::endl;
     }
 
-    ignition::fuel_tools::Result result = client.DownloadWorld(world);
+    gz::fuel_tools::Result result = client.DownloadWorld(world);
 
     if (!result)
     {
@@ -570,7 +570,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
   // Collection?
   else if (client.ParseCollectionUrl(url, collection))
   {
-    if (ignition::common::Console::Verbosity() >= 3)
+    if (gz::common::Console::Verbosity() >= 3)
     {
       std::cout << "Downloading collection: " << "\033[36m" << std::endl
                 << collection.AsPrettyString("  ") << "\033[39m" << std::endl;
@@ -595,8 +595,8 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       }
     }
 
-    std::vector<ignition::fuel_tools::ModelIdentifier> modelIds;
-    std::vector<ignition::fuel_tools::WorldIdentifier> worldIds;
+    std::vector<gz::fuel_tools::ModelIdentifier> modelIds;
+    std::vector<gz::fuel_tools::WorldIdentifier> worldIds;
 
     if (downloadModels)
     {
@@ -647,7 +647,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
     return false;
   }
 
-  if (ignition::common::Console::Verbosity() >= 3)
+  if (gz::common::Console::Verbosity() >= 3)
   {
     std::cout << "Download succeeded." << std::endl;
   }
@@ -657,28 +657,28 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 {
-  ignition::common::Console::SetVerbosity(std::atoi(_verbosity));
+  gz::common::Console::SetVerbosity(std::atoi(_verbosity));
 }
 
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     const char *_url, const char *_header, const char *_private)
 {
-  ignition::common::SignalHandler handler;
+  gz::common::SignalHandler handler;
   bool sigKilled{false};
   handler.AddCallback([&sigKilled](const int)
   {
     sigKilled = true;
   });
 
-  ignition::fuel_tools::ClientConfig conf;
+  gz::fuel_tools::ClientConfig conf;
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
-  ignition::fuel_tools::FuelClient client(conf);
-  ignition::fuel_tools::ModelIdentifier model;
+  gz::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::ModelIdentifier model;
 
   // Set the server URL, if present.
   if (_url && std::strlen(_url) != 0)
-    model.Server().SetUrl(ignition::common::URI(_url));
+    model.Server().SetUrl(gz::common::URI(_url));
 
   // Store header information
   std::vector<std::string> headers;
@@ -689,11 +689,11 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
   bool privateBool = false;
   if (_private && std::strlen(_private) != 0)
   {
-    std::string privateStr = ignition::common::lowercase(_private);
+    std::string privateStr = gz::common::lowercase(_private);
     privateBool = privateStr == "1" || privateStr == "true";
   }
 
-  if (!ignition::common::exists(_path))
+  if (!gz::common::exists(_path))
   {
     ignerr << "The model path[" << _path << "] doesn't exist.\n";
     return 0;
@@ -703,10 +703,10 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
   // be used during the upload process.
   client.PopulateLicenses(model.Server());
 
-  if (ignition::common::exists(
-        ignition::common::joinPaths(_path, "metadata.pbtxt")) ||
-      ignition::common::exists(
-        ignition::common::joinPaths(_path, "model.config")))
+  if (gz::common::exists(
+        gz::common::joinPaths(_path, "metadata.pbtxt")) ||
+      gz::common::exists(
+        gz::common::joinPaths(_path, "model.config")))
   {
     std::cout << "Uploading a model[" << _path << "]\n";
     // Upload the model
@@ -715,15 +715,15 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 
   // If a model.config or metadata.pbtxt file does not exist, then assume
   // that the given path is a directory containing multiple models.
-  ignition::common::DirIter dirIter(_path);
-  ignition::common::DirIter end;
+  gz::common::DirIter dirIter(_path);
+  gz::common::DirIter end;
   while (!sigKilled && dirIter != end)
   {
-    if (ignition::common::isDirectory(*dirIter) &&
-        (ignition::common::exists(
-           ignition::common::joinPaths(*dirIter, "metadata.pbtxt")) ||
-         ignition::common::exists(
-           ignition::common::joinPaths(*dirIter, "model.config"))))
+    if (gz::common::isDirectory(*dirIter) &&
+        (gz::common::exists(
+           gz::common::joinPaths(*dirIter, "metadata.pbtxt")) ||
+         gz::common::exists(
+           gz::common::joinPaths(*dirIter, "model.config"))))
     {
       if (!client.UploadModel(*dirIter, model, headers, privateBool))
       {
@@ -739,21 +739,21 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteUrl(
     const char *_url, const char *_header)
 {
-  ignition::fuel_tools::ClientConfig conf;
+  gz::fuel_tools::ClientConfig conf;
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
-  ignition::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::FuelClient client(conf);
 
   // Store header information
   std::vector<std::string> headers;
   if (_header && strlen(_header) > 0)
     headers.push_back(_header);
 
-  ignition::common::URI url(_url);
+  gz::common::URI url(_url);
 
-  if (ignition::common::Console::Verbosity() >= 3)
+  if (gz::common::Console::Verbosity() >= 3)
   {
-    ignition::fuel_tools::ModelIdentifier model;
-    ignition::fuel_tools::WorldIdentifier world;
+    gz::fuel_tools::ModelIdentifier model;
+    gz::fuel_tools::WorldIdentifier world;
 
     if (client.ParseModelUrl(url, model))
     {
@@ -780,13 +780,13 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int deleteUrl(
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(const char *_path)
 {
-  ignition::msgs::FuelMetadata meta;
+  gz::msgs::FuelMetadata meta;
 
   std::ifstream inputFile(_path);
   std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
       std::istreambuf_iterator<char>());
 
-  if (!ignition::msgs::ConvertFuelMetadata(inputStr, meta))
+  if (!gz::msgs::ConvertFuelMetadata(inputStr, meta))
   {
     ignerr << "Unable to convert model config[" << _path << "].\n";
     return 0;
@@ -800,7 +800,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int config2Pbtxt(const char *_path)
 //////////////////////////////////////////////////
 extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
 {
-  ignition::msgs::FuelMetadata meta;
+  gz::msgs::FuelMetadata meta;
 
   // Read the pbtxt file.
   std::ifstream inputFile(_path);
@@ -811,7 +811,7 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
   google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
 
   std::string modelConfig;
-  if (!ignition::msgs::ConvertFuelMetadata(meta, modelConfig))
+  if (!gz::msgs::ConvertFuelMetadata(meta, modelConfig))
   {
     std::cerr << "Unable to convert Fuel metadata to model.config\n";
     return 0;
@@ -826,31 +826,31 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
     const char *_url, const char *_header, const char *_private,
     const char *_path)
 {
-  ignition::fuel_tools::ClientConfig conf;
+  gz::fuel_tools::ClientConfig conf;
   conf.SetUserAgent("FuelTools " IGNITION_FUEL_TOOLS_VERSION_FULL);
-  ignition::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::FuelClient client(conf);
 
   // Store header information
   std::vector<std::string> headers;
   if (_header && strlen(_header) > 0)
     headers.push_back(_header);
 
-  ignition::common::URI url(_url);
+  gz::common::URI url(_url);
 
   // Get a privacy change.
   std::optional<bool> privateBool;
   if (_private && std::strlen(_private) != 0)
   {
-    std::string privateStr = ignition::common::lowercase(_private);
+    std::string privateStr = gz::common::lowercase(_private);
     privateBool = privateStr == "1" || privateStr == "true";
   }
 
-  ignition::fuel_tools::ModelIdentifier model;
+  gz::fuel_tools::ModelIdentifier model;
 
   std::string modelPath;
   if (_path && std::strlen(_path) != 0)
   {
-    if (!ignition::common::exists(_path))
+    if (!gz::common::exists(_path))
     {
       ignerr << "The model path[" << _path << "] doesn't exist.\n";
       return 0;
@@ -861,14 +861,14 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int editUrl(
   // Check to see if a model has been specified in the the URI.
   if (client.ParseModelUrl(url, model))
   {
-    if (ignition::common::Console::Verbosity() >= 3)
+    if (gz::common::Console::Verbosity() >= 3)
     {
       std::cout << "Editing model: " << "\033[36m" << std::endl
         << model.AsPrettyString("  ") << "\033[39m" << std::endl;
     }
 
     // Get the model details from the server
-    ignition::fuel_tools::ModelIdentifier details;
+    gz::fuel_tools::ModelIdentifier details;
     if (!client.ModelDetails(model, details, headers))
     {
       ignerr << "Failed to fetch model details for model["

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Open Source Robotics Foundation
+ * Copyright (C) 2022 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,71 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
-#ifndef IGNITION_FUEL_TOOLS_WORLDITER_HH_
-#define IGNITION_FUEL_TOOLS_WORLDITER_HH_
-
-#include <memory>
-
-#include "ignition/fuel_tools/Helpers.hh"
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-
-namespace ignition
-{
-  namespace fuel_tools
-  {
-    /// \brief Forward declarations
-    class WorldIdentifier;
-    class WorldIterPrivate;
-    class WorldIterFactory;
-
-    /// \brief class for iterating through worlds
-    class IGNITION_FUEL_TOOLS_VISIBLE WorldIter
-    {
-      friend WorldIterFactory;
-
-      /// \brief Construct an iterator with the data it needs to function
-      /// \param[in] _dptr Pointer to private data to copy
-      protected: explicit WorldIter(std::unique_ptr<WorldIterPrivate> _dptr);
-
-      /// \brief Move constructor
-      /// \param[in] _old Iter to move
-      public: WorldIter(WorldIter && _old);
-
-      /// \brief Default destructor.
-      public: ~WorldIter();
-
-      /// \brief Conversion operator
-      /// \return False once the iterator is one past the end of the worlds
-      public: operator bool() const;
-
-      /// \brief Conversion operator
-      /// \return Internal world identifier.
-      public: operator WorldIdentifier() const;
-
-      /// \brief Prefix increment
-      /// \return Next iteration
-      public: WorldIter &operator++();
-
-      /// \brief -> operator
-      /// \return Internal world identifier
-      public: WorldIdentifier *operator->();
-
-      /// \brief Private data pointer.
-      private: std::unique_ptr<WorldIterPrivate> dataPtr;
-    };
-  }
-}
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
-#endif
+#include <gz/fuel_tools/WorldIter.hh>
+#include <ignition/fuel_tools/config.hh>
