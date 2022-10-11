@@ -3,7 +3,7 @@ set (sources
   CollectionIdentifier.cc
   FuelClient.cc
   Helpers.cc
-  ign.cc
+  gz.cc
   Interface.cc
   JSONParser.cc
   LocalCache.cc
@@ -21,7 +21,7 @@ set (gtest_sources
   ClientConfig_TEST.cc
   CollectionIdentifier_TEST.cc
   FuelClient_TEST.cc
-  ign_src_TEST.cc
+  gz_src_TEST.cc
   Interface_TEST.cc
   Helpers_TEST.cc
   JSONParser_TEST.cc
@@ -38,7 +38,7 @@ set (gtest_sources
 
 if (HAVE_IGN_TOOLS)
   set (gtest_sources ${gtest_sources}
-    ign_TEST.cc
+    gz_TEST.cc
   )
 endif()
 

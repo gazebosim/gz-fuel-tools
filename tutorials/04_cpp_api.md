@@ -171,7 +171,7 @@ for (const auto &server : client.Config().Servers())
     auto id = modelIdentifier;
     id.SetServer(server);
 
-    ignition::fuel_tools::ModelIdentifier model;
+    gz::fuel_tools::ModelIdentifier model;
     if (!client.ModelDetails(server, id, model))
       continue;
 
@@ -183,7 +183,7 @@ for (const auto &server : client.Config().Servers())
     auto id = worldIdentifier;
     id.SetServer(server);
 
-    ignition::fuel_tools::WorldIdentifier world;
+    gz::fuel_tools::WorldIdentifier world;
     if (!client.WorldDetails(id, world))
       continue;
 

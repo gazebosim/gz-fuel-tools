@@ -20,10 +20,10 @@
 #include <stdlib.h>
 
 #include <string>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/utilities/ExtraTestMacros.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/utilities/ExtraTestMacros.hh>
 
-#include "ign.hh"
+#include "gz.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
 
 using namespace ignition;
@@ -372,6 +372,7 @@ class DownloadCollectionTest
 {};
 
 INSTANTIATE_TEST_CASE_P(CollectionTest, DownloadCollectionTest,
+                        // cppcheck-suppress syntaxError
                         ::testing::Values(1, 2, 16),); // NOLINT
 
 /////////////////////////////////////////////////

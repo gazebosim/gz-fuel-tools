@@ -19,13 +19,13 @@
 #include <regex>
 #include <string>
 #include <vector>
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/JSONParser.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/WorldIter.hh"
-#include "ignition/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/JSONParser.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/WorldIter.hh"
+#include "gz/fuel_tools/RestClient.hh"
 
 #include "WorldIterPrivate.hh"
 
@@ -133,8 +133,8 @@ WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
           resp.headers["Link"], ",");
       for (const auto &l : links)
       {
-        if (l.find("next") != std::string::npos)
-        {
+        // cppcheck-suppress useStlAlgorithm
+        if (l.find("next") != std::string::npos) {
           auto start = l.find(queryStrPageKey);
           auto end = l.find(">", start+1);
           queryStrPage = l.substr(start, end-start);

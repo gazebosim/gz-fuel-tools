@@ -22,10 +22,10 @@
 #include <fstream>
 #include <string>
 
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
 
-#include "ignition/fuel_tools/Zip.hh"
+#include "gz/fuel_tools/Zip.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
@@ -166,7 +166,7 @@ bool Zip::Extract(const std::string &_src,
     char *buf = new char[readSize];
     int len = zip_fread(zf, buf, readSize);
 
-    if (len < 0)
+    if (len <= 0)
       ignerr << "Error reading " << sb.name << std::endl;
     else
     {
