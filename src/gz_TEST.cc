@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 Open Source Robotics Foundation
+ * Copyright (C/ 2018 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ auto g_version = std::string(strdup(IGNITION_FUEL_TOOLS_VERSION_FULL));
 auto g_listCmd = "ign fuel list -v 4 --force-version " + g_version;
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Versions))
 {
   auto output = custom_exec_str("ign fuel --versions");
@@ -60,7 +60,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Versions))
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Help))
 {
   auto output = custom_exec_str("ign fuel --force-version " + g_version +
@@ -75,7 +75,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(Help))
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ListFail))
 {
   auto output = custom_exec_str(g_listCmd);
@@ -94,7 +94,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ListFail))
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine,
     IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListConfigServerUgly))
 {
@@ -105,7 +105,7 @@ TEST(CmdLine,
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 // https://github.com/gazebosim/gz-fuel-tools/issues/254
 TEST(CmdLine,
     DETAIL_IGN_UTILS_ADD_DISABLED_PREFIX(ModelListCustomServerPretty))
@@ -125,7 +125,7 @@ TEST(CmdLine,
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListConfigServerUgly))
 {
   auto output = custom_exec_str(g_listCmd +
@@ -136,7 +136,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(WorldListConfigServerUgly))
 }
 
 /////////////////////////////////////////////////
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/113
+// https://github.com/gazebosim/gz-fuel-tools/issues/113
 // https://github.com/gazebosim/gz-fuel-tools/issues/254
 TEST(CmdLine,
     DETAIL_IGN_UTILS_ADD_DISABLED_PREFIX(WorldListCustomServerPretty))

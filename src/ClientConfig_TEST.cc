@@ -30,7 +30,7 @@ using namespace fuel_tools;
 /////////////////////////////////////////////////
 /// \brief Helper to remove file according to OS, while Windows
 /// has this issue:
-/// https://github.com/ignitionrobotics/ign-common/issues/51
+/// https://github.com/gazebosim/gz-common/issues/51
 /// \todo(anyone) Remove this once Windows issue is solved.
 /// \param[in] _path Path to file to be removed.
 void removeFileTemp(const std::string &_path)

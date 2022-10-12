@@ -38,7 +38,7 @@ using namespace ignition::fuel_tools;
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST(Interface, FetchResources)
 {
   common::Console::SetVerbosity(4);
