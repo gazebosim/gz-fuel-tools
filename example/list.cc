@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-#include <ignition/fuel_tools.hh>
+#include <gz/fuel_tools.hh>
 
 DEFINE_bool(h, false, "Show help");
 
@@ -61,14 +61,14 @@ int main(int argc, char **argv)
   }
 
   // Setup ClientConfig.
-  ignition::fuel_tools::ClientConfig conf;
+  gz::fuel_tools::ClientConfig conf;
   conf.SetUserAgent("ExampleList");
 
   if (FLAGS_s != "")
   {
     // The user specified a Fuel server via command line.
-    ignition::fuel_tools::ServerConfig srv;
-    srv.SetUrl(ignition::common::URI(FLAGS_s));
+    gz::fuel_tools::ServerConfig srv;
+    srv.SetUrl(gz::common::URI(FLAGS_s));
 
     // Add the extra Fuel server.
     conf.AddServer(srv);
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
   }
 
   // Instantiate the FuelClient object with the configuration.
-  ignition::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::FuelClient client(conf);
 
   for (const auto &server : client.Config().Servers())
   {

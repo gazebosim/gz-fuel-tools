@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Open Source Robotics Foundation
+ * Copyright (C) 2022 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
-#ifndef IGNITION_FUEL_TOOLS_HELPERS_HH_
-#define IGNITION_FUEL_TOOLS_HELPERS_HH_
-
-#include <string>
-#include <ignition/fuel_tools/Export.hh>
-
-// Use safer functions on Windows
-#ifdef _MSC_VER
-  #define ign_strcat strcat_s
-  #define ign_strcpy strcpy_s
-  #define ign_sprintf sprintf_s
-  #define ign_strdup _strdup
-#else
-  #define ign_strcat std::strcat
-  #define ign_strcpy std::strcpy
-  #define ign_sprintf std::sprintf
-  #define ign_strdup strdup
-#endif
-
-// IGNITION_FUEL_TOOLS_HELPERS_HH_
-#endif
+#include <gz/fuel_tools/Helpers.hh>
+#include <ignition/fuel_tools/config.hh>

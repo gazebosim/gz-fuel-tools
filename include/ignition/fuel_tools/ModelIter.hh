@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Open Source Robotics Foundation
+ * Copyright (C) 2022 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,76 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
-*/
+ */
 
-#ifndef IGNITION_FUEL_TOOLS_MODELITER_HH_
-#define IGNITION_FUEL_TOOLS_MODELITER_HH_
-
-#include <memory>
-
-#include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/Model.hh"
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-
-namespace ignition
-{
-  namespace fuel_tools
-  {
-    /// \brief forward declaration
-    class FuelClient;
-    class ModelIterPrivate;
-    class ModelIterFactory;
-
-    /// \brief class for iterating through models
-    class IGNITION_FUEL_TOOLS_VISIBLE ModelIter
-    {
-      friend ModelIterFactory;
-
-      /// \brief Construct an iterator with the data it needs to function
-      /// \param[in] _dptr Pointer to private data to copy
-      protected: explicit ModelIter(std::unique_ptr<ModelIterPrivate> _dptr);
-
-      /// \brief Move constructor
-      /// \param[in] _old Iter to move
-      public: ModelIter(ModelIter && _old);
-
-      /// \brief Default destructor.
-      public: ~ModelIter();
-
-      /// \brief Conversion operator
-      /// \return false once the iterator is one past the end of the models
-      public: operator bool();
-
-      /// \brief Conversion operator
-      /// \return false once the iterator is one past the end of the models
-      public: operator bool() const;
-
-      /// \brief Prefix increment
-      /// \return Next iteration
-      public: ModelIter &operator++();
-
-      /// \brief Dereference operator
-      /// \return Reference
-      public: Model &operator*();
-
-      /// \brief -> operator
-      /// \return Internal world identifier
-      public: Model *operator->();
-
-      /// \brief Private data pointer.
-      private: std::unique_ptr<ModelIterPrivate> dataPtr;
-    };
-  }
-}
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
-#endif
+#include <gz/fuel_tools/ModelIter.hh>
+#include <ignition/fuel_tools/config.hh>

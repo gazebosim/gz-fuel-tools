@@ -19,10 +19,10 @@
 #include <cstdio>
 #include <string>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/ModelIter.hh"
-#include "ignition/fuel_tools/ModelIterPrivate.hh"
-#include "ignition/fuel_tools/ModelPrivate.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/ModelIter.hh"
+#include "gz/fuel_tools/ModelIterPrivate.hh"
+#include "gz/fuel_tools/ModelPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

@@ -20,10 +20,10 @@
 #include <stdlib.h>
 
 #include <string>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/utilities/ExtraTestMacros.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/utilities/ExtraTestMacros.hh>
 
-#include "ign.hh"
+#include "gz.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
 
 using namespace ignition;
@@ -93,9 +93,9 @@ TEST_F(CmdLine, ModelListFail)
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
 TEST_F(CmdLine, ModelListConfigServerUgly)
 {
-  EXPECT_TRUE(listModels("", "", "true"));
+  EXPECT_TRUE(listModels("", "openroboticstest", "true"));
 
-  EXPECT_NE(this->stdOutBuffer.str().find("https://fuel.ignitionrobotics.org"),
+  EXPECT_NE(this->stdOutBuffer.str().find("https://fuel.gazebosim.org"),
       std::string::npos) << this->stdOutBuffer.str();
   EXPECT_EQ(this->stdOutBuffer.str().find("owners"), std::string::npos)
       << this->stdOutBuffer.str();
@@ -182,7 +182,7 @@ TEST_F(CmdLine, ModelDownloadUnversioned)
 {
   // Download
   EXPECT_TRUE(downloadUrl(
-      "https://fuel.ignitionrobotics.org/1.0/chapulina/models/Test box"));
+    "https://fuel.ignitionrobotics.org/1.0/openroboticstest/models/Test box"));
 
   // Check output
   EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"),
@@ -192,13 +192,13 @@ TEST_F(CmdLine, ModelDownloadUnversioned)
   // Check files
   EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
-      "chapulina", "models", "test box")));
+      "openroboticstest", "models", "test box")));
   EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
-      "chapulina", "models", "test box", "2")));
+      "openroboticstest", "models", "test box", "1")));
   EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.ignitionrobotics.org",
-      "chapulina", "models", "test box", "2", "model.sdf")));
+      "openroboticstest", "models", "test box", "1", "model.sdf")));
 }
 
 /////////////////////////////////////////////////
@@ -226,7 +226,7 @@ TEST_F(CmdLine, DownloadConfigCache)
 
   // Download
   EXPECT_TRUE(downloadUrl(
-      "https://fuel.ignitionrobotics.org/1.0/chapulina/models/Test box",
+      "https://fuel.ignitionrobotics.org/1.0/openroboticstest/models/Test box",
       testPath.c_str()));
 
   // Check output
@@ -236,10 +236,10 @@ TEST_F(CmdLine, DownloadConfigCache)
 
   // Check files
   auto modelPath = common::joinPaths(this->testCachePath,
-      "fuel.ignitionrobotics.org", "chapulina", "models", "test box");
+      "fuel.ignitionrobotics.org", "openroboticstest", "models", "test box");
   EXPECT_TRUE(common::isDirectory(modelPath));
-  EXPECT_TRUE(common::isDirectory(common::joinPaths(modelPath, "2")));
-  EXPECT_TRUE(common::isFile(common::joinPaths(modelPath, "2",
+  EXPECT_TRUE(common::isDirectory(common::joinPaths(modelPath, "1")));
+  EXPECT_TRUE(common::isFile(common::joinPaths(modelPath, "1",
       "model.sdf")));
 }
 

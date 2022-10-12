@@ -15,8 +15,8 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_TEST_CONFIG_HH_
-#define IGNITION_FUEL_TOOLS_TEST_CONFIG_HH_
+#ifndef GZ_FUEL_TOOLS_TEST_CONFIG_HH_
+#define GZ_FUEL_TOOLS_TEST_CONFIG_HH_
 
 #define PROJECT_SOURCE_PATH "${PROJECT_SOURCE_DIR}"
 #define PROJECT_BINARY_PATH "${PROJECT_BINARY_DIR}"
@@ -42,7 +42,7 @@
 #endif
 
 #include "gtest/gtest.h"
-#include "ignition/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Helpers.hh"
 
 #ifdef _MSC_VER
 #  define popen _popen
