@@ -20,9 +20,9 @@
 #include <stdlib.h>
 
 #include <string>
-#include <ignition/utilities/ExtraTestMacros.hh>
+#include <gz/utilities/ExtraTestMacros.hh>
 
-#include "ignition/fuel_tools/config.hh"
+#include "gz/fuel_tools/config.hh"
 #include "test/test_config.h"  // NOLINT(build/include)
 
 /////////////////////////////////////////////////

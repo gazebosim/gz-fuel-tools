@@ -19,15 +19,15 @@
 #include <string>
 #include <vector>
 
-#include <ignition/common/Filesystem.hh>
+#include <gz/common/Filesystem.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/CollectionIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/CollectionIdentifier.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
 
-class ignition::fuel_tools::CollectionIdentifierPrivate
+class gz::fuel_tools::CollectionIdentifierPrivate
 {
   /// \brief a name given to this collection by a user
   public: std::string name;

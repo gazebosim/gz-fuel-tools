@@ -28,23 +28,23 @@
 #include <regex>
 #include <string>
 #include <vector>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/common/StringUtils.hh>
-#include <ignition/common/Util.hh>
-#include <ignition/math/SemanticVersion.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/common/StringUtils.hh>
+#include <gz/common/Util.hh>
+#include <gz/math/SemanticVersion.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/LocalCache.hh"
-#include "ignition/fuel_tools/ModelIterPrivate.hh"
-#include "ignition/fuel_tools/ModelPrivate.hh"
-#include "ignition/fuel_tools/Zip.hh"
-#include "ignition/fuel_tools/WorldIterPrivate.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/LocalCache.hh"
+#include "gz/fuel_tools/ModelIterPrivate.hh"
+#include "gz/fuel_tools/ModelPrivate.hh"
+#include "gz/fuel_tools/Zip.hh"
+#include "gz/fuel_tools/WorldIterPrivate.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
 
-class ignition::fuel_tools::LocalCachePrivate
+class gz::fuel_tools::LocalCachePrivate
 {
   /// \brief return all models in a given directory
   /// \param[in] _path A directory for the local server cache
