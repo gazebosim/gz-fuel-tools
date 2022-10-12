@@ -192,13 +192,13 @@ TEST_F(CmdLine, ModelDownloadUnversioned)
   // Check files
   EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.gazebosim.org",
-      "chapulina", "models", "test box")));
+      "openroboticstest", "models", "test box")));
   EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.gazebosim.org",
-      "chapulina", "models", "test box", "2")));
+      "openroboticstest", "models", "test box", "1")));
   EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.gazebosim.org",
-      "chapulina", "models", "test box", "2", "model.sdf")));
+      "openroboticstest", "models", "test box", "1", "model.sdf")));
 }
 
 /////////////////////////////////////////////////
