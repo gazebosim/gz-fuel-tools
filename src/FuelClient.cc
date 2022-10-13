@@ -1793,7 +1793,7 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
 //////////////////////////////////////////////////
 void FuelClientPrivate::CheckForDeprecatedUri(const common::URI &_uri)
 {
-  static std::string oldServer = "fuel.gazebosim.org";
+  static std::string oldServer = "fuel.ignitionrobotics.org";
   auto ignFuelPos = _uri.Str().find(oldServer);
   if (ignFuelPos != std::string::npos)
   {
