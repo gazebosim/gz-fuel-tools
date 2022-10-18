@@ -807,7 +807,7 @@ Result FuelClient::ModelDependencies(
 
       std::copy(modelDeps.begin(), modelDeps.end(),
                 std::back_inserter(newDeps));
-      std::copy(recursiveDeps.begion(), recursiveDeps.end(),
+      std::copy(recursiveDeps.begin(), recursiveDeps.end(),
                 std::back_inserter(newDeps));
     }
   }
