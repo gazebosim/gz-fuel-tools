@@ -36,11 +36,6 @@ set (gtest_sources
   Zip_TEST.cc
 )
 
-# Some tests download simulation assets, which can take longer than the
-# default time limit.
-set_tests_properties(UNIT_gz_src_TEST PROPERTIES TIMEOUT 500)
-set_tests_properties(UNIT_FuelClient_TEST PROPERTIES TIMEOUT 500)
-
 if (HAVE_IGN_TOOLS)
   set (gtest_sources ${gtest_sources}
     gz_TEST.cc
@@ -77,6 +72,11 @@ ign_build_tests(TYPE UNIT
                   ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
                   TINYXML2::TINYXML2
 )
+
+# Some tests download simulation assets, which can take longer than the
+# default time limit.
+set_tests_properties(UNIT_gz_src_TEST PROPERTIES TIMEOUT 500)
+set_tests_properties(UNIT_FuelClient_TEST PROPERTIES TIMEOUT 500)
 
 # Command line support.
 add_subdirectory(cmd)
