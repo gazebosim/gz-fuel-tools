@@ -36,6 +36,11 @@ set (gtest_sources
   Zip_TEST.cc
 )
 
+# Some tests download simulation assets, which can take longer than the
+# default time limit.
+set_tests_properties(UNIT_gz_src_TEST PROPERTIES TIMEOUT 500)
+set_tests_properties(UNIT_FuelClient_TEST PROPERTIES TIMEOUT 500)
+
 if (HAVE_IGN_TOOLS)
   set (gtest_sources ${gtest_sources}
     gz_TEST.cc
