@@ -247,7 +247,7 @@ TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
   }
   EXPECT_EQ(9u, uniqueNames.size());
 
-  auto toFind = ignition::common::joinPaths(
+  auto toFind = gz::common::joinPaths(
     "http://localhost:8001/", "alice", "models", "am1");
 
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(toFind));
