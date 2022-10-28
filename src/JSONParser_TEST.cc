@@ -22,14 +22,14 @@
 #include <string>
 #include <vector>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/JSONParser.hh"
-#include "ignition/fuel_tools/ModelIter.hh"
-#include "ignition/fuel_tools/WorldIter.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/JSONParser.hh"
+#include "gz/fuel_tools/ModelIter.hh"
+#include "gz/fuel_tools/WorldIter.hh"
 #include "ModelIterPrivate.hh"
 #include "WorldIterPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
@@ -281,11 +281,4 @@ TEST(JSONParser, ParseLicenses)
         break;
     }
   }
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

@@ -28,7 +28,7 @@ end
 require 'optparse'
 
 # Constants.
-LIBRARY_NAME = '@IGN_LIBRARY_NAME@'
+LIBRARY_NAME = '@GZ_LIBRARY_NAME@'
 LIBRARY_VERSION = '@PROJECT_VERSION_FULL@'
 MAX_PARALLEL_JOBS = 16
 
@@ -45,10 +45,10 @@ COMMON_OPTIONS =
   "   The following information is in regards to user authentication via    \n"\
   "   the --header command line option.                                     \n"\
   "                                                                         \n"\
-  "   Two types of credentials are supported on Ignition Fuel, Private      \n"\
+  "   Two types of credentials are supported on Gazebo Fuel, Private      \n"\
   "   Token and JSON Web Token(JWT). The Private Token method is prefered.  \n"\
   "   Private tokens can be created through your  user settings on          \n"\
-  "   https://app.ignitionrobotics.org. Example usage:                      \n"\
+  "   https://app.gazebosim.org. Example usage:                      \n"\
   "     1. Private token method:                                            \n"\
   "         --header 'Private-Token: <token>'                               \n"\
   "     2. JWT method:                                                      \n"\
@@ -58,7 +58,7 @@ COMMON_OPTIONS =
 COMMANDS = { 'fuel' =>
   "Manage simulation resources.                                            \n"\
   "                                                                        \n"\
-  "  ign fuel [action] [options]                                           \n"\
+  "  gz fuel [action] [options]                                           \n"\
   "                                                                        \n"\
   "Available Actions:                                                      \n"\
   "  delete                   Delete resources                             \n"\
@@ -75,20 +75,20 @@ COMMANDS = { 'fuel' =>
   "                           arguments for level 3.                       \n" +
   COMMON_OPTIONS + "\n\n" +
   "Environment variables:                                                  \n"\
-  "  IGN_FUEL_CACHE_PATH      Path to the cache where resources are        \n"\
-  " downloaded to. Defaults to $HOME/.ignition/fuel                        \n"
+  "  GZ_FUEL_CACHE_PATH      Path to the cache where resources are        \n"\
+  " downloaded to. Defaults to $HOME/.gz/fuel                        \n"
 }
 
 SUBCOMMANDS = {
  'delete' =>
   "Delete simulation resources                                             \n"\
   "                                                                        \n"\
-  "  ign fuel delete [options]                                             \n"\
+  "  gz fuel delete [options]                                              \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
-  "                           https://fuel.ignitionrobotics.org.           \n"\
+  "                           https://fuel.gazebosim.org.                  \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'Private-Token: <access_token>'.    \n" +
   COMMON_OPTIONS,
@@ -96,11 +96,11 @@ SUBCOMMANDS = {
  'download' =>
   "Download simulation resources                                           \n"\
   "                                                                        \n"\
-  "  ign fuel download [options]                                           \n"\
+  "  gz fuel download [options]                                           \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -u [--url] arg           Full resource URL, such as:                  \n"\
-  "                           https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance\n"\
+  "                           https://fuel.gazebosim.org/1.0/openrobotics/models/Ambulance\n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
   "                           --header 'Private-Token: <access_token>'.    \n"\
   "  -j [--jobs] arg          Number of parallel downloads (default: 1,    \n"\
@@ -114,13 +114,13 @@ SUBCOMMANDS = {
  'edit' =>
   "Edit a simulation resource                                              \n"\
   "                                                                        \n"\
-  "  ign fuel edit [options]                                               \n"\
+  "  gz fuel edit [options]                                                \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -m [--model] arg         Path to directory containing the model.      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
-  "                           https://fuel.ignitionrobotics.org.           \n"\
+  "                           https://fuel.gazebosim.org.                  \n"\
   "  -p [--private]           Use this argument to make the model private. \n"\
   "  -b [--public]            Use this argument to make the model public.  \n"\
   "  --header arg             Set an HTTP header, such as                  \n"\
@@ -130,21 +130,21 @@ SUBCOMMANDS = {
   'list' =>
   "List simulation resources                                               \n"\
   "                                                                        \n"\
-  "  ign fuel list [options]                                               \n"\
+  "  gz fuel list [options]                                                \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -t [--type] arg          Resource type (i.e. model, world). Required. \n"\
   "  -o [--owner] arg         Return only resources for given owner.       \n"\
   "  -u [--url] arg           URL of a server the resource comes from,     \n"\
   "                           if unspecified, it will be                   \n"\
-  "                           https://fuel.ignitionrobotics.org.           \n"\
+  "                           https://fuel.gazebosim.org.                  \n"\
   "  -r [--raw]               Machine-friendly output.                     \n" +
   COMMON_OPTIONS,
 
   'meta' =>
   "Read and write resource metadata                                        \n"\
   "                                                                        \n"\
-  "  ign fuel meta [options]                                               \n"\
+  "  gz fuel meta [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  --config2pbtxt arg       Convert a model.config file to a             \n"\
@@ -156,14 +156,14 @@ SUBCOMMANDS = {
  'upload' =>
   "Upload simulation resources                                             \n"\
   "                                                                        \n"\
-  "  ign fuel upload [options]                                             \n"\
+  "  gz fuel upload [options]                                              \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -m [--model] arg         Path to directory containing a model, or     \n"\
   "                           multiple models each in a subdirectory.      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
-  "                           https://fuel.ignitionrobotics.org.           \n"\
+  "                           https://fuel.gazebosim.org.                  \n"\
   "  -o [--owner] arg         Upload to the given owner, which can be an.  \n"\
   "                           organization. Default behavior is to upload  \n"\
   "                           to the user account associated with the      \n"\
@@ -177,7 +177,7 @@ SUBCOMMANDS = {
  'update' =>
   "Update all models and worlds in local cache                             \n"\
   "                                                                        \n"\
-  "  ign fuel update [options]                                             \n"\
+  "  gz fuel update [options]                                             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  --onlymodels             Use this argument to only update models.     \n"\
@@ -188,7 +188,7 @@ SUBCOMMANDS = {
 }
 
 #
-# Class for the Ignition Fuel command line tools.
+# Class for the Gazebo Fuel command line tools.
 #
 class Cmd
 
@@ -287,12 +287,12 @@ class Cmd
     case options['subcommand']
     when 'delete'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
     when 'download'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
 
@@ -333,12 +333,12 @@ class Cmd
         exit(-1)
       end
       if options['url'] == ''
-        puts "Missing URL (e.g. --url https://fuel.ignitionrobotics.org)."
+        puts "Missing URL (e.g. --url https://fuel.gazebosim.org)."
         exit(-1)
       end
     when 'edit'
       if options['url'] == ''
-        puts "Missing resource URL (e.g. --url https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ambulance)."
+        puts "Missing resource URL (e.g. --url https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ambulance)."
         exit(-1)
       end
     end
@@ -361,12 +361,12 @@ class Cmd
     end
 
     # Read the library version.
-    Importer.extern 'char* ignitionVersion()'
+    Importer.extern 'char* gzVersion()'
     begin
-      plugin_version = Importer.ignitionVersion.to_s
+      plugin_version = Importer.gzVersion.to_s
     rescue DLError
-      puts "Library error: Problem running 'ignitionVersion()' from #{plugin}."
-      exit(-1)
+        puts "Library error: Problem running 'gzVersion()' from #{plugin}."
+        exit(-1)
     end
 
     # Sanity check: Verify that the version of the yaml file matches the version
@@ -452,7 +452,7 @@ class Cmd
       end
     rescue
       puts "Library error: Problem running [#{options['subcommand']}]() "\
-           "from @IGN_LIBRARY_NAME@."
+           "from @GZ_LIBRARY_NAME@."
     end # begin
   end # execute
 end # class

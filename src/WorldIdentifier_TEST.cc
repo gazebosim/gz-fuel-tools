@@ -17,12 +17,12 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
@@ -43,15 +43,15 @@ TEST(WorldIdentifier, SetFields)
 /// \brief Unique Name
 TEST(WorldIdentifier, UniqueName)
 {
-  ignition::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(ignition::common::URI("https://localhost:8001/"));
+  gz::fuel_tools::ServerConfig srv1;
+  srv1.SetUrl(gz::common::URI("https://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(ignition::common::URI("https://localhost:8002"));
+  gz::fuel_tools::ServerConfig srv2;
+  srv2.SetUrl(gz::common::URI("https://localhost:8002"));
 
-  ignition::fuel_tools::ServerConfig srv3;
+  gz::fuel_tools::ServerConfig srv3;
 
-  srv3.SetUrl(ignition::common::URI("https://localhost:8003/"));
+  srv3.SetUrl(gz::common::URI("https://localhost:8003/"));
 
   WorldIdentifier id;
   id.SetName("hello");
@@ -120,10 +120,10 @@ TEST(WorldIdentifier, AsString)
         "Name: \n"\
         "Owner: \n"\
         "Version: tip\n"\
-        "Unique name: fuel.ignitionrobotics.org/worlds/\n"
+        "Unique name: fuel.gazebosim.org/worlds/\n"
         "Local path: \n"
         "Server:\n"
-        "  URL: https://fuel.ignitionrobotics.org\n"
+        "  URL: https://fuel.gazebosim.org\n"
         "  Version: 1.0\n"
         "  API key: \n";
 #else
@@ -131,10 +131,10 @@ TEST(WorldIdentifier, AsString)
         "Name: \n"\
         "Owner: \n"\
         "Version: tip\n"\
-        "Unique name: fuel.ignitionrobotics.org\\worlds\n"
+        "Unique name: fuel.gazebosim.org\\worlds\\\n"
         "Local path: \n"
         "Server:\n"
-        "  URL: https://fuel.ignitionrobotics.org\n"
+        "  URL: https://fuel.gazebosim.org\n"
         "  Version: 1.0\n"
         "  API key: \n";
 #endif
@@ -148,7 +148,7 @@ TEST(WorldIdentifier, AsString)
     id.SetVersionStr("55");
 
     auto str = id.AsString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("hello"), std::string::npos);
     EXPECT_NE(str.find("raspberry"), std::string::npos);
@@ -164,7 +164,7 @@ TEST(WorldIdentifier, AsPrettyString)
     WorldIdentifier id;
     std::string str =
       "\x1B[96m\x1B[1mServer:\x1B[0m\n  "
-      "\x1B[96m\x1B[1mURL: \x1B[0m\x1B[37mhttps://fuel.ignitionrobotics.org"
+      "\x1B[96m\x1B[1mURL: \x1B[0m\x1B[37mhttps://fuel.gazebosim.org"
       "\x1B[0m\n  \x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
     EXPECT_EQ(str, id.AsPrettyString());
   }
@@ -176,17 +176,10 @@ TEST(WorldIdentifier, AsPrettyString)
     id.SetVersionStr("55");
 
     auto str = id.AsPrettyString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("hello"), std::string::npos);
     EXPECT_NE(str.find("raspberry"), std::string::npos);
     EXPECT_NE(str.find("55"), std::string::npos);
   }
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

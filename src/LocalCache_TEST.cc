@@ -20,15 +20,15 @@
 #include <fstream>
 #include <set>
 #include <string>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/utilities/ExtraTestMacros.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/utils/ExtraTestMacros.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
 #include "LocalCache.hh"
-#include "test/test_config.h"
+#include "test_config.hh"
 
 #ifdef _WIN32
 #include <direct.h>
@@ -38,26 +38,26 @@
 #define ChangeDirectory chdir
 #endif
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /// \brief Creates a directory structure in the build directory with 6 models
 void createLocal6Models(ClientConfig &_conf)
 {
-  igndbg << "Creating 6 local models in [" << common::cwd() << "]" << std::endl;
+  gzdbg << "Creating 6 local models in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8001");
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "models", "am1", "2")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "models", "am2", "1")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "bob", "models", "bm1", "1")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "bob", "models", "bm2", "2")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "trudy", "models", "tm1", "3")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "trudy", "models", "tm2", "2")));
 
   std::ofstream fout(common::joinPaths(serverPath,
@@ -67,28 +67,28 @@ void createLocal6Models(ClientConfig &_conf)
   fout.flush();
   fout.close();
 
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
       "alice", "models", "am2", "1", "model.config")));
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
       "bob", "models", "bm1", "1", "model.config")));
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
       "bob", "models", "bm2", "2", "model.config")));
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
       "trudy", "models", "tm1", "3", "model.config")));
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
       "trudy", "models", "tm2", "2", "model.config")));
 
-  ignition::fuel_tools::ServerConfig srv;
+  gz::fuel_tools::ServerConfig srv;
   srv.SetUrl(common::URI("http://localhost:8001/"));
   _conf.AddServer(srv);
 }
@@ -96,14 +96,14 @@ void createLocal6Models(ClientConfig &_conf)
 /// \brief Creates a directory structure in the build directory with 3 models
 void createLocal3Models(ClientConfig &_conf)
 {
-  igndbg << "Creating 3 local models in [" << common::cwd() << "]" << std::endl;
+  gzdbg << "Creating 3 local models in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8007");
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "models", "am1", "2")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "bob", "models", "bm1", "1")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "trudy", "models", "tm1", "3")));
 
   std::ofstream fout(common::joinPaths(serverPath,
@@ -113,37 +113,37 @@ void createLocal3Models(ClientConfig &_conf)
   fout.flush();
   fout.close();
 
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
       "bob", "models", "bm1", "1", "model.config")));
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "models", "am1", "2", "model.config"),
       common::joinPaths(serverPath,
       "trudy", "models", "tm1", "3", "model.config")));
 
-  ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(ignition::common::URI("http://localhost:8007/"));
+  gz::fuel_tools::ServerConfig srv;
+  srv.SetUrl(gz::common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
 
 /// \brief Creates a directory structure in the build directory with 6 worlds
 void createLocal6Worlds(ClientConfig &_conf)
 {
-  igndbg << "Creating 6 local worlds in [" << common::cwd() << "]" << std::endl;
+  gzdbg << "Creating 6 local worlds in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8001");
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "worlds", "am2", "1")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "bob", "worlds", "bm1", "1")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "bob", "worlds", "bm2", "2")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "trudy", "worlds", "tm1", "3")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "trudy", "worlds", "tm2", "2")));
 
   std::ofstream fout(common::joinPaths(serverPath,
@@ -153,43 +153,43 @@ void createLocal6Worlds(ClientConfig &_conf)
   fout.flush();
   fout.close();
 
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
       "alice", "worlds", "am2", "1", "world.world")));
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
       "bob", "worlds", "bm1", "1", "world.world")));
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
       "bob", "worlds", "bm2", "2", "world.world")));
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
       "trudy", "worlds", "tm1", "3", "world.world")));
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
       "trudy", "worlds", "tm2", "2", "world.world")));
 
-  ignition::fuel_tools::ServerConfig srv;
-  srv.SetUrl(ignition::common::URI("http://localhost:8001/"));
+  gz::fuel_tools::ServerConfig srv;
+  srv.SetUrl(gz::common::URI("http://localhost:8001/"));
   _conf.AddServer(srv);
 }
 
 /// \brief Creates a directory structure in the build directory with 3 worlds
 void createLocal3Worlds(ClientConfig &_conf)
 {
-  igndbg << "Creating 3 local worlds in [" << common::cwd() << "]" << std::endl;
+  gzdbg << "Creating 3 local worlds in [" << common::cwd() << "]" << std::endl;
 
   auto serverPath = common::joinPaths("test_cache", "localhost:8007");
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "bob", "worlds", "bm1", "1")));
-  EXPECT_TRUE(common::createDirectories(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "trudy", "worlds", "tm1", "3")));
 
   std::ofstream fout(common::joinPaths(serverPath,
@@ -199,16 +199,16 @@ void createLocal3Worlds(ClientConfig &_conf)
   fout.flush();
   fout.close();
 
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
       "bob", "worlds", "bm1", "1", "world.world")));
-  EXPECT_TRUE(common::copyFile(common::joinPaths(serverPath,
+  ASSERT_TRUE(common::copyFile(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2", "world.world"),
       common::joinPaths(serverPath,
       "trudy", "worlds", "tm1", "3", "world.world")));
 
-  ignition::fuel_tools::ServerConfig srv;
+  gz::fuel_tools::ServerConfig srv;
   srv.SetUrl(common::URI("http://localhost:8007/"));
   _conf.AddServer(srv);
 }
@@ -218,25 +218,24 @@ class LocalCacheTest : public ::testing::Test
 {
   public: void SetUp() override
   {
-    ignition::common::Console::SetVerbosity(4);
+    gz::common::Console::SetVerbosity(4);
   }
 };
 
 /////////////////////////////////////////////////
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
-TEST_F(LocalCacheTest, AllModels)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/231
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   EXPECT_TRUE(common::removeAll("test_cache"));
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
   createLocal3Models(conf);
 
-  ignition::fuel_tools::LocalCache cache(&conf);
+  gz::fuel_tools::LocalCache cache(&conf);
 
   auto iter = cache.AllModels();
   std::set<std::string> uniqueNames;
@@ -257,20 +256,18 @@ TEST_F(LocalCacheTest, AllModels)
 /////////////////////////////////////////////////
 /// \brief Get all models that match some fields
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, MatchingModels)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   EXPECT_TRUE(common::removeAll("test_cache"));
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.Clear();
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
   createLocal3Models(conf);
 
-  ignition::fuel_tools::LocalCache cache(&conf);
+  gz::fuel_tools::LocalCache cache(&conf);
 
   ModelIdentifier am1;
   am1.SetServer(conf.Servers().front());
@@ -305,23 +302,21 @@ TEST_F(LocalCacheTest, MatchingModels)
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, MatchingModel)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   EXPECT_TRUE(common::removeAll("test_cache"));
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
 
-  ignition::fuel_tools::LocalCache cache(&conf);
+  gz::fuel_tools::LocalCache cache(&conf);
 
-  ignition::fuel_tools::ServerConfig srv1;
+  gz::fuel_tools::ServerConfig srv1;
   srv1.SetUrl(common::URI("http://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv2;
+  gz::fuel_tools::ServerConfig srv2;
   srv2.SetUrl(common::URI("http://localhost:8002/"));
 
   ModelIdentifier am1;
@@ -363,19 +358,17 @@ TEST_F(LocalCacheTest, MatchingModel)
 /////////////////////////////////////////////////
 /// \brief Iterate through all worlds in cache
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, AllWorlds)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   EXPECT_TRUE(common::removeAll("test_cache"));
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
   createLocal3Worlds(conf);
 
-  ignition::fuel_tools::LocalCache cache(&conf);
+  gz::fuel_tools::LocalCache cache(&conf);
 
   auto iter = cache.AllWorlds();
   std::set<std::string> uniqueNames;
@@ -387,30 +380,28 @@ TEST_F(LocalCacheTest, AllWorlds)
   EXPECT_EQ(9u, uniqueNames.size());
 #ifdef _WIN32
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    ignition::common::joinPaths("localhost8001", "alice", "worlds", "am1")));
+    gz::common::joinPaths("localhost8001", "alice", "worlds", "am1")));
 #else
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    ignition::common::joinPaths("localhost:8001", "alice", "worlds", "am1")));
+    gz::common::joinPaths("localhost:8001", "alice", "worlds", "am1")));
 #endif
 }
 
 /////////////////////////////////////////////////
 /// \brief Get all worlds that match some fields
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, MatchingWorlds)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   EXPECT_TRUE(common::removeAll("test_cache"));
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.Clear();
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
   createLocal3Worlds(conf);
 
-  ignition::fuel_tools::LocalCache cache(&conf);
+  gz::fuel_tools::LocalCache cache(&conf);
 
   WorldIdentifier am1;
   am1.SetServer(conf.Servers().front());
@@ -433,24 +424,22 @@ TEST_F(LocalCacheTest, MatchingWorlds)
 /////////////////////////////////////////////////
 /// \brief Get a specific world from cache
 /// \brief Iterate through all models in cache
-// Windows doesn't support colons in filenames
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/106
 TEST_F(LocalCacheTest, MatchingWorld)
 {
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   EXPECT_TRUE(common::removeAll("test_cache"));
-  EXPECT_TRUE(common::createDirectories("test_cache"));
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
 
-  ignition::fuel_tools::LocalCache cache(&conf);
+  gz::fuel_tools::LocalCache cache(&conf);
 
-  ignition::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(ignition::common::URI("http://localhost:8001/"));
+  gz::fuel_tools::ServerConfig srv1;
+  srv1.SetUrl(gz::common::URI("http://localhost:8001/"));
 
-  ignition::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(ignition::common::URI("http://localhost:8002/"));
+  gz::fuel_tools::ServerConfig srv2;
+  srv2.SetUrl(gz::common::URI("http://localhost:8002/"));
 
   WorldIdentifier am1;
   am1.SetServer(srv1);
@@ -484,11 +473,4 @@ TEST_F(LocalCacheTest, MatchingWorld)
   bogus3.SetOwner("trudy");
   bogus3.SetName("tm3");
   EXPECT_FALSE(cache.MatchingWorld(bogus3));
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

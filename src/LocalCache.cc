@@ -28,25 +28,25 @@
 #include <regex>
 #include <string>
 #include <vector>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/common/StringUtils.hh>
-#include <ignition/common/Util.hh>
-#include <ignition/math/SemanticVersion.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/common/StringUtils.hh>
+#include <gz/common/Util.hh>
+#include <gz/math/SemanticVersion.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/Zip.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Zip.hh"
 
 #include "ModelPrivate.hh"
 #include "ModelIterPrivate.hh"
 #include "WorldIterPrivate.hh"
 #include "LocalCache.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
-class ignition::fuel_tools::LocalCachePrivate
+class gz::fuel_tools::LocalCachePrivate
 {
   /// \brief return all models in a given directory
   /// \param[in] _path A directory for the local server cache
@@ -102,7 +102,7 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
   std::vector<Model> models;
   if (!common::isDirectory(_path))
   {
-    ignwarn << "Server directory does not exist [" << _path << "]\n";
+    gzwarn << "Server directory does not exist [" << _path << "]\n";
     return models;
   }
 
@@ -162,7 +162,7 @@ std::vector<WorldIdentifier> LocalCachePrivate::WorldsInServer(
   std::vector<WorldIdentifier> worldIds;
   if (!common::isDirectory(_path))
   {
-    ignwarn << "Server directory does not exist [" << _path << "]\n";
+    gzwarn << "Server directory does not exist [" << _path << "]\n";
     return worldIds;
   }
 
@@ -381,7 +381,7 @@ bool LocalCache::SaveModel(
   if (_id.Server().Url().Str().empty() || _id.Owner().empty() ||
       _id.Name().empty() || _id.Version() == 0)
   {
-    ignerr << "Incomplete model identifier, failed to save model." << std::endl
+    gzerr << "Incomplete model identifier, failed to save model." << std::endl
            << _id.AsString();
     return false;
   }
@@ -396,7 +396,7 @@ bool LocalCache::SaveModel(
   // Is it already in the cache?
   if (common::isDirectory(modelVersionedDir) && !_overwrite)
   {
-    ignerr << "Directory [" << modelVersionedDir << "] already exists"
+    gzerr << "Directory [" << modelVersionedDir << "] already exists"
            << std::endl;
     return false;
   }
@@ -404,7 +404,7 @@ bool LocalCache::SaveModel(
   // Create the model directory.
   if (!common::createDirectories(modelVersionedDir))
   {
-    ignerr << "Unable to create directory [" << modelVersionedDir << "]"
+    gzerr << "Unable to create directory [" << modelVersionedDir << "]"
            << std::endl;
   }
 
@@ -419,7 +419,7 @@ bool LocalCache::SaveModel(
 
   if (!Zip::Extract(zipFile, modelVersionedDir))
   {
-    ignerr << "Unable to unzip [" << zipFile << "]" << std::endl;
+    gzerr << "Unable to unzip [" << zipFile << "]" << std::endl;
     return false;
   }
 
@@ -429,7 +429,7 @@ bool LocalCache::SaveModel(
   // Cleanup the zip file.
   if (!common::removeDirectoryOrFile(zipFile))
   {
-    ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
+    gzwarn << "Unable to remove [" << zipFile << "]" << std::endl;
   }
 
   return true;
@@ -446,7 +446,7 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir,
   // Make sure the model config file exits.
   if (!common::exists(modelConfigPath))
   {
-    ignerr << "model.config file does not exist in ["
+    gzerr << "model.config file does not exist in ["
       << _modelVersionedDir << ".\n";
     return false;
   }
@@ -456,7 +456,7 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir,
   if (modelConfigDoc.LoadFile(modelConfigPath.c_str()) !=
       tinyxml2::XML_SUCCESS)
   {
-    ignerr << "Unable to load model.config file[" << modelConfigPath << "]\n";
+    gzerr << "Unable to load model.config file[" << modelConfigPath << "]\n";
     return false;
   }
 
@@ -477,7 +477,7 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir,
     if (nullptr == versionAttribute)
     {
       version.Parse("0.0.1");
-      ignwarn << "<sdf> element missing version attribute, assuming version ["
+      gzwarn << "<sdf> element missing version attribute, assuming version ["
               << version << "]" << std::endl;
     }
     else
@@ -503,7 +503,7 @@ bool LocalCachePrivate::FixPaths(const std::string &_modelVersionedDir,
   if (modelSdfDoc.LoadFile(modelSdfFilePath.c_str()) !=
       tinyxml2::XML_SUCCESS)
   {
-    ignerr << "Unable to load SDF file[" << modelSdfFilePath << "]\n";
+    gzerr << "Unable to load SDF file[" << modelSdfFilePath << "]\n";
     return false;
   }
 
@@ -601,11 +601,11 @@ void LocalCachePrivate::FixPathsInUri(tinyxml2::XMLElement *_elem,
     // On Blueprint and Citadel, just warn the user
     // From Dome, use the name on the URI (resourceName) and assume the same
     // owner
-    igndbg << "Model [" << _id.Name()
+    gzdbg << "Model [" << _id.Name()
            << "] loading resource from another model, named [" << resourceName
-           << "]. On Blueprint (ign-fuel-tools 3) and Citadel "
-           << "(ign-fuel-tools 4), [" << resourceName << "] is ignored. "
-           << "From Dome (ign-fuel-tools 5), [" << _id.Name()
+           << "]. On Blueprint (gz-fuel-tools 3) and Citadel "
+           << "(gz-fuel-tools 4), [" << resourceName << "] is ignored. "
+           << "From Dome (gz-fuel-tools 5), [" << _id.Name()
            << "] will be used. If [" << resourceName
            << "] is not a model belonging to owner [" << _id.Owner()
            << "], fix your SDF file!" << std::endl;
@@ -735,7 +735,7 @@ bool LocalCache::SaveWorld(
   if (!_id.Server().Url().Valid() || _id.Owner().empty() ||
       _id.Name().empty() || _id.Version() == 0)
   {
-    ignerr << "Incomplete world identifier, failed to save world." << std::endl
+    gzerr << "Incomplete world identifier, failed to save world." << std::endl
            << _id.AsString();
     return false;
   }
@@ -748,7 +748,7 @@ bool LocalCache::SaveWorld(
   // Is it already in the cache?
   if (common::isDirectory(worldVersionedDir) && !_overwrite)
   {
-    ignerr << "Directory [" << worldVersionedDir << "] already exists"
+    gzerr << "Directory [" << worldVersionedDir << "] already exists"
            << std::endl;
     return false;
   }
@@ -756,7 +756,7 @@ bool LocalCache::SaveWorld(
   // Create the world directory.
   if (!common::createDirectories(worldVersionedDir))
   {
-    ignerr << "Unable to create directory [" << worldVersionedDir << "]"
+    gzerr << "Unable to create directory [" << worldVersionedDir << "]"
            << std::endl;
   }
 
@@ -771,17 +771,17 @@ bool LocalCache::SaveWorld(
 
   if (!Zip::Extract(zipFile, worldVersionedDir))
   {
-    ignerr << "Unable to unzip [" << zipFile << "]" << std::endl;
+    gzerr << "Unable to unzip [" << zipFile << "]" << std::endl;
     return false;
   }
 
   if (!common::removeDirectoryOrFile(zipFile))
   {
-    ignwarn << "Unable to remove [" << zipFile << "]" << std::endl;
+    gzwarn << "Unable to remove [" << zipFile << "]" << std::endl;
   }
 
   _id.SetLocalPath(worldVersionedDir);
-  ignmsg << "Saved world at:" << std::endl
+  gzmsg << "Saved world at:" << std::endl
          << "  " << worldVersionedDir << std::endl;
 
   return true;

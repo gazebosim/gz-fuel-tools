@@ -17,12 +17,13 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
+#include <gz/utils/ExtraTestMacros.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/CollectionIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/CollectionIdentifier.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
@@ -32,7 +33,7 @@ TEST(CollectionIdentifier, SetFields)
   CollectionIdentifier id;
   id.SetName("hello");
   id.SetOwner("osrf");
-  ignition::fuel_tools::ServerConfig srv1;
+  gz::fuel_tools::ServerConfig srv1;
   srv1.SetUrl(common::URI("https://localhost:8001/"));
   id.SetServer(srv1);
 
@@ -43,15 +44,16 @@ TEST(CollectionIdentifier, SetFields)
 
 /////////////////////////////////////////////////
 /// \brief Unique Name
-TEST(CollectionIdentifier, UniqueName)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/231
+TEST(CollectionIdentifier, GZ_UTILS_TEST_DISABLED_ON_WIN32(UniqueName))
 {
-  ignition::fuel_tools::ServerConfig srv1;
+  gz::fuel_tools::ServerConfig srv1;
   srv1.SetUrl(common::URI("https://localhost:8001"));
 
-  ignition::fuel_tools::ServerConfig srv2;
+  gz::fuel_tools::ServerConfig srv2;
   srv2.SetUrl(common::URI("https://localhost:8002"));
 
-  ignition::fuel_tools::ServerConfig srv3;
+  gz::fuel_tools::ServerConfig srv3;
   srv3.SetUrl(common::URI("https://localhost:8003"));
 
   CollectionIdentifier id;
@@ -75,7 +77,7 @@ TEST(CollectionIdentifier, CopyConstructorDeepCopy)
   id.SetName("hello");
   id.SetOwner("watermelon");
 
-  ignition::fuel_tools::ServerConfig srv;
+  gz::fuel_tools::ServerConfig srv;
   srv.SetUrl(common::URI("https://localhost:8001"));
   id.SetServer(srv);
 
@@ -96,7 +98,7 @@ TEST(CollectionIdentifier, AssignmentOperatorDeepCopy)
   CollectionIdentifier id;
   id.SetName("hello");
   id.SetOwner("pineapple");
-  ignition::fuel_tools::ServerConfig srv;
+  gz::fuel_tools::ServerConfig srv;
   srv.SetUrl(common::URI("https://localhost:8001"));
   id.SetServer(srv);
 
@@ -119,25 +121,14 @@ TEST(CollectionIdentifier, AsString)
   {
     CollectionIdentifier id;
 
-#ifndef _WIN32
     std::string str =
         "Name: \n"\
         "Owner: \n"\
-        "Unique name: https://fuel.ignitionrobotics.org/collections/\n"
+        "Unique name: https://fuel.gazebosim.org/collections/\n"
         "Server:\n"
-        "  URL: https://fuel.ignitionrobotics.org\n"
+        "  URL: https://fuel.gazebosim.org\n"
         "  Version: 1.0\n"
         "  API key: \n";
-#else
-    std::string str =
-        "Name: \n"\
-        "Owner: \n"\
-        "Unique name: https://fuel.ignitionrobotics.org/collections\n"
-        "Server:\n"
-        "  URL: https://fuel.ignitionrobotics.org\n"
-        "  Version: 1.0\n"
-        "  API key: \n";
-#endif
     EXPECT_EQ(str, id.AsString());
   }
 
@@ -161,7 +152,7 @@ TEST(CollectionIdentifier, AsPrettyString)
     CollectionIdentifier id;
     std::string str =
       "\x1B[96m\x1B[1mServer:\x1B[0m\n  "
-      "\x1B[96m\x1B[1mURL: \x1B[0m\x1B[37mhttps://fuel.ignitionrobotics.org"
+      "\x1B[96m\x1B[1mURL: \x1B[0m\x1B[37mhttps://fuel.gazebosim.org"
       "\x1B[0m\n  \x1B[96m\x1B[1mVersion: \x1B[0m\x1B[37m1.0\x1B[0m\n";
     EXPECT_EQ(str, id.AsPrettyString());
   }
@@ -175,11 +166,4 @@ TEST(CollectionIdentifier, AsPrettyString)
     EXPECT_NE(str.find("hello"), std::string::npos);
     EXPECT_NE(str.find("raspberry"), std::string::npos);
   }
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

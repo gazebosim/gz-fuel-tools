@@ -3,23 +3,25 @@ cmake_minimum_required(VERSION 3.5.1 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(ignition-fuel_tools8 VERSION 8.0.0)
+project(gz-fuel_tools8 VERSION 8.0.0)
 
 #============================================================================
-# Find ignition-cmake
+# Find gz-cmake
 #============================================================================
-# If you get an error at this line, you need to install ignition-cmake
-find_package(ignition-cmake2 2.8.0 REQUIRED)
-set(IGN_CMAKE_VER ${ignition-cmake2_VERSION_MAJOR})
+# If you get an error at this line, you need to install gz-cmake
+find_package(gz-cmake3 REQUIRED)
+set(GZ_CMAKE_VER ${gz-cmake3_VERSION_MAJOR})
 
 #============================================================================
 # Configure the project
 #============================================================================
-ign_configure_project(VERSION_SUFFIX pre1)
+gz_configure_project(VERSION_SUFFIX)
 
 #============================================================================
 # Set project-specific options
 #============================================================================
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #============================================================================
 # Search for project-specific dependencies
@@ -27,57 +29,62 @@ ign_configure_project(VERSION_SUFFIX pre1)
 
 #--------------------------------------
 # Find Tinyxml2
-ign_find_package(TINYXML2 REQUIRED PRIVATE PRETTY tinyxml2)
+gz_find_package(TINYXML2 REQUIRED PRIVATE PRETTY tinyxml2)
 
 #--------------------------------------
 # Find libcurl
-ign_find_package(IgnCURL REQUIRED PRIVATE PRETTY curl)
+gz_find_package(GzCURL REQUIRED PRIVATE PRETTY curl)
 
 #--------------------------------------
 # Find jsoncpp
-ign_find_package(JSONCPP REQUIRED PRIVATE)
+gz_find_package(JSONCPP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find libyaml
-ign_find_package(YAML REQUIRED PRIVATE)
+gz_find_package(YAML REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find libzip
-ign_find_package(ZIP REQUIRED PRIVATE)
+gz_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
-# Find ignition-common
-ign_find_package(ignition-common5 REQUIRED PRIVATE)
-set(IGN_COMMON_MAJOR_VER ${ignition-common5_VERSION_MAJOR})
+# Find gz-utils
+gz_find_package(gz-utils2 REQUIRED)
+set(GZ_UTILS_VER ${gz-utils2_VERSION_MAJOR})
 
 #--------------------------------------
-# Find ignition-math
-ign_find_package(ignition-math7 REQUIRED PRIVATE)
-set(IGN_MSGS_MAJOR_VER ${ignition-math7_VERSION_MAJOR})
+# Find gz-common
+gz_find_package(gz-common5 REQUIRED PRIVATE)
+set(GZ_COMMON_VER ${gz-common5_VERSION_MAJOR})
 
 #--------------------------------------
-# Find ignition-msgs
-ign_find_package(ignition-msgs9 REQUIRED PRIVATE)
-set(IGN_MSGS_MAJOR_VER ${ignition-msgs9_VERSION_MAJOR})
+# Find gz-math
+gz_find_package(gz-math7 REQUIRED PRIVATE)
+set(GZ_MATH_VER ${gz-math7_VERSION_MAJOR})
 
 #--------------------------------------
-# Find ignition-tools
-find_program(HAVE_IGN_TOOLS ign)
+# Find gz-msgs
+gz_find_package(gz-msgs9 REQUIRED PRIVATE)
+set(GZ_MSGS_VER ${gz-msgs9_VERSION_MAJOR})
+
+#--------------------------------------
+# Find gz-tools
+find_program(HAVE_GZ_TOOLS gz)
 
 #============================================================================
 # Configure the build
 #============================================================================
-ign_configure_build(QUIT_IF_BUILD_ERRORS)
+gz_configure_build(QUIT_IF_BUILD_ERRORS)
 
 #============================================================================
-# ign command line support
+# gz command line support
 #============================================================================
 add_subdirectory(conf)
 
 #============================================================================
 # Create package information
 #============================================================================
-ign_create_packages()
+gz_create_packages()
 
 #============================================================================
 # Configure documentation
@@ -85,9 +92,9 @@ ign_create_packages()
 configure_file(${CMAKE_SOURCE_DIR}/api.md.in ${CMAKE_BINARY_DIR}/api.md)
 configure_file(${CMAKE_SOURCE_DIR}/tutorials.md.in ${CMAKE_BINARY_DIR}/tutorials.md)
 
-ign_create_docs(
+gz_create_docs(
   API_MAINPAGE_MD "${CMAKE_BINARY_DIR}/api.md"
   TUTORIALS_MAINPAGE_MD "${CMAKE_BINARY_DIR}/tutorials.md"
   TAGFILES
-   "${IGNITION-COMMON_DOXYGEN_TAGFILE} = ${IGNITION-COMMON_API_URL}"
+   "${GZ-COMMON_DOXYGEN_TAGFILE} = ${GZ-COMMON_API_URL}"
   )

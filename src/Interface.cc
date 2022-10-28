@@ -15,31 +15,41 @@
  *
 */
 
-#include "ignition/common/Console.hh"
-#include "ignition/fuel_tools/Interface.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#ifdef _MSC_VER
+#pragma warning(push, 0)
+#endif
+#include <google/protobuf/text_format.h>
+#include <gz/msgs/fuel_metadata.pb.h>
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
-namespace ignition
+#include <gz/msgs/Utility.hh>
+#include "gz/common/Console.hh"
+#include "gz/fuel_tools/Interface.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
+
+namespace gz
 {
   namespace fuel_tools
   {
     //////////////////////////////////////////////
     std::string fetchResource(const std::string &_uri)
     {
-      ignition::fuel_tools::FuelClient client;
+      gz::fuel_tools::FuelClient client;
       return fetchResourceWithClient(_uri, client);
     }
 
     //////////////////////////////////////////////
     std::string fetchResourceWithClient(const std::string &_uri,
-        ignition::fuel_tools::FuelClient &_client)
+        gz::fuel_tools::FuelClient &_client)
     {
       std::string result;
 
-      ignition::fuel_tools::ModelIdentifier model;
-      ignition::fuel_tools::WorldIdentifier world;
+      gz::fuel_tools::ModelIdentifier model;
+      gz::fuel_tools::WorldIdentifier world;
       std::string fileUrl;
-      ignition::common::URI uri(_uri);
+      gz::common::URI uri(_uri);
       // Download the model, if it is a model URI
       if (_client.ParseModelUrl(uri, model) &&
           !_client.CachedModel(uri, result))
@@ -73,6 +83,70 @@ namespace ignition
       }
 
       return result;
+    }
+
+    //////////////////////////////////////////////
+    std::string sdfFromPath(const std::string &_path)
+    {
+      gz::msgs::FuelMetadata meta;
+      std::string metadataPath =
+        gz::common::joinPaths(_path, "metadata.pbtxt");
+      std::string modelConfigPath =
+        gz::common::joinPaths(_path, "model.config");
+
+      bool foundMetadataPath = gz::common::exists(metadataPath);
+      bool foundModelConfigPath = gz::common::exists(modelConfigPath);
+
+      // Use the metadata.pbtxt or model.config first.
+      if (foundMetadataPath || foundModelConfigPath)
+      {
+        std::string modelPath =
+          (foundMetadataPath) ? metadataPath : modelConfigPath;
+
+        // Read the pbtxt or config file.
+        std::ifstream inputFile(modelPath);
+        std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+            std::istreambuf_iterator<char>());
+
+        if (foundMetadataPath)
+        {
+          // Parse the file into the fuel metadata message
+          google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+        }
+        else
+        {
+          if (!gz::msgs::ConvertFuelMetadata(inputStr, meta))
+            return "";
+        }
+
+        if (meta.has_model())
+          return gz::common::joinPaths(_path, meta.model().file());
+        else if (meta.has_world())
+          return gz::common::joinPaths(_path, meta.world().file());
+        return "";
+      }
+
+      // Otherwise, use the first ".sdf" file found in the given path.
+      common::DirIter dirIter(_path);
+      common::DirIter end;
+      while (dirIter != end)
+      {
+        if (common::isFile(*dirIter))
+        {
+          std::string basename = gz::common::basename(*dirIter);
+          // Just some safety checks.
+          if (!basename.empty() && basename.find(".sdf") != std::string::npos)
+          {
+            std::string extension = basename.substr(
+                basename.find_last_of(".") + 1);
+            if (extension == "sdf")
+              return *dirIter;
+          }
+        }
+        ++dirIter;
+      }
+
+      return "";
     }
   }
 }

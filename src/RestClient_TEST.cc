@@ -17,22 +17,15 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include "ignition/fuel_tools/RestClient.hh"
-#include "test/test_config.h"
+#include "gz/fuel_tools/RestClient.hh"
+#include "test_config.hh"
 
 /////////////////////////////////////////////////
 TEST(RestClient, UserAgent)
 {
-  ignition::fuel_tools::Rest rest;
+  gz::fuel_tools::Rest rest;
   EXPECT_TRUE(rest.UserAgent().empty());
 
   rest.SetUserAgent("my_user_agent");
   EXPECT_EQ("my_user_agent", rest.UserAgent());
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

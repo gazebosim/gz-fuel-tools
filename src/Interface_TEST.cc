@@ -16,14 +16,14 @@
 */
 
 #include <gtest/gtest.h>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/utilities/ExtraTestMacros.hh>
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/FuelClient.hh"
-#include "ignition/fuel_tools/Interface.hh"
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/utils/ExtraTestMacros.hh>
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/FuelClient.hh"
+#include "gz/fuel_tools/Interface.hh"
 
-#include "test/test_config.h"
+#include "test_config.hh"
 
 #ifdef _WIN32
 #include <direct.h>
@@ -33,12 +33,12 @@
 #define ChangeDirectory chdir
 #endif
 
-using namespace ignition;
-using namespace ignition::fuel_tools;
+using namespace gz;
+using namespace gz::fuel_tools;
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
-// https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
+// https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST(Interface, FetchResources)
 {
   common::Console::SetVerbosity(4);
@@ -46,7 +46,7 @@ TEST(Interface, FetchResources)
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
   common::removeAll("test_cache");
-  common::createDirectories("test_cache");
+  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
@@ -60,41 +60,46 @@ TEST(Interface, FetchResources)
   {
     // Check it's not cached
     common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/1.0/chapulina/models/Test box"};
+      "https://fuel.gazebosim.org/1.0/chapulina/models/Test box"};
     {
       Result res = client.CachedModel(modelUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
     }
 
     // Download model
     std::string path = fetchResourceWithClient(modelUrl.Str(), client);
 
+    std::string sdfPath = sdfFromPath(path);
+    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+      "fuel.gazebosim.org", "chapulina", "models", "test box", "2",
+      "model.sdf"), sdfPath);
+
     // Check it was downloaded to `2`
     EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
-      "fuel.ignitionrobotics.org", "chapulina", "models", "test box", "2"));
+      "fuel.gazebosim.org", "chapulina", "models", "test box", "2"));
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "chapulina", "models", "test box", "2")));
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "chapulina", "models", "test box", "2", "model.sdf")));
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "chapulina", "models", "test box", "2", "model.config")));
 
     // Check it wasn't downloaded to model root directory
     EXPECT_FALSE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "chapulina", "models", "Test box", "model.config")));
 
     // Check it is cached
     {
       Result res = client.CachedModel(modelUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "chapulina", "models", "test box", "2"),
+        "fuel.gazebosim.org", "chapulina", "models", "test box", "2"),
         cachedPath);
      }
   }
@@ -103,20 +108,20 @@ TEST(Interface, FetchResources)
   {
     // Check neither file nor its model are cached
     common::URI modelUrl{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Bus/1/"};
+      "https://fuel.gazebosim.org/1.0/openrobotics/models/Bus/1/"};
     common::URI modelFileUrl{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Bus/1/files"
+      "https://fuel.gazebosim.org/1.0/openrobotics/models/Bus/1/files"
       "/meshes/bus.obj"};
 
     {
       Result res = client.CachedModel(modelUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
     }
     {
       Result res = client.CachedModelFile(modelFileUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
     }
 
     // Download model file
@@ -124,25 +129,25 @@ TEST(Interface, FetchResources)
 
     // Check entire model was downloaded to `1`
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "openrobotics", "models", "bus", "1")));
     EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
-      "fuel.ignitionrobotics.org", "openrobotics", "models", "bus",
+      "fuel.gazebosim.org", "openrobotics", "models", "bus",
       "1", "meshes", "bus.obj"));
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
         "openrobotics", "models", "bus", "1", "model.sdf")));
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "openrobotics", "models", "bus", "1", "model.config")));
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "openrobotics", "models", "bus", "1", "meshes/bus.obj")));
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "openrobotics", "models", "bus", "1", "meshes/bus.mtl")));
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "openrobotics", "models", "bus", "1", "materials", "textures",
           "bus.png")));
 
@@ -150,19 +155,26 @@ TEST(Interface, FetchResources)
     {
       Result res = client.CachedModel(modelUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "openrobotics", "models", "bus", "1"),
+        "fuel.gazebosim.org", "openrobotics", "models", "bus", "1"),
         cachedPath);
-     }
+    }
+
+    {
+      std::string sdfFile = sdfFromPath(cachedPath);
+      EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+            "fuel.gazebosim.org", "openrobotics", "models", "bus",
+            "1", "model.sdf"), sdfFile);
+    }
 
     // Check file is cached
     {
       Result res = client.CachedModelFile(modelFileUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "openrobotics", "models", "bus", "1",
+        "fuel.gazebosim.org", "openrobotics", "models", "bus", "1",
         "meshes", "bus.obj"), cachedPath);
      }
   }
@@ -171,11 +183,13 @@ TEST(Interface, FetchResources)
   {
     // Check it's not cached
     common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/openrobotics/worlds/Test world"};
+      "https://fuel.gazebosim.org/1.0/openrobotics/worlds/Test world"};
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
+      std::string sdfFile = sdfFromPath(cachedPath);
+      EXPECT_TRUE(sdfFile.empty());
     }
 
     // Download world
@@ -183,22 +197,22 @@ TEST(Interface, FetchResources)
 
     // Check it was downloaded to `1`
     EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
-      "fuel.ignitionrobotics.org", "openrobotics", "worlds",
+      "fuel.gazebosim.org", "openrobotics", "worlds",
       "test world", "2"));
     EXPECT_TRUE(common::exists(common::joinPaths("test_cache",
-      "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world",
+      "fuel.gazebosim.org", "openrobotics", "worlds", "test world",
       "2")));
     EXPECT_TRUE(common::exists(common::joinPaths("test_cache",
-      "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world", "2",
+      "fuel.gazebosim.org", "openrobotics", "worlds", "test world", "2",
       "test.world")));
 
     // Check it is cached
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "openrobotics", "worlds", "test world",
+        "fuel.gazebosim.org", "openrobotics", "worlds", "test world",
         "2"), cachedPath);
      }
   }
@@ -207,20 +221,20 @@ TEST(Interface, FetchResources)
   {
     // Check neither file nor its world are cached
     common::URI worldUrl{
-      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/2/"};
+      "https://fuel.gazebosim.org/1.0/chapulina/worlds/Test world/2/"};
     common::URI worldFileUrl{
-      "https://fuel.ignitionrobotics.org/1.0/chapulina/worlds/Test world/2/"
+      "https://fuel.gazebosim.org/1.0/chapulina/worlds/Test world/2/"
       "files/thumbnails/1.png"};
 
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
     }
     {
       Result res = client.CachedWorldFile(worldFileUrl, cachedPath);
       EXPECT_FALSE(res) << "Cached Path: " << cachedPath;
-      EXPECT_EQ(Result(ResultType::FETCH_ERROR), res);
+      EXPECT_EQ(ResultType::FETCH_ERROR, res.Type());
     }
 
     // Download world file
@@ -228,32 +242,39 @@ TEST(Interface, FetchResources)
 
     // Check entire world was downloaded to `1`
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "chapulina", "worlds", "test world", "2")));
     EXPECT_EQ(path, common::joinPaths(common::cwd(), "test_cache",
-      "fuel.ignitionrobotics.org", "chapulina", "worlds", "test world", "2",
+      "fuel.gazebosim.org", "chapulina", "worlds", "test world", "2",
       "thumbnails", "1.png"));
     EXPECT_TRUE(common::exists(
-        common::joinPaths("test_cache", "fuel.ignitionrobotics.org",
+        common::joinPaths("test_cache", "fuel.gazebosim.org",
           "chapulina", "worlds", "test world", "2", "test.world")));
 
     // Check world is cached
     {
       Result res = client.CachedWorld(worldUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "chapulina", "worlds", "test world", "2"),
+        "fuel.gazebosim.org", "chapulina", "worlds", "test world", "2"),
         cachedPath);
-     }
+    }
+
+    {
+      std::string sdfFile = sdfFromPath(cachedPath);
+      EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
+            "fuel.gazebosim.org", "chapulina", "worlds", "test world",
+            "2", "test.sdf"), sdfFile);
+    }
 
     // Check file is cached
     {
       Result res = client.CachedWorldFile(worldFileUrl, cachedPath);
       EXPECT_TRUE(res);
-      EXPECT_EQ(Result(ResultType::FETCH_ALREADY_EXISTS), res);
+      EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res.Type());
       EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "fuel.ignitionrobotics.org", "chapulina", "worlds", "test world", "2",
+        "fuel.gazebosim.org", "chapulina", "worlds", "test world", "2",
         "thumbnails", "1.png"), cachedPath);
      }
   }

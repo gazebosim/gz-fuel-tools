@@ -21,27 +21,27 @@
 #include <stack>
 #include <string>
 #include <vector>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/common/Util.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/common/Util.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/config.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/config.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class ignition::fuel_tools::ClientConfigPrivate
+class gz::fuel_tools::ClientConfigPrivate
 {
   /// \brief Constructor.
   public: ClientConfigPrivate()
           {
             std::string homePath;
-            ignition::common::env(IGN_HOMEDIR, homePath);
+            gz::common::env(GZ_HOMEDIR, homePath);
             this->cacheLocation = common::joinPaths(
-                homePath, ".ignition", "fuel");
+                homePath, ".gz", "fuel");
 
             this->servers.push_back(ServerConfig());
           }
@@ -53,7 +53,7 @@ class ignition::fuel_tools::ClientConfigPrivate
             this->cacheLocation = "";
             this->configPath = "";
             this->userAgent =
-              "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
+              "IgnitionFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL;
           }
 
   /// \brief A list of servers.
@@ -67,12 +67,12 @@ class ignition::fuel_tools::ClientConfigPrivate
 
   /// \brief Name of the user agent.
   public: std::string userAgent =
-          "IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL;
+          "IgnitionFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL;
 };
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class ignition::fuel_tools::ServerConfigPrivate
+class gz::fuel_tools::ServerConfigPrivate
 {
   /// \brief Clear values.
   public: void Clear()
@@ -83,7 +83,7 @@ class ignition::fuel_tools::ServerConfigPrivate
           }
 
   /// \brief URL to reach server
-  public: common::URI url{"https://fuel.ignitionrobotics.org"};
+  public: common::URI url{"https://fuel.gazebosim.org"};
 
   /// \brief A key to auth with the server
   public: std::string key = "";
@@ -201,16 +201,28 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
 {
-  std::string ignFuelPath = "";
-  if (ignition::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
+  std::string gzFuelPath = "";
+  if (!gz::common::env("GZ_FUEL_CACHE_PATH", gzFuelPath))
   {
-    if (!ignition::common::isDirectory(ignFuelPath))
+    // TODO(CH3): Deprecated. Remove on tock.
+    if (gz::common::env("IGN_FUEL_CACHE_PATH", gzFuelPath))
     {
-      ignerr << "[" << ignFuelPath << "] is not a directory" << std::endl;
+      gzwarn << "Using deprecated environment variable [IGN_FUEL_CACHE_PATH] "
+             << "to set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
+             << std::endl;
+    }
+    else
+    {
       return;
     }
-    this->SetCacheLocation(ignFuelPath);
   }
+
+  if (!gz::common::isDirectory(gzFuelPath))
+  {
+    gzerr << "[" << gzFuelPath << "] is not a directory" << std::endl;
+    return;
+  }
+  this->SetCacheLocation(gzFuelPath);
 }
 
 //////////////////////////////////////////////////
@@ -243,9 +255,9 @@ void ClientConfig::Clear()
 bool ClientConfig::LoadConfig(const std::string &_file)
 {
   // Sanity check: Verify that the configuration file exists.
-  if (!ignition::common::exists(_file))
+  if (!gz::common::exists(_file))
   {
-    ignerr << "Unable to find configuration file [" << _file<< "]" << std::endl;
+    gzerr << "Unable to find configuration file [" << _file<< "]" << std::endl;
     return false;
   }
 
@@ -253,7 +265,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   FILE *fh = fopen(_file.c_str(), "r");
   if (!fh)
   {
-    ignerr << "Failed to open configuration file ["
+    gzerr << "Failed to open configuration file ["
       << _file << "]" << std::endl;
     return false;
   }
@@ -264,7 +276,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   yaml_parser_t parser;
   if (!yaml_parser_initialize(&parser))
   {
-    ignerr << "Failed to initialize YAML parser" << std::endl;
+    gzerr << "Failed to initialize YAML parser" << std::endl;
     fclose(fh);
     return false;
   }
@@ -284,7 +296,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
   {
     if (!yaml_parser_parse(&parser, &event))
     {
-      ignerr << "Parser error [" << parser.error << "]" << std::endl;
+      gzerr << "Parser error [" << parser.error << "]" << std::endl;
       res = false;
       break;
     }
@@ -316,7 +328,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
         {
           if (cacheLocationConfig.empty())
           {
-            ignerr << "[path] parameter is required for a cache" << std::endl;
+            gzerr << "[path] parameter is required for a cache" << std::endl;
             res = false;
           }
         }
@@ -332,11 +344,11 @@ bool ClientConfig::LoadConfig(const std::string &_file)
               {
                 if (!privateToken.empty())
                 {
-                  ignmsg << "Set private token for " << serverURL << " server."
+                  gzmsg << "Set private token for " << serverURL << " server."
                     << std::endl;
                   savedServer.SetApiKey(privateToken);
                 }
-                ignwarn << "URL [" << serverURL << "] already exists. "
+                gzwarn << "URL [" << serverURL << "] already exists. "
                   << "Ignoring server" << std::endl;
                 repeated = true;
                 break;
@@ -349,7 +361,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
               newServer.SetUrl(common::URI(serverURL));
               if (!privateToken.empty())
               {
-                ignmsg << "Set private token for " << serverURL << " server."
+                gzmsg << "Set private token for " << serverURL << " server."
                   << std::endl;
                 newServer.SetApiKey(privateToken);
               }
@@ -358,7 +370,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
           }
           else
           {
-            ignerr << "[url] parameter is required for a server"
+            gzerr << "[url] parameter is required for a server"
                       << std::endl;
             res = false;
           }
@@ -403,7 +415,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
         break;
       default:
       {
-        ignerr << "Unknown event type [" << event.type << "]" << std::endl;
+        gzerr << "Unknown event type [" << event.type << "]" << std::endl;
         res = false;
       }
     }
@@ -414,21 +426,33 @@ bool ClientConfig::LoadConfig(const std::string &_file)
 
   // Default cache path.
   std::string homePath;
-  ignition::common::env(IGN_HOMEDIR, homePath);
-  std::string cacheLocation = ignition::common::joinPaths(
-    homePath, ".ignition", "fuel");
+  gz::common::env(GZ_HOMEDIR, homePath);
+  std::string cacheLocation = gz::common::joinPaths(
+    homePath, ".gz", "fuel");
 
   // The user wants to overwrite the default cache path.
   if (!cacheLocationConfig.empty())
     cacheLocation = cacheLocationConfig;
 
-  // Do not overwrite the cache location if IGN_FUEL_CACHE_PATH is set.
-  std::string ignFuelPath = "";
-  if (ignition::common::env("IGN_FUEL_CACHE_PATH", ignFuelPath))
+  // Do not overwrite the cache location if GZ_FUEL_CACHE_PATH is set.
+  std::string gzFuelPath = "";
+  if (gz::common::env("GZ_FUEL_CACHE_PATH", gzFuelPath))
   {
-    ignwarn << "IGN_FUEL_CACHE_PATH is set to [" << ignFuelPath << "]. The "
+    gzwarn << "GZ_FUEL_CACHE_PATH is set to [" << gzFuelPath << "]. The "
             << "path in the configuration file will be ignored" << std::endl;
-    cacheLocation = ignFuelPath;
+    cacheLocation = gzFuelPath;
+  }
+  // TODO(CH3): Deprecated. Remove on tock.
+  else if (gz::common::env("IGN_FUEL_CACHE_PATH", gzFuelPath))
+  {
+    gzwarn << "Using deprecated environment variable [IGN_FUEL_CACHE_PATH] "
+           << "to set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
+           << std::endl;
+
+    gzwarn << "GZ_FUEL_CACHE_PATH is set to [" << gzFuelPath << "]. The "
+            << "path in the configuration file will be ignored" << std::endl;
+
+    cacheLocation = gzFuelPath;
   }
   this->SetCacheLocation(cacheLocation);
 

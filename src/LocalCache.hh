@@ -15,16 +15,16 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_LOCALCACHE_HH_
-#define IGNITION_FUEL_TOOLS_LOCALCACHE_HH_
+#ifndef GZ_FUEL_TOOLS_LOCALCACHE_HH_
+#define GZ_FUEL_TOOLS_LOCALCACHE_HH_
 
 #include <memory>
 #include <string>
 
-#include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/Model.hh"
-#include "ignition/fuel_tools/ModelIter.hh"
-#include "ignition/fuel_tools/WorldIter.hh"
+#include "gz/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Model.hh"
+#include "gz/fuel_tools/ModelIter.hh"
+#include "gz/fuel_tools/WorldIter.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
@@ -33,7 +33,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -43,7 +43,7 @@ namespace ignition
     class ModelIdentifier;
 
     /// \brief Class for managing stuff in the local cache
-    class IGNITION_FUEL_TOOLS_VISIBLE LocalCache
+    class GZ_FUEL_TOOLS_VISIBLE LocalCache
     {
       /// \brief Constructor
       /// \param[in] _config The configuration for the client

@@ -15,15 +15,15 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_WORLDITERPRIVATE_HH_
-#define IGNITION_FUEL_TOOLS_WORLDITERPRIVATE_HH_
+#ifndef GZ_FUEL_TOOLS_WORLDITERPRIVATE_HH_
+#define GZ_FUEL_TOOLS_WORLDITERPRIVATE_HH_
 
 #include <string>
 #include <vector>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/RestClient.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
@@ -32,7 +32,7 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -40,7 +40,7 @@ namespace ignition
     class WorldIter;
 
     /// \brief Private class, do not include or instantiate
-    class IGNITION_FUEL_TOOLS_VISIBLE WorldIterFactory
+    class GZ_FUEL_TOOLS_VISIBLE WorldIterFactory
     {
       /// \brief Create a world iterator from a vector of world identifiers
       /// \param[in] _ids World identifiers
@@ -62,7 +62,7 @@ namespace ignition
     };
 
     /// \brief Private class, do not include or instantiate
-    class IGNITION_FUEL_TOOLS_VISIBLE WorldIterPrivate
+    class GZ_FUEL_TOOLS_VISIBLE WorldIterPrivate
     {
       /// \brief Destructor
       public: virtual ~WorldIterPrivate();
@@ -79,7 +79,7 @@ namespace ignition
     };
 
     /// \brief Class for iterating through world ids
-    class IGNITION_FUEL_TOOLS_VISIBLE WorldIterIds : public WorldIterPrivate
+    class GZ_FUEL_TOOLS_VISIBLE WorldIterIds : public WorldIterPrivate
     {
       /// \brief Constructor
       /// \param[in] _ids Vector of ids
@@ -102,7 +102,7 @@ namespace ignition
     };
 
     /// \brief class for iterating through world ids from a rest API
-    class IGNITION_FUEL_TOOLS_VISIBLE WorldIterRestIds: public WorldIterPrivate
+    class GZ_FUEL_TOOLS_VISIBLE WorldIterRestIds: public WorldIterPrivate
     {
       /// \brief Constructor
       /// \param[in] _rest REST client

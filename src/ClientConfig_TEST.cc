@@ -18,41 +18,41 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include <string>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/common/Util.hh>
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "test/test_config.h"
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/common/Util.hh>
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "test_config.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
 /// \brief Helper to remove file according to OS, while Windows
 /// has this issue:
-/// https://github.com/ignitionrobotics/ign-common/issues/51
+/// https://github.com/gazebosim/gz-common/issues/51
 /// \todo(anyone) Remove this once Windows issue is solved.
 /// \param[in] _path Path to file to be removed.
 void removeFileTemp(const std::string &_path)
 {
 #ifndef _WIN32
-  EXPECT_TRUE(ignition::common::removeFile(_path));
+  EXPECT_TRUE(gz::common::removeFile(_path));
 #else
-  ignition::common::removeFile(_path);
+  gz::common::removeFile(_path);
 #endif
 }
 
 /////////////////////////////////////////////////
 /// \brief Get home directory.
 /// \return Home directory or empty string if home wasn't found.
-/// \ToDo: Move this function to ignition::common::Filesystem
+/// \ToDo: Move this function to gz::common::Filesystem
 std::string homePath()
 {
   std::string homePath;
 #ifndef _WIN32
-  ignition::common::env("HOME", homePath);
+  gz::common::env("HOME", homePath);
 #else
-  ignition::common::env("USERPROFILE", homePath);
+  gz::common::env("USERPROFILE", homePath);
 #endif
 
   return homePath;
@@ -61,12 +61,11 @@ std::string homePath()
 /////////////////////////////////////////////////
 /// \brief Get cache directory.
 /// \return Cache directory
-/// \ToDo: Move this function to ignition::common::Filesystem
+/// \ToDo: Move this function to gz::common::Filesystem
 std::string cachePath()
 {
-  std::string cachePath;
 #ifndef _WIN32
-  return std::string("/tmp/ignition/fuel");
+  return std::string("/tmp/gz/fuel");
 #else
   return std::string("C:\\Windows\\Temp");
 #endif
@@ -99,11 +98,11 @@ TEST(ClientConfig, CustomDefaultConfiguration)
 {
   ClientConfig config;
   ASSERT_EQ(1u, config.Servers().size());
-  EXPECT_EQ("https://fuel.ignitionrobotics.org",
+  EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
 
-  std::string defaultCacheLocation = ignition::common::joinPaths(
-    homePath(), ".ignition", "fuel");
+  std::string defaultCacheLocation = gz::common::joinPaths(
+    homePath(), ".gz", "fuel");
   EXPECT_EQ(defaultCacheLocation, config.CacheLocation());
 }
 
@@ -122,7 +121,7 @@ TEST(ClientConfig, CustomConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://api.ignitionfuel.org"  << std::endl
+      << "    url: https://api.gazebosim.org"     << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
       << "    url: https://myserver"              << std::endl
@@ -136,9 +135,9 @@ TEST(ClientConfig, CustomConfiguration)
   EXPECT_TRUE(config.LoadConfig(testPath));
 
   ASSERT_EQ(3u, config.Servers().size());
-  EXPECT_EQ("https://fuel.ignitionrobotics.org",
+  EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://api.ignitionfuel.org",
+  EXPECT_EQ("https://api.gazebosim.org",
     config.Servers()[1].Url().Str());
   EXPECT_EQ("https://myserver",
     config.Servers().back().Url().Str());
@@ -163,10 +162,10 @@ TEST(ClientConfig, RepeatedServerConfiguration)
       << "# The list of servers."                 << std::endl
       << "servers:"                               << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
+      << "    url: https://fuel.gazebosim.org"    << std::endl
       << ""                                       << std::endl
       << "  -"                                    << std::endl
-      << "    url: https://fuel.ignitionrobotics.org"  << std::endl
+      << "    url: https://fuel.gazebosim.org"    << std::endl
       << ""                                       << std::endl
       << "# Where are the assets stored in disk." << std::endl
       << "cache:"                                 << std::endl
@@ -279,7 +278,7 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
 TEST(ClientConfig, UserAgent)
 {
   ClientConfig config;
-  EXPECT_EQ("IgnitionFuelTools-" IGNITION_FUEL_TOOLS_VERSION_FULL,
+  EXPECT_EQ("IgnitionFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL,
             config.UserAgent());
 
   config.SetUserAgent("my_user_agent");
@@ -307,14 +306,14 @@ TEST(ClientConfig, AsString)
     ClientConfig client;
 
     std::string str = client.AsString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
 #ifndef _WIN32
-    EXPECT_NE(str.find(".ignition/fuel"), std::string::npos);
+    EXPECT_NE(str.find(".gz/fuel"), std::string::npos);
 #else
-    EXPECT_NE(str.find(".ignition\\fuel"), std::string::npos);
+    EXPECT_NE(str.find(".gz\\fuel"), std::string::npos);
 #endif
-    EXPECT_NE(str.find("https://fuel.ignitionrobotics.org"), std::string::npos);
+    EXPECT_NE(str.find("https://fuel.gazebosim.org"), std::string::npos);
   }
 
   {
@@ -338,7 +337,7 @@ TEST(ClientConfig, AsString)
     srv.SetApiKey("ABCD");
 
     auto str = srv.AsString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
     EXPECT_EQ(str.find("local_name"), std::string::npos);
@@ -355,7 +354,7 @@ TEST(ClientConfig, AsString)
     client.AddServer(srv);
 
     auto str = client.AsString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("cache/location"), std::string::npos);
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
@@ -381,7 +380,7 @@ TEST(ClientConfig, AsPrettyString)
     srv.SetApiKey("ABCD");
 
     auto str = srv.AsPrettyString();
-    igndbg << str << std::endl;
+    gzdbg << str << std::endl;
 
     EXPECT_NE(str.find("http://serverurl.com"), std::string::npos);
     EXPECT_EQ(str.find("local_name"), std::string::npos);
@@ -433,11 +432,4 @@ TEST(ServerConfig, Url)
     EXPECT_EQ("banana:8080", srv.Url().Path().Str());
     EXPECT_FALSE(srv.Url().Authority());
   }
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

@@ -19,16 +19,16 @@
 #include <cstdio>
 #include <string>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/ModelIter.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/ModelIter.hh"
 
 #include "ModelIterPrivate.hh"
 #include "ModelPrivate.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
-namespace ignition
+namespace gz
 {
   namespace fuel_tools
   {
@@ -45,7 +45,7 @@ namespace ignition
 
       public: static ModelIter ModelIterThreeModelIds()
         {
-          ignition::fuel_tools::ServerConfig srv;
+          gz::fuel_tools::ServerConfig srv;
           srv.SetUrl(common::URI("https://ignitionrobotics.org"));
 
           std::vector<ModelIdentifier> ids;
@@ -67,7 +67,7 @@ namespace ignition
 
       public: static ModelIter ModelIterThreeModels()
         {
-          ignition::fuel_tools::ServerConfig srv;
+          gz::fuel_tools::ServerConfig srv;
           srv.SetUrl(common::URI("https://ignitionrobotics.org"));
 
           std::vector<Model> models;
@@ -158,11 +158,4 @@ TEST(ModelIterTestFixture, MoveThroughModels)
 
   ++iter;
   EXPECT_FALSE(iter);
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

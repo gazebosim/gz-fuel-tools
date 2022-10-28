@@ -1,16 +1,12 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 
-# Find the Ignition Fuel Tools library
-find_package(ignition-fuel_tools8 QUIET REQUIRED)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNITION-FUEL-TOOLS_CXX_FLAGS}")
-include_directories(
-  ${IGNITION-COMMON_INCLUDE_DIRS}
-  ${IGNITION-FUEL_TOOLS_INCLUDE_DIRS}
-)
-link_directories(
-  ${IGNITION-COMMON_LIBRARY_DIRS}
-  ${IGNITION-FUEL_TOOLS_LIBRARY_DIRS}
-)
+project(fuel-tools-examples)
+
+# Find the Gazebo Fuel Tools library
+find_package(gz-fuel_tools9 QUIET REQUIRED)
+set(GZ_FUEL_TOOLS_VER ${gz-fuel_tools9_VERSION_MAJOR})
+
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GZ-FUEL-TOOLS_CXX_FLAGS}")
 
 # GFlags
 find_library(gflags_LIBRARIES NAMES gflags)
@@ -25,24 +21,21 @@ endif()
 if (EXISTS "${CMAKE_SOURCE_DIR}/list.cc")
   add_executable(list list.cc)
   target_link_libraries(list
-                        ${IGNITION-COMMON_LIBRARIES}
-                        ${IGNITION-FUEL_TOOLS_LIBRARIES}
+                        gz-fuel_tools${GZ_FUEL_TOOLS_VER}::gz-fuel_tools${GZ_FUEL_TOOLS_VER}
                         ${gflags_LIBRARIES})
 endif()
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/download.cc")
   add_executable(download download.cc)
   target_link_libraries(download
-                        ${IGNITION-COMMON_LIBRARIES}
-                        ${IGNITION-FUEL_TOOLS_LIBRARIES}
+                        gz-fuel_tools${GZ_FUEL_TOOLS_VER}::gz-fuel_tools${GZ_FUEL_TOOLS_VER}
                         ${gflags_LIBRARIES})
 endif()
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/details.cc")
   add_executable(details details.cc)
   target_link_libraries(details
-                        ${IGNITION-COMMON_LIBRARIES}
-                        ${IGNITION-FUEL_TOOLS_LIBRARIES}
+                        gz-fuel_tools${GZ_FUEL_TOOLS_VER}::gz-fuel_tools${GZ_FUEL_TOOLS_VER}
                         ${gflags_LIBRARIES})
 endif()
 

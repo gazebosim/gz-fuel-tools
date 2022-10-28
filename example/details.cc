@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-#include <ignition/fuel_tools.hh>
+#include <gz/fuel_tools.hh>
 
 DEFINE_bool(h, false, "Show help");
 
@@ -56,14 +56,14 @@ int main(int argc, char **argv)
   gflags::HandleCommandLineHelpFlags();
 
   // Setup ClientConfig.
-  ignition::fuel_tools::ClientConfig conf;
+  gz::fuel_tools::ClientConfig conf;
   conf.SetUserAgent("ExampleDetails");
 
   if (FLAGS_s != "")
   {
     // The user specified a Fuel server via command line.
-    ignition::fuel_tools::ServerConfig srv;
-    srv.SetUrl(ignition::common::URI(FLAGS_s));
+    gz::fuel_tools::ServerConfig srv;
+    srv.SetUrl(gz::common::URI(FLAGS_s));
 
     // Add the extra Fuel server.
     conf.AddServer(srv);
@@ -80,11 +80,11 @@ int main(int argc, char **argv)
   }
 
   // Instantiate the FuelClient object with the configuration.
-  ignition::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::FuelClient client(conf);
 
   // Set the properties of the resource that we want to search.
-  ignition::fuel_tools::ModelIdentifier modelIdentifier;
-  ignition::fuel_tools::WorldIdentifier worldIdentifier;
+  gz::fuel_tools::ModelIdentifier modelIdentifier;
+  gz::fuel_tools::WorldIdentifier worldIdentifier;
 
   if (FLAGS_t == "model")
   {
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
       auto id = modelIdentifier;
       id.SetServer(server);
 
-      ignition::fuel_tools::ModelIdentifier model;
+      gz::fuel_tools::ModelIdentifier model;
       if (!client.ModelDetails(id, model))
         continue;
 
@@ -118,7 +118,7 @@ int main(int argc, char **argv)
       auto id = worldIdentifier;
       id.SetServer(server);
 
-      ignition::fuel_tools::WorldIdentifier world;
+      gz::fuel_tools::WorldIdentifier world;
       if (!client.WorldDetails(id, world))
         continue;
 

@@ -16,10 +16,10 @@
 */
 
 #include <gtest/gtest.h>
-#include "ignition/fuel_tools/Model.hh"
+#include "gz/fuel_tools/Model.hh"
 
-namespace ignft = ignition::fuel_tools;
-using namespace ignition;
+namespace ignft = gz::fuel_tools;
+using namespace gz;
 using namespace ignft;
 
 /////////////////////////////////////////////////
@@ -37,11 +37,4 @@ TEST(Model, ConstructorDoesNotCrash)
 
   std::string path = model.PathToModel();
   EXPECT_TRUE(path.empty());
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

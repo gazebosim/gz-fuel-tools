@@ -26,11 +26,11 @@
 #include <string>
 #include <vector>
 
-#include <ignition/common/Console.hh>
+#include <gz/common/Console.hh>
 
-#include "ignition/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/RestClient.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 // List of known file extensions and associated mime type.
@@ -133,11 +133,8 @@ struct curl_httppost *BuildFormPost(
 {
   struct curl_httppost *formpost = nullptr;
   struct curl_httppost *lastptr = nullptr;
-  for (const std::pair<std::string, std::string> &it : _form)
+  for (const auto &[key, value] : _form)
   {
-    std::string key = it.first;
-    std::string value = it.second;
-
     // follow same convention as curl cmdline tool
     // field starting with @ indicates path to file to upload
     // others are standard fields to describe the file
@@ -147,7 +144,7 @@ struct curl_httppost *BuildFormPost(
       std::string path = value.substr(1);
 
       // Default upload filename
-      std::string uploadFilename = ignition::common::basename(path);
+      std::string uploadFilename = gz::common::basename(path);
 
       // If the value has a semicolon, then use the string preceding the
       // semicolon as the local filesystem path and the string following
@@ -158,7 +155,7 @@ struct curl_httppost *BuildFormPost(
         uploadFilename = value.substr(value.find(";") + 1);
       }
 
-      std::string basename = ignition::common::basename(path);
+      std::string basename = gz::common::basename(path);
       std::string contentType = "application/octet-stream";
 
       // Figure out the content type based on the file extension.
@@ -166,14 +163,14 @@ struct curl_httppost *BuildFormPost(
       if (dotIdx != std::string::npos)
       {
         std::string extension =
-          ignition::common::lowercase(basename.substr(dotIdx));
+          gz::common::lowercase(basename.substr(dotIdx));
         if (kContentTypes.find(extension) != kContentTypes.end())
         {
           contentType = kContentTypes.at(extension);
         }
         else
         {
-          ignwarn << "Unknown mime type for file[" << path
+          gzwarn << "Unknown mime type for file[" << path
             << "]. The mime type '" << contentType << "' will be used.\n";
         }
       }
@@ -246,7 +243,7 @@ RestResponse Rest::Request(HttpMethod _method,
     headers = curl_slist_append(headers, header.c_str());
     if (!headers)
     {
-      ignerr << "[Rest::Request()]: Error processing header.\n  ["
+      gzerr << "[Rest::Request()]: Error processing header.\n  ["
                 << header.c_str() << "]" << std::endl;
 
       // cleanup
@@ -316,7 +313,7 @@ RestResponse Rest::Request(HttpMethod _method,
   }
   else
   {
-    ignerr << "Unsupported method" << std::endl;
+    gzerr << "Unsupported method" << std::endl;
 
     // Cleanup.
     curl_slist_free_all(headers);
@@ -327,7 +324,7 @@ RestResponse Rest::Request(HttpMethod _method,
   CURLcode success = curl_easy_perform(curl);
   if (success != CURLE_OK)
   {
-    ignerr << "Error in REST request" << std::endl;
+    gzerr << "Error in REST request" << std::endl;
     size_t len = strlen(errbuf);
     fprintf(stderr, "\nlibcurl: (%d) ", success);
     if (len)

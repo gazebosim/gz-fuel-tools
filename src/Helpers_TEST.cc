@@ -16,16 +16,16 @@
 */
 
 #include <gtest/gtest.h>
-#include <ignition/common/Filesystem.hh>
-#include "ignition/fuel_tools/Helpers.hh"
+#include <gz/common/Filesystem.hh>
+#include "gz/fuel_tools/Helpers.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
 TEST(HelpersTEST, UriToPathNoAuthority)
 {
-// TO-DO: Update this test after ign-fuel-tools#204 is addressed
+// TO-DO: Update this test after gz-fuel-tools#204 is addressed
 #ifdef WIN32
   const std::string testStr1 = R"(localhost:8000\some\path)";
   const std::string testStr2 = R"(localhost:8000\some\path\)";
@@ -69,11 +69,4 @@ TEST(HelpersTEST, UriToPathHasAuthority)
     EXPECT_EQ(common::separator(common::joinPaths("localhost:8000", "some",
         "path")), uriToPath(uri));
   }
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }

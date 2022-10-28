@@ -3,7 +3,7 @@ set (sources
   CollectionIdentifier.cc
   FuelClient.cc
   Helpers.cc
-  ign.cc
+  gz.cc
   Interface.cc
   JSONParser.cc
   LocalCache.cc
@@ -21,7 +21,7 @@ set (gtest_sources
   ClientConfig_TEST.cc
   CollectionIdentifier_TEST.cc
   FuelClient_TEST.cc
-  ign_src_TEST.cc
+  gz_src_TEST.cc
   Interface_TEST.cc
   Helpers_TEST.cc
   JSONParser_TEST.cc
@@ -36,21 +36,21 @@ set (gtest_sources
   Zip_TEST.cc
 )
 
-if (HAVE_IGN_TOOLS)
+if (HAVE_GZ_TOOLS)
   set (gtest_sources ${gtest_sources}
-    ign_TEST.cc
+    gz_TEST.cc
   )
 endif()
 
 # Create the library target.
-ign_create_core_library(SOURCES ${sources} CXX_STANDARD 17)
+gz_create_core_library(SOURCES ${sources} CXX_STANDARD 17)
 
 # Link the libraries that we always need.
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
-    ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
+    gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
   PRIVATE
-    ignition-msgs${IGN_MSGS_MAJOR_VER}::ignition-msgs${IGN_MSGS_MAJOR_VER}
+    gz-msgs${GZ_MSGS_VER}::gz-msgs${GZ_MSGS_VER}
     curl::curl
     ${JSONCPP_TARGET}
     TINYXML2::TINYXML2
@@ -58,20 +58,27 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
     ZIP::ZIP
 )
 
-ign_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
-  ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
-  ignition-msgs${IGN_MSGS_MAJOR_VER}::ignition-msgs${IGN_MSGS_MAJOR_VER}
+gz_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
+  gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
+  gz-msgs${GZ_MSGS_VER}::gz-msgs${GZ_MSGS_VER}
 )
 
 
 # Build the unit tests.
-ign_build_tests(TYPE UNIT
+gz_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
+                TEST_LIST test_targets
                 LIB_DEPS
-                  ignition-cmake${IGN_CMAKE_VER}::utilities
-                  ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
+                  gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
                   TINYXML2::TINYXML2
 )
+
+foreach(test ${test_targets})
+
+  target_compile_definitions(${test} PRIVATE
+    "GZ_PATH=\"${HAVE_GZ_TOOLS}\"")
+
+endforeach()
 
 # Command line support.
 add_subdirectory(cmd)

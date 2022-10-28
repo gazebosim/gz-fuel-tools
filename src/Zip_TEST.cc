@@ -16,7 +16,7 @@
 */
 
 // All these helper functions have been copied from
-// https://github.com/ignitionrobotics/ign-common/raw/ign-common3/src/Filesystem_TEST.cc
+// https://github.com/gazebosim/gz-common/raw/ign-common3/src/Filesystem_TEST.cc
 
 #ifndef _WIN32
 #include <fcntl.h>
@@ -138,11 +138,11 @@ bool createNewEmptyFile(const std::string &_filename)
 #endif
 
 #include <gtest/gtest.h>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include "ignition/fuel_tools/Zip.hh"
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include "gz/fuel_tools/Zip.hh"
 
-using namespace ignition;
+using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
@@ -150,7 +150,7 @@ class ZipTest : public ::testing::Test
 {
   public: void SetUp() override
   {
-    ignition::common::Console::SetVerbosity(4);
+    gz::common::Console::SetVerbosity(4);
   }
 };
 
@@ -173,32 +173,25 @@ TEST_F(ZipTest, CompressAndExtract)
 {
   std::string newTempDir;
   ASSERT_TRUE(createAndSwitchToTempDir(newTempDir));
-  auto d = ignition::common::joinPaths(newTempDir, "d1", "d2");
-  ASSERT_TRUE(ignition::common::createDirectories(d));
-  auto f = ignition::common::joinPaths(d, "new_file");
+  auto d = gz::common::joinPaths(newTempDir, "d1", "d2");
+  ASSERT_TRUE(gz::common::createDirectories(d));
+  auto f = gz::common::joinPaths(d, "new_file");
   ASSERT_TRUE(createNewEmptyFile(f));
-  EXPECT_TRUE(ignition::common::exists(f));
+  EXPECT_TRUE(gz::common::exists(f));
 
   // Compress.
-  auto d1 = ignition::common::joinPaths(newTempDir, "d1");
-  auto zipOutFile = ignition::common::joinPaths(newTempDir, "new_file.zip");
+  auto d1 = gz::common::joinPaths(newTempDir, "d1");
+  auto zipOutFile = gz::common::joinPaths(newTempDir, "new_file.zip");
   EXPECT_TRUE(Zip::Compress(d1, zipOutFile));
-  EXPECT_TRUE(ignition::common::exists(zipOutFile));
+  EXPECT_TRUE(gz::common::exists(zipOutFile));
 
   // Extract.
-  auto extractOutDir = ignition::common::joinPaths(newTempDir, "extract");
+  auto extractOutDir = gz::common::joinPaths(newTempDir, "extract");
   EXPECT_TRUE(Zip::Extract(zipOutFile, extractOutDir));
   auto extractOutFile =
-    ignition::common::joinPaths(extractOutDir, "d1", "d2", "new_file");
-  EXPECT_TRUE(ignition::common::exists(extractOutFile));
+    gz::common::joinPaths(extractOutDir, "d1", "d2", "new_file");
+  EXPECT_TRUE(gz::common::exists(extractOutFile));
 
   // Clean.
-  ignition::common::removeAll(newTempDir);
-}
-
-//////////////////////////////////////////////////
-int main(int argc, char **argv)
-{
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+  gz::common::removeAll(newTempDir);
 }
