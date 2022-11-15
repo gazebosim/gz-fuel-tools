@@ -346,7 +346,7 @@ TEST_F(CmdLine, WorldDownloadUnversioned)
 {
   // Download
   EXPECT_TRUE(downloadUrl(
-      "https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Test world"));
+      "https://fuel.gazebosim.org/1.0/openrobotics/worlds/Test world"));
 
   // Check output
   EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"),
@@ -362,7 +362,7 @@ TEST_F(CmdLine, WorldDownloadUnversioned)
       "openrobotics", "worlds", "test world", "2")));
   EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.gazebosim.org",
-      "openrobotics", "worlds", "test world", "2", "test.world")));
+      "openrobotics", "worlds", "test world", "2", "test.sdf")));
 }
 
 
@@ -380,11 +380,11 @@ INSTANTIATE_TEST_CASE_P(CollectionTest, DownloadCollectionTest,
 // https://github.com/ignitionrobotics/ign-fuel-tools/issues/105
 TEST_P(DownloadCollectionTest, AllItems)
 {
+  std::string url =
+   "https://fuel.gazebosim.org/1.0/openroboticstest/collections/testcollection";
+
   // Download
-  EXPECT_TRUE(
-      downloadUrl("https://fuel.gazebosim.org/1.0/openroboticstest/"
-                  "collections/TestCollection",
-                  nullptr, nullptr, nullptr, GetParam()));
+  EXPECT_TRUE(downloadUrl(url.c_str(), nullptr, nullptr, nullptr, GetParam()));
 
   // Check output
   EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"),
@@ -445,7 +445,7 @@ TEST_P(DownloadCollectionTest, Models)
 {
   // Download
   EXPECT_TRUE(
-      downloadUrl("https://fuel.gazebosim.org/1.0/OpenRoboticstest/"
+      downloadUrl("https://fuel.gazebosim.org/1.0/openroboticstest/"
                   "collections/testcollection",
                   nullptr, nullptr, "model", GetParam()));
 
