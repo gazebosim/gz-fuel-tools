@@ -75,8 +75,12 @@ ign_build_tests(TYPE UNIT
 
 # Some tests download simulation assets, which can take longer than the
 # default time limit.
-set_tests_properties(UNIT_gz_src_TEST PROPERTIES TIMEOUT 500)
-set_tests_properties(UNIT_FuelClient_TEST PROPERTIES TIMEOUT 500)
+if (TARGET UNIT_gz_src_TEST)
+  set_tests_properties(UNIT_gz_src_TEST PROPERTIES TIMEOUT 500)
+endif()
+if (TARGET UNIT_FuelClient_TEST)
+  set_tests_properties(UNIT_FuelClient_TEST PROPERTIES TIMEOUT 500)
+endif()
 
 # Command line support.
 add_subdirectory(cmd)
