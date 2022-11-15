@@ -3,7 +3,7 @@ set (sources
   CollectionIdentifier.cc
   FuelClient.cc
   Helpers.cc
-  ign.cc
+  gz.cc
   Interface.cc
   JSONParser.cc
   LocalCache.cc
@@ -21,7 +21,7 @@ set (gtest_sources
   ClientConfig_TEST.cc
   CollectionIdentifier_TEST.cc
   FuelClient_TEST.cc
-  ign_src_TEST.cc
+  gz_src_TEST.cc
   Interface_TEST.cc
   Helpers_TEST.cc
   JSONParser_TEST.cc
@@ -38,7 +38,7 @@ set (gtest_sources
 
 if (HAVE_IGN_TOOLS)
   set (gtest_sources ${gtest_sources}
-    ign_TEST.cc
+    gz_TEST.cc
   )
 endif()
 
@@ -72,6 +72,15 @@ ign_build_tests(TYPE UNIT
                   ignition-common${IGN_COMMON_MAJOR_VER}::ignition-common${IGN_COMMON_MAJOR_VER}
                   TINYXML2::TINYXML2
 )
+
+# Some tests download simulation assets, which can take longer than the
+# default time limit.
+if (TARGET UNIT_gz_src_TEST)
+  set_tests_properties(UNIT_gz_src_TEST PROPERTIES TIMEOUT 1000)
+endif()
+if (TARGET UNIT_FuelClient_TEST)
+  set_tests_properties(UNIT_FuelClient_TEST PROPERTIES TIMEOUT 1000)
+endif()
 
 # Command line support.
 add_subdirectory(cmd)

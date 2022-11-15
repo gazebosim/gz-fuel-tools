@@ -19,17 +19,17 @@
 #include <string>
 #include <vector>
 
-#include <ignition/common/Filesystem.hh>
-#include <ignition/common/Util.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/common/Util.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/Helpers.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
 using namespace ignition;
 using namespace fuel_tools;
 
-class ignition::fuel_tools::WorldIdentifierPrivate
+class gz::fuel_tools::WorldIdentifierPrivate
 {
   /// \brief a name given to this world by a user
   public: std::string name;

@@ -17,11 +17,11 @@
 
 #include <gtest/gtest.h>
 #include <string>
-#include <ignition/common/Console.hh>
-#include <ignition/utilities/ExtraTestMacros.hh>
+#include <gz/common/Console.hh>
+#include <gz/utilities/ExtraTestMacros.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/CollectionIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/CollectionIdentifier.hh"
 
 using namespace ignition;
 using namespace fuel_tools;

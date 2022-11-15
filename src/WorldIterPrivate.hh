@@ -15,15 +15,15 @@
  *
 */
 
-#ifndef IGNITION_FUEL_TOOLS_WORLDITERPRIVATE_HH_
-#define IGNITION_FUEL_TOOLS_WORLDITERPRIVATE_HH_
+#ifndef GZ_FUEL_TOOLS_WORLDITERPRIVATE_HH_
+#define GZ_FUEL_TOOLS_WORLDITERPRIVATE_HH_
 
 #include <string>
 #include <vector>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
-#include "ignition/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/RestClient.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by

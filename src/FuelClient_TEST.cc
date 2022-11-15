@@ -17,14 +17,14 @@
 
 #include <gtest/gtest.h>
 #include <fstream>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/utilities/ExtraTestMacros.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/utilities/ExtraTestMacros.hh>
 
-#include "ignition/fuel_tools/FuelClient.hh"
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/Result.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/FuelClient.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/Result.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
 #include "test/test_config.h"
 

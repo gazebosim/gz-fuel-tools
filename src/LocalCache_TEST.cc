@@ -20,13 +20,13 @@
 #include <fstream>
 #include <set>
 #include <string>
-#include <ignition/common/Console.hh>
-#include <ignition/common/Filesystem.hh>
-#include <ignition/utilities/ExtraTestMacros.hh>
+#include <gz/common/Console.hh>
+#include <gz/common/Filesystem.hh>
+#include <gz/utilities/ExtraTestMacros.hh>
 
-#include "ignition/fuel_tools/ClientConfig.hh"
-#include "ignition/fuel_tools/LocalCache.hh"
-#include "ignition/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/LocalCache.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
 #include "test/test_config.h"
 
