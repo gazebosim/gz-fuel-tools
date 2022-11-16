@@ -78,7 +78,8 @@ bool ParseLicenseImpl(const Json::Value &_json,
     if (_json.isMember("ID"))
       _license.second = _json["ID"].asUInt();
   }
-#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
+#if ((JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10) || \
+     JSON_USE_EXCEPTION == 0)
   catch (...)
   {
     std::string what;
@@ -109,7 +110,8 @@ std::vector<std::string> JSONParser::ParseTags(const Json::Value &_json)
     for (auto tagIt = _json.begin(); tagIt != _json.end(); ++tagIt)
       tags.push_back(tagIt->asString());
   }
-#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
+#if ((JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10) || \
+     JSON_USE_EXCEPTION == 0)
   catch (...)
   {
     std::string what;
@@ -221,7 +223,8 @@ bool JSONParser::ParseModelImpl(
     if (_json.isMember("version"))
       _model.SetVersion(_json["version"].asUInt());
   }
-#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
+#if ((JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10) || \
+     JSON_USE_EXCEPTION == 0)
   catch (...)
   {
     std::string what;
@@ -326,7 +329,8 @@ bool JSONParser::ParseWorldImpl(
     if (_json.isMember("version"))
       _world.SetVersion(_json["version"].asUInt());
   }
-#if JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10
+#if ((JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10) || \
+     JSON_USE_EXCEPTION == 0)
   catch (...)
   {
     std::string what;
