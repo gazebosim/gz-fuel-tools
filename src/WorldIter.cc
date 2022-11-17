@@ -133,8 +133,8 @@ WorldIterRestIds::WorldIterRestIds(const Rest &_rest,
           resp.headers["Link"], ",");
       for (const auto &l : links)
       {
-        if (l.find("next") != std::string::npos)
-        {
+        // cppcheck-suppress useStlAlgorithm
+        if (l.find("next") != std::string::npos) {
           auto start = l.find(queryStrPageKey);
           auto end = l.find(">", start+1);
           queryStrPage = l.substr(start, end-start);

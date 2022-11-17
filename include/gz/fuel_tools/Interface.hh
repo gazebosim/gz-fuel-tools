@@ -15,6 +15,9 @@
  *
 */
 
+#ifndef GZ_FUEL_TOOLS_INTERFACE_HH_
+#define GZ_FUEL_TOOLS_INTERFACE_HH_
+
 #include <string>
 #include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/FuelClient.hh"
@@ -60,3 +63,5 @@ namespace gz
         const std::string &_path);
   }
 }
+
+#endif
