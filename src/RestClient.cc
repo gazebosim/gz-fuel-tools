@@ -228,6 +228,7 @@ RestResponse Rest::Request(HttpMethod _method,
   {
     std::string fullQuery{"?"};
     for (const std::string &queryString : _queryStrings)
+      // cppcheck-suppress useStlAlgorithm
       fullQuery += queryString + "&";
 
     fullQuery.pop_back();
