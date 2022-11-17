@@ -1,5 +1,17 @@
 ## Gazebo Fuel Tools 8.x
 
+### Gazebo Fuel Tools 8.0.1
+
+1. Forward ports.
+    * [Pull request #306](https://github.com/gazebosim/gz-fuel-tools/pull/306)
+    * [Pull request #310](https://github.com/gazebosim/gz-fuel-tools/pull/310)
+
+1. Remove fuel.ignitionrobotics.org from ClientConfig.
+    * [Pull request #293](https://github.com/gazebosim/gz-fuel-tools/pull/293)
+
+1. Clean up a few Windows warnings.
+    * [Pull request #308](https://github.com/gazebosim/gz-fuel-tools/pull/308)
+
 ### Gazebo Fuel Tools 8.0.0
 
 1. Update test infrastruture
