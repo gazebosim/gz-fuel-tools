@@ -15,12 +15,12 @@
  *
 */
 
-#ifdef _MSC_VER
-#pragma warning(push, 0)
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4251)  // foo needs to have dll-interface
 #endif
 #include <google/protobuf/text_format.h>
-#include <gz/msgs/fuel_metadata.pb.h>
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 #pragma warning(pop)
 #endif
 
@@ -36,6 +36,7 @@
 #include <gz/common/Filesystem.hh>
 #include <gz/common/Util.hh>
 
+#include <gz/msgs/fuel_metadata.pb.h>
 #include <gz/msgs/Utility.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
@@ -406,6 +407,7 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
     path = path / _id.Owner() / "models";
 
   if (path.Str().empty())
+    // cppcheck-suppress identicalConditionAfterEarlyExit
     return localIter;
 
   gzmsg << _id.UniqueName() << " not found in cache, attempting download\n";
@@ -777,15 +779,10 @@ Result FuelClient::ModelDependencies(
       std::vector<ModelIdentifier> recursiveDeps;
       this->ModelDependencies(modelDeps, recursiveDeps);
 
-      for (auto dep : modelDeps)
-      {
-        newDeps.push_back(dep);
-      }
-
-      for (auto dep : recursiveDeps)
-      {
-        newDeps.push_back(dep);
-      }
+      std::copy(modelDeps.begin(), modelDeps.end(),
+                std::back_inserter(newDeps));
+      std::copy(recursiveDeps.begin(), recursiveDeps.end(),
+                std::back_inserter(newDeps));
     }
   }
 
@@ -1077,8 +1074,8 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.Url().Str() == _id.Server().Url().Str())
-    {
+    // cppcheck-suppress useStlAlgorithm
+    if (s.Url().Str() == _id.Server().Url().Str()) {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
         gzwarn << "Requested server API version [" << apiVersion
@@ -1143,8 +1140,8 @@ bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.Url() == _id.Server().Url())
-    {
+    // cppcheck-suppress useStlAlgorithm
+    if (s.Url() == _id.Server().Url()) {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
         gzwarn << "Requested server API version [" << apiVersion
@@ -1211,8 +1208,8 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.Url().Str() == _id.Server().Url().Str())
-    {
+    // cppcheck-suppress useStlAlgorithm
+    if (s.Url().Str() == _id.Server().Url().Str()) {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
         gzwarn << "Requested server API version [" << apiVersion
@@ -1280,8 +1277,8 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.Url() == _id.Server().Url())
-    {
+    // cppcheck-suppress useStlAlgorithm
+    if (s.Url() == _id.Server().Url()) {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
         gzwarn << "Requested server API version [" << apiVersion
@@ -1347,8 +1344,8 @@ bool FuelClient::ParseCollectionUrl(const common::URI &_url,
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.Url() == _id.Server().Url())
-    {
+    // cppcheck-suppress useStlAlgorithm
+    if (s.Url() == _id.Server().Url()) {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
         gzwarn << "Requested server API version [" << apiVersion

@@ -73,6 +73,15 @@ gz_build_tests(TYPE UNIT
                   TINYXML2::TINYXML2
 )
 
+# Some tests download simulation assets, which can take longer than the
+# default time limit.
+if (TARGET UNIT_gz_src_TEST)
+  set_tests_properties(UNIT_gz_src_TEST PROPERTIES TIMEOUT 1000)
+endif()
+if (TARGET UNIT_FuelClient_TEST)
+  set_tests_properties(UNIT_FuelClient_TEST PROPERTIES TIMEOUT 1000)
+endif()
+
 foreach(test ${test_targets})
 
   target_compile_definitions(${test} PRIVATE
