@@ -189,7 +189,6 @@ class gz::fuel_tools::FuelClientPrivate
   /// \brief Checks the provided URI for fuel.ignitionrobotics.org, and
   /// prints a deprecation warning message if found.
   /// \param[in] _uri URI to check
-  /// DEPRECATED/DEPRECATION: remove this function in Gazebo H.
   public: void CheckForDeprecatedUri(const common::URI &_uri);
 
   /// \brief Client configuration
@@ -1793,12 +1792,12 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
 //////////////////////////////////////////////////
 void FuelClientPrivate::CheckForDeprecatedUri(const common::URI &_uri)
 {
-  static std::string oldServer = "fuel.ignitionrobotics.org";
+  static const char *oldServer = "fuel.ignitionrobotics.org";
   auto ignFuelPos = _uri.Str().find(oldServer);
   if (ignFuelPos != std::string::npos)
   {
     std::string newUrl = _uri.Str();
-    newUrl.replace(ignFuelPos, oldServer.size(), "fuel.gazebosim.org");
+    newUrl.replace(ignFuelPos, strlen(oldServer), "fuel.gazebosim.org");
     ignwarn << "The " << oldServer << " URL is deprecrated. Please change "
       << _uri.Str() << " to " << newUrl << std::endl;
   }
