@@ -44,13 +44,6 @@ class gz::fuel_tools::ClientConfigPrivate
                 homePath, ".gz", "fuel");
 
             this->servers.push_back(ServerConfig());
-
-            // Add in fuel.gazebosim.org as another default server config.
-            ServerConfig gzServerConfig;
-            gzServerConfig.SetUrl(
-                common::URI("https://fuel.ignitionrobotics.org"));
-            gzServerConfig.SetVersion("1.0");
-            this->servers.push_back(gzServerConfig);
           }
 
   /// \brief Clear values.

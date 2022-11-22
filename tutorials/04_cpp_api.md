@@ -18,22 +18,22 @@ Download the files `list.cc`, `details.cc`, `download.cc`,
 
 ```bash
 # Ubuntu or MacOS
-wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/list.cc
-wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/details.cc
-wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc
-wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/list.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/details.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/download.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/CMakeLists.txt
 
 # Windows
 ## CMD
-curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/list.cc -o list.cc
-curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/details.cc -o details.cc
-curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc -o download.cc
-curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/list.cc -o list.cc
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/details.cc -o details.cc
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/download.cc -o download.cc
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/CMakeLists.txt -o CMakeLists.txt
 ## PowerShell
-curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/list.cc -o list.cc
-curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/details.cc -o details.cc
-curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc -o download.cc
-curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
+curl https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/list.cc -o list.cc
+curl https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/details.cc -o details.cc
+curl https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/download.cc -o download.cc
+curl https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/CMakeLists.txt -o CMakeLists.txt
 ```
 
 Let's start by compiling the examples:
@@ -73,7 +73,7 @@ You should see the name of the server followed by its list of models. Here's an
 example:
 
 ```
-[https://fuel.ignitionrobotics.org]
+[https://fuel.gazebosim.org]
 
   Beer
   Wastebasket
@@ -150,7 +150,7 @@ License name: Creative Commons - Attribution
 License URL: http://creativecommons.org/licenses/by/4.0
 License image URL: https://i.creativecommons.org/l/by/4.0/88x31.png
 Server:
-  URL: https://fuel.ignitionrobotics.org
+  URL: https://fuel.gazebosim.org
   Version: 1.0
 ```
 

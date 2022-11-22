@@ -43,12 +43,12 @@ Here are the instructions:
 
 Install Homebrew, which should also prompt you to install the XCode
 command-line tools:
-```
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 Run the following commands:
-```
+```bash
 brew tap osrf/simulation
 brew install gz-fuel-tools<#>
 ```
@@ -175,7 +175,7 @@ sudo make uninstall
 
 2. Install dependencies
   ```
-  brew install --only-dependencies ignition-fuel-tools<#>
+  brew install --only-dependencies gz-fuel-tools<#>
   ```
   Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
   which version you need.

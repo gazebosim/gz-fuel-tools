@@ -9,13 +9,13 @@ project(gz-fuel_tools9 VERSION 9.0.0)
 # Find gz-cmake
 #============================================================================
 # If you get an error at this line, you need to install gz-cmake
-find_package(gz-cmake3 REQUIRED)
-set(GZ_CMAKE_VER ${gz-cmake3_VERSION_MAJOR})
+find_package(gz-cmake4 REQUIRED)
+set(GZ_CMAKE_VER ${gz-cmake4_VERSION_MAJOR})
 
 #============================================================================
 # Configure the project
 #============================================================================
-gz_configure_project(VERSION_SUFFIX pre1)
+gz_configure_project(VERSION_SUFFIX)
 
 #============================================================================
 # Set project-specific options
@@ -49,23 +49,23 @@ gz_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find gz-utils
-gz_find_package(gz-utils2 REQUIRED)
-set(GZ_UTILS_VER ${gz-utils2_VERSION_MAJOR})
+gz_find_package(gz-utils3 REQUIRED)
+set(GZ_UTILS_VER ${gz-utils3_VERSION_MAJOR})
 
 #--------------------------------------
 # Find gz-common
-gz_find_package(gz-common5 REQUIRED PRIVATE)
-set(GZ_COMMON_VER ${gz-common5_VERSION_MAJOR})
+gz_find_package(gz-common6 REQUIRED PRIVATE)
+set(GZ_COMMON_VER ${gz-common6_VERSION_MAJOR})
 
 #--------------------------------------
 # Find gz-math
-gz_find_package(gz-math7 REQUIRED PRIVATE)
-set(GZ_MATH_VER ${gz-math7_VERSION_MAJOR})
+gz_find_package(gz-math8 REQUIRED PRIVATE)
+set(GZ_MATH_VER ${gz-math8_VERSION_MAJOR})
 
 #--------------------------------------
 # Find gz-msgs
-gz_find_package(gz-msgs9 REQUIRED PRIVATE)
-set(GZ_MSGS_VER ${gz-msgs9_VERSION_MAJOR})
+gz_find_package(gz-msgs10 REQUIRED PRIVATE)
+set(GZ_MSGS_VER ${gz-msgs10_VERSION_MAJOR})
 
 #--------------------------------------
 # Find gz-tools

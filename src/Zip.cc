@@ -166,7 +166,7 @@ bool Zip::Extract(const std::string &_src,
     char *buf = new char[readSize];
     int len = zip_fread(zf, buf, readSize);
 
-    if (len < 0)
+    if (len <= 0)
       gzerr << "Error reading " << sb.name << std::endl;
     else
     {
