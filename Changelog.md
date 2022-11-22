@@ -1,5 +1,10 @@
 ## Gazebo Fuel Tools 4.x
 
+### Gazebo Fuel Tools 4.7.0 (2022-11-17)
+
+1. ign -> gz Migrate Ignition Headers : gz-fuel-tools.
+    * [Pull request #285](https://github.com/gazebosim/gz-fuel-tools/pull/285)
+
 ### Gazebo Fuel Tools 4.6.0 (2022-08-15)
 
 . Ignition to Gazebo server rename
