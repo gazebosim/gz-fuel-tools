@@ -66,26 +66,26 @@ Download the file `download.cc` and save it under `/tmp/conf_tutorial`:
 
 ```bash
 # Ubuntu and MacOS
-wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/download.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/download.cc
 
 # Windows
 ## CMD
-curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/download.cc -o download.cc
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/download.cc -o download.cc
 ## PowerShell
-curl https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/download.cc -o download.cc
+curl https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/download.cc -o download.cc
 ```
 
 Also, download `CMakeLists.txt` for compiling the example:
 
 ```bash
 # Ubuntu and MacOS
-wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/CMakeLists.txt
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/CMakeLists.txt
 
 # Windows
 ## CMD
-curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/CMakeLists.txt -o CMakeLists.txt
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/CMakeLists.txt -o CMakeLists.txt
 ## PowerShell
-curl https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools8/example/CMakeLists.txt -o CMakeLists.txt
+curl https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools9/example/CMakeLists.txt -o CMakeLists.txt
 ```
 
 Install the gflags dependency:
