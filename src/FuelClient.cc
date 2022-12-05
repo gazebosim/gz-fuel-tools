@@ -186,12 +186,6 @@ class gz::fuel_tools::FuelClientPrivate
   /// license information.
   public: void PopulateLicenses(const ServerConfig &_server);
 
-  /// \brief Checks the provided URI for fuel.ignitionrobotics.org, and
-  /// prints a deprecation warning message if found.
-  /// \param[in] _uri URI to check
-  /// DEPRECATED/DEPRECATION: remove this function in Gazebo H.
-  public: void CheckForDeprecatedUri(const common::URI &_uri);
-
   /// \brief Client configuration
   public: ClientConfig config;
 
@@ -503,8 +497,6 @@ void FuelClient::AddServerConfigParametersToHeaders(
 Result FuelClient::DeleteUrl(const gz::common::URI &_uri,
     const std::vector<std::string> &_headers)
 {
-  this->dataPtr->CheckForDeprecatedUri(_uri);
-
   Rest rest;
   RestResponse resp;
 
@@ -607,7 +599,6 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
           << std::endl << _id.Server().AsString() << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
-  this->dataPtr->CheckForDeprecatedUri(_id.Server().Url());
 
   // Route
   common::URIPath route;
@@ -774,8 +765,6 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
           << std::endl << _id.Server().AsString() << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
-
-  this->dataPtr->CheckForDeprecatedUri(_id.Server().Url());
 
   // Route
   common::URIPath route;
@@ -1145,8 +1134,6 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
 {
   if (!_fileUrl.Valid())
     return false;
-
-  this->dataPtr->CheckForDeprecatedUri(_fileUrl);
 
   auto urlStr = _fileUrl.Str();
 
@@ -1789,18 +1776,3 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
     ignerr << "Failed to parse license information[" << resp.data << "]\n";
   }
 }
-
-//////////////////////////////////////////////////
-void FuelClientPrivate::CheckForDeprecatedUri(const common::URI &_uri)
-{
-  static std::string oldServer = "fuel.ignitionrobotics.org";
-  auto ignFuelPos = _uri.Str().find(oldServer);
-  if (ignFuelPos != std::string::npos)
-  {
-    std::string newUrl = _uri.Str();
-    newUrl.replace(ignFuelPos, oldServer.size(), "fuel.gazebosim.org");
-    ignwarn << "The " << oldServer << " URL is deprecrated. Please change "
-      << _uri.Str() << " to " << newUrl << std::endl;
-  }
-}
-
