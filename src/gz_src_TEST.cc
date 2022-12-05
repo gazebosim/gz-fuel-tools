@@ -182,7 +182,7 @@ TEST_F(CmdLine, ModelDownloadUnversioned)
 {
   // Download
   EXPECT_TRUE(downloadUrl(
-    "https://fuel.ignitionrobotics.org/1.0/chapulina/models/Test box"));
+      "https://fuel.ignitionrobotics.org/1.0/chapulina/models/Test box"));
 
   // Check output
   EXPECT_NE(this->stdOutBuffer.str().find("Download succeeded"),
