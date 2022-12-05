@@ -2,8 +2,8 @@
 
 ## Overview 
 
-Ignition Fuel Tools lets you perform a set of operations over the resources
-hosted in any Ignition Fuel server. These operations allow you to list all
+Gazebo Fuel Tools lets you perform a set of operations over the resources
+hosted in any Gazebo Fuel server. These operations allow you to list all
 resources of a particular server, get the details of a resource or download it.
 
 We're going to run a few examples, so let's start by creating a directory for
@@ -17,10 +17,10 @@ Download the files `list.cc`, `details.cc`, `download.cc`,
 `CMakeLists.txt`, and save them under `/tmp/fuel_tutorial`:
 
 ```
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools4/example/list.cc
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools4/example/details.cc
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools4/example/download.cc
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/ign-fuel-tools4/example/CMakeLists.txt
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools4/example/list.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools4/example/details.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools4/example/download.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/gz-fuel-tools4/example/CMakeLists.txt
 ```
 
 Let's start by compiling the examples:
@@ -44,7 +44,7 @@ You should see the name of the server followed by its list of models. Here's an
 example:
 
 ```
-[https://fuel.ignitionrobotics.org]
+[https://fuel.gazebosim.org]
 
   Beer
   Wastebasket
@@ -117,7 +117,7 @@ License name: Creative Commons - Attribution
 License URL: http://creativecommons.org/licenses/by/4.0
 License image URL: https://i.creativecommons.org/l/by/4.0/88x31.png
 Server:
-  URL: https://fuel.ignitionrobotics.org
+  URL: https://fuel.gazebosim.org
   Version: 1.0
 ```
 
