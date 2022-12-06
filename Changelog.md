@@ -22,88 +22,88 @@
 1. Remove unused files (bitbucket-pipelines, docs)
     * [Pull request #273](https://github.com/gazebosim/gz-fuel-tools/pull/273)
 
-1. Disable `staging-fuel.ignitionrobotics.org` test
+1. Disable `staging-fuel.gazebosim.org` test
     * [Pull request #257](https://github.com/gazebosim/gz-fuel-tools/pull/257)
 
 ### Ignition Fuel Tools 4.5.0 (2022-06-01)
 
 1. APIs for retrieving models in parallel
-    * [Pull request #199](https://github.com/ignitionrobotics/ign-fuel-tools/pull/199)
+    * [Pull request #199](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/199)
 
 1. Add missing header guard for Interface.hh
-    * [Pull request #249](https://github.com/ignitionrobotics/ign-fuel-tools/pull/249)
+    * [Pull request #249](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/249)
 
 1. Print error when unzipping fails to save a file
-    * [Pull request #235](https://github.com/ignitionrobotics/ign-fuel-tools/pull/235)
+    * [Pull request #235](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/235)
 
 1. More checks when manipulating file system in tests
-    * [Pull request #227](https://github.com/ignitionrobotics/ign-fuel-tools/pull/227)
+    * [Pull request #227](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/227)
 
 1. Move test cache to build folder
-    * [Pull request #222](https://github.com/ignitionrobotics/ign-fuel-tools/pull/222)
+    * [Pull request #222](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/222)
 
 1. Improve and fix `ResultType` tests
-    * [Pull request #225](https://github.com/ignitionrobotics/ign-fuel-tools/pull/225)
+    * [Pull request #225](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/225)
 
 1. FuelClient.cc: include <deque>
-    * [Pull request #213](https://github.com/ignitionrobotics/ign-fuel-tools/pull/213)
+    * [Pull request #213](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/213)
 
 ### Ignition Fuel Tools 4.4.0 (2021-06-17)
 
 1. Remove `tools/code_check` and update codecov
-    * [Pull request #187](https://github.com/ignitionrobotics/ign-fuel-tools/pull/187)
+    * [Pull request #187](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/187)
 
 1. Fixed windows download
-    * [Pull request #178](https://github.com/ignitionrobotics/ign-fuel-tools/pull/178)
+    * [Pull request #178](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/178)
 
 1. Master branch updates
-    * [Pull request #170](https://github.com/ignitionrobotics/ign-fuel-tools/pull/170)
+    * [Pull request #170](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/170)
 
 1. Support private-token in `config.yaml`
-    * [Pull request #156](https://github.com/ignitionrobotics/ign-fuel-tools/pull/156)
+    * [Pull request #156](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/156)
 
 1. Add Windows Installation
-    * [Pull request #162](https://github.com/ignitionrobotics/ign-fuel-tools/pull/162)
+    * [Pull request #162](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/162)
 
 1. Use semantic version and prevent crash if version is missing
-    * [Pull request #151](https://github.com/ignitionrobotics/ign-fuel-tools/pull/151)
+    * [Pull request #151](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/151)
 
 1. Document `IGN_FUEL_CACHE_PATH` on command line
-    * [Pull request #149](https://github.com/ignitionrobotics/ign-fuel-tools/pull/149)
+    * [Pull request #149](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/149)
 
 1. Support editing/patching model files
-    * [Pull request #140](https://github.com/ignitionrobotics/ign-fuel-tools/pull/140)
+    * [Pull request #140](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/140)
 
 1. Set keep alive on
-    * [Pull request #141](https://github.com/ignitionrobotics/ign-fuel-tools/pull/141)
+    * [Pull request #141](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/141)
 
 ### Ignition Fuel Tools 4.3.0 (2020-12-01)
 
 1. Improve fork experience.
-    * [Pull request 126](https://github.com/ignitionrobotics/ign-fuel-tools/pull/126)
+    * [Pull request 126](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/126)
 
 1. Download dependencies.
-    * [Pull request 123](https://github.com/ignitionrobotics/ign-fuel-tools/pull/123)
+    * [Pull request 123](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/123)
 
 1. Includes all changes up to version 3.5.0.
 
 ### Ignition Fuel Tools 4.2.1 (2020-08-26)
 
 1. Fix `ign fuel download`, which was missing the `-j` option.
-    * [Pull request 116](https://github.com/ignitionrobotics/ign-fuel-tools/pull/116)
+    * [Pull request 116](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/116)
 
 ### Ignition Fuel Tools 4.2.0 (2020-08-26)
 
 1. Set license information based on licenses available from a Fuel server
    and `legal` information in a `metadata.pbtxt` file.
-    * [Pull request 69](https://github.com/ignitionrobotics/ign-fuel-tools/pull/69)
+    * [Pull request 69](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/69)
 
 1. Added `edit` subcommand to the `ign fuel`. The edit command currently
    supports editing a model's privacy.
-    * [Pull request 67](https://github.com/ignitionrobotics/ign-fuel-tools/pull/67)
+    * [Pull request 67](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/67)
 
 1. Alphabetical listing of subcommands.
-    * [Pull request 65](https://github.com/ignitionrobotics/ign-fuel-tools/pull/65)
+    * [Pull request 65](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/65)
 
 1. All changes up to and including Ignition Fuel Tools 3.3.0 are included.
 
@@ -132,52 +132,52 @@
 ### Ignition Fuel Tools 3.5.0 (2020-11-30)
 
 1. Fix windows build.
-    * [Pull request 107](https://github.com/ignitionrobotics/ign-fuel-tools/pull/107)
+    * [Pull request 107](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/107)
 
 1. Resolve updated codecheck issues.
-    * [Pull request 129](https://github.com/ignitionrobotics/ign-fuel-tools/pull/129)
+    * [Pull request 129](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/129)
 
 1. Update Backpack model to fix tests.
-    * [Pull request 132](https://github.com/ignitionrobotics/ign-fuel-tools/pull/132)
+    * [Pull request 132](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/132)
 
 1. Use lowercase resource and owner names when storing assets on disk.
-    * [Pull request 130](https://github.com/ignitionrobotics/ign-fuel-tools/pull/130)
+    * [Pull request 130](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/130)
 
 ### Ignition Fuel Tools 3.4.0 (2020-08-19)
 
 1. Modernize github actions by updating to the new style.
-    * [Pull request 94](https://github.com/ignitionrobotics/ign-fuel-tools/pull/94)
+    * [Pull request 94](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/94)
 
 1. Fix test worlds.
-    * [Pull request 100](https://github.com/ignitionrobotics/ign-fuel-tools/pull/100)
+    * [Pull request 100](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/100)
 
 1. Add capability for downloading collections.
-    * [Pull request 98](https://github.com/ignitionrobotics/ign-fuel-tools/pull/98)
+    * [Pull request 98](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/98)
 
 1. Fix windows build.t
-    * [Pull request 103](https://github.com/ignitionrobotics/ign-fuel-tools/pull/013)
+    * [Pull request 103](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/013)
 
 ### Ignition Fuel Tools 3.3.0 (2020-07-29)
 
 1. openrobotics to OpenRobotics
-    * [Pull request 75](https://github.com/ignitionrobotics/ign-fuel-tools/pull/75)
+    * [Pull request 75](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/75)
 
 1. Fix world tests
-    * [Pull request 76](https://github.com/ignitionrobotics/ign-fuel-tools/pull/76)
+    * [Pull request 76](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/76)
 
 1. Add missing dependency in Actions CI
-    * [Pull request 86](https://github.com/ignitionrobotics/ign-fuel-tools/pull/86)
+    * [Pull request 86](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/86)
 
 1. Backport file fetching
-    * [Pull request 84](https://github.com/ignitionrobotics/ign-fuel-tools/pull/84)
+    * [Pull request 84](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/84)
 
 1. Convert model:// to Fuel URLs instead of absolute paths
-    * [Pull request 85](https://github.com/ignitionrobotics/ign-fuel-tools/pull/85)
+    * [Pull request 85](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/85)
 
 ### Ignition Fuel Tools 3.2.2 (2020-05-18)
 
 1. Fix URL encodings in RestClient.
-    * [Pull request 70](https://github.com/ignitionrobotics/ign-fuel-tools/pull/70)
+    * [Pull request 70](https://gazebosim.org/gazebosim/gz-fuel-tools/pull/70)
 
 1. Print message when downloading a resource.
     * [BitBucket pull request 102](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/102)

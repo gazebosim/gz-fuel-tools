@@ -56,7 +56,7 @@ using namespace fuel_tools;
 class gz::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer/2
+  /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer/2
   /// Where the API version and the model version are optional.
   public: const std::string kModelUrlRegexStr{
     // Method
@@ -75,7 +75,7 @@ class gz::fuel_tools::FuelClientPrivate
     "([0-9]*|tip)"};
 
   /// \brief A world URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/1
+  /// E.g.: https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty/1
   /// Where the API version and the world version are optional.
   public: const std::string kWorldUrlRegexStr{
     // Method
@@ -141,7 +141,7 @@ class gz::fuel_tools::FuelClientPrivate
 
   /// \brief A collection URL,
   /// E.g.:
-  /// https://fuel.ignitionrobotics.org/1.0/OpenRobotics/collections/TestColl
+  /// https://fuel.gazebosim.org/1.0/OpenRobotics/collections/TestColl
   /// Where the API version is optional
   public: const std::string kCollectionUrlRegexStr{
     // Method
@@ -185,6 +185,12 @@ class gz::fuel_tools::FuelClientPrivate
   /// \param[in] _server Information about the server that provides
   /// license information.
   public: void PopulateLicenses(const ServerConfig &_server);
+
+  /// \brief Checks the provided URI for fuel.gazebosim.org, and
+  /// prints a deprecation warning message if found.
+  /// \param[in] _uri URI to check
+  /// DEPRECATED/DEPRECATION: remove this function in Gazebo H.
+  public: void CheckForDeprecatedUri(const common::URI &_uri);
 
   /// \brief Client configuration
   public: ClientConfig config;
@@ -497,6 +503,8 @@ void FuelClient::AddServerConfigParametersToHeaders(
 Result FuelClient::DeleteUrl(const gz::common::URI &_uri,
     const std::vector<std::string> &_headers)
 {
+  this->dataPtr->CheckForDeprecatedUri(_uri);
+
   Rest rest;
   RestResponse resp;
 
@@ -599,6 +607,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
           << std::endl << _id.Server().AsString() << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
+  this->dataPtr->CheckForDeprecatedUri(_id.Server().Url());
 
   // Route
   common::URIPath route;
@@ -765,6 +774,8 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
           << std::endl << _id.Server().AsString() << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
+
+  this->dataPtr->CheckForDeprecatedUri(_id.Server().Url());
 
   // Route
   common::URIPath route;
@@ -1134,6 +1145,8 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
 {
   if (!_fileUrl.Valid())
     return false;
+
+  this->dataPtr->CheckForDeprecatedUri(_fileUrl);
 
   auto urlStr = _fileUrl.Str();
 
@@ -1776,3 +1789,18 @@ void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
     ignerr << "Failed to parse license information[" << resp.data << "]\n";
   }
 }
+
+//////////////////////////////////////////////////
+void FuelClientPrivate::CheckForDeprecatedUri(const common::URI &_uri)
+{
+  static std::string oldServer = "fuel.ignitionrobotics.org";
+  auto ignFuelPos = _uri.Str().find(oldServer);
+  if (ignFuelPos != std::string::npos)
+  {
+    std::string newUrl = _uri.Str();
+    newUrl.replace(ignFuelPos, oldServer.size(), "fuel.gazebosim.org");
+    ignwarn << "The " << oldServer << " URL is deprecrated. Please change "
+      << _uri.Str() << " to " << newUrl << std::endl;
+  }
+}
+

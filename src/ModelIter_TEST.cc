@@ -45,7 +45,7 @@ namespace ignition
       public: static ModelIter ModelIterThreeModelIds()
         {
           ServerConfig srv;
-          srv.SetUrl(common::URI("https://ignitionrobotics.org"));
+          srv.SetUrl(common::URI("https://gazebosim.org"));
 
           std::vector<ModelIdentifier> ids;
           for (int i = 0; i < 3; i++)
@@ -67,7 +67,7 @@ namespace ignition
       public: static ModelIter ModelIterThreeModels()
         {
           ServerConfig srv;
-          srv.SetUrl(common::URI("https://ignitionrobotics.org"));
+          srv.SetUrl(common::URI("https://gazebosim.org"));
 
           std::vector<Model> models;
           for (int i = 0; i < 3; i++)
