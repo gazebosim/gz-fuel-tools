@@ -130,7 +130,7 @@ namespace ignition
     };
 
     /// \brief class for iterating through model ids from a rest API
-    class IGNITION_FUEL_TOOLS_VISIBLE IterRestIds: public ModelIterPrivate
+    class IGNITION_FUEL_TOOLS_HIDDEN IterRestIds: public ModelIterPrivate
     {
       /// \brief constructor
       public: IterRestIds(const Rest &_rest,
@@ -152,12 +152,24 @@ namespace ignition
 
       /// \brief RESTful client
       public: Rest rest;
+      public: const std::string api;
+
+      using IdListIterator = std::vector<ModelIdentifier>::iterator;
+
+      protected: RestResponse MakeRestRequest(std::size_t _page);
+      protected: void SetModelFromIdIter(IdListIterator iter);
+      protected: std::vector<ModelIdentifier> ParseIdsFromResponse(
+          const RestResponse &resp);
 
       /// \brief Model identifiers in the current page
       protected: std::vector<ModelIdentifier> ids;
 
       /// \brief Where the current iterator is in the list of ids
-      protected: std::vector<ModelIdentifier>::iterator idIter;
+      protected: IdListIterator idIter;
+
+      /// \brief Keep track of page number for pagination of response data from
+      /// server.
+      protected: std::size_t currentPage{1};
     };
   }
 }
