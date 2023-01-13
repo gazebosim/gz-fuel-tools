@@ -2,7 +2,7 @@
 
 ### Depercations
 
-1. The `fuel.gazebosim.org` Fuel server has been deprecated, and
+1. The `fuel.ignitionrobotics.org` Fuel server has been deprecated, and
     redirects to `fuel.gazebosim.org`. Use `fuel.gazebosim.org` in all Fuel
     URLs.
 
