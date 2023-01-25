@@ -50,6 +50,11 @@
 
 ## Gazebo Fuel Tools 7.x
 
+### Gazebo Fuel Tools 7.2.0 (2021-11-17)
+
+1. Forward port 4.7.0.
+    * [Pull request #306](https://github.com/gazebosim/gz-fuel-tools/pull/306)
+
 ### Gazebo Fuel Tools 7.1.0 (2021-08-16)
 
 1. Ignition to Gazebo server rename effort
