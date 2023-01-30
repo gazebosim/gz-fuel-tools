@@ -64,8 +64,8 @@ set(GZ_MATH_VER ${gz-math7_VERSION_MAJOR})
 
 #--------------------------------------
 # Find gz-msgs
-gz_find_package(gz-msgs9 REQUIRED PRIVATE)
-set(GZ_MSGS_VER ${gz-msgs9_VERSION_MAJOR})
+gz_find_package(gz-msgs10 REQUIRED PRIVATE)
+set(GZ_MSGS_VER ${gz-msgs10_VERSION_MAJOR})
 
 #--------------------------------------
 # Find gz-tools
