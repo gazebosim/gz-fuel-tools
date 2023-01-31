@@ -398,10 +398,20 @@ TEST_F(FuelClientTest, ParseModelFileURL)
   }
 }
 
+class FuelClientDownloadTest
+    : public FuelClientTest,
+      public ::testing::WithParamInterface<const char *>
+{};
+
+INSTANTIATE_TEST_CASE_P(
+    FuelClientTest, FuelClientDownloadTest,
+    ::testing::Values("fuel.gazebosim.org",
+                      "fuel.ignitionrobotics.org"), );  // NOLINT
+
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
-TEST_F(FuelClientTest, DownloadModel)
+TEST_P(FuelClientDownloadTest, DownloadModel)
 {
   // Configure to use binary path as cache
   ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
@@ -414,11 +424,12 @@ TEST_F(FuelClientTest, DownloadModel)
   FuelClient client(config);
   EXPECT_EQ(config.CacheLocation(), client.Config().CacheLocation());
 
+  std::string fuelServerHost = GetParam();
   // Download model from URL
   {
     // Unversioned URL should get the latest available version
     common::URI url{
-        "https://fuel.gazebosim.org/1.0/openroboticstest/models/test box"};
+      "https://" + fuelServerHost + "/1.0/openroboticstest/models/test box"};
 
     // Check it is not cached
     std::string cachedPath;
@@ -434,7 +445,7 @@ TEST_F(FuelClientTest, DownloadModel)
 
     // Check it was downloaded to `2`
     auto modelPath = common::joinPaths(common::cwd(), "test_cache",
-        "fuel.gazebosim.org", "openroboticstest", "models", "test box");
+        fuelServerHost, "openroboticstest", "models", "test box");
 
     EXPECT_EQ(path, common::joinPaths(modelPath, "1"));
     EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "1")));
@@ -455,8 +466,8 @@ TEST_F(FuelClientTest, DownloadModel)
   // Download model with pbr paths from URL and check that paths are fixed
   {
     // Unversioned URL should get the latest available version
-    common::URI url{
-        "https://fuel.gazebosim.org/1.0/openroboticstest/models/Rescue Randy"};
+    common::URI url{"https://" + fuelServerHost +
+                    "/1.0/openroboticstest/models/Rescue Randy"};
 
     // Check it is not cached
     std::string cachedPath;
@@ -472,7 +483,7 @@ TEST_F(FuelClientTest, DownloadModel)
 
     // Check it was downloaded to `2`
     auto modelPath = common::joinPaths(common::cwd(), "test_cache",
-        "fuel.gazebosim.org", "openroboticstest", "models", "rescue randy");
+        fuelServerHost, "openroboticstest", "models", "rescue randy");
 
     EXPECT_EQ(path, common::joinPaths(modelPath, "2"));
     EXPECT_TRUE(common::exists(common::joinPaths(modelPath, "2")));
@@ -508,9 +519,11 @@ TEST_F(FuelClientTest, DownloadModel)
 
   // Download model with a dependency specified within its `metadata.pbtxt`
   {
-    common::URI url{
-        "https://fuel.gazebosim.org/1.0/openroboticstest/models/hatchback_red_1"
-    };
+    common::URI url{"https://" + fuelServerHost +
+                    "/1.0/openroboticstest/models/hatchback_red_1"};
+
+    // The dependency will use the fuel.gazebosim.org URI regardless of what
+    // fuelServerHost is because it's set in the hatchback_red_1 model
     common::URI depUrl{
         "https://fuel.gazebosim.org/1.0/openroboticstest/models/hatchback_1"};
 
@@ -546,8 +559,10 @@ TEST_F(FuelClientTest, DownloadModel)
   // The dependency points to fuel.gazebosim.org.
   {
     common::URI url{
-      "https://fuel.gazebosim.org/1.0/openrobotics/models/hatchback red"
+      "https://" + fuelServerHost + "/1.0/openrobotics/models/hatchback red"
     };
+    // The dependency will use the fuel.gazebosim.org URI regardless of what
+    // fuelServerHost is because it's set in the "hatchback red" model
     common::URI depUrl{
       "https://fuel.gazebosim.org/1.0/openrobotics/models/hatchback"};
 
@@ -582,7 +597,7 @@ TEST_F(FuelClientTest, DownloadModel)
   // Try using nonexistent URL
   {
     std::string url{
-        "https://fuel.gazebosim.org/1.0/openroboticstest/models/"
+        "https://" + fuelServerHost + "/1.0/openroboticstest/models/"
           "Inexistent model"};
     std::string path;
     Result result = client.DownloadModel(common::URI(url), path);

@@ -100,7 +100,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
   ASSERT_EQ(2u, config.Servers().size());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://fuel.gazebosim.org",
+  EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers()[1].Url().Str());
 
   std::string defaultCacheLocation = common::joinPaths(
@@ -139,7 +139,7 @@ TEST(ClientConfig, CustomConfiguration)
   ASSERT_EQ(4u, config.Servers().size());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://fuel.gazebosim.org",
+  EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers()[1].Url().Str());
   EXPECT_EQ("https://api.ignitionfuel.org",
     config.Servers()[2].Url().Str());
