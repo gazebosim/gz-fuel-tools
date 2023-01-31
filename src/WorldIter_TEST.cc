@@ -45,7 +45,7 @@ namespace ignition
       public: static WorldIter WorldIterThreeWorldIds()
         {
           ServerConfig srv;
-          srv.SetUrl(common::URI("https://ignitionrobotics.org"));
+          srv.SetUrl(common::URI("https://gazebosim.org"));
 
           std::vector<WorldIdentifier> ids;
           for (int i = 0; i < 3; i++)

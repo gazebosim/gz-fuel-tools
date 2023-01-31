@@ -176,7 +176,7 @@ TEST(JSONParser, ParseLicenses)
   std::stringstream tmpJsonStr;
 
   // This is the exact return value from
-  // https://fuel.ignitionrobotics.org/1.0/licenses as of April 29th, 2020.
+  // https://fuel.gazebosim.org/1.0/licenses as of April 29th, 2020.
   tmpJsonStr << R"tmpJsonStr([{
     "ID": 1,
     "CreatedAt": "2017-12-19T20:32:48Z",
