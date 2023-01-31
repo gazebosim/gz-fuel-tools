@@ -71,8 +71,10 @@ ign_build_tests(TYPE UNIT
                   TINYXML2::TINYXML2
 )
 
-# The default timeout (240s) doesn't seem to be enough for this test.
-set_tests_properties(UNIT_FuelClient_TEST PROPERTIES TIMEOUT 360)
+if (TARGET UNIT_FuelClient_TEST)
+  # The default timeout (240s) doesn't seem to be enough for this test.
+  set_tests_properties(UNIT_FuelClient_TEST PROPERTIES TIMEOUT 360)
+endif()
 
 # Command line support.
 add_subdirectory(cmd)
