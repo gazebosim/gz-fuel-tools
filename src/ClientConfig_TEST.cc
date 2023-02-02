@@ -20,27 +20,15 @@
 #include <string>
 #include <gz/common/Console.hh>
 #include <gz/common/Filesystem.hh>
+#include <gz/common/TempDirectory.hh>
+#include <gz/common/testing/TestPaths.hh>
 #include <gz/common/Util.hh>
+
+#include "gz/fuel_tools/config.hh"
 #include "gz/fuel_tools/ClientConfig.hh"
-#include "test_config.hh"
 
 using namespace gz;
 using namespace fuel_tools;
-
-/////////////////////////////////////////////////
-/// \brief Helper to remove file according to OS, while Windows
-/// has this issue:
-/// https://github.com/gazebosim/gz-common/issues/51
-/// \todo(anyone) Remove this once Windows issue is solved.
-/// \param[in] _path Path to file to be removed.
-void removeFileTemp(const std::string &_path)
-{
-#ifndef _WIN32
-  EXPECT_TRUE(gz::common::removeFile(_path));
-#else
-  gz::common::removeFile(_path);
-#endif
-}
 
 /////////////////////////////////////////////////
 /// \brief Get home directory.
@@ -54,26 +42,34 @@ std::string homePath()
 #else
   gz::common::env("USERPROFILE", homePath);
 #endif
-
   return homePath;
 }
 
 /////////////////////////////////////////////////
-/// \brief Get cache directory.
-/// \return Cache directory
-/// \ToDo: Move this function to gz::common::Filesystem
-std::string cachePath()
+class ClientConfigTest: public ::testing::Test
 {
-#ifndef _WIN32
-  return std::string("/tmp/gz/fuel");
-#else
-  return std::string("C:\\Windows\\Temp");
-#endif
-}
+  public: void SetUp() override
+  {
+    gz::common::Console::SetVerbosity(4);
+    tempDir = gz::common::testing::MakeTestTempDirectory();
+    ASSERT_TRUE(tempDir->Valid()) << tempDir->Path();
+
+    gz::common::chdir(tempDir->Path());
+  }
+
+  public: std::string cachePath()
+  {
+    return this->tempDir->Path();
+  }
+
+  public: std::shared_ptr<gz::common::TempDirectory> tempDir;
+};
+
+class ServerConfigTest: public ClientConfigTest {};
 
 /////////////////////////////////////////////////
 /// \brief Initially only the default server in config
-TEST(ClientConfig, InitiallyDefaultServers)
+TEST_F(ClientConfigTest, InitiallyDefaultServers)
 {
   ClientConfig config;
   EXPECT_EQ(1u, config.Servers().size());
@@ -81,7 +77,7 @@ TEST(ClientConfig, InitiallyDefaultServers)
 
 /////////////////////////////////////////////////
 /// \brief Servers can be added
-TEST(ClientConfig, ServersCanBeAdded)
+TEST_F(ClientConfigTest, ServersCanBeAdded)
 {
   ClientConfig config;
   ServerConfig srv;
@@ -94,7 +90,7 @@ TEST(ClientConfig, ServersCanBeAdded)
 
 /////////////////////////////////////////////////
 /// \brief We can load the default configuration file.
-TEST(ClientConfig, CustomDefaultConfiguration)
+TEST_F(ClientConfigTest, CustomDefaultConfiguration)
 {
   ClientConfig config;
   ASSERT_EQ(1u, config.Servers().size());
@@ -108,7 +104,7 @@ TEST(ClientConfig, CustomDefaultConfiguration)
 
 /////////////////////////////////////////////////
 /// \brief We can load custom settings in a configuration file.
-TEST(ClientConfig, CustomConfiguration)
+TEST_F(ClientConfigTest, CustomConfiguration)
 {
   ClientConfig config;
 
@@ -143,13 +139,11 @@ TEST(ClientConfig, CustomConfiguration)
     config.Servers().back().Url().Str());
 
   EXPECT_EQ(cachePath(), config.CacheLocation());
-  // Remove the configuration file.
-  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
 /// \brief A server contains an already used URL.
-TEST(ClientConfig, RepeatedServerConfiguration)
+TEST_F(ClientConfigTest, RepeatedServerConfiguration)
 {
   ClientConfig config;
 
@@ -174,14 +168,11 @@ TEST(ClientConfig, RepeatedServerConfiguration)
   ofs.close();
 
   EXPECT_TRUE(config.LoadConfig(testPath));
-
-  // Remove the configuration file.
-  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
 /// \brief A server without URL is not valid.
-TEST(ClientConfig, NoServerUrlConfiguration)
+TEST_F(ClientConfigTest, NoServerUrlConfiguration)
 {
   ClientConfig config;
 
@@ -199,14 +190,11 @@ TEST(ClientConfig, NoServerUrlConfiguration)
   ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
-
-  // Remove the configuration file.
-  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
 /// \brief A server with an empty URL is not valid.
-TEST(ClientConfig, EmptyServerUrlConfiguration)
+TEST_F(ClientConfigTest, EmptyServerUrlConfiguration)
 {
   ClientConfig config;
 
@@ -224,14 +212,11 @@ TEST(ClientConfig, EmptyServerUrlConfiguration)
   ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
-
-  // Remove the configuration file.
-  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
 /// \brief The "cache" option requires to set "path".
-TEST(ClientConfig, NoCachePathConfiguration)
+TEST_F(ClientConfigTest, NoCachePathConfiguration)
 {
   ClientConfig config;
 
@@ -246,14 +231,11 @@ TEST(ClientConfig, NoCachePathConfiguration)
   ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
-
-  // Remove the configuration file.
-  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
 /// \brief The path parameter cannot be empty.
-TEST(ClientConfig, EmptyCachePathConfiguration)
+TEST_F(ClientConfigTest, EmptyCachePathConfiguration)
 {
   ClientConfig config;
 
@@ -269,13 +251,10 @@ TEST(ClientConfig, EmptyCachePathConfiguration)
   ofs.close();
 
   EXPECT_FALSE(config.LoadConfig(testPath));
-
-  // Remove the configuration file.
-  removeFileTemp(testPath);
 }
 
 /////////////////////////////////////////////////
-TEST(ClientConfig, UserAgent)
+TEST_F(ClientConfigTest, UserAgent)
 {
   ClientConfig config;
   EXPECT_EQ("IgnitionFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL,
@@ -286,7 +265,7 @@ TEST(ClientConfig, UserAgent)
 }
 
 /////////////////////////////////////////////////
-TEST(ServerConfig, ApiKey)
+TEST_F(ServerConfigTest, ApiKey)
 {
   ServerConfig config;
   EXPECT_TRUE(config.ApiKey().empty());
@@ -299,7 +278,7 @@ TEST(ServerConfig, ApiKey)
 }
 
 /////////////////////////////////////////////////
-TEST(ClientConfig, AsString)
+TEST_F(ClientConfigTest, AsString)
 {
   common::Console::SetVerbosity(4);
   {
@@ -362,7 +341,7 @@ TEST(ClientConfig, AsString)
 }
 
 /////////////////////////////////////////////////
-TEST(ClientConfig, AsPrettyString)
+TEST_F(ClientConfigTest, AsPrettyString)
 {
   common::Console::SetVerbosity(4);
 
@@ -390,7 +369,7 @@ TEST(ClientConfig, AsPrettyString)
 }
 
 /////////////////////////////////////////////////
-TEST(ServerConfig, Url)
+TEST_F(ServerConfigTest, Url)
 {
   // Invalid URL string
   {

@@ -26,15 +26,7 @@
 #include "gz/fuel_tools/Result.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
-#include "test_config.hh"
-
-#ifdef _WIN32
-#include <direct.h>
-#define ChangeDirectory _chdir
-#else
-#include <unistd.h>
-#define ChangeDirectory chdir
-#endif
+#include <gz/common/testing/TestPaths.hh>
 
 using namespace gz;
 using namespace gz::fuel_tools;
@@ -126,12 +118,21 @@ void createLocalWorld(ClientConfig &_conf)
 }
 
 /////////////////////////////////////////////////
-class FuelClientTest : public ::testing::Test
+class FuelClientTest: public ::testing::Test
 {
   public: void SetUp() override
   {
     gz::common::Console::SetVerbosity(4);
+    tempDir = gz::common::testing::MakeTestTempDirectory();
+    ASSERT_TRUE(tempDir->Valid()) << tempDir->Path();
+
+    gz::common::chdir(tempDir->Path());
+    ASSERT_FALSE(common::exists("test_cache"));
+    ASSERT_TRUE(common::createDirectories("test_cache"));
+    ASSERT_TRUE(common::isDirectory("test_cache"));
   }
+
+  public: std::shared_ptr<gz::common::TempDirectory> tempDir;
 };
 
 /////////////////////////////////////////////////
@@ -401,10 +402,6 @@ TEST_F(FuelClientTest, ParseModelFileURL)
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(FuelClientTest, DownloadModel)
 {
-  // Configure to use binary path as cache
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
@@ -602,10 +599,6 @@ TEST_F(FuelClientTest, DownloadModel)
 // https://github.com/gazebosim/gz-fuel-tools/issues/106
 TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
 {
-  // Configure to use binary path as cache
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
@@ -677,10 +670,6 @@ TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
 // See https://github.com/gazebosim/gz-fuel-tools/issues/231
 TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(CachedModel))
 {
-  // Configure to use binary path as cache and populate it
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocalModel(config);
@@ -1068,11 +1057,6 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(FuelClientTest, DownloadWorld)
 {
-  // Configure to use binary path as cache
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
-
   ServerConfig server;
   server.SetUrl(gz::common::URI(
         "https://fuel.gazebosim.org"));
@@ -1146,10 +1130,6 @@ TEST_F(FuelClientTest, DownloadWorld)
 // https://github.com/gazebosim/gz-fuel-tools/issues/106
 TEST_F(FuelClientTest, CachedWorld)
 {
-  // Configure to use binary path as cache and populate it
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocalWorld(config);
