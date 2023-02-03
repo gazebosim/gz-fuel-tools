@@ -33,16 +33,16 @@ For a complete list of commands run `gz fuel -h` on the command line.
 **List all models**
 ```
 $ gz fuel list -t model -r | head
-https://fuel.gazebosim.org/1.0/09ubberboy90/models/box%205cm
-https://fuel.gazebosim.org/1.0/accurrent/models/mbari%20tethys%20lrauv
-https://fuel.gazebosim.org/1.0/adlarkin/models/construction%20cone%20label%20test
-https://fuel.gazebosim.org/1.0/aknyunus0/models/shoe
-https://fuel.gazebosim.org/1.0/aknyunus0/models/mens_asv_billfish_boat_shoe_in_tan_leather_wmuj5pbwanc
-https://fuel.gazebosim.org/1.0/amangupta/models/start
-https://fuel.gazebosim.org/1.0/amelhassan/models/backpack
-https://fuel.gazebosim.org/1.0/amrelsersy/models/house%203
-https://fuel.gazebosim.org/1.0/amrelsersy/models/coro_mike_sensor_config_2
-https://fuel.gazebosim.org/1.0/andreamcr/models/stecca%20centrale
+https://fuel.gazebosim.org/anonymous/test_model_595389531
+https://fuel.gazebosim.org/anonymous/test_model_122023392
+https://fuel.gazebosim.org/anonymous/test_model_429486665
+https://fuel.gazebosim.org/anonymous/test_model_887243621
+https://fuel.gazebosim.org/anonymous/test_model_084900530
+https://fuel.gazebosim.org/anonymous/test_model_240061059
+https://fuel.gazebosim.org/anonymous/test_model_464734097
+https://fuel.gazebosim.org/anonymous/test_model_658598990
+https://fuel.gazebosim.org/anonymous/test_model_834617935
+https://fuel.gazebosim.org/anonymous/test_model_380348669
 ```
 
 **Download a model**
@@ -90,7 +90,7 @@ See issues beginning with [Fuel backend] in the title. Here are two examples.
 **TODO: Find a model on disk**
 ```
 $ gz fuel locate --name am1
-/home/developer/.ignition/fuel/fuel.ignitionrobotics.org/alice/am1
+/home/developer/.ignition/fuel/fuel.gazebosim.org/alice/am1
 ```
 
 ## Dependencies

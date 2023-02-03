@@ -15,7 +15,7 @@ Gazebo Fuel Tools accepts a YAML file with the following syntax:
 # The list of servers.
 servers:
   -
-    url: https://fuel.ignitionrobotics.org
+    url: https://fuel.gazebosim.org
     private-token: <your private token>
 
   # -
