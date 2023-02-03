@@ -16,7 +16,7 @@
 */
 
 // All these helper functions have been copied from
-// https://github.com/ignitionrobotics/ign-common/raw/ign-common3/src/Filesystem_TEST.cc
+// https://github.com/gazebosim/gz-common/raw/ign-common3/src/Filesystem_TEST.cc
 
 #ifndef _WIN32
 #include <fcntl.h>

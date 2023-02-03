@@ -4,18 +4,18 @@ Next Tutorial: \ref cmdline
 
 ## Overview
 
-Some aspects of Ignition Fuel Tools can be configured according to the needs of
+Some aspects of Gazebo Fuel Tools can be configured according to the needs of
 the library users. This configuration can be done via a YAML configuration file
 or programatically.
 
-Ignition Fuel Tools accepts a YAML file with the following syntax:
+Gazebo Fuel Tools accepts a YAML file with the following syntax:
 
 ```yaml
 ---
 # The list of servers.
 servers:
   -
-    url: https://fuel.ignitionrobotics.org
+    url: https://fuel.gazbosim.org
     private-token: <your private token>
 
   # -
@@ -23,7 +23,7 @@ servers:
 
 # Where are the assets stored in disk.
 # cache:
-#   path: /tmp/ignition/fuel
+#   path: /tmp/gz/fuel
 ```
 
 The `servers` section specifies all Fuel servers to interact with.
@@ -32,12 +32,12 @@ If the server requires auth you can specify the token filling the optional field
 
 The `cache` section captures options related with the local storage of the
 assets. `path` specifies the local directory where all assets will be
-downloaded. If not used, all assets are stored under `$HOME/.ignition/fuel`.
+downloaded. If not used, all assets are stored under `$HOME/.gz/fuel`.
 
 ## Custom configuration file path
 
-Ignition Fuel's default configuration file is stored under
-`$HOME/.ignition/fuel/config.yaml`, but it is possible to load a configuration
+Gazebo Fuel's default configuration file is stored under
+`$HOME/.gz/fuel/config.yaml`, but it is possible to load a configuration
 file from a custom path programmatically. Let's see how.
 
 Create a file `/tmp/my_config.yaml` with the following content:
@@ -47,11 +47,11 @@ Create a file `/tmp/my_config.yaml` with the following content:
 # The list of servers.
 servers:
   -
-    url: https://fuel.ignitionrobotics.org
+    url: https://fuel.gazebosim.org
 
 # Where are the assets stored in disk.
 cache:
-  path: /tmp/ignition/fuel
+  path: /tmp/gz/fuel
 ```
 
 Now, let's use a program that downloads a resource from a server in the custom
@@ -65,26 +65,26 @@ Download the file `download.cc` and save it under `/tmp/conf_tutorial`:
 
 ```bash
 # Ubuntu and MacOS
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/download.cc
+wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc
 
 # Windows
 ## CMD
-curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/download.cc -o download.cc
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc -o download.cc
 ## PowerShell
-curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/download.cc -o download.cc
+curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/download.cc -o download.cc
 ```
 
 Also, download `CMakeLists.txt` for compiling the example:
 
 ```bash
 # Ubuntu and MacOS
-wget https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/CMakeLists.txt
+wget https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt
 
 # Windows
 ## CMD
-curl -sk https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
+curl -sk https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
 ## PowerShell
-curl https://github.com/ignitionrobotics/ign-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
+curl https://github.com/gazebosim/gz-fuel-tools/raw/main/example/CMakeLists.txt -o CMakeLists.txt
 ```
 
 Install a dependency:
@@ -121,7 +121,7 @@ And now the fun part, execute it:
 ```
 
 Verify that you have the model in
-`/tmp/ignition/fuel/fuel.ignitionrobotics.org/caguero/models/Beer`,
+`/tmp/gz/fuel/fuel.gazebosim.org/caguero/models/Beer`,
 as you configured in your YAML file.
 
 ## Walkthrough
@@ -176,7 +176,7 @@ purpose we use `SetConfigPath()`. As we're interested in using a configuration
 file, we need to call `LoadConfig()`. It's important to note that if we call
 `LoadConfig()` without calling `SetConfigPath()` beforehand, a default
 configuration file will be loaded (and created if it doesn't already exist under
-`$HOME/.ignition/fuel/config.yaml`). If the user doesn't call `LoadConfig()`, no
+`$HOME/.gz/fuel/config.yaml`). If the user doesn't call `LoadConfig()`, no
 configuration file will be used at all.
 
 Once we have all our configuration ready and captured in the `conf` object,
