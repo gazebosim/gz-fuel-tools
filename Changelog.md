@@ -1,5 +1,10 @@
 ## Gazebo Fuel Tools 4.x
 
+### Gazebo Fuel Tools 4.8.1 (2023-02-07)
+
+1. Fix model downloads for ignitionrobotics.org URIs.
+    * [Pull request #318](https://github.com/gazebosim/gz-fuel-tools/pull/318)
+
 ### Gazebo Fuel Tools 4.8.0 (2022-12-07)
 
 1. Reduce asset download sizes.
