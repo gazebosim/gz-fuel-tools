@@ -4,7 +4,7 @@ libgflags-dev
 libgz-cmake3-dev
 libgz-common5-dev
 libgz-math7-dev
-libgz-msgs9-dev
+libgz-msgs10-dev
 libgz-tools2-dev
 libgz-utils2-dev
 libjsoncpp-dev
