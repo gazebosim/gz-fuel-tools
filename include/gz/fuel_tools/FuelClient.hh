@@ -195,7 +195,7 @@ namespace gz
 
       /// \brief Remove a resource, such as a model or world, from Gazebo Fuel
       /// \param[in] _uri The full URI of the resource, e.g:
-      /// https://fuel.ignitionrobotics.org/1.0/openrobotcs/model/my_model
+      /// https://fuel.gazebosim.org/1.0/openrobotcs/model/my_model
       /// \param[in] _headers Headers to set on the HTTP request.
       /// \return Result of the delete operation
       public: Result DeleteUrl(const gz::common::URI &_uri,
@@ -257,7 +257,7 @@ namespace gz
       /// \brief Download a model from Gazebo Fuel. This will override an
       /// existing local copy of the model.
       /// \param[in] _modelUrl The unique URL of the model to download.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer
+      /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer
       /// \param[out] _path Path where the model was downloaded.
       /// \return Result of the download operation.
       public: Result DownloadModel(const common::URI &_modelUrl,
@@ -266,7 +266,7 @@ namespace gz
       /// \brief Download a world from Gazebo Fuel. This will override an
       /// existing local copy of the world.
       /// \param[in] _worldUrl The unique URL of the world to download.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
+      /// E.g.: https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty
       /// \param[out] _path Path where the world was downloaded.
       /// \return Result of the download operation.
       public: Result DownloadWorld(const common::URI &_worldUrl,
@@ -296,7 +296,7 @@ namespace gz
 
       /// \brief Check if a model is already present in the local cache.
       /// \param[in] _modelUrl The unique URL of the model on a Fuel server.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer
+      /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer
       /// \param[out] _path Local path where the model can be found.
       /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
       public: Result CachedModel(const common::URI &_modelUrl,
@@ -304,13 +304,13 @@ namespace gz
 
       /// \brief Check if a model exists in the cache.
       /// \param[in] _modelUrl The unique URL of the world on a Fuel server.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer
+      /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer
       /// \return True if the model exists in the cache, false otherwise.
       public: bool CachedModel(const common::URI &_modelUrl);
 
       /// \brief Check if a world is already present in the local cache.
       /// \param[in] _worldUrl The unique URL of the world on a Fuel server.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
+      /// E.g.: https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty
       /// \param[out] _path Local path where the world can be found.
       /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
       public: Result CachedWorld(const common::URI &_worldUrl,
@@ -318,7 +318,7 @@ namespace gz
 
       /// \brief Check if a world exists in the cache.
       /// \param[in] _worldUrl The unique URL of the world on a Fuel server.
-      /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty
+      /// E.g.: https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty
       /// \return True if the world exists in the cache, false otherwise.
       public: bool CachedWorld(const common::URI &_worldUrl);
 
