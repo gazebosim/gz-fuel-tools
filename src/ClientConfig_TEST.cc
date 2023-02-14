@@ -76,7 +76,7 @@ std::string cachePath()
 TEST(ClientConfig, InitiallyDefaultServers)
 {
   ClientConfig config;
-  EXPECT_EQ(1u, config.Servers().size());
+  EXPECT_EQ(2u, config.Servers().size());
 }
 
 /////////////////////////////////////////////////
@@ -88,7 +88,7 @@ TEST(ClientConfig, ServersCanBeAdded)
   srv.SetUrl(common::URI("http://asdf"));
   config.AddServer(srv);
 
-  ASSERT_EQ(2u, config.Servers().size());
+  ASSERT_EQ(3u, config.Servers().size());
   EXPECT_EQ(std::string("http://asdf"), config.Servers().back().Url().Str());
 }
 
@@ -97,9 +97,11 @@ TEST(ClientConfig, ServersCanBeAdded)
 TEST(ClientConfig, CustomDefaultConfiguration)
 {
   ClientConfig config;
-  ASSERT_EQ(1u, config.Servers().size());
+  ASSERT_EQ(2u, config.Servers().size());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
+  EXPECT_EQ("https://fuel.ignitionrobotics.org",
+    config.Servers()[1].Url().Str());
 
   std::string defaultCacheLocation = gz::common::joinPaths(
     homePath(), ".gz", "fuel");
@@ -134,11 +136,13 @@ TEST(ClientConfig, CustomConfiguration)
 
   EXPECT_TRUE(config.LoadConfig(testPath));
 
-  ASSERT_EQ(3u, config.Servers().size());
+  ASSERT_EQ(4u, config.Servers().size());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://api.gazebosim.org",
+  EXPECT_EQ("https://fuel.ignitionrobotics.org",
     config.Servers()[1].Url().Str());
+  EXPECT_EQ("https://api.gazebosim.org",
+    config.Servers()[2].Url().Str());
   EXPECT_EQ("https://myserver",
     config.Servers().back().Url().Str());
 
