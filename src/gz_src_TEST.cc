@@ -397,10 +397,10 @@ TEST_P(DownloadCollectionTest, AllItems)
       "openroboticstest", "models", "backpack")));
   EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.gazebosim.org",
-      "openroboticstest", "models", "backpack", "2")));
+      "openroboticstest", "models", "backpack", "3")));
   EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.gazebosim.org",
-      "openroboticstest", "models", "backpack", "2", "model.sdf")));
+      "openroboticstest", "models", "backpack", "3", "model.sdf")));
 
   // Model: TEAMBASE
   EXPECT_TRUE(common::isDirectory(
@@ -460,10 +460,10 @@ TEST_P(DownloadCollectionTest, Models)
       "openroboticstest", "models", "backpack")));
   EXPECT_TRUE(common::isDirectory(
     common::joinPaths(this->testCachePath, "fuel.gazebosim.org",
-      "openroboticstest", "models", "backpack", "2")));
+      "openroboticstest", "models", "backpack", "3")));
   EXPECT_TRUE(common::isFile(
     common::joinPaths(this->testCachePath, "fuel.gazebosim.org",
-      "openroboticstest", "models", "backpack", "2", "model.sdf")));
+      "openroboticstest", "models", "backpack", "3", "model.sdf")));
 
   // Model: TEAMBASE
   EXPECT_TRUE(common::isDirectory(

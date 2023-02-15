@@ -29,9 +29,7 @@ https://fuel.gazebosim.org
 ```
 
 By default, Fuel will list resources from all the servers listed in your
-`config.yaml` file. See the
-[configuration tutorial](configuration.html)
-for more details.
+`config.yaml` file. See the \ref configuration for more details.
 
 > **Tip**: If you want to see resources from a different Fuel server, add it to
 `config.yaml` to and re-run the list command to see resources from both servers!
@@ -144,5 +142,5 @@ gz fuel edit -p -u https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Fortress%2
 Use the `-b` option to make a resource public. For example:
 
 ```
-gz fuel edit -b -u https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/%20Demo --header 'Private-token: YOUR_TOKEN'
+gz fuel edit -b -u https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Fortress%20Demo --header 'Private-token: YOUR_TOKEN'
 ```
