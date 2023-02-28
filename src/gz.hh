@@ -87,7 +87,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
 ///
 /// Example usage, including a private access token which is required:
 ///
-/// `gz fuel delete -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"` // NOLINT
+/// `gz fuel delete -u https://fuel.gazebosim.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"` // NOLINT
 ///
 /// \param[in] _url Resource URL.
 /// \param[in] _header An HTTP header.
@@ -114,7 +114,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path);
 ///
 /// Example usage, including a private access token which is required:
 ///
-/// `gz fuel edit -u https://fuel.ignitionrobotics.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"` --public // NOLINT
+/// `gz fuel edit -u https://fuel.gazebosim.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"` --public // NOLINT
 ///
 /// \param[in] _url Resource URL.
 /// \param[in] _header An HTTP header.

@@ -249,6 +249,22 @@
 
 ## Gazebo Fuel Tools 4.x
 
+### Gazebo Fuel Tools 4.8.0 (2022-12-07)
+
+1. Reduce asset download sizes.
+    * [Pull request #316](https://github.com/gazebosim/gz-fuel-tools/pull/316)
+
+1. Update tutorials to use Gazebo.
+    * [Pull request #303](https://github.com/gazebosim/gz-fuel-tools/pull/303)
+
+1. Change ignitionrobotics.org to gazebosim.org.
+    * [Pull request #304](https://github.com/gazebosim/gz-fuel-tools/pull/304)
+
+### Gazebo Fuel Tools 4.7.0 (2022-11-17)
+
+1. ign -> gz Migrate Ignition Headers : gz-fuel-tools.
+    * [Pull request #285](https://github.com/gazebosim/gz-fuel-tools/pull/285)
+
 ### Gazebo Fuel Tools 4.6.0 (2022-08-15)
 
 . Ignition to Gazebo server rename
@@ -266,7 +282,7 @@
 1. Remove unused files (bitbucket-pipelines, docs)
     * [Pull request #273](https://github.com/gazebosim/gz-fuel-tools/pull/273)
 
-1. Disable `staging-fuel.ignitionrobotics.org` test
+1. Disable `staging-fuel.gazebosim.org` test
     * [Pull request #257](https://github.com/gazebosim/gz-fuel-tools/pull/257)
 
 ### Gazebo Fuel Tools 4.5.0 (2022-06-01)
