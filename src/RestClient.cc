@@ -292,7 +292,11 @@ RestResponse Rest::Request(HttpMethod _method,
   // Send the request.
   if (_method == HttpMethod::GET)
   {
-    // no need to do anything
+    // Follow redirects to any URL set on the Location header.
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
+    // Set cURL to only follow 3 redirects tops.
+    curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 3L);
   }
   else if (_method == HttpMethod::PATCH_FORM)
   {
