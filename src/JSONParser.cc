@@ -30,6 +30,9 @@ using namespace fuel_tools;
   #define timegm _mkgmtime
 #endif
 
+#define GZ_JSON_HAVE_EXCEPTIONS ((JSONCPP_VERSION_MAJOR < 1 && \
+      JSONCPP_VERSION_MINOR < 10) ||  JSON_USE_EXCEPTION == 0)
+
 /////////////////////////////////////////////////
 std::time_t ParseDateTime(const std::string &_datetime)
 {
@@ -78,8 +81,7 @@ bool ParseLicenseImpl(const Json::Value &_json,
     if (_json.isMember("ID"))
       _license.second = _json["ID"].asUInt();
   }
-#if ((JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10) || \
-     JSON_USE_EXCEPTION == 0)
+#if GZ_JSON_HAVE_EXCEPTIONS == 1
   catch (...)
   {
     std::string what;
@@ -110,8 +112,7 @@ std::vector<std::string> JSONParser::ParseTags(const Json::Value &_json)
     for (auto tagIt = _json.begin(); tagIt != _json.end(); ++tagIt)
       tags.push_back(tagIt->asString());
   }
-#if ((JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10) || \
-     JSON_USE_EXCEPTION == 0)
+#if GZ_JSON_HAVE_EXCEPTIONS == 1
   catch (...)
   {
     std::string what;
@@ -223,8 +224,7 @@ bool JSONParser::ParseModelImpl(
     if (_json.isMember("version"))
       _model.SetVersion(_json["version"].asUInt());
   }
-#if ((JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10) || \
-     JSON_USE_EXCEPTION == 0)
+#if GZ_JSON_HAVE_EXCEPTIONS == 1
   catch (...)
   {
     std::string what;
@@ -329,8 +329,7 @@ bool JSONParser::ParseWorldImpl(
     if (_json.isMember("version"))
       _world.SetVersion(_json["version"].asUInt());
   }
-#if ((JSONCPP_VERSION_MAJOR < 1 && JSONCPP_VERSION_MINOR < 10) || \
-     JSON_USE_EXCEPTION == 0)
+#if GZ_JSON_HAVE_EXCEPTIONS == 1
   catch (...)
   {
     std::string what;
