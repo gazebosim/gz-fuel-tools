@@ -286,17 +286,19 @@ RestResponse Rest::Request(HttpMethod _method,
   // Set the default value: do not prove that SSL certificate is authentic
   curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 
+  // Follow redirects to any URL set on the Location header.
+  curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
+  // Set cURL to only follow 3 redirects tops.
+  curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 3L);
+
   std::ifstream ifs;
   struct curl_httppost *formpost = nullptr;
 
   // Send the request.
   if (_method == HttpMethod::GET)
   {
-    // Follow redirects to any URL set on the Location header.
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-
-    // Set cURL to only follow 3 redirects tops.
-    curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 3L);
+    // no need to do anything
   }
   else if (_method == HttpMethod::PATCH_FORM)
   {
