@@ -1847,7 +1847,7 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
       // Check for valid URI
       if (common::URI::Valid(linkUri))
       {
-        igndbg << "Downloading from a referal link[" << linkUri << "]\n";
+        igndbg << "Downloading from a referral link[" << linkUri << "]\n";
         // Get the zip data.
         RestResponse linkResp = rest.Request(HttpMethod::GET,
             // URL
@@ -1867,7 +1867,7 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
       }
       else
       {
-        ignerr << "Invalid referal link URI[" << linkUri << "]. "
+        ignerr << "Invalid referral link URI[" << linkUri << "]. "
           << "Unable to download.\n";
       }
     }
