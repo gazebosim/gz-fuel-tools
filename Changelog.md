@@ -1,5 +1,13 @@
 ## Gazebo Fuel Tools 7.x
 
+### Gazebo Fuel Tools 7.2.1 (2023-03-22)
+
+1. Forward port 4.8.2
+    * [Pull request #338](https://github.com/gazebosim/gz-fuel-tools/pull/338)
+
+1. Change backpack model version 2->3.
+    * [Pull request #319](https://github.com/gazebosim/gz-fuel-tools/pull/319)
+
 ### Gazebo Fuel Tools 7.2.0 (2021-11-17)
 
 1. Forward port 4.7.0.
