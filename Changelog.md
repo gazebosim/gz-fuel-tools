@@ -2,8 +2,12 @@
 
 ### Gazebo Fuel Tools 7.2.1 (2023-03-22)
 
-1. Forward port 4.8.2
-    * [Pull request #338](https://github.com/gazebosim/gz-fuel-tools/pull/338)
+1. Allow Curl redirect on get.
+    * [Pull request #331](https://github.com/gazebosim/gz-fuel-tools/pull/331)
+
+1. CI and license updates.
+    * [Pull request #334](https://github.com/gazebosim/gz-fuel-tools/pull/334)
+    * [Pull request #335](https://github.com/gazebosim/gz-fuel-tools/pull/335)
 
 1. Change backpack model version 2->3.
     * [Pull request #319](https://github.com/gazebosim/gz-fuel-tools/pull/319)
