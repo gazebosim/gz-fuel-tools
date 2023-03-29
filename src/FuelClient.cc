@@ -668,12 +668,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
 
   // Save
   // Note that the save function doesn't return the path
-  if (!zipData.empty())
-  {
-    if (!this->dataPtr->cache->SaveModel(newId, zipData, true))
-      return Result(ResultType::FETCH_ERROR);
-  }
-  else
+  if (zipData.empty() || !this->dataPtr->cache->SaveModel(newId, zipData, true))
     return Result(ResultType::FETCH_ERROR);
 
   return this->ModelDependencies(_id, _dependencies);
@@ -844,15 +839,8 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
   this->dataPtr->ZipFromResponse(resp, zipData);
 
   // Save
-  if (!zipData.empty())
-  {
-    if (!this->dataPtr->cache->SaveWorld(_id, zipData, true))
+  if (zipData.empty() || !this->dataPtr->cache->SaveWorld(_id, zipData, true))
       return Result(ResultType::FETCH_ERROR);
-  }
-  else
-  {
-    return Result(ResultType::FETCH_ERROR);
-  }
 
   return Result(ResultType::FETCH);
 }
@@ -1832,10 +1820,10 @@ void FuelClientPrivate::CheckForDeprecatedUri(const common::URI &_uri)
 void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
     std::string &_zip)
 {
-  // Check the content-type which could be empty (ideally not), text/plain
-  // which indicates the data is a download link, application/zip which
-  // indicates the data is a zip file, or binary/octet-stream which also
-  // indicates the data is a zip file.
+  // Check the content-type which could be empty (ideally not):
+  //   * text/plain indicates the data is a download link.
+  //   * application/zip indicates the data is a zip file.
+  //   * binary/octet-stream indicates the data is a zip file.
   auto contentTypeIter = _resp.headers.find("Content-Type");
   if (contentTypeIter != _resp.headers.end())
   {
@@ -1847,7 +1835,7 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
       // Check for valid URI
       if (common::URI::Valid(linkUri))
       {
-        igndbg << "Downloading from a referral link[" << linkUri << "]\n";
+        igndbg << "Downloading from a referral link [" << linkUri << "]\n";
         // Get the zip data.
         RestResponse linkResp = rest.Request(HttpMethod::GET,
             // URL
@@ -1867,7 +1855,7 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
       }
       else
       {
-        ignerr << "Invalid referral link URI[" << linkUri << "]. "
+        ignerr << "Invalid referral link URI [" << linkUri << "]. "
           << "Unable to download.\n";
       }
     }
