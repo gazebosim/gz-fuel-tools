@@ -1,5 +1,10 @@
 ## Gazebo Fuel Tools 7.x
 
+### Gazebo Fuel Tools 7.2.2 (2023-03-29)
+
+1. Support link referral download
+    * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
+
 ### Gazebo Fuel Tools 7.2.1 (2023-03-22)
 
 1. Allow Curl redirect on get.
