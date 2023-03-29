@@ -1,6 +1,6 @@
 ## Gazebo Fuel Tools 4.x
 
-### Gazebo Fuel Tools 4.8.2 (2023-03-29)
+### Gazebo Fuel Tools 4.8.3 (2023-03-29)
 
 1. Support link referral download
     * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
