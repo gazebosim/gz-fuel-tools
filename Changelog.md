@@ -1,5 +1,25 @@
 ## Gazebo Fuel Tools 8.x
 
+### Gazebo Fuel Tools 8.0.2 (2023-03-30)
+
+1. Support link referral download
+    * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
+1. Allow Curl redirect on get.
+    * [Pull request #331](https://github.com/gazebosim/gz-fuel-tools/pull/331)
+
+1. CI and license updates.
+    * [Pull request #334](https://github.com/gazebosim/gz-fuel-tools/pull/334)
+    * [Pull request #335](https://github.com/gazebosim/gz-fuel-tools/pull/335)
+
+1. Change backpack model version 2->3.
+    * [Pull request #319](https://github.com/gazebosim/gz-fuel-tools/pull/319)
+
+1. Fix model downloads for ignitionrobotics.org URIs.
+    * [Pull request #318](https://github.com/gazebosim/gz-fuel-tools/pull/318)
+
+1. Fix build when `JSON_USE_EXCEPTION == 0` 
+    * [Pull request #332](https: //github.com/gazebosim/gz-fuel-tools/pull/332)
+
 ### Gazebo Fuel Tools 8.0.1
 
 1. Forward ports.
