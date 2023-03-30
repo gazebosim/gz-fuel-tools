@@ -4,7 +4,8 @@
 
 1. Support link referral download
     * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
-1. Allow Curl redirect on get.
+
+1. Allow Curl redirect on HTTP requests.
     * [Pull request #331](https://github.com/gazebosim/gz-fuel-tools/pull/331)
 
 1. CI and license updates.
@@ -77,7 +78,7 @@
 
 ### Gazebo Fuel Tools 7.2.1 (2023-03-22)
 
-1. Allow Curl redirect on get.
+1. Allow Curl redirect on HTTP requests.
     * [Pull request #331](https://github.com/gazebosim/gz-fuel-tools/pull/331)
 
 1. CI and license updates.
@@ -293,7 +294,7 @@
 
 ### Gazebo Fuel Tools 4.8.2 (2023-03-21)
 
-1. Allow Curl redirect on get.
+1. Allow Curl redirect HTTP requests.
     * [Pull request #331](https://github.com/gazebosim/gz-fuel-tools/pull/331)
 
 1. CI and license updates.
