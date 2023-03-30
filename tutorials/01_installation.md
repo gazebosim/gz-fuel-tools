@@ -70,7 +70,7 @@ Install:
 conda install libgz-fuel-tools<#> --channel conda-forge
 ```
 
-Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+Be sure to replace `<#>` with a number value, such as 4 or 5, depending on
 which version you need.
 
 ## Source Install
@@ -229,7 +229,7 @@ conda install libgz-cmake<#> libgz-common<#> libgz-msgs<#> libgz-tools<#> --chan
 
 2. Navigate to where you would like to build the library, and clone the repository.
   ```
-  # Optionally, append `-b ign-fuel-tools#` (replace # with a number) to check out a specific version
+  # Optionally, append `-b gz-fuel-tools#` (replace # with a number) to check out a specific version
   git clone https://github.com/gazebosim/gz-fuel-tools.git
   ```
 

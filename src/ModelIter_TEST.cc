@@ -46,7 +46,7 @@ namespace gz
       public: static ModelIter ModelIterThreeModelIds()
         {
           gz::fuel_tools::ServerConfig srv;
-          srv.SetUrl(common::URI("https://ignitionrobotics.org"));
+          srv.SetUrl(common::URI("https://gazebosim.org"));
 
           std::vector<ModelIdentifier> ids;
           for (int i = 0; i < 3; i++)
@@ -68,7 +68,7 @@ namespace gz
       public: static ModelIter ModelIterThreeModels()
         {
           gz::fuel_tools::ServerConfig srv;
-          srv.SetUrl(common::URI("https://ignitionrobotics.org"));
+          srv.SetUrl(common::URI("https://gazebosim.org"));
 
           std::vector<Model> models;
           for (int i = 0; i < 3; i++)
