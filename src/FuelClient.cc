@@ -34,6 +34,7 @@
 
 #include <gz/common/Console.hh>
 #include <gz/common/Filesystem.hh>
+#include <gz/common/URI.hh>
 #include <gz/common/Util.hh>
 
 #include <gz/msgs/Utility.hh>
@@ -191,6 +192,11 @@ class gz::fuel_tools::FuelClientPrivate
   /// \param[in] _uri URI to check
   /// DEPRECATED/DEPRECATION: remove this function in Gazebo H.
   public: void CheckForDeprecatedUri(const common::URI &_uri);
+
+  /// \brief Get zip data from a REST response. This is used by world and
+  /// model download.
+  public: void ZipFromResponse(const RestResponse &_resp,
+              std::string &_zip);
 
   /// \brief Client configuration
   public: ClientConfig config;
@@ -623,7 +629,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
-      _id.Server().Version(), route.Str(), {},
+      _id.Server().Version(), route.Str(), {"link=true"},
       headersIncludingServerConfig, "");
   if (resp.statusCode != 200)
   {
@@ -657,9 +663,12 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   }
   newId.SetVersion(version);
 
+  std::string zipData;
+  this->dataPtr->ZipFromResponse(resp, zipData);
+
   // Save
   // Note that the save function doesn't return the path
-  if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
+  if (zipData.empty() || !this->dataPtr->cache->SaveModel(newId, zipData, true))
     return Result(ResultType::FETCH_ERROR);
 
   return this->ModelDependencies(_id, _dependencies);
@@ -792,7 +801,7 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
   Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
-      _id.Server().Version(), route.Str(), {},
+      _id.Server().Version(), route.Str(), {"link=true"},
       headersIncludingServerConfig, "");
   if (resp.statusCode != 200)
   {
@@ -826,9 +835,12 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id)
   }
   _id.SetVersion(version);
 
+  std::string zipData;
+  this->dataPtr->ZipFromResponse(resp, zipData);
+
   // Save
-  if (!this->dataPtr->cache->SaveWorld(_id, resp.data, true))
-    return Result(ResultType::FETCH_ERROR);
+  if (zipData.empty() || !this->dataPtr->cache->SaveWorld(_id, zipData, true))
+      return Result(ResultType::FETCH_ERROR);
 
   return Result(ResultType::FETCH);
 }
@@ -1804,3 +1816,65 @@ void FuelClientPrivate::CheckForDeprecatedUri(const common::URI &_uri)
   }
 }
 
+//////////////////////////////////////////////////
+void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
+    std::string &_zip)
+{
+  // Check the content-type which could be empty (ideally not):
+  //   * text/plain indicates the data is a download link.
+  //   * application/zip indicates the data is a zip file.
+  //   * binary/octet-stream indicates the data is a zip file.
+  auto contentTypeIter = _resp.headers.find("Content-Type");
+  if (contentTypeIter != _resp.headers.end())
+  {
+    // If text/plain then data might be a link to a zip file.
+    if (contentTypeIter->second.find("text/plain") != std::string::npos)
+    {
+      std::string linkUri = _resp.data;
+
+      // Check for valid URI
+      if (common::URI::Valid(linkUri))
+      {
+        igndbg << "Downloading from a referral link [" << linkUri << "]\n";
+        // Get the zip data.
+        RestResponse linkResp = rest.Request(HttpMethod::GET,
+            // URL
+            linkUri,
+            // Version
+            "",
+            // Path
+            "",
+            // Query strings
+            {},
+            // Headers
+            {},
+            // Data
+            "");
+
+        return this->ZipFromResponse(linkResp, _zip);
+      }
+      else
+      {
+        ignerr << "Invalid referral link URI [" << linkUri << "]. "
+          << "Unable to download.\n";
+      }
+    }
+    else if (contentTypeIter->second.find("application/zip") !=
+             std::string::npos ||
+             contentTypeIter->second.find("binary/octet-stream") !=
+             std::string::npos)
+    {
+      _zip = std::move(_resp.data);
+    }
+    else
+    {
+      ignerr << "Invalid content-type of [" << contentTypeIter->second << "]. "
+        << "Unable to download.\n";
+    }
+  }
+  else
+  {
+    // If content-type is missing, then assume the data is the zip file.
+    _zip = std::move(_resp.data);
+  }
+}

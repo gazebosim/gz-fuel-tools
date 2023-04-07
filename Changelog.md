@@ -1,5 +1,19 @@
 ## Gazebo Fuel Tools 4.x
 
+### Gazebo Fuel Tools 4.8.3 (2023-03-29)
+
+1. Support link referral download
+    * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
+
+### Gazebo Fuel Tools 4.8.2 (2023-03-21)
+
+1. Allow Curl redirect on get.
+    * [Pull request #331](https://github.com/gazebosim/gz-fuel-tools/pull/331)
+
+1. CI and license updates.
+    * [Pull request #334](https://github.com/gazebosim/gz-fuel-tools/pull/334)
+    * [Pull request #335](https://github.com/gazebosim/gz-fuel-tools/pull/335)
+
 ### Gazebo Fuel Tools 4.8.1 (2023-02-07)
 
 1. Fix model downloads for ignitionrobotics.org URIs.

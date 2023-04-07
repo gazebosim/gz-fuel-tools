@@ -212,19 +212,25 @@ RestResponse Rest::Request(HttpMethod _method,
   if (_url.empty())
     return res;
 
-  std::string url = RestJoinUrl(_url, _version);
+  std::string url = _url;
+  if (!_version.empty())
+    url = RestJoinUrl(_url, _version);
 
   CURL *curl = curl_easy_init();
+  char *encodedPath = nullptr;
 
-  // First, unescape the _path since it might have %XX encodings. If this
-  // step is not performed, then curl_easy_escape will encode the %XX
-  // encodings resulting in an incorrect URL.
-  int decodedSize;
-  char *decodedPath = curl_easy_unescape(curl,
-      _path.c_str(), _path.size(), &decodedSize);
+  if (!_path.empty())
+  {
+    // First, unescape the _path since it might have %XX encodings. If this
+    // step is not performed, then curl_easy_escape will encode the %XX
+    // encodings resulting in an incorrect URL.
+    int decodedSize;
+    char *decodedPath = curl_easy_unescape(curl,
+        _path.c_str(), _path.size(), &decodedSize);
 
-  char *encodedPath = curl_easy_escape(curl, decodedPath, decodedSize);
-  url = RestJoinUrl(url, encodedPath);
+    encodedPath = curl_easy_escape(curl, decodedPath, decodedSize);
+    url = RestJoinUrl(url, encodedPath);
+  }
 
   // Process query strings.
   if (!_queryStrings.empty())
@@ -285,6 +291,12 @@ RestResponse Rest::Request(HttpMethod _method,
   // ToDo: Set this option to 0 only when using localhost.
   // Set the default value: do not prove that SSL certificate is authentic
   curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
+
+  // Follow redirects to any URL set on the Location header.
+  curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
+  // Set cURL to only follow 3 redirects tops.
+  curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 3L);
 
   std::ifstream ifs;
   struct curl_httppost *formpost = nullptr;
@@ -352,7 +364,8 @@ RestResponse Rest::Request(HttpMethod _method,
     curl_formfree(formpost);
 
   // free encoded path char*
-  curl_free(encodedPath);
+  if (encodedPath)
+    curl_free(encodedPath);
 
   // free the headers
   curl_slist_free_all(headers);
