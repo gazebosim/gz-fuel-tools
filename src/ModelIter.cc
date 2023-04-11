@@ -195,7 +195,6 @@ void IterRestIds::Next()
   if (this->idIter == this->ids.end())
   {
     ++this->currentPage;
-    std::cout << "Getting page " << currentPage << std::endl;
     RestResponse resp = this->MakeRestRequest(this->currentPage);
     this->ids = this->ParseIdsFromResponse(resp);
     this->idIter = this->ids.begin();
