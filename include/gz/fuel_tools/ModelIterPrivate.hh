@@ -152,24 +152,30 @@ namespace ignition
 
       /// \brief RESTful client
       public: Rest rest;
+
+      /// \brief The API (path) of the RESTful requests
       public: const std::string api;
 
-      using IdListIterator = std::vector<ModelIdentifier>::iterator;
-
+      /// \brief Make a RESTful request for the given page
+      /// \param[in] _page Page number to request
+      /// \return Response from the request
       protected: RestResponse MakeRestRequest(std::size_t _page);
-      protected: void SetModelFromIdIter(IdListIterator iter);
+
+      /// \brief Parse model identifiers from a RESTful response
+      /// \param[in] _resp RESTful response
+      /// \return A vector of identifiers extracted from the response.
       protected: std::vector<ModelIdentifier> ParseIdsFromResponse(
-          const RestResponse &resp);
+          const RestResponse &_resp);
 
       /// \brief Model identifiers in the current page
       protected: std::vector<ModelIdentifier> ids;
 
       /// \brief Where the current iterator is in the list of ids
-      protected: IdListIterator idIter;
+      protected: std::vector<ModelIdentifier>::iterator idIter;
 
       /// \brief Keep track of page number for pagination of response data from
       /// server.
-      protected: std::size_t currentPage{1};
+      protected: std::size_t currentPage{0};
     };
   }
 }

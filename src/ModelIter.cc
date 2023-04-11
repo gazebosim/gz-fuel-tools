@@ -150,6 +150,9 @@ IterRestIds::~IterRestIds()
 std::vector<ModelIdentifier> IterRestIds::ParseIdsFromResponse(
     const RestResponse &resp)
 {
+  // TODO(nkoenig): resp.statusCode should return != 200 when the page
+  // requested does
+  // not exist. When this happens we should stop without calling ParseModels()
   if (resp.data == "null\n" || resp.statusCode != 200)
     return {};
 
@@ -162,23 +165,8 @@ IterRestIds::IterRestIds(const Rest &_rest, const ServerConfig &_config,
     const std::string &_api)
   : config(_config), rest(_rest), api(_api)
 {
-  RestResponse resp = this->MakeRestRequest(this->currentPage);
-  this->ids = this->ParseIdsFromResponse(resp);
   this->idIter = this->ids.begin();
-
-  if (this->ids.empty())
-    return;
-  // make first model
-  this->SetModelFromIdIter(this->idIter);
-}
-
-//////////////////////////////////////////////////
-void IterRestIds::SetModelFromIdIter(IdListIterator iter)
-{
-  std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
-  ptr->id = *iter;
-  ptr->id.SetServer(this->config);
-  this->model = Model(ptr);
+  this->Next();
 }
 
 //////////////////////////////////////////////////
@@ -190,7 +178,6 @@ RestResponse IterRestIds::MakeRestRequest(std::size_t _page)
   // Prepare the request with the next page.
   std::string queryStrPage = "page=" + std::to_string(_page);
   std::string path = this->api;
-  std::cout << "Getting: " << queryStrPage << std::endl;
   // Fire the request.
   return this->rest.Request(method, this->config.Url().Str(),
       this->config.Version(),
@@ -202,11 +189,13 @@ RestResponse IterRestIds::MakeRestRequest(std::size_t _page)
 void IterRestIds::Next()
 {
   // advance pointer
-  ++(this->idIter);
+  if (this->idIter != this->ids.end())
+    ++(this->idIter);
 
   if (this->idIter == this->ids.end())
   {
     ++this->currentPage;
+    std::cout << "Getting page " << currentPage << std::endl;
     RestResponse resp = this->MakeRestRequest(this->currentPage);
     this->ids = this->ParseIdsFromResponse(resp);
     this->idIter = this->ids.begin();
@@ -215,7 +204,10 @@ void IterRestIds::Next()
   // Update personal model class
   if (this->idIter != this->ids.end())
   {
-    this->SetModelFromIdIter(this->idIter);
+    std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
+    ptr->id = *(this->idIter);
+    ptr->id.SetServer(this->config);
+    this->model = Model(ptr);
   }
 }
 
