@@ -150,9 +150,6 @@ IterRestIds::~IterRestIds()
 std::vector<ModelIdentifier> IterRestIds::ParseIdsFromResponse(
     const RestResponse &resp)
 {
-  // TODO(nkoenig): resp.statusCode should return != 200 when the page
-  // requested does
-  // not exist. When this happens we should stop without calling ParseModels()
   if (resp.data == "null\n" || resp.statusCode != 200)
     return {};
 
@@ -175,7 +172,7 @@ RestResponse IterRestIds::MakeRestRequest(std::size_t _page)
   HttpMethod method = HttpMethod::GET;
   std::vector<std::string> headers = {"Accept: application/json"};
   std::vector<ModelIdentifier> modelIds;
-  // Prepare the request with the next page.
+  // Prepare the request with the requested page.
   std::string queryStrPage = "page=" + std::to_string(_page);
   std::string path = this->api;
   // Fire the request.

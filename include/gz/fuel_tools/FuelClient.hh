@@ -132,18 +132,18 @@ namespace ignition
       /// \brief Returns models matching a given identifying criteria
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
-      /// \remarks It's not yet clear if model names are unique, so this API
+      /// \remarks Model names are unique to the owner, so this API
       ///          allows the possibility of getting multiple models with the
-      ///          same name.
+      ///          same name if the owner is not specified.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id);
 
       /// \brief Returns models matching a given identifying criteria
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
-      /// \remarks It's not yet clear if model names are unique, so this API
+      /// \remarks Model names are unique to the owner, so this API
       ///          allows the possibility of getting multiple models with the
-      ///          same name.
+      ///          same name if the owner is not specified.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id) const;
 
@@ -151,9 +151,9 @@ namespace ignition
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \param[in] _checkCache Whether to check the cache.
       /// \remarks Fulfills Get-One requirement
-      /// \remarks It's not yet clear if model names are unique, so this API
+      /// \remarks Model names are unique to the owner, so this API
       ///          allows the possibility of getting multiple models with the
-      ///          same name.
+      ///          same name if the owner is not specified.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id, bool _checkCache);
 
@@ -161,9 +161,9 @@ namespace ignition
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \param[in] _checkCache Whether to check the cache.
       /// \remarks Fulfills Get-One requirement
-      /// \remarks It's not yet clear if model names are unique, so this API
+      /// \remarks Model names are unique to the owner, so this API
       ///          allows the possibility of getting multiple models with the
-      ///          same name.
+      ///          same name if the owner is not specified.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id,
                                bool _checkCache) const;
