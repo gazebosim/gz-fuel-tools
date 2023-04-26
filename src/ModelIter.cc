@@ -147,65 +147,55 @@ IterRestIds::~IterRestIds()
 {
 }
 
+std::vector<ModelIdentifier> IterRestIds::ParseIdsFromResponse(
+    const RestResponse &resp)
+{
+  if (resp.data == "null\n" || resp.statusCode != 200)
+    return {};
+
+  // Parse the response.
+  return JSONParser::ParseModels(resp.data, this->config);
+}
+
 //////////////////////////////////////////////////
 IterRestIds::IterRestIds(const Rest &_rest, const ServerConfig &_config,
     const std::string &_api)
-  : config(_config), rest(_rest)
+  : config(_config), rest(_rest), api(_api)
+{
+  this->idIter = this->ids.begin();
+  this->Next();
+}
+
+//////////////////////////////////////////////////
+RestResponse IterRestIds::MakeRestRequest(std::size_t _page)
 {
   HttpMethod method = HttpMethod::GET;
-  this->config = _config;
-  int page = 1;
   std::vector<std::string> headers = {"Accept: application/json"};
-  RestResponse resp;
   std::vector<ModelIdentifier> modelIds;
-  this->ids.clear();
-
-  do
-  {
-    // Prepare the request with the next page.
-    std::string queryStrPage = "page=" + std::to_string(page);
-    std::string path = _api;
-    ++page;
-
-    // Fire the request.
-    resp = this->rest.Request(method, this->config.Url().Str(),
+  // Prepare the request with the requested page.
+  std::string queryStrPage = "page=" + std::to_string(_page);
+  std::string path = this->api;
+  // Fire the request.
+  return this->rest.Request(method, this->config.Url().Str(),
       this->config.Version(),
       std::regex_replace(path, std::regex(R"(\\)"), "/"),
       {queryStrPage}, headers, "");
-
-    // TODO(nkoenig): resp.statusCode should return != 200 when the page
-    // requested does
-    // not exist. When this happens we should stop without calling ParseModels()
-    if (resp.data == "null\n" || resp.statusCode != 200)
-      break;
-
-    // Parse the response.
-    modelIds = JSONParser::ParseModels(resp.data, this->config);
-
-    // Add the vector of models to the list.
-    this->ids.insert(std::end(this->ids), std::begin(modelIds),
-      std::end(modelIds));
-  } while (!modelIds.empty());
-
-  if (this->ids.empty())
-    return;
-
-  this->idIter = this->ids.begin();
-
-  // make first model
-  std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
-  ptr->id = *(this->idIter);
-  ptr->id.SetServer(this->config);
-  this->model = Model(ptr);
-
-  igndbg << "Got response [" << resp.data << "]\n";
 }
 
 //////////////////////////////////////////////////
 void IterRestIds::Next()
 {
   // advance pointer
-  ++(this->idIter);
+  if (this->idIter != this->ids.end())
+    ++(this->idIter);
+
+  if (this->idIter == this->ids.end())
+  {
+    ++this->currentPage;
+    RestResponse resp = this->MakeRestRequest(this->currentPage);
+    this->ids = this->ParseIdsFromResponse(resp);
+    this->idIter = this->ids.begin();
+  }
 
   // Update personal model class
   if (this->idIter != this->ids.end())
@@ -215,7 +205,6 @@ void IterRestIds::Next()
     ptr->id.SetServer(this->config);
     this->model = Model(ptr);
   }
-  // TODO(nkoenig) request next page if api is paginated
 }
 
 //////////////////////////////////////////////////
@@ -256,7 +245,6 @@ ModelIter::operator bool() const
 //////////////////////////////////////////////////
 ModelIter &ModelIter::operator++()
 {
-  // TODO(nkoenig) Request more data if there are more pages
   if (!this->dataPtr->HasReachedEnd())
   {
     this->dataPtr->Next();
