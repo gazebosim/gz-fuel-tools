@@ -4,8 +4,8 @@
 # Ex: cmdfuel0.rb
 # Unlike other gz libraries, the ruby script for the fuel_tools library is called cmdfuel.rb instead of cmdfuel_tools.rb
 set(CMD_NAME cmdfuel)
-set(cmd_script_generated_test "${CMAKE_BINARY_DIR}/test/lib/ruby/ignition/${CMD_NAME}${PROJECT_VERSION_MAJOR}.rb")
-set(cmd_script_configured_test "${cmd_script_generated_test}.configured")
+set(cmd_script_generated_test "${CMAKE_BINARY_DIR}/test/lib/$<CONFIG>/ruby/ignition/${CMD_NAME}${PROJECT_VERSION_MAJOR}.rb")
+set(cmd_script_configured_test "${CMAKE_CURRENT_BINARY_DIR}/test_${CMD_NAME}${PROJECT_VERSION_MAJOR}.rb.configured")
 
 # Set the library_location variable to the full path of the library file within
 # the build directory.
@@ -26,8 +26,8 @@ file(GENERATE
 # Generate the ruby script that gets installed.
 # Note that the major version of the library is included in the name.
 # Ex: cmdfuel0.rb
-set(cmd_script_generated "${CMAKE_CURRENT_BINARY_DIR}/${CMD_NAME}${PROJECT_VERSION_MAJOR}.rb")
-set(cmd_script_configured "${cmd_script_generated}.configured")
+set(cmd_script_generated "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIG>/${CMD_NAME}${PROJECT_VERSION_MAJOR}.rb")
+set(cmd_script_configured "${CMAKE_CURRENT_BINARY_DIR}/${CMD_NAME}${PROJECT_VERSION_MAJOR}.rb.configured")
 
 # Set the library_location variable to the relative path to the library file
 # within the install directory structure.
