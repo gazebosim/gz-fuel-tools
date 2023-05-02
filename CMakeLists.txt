@@ -68,6 +68,7 @@ ign_find_package(ignition-tools QUIET)
 if (ignition-tools_FOUND)
   set (HAVE_IGN_TOOLS TRUE)
 endif()
+set (IGN_TOOLS_VER 1)
 
 #============================================================================
 # Configure the build
