@@ -1,5 +1,13 @@
 ## Gazebo Fuel Tools 4.x
 
+### Gazebo Fuel Tools 4.9.0 (2023-05-03)
+
+1. Add bash completion
+    * [Pull request #329](https://github.com/gazebosim/gz-fuel-tools/pull/329)
+
+1. Reflect pagination of RESTful requests in iterator API
+    * [Pull request #350](https://github.com/gazebosim/gz-fuel-tools/pull/350)
+
 ### Gazebo Fuel Tools 4.8.3 (2023-03-29)
 
 1. Support link referral download
