@@ -50,7 +50,8 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
     gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
   PRIVATE
-    gz-msgs${GZ_MSGS_VER}::gz-msgs${GZ_MSGS_VER}
+    gz-math${GZ_MATH_VER}::gz-math${GZ_MATH_VER}
+    gz_msgs_gen
     curl::curl
     ${JSONCPP_TARGET}
     TINYXML2::TINYXML2
