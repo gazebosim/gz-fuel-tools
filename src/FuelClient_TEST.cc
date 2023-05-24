@@ -1386,6 +1386,52 @@ TEST_F(FuelClientTest, Models)
   }
 }
 
+//////////////////////////////////////////////////
+TEST_F(FuelClientTest, ModelsCheckCached)
+{
+  ClientConfig config;
+  std::string cacheDir = common::joinPaths(PROJECT_BINARY_PATH, "test_cache");
+  common::removeAll(cacheDir );
+  ASSERT_TRUE(common::createDirectories(cacheDir));
+  config.SetCacheLocation(cacheDir);
+  FuelClient client(config);
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+  modelId.SetOwner("openroboticstest");
+  std::vector<Model> modelInfos;
+  {
+    for (ModelIter iter = client.Models(modelId, true); iter; ++iter)
+    {
+      modelInfos.push_back(*iter);
+    }
+  }
+  ASSERT_FALSE(modelInfos.empty());
+  // Download one of the models to test the behavior of Models() with
+  // different values for _checkCache
+  EXPECT_TRUE(client.DownloadModel(modelInfos.front().Identification()));
+  {
+    std::size_t counter = 0;
+    for (ModelIter iter = client.Models(modelId, true); iter; ++iter, ++counter)
+    {
+    }
+    std::cout << "counter: " << counter << std::endl;
+    // Expect only one result with checkCache=true because we've downloaded only
+    // one model
+    EXPECT_EQ(counter, 1u);
+    EXPECT_GT(modelInfos.size(), counter);
+  }
+
+  {
+    std::size_t counter = 0;
+    for (ModelIter iter = client.Models(modelId, false); iter;
+         ++iter, ++counter)
+    {
+    }
+    std::cout << "counter: " << counter << std::endl;
+    EXPECT_EQ(counter, modelInfos.size());
+  }
+}
+
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/gazebosim/gz-fuel-tools/issues/105

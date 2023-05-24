@@ -65,6 +65,7 @@ set(IGN_MSGS_MAJOR_VER ${ignition-msgs8_VERSION_MAJOR})
 #--------------------------------------
 # Find ignition-tools
 find_program(HAVE_IGN_TOOLS ign)
+set (IGN_TOOLS_VER 1)
 
 #============================================================================
 # Configure the build
