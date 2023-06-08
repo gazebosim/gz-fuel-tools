@@ -1935,7 +1935,7 @@ void FuelClientPrivate::CheckForDeprecatedUri(const common::URI &_uri)
   {
     std::string newUrl = _uri.Str();
     newUrl.replace(ignFuelPos, oldServer.size(), "fuel.gazebosim.org");
-    ignwarn << "The " << oldServer << " URL is deprecrated. Pleasse change "
+    gzwarn << "The " << oldServer << " URL is deprecrated. Pleasse change "
       << _uri.Str() << " to " << newUrl << std::endl;
   }
 }
@@ -1959,7 +1959,7 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
       // Check for valid URI
       if (common::URI::Valid(linkUri))
       {
-        igndbg << "Downloading from a referral link [" << linkUri << "]\n";
+        gzdbg << "Downloading from a referral link [" << linkUri << "]\n";
         // Get the zip data.
         RestResponse linkResp = rest.Request(HttpMethod::GET,
             // URL
@@ -1979,7 +1979,7 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
       }
       else
       {
-        ignerr << "Invalid referral link URI [" << linkUri << "]. "
+        gzerr << "Invalid referral link URI [" << linkUri << "]. "
           << "Unable to download.\n";
       }
     }
@@ -1992,7 +1992,7 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
     }
     else
     {
-      ignerr << "Invalid content-type of [" << contentTypeIter->second << "]. "
+      gzerr << "Invalid content-type of [" << contentTypeIter->second << "]. "
         << "Unable to download.\n";
     }
   }
