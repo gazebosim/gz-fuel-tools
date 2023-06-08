@@ -240,9 +240,9 @@ ClientConfig::ClientConfig(const ClientConfig &_copy)
 }
 
 //////////////////////////////////////////////////
-ClientConfig &ClientConfig::operator=(const ClientConfig &_rhs)
+ClientConfig &ClientConfig::operator=(const ClientConfig &_copy)
 {
-  *(this->dataPtr) = *(_rhs.dataPtr);
+  *(this->dataPtr) = *(_copy.dataPtr);
 
   return *this;
 }

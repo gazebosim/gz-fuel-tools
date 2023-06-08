@@ -174,10 +174,10 @@ bool ModelIdentifier::SetName(const std::string &_name)
 }
 
 //////////////////////////////////////////////////
-bool ModelIdentifier::SetOwner(const std::string &_owner)
+bool ModelIdentifier::SetOwner(const std::string &_name)
 {
   bool success = false;
-  std::string owner = common::lowercase(_owner);
+  std::string owner = common::lowercase(_name);
   if (this->dataPtr->ValidName(owner))
   {
     success = true;
