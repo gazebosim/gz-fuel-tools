@@ -530,7 +530,7 @@ void FuelClient::AddServerConfigParametersToHeaders(
   std::vector<std::string> &_headers) const
 {
   bool privateTokenDefined = false;
-  for (auto header : _headers)
+  for (const auto &header : _headers)
   {
     if (header.find("Private-token:") != std::string::npos)
     {
