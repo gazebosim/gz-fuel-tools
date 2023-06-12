@@ -25,6 +25,11 @@ gz_configure_header(
     name = "fuel_tools_config_hh",
     src = "include/gz/fuel_tools/config.hh.in",
     cmakelists = ["CMakeLists.txt"],
+    defines = {
+        # These definitions are unused,
+        # this is merely to suppress generator warnings
+        "CMAKE_INSTALL_PREFIX": "unused",
+    },
     package = "fuel_tools",
 )
 
