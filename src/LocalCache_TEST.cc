@@ -251,7 +251,8 @@ TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
 /////////////////////////////////////////////////
 /// \brief Get all models that match some fields
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, MatchingModels)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/307
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingModels))
 {
   ClientConfig conf;
   conf.Clear();
@@ -294,7 +295,8 @@ TEST_F(LocalCacheTest, MatchingModels)
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, MatchingModel)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/307
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingModel))
 {
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -347,7 +349,8 @@ TEST_F(LocalCacheTest, MatchingModel)
 /////////////////////////////////////////////////
 /// \brief Iterate through all worlds in cache
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, AllWorlds)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/307
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllWorlds))
 {
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -376,7 +379,8 @@ TEST_F(LocalCacheTest, AllWorlds)
 /////////////////////////////////////////////////
 /// \brief Get all worlds that match some fields
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, MatchingWorlds)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/307
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorlds))
 {
   ClientConfig conf;
   conf.Clear();
@@ -407,7 +411,8 @@ TEST_F(LocalCacheTest, MatchingWorlds)
 /////////////////////////////////////////////////
 /// \brief Get a specific world from cache
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, MatchingWorld)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/307
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorld))
 {
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
