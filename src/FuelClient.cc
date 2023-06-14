@@ -530,7 +530,7 @@ void FuelClient::AddServerConfigParametersToHeaders(
   std::vector<std::string> &_headers) const
 {
   bool privateTokenDefined = false;
-  for (auto header : _headers)
+  for (const auto &header : _headers)
   {
     if (header.find("Private-token:") != std::string::npos)
     {
@@ -627,7 +627,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   if(!res)
     return res;
 
-  for (ModelIdentifier dep : dependencies)
+  for (const ModelIdentifier &dep : dependencies)
   {
     // Download dependency if not in the local cache
     if (!this->dataPtr->cache->MatchingModel(dep))
@@ -787,7 +787,7 @@ Result FuelClient::ModelDependencies(
     std::vector<ModelIdentifier> &_dependencies)
 {
   std::vector<ModelIdentifier> newDeps;
-  for (auto modelId : _ids)
+  for (const auto &modelId : _ids)
   {
     std::vector<ModelIdentifier> modelDeps;
     auto result = this->ModelDependencies(modelId, modelDeps);
@@ -946,7 +946,7 @@ std::vector<FuelClient::ModelResult> FuelClient::DownloadModels(
         std::lock_guard<std::mutex> lock(idsMutex);
         gzdbg << "Adding " << dependencies.size()
           << " model dependencies to queue from " << id.Name() << "\n";
-        for (auto dep : dependencies)
+        for (const auto &dep : dependencies)
         {
           if (uniqueIds.count(dep) == 0)
           {
@@ -1191,15 +1191,15 @@ bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
 }
 
 //////////////////////////////////////////////////
-bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
+bool FuelClient::ParseModelFileUrl(const common::URI &_modelFileUrl,
     ModelIdentifier &_id, std::string &_filePath)
 {
-  if (!_fileUrl.Valid())
+  if (!_modelFileUrl.Valid())
     return false;
 
-  this->dataPtr->CheckForDeprecatedUri(_fileUrl);
+  this->dataPtr->CheckForDeprecatedUri(_modelFileUrl);
 
-  auto urlStr = _fileUrl.Str();
+  auto urlStr = _modelFileUrl.Str();
 
   std::smatch match;
   std::string scheme;
@@ -1262,13 +1262,13 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
 }
 
 //////////////////////////////////////////////////
-bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
+bool FuelClient::ParseWorldFileUrl(const common::URI &_worldFileUrl,
     WorldIdentifier &_id, std::string &_filePath)
 {
-  if (!_fileUrl.Valid())
+  if (!_worldFileUrl.Valid())
     return false;
 
-  auto urlStr = _fileUrl.Str();
+  auto urlStr = _worldFileUrl.Str();
 
   std::smatch match;
   std::string scheme;
@@ -1935,7 +1935,7 @@ void FuelClientPrivate::CheckForDeprecatedUri(const common::URI &_uri)
   {
     std::string newUrl = _uri.Str();
     newUrl.replace(ignFuelPos, oldServer.size(), "fuel.gazebosim.org");
-    ignwarn << "The " << oldServer << " URL is deprecrated. Pleasse change "
+    gzwarn << "The " << oldServer << " URL is deprecrated. Pleasse change "
       << _uri.Str() << " to " << newUrl << std::endl;
   }
 }
@@ -1959,7 +1959,7 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
       // Check for valid URI
       if (common::URI::Valid(linkUri))
       {
-        igndbg << "Downloading from a referral link [" << linkUri << "]\n";
+        gzdbg << "Downloading from a referral link [" << linkUri << "]\n";
         // Get the zip data.
         RestResponse linkResp = rest.Request(HttpMethod::GET,
             // URL
@@ -1979,7 +1979,7 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
       }
       else
       {
-        ignerr << "Invalid referral link URI [" << linkUri << "]. "
+        gzerr << "Invalid referral link URI [" << linkUri << "]. "
           << "Unable to download.\n";
       }
     }
@@ -1992,7 +1992,7 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
     }
     else
     {
-      ignerr << "Invalid content-type of [" << contentTypeIter->second << "]. "
+      gzerr << "Invalid content-type of [" << contentTypeIter->second << "]. "
         << "Unable to download.\n";
     }
   }
