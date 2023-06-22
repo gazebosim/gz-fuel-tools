@@ -23,30 +23,34 @@
 #include "gz/fuel_tools/FuelClient.hh"
 #include "gz/fuel_tools/Interface.hh"
 
-#include "test_config.hh"
-
-#ifdef _WIN32
-#include <direct.h>
-#define ChangeDirectory _chdir
-#else
-#include <unistd.h>
-#define ChangeDirectory chdir
-#endif
+#include <gz/common/testing/TestPaths.hh>
 
 using namespace gz;
 using namespace gz::fuel_tools;
 
 /////////////////////////////////////////////////
+class InterfaceTest: public ::testing::Test
+{
+  public: void SetUp() override
+  {
+    gz::common::Console::SetVerbosity(4);
+    tempDir = gz::common::testing::MakeTestTempDirectory();
+    ASSERT_TRUE(tempDir->Valid()) << tempDir->Path();
+
+    gz::common::chdir(tempDir->Path());
+    ASSERT_FALSE(common::exists("test_cache"));
+    ASSERT_TRUE(common::createDirectories("test_cache"));
+    ASSERT_TRUE(common::isDirectory("test_cache"));
+  }
+
+  public: std::shared_ptr<gz::common::TempDirectory> tempDir;
+};
+
+/////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
-TEST(Interface, FetchResources)
+TEST_F(InterfaceTest, FetchResources)
 {
-  common::Console::SetVerbosity(4);
-
-  // Configure to use binary path as cache
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
