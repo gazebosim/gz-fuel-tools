@@ -70,8 +70,18 @@ gz_build_tests(TYPE UNIT
                 TEST_LIST test_targets
                 LIB_DEPS
                   gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
+                  gz-common${GZ_COMMON_VER}::testing
                   TINYXML2::TINYXML2
 )
+
+# Some tests download simulation assets, which can take longer than the
+# default time limit.
+if (TARGET UNIT_gz_src_TEST)
+  set_tests_properties(UNIT_gz_src_TEST PROPERTIES TIMEOUT 1000)
+endif()
+if (TARGET UNIT_FuelClient_TEST)
+  set_tests_properties(UNIT_FuelClient_TEST PROPERTIES TIMEOUT 1000)
+endif()
 
 foreach(test ${test_targets})
 

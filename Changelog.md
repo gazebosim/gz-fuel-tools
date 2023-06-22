@@ -1,5 +1,38 @@
 ## Gazebo Fuel Tools 8.x
 
+### Gazebo Fuel Tools 8.0.2 (2023-03-30)
+
+1. Support link referral download
+    * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
+
+1. Allow Curl redirect on HTTP requests.
+    * [Pull request #331](https://github.com/gazebosim/gz-fuel-tools/pull/331)
+
+1. CI and license updates.
+    * [Pull request #334](https://github.com/gazebosim/gz-fuel-tools/pull/334)
+    * [Pull request #335](https://github.com/gazebosim/gz-fuel-tools/pull/335)
+
+1. Change backpack model version 2->3.
+    * [Pull request #319](https://github.com/gazebosim/gz-fuel-tools/pull/319)
+
+1. Fix model downloads for ignitionrobotics.org URIs.
+    * [Pull request #318](https://github.com/gazebosim/gz-fuel-tools/pull/318)
+
+1. Fix build when `JSON_USE_EXCEPTION == 0` 
+    * [Pull request #332](https: //github.com/gazebosim/gz-fuel-tools/pull/332)
+
+### Gazebo Fuel Tools 8.0.1
+
+1. Forward ports.
+    * [Pull request #306](https://github.com/gazebosim/gz-fuel-tools/pull/306)
+    * [Pull request #310](https://github.com/gazebosim/gz-fuel-tools/pull/310)
+
+1. Remove fuel.ignitionrobotics.org from ClientConfig.
+    * [Pull request #293](https://github.com/gazebosim/gz-fuel-tools/pull/293)
+
+1. Clean up a few Windows warnings.
+    * [Pull request #308](https://github.com/gazebosim/gz-fuel-tools/pull/308)
+
 ### Gazebo Fuel Tools 8.0.0
 
 1. Update test infrastruture
@@ -37,6 +70,28 @@
     * [Pull request #300](https://github.com/gazebosim/gz-fuel-tools/pull/300)
 
 ## Gazebo Fuel Tools 7.x
+
+### Gazebo Fuel Tools 7.2.2 (2023-03-29)
+
+1. Support link referral download
+    * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
+
+### Gazebo Fuel Tools 7.2.1 (2023-03-22)
+
+1. Allow Curl redirect on HTTP requests.
+    * [Pull request #331](https://github.com/gazebosim/gz-fuel-tools/pull/331)
+
+1. CI and license updates.
+    * [Pull request #334](https://github.com/gazebosim/gz-fuel-tools/pull/334)
+    * [Pull request #335](https://github.com/gazebosim/gz-fuel-tools/pull/335)
+
+1. Change backpack model version 2->3.
+    * [Pull request #319](https://github.com/gazebosim/gz-fuel-tools/pull/319)
+
+### Gazebo Fuel Tools 7.2.0 (2021-11-17)
+
+1. Forward port 4.7.0.
+    * [Pull request #306](https://github.com/gazebosim/gz-fuel-tools/pull/306)
 
 ### Gazebo Fuel Tools 7.1.0 (2021-08-16)
 
@@ -229,6 +284,63 @@
 
 1. Fixed test - Download world 2
     * [Pull request 110](https://github.com/gazebosim/gz-fuel-tools/pull/110)
+
+## Gazebo Fuel Tools 4.x
+
+### Gazebo Fuel Tools 4.8.3 (2023-03-29)
+
+1. Support link referral download
+    * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
+
+### Gazebo Fuel Tools 4.8.2 (2023-03-21)
+
+1. Allow Curl redirect HTTP requests.
+    * [Pull request #331](https://github.com/gazebosim/gz-fuel-tools/pull/331)
+
+1. CI and license updates.
+    * [Pull request #334](https://github.com/gazebosim/gz-fuel-tools/pull/334)
+    * [Pull request #335](https://github.com/gazebosim/gz-fuel-tools/pull/335)
+
+### Gazebo Fuel Tools 4.8.1 (2023-02-07)
+
+1. Fix model downloads for ignitionrobotics.org URIs.
+    * [Pull request #318](https://github.com/gazebosim/gz-fuel-tools/pull/318)
+
+### Gazebo Fuel Tools 4.8.0 (2022-12-07)
+
+1. Reduce asset download sizes.
+    * [Pull request #316](https://github.com/gazebosim/gz-fuel-tools/pull/316)
+
+1. Update tutorials to use Gazebo.
+    * [Pull request #303](https://github.com/gazebosim/gz-fuel-tools/pull/303)
+
+1. Change ignitionrobotics.org to gazebosim.org.
+    * [Pull request #304](https://github.com/gazebosim/gz-fuel-tools/pull/304)
+
+### Gazebo Fuel Tools 4.7.0 (2022-11-17)
+
+1. ign -> gz Migrate Ignition Headers : gz-fuel-tools.
+    * [Pull request #285](https://github.com/gazebosim/gz-fuel-tools/pull/285)
+
+### Gazebo Fuel Tools 4.6.0 (2022-08-15)
+
+. Ignition to Gazebo server rename
+    * [Pull request #263](https://github.com/gazebosim/gz-fuel-tools/pull/263)
+
+1. Remove redundant namespace references
+    * [Pull request #284](https://github.com/gazebosim/gz-fuel-tools/pull/284)
+
+1. Change `IGN_DESIGNATION` to `GZ_DESIGNATION`
+    * [Pull request #278](https://github.com/gazebosim/gz-fuel-tools/pull/278)
+
+1. Ignition -> Gazebo
+    * [Pull request #276](https://github.com/gazebosim/gz-fuel-tools/pull/276)
+
+1. Remove unused files (bitbucket-pipelines, docs)
+    * [Pull request #273](https://github.com/gazebosim/gz-fuel-tools/pull/273)
+
+1. Disable `staging-fuel.gazebosim.org` test
+    * [Pull request #257](https://github.com/gazebosim/gz-fuel-tools/pull/257)
 
 ### Gazebo Fuel Tools 4.5.0 (2022-06-01)
 

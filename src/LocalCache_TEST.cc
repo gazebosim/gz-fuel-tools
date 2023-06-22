@@ -22,21 +22,13 @@
 #include <string>
 #include <gz/common/Console.hh>
 #include <gz/common/Filesystem.hh>
+#include <gz/common/testing/TestPaths.hh>
 #include <gz/utils/ExtraTestMacros.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
 #include "LocalCache.hh"
-#include "test_config.hh"
-
-#ifdef _WIN32
-#include <direct.h>
-#define ChangeDirectory _chdir
-#else
-#include <unistd.h>
-#define ChangeDirectory chdir
-#endif
 
 using namespace gz;
 using namespace fuel_tools;
@@ -219,7 +211,16 @@ class LocalCacheTest : public ::testing::Test
   public: void SetUp() override
   {
     gz::common::Console::SetVerbosity(4);
+    tempDir = gz::common::testing::MakeTestTempDirectory();
+    ASSERT_TRUE(tempDir->Valid()) << tempDir->Path();
+
+    gz::common::chdir(tempDir->Path());
+    ASSERT_FALSE(common::exists("test_cache"));
+    ASSERT_TRUE(common::createDirectories("test_cache"));
+    ASSERT_TRUE(common::isDirectory("test_cache"));
   }
+
+  public: std::shared_ptr<gz::common::TempDirectory> tempDir;
 };
 
 /////////////////////////////////////////////////
@@ -227,9 +228,6 @@ class LocalCacheTest : public ::testing::Test
 // See https://github.com/gazebosim/gz-fuel-tools/issues/231
 TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
 {
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
@@ -256,11 +254,9 @@ TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
 /////////////////////////////////////////////////
 /// \brief Get all models that match some fields
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, MatchingModels)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/307
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingModels))
 {
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.Clear();
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -302,11 +298,9 @@ TEST_F(LocalCacheTest, MatchingModels)
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, MatchingModel)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/307
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingModel))
 {
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Models(conf);
@@ -358,11 +352,9 @@ TEST_F(LocalCacheTest, MatchingModel)
 /////////////////////////////////////////////////
 /// \brief Iterate through all worlds in cache
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, AllWorlds)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/307
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllWorlds))
 {
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);
@@ -390,11 +382,9 @@ TEST_F(LocalCacheTest, AllWorlds)
 /////////////////////////////////////////////////
 /// \brief Get all worlds that match some fields
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, MatchingWorlds)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/307
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorlds))
 {
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.Clear();
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -424,11 +414,9 @@ TEST_F(LocalCacheTest, MatchingWorlds)
 /////////////////////////////////////////////////
 /// \brief Get a specific world from cache
 /// \brief Iterate through all models in cache
-TEST_F(LocalCacheTest, MatchingWorld)
+// See https://github.com/gazebosim/gz-fuel-tools/issues/307
+TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorld))
 {
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  EXPECT_TRUE(common::removeAll("test_cache"));
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocal6Worlds(conf);

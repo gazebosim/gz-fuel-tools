@@ -106,9 +106,9 @@ std::string WorldIdentifier::Owner() const
 }
 
 //////////////////////////////////////////////////
-bool WorldIdentifier::SetOwner(const std::string &_owner)
+bool WorldIdentifier::SetOwner(const std::string &_name)
 {
-  this->dataPtr->owner = common::lowercase(_owner);
+  this->dataPtr->owner = common::lowercase(_name);
   return true;
 }
 
@@ -177,9 +177,9 @@ std::string WorldIdentifier::LocalPath() const
 }
 
 //////////////////////////////////////////////////
-bool WorldIdentifier::SetLocalPath(const std::string &_localPath)
+bool WorldIdentifier::SetLocalPath(const std::string &_path)
 {
-  this->dataPtr->localPath = _localPath;
+  this->dataPtr->localPath = _path;
   return true;
 }
 

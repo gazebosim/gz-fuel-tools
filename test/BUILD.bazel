@@ -1,0 +1,6 @@
+load(
+    "@gz//bazel/lint:lint.bzl",
+    "add_lint_tests",
+)
+
+add_lint_tests()

@@ -15,14 +15,16 @@
  *
 */
 
-#ifdef _MSC_VER
-#pragma warning(push, 0)
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4251)  // foo needs to have dll-interface
 #endif
 #include <google/protobuf/text_format.h>
-#include <gz/msgs/fuel_metadata.pb.h>
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 #pragma warning(pop)
 #endif
+
+#include <gz/msgs/fuel_metadata.pb.h>
 
 #include <gz/msgs/Utility.hh>
 #include "gz/common/Console.hh"
@@ -138,7 +140,7 @@ namespace gz
           if (!basename.empty() && basename.find(".sdf") != std::string::npos)
           {
             std::string extension = basename.substr(
-                basename.find_last_of(".") + 1);
+                basename.find_last_of('.') + 1);
             if (extension == "sdf")
               return *dirIter;
           }

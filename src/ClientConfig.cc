@@ -44,6 +44,13 @@ class gz::fuel_tools::ClientConfigPrivate
                 homePath, ".gz", "fuel");
 
             this->servers.push_back(ServerConfig());
+            // Add in fuel.ignitionrobotics.org as another default server
+            // config.
+            ServerConfig ignServerConfig;
+            ignServerConfig.SetUrl(
+                common::URI("https://fuel.ignitionrobotics.org"));
+            ignServerConfig.SetVersion("1.0");
+            this->servers.push_back(ignServerConfig);
           }
 
   /// \brief Clear values.
@@ -233,9 +240,9 @@ ClientConfig::ClientConfig(const ClientConfig &_copy)
 }
 
 //////////////////////////////////////////////////
-ClientConfig &ClientConfig::operator=(const ClientConfig &_rhs)
+ClientConfig &ClientConfig::operator=(const ClientConfig &_copy)
 {
-  *(this->dataPtr) = *(_rhs.dataPtr);
+  *(this->dataPtr) = *(_copy.dataPtr);
 
   return *this;
 }
@@ -519,7 +526,7 @@ std::string ClientConfig::AsString(const std::string &_prefix) const
       << _prefix << "Cache location: " << this->CacheLocation() << std::endl
       << _prefix << "Servers:" << std::endl;
 
-  for (auto s : this->Servers())
+  for (const auto &s : this->Servers())
   {
     out << _prefix << "  ---" << std::endl;
     out << _prefix << s.AsString("  ");

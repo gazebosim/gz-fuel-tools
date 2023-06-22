@@ -15,12 +15,12 @@
  *
 */
 
-#ifdef _MSC_VER
-#pragma warning(push, 0)
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable: 4251)  // foo needs to have dll-interface
 #endif
 #include <google/protobuf/text_format.h>
-#include <gz/msgs/fuel_metadata.pb.h>
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 #pragma warning(pop)
 #endif
 
@@ -34,8 +34,10 @@
 
 #include <gz/common/Console.hh>
 #include <gz/common/Filesystem.hh>
+#include <gz/common/URI.hh>
 #include <gz/common/Util.hh>
 
+#include <gz/msgs/fuel_metadata.pb.h>
 #include <gz/msgs/Utility.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
@@ -58,7 +60,7 @@ using namespace fuel_tools;
 class gz::fuel_tools::FuelClientPrivate
 {
   /// \brief A model URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/caguero/models/Beer/2
+  /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer/2
   /// Where the API version and the model version are optional.
   public: const std::string kModelUrlRegexStr{
     // Method
@@ -79,7 +81,7 @@ class gz::fuel_tools::FuelClientPrivate
     "/?"};
 
   /// \brief A world URL,
-  /// E.g.: https://fuel.ignitionrobotics.org/1.0/OpenRobotics/worlds/Empty/1
+  /// E.g.: https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty/1
   /// Where the API version and the world version are optional.
   public: const std::string kWorldUrlRegexStr{
     // Method
@@ -151,7 +153,7 @@ class gz::fuel_tools::FuelClientPrivate
 
   /// \brief A collection URL,
   /// E.g.:
-  /// https://fuel.ignitionrobotics.org/1.0/OpenRobotics/collections/TestColl
+  /// https://fuel.gazebosim.org/1.0/OpenRobotics/collections/TestColl
   /// Where the API version is optional
   public: const std::string kCollectionUrlRegexStr{
     // Method
@@ -197,6 +199,17 @@ class gz::fuel_tools::FuelClientPrivate
   /// \param[in] _server Information about the server that provides
   /// license information.
   public: void PopulateLicenses(const ServerConfig &_server);
+
+  /// \brief Checks the provided URI for fuel.gazebosim.org, and
+  /// prints a deprecation warning message if found.
+  /// \param[in] _uri URI to check
+  /// DEPRECATED/DEPRECATION: remove this function in Gazebo H.
+  public: void CheckForDeprecatedUri(const common::URI &_uri);
+
+  /// \brief Get zip data from a REST response. This is used by world and
+  /// model download.
+  public: void ZipFromResponse(const RestResponse &_resp,
+              std::string &_zip);
 
   /// \brief Client configuration
   public: ClientConfig config;
@@ -406,6 +419,7 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
     path = path / _id.Owner() / "models";
 
   if (path.Str().empty())
+    // cppcheck-suppress identicalConditionAfterEarlyExit
     return localIter;
 
   gzmsg << _id.UniqueName() << " not found in cache, attempting download\n";
@@ -516,7 +530,7 @@ void FuelClient::AddServerConfigParametersToHeaders(
   std::vector<std::string> &_headers) const
 {
   bool privateTokenDefined = false;
-  for (auto header : _headers)
+  for (const auto &header : _headers)
   {
     if (header.find("Private-token:") != std::string::npos)
     {
@@ -536,7 +550,9 @@ void FuelClient::AddServerConfigParametersToHeaders(
 Result FuelClient::DeleteUrl(const gz::common::URI &_uri,
     const std::vector<std::string> &_headers)
 {
+  this->dataPtr->CheckForDeprecatedUri(_uri);
   gz::fuel_tools::Rest rest;
+
   RestResponse resp;
 
   std::string server;
@@ -611,7 +627,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   if(!res)
     return res;
 
-  for (ModelIdentifier dep : dependencies)
+  for (const ModelIdentifier &dep : dependencies)
   {
     // Download dependency if not in the local cache
     if (!this->dataPtr->cache->MatchingModel(dep))
@@ -638,6 +654,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
           << std::endl << _id.Server().AsString() << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
+  this->dataPtr->CheckForDeprecatedUri(_id.Server().Url());
 
   // Route
   common::URIPath route;
@@ -653,7 +670,7 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   gz::fuel_tools::Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
-      _id.Server().Version(), route.Str(), {},
+      _id.Server().Version(), route.Str(), {"link=true"},
       headersIncludingServerConfig, "");
   if (resp.statusCode != 200)
   {
@@ -687,9 +704,12 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   }
   newId.SetVersion(version);
 
+  std::string zipData;
+  this->dataPtr->ZipFromResponse(resp, zipData);
+
   // Save
   // Note that the save function doesn't return the path
-  if (!this->dataPtr->cache->SaveModel(newId, resp.data, true))
+  if (zipData.empty() || !this->dataPtr->cache->SaveModel(newId, zipData, true))
     return Result(ResultType::FETCH_ERROR);
 
   return this->ModelDependencies(_id, _dependencies);
@@ -767,7 +787,7 @@ Result FuelClient::ModelDependencies(
     std::vector<ModelIdentifier> &_dependencies)
 {
   std::vector<ModelIdentifier> newDeps;
-  for (auto modelId : _ids)
+  for (const auto &modelId : _ids)
   {
     std::vector<ModelIdentifier> modelDeps;
     auto result = this->ModelDependencies(modelId, modelDeps);
@@ -777,15 +797,10 @@ Result FuelClient::ModelDependencies(
       std::vector<ModelIdentifier> recursiveDeps;
       this->ModelDependencies(modelDeps, recursiveDeps);
 
-      for (auto dep : modelDeps)
-      {
-        newDeps.push_back(dep);
-      }
-
-      for (auto dep : recursiveDeps)
-      {
-        newDeps.push_back(dep);
-      }
+      std::copy(modelDeps.begin(), modelDeps.end(),
+                std::back_inserter(newDeps));
+      std::copy(recursiveDeps.begin(), recursiveDeps.end(),
+                std::back_inserter(newDeps));
     }
   }
 
@@ -812,6 +827,8 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id,
     return Result(ResultType::FETCH_ERROR);
   }
 
+  this->dataPtr->CheckForDeprecatedUri(_id.Server().Url());
+
   // Route
   common::URIPath route;
   route = route / _id.Owner() / "worlds" / _id.Name() / _id.VersionStr() /
@@ -827,7 +844,7 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id,
   gz::fuel_tools::Rest rest;
   RestResponse resp;
   resp = rest.Request(HttpMethod::GET, _id.Server().Url().Str(),
-      _id.Server().Version(), route.Str(), {},
+      _id.Server().Version(), route.Str(), {"link=true"},
       headersIncludingServerConfig, "");
   if (resp.statusCode != 200)
   {
@@ -861,9 +878,12 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id,
   }
   _id.SetVersion(version);
 
+  std::string zipData;
+  this->dataPtr->ZipFromResponse(resp, zipData);
+
   // Save
-  if (!this->dataPtr->cache->SaveWorld(_id, resp.data, true))
-    return Result(ResultType::FETCH_ERROR);
+  if (zipData.empty() || !this->dataPtr->cache->SaveWorld(_id, zipData, true))
+      return Result(ResultType::FETCH_ERROR);
 
   return Result(ResultType::FETCH);
 }
@@ -926,7 +946,7 @@ std::vector<FuelClient::ModelResult> FuelClient::DownloadModels(
         std::lock_guard<std::mutex> lock(idsMutex);
         gzdbg << "Adding " << dependencies.size()
           << " model dependencies to queue from " << id.Name() << "\n";
-        for (auto dep : dependencies)
+        for (const auto &dep : dependencies)
         {
           if (uniqueIds.count(dep) == 0)
           {
@@ -1077,8 +1097,8 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.Url().Str() == _id.Server().Url().Str())
-    {
+    // cppcheck-suppress useStlAlgorithm
+    if (s.Url().Str() == _id.Server().Url().Str()) {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
         gzwarn << "Requested server API version [" << apiVersion
@@ -1143,8 +1163,8 @@ bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.Url() == _id.Server().Url())
-    {
+    // cppcheck-suppress useStlAlgorithm
+    if (s.Url() == _id.Server().Url()) {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
         gzwarn << "Requested server API version [" << apiVersion
@@ -1171,13 +1191,15 @@ bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
 }
 
 //////////////////////////////////////////////////
-bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
+bool FuelClient::ParseModelFileUrl(const common::URI &_modelFileUrl,
     ModelIdentifier &_id, std::string &_filePath)
 {
-  if (!_fileUrl.Valid())
+  if (!_modelFileUrl.Valid())
     return false;
 
-  auto urlStr = _fileUrl.Str();
+  this->dataPtr->CheckForDeprecatedUri(_modelFileUrl);
+
+  auto urlStr = _modelFileUrl.Str();
 
   std::smatch match;
   std::string scheme;
@@ -1211,8 +1233,8 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.Url().Str() == _id.Server().Url().Str())
-    {
+    // cppcheck-suppress useStlAlgorithm
+    if (s.Url().Str() == _id.Server().Url().Str()) {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
         gzwarn << "Requested server API version [" << apiVersion
@@ -1240,13 +1262,13 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_fileUrl,
 }
 
 //////////////////////////////////////////////////
-bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
+bool FuelClient::ParseWorldFileUrl(const common::URI &_worldFileUrl,
     WorldIdentifier &_id, std::string &_filePath)
 {
-  if (!_fileUrl.Valid())
+  if (!_worldFileUrl.Valid())
     return false;
 
-  auto urlStr = _fileUrl.Str();
+  auto urlStr = _worldFileUrl.Str();
 
   std::smatch match;
   std::string scheme;
@@ -1280,8 +1302,8 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_fileUrl,
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.Url() == _id.Server().Url())
-    {
+    // cppcheck-suppress useStlAlgorithm
+    if (s.Url() == _id.Server().Url()) {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
         gzwarn << "Requested server API version [" << apiVersion
@@ -1347,8 +1369,8 @@ bool FuelClient::ParseCollectionUrl(const common::URI &_url,
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
-    if (s.Url() == _id.Server().Url())
-    {
+    // cppcheck-suppress useStlAlgorithm
+    if (s.Url() == _id.Server().Url()) {
       if (!apiVersion.empty() && s.Version() != _id.Server().Version())
       {
         gzwarn << "Requested server API version [" << apiVersion
@@ -1903,4 +1925,80 @@ bool FuelClient::UpdateWorlds(const std::vector<std::string> &_headers)
     }
   }
   return true;
+}
+//////////////////////////////////////////////////
+void FuelClientPrivate::CheckForDeprecatedUri(const common::URI &_uri)
+{
+  static std::string oldServer = "fuel.ignitionrobotics.org";
+  auto ignFuelPos = _uri.Str().find(oldServer);
+  if (ignFuelPos != std::string::npos)
+  {
+    std::string newUrl = _uri.Str();
+    newUrl.replace(ignFuelPos, oldServer.size(), "fuel.gazebosim.org");
+    gzwarn << "The " << oldServer << " URL is deprecrated. Pleasse change "
+      << _uri.Str() << " to " << newUrl << std::endl;
+  }
+}
+
+//////////////////////////////////////////////////
+void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
+    std::string &_zip)
+{
+  // Check the content-type which could be empty (ideally not):
+  //   * text/plain indicates the data is a download link.
+  //   * application/zip indicates the data is a zip file.
+  //   * binary/octet-stream indicates the data is a zip file.
+  auto contentTypeIter = _resp.headers.find("Content-Type");
+  if (contentTypeIter != _resp.headers.end())
+  {
+    // If text/plain then data might be a link to a zip file.
+    if (contentTypeIter->second.find("text/plain") != std::string::npos)
+    {
+      std::string linkUri = _resp.data;
+
+      // Check for valid URI
+      if (common::URI::Valid(linkUri))
+      {
+        gzdbg << "Downloading from a referral link [" << linkUri << "]\n";
+        // Get the zip data.
+        RestResponse linkResp = rest.Request(HttpMethod::GET,
+            // URL
+            linkUri,
+            // Version
+            "",
+            // Path
+            "",
+            // Query strings
+            {},
+            // Headers
+            {},
+            // Data
+            "");
+
+        return this->ZipFromResponse(linkResp, _zip);
+      }
+      else
+      {
+        gzerr << "Invalid referral link URI [" << linkUri << "]. "
+          << "Unable to download.\n";
+      }
+    }
+    else if (contentTypeIter->second.find("application/zip") !=
+             std::string::npos ||
+             contentTypeIter->second.find("binary/octet-stream") !=
+             std::string::npos)
+    {
+      _zip = std::move(_resp.data);
+    }
+    else
+    {
+      gzerr << "Invalid content-type of [" << contentTypeIter->second << "]. "
+        << "Unable to download.\n";
+    }
+  }
+  else
+  {
+    // If content-type is missing, then assume the data is the zip file.
+    _zip = std::move(_resp.data);
+  }
 }

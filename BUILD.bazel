@@ -1,0 +1,110 @@
+load(
+    "@gz//bazel/skylark:build_defs.bzl",
+    "GZ_FEATURES",
+    "GZ_ROOT",
+    "GZ_VISIBILITY",
+    "gz_configure_header",
+    "gz_export_header",
+    "gz_include_header",
+)
+load(
+    "@gz//bazel/lint:lint.bzl",
+    "add_lint_tests",
+)
+
+package(
+    default_visibility = GZ_VISIBILITY,
+    features = GZ_FEATURES,
+)
+
+licenses(["notice"])  # Apache-2.0
+
+exports_files(["LICENSE"])
+
+gz_configure_header(
+    name = "fuel_tools_config_hh",
+    src = "include/gz/fuel_tools/config.hh.in",
+    cmakelists = ["CMakeLists.txt"],
+    defines = {
+        # These definitions are unused,
+        # this is merely to suppress generator warnings
+        "CMAKE_INSTALL_PREFIX": "unused",
+    },
+    package = "fuel_tools",
+)
+
+gz_export_header(
+    name = "include/gz/fuel_tools/Export.hh",
+    export_base = "GZ_FUEL_TOOLS",
+    lib_name = "gz-fuel_tools",
+    visibility = ["//visibility:private"],
+)
+
+public_headers_no_gen = glob([
+    "include/gz/fuel_tools/*.hh",
+])
+
+private_headers = glob(["src/*.hh"])
+
+sources = glob(
+    ["src/*.cc"],
+    exclude = [
+        "src/gz.cc",
+        "src/*_TEST.cc",
+    ],
+)
+
+gz_include_header(
+    name = "fuel_tools_hh_genrule",
+    out = "include/gz/fuel_tools.hh",
+    hdrs = public_headers_no_gen + [
+        "include/gz/fuel_tools/config.hh",
+        "include/gz/fuel_tools/Export.hh",
+    ],
+)
+
+public_headers = public_headers_no_gen + [
+    "include/gz/fuel_tools/config.hh",
+    "include/gz/fuel_tools/Export.hh",
+    "include/gz/fuel_tools.hh",
+]
+
+cc_library(
+    name = "fuel_tools",
+    srcs = sources + private_headers,
+    hdrs = public_headers,
+    includes = ["include"],
+    deps = [
+        GZ_ROOT + "common",
+        GZ_ROOT + "msgs",
+        "@curl",
+        "@jsoncpp",
+        "@yaml",
+        "@zip",
+    ],
+)
+
+test_sources = glob(
+    include = ["src/*_TEST.cc"],
+    exclude = [
+        "src/gz_TEST.cc",
+        "src/gz_src_TEST.cc",
+    ],
+)
+
+[cc_test(
+    name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
+    srcs = [src],
+    env = {
+        "GZ_BAZEL": "1",
+        "GZ_BAZEL_PATH": "fuel_tools",
+    },
+    deps = [
+        ":fuel_tools",
+        GZ_ROOT + "common/testing",
+        "@gtest",
+        "@gtest//:gtest_main",
+    ],
+) for src in test_sources]
+
+add_lint_tests()
