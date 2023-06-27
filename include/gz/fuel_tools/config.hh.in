@@ -30,6 +30,6 @@
 
 #define GZ_FUEL_TOOLS_VERSION_HEADER "Gazebo Fuel Tools, version ${PROJECT_VERSION_FULL}\nCopyright (C) 2017 Open Source Robotics Foundation.\nReleased under the Apache 2.0 License.\n\n"
 
-#define GZ_FUEL_INITIAL_CONFIG_PATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/ignition/${GZ_DESIGNATION}${PROJECT_VERSION_MAJOR}/"
+#define GZ_FUEL_INITIAL_CONFIG_PATH _Pragma ("GCC warning \"'GZ_FUEL_INITIAL_CONFIG_PATH' macro is deprecated and should not be used. \"") "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATAROOTDIR}/ignition/${GZ_DESIGNATION}${PROJECT_VERSION_MAJOR}/"
 
 #endif
