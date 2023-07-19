@@ -28,7 +28,7 @@ end
 require 'optparse'
 
 # Constants.
-LIBRARY_NAME = '@GZ_LIBRARY_NAME@'
+LIBRARY_NAME = '@library_location@'
 LIBRARY_VERSION = '@PROJECT_VERSION_FULL@'
 MAX_PARALLEL_JOBS = 16
 
@@ -45,10 +45,10 @@ COMMON_OPTIONS =
   "   The following information is in regards to user authentication via    \n"\
   "   the --header command line option.                                     \n"\
   "                                                                         \n"\
-  "   Two types of credentials are supported on Gazebo Fuel, Private      \n"\
+  "   Two types of credentials are supported on Gazebo Fuel, Private        \n"\
   "   Token and JSON Web Token(JWT). The Private Token method is prefered.  \n"\
   "   Private tokens can be created through your  user settings on          \n"\
-  "   https://app.gazebosim.org. Example usage:                      \n"\
+  "   https://app.gazebosim.org. Example usage:                             \n"\
   "     1. Private token method:                                            \n"\
   "         --header 'Private-Token: <token>'                               \n"\
   "     2. JWT method:                                                      \n"\
@@ -58,7 +58,7 @@ COMMON_OPTIONS =
 COMMANDS = { 'fuel' =>
   "Manage simulation resources.                                            \n"\
   "                                                                        \n"\
-  "  gz fuel [action] [options]                                           \n"\
+  "  gz fuel [action] [options]                                            \n"\
   "                                                                        \n"\
   "Available Actions:                                                      \n"\
   "  delete                   Delete resources                             \n"\
@@ -75,15 +75,15 @@ COMMANDS = { 'fuel' =>
   "                           arguments for level 3.                       \n" +
   COMMON_OPTIONS + "\n\n" +
   "Environment variables:                                                  \n"\
-  "  GZ_FUEL_CACHE_PATH      Path to the cache where resources are        \n"\
-  " downloaded to. Defaults to $HOME/.gz/fuel                        \n"
+  "  GZ_FUEL_CACHE_PATH      Path to the cache where resources are         \n"\
+  " downloaded to. Defaults to $HOME/.gz/fuel                              \n"
 }
 
 SUBCOMMANDS = {
  'delete' =>
   "Delete simulation resources                                             \n"\
   "                                                                        \n"\
-  "  gz fuel delete [options]                                              \n"\
+  "  gz fuel delete [options]                                             \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
@@ -130,7 +130,7 @@ SUBCOMMANDS = {
   'list' =>
   "List simulation resources                                               \n"\
   "                                                                        \n"\
-  "  gz fuel list [options]                                                \n"\
+  "  gz fuel list [options]                                               \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -t [--type] arg          Resource type (i.e. model, world). Required. \n"\
@@ -144,7 +144,7 @@ SUBCOMMANDS = {
   'meta' =>
   "Read and write resource metadata                                        \n"\
   "                                                                        \n"\
-  "  gz fuel meta [options]                                               \n"\
+  "  gz fuel meta [options]                                                \n"\
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  --config2pbtxt arg       Convert a model.config file to a             \n"\
@@ -350,7 +350,15 @@ class Cmd
     options = parse(args)
 
     # Read the plugin that handles the command.
-    plugin = LIBRARY_NAME
+    if LIBRARY_NAME[0] == '/'
+      # If the first character is a slash, we'll assume that we've been given an
+      # absolute path to the library. This is only used during test mode.
+      plugin = LIBRARY_NAME
+    else
+      # We're assuming that the library path is relative to the current
+      # location of this script.
+      plugin = File.expand_path(File.join(File.dirname(__FILE__), LIBRARY_NAME))
+    end
     conf_version = LIBRARY_VERSION
 
     begin
@@ -452,7 +460,7 @@ class Cmd
       end
     rescue
       puts "Library error: Problem running [#{options['subcommand']}]() "\
-           "from @GZ_LIBRARY_NAME@."
+           "from #{plugin}."
     end # begin
   end # execute
 end # class

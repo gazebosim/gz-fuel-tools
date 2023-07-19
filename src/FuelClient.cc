@@ -399,16 +399,31 @@ WorldIter FuelClient::Worlds(const ServerConfig &_server) const
 //////////////////////////////////////////////////
 ModelIter FuelClient::Models(const ModelIdentifier &_id)
 {
-  return const_cast<const FuelClient*>(this)->Models(_id);
+  return this->Models(_id, true);
 }
 
 //////////////////////////////////////////////////
 ModelIter FuelClient::Models(const ModelIdentifier &_id) const
 {
-  // Check local cache first
-  ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
-  if (localIter)
-    return localIter;
+  return this->Models(_id, true);
+}
+
+//////////////////////////////////////////////////
+ModelIter FuelClient::Models(const ModelIdentifier &_id, bool _checkCache)
+{
+  return const_cast<const FuelClient*>(this)->Models(_id, _checkCache);
+}
+
+//////////////////////////////////////////////////
+ModelIter FuelClient::Models(const ModelIdentifier &_id, bool _checkCache) const
+{
+  if (_checkCache)
+  {
+    // Check local cache first
+    ModelIter localIter = this->dataPtr->cache->MatchingModels(_id);
+    if (localIter)
+      return localIter;
+  }
 
   // TODO(nkoenig) try to fetch model directly from a server
   // Note: gz-fuel-server doesn't like URLs ending in /
@@ -419,8 +434,7 @@ ModelIter FuelClient::Models(const ModelIdentifier &_id) const
     path = path / _id.Owner() / "models";
 
   if (path.Str().empty())
-    // cppcheck-suppress identicalConditionAfterEarlyExit
-    return localIter;
+    return ModelIterFactory::Create();
 
   gzmsg << _id.UniqueName() << " not found in cache, attempting download\n";
 

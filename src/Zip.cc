@@ -37,7 +37,7 @@ bool CompressFile(zip *_archive, const std::string &_file,
 {
   if (gz::common::isDirectory(_file))
   {
-    if (zip_add_dir(_archive, _entry.c_str()) < 0)
+    if (zip_dir_add(_archive, _entry.c_str(), 0) < 0)
     {
       gzerr << "Error adding directory to zip: " << _file << std::endl;
       return false;
@@ -69,7 +69,7 @@ bool CompressFile(zip *_archive, const std::string &_file,
       return false;
     }
 
-    if (zip_add(_archive, _entry.c_str(), source)
+    if (zip_file_add(_archive, _entry.c_str(), source, 0)
         < 0)
     {
       gzerr << "Error adding file to zip: " << _file << std::endl;
