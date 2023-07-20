@@ -70,6 +70,7 @@ set(GZ_MSGS_VER ${gz-msgs9_VERSION_MAJOR})
 #--------------------------------------
 # Find gz-tools
 find_program(HAVE_GZ_TOOLS gz)
+set (GZ_TOOLS_VER 2)
 
 #============================================================================
 # Configure the build
