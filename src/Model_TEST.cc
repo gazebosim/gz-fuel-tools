@@ -18,9 +18,8 @@
 #include <gtest/gtest.h>
 #include "gz/fuel_tools/Model.hh"
 
-namespace ignft = gz::fuel_tools;
 using namespace gz;
-using namespace ignft;
+using namespace fuel_tools;
 
 /////////////////////////////////////////////////
 /// \brief Nothing crashes

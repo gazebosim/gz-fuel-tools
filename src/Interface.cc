@@ -140,7 +140,7 @@ namespace gz
           if (!basename.empty() && basename.find(".sdf") != std::string::npos)
           {
             std::string extension = basename.substr(
-                basename.find_last_of(".") + 1);
+                basename.find_last_of('.') + 1);
             if (extension == "sdf")
               return *dirIter;
           }

@@ -24,9 +24,8 @@
 
 #include "ModelPrivate.hh"
 
-namespace ignft = gz::fuel_tools;
 using namespace gz;
-using namespace ignft;
+using namespace fuel_tools;
 
 //////////////////////////////////////////////////
 Model::Model() : dataPtr(nullptr)
