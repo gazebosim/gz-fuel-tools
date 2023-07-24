@@ -54,7 +54,7 @@ set(GZ_UTILS_VER ${gz-utils2_VERSION_MAJOR})
 
 #--------------------------------------
 # Find gz-common
-gz_find_package(gz-common5 REQUIRED PRIVATE)
+gz_find_package(gz-common5 REQUIRED PRIVATE COMPONENTS testing)
 set(GZ_COMMON_VER ${gz-common5_VERSION_MAJOR})
 
 #--------------------------------------
@@ -70,6 +70,7 @@ set(GZ_MSGS_VER ${gz-msgs10_VERSION_MAJOR})
 #--------------------------------------
 # Find gz-tools
 find_program(HAVE_GZ_TOOLS gz)
+set (GZ_TOOLS_VER 2)
 
 #============================================================================
 # Configure the build
