@@ -32,7 +32,7 @@
 #include <exception>
 
 #include <gz/msgs/fuel_metadata.pb.h>
-#include <gz/msgs/Utility.hh>
+#include <gz/msgs/convert/FuelMetadata.hh>
 
 #ifdef _WIN32
 // DELETE is defined in winnt.h and causes a problem with REST::DELETE

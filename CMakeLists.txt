@@ -64,7 +64,7 @@ set(GZ_MATH_VER ${gz-math7_VERSION_MAJOR})
 
 #--------------------------------------
 # Find gz-msgs
-gz_find_package(gz-msgs10 REQUIRED PRIVATE)
+gz_find_package(gz-msgs10 REQUIRED COMPONENTS msgs)
 set(GZ_MSGS_VER ${gz-msgs10_VERSION_MAJOR})
 
 #--------------------------------------
@@ -81,6 +81,8 @@ gz_configure_build(QUIT_IF_BUILD_ERRORS)
 # gz command line support
 #============================================================================
 add_subdirectory(conf)
+
+add_subdirectory(proto)
 
 #============================================================================
 # Create package information

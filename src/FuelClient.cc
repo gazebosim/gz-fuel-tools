@@ -38,7 +38,7 @@
 #include <gz/common/Util.hh>
 
 #include <gz/msgs/fuel_metadata.pb.h>
-#include <gz/msgs/Utility.hh>
+#include <gz/msgs/convert/FuelMetadata.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/CollectionIdentifier.hh"

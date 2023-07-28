@@ -49,6 +49,7 @@ gz_create_core_library(SOURCES ${sources} CXX_STANDARD 17)
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
     gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
+    gz-fuel_tools9-msgs
   PRIVATE
     gz-msgs${GZ_MSGS_VER}::gz-msgs${GZ_MSGS_VER}
     curl::curl

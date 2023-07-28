@@ -25,8 +25,8 @@
 #endif
 
 #include <gz/msgs/fuel_metadata.pb.h>
+#include <gz/msgs/convert/FuelMetadata.hh>
 
-#include <gz/msgs/Utility.hh>
 #include "gz/common/Console.hh"
 #include "gz/fuel_tools/Interface.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
