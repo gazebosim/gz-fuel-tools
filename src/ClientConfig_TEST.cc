@@ -93,12 +93,9 @@ TEST_F(ClientConfigTest, ServersCanBeAdded)
 TEST_F(ClientConfigTest, CustomDefaultConfiguration)
 {
   ClientConfig config;
-  ASSERT_EQ(2u, config.Servers().size());
+  ASSERT_EQ(1u, config.Servers().size());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://fuel.ignitionrobotics.org",
-    config.Servers()[1].Url().Str());
-
   std::string defaultCacheLocation = gz::common::joinPaths(
     homePath(), ".gz", "fuel");
   EXPECT_EQ(defaultCacheLocation, config.CacheLocation());
@@ -132,11 +129,9 @@ TEST_F(ClientConfigTest, CustomConfiguration)
 
   EXPECT_TRUE(config.LoadConfig(testPath));
 
-  ASSERT_EQ(4u, config.Servers().size());
+  ASSERT_EQ(3u, config.Servers().size());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://fuel.ignitionrobotics.org",
-    config.Servers()[1].Url().Str());
   EXPECT_EQ("https://api.gazebosim.org",
     config.Servers()[2].Url().Str());
   EXPECT_EQ("https://myserver",
@@ -261,7 +256,7 @@ TEST_F(ClientConfigTest, EmptyCachePathConfiguration)
 TEST_F(ClientConfigTest, UserAgent)
 {
   ClientConfig config;
-  EXPECT_EQ("IgnitionFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL,
+  EXPECT_EQ("GazeboFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL,
             config.UserAgent());
 
   config.SetUserAgent("my_user_agent");
