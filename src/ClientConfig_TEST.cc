@@ -72,7 +72,7 @@ class ServerConfigTest: public ClientConfigTest {};
 TEST_F(ClientConfigTest, InitiallyDefaultServers)
 {
   ClientConfig config;
-  EXPECT_EQ(2u, config.Servers().size());
+  EXPECT_EQ(1u, config.Servers().size());
 }
 
 /////////////////////////////////////////////////
@@ -84,7 +84,7 @@ TEST_F(ClientConfigTest, ServersCanBeAdded)
   srv.SetUrl(common::URI("http://asdf"));
   config.AddServer(srv);
 
-  ASSERT_EQ(3u, config.Servers().size());
+  ASSERT_EQ(2u, config.Servers().size());
   EXPECT_EQ(std::string("http://asdf"), config.Servers().back().Url().Str());
 }
 
@@ -132,8 +132,6 @@ TEST_F(ClientConfigTest, CustomConfiguration)
   ASSERT_EQ(3u, config.Servers().size());
   EXPECT_EQ("https://fuel.gazebosim.org",
     config.Servers().front().Url().Str());
-  EXPECT_EQ("https://api.gazebosim.org",
-    config.Servers()[2].Url().Str());
   EXPECT_EQ("https://myserver",
     config.Servers().back().Url().Str());
 
