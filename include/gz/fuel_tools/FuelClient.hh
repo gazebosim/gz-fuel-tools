@@ -136,25 +136,46 @@ namespace gz
       /// \brief Returns models matching a given identifying criteria
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
-      /// \remarks It's not yet clear if model names are unique, so this API
+      /// \remarks Model names are unique to the owner, so this API
       ///          allows the possibility of getting multiple models with the
-      ///          same name.
+      ///          same name if the owner is not specified.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id);
 
       /// \brief Returns models matching a given identifying criteria
       /// \param[in] _id a partially filled out identifier used to fetch models
       /// \remarks Fulfills Get-One requirement
-      /// \remarks It's not yet clear if model names are unique, so this API
+      /// \remarks Model names are unique to the owner, so this API
       ///          allows the possibility of getting multiple models with the
-      ///          same name.
+      ///          same name if the owner is not specified.
       /// \return An iterator of models with names matching the criteria
       public: ModelIter Models(const ModelIdentifier &_id) const;
 
-      /// \brief Returns an iterator for the models found in a collection.
-      /// \param[in] _id a partially filled out identifier used to fetch a
-      /// collection.
-      /// \return An iterator of models in the collection.
+      /// \brief Returns models matching a given identifying criteria
+      /// \param[in] _id a partially filled out identifier used to fetch models
+      /// \param[in] _checkCache Whether to check the cache.
+      /// \remarks Fulfills Get-One requirement
+      /// \remarks Model names are unique to the owner, so this API
+      ///          allows the possibility of getting multiple models with the
+      ///          same name if the owner is not specified.
+      /// \return An iterator of models with names matching the criteria
+      public: ModelIter Models(const ModelIdentifier &_id, bool _checkCache);
+
+      /// \brief Returns models matching a given identifying criteria
+      /// \param[in] _id a partially filled out identifier used to fetch models
+      /// \param[in] _checkCache Whether to check the cache.
+      /// \remarks Fulfills Get-One requirement
+      /// \remarks Model names are unique to the owner, so this API
+      ///          allows the possibility of getting multiple models with the
+      ///          same name if the owner is not specified.
+      /// \return An iterator of models with names matching the criteria
+      public: ModelIter Models(const ModelIdentifier &_id,
+                               bool _checkCache) const;
+
+       /// \brief Returns an iterator for the models found in a collection.
+       /// \param[in] _id a partially filled out identifier used to fetch a
+       /// collection.
+       /// \return An iterator of models in the collection.
       public: ModelIter Models(const CollectionIdentifier &_id) const;
 
       /// \brief Returns worlds matching a given identifying criteria

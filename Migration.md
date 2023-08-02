@@ -1,3 +1,9 @@
+## Gazebo Fuel Tools 8.X to 9.X
+
+### Removals
+
+* `GZ_FUEL_INITIAL_CONFIG_PATH` macro removed from `gz/fuel_tools/config.hh`
+
 ## Gazebo Fuel Tools 7.X to 8.X
 
 ### Deprecations

@@ -75,6 +75,20 @@
 
 ## Gazebo Fuel Tools 7.x
 
+### Gazebo Fuel Tools 7.3.0 (2023-06-13)
+
+1. Forward merges
+    * [Pull request #355](https://github.com/gazebosim/gz-fuel-tools/pull/355)
+
+1. Add bash completion
+    * [Pull request #329](https://github.com/gazebosim/gz-fuel-tools/pull/329)
+
+1. Reflect pagination of RESTful requests in iterator API
+    * [Pull request #350](https://github.com/gazebosim/gz-fuel-tools/pull/350)
+
+1. Support link referral download
+    * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
+
 ### Gazebo Fuel Tools 7.2.2 (2023-03-29)
 
 1. Support link referral download
@@ -290,6 +304,19 @@
     * [Pull request 110](https://github.com/gazebosim/gz-fuel-tools/pull/110)
 
 ## Gazebo Fuel Tools 4.x
+
+### Gazebo Fuel Tools 4.8.3 (2023-03-29)
+
+1. Support link referral download
+    * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
+
+### Gazebo Fuel Tools 4.9.0 (2023-05-03)
+
+1. Add bash completion
+    * [Pull request #329](https://github.com/gazebosim/gz-fuel-tools/pull/329)
+
+1. Reflect pagination of RESTful requests in iterator API
+    * [Pull request #350](https://github.com/gazebosim/gz-fuel-tools/pull/350)
 
 ### Gazebo Fuel Tools 4.8.3 (2023-03-29)
 

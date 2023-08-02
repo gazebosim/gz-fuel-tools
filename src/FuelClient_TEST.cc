@@ -26,15 +26,7 @@
 #include "gz/fuel_tools/Result.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
-#include "test_config.hh"
-
-#ifdef _WIN32
-#include <direct.h>
-#define ChangeDirectory _chdir
-#else
-#include <unistd.h>
-#define ChangeDirectory chdir
-#endif
+#include <gz/common/testing/TestPaths.hh>
 
 using namespace gz;
 using namespace gz::fuel_tools;
@@ -126,12 +118,21 @@ void createLocalWorld(ClientConfig &_conf)
 }
 
 /////////////////////////////////////////////////
-class FuelClientTest : public ::testing::Test
+class FuelClientTest: public ::testing::Test
 {
   public: void SetUp() override
   {
     gz::common::Console::SetVerbosity(4);
+    tempDir = gz::common::testing::MakeTestTempDirectory();
+    ASSERT_TRUE(tempDir->Valid()) << tempDir->Path();
+
+    gz::common::chdir(tempDir->Path());
+    ASSERT_FALSE(common::exists("test_cache"));
+    ASSERT_TRUE(common::createDirectories("test_cache"));
+    ASSERT_TRUE(common::isDirectory("test_cache"));
   }
+
+  public: std::shared_ptr<gz::common::TempDirectory> tempDir;
 };
 
 /////////////////////////////////////////////////
@@ -414,10 +415,6 @@ INSTANTIATE_TEST_SUITE_P(
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_P(FuelClientDownloadTest, DownloadModel)
 {
-  // Configure to use binary path as cache
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
@@ -621,10 +618,6 @@ TEST_P(FuelClientDownloadTest, DownloadModel)
 // https://github.com/gazebosim/gz-fuel-tools/issues/106
 TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
 {
-  // Configure to use binary path as cache
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
 
@@ -697,10 +690,6 @@ TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
 // See https://github.com/gazebosim/gz-fuel-tools/issues/231
 TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(CachedModel))
 {
-  // Configure to use binary path as cache and populate it
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocalModel(config);
@@ -1089,11 +1078,6 @@ TEST_F(FuelClientTest, ParseWorldFileUrl)
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(FuelClientTest, DownloadWorld)
 {
-  // Configure to use binary path as cache
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
-
   ServerConfig server;
   server.SetUrl(common::URI(
         "https://fuel.gazebosim.org"));
@@ -1167,10 +1151,6 @@ TEST_F(FuelClientTest, DownloadWorld)
 // https://github.com/gazebosim/gz-fuel-tools/issues/106
 TEST_F(FuelClientTest, CachedWorld)
 {
-  // Configure to use binary path as cache and populate it
-  ASSERT_EQ(0, ChangeDirectory(PROJECT_BINARY_PATH));
-  common::removeAll("test_cache");
-  ASSERT_TRUE(common::createDirectories("test_cache"));
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
   createLocalWorld(config);
@@ -1383,6 +1363,52 @@ TEST_F(FuelClientTest, Models)
     serverConfig.Clear();
     ModelIter const iter = client.Models(serverConfig);
     EXPECT_FALSE(iter);
+  }
+}
+
+//////////////////////////////////////////////////
+TEST_F(FuelClientTest, ModelsCheckCached)
+{
+  ClientConfig config;
+  std::string cacheDir = common::joinPaths(common::cwd(), "test_cache");
+  common::removeAll(cacheDir );
+  ASSERT_TRUE(common::createDirectories(cacheDir));
+  config.SetCacheLocation(cacheDir);
+  FuelClient client(config);
+  ServerConfig serverConfig;
+  ModelIdentifier modelId;
+  modelId.SetOwner("openroboticstest");
+  std::vector<Model> modelInfos;
+  {
+    for (ModelIter iter = client.Models(modelId, true); iter; ++iter)
+    {
+      modelInfos.push_back(*iter);
+    }
+  }
+  ASSERT_FALSE(modelInfos.empty());
+  // Download one of the models to test the behavior of Models() with
+  // different values for _checkCache
+  EXPECT_TRUE(client.DownloadModel(modelInfos.front().Identification()));
+  {
+    std::size_t counter = 0;
+    for (ModelIter iter = client.Models(modelId, true); iter; ++iter, ++counter)
+    {
+    }
+    std::cout << "counter: " << counter << std::endl;
+    // Expect only one result with checkCache=true because we've downloaded only
+    // one model
+    EXPECT_EQ(counter, 1u);
+    EXPECT_GT(modelInfos.size(), counter);
+  }
+
+  {
+    std::size_t counter = 0;
+    for (ModelIter iter = client.Models(modelId, false); iter;
+         ++iter, ++counter)
+    {
+    }
+    std::cout << "counter: " << counter << std::endl;
+    EXPECT_EQ(counter, modelInfos.size());
   }
 }
 

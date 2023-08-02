@@ -71,6 +71,7 @@ gz_build_tests(TYPE UNIT
                 TEST_LIST test_targets
                 LIB_DEPS
                   gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
+                  gz-common${GZ_COMMON_VER}::testing
                   TINYXML2::TINYXML2
 )
 
