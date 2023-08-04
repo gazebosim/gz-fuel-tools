@@ -64,7 +64,7 @@ set(GZ_MATH_VER ${gz-math7_VERSION_MAJOR})
 
 #--------------------------------------
 # Find gz-msgs
-gz_find_package(gz-msgs10 REQUIRED COMPONENTS msgs)
+gz_find_package(gz-msgs10 REQUIRED PRIVATE COMPONENTS msgs)
 set(GZ_MSGS_VER ${gz-msgs10_VERSION_MAJOR})
 
 #--------------------------------------

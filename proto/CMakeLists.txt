@@ -6,11 +6,11 @@ set(proto_files
 )
 
 gz_msgs_generate_messages(
-  TARGET gz-fuel_tools9-msgs
+  TARGET msgs
   PROTO_PACKAGE "gz.msgs"
   MSGS_PATH ${PROJECT_SOURCE_DIR}/proto
   MSGS_PROTOS ${proto_files}
-  DEPENDENCIES gz-msgs10::gz-msgs10-msgs
+  DEPENDENCIES gz-msgs${GZ_MSGS_VER}::gz-msgs${GZ_MSGS_VER}-msgs
 )
 
 install(
