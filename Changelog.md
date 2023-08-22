@@ -4,6 +4,41 @@
 
 ## Gazebo Fuel Tools 8.x
 
+### Gazebo Fuel Tools 8.1.0 (2023-08-21)
+
+1. Use `pull_request_target` for triage workflow
+    * [Pull request #367](https://github.com/gazebosim/gz-fuel-tools/pull/367)
+
+1. Fix Github project automation for new project board
+    * [Pull request #366](https://github.com/gazebosim/gz-fuel-tools/pull/366)
+
+1. Zip: use non-deprecated methods
+    * [Pull request #360](https://github.com/gazebosim/gz-fuel-tools/pull/360)
+
+1. Deprecated non-relocatable macro
+    * [Pull request #352](https://github.com/gazebosim/gz-fuel-tools/pull/352)
+
+1. Support for bazel in Garden
+    * [Pull request #328](https://github.com/gazebosim/gz-fuel-tools/pull/328)
+
+1. Minor cleanup
+    * [Pull request #357](https://github.com/gazebosim/gz-fuel-tools/pull/357)
+
+1. 7.3.0 Release
+    * [Pull request #359](https://github.com/gazebosim/gz-fuel-tools/pull/359)
+
+1. Add bash completion
+    * [Pull request #329](https://github.com/gazebosim/gz-fuel-tools/pull/329)
+
+1. Reflect pagination of RESTful requests in iterator API 
+    * [Pull request #350](https://github.com/gazebosim/gz-fuel-tools/pull/350)
+
+1. Disable all LocalCache Tests for Windows
+    * [Pull request #351](https://github.com/gazebosim/gz-fuel-tools/pull/351)
+
+1. Support link referral download
+    * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
+
 ### Gazebo Fuel Tools 8.0.2 (2023-03-30)
 
 1. Support link referral download
