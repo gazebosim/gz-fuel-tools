@@ -72,7 +72,7 @@ server:
 You should see the name of the server followed by its list of models. Here's an
 example:
 
-```
+```bash
 [https://fuel.gazebosim.org]
 
   Beer
@@ -99,7 +99,7 @@ some configuration. Refer to the [configuration tutorial](configuration.html)
 for details about this part of the code. Let's focus on the relevant code for
 listing resources:
 
-```
+```cpp
 for (const auto &server : client.Config().Servers())
 {
   std::cout << "[" << server.Url().Str() << "]\n\n";
@@ -127,7 +127,7 @@ their names.
 Run the following example to see the details of a model hosted in the default
 server:
 
-```
+```bash
 # Ubuntu and MacOS
 ./details -o caguero -n Beer -t model
 
@@ -138,7 +138,7 @@ server:
 You should see the details of the model.
 Here's an example:
 
-```
+```bash
 Name: Beer
 Owner: caguero
 Version: 2
@@ -161,7 +161,7 @@ some configuration. Refer to the [configuration tutorial](configuration.html)
 for details about this part of the code. Let's focus on the relevant code for
 getting details of a resource:
 
-```
+```cpp
 // Fetch the details.
 for (const auto &server : client.Config().Servers())
 {
