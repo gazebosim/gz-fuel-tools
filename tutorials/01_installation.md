@@ -179,7 +179,7 @@ sudo make uninstall
   ```
   brew install --only-dependencies gz-fuel-tools<#>
   ```
-  Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+  Be sure to replace `<#>` with a number value, such as 8 or 9, depending on
   which version you need.
 
 3. Configure and build
