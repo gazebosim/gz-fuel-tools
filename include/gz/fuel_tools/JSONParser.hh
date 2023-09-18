@@ -117,7 +117,7 @@ namespace gz
       private: static std::vector<std::string> ParseTags(
                   const Json::Value &_json);
     };
-  }
-}
+  }  // namespace fuel_tools
+}  // namespace gz
 
-#endif
+#endif  // GZ_FUEL_TOOLS_JSONPARSER_HH_

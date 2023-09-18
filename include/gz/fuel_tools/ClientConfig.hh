@@ -23,42 +23,20 @@
 #include <vector>
 
 #include <gz/common/URI.hh>
+#include <gz/utils/ImplPtr.hh>
 
 #include "gz/fuel_tools/Export.hh"
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
 
 namespace gz
 {
   namespace fuel_tools
   {
-    /// \brief forward declaration
-    class ServerConfigPrivate;
-
-    /// \brief Forward Declaration
-    class ClientConfigPrivate;
-
     /// \brief Describes options needed for a server.
     class GZ_FUEL_TOOLS_VISIBLE ServerConfig
     {
       /// \brief Constructor.
       public: ServerConfig();
 
-      /// \brief Copy constructor.
-      /// \param[in] _orig The server config to copy.
-      public: ServerConfig(const ServerConfig &_orig);
-
-      /// \brief Assignment operator overload.
-      /// \param[in] _orig The server config to copy.
-      public: ServerConfig &operator=(const ServerConfig &_orig);
-
-      /// \brief Destructor.
-      public: ~ServerConfig();
 
       /// \brief Clear the server config. This will set all values to empty
       /// strings, except the version string which will be set to its default
@@ -101,7 +79,7 @@ namespace gz
       public: std::string AsPrettyString(const std::string &_prefix = "") const;
 
       /// \brief PIMPL
-      private: std::unique_ptr<ServerConfigPrivate> dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
 
     /// \brief High level interface to Gazebo Fuel.
@@ -173,13 +151,8 @@ namespace gz
       public: std::string AsString(const std::string &_prefix = "") const;
 
       /// \brief PIMPL
-      private: std::unique_ptr<ClientConfigPrivate> dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
-  }
-}
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
-#endif
+  }  // namespace fuel_tools
+}  // namespace gz
+#endif  // GZ_FUEL_TOOLS_CLIENTCONFIG_HH_

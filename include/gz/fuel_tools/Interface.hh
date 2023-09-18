@@ -61,7 +61,7 @@ namespace gz
     /// the SDF file coult not be determined.
     GZ_FUEL_TOOLS_VISIBLE std::string sdfFromPath(
         const std::string &_path);
-  }
-}
+  }  // namespace fuel_tools
+}  // namespace gz
 
-#endif
+#endif  // GZ_FUEL_TOOLS_INTERFACE_HH_

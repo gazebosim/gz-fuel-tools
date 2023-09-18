@@ -2,6 +2,7 @@ set (sources
   ClientConfig.cc
   CollectionIdentifier.cc
   FuelClient.cc
+  FuelClientPrivate.cc
   Helpers.cc
   gz.cc
   Interface.cc

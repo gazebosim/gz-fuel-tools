@@ -53,193 +53,11 @@
 #include "ModelIterPrivate.hh"
 #include "WorldIterPrivate.hh"
 
+#include "FuelClientPrivate.hh"
+
 using namespace gz;
 using namespace fuel_tools;
 
-/// \brief Private Implementation
-class gz::fuel_tools::FuelClientPrivate
-{
-  /// \brief A model URL,
-  /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer/2
-  /// Where the API version and the model version are optional.
-  public: const std::string kModelUrlRegexStr{
-    // Method
-    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
-    // Server
-    "([^\\/\\s]+)\\/+"
-    // API Version
-    "([0-9]+[.][0-9]+)?\\/*"
-    // Owner
-    "([^\\/\\s]+)\\/+"
-    // "models"
-    "models\\/+"
-    // Name
-    "([^\\/]+)\\/*"
-    // Version
-    "([0-9]*|tip)"
-    // Trailing /
-    "/?"};
-
-  /// \brief A world URL,
-  /// E.g.: https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty/1
-  /// Where the API version and the world version are optional.
-  public: const std::string kWorldUrlRegexStr{
-    // Method
-    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
-    // Server
-    "([^\\/\\s]+)\\/+"
-    // API Version
-    "([0-9]+[.][0-9]+)?\\/*"
-    // Owner
-    "([^\\/\\s]+)\\/+"
-    // "worlds"
-    "worlds\\/+"
-    // Name
-    "([^\\/]+)\\/*"
-    // Version
-    "([0-9]*|tip)"
-    // Trailing /
-    "/?"};
-
-  /// \brief A model file URL,
-  /// E.g.: https://server.org/1.0/owner/models/modelname/files/meshes/mesh.dae
-  /// Where the API version is optional, but the model version is required.
-  public: const std::string kModelFileUrlRegexStr{
-    // Method
-    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
-    // Server
-    "([^\\/\\s]+)\\/+"
-    // API Version
-    "([0-9]+[.][0-9]+)?\\/*"
-    // Owner
-    "([^\\/\\s]+)\\/+"
-    // "models"
-    "models\\/+"
-    // Model
-    "([^\\/]+)\\/+"
-    // Version
-    "([0-9]*|tip)\\/+"
-    // "files"
-    "files\\/+"
-    // File path
-    "(.*)"
-    // Trailing /
-    "/?"};
-
-  /// \brief A world file URL,
-  /// E.g.: https://server.org/1.0/owner/worlds/worldname/files/meshes/mesh.dae
-  /// Where the API version is optional, but the world version is required.
-  public: const std::string kWorldFileUrlRegexStr{
-    // Method
-    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
-    // Server
-    "([^\\/\\s]+)\\/+"
-    // API Version
-    "([0-9]+[.][0-9]+)?\\/*"
-    // Owner
-    "([^\\/\\s]+)\\/+"
-    // "worlds"
-    "worlds\\/+"
-    // World
-    "([^\\/]+)\\/+"
-    // Version
-    "([0-9]*|tip)\\/+"
-    // "files"
-    "files\\/+"
-    // File path
-    "(.*)"
-    // Trailing /
-    "/?"};
-
-  /// \brief A collection URL,
-  /// E.g.:
-  /// https://fuel.gazebosim.org/1.0/OpenRobotics/collections/TestColl
-  /// Where the API version is optional
-  public: const std::string kCollectionUrlRegexStr{
-    // Method
-    "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
-    // Server
-    "([^\\/\\s]+)\\/+"
-    // API Version
-    "([0-9]+[.][0-9]+)?\\/*"
-    // Owner
-    "([^\\/\\s]+)\\/+"
-    // "collections"
-    "collections\\/+"
-    // Name
-    "([^\\/]+)\\/*"};
-
-  /// \brief Recursively get all the files in the given path.
-  /// \param[in] _path Path to process.
-  /// \param[out] _files All the files in the given _path.
-  public: void AllFiles(const std::string &_path,
-              std::vector<std::string> &_files) const;
-
-  /// \brief Populate a model form such that it can be used during
-  /// model creation and editing REST calls.
-  /// \param[in] _pathToModelDir Path to the model directory.
-  /// \param[in] _id Model identifier information.
-  /// \param[in] _private True if this model should be private.
-  /// \param[in] _owner Model owner name.
-  /// \param[out] _form Form to fill.
-  /// \return True if the operation completed successfully.
-  public: bool FillModelForm(const std::string &_pathToModelDir,
-              const ModelIdentifier &_id, bool _private,
-              const std::string &_owner,
-              std::multimap<std::string, std::string> &_form);
-
-  /// \brief This function requests the available licenses from the
-  ///  Fuel server and stores this information locally.
-  ///
-  /// The UploadModel function can use this information to set
-  /// appropriate license information based on a model's metadata.pbtxt
-  /// file. If license information is not available, then the
-  /// UploadModel function will default to the
-  /// "Creative Commons - Public Domain" license.
-  /// \param[in] _server Information about the server that provides
-  /// license information.
-  public: void PopulateLicenses(const ServerConfig &_server);
-
-  /// \brief Checks the provided URI for fuel.gazebosim.org, and
-  /// prints a deprecation warning message if found.
-  /// \param[in] _uri URI to check
-  /// DEPRECATED/DEPRECATION: remove this function in Gazebo H.
-  public: void CheckForDeprecatedUri(const common::URI &_uri);
-
-  /// \brief Get zip data from a REST response. This is used by world and
-  /// model download.
-  public: void ZipFromResponse(const RestResponse &_resp,
-              std::string &_zip);
-
-  /// \brief Client configuration
-  public: ClientConfig config;
-
-  /// \brief RESTful client
-  public: Rest rest;
-
-  /// \brief Local Cache
-  public: std::shared_ptr<LocalCache> cache;
-
-  /// \brief Regex to parse Gazebo Fuel model URLs.
-  public: std::unique_ptr<std::regex> urlModelRegex;
-
-  /// \brief Regex to parse Gazebo Fuel world URLs.
-  public: std::unique_ptr<std::regex> urlWorldRegex;
-
-  /// \brief Regex to parse Gazebo Fuel model file URLs.
-  public: std::unique_ptr<std::regex> urlModelFileRegex;
-
-  /// \brief Regex to parse Gazebo Fuel world file URLs.
-  public: std::unique_ptr<std::regex> urlWorldFileRegex;
-
-  /// \brief Regex to parse Gazebo Fuel Collection URLs.
-  public: std::unique_ptr<std::regex> urlCollectionRegex;
-
-  /// \brief The set of licenses where the key is the name of the license
-  /// and the value is the license ID on a Fuel server. See the
-  /// PopulateLicenses function.
-  public: std::map<std::string, unsigned int> licenses;
-};
 
 //////////////////////////////////////////////////
 FuelClient::FuelClient()
@@ -249,7 +67,7 @@ FuelClient::FuelClient()
 
 //////////////////////////////////////////////////
 FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest)
-  : dataPtr(std::make_unique<FuelClientPrivate>())
+  : dataPtr(gz::utils::MakeUniqueImpl<FuelClient::Implementation>())
 {
   this->dataPtr->config = _config;
   this->dataPtr->rest = _rest;
@@ -257,21 +75,16 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest)
 
   this->dataPtr->cache = std::make_unique<LocalCache>(&(this->dataPtr->config));
 
-  this->dataPtr->urlModelRegex.reset(new std::regex(
-    this->dataPtr->kModelUrlRegexStr));
-  this->dataPtr->urlWorldRegex.reset(new std::regex(
-    this->dataPtr->kWorldUrlRegexStr));
-  this->dataPtr->urlModelFileRegex.reset(new std::regex(
-    this->dataPtr->kModelFileUrlRegexStr));
-  this->dataPtr->urlWorldFileRegex.reset(new std::regex(
-    this->dataPtr->kWorldFileUrlRegexStr));
-  this->dataPtr->urlCollectionRegex.reset(new std::regex(
-    this->dataPtr->kCollectionUrlRegexStr));
-}
-
-//////////////////////////////////////////////////
-FuelClient::~FuelClient()
-{
+  this->dataPtr->urlModelRegex =
+    std::make_unique<std::regex>(this->dataPtr->kModelUrlRegexStr);
+  this->dataPtr->urlWorldRegex =
+    std::make_unique<std::regex>(this->dataPtr->kWorldUrlRegexStr);
+  this->dataPtr->urlModelFileRegex =
+    std::make_unique<std::regex>(this->dataPtr->kModelFileUrlRegexStr);
+  this->dataPtr->urlWorldFileRegex =
+    std::make_unique<std::regex>(this->dataPtr->kWorldFileUrlRegexStr);
+  this->dataPtr->urlCollectionRegex =
+    std::make_unique<std::regex>(this->dataPtr->kCollectionUrlRegexStr);
 }
 
 //////////////////////////////////////////////////
@@ -1651,22 +1464,6 @@ Result FuelClient::PatchModel(
   return Result(ResultType::PATCH);
 }
 
-//////////////////////////////////////////////////
-void FuelClientPrivate::AllFiles(const std::string &_path,
-    std::vector<std::string> &_files) const
-{
-  common::DirIter dirIter(_path);
-  common::DirIter end;
-  while (dirIter != end)
-  {
-    if (common::isDirectory(*dirIter))
-      this->AllFiles(*dirIter, _files);
-    else
-      _files.push_back(*dirIter);
-
-    ++dirIter;
-  }
-}
 
 //////////////////////////////////////////////////
 void FuelClient::PopulateLicenses(const ServerConfig &_server)
@@ -1674,190 +1471,6 @@ void FuelClient::PopulateLicenses(const ServerConfig &_server)
   this->dataPtr->PopulateLicenses(_server);
 }
 
-//////////////////////////////////////////////////
-bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
-    const ModelIdentifier &_id, bool _private, const std::string &_owner,
-    std::multimap<std::string, std::string> &_form)
-{
-  if (!common::exists(_pathToModelDir))
-  {
-    gzerr << "The model path[" << _pathToModelDir << "] doesn't exist.\n";
-    return false;
-  }
-
-  gz::msgs::FuelMetadata meta;
-
-  // Try the `metadata.pbtxt` file first since it contains more information
-  // than `model.config`.
-  if (common::exists(common::joinPaths(_pathToModelDir, "metadata.pbtxt")))
-  {
-    std::string filePath = common::joinPaths(_pathToModelDir, "metadata.pbtxt");
-
-    gzdbg << "Parsing " << filePath  << std::endl;
-
-    // Read the pbtxt file.
-    std::ifstream inputFile(filePath);
-    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
-        std::istreambuf_iterator<char>());
-
-    // Parse the file into the fuel metadata message
-    google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
-  }
-  else if (common::exists(common::joinPaths(_pathToModelDir, "model.config")))
-  {
-    std::string filePath = common::joinPaths(_pathToModelDir, "model.config");
-
-    gzdbg << "Parsing " << filePath << std::endl;
-
-    std::ifstream inputFile(filePath);
-    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
-        std::istreambuf_iterator<char>());
-
-    if (!gz::msgs::ConvertFuelMetadata(inputStr, meta))
-    {
-      gzerr << "Unable to convert model config[" << _pathToModelDir << "].\n";
-      return false;
-    }
-  }
-  else
-  {
-    gzerr << "Provided model directory[" <<  _pathToModelDir
-      << "] needs a metadata.pbtxt or a model.confg file.";
-    return false;
-  }
-
-  _form =
-  {
-    {"name", meta.name()},
-    {"description", meta.description()},
-    {"private", _private ? "1" : "0"},
-  };
-
-  // Add owner if specified.
-  if (!_owner.empty())
-  {
-    _form.emplace("owner", _owner);
-  }
-
-  // \todo(nkoenig) The gz-fuelserver expects an integer number for the
-  // license information. The fuelserver should be modified to accept
-  // a string. Otherwise, we have to bake into each client a mapping of
-  // license name to integer.
-  //
-  // If we have legal, then attempt to fill in the correct license information.
-  if (meta.has_legal())
-  {
-    // Attempt to retrieve the available licenses, if we have no available
-    // licenses.
-    if (this->licenses.empty())
-    {
-      this->PopulateLicenses(_id.Server());
-      // Fail if a license has been requested, but we couldn't get the
-      // available licenses.
-      if (this->licenses.empty())
-      {
-        return false;
-      }
-    }
-
-    // Find the license by name.
-    std::map<std::string, unsigned int>::const_iterator licenseIt =
-      this->licenses.find(meta.legal().license());
-    if (licenseIt != this->licenses.end())
-    {
-      _form.emplace("license", std::to_string(licenseIt->second));
-    }
-    // No license found, print an error and return.
-    else
-    {
-      std::string validLicenseNames;
-      auto end = this->licenses.end();
-      std::advance(end, -1);
-      for (licenseIt = this->licenses.begin(); licenseIt != end; ++licenseIt)
-      {
-        validLicenseNames += "    " + licenseIt->first + "\n";
-      }
-      validLicenseNames += "    " + licenseIt->first;
-
-      gzerr << "Invalid license[" << meta.legal().license() << "].\n"
-             << "  Valid licenses include:\n"
-             << validLicenseNames << std::endl;
-
-      return false;
-    }
-  }
-  // If there is no license information, then default to
-  // "Creative Commons - Public Domain"
-  else
-  {
-    _form.emplace("license", "1");
-  }
-
-  // Add tags
-  std::string tags;
-  for (int i = 0; i < meta.tags_size(); ++i)
-    tags += meta.tags(i) + ",";
-  if (!tags.empty())
-    _form.emplace("tags", tags);
-
-  // Add categories
-  std::string categories;
-  if (meta.has_categories())
-  {
-    // Add the first category, if present.
-    if (!meta.categories().first().empty())
-      categories = meta.categories().first();
-
-    // Add the second category, if present.
-    if (!meta.categories().second().empty())
-    {
-      // Add a comma separator if the first category was not empty.
-      if (!categories.empty())
-        categories += ", ";
-      categories += meta.categories().second();
-    }
-  }
-  if (!categories.empty())
-    _form.emplace("categories", categories);
-
-  // Add annotations as metadata.
-  for (const auto &annotation : meta.annotations())
-  {
-    std::string formAnnotation = std::string("{\"key\":\"") +
-      annotation.first + "\",\"value\":\"" + annotation.second + "\"}";
-    _form.emplace("metadata", formAnnotation);
-  }
-
-  // Recursively get all the files.
-  std::vector<std::string> files;
-  this->AllFiles(_pathToModelDir, files);
-  for (const std::string &file : files)
-  {
-    _form.emplace("file", std::string("@") + file + ";"
-        + file.substr(_pathToModelDir.size()+1));
-  }
-
-  return true;
-}
-
-//////////////////////////////////////////////////
-void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
-{
-  RestResponse resp;
-
-  // Send the request.
-  resp = this->rest.Request(HttpMethod::GET, _server.Url().Str(),
-      _server.Version(), "licenses", {}, {}, "");
-  if (resp.statusCode != 200)
-  {
-    gzerr << "Failed to get license information from "
-      << _server.Url().Str() << "/" << _server.Version() << std::endl;
-  }
-  else if (!JSONParser::ParseLicenses(resp.data, this->licenses))
-  {
-    gzerr << "Failed to parse license information[" << resp.data << "]\n";
-  }
-}
 
 //////////////////////////////////////////////////
 bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)

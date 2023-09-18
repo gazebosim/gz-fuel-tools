@@ -33,10 +33,10 @@ using namespace fuel_tools;
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class gz::fuel_tools::ClientConfigPrivate
+class gz::fuel_tools::ClientConfig::Implementation
 {
   /// \brief Constructor.
-  public: ClientConfigPrivate()
+  public: Implementation()
           {
             std::string homePath;
             gz::common::env(GZ_HOMEDIR, homePath);
@@ -79,7 +79,7 @@ class gz::fuel_tools::ClientConfigPrivate
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class gz::fuel_tools::ServerConfigPrivate
+class gz::fuel_tools::ServerConfig::Implementation
 {
   /// \brief Clear values.
   public: void Clear()
@@ -101,33 +101,14 @@ class gz::fuel_tools::ServerConfigPrivate
 
 //////////////////////////////////////////////////
 ServerConfig::ServerConfig()
-  : dataPtr (new ServerConfigPrivate)
+  : dataPtr (gz::utils::MakeImpl<Implementation>())
 {
-}
-
-//////////////////////////////////////////////////
-ServerConfig::ServerConfig(const ServerConfig &_orig)
-  : dataPtr(new ServerConfigPrivate)
-{
-  *(this->dataPtr) = *(_orig.dataPtr);
 }
 
 //////////////////////////////////////////////////
 void ServerConfig::Clear()
 {
   this->dataPtr->Clear();
-}
-
-//////////////////////////////////////////////////
-ServerConfig &ServerConfig::operator=(const ServerConfig &_orig)
-{
-  *(this->dataPtr) = *(_orig.dataPtr);
-  return *this;
-}
-
-//////////////////////////////////////////////////
-ServerConfig::~ServerConfig()
-{
 }
 
 //////////////////////////////////////////////////
@@ -206,7 +187,8 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
 }
 
 //////////////////////////////////////////////////
-ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
+ClientConfig::ClientConfig()
+: dataPtr(gz::utils::MakeImpl<Implementation>())
 {
   std::string gzFuelPath;
   if (!gz::common::env("GZ_FUEL_CACHE_PATH", gzFuelPath))
@@ -220,26 +202,6 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
     return;
   }
   this->SetCacheLocation(gzFuelPath);
-}
-
-//////////////////////////////////////////////////
-ClientConfig::ClientConfig(const ClientConfig &_copy)
-  : dataPtr(new ClientConfigPrivate)
-{
-  *(this->dataPtr) = *(_copy.dataPtr);
-}
-
-//////////////////////////////////////////////////
-ClientConfig &ClientConfig::operator=(const ClientConfig &_copy)
-{
-  *(this->dataPtr) = *(_copy.dataPtr);
-
-  return *this;
-}
-
-//////////////////////////////////////////////////
-ClientConfig::~ClientConfig()
-{
 }
 
 //////////////////////////////////////////////////

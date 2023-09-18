@@ -27,7 +27,7 @@
 using namespace gz;
 using namespace fuel_tools;
 
-class gz::fuel_tools::CollectionIdentifierPrivate
+class gz::fuel_tools::CollectionIdentifier::Implementation
 {
   /// \brief a name given to this collection by a user
   public: std::string name;
@@ -41,22 +41,8 @@ class gz::fuel_tools::CollectionIdentifierPrivate
 
 //////////////////////////////////////////////////
 CollectionIdentifier::CollectionIdentifier()
-  : dataPtr(std::make_unique<CollectionIdentifierPrivate>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
-}
-
-//////////////////////////////////////////////////
-CollectionIdentifier::CollectionIdentifier(const CollectionIdentifier &_orig)
-    : dataPtr(std::make_unique<CollectionIdentifierPrivate>(*_orig.dataPtr))
-{
-}
-
-//////////////////////////////////////////////////
-CollectionIdentifier &CollectionIdentifier::operator=(
-    const CollectionIdentifier &_orig)
-{
-  this->dataPtr = std::make_unique<CollectionIdentifierPrivate>(*_orig.dataPtr);
-  return *this;
 }
 
 //////////////////////////////////////////////////
@@ -64,9 +50,6 @@ bool CollectionIdentifier::operator==(const CollectionIdentifier &_rhs) const
 {
   return this->UniqueName() == _rhs.UniqueName();
 }
-
-//////////////////////////////////////////////////
-CollectionIdentifier::~CollectionIdentifier() = default;
 
 //////////////////////////////////////////////////
 std::string CollectionIdentifier::UniqueName() const

@@ -18,6 +18,7 @@
 #ifndef GZ_FUEL_TOOLS_FUELCLIENT_HH_
 #define GZ_FUEL_TOOLS_FUELCLIENT_HH_
 
+#include <gz/utils/ImplPtr.hh>
 #include <memory>
 #include <string>
 #include <tuple>
@@ -29,13 +30,6 @@
 #include "gz/fuel_tools/Result.hh"
 #include "gz/fuel_tools/WorldIter.hh"
 
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-
 namespace gz
 {
   namespace fuel_tools
@@ -43,7 +37,6 @@ namespace gz
     /// \brief Forward Declaration
     class ClientConfig;
     class CollectionIdentifier;
-    class FuelClientPrivate;
     class LocalCache;
     class ModelIdentifier;
     class ServerConfig;
@@ -60,9 +53,6 @@ namespace gz
       /// \remarks the client saves a copy of the config passed into it
       public: FuelClient(const ClientConfig &_config,
                          const Rest &_rest = Rest());
-
-      /// \brief Destructor
-      public: ~FuelClient();
 
       /// \brief Get a mutable reference to the client configuration.
       /// \return Mutable reference to the client configuration.
@@ -483,13 +473,9 @@ namespace gz
         std::vector<std::string> &_headers) const;
 
       /// \brief PIMPL
-      private: std::unique_ptr<FuelClientPrivate> dataPtr;
+      GZ_UTILS_UNIQUE_IMPL_PTR(dataPtr)
     };
-  }
-}
+  }  // namespace fuel_tools
+}  // namespace gz
 
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
-#endif
+#endif  // GZ_FUEL_TOOLS_FUELCLIENT_HH_

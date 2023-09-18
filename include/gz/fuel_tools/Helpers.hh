@@ -45,8 +45,7 @@ namespace fuel_tools
 /// \return String suitable to use in file paths
 GZ_FUEL_TOOLS_VISIBLE
 std::string uriToPath(const gz::common::URI &_uri);
-}
-}
+}  // namespace fuel_tools
+}  // namespace gz
 
-// GZ_FUEL_TOOLS_HELPERS_HH_
-#endif
+#endif  // GZ_FUEL_TOOLS_HELPERS_HH_
