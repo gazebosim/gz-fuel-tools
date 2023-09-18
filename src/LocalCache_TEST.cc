@@ -26,6 +26,7 @@
 #include <gz/utils/ExtraTestMacros.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/Helpers.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
 #include "LocalCache.hh"
@@ -38,7 +39,8 @@ void createLocal6Models(ClientConfig &_conf)
 {
   gzdbg << "Creating 6 local models in [" << common::cwd() << "]" << std::endl;
 
-  auto serverPath = common::joinPaths("test_cache", "localhost:8001");
+  auto serverPath =
+    common::joinPaths("test_cache", sanitizeAuthority("localhost:8001"));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "models", "am1", "2")));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -90,7 +92,8 @@ void createLocal3Models(ClientConfig &_conf)
 {
   gzdbg << "Creating 3 local models in [" << common::cwd() << "]" << std::endl;
 
-  auto serverPath = common::joinPaths("test_cache", "localhost:8007");
+  auto serverPath =
+    common::joinPaths("test_cache", sanitizeAuthority("localhost:8007"));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "models", "am1", "2")));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -124,7 +127,8 @@ void createLocal6Worlds(ClientConfig &_conf)
 {
   gzdbg << "Creating 6 local worlds in [" << common::cwd() << "]" << std::endl;
 
-  auto serverPath = common::joinPaths("test_cache", "localhost:8001");
+  auto serverPath =
+    common::joinPaths("test_cache", sanitizeAuthority("localhost:8001"));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2")));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -176,7 +180,8 @@ void createLocal3Worlds(ClientConfig &_conf)
 {
   gzdbg << "Creating 3 local worlds in [" << common::cwd() << "]" << std::endl;
 
-  auto serverPath = common::joinPaths("test_cache", "localhost:8007");
+  auto serverPath = common::joinPaths(
+    "test_cache", sanitizeAuthority("localhost:8007"));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2")));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -367,13 +372,8 @@ TEST_F(LocalCacheTest, AllWorlds)
     ++iter;
   }
   EXPECT_EQ(9u, uniqueNames.size());
-#ifdef _WIN32
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    gz::common::joinPaths("localhost8001", "alice", "worlds", "am1")));
-#else
-  EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    gz::common::joinPaths("localhost:8001", "alice", "worlds", "am1")));
-#endif
+    gz::common::joinPaths(sanitizeAuthority("localhost:8001"), "alice", "worlds", "am1")));
 }
 
 /////////////////////////////////////////////////
