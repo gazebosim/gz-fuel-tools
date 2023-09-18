@@ -23,20 +23,30 @@ using namespace gz;
 using namespace fuel_tools;
 
 /////////////////////////////////////////////////
+TEST(HelpersTEST, SanitizeAuthority)
+{
+  EXPECT_EQ("localhost%3A8000", sanitizeAuthority("localhost:8000"));
+  EXPECT_EQ("localhost%3A8001", sanitizeAuthority("localhost:8001"));
+  EXPECT_EQ("localhost%3A%3A8002", sanitizeAuthority("localhost::8002"));
+  EXPECT_EQ("gazebo%40localhost", sanitizeAuthority("gazebo@localhost"));
+}
+
+/////////////////////////////////////////////////
 TEST(HelpersTEST, UriToPathNoAuthority)
 {
-// TO-DO: Update this test after gz-fuel-tools#204 is addressed
 #ifdef WIN32
+  const std::string testStr0 = R"(localhost:8000)";
   const std::string testStr1 = R"(localhost:8000\some\path)";
   const std::string testStr2 = R"(localhost:8000\some\path\)";
 #else
+  const std::string testStr0 = R"(localhost:8000)";
   const std::string testStr1 = R"(localhost:8000/some/path)";
   const std::string testStr2 = R"(localhost:8000/some/path/)";
 #endif
 
   {
     common::URI uri{"http://localhost:8000"};
-    EXPECT_EQ("localhost:8000", uriToPath(uri));
+    EXPECT_EQ(testStr0, uriToPath(uri));
   }
 
   {
@@ -53,20 +63,28 @@ TEST(HelpersTEST, UriToPathNoAuthority)
 /////////////////////////////////////////////////
 TEST(HelpersTEST, UriToPathHasAuthority)
 {
+#ifdef WIN32
+  const std::string testStr0 = R"(localhost%3A8000)";
+  const std::string testStr1 = R"(localhost%3A8000\some\path)";
+  const std::string testStr2 = R"(localhost%3A8000\some\path\)";
+#else
+  const std::string testStr0 = R"(localhost%3A8000)";
+  const std::string testStr1 = R"(localhost%3A8000/some/path)";
+  const std::string testStr2 = R"(localhost%3A8000/some/path/)";
+#endif
+
   {
     common::URI uri{"http://localhost:8000", true};
-    EXPECT_EQ("localhost:8000", uriToPath(uri));
+    EXPECT_EQ(testStr0, uriToPath(uri));
   }
 
   {
     common::URI uri{"http://localhost:8000/some/path", true};
-    EXPECT_EQ(common::joinPaths("localhost:8000", "some", "path"),
-        uriToPath(uri));
+    EXPECT_EQ(testStr1, uriToPath(uri));
   }
 
   {
     common::URI uri{"http://localhost:8000/some/path/", true};
-    EXPECT_EQ(common::separator(common::joinPaths("localhost:8000", "some",
-        "path")), uriToPath(uri));
+    EXPECT_EQ(testStr2, uriToPath(uri));
   }
 }

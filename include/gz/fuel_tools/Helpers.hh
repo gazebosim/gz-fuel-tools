@@ -35,18 +35,17 @@
   #define gz_strdup strdup
 #endif
 
-namespace gz
+namespace gz::fuel_tools
 {
-namespace fuel_tools
-{
+
+std::string sanitizeAuthority(const std::string &_uriAuthority);
+
 /// \brief Convert a URI to a string suitable to use as a path on disk.
 /// It strips the scheme and authority's `//` prefix.
 /// \param[in] _uri URI to convert.
 /// \return String suitable to use in file paths
 GZ_FUEL_TOOLS_VISIBLE
 std::string uriToPath(const gz::common::URI &_uri);
-}
-}
+}  // namespace gz::fuel_tools
 
-// GZ_FUEL_TOOLS_HELPERS_HH_
-#endif
+#endif  // GZ_FUEL_TOOLS_HELPERS_HH_

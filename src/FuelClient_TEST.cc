@@ -37,10 +37,10 @@ using namespace gz::fuel_tools;
 /// Taken from LocalCache_TEST
 void createLocalModel(ClientConfig &_conf)
 {
-  gzdbg << "Creating local model in [" << common::cwd() << "]" << std::endl;
-
   auto modelPath = common::joinPaths(
-      "test_cache", "localhost:8007", "alice", "models", "My Model");
+      "test_cache",
+      sanitizeAuthority("localhost:8007"),
+      "alice", "models", "My Model");
 
   ASSERT_TRUE(common::createDirectories(
       common::joinPaths(modelPath, "2", "meshes")));
@@ -92,10 +92,10 @@ void createLocalModel(ClientConfig &_conf)
 /// Taken from LocalCache_TEST
 void createLocalWorld(ClientConfig &_conf)
 {
-  gzdbg << "Creating local world in [" << common::cwd() << "]" << std::endl;
-
   auto worldPath = common::joinPaths(
-      "test_cache", "localhost:8007", "banana", "worlds", "My World");
+      "test_cache",
+      sanitizeAuthority("localhost:8007"),
+      "banana", "worlds", "My World");
 
   ASSERT_TRUE(common::createDirectories(common::joinPaths(worldPath, "2")));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(worldPath, "3")));
@@ -615,7 +615,7 @@ TEST_P(FuelClientDownloadTest, DownloadModel)
 /////////////////////////////////////////////////
 // Windows doesn't support colons in filenames
 // https://github.com/gazebosim/gz-fuel-tools/issues/106
-TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
+TEST_F(FuelClientTest, ModelDependencies)
 {
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -687,7 +687,7 @@ TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(ModelDependencies))
 // Windows doesn't support colons in filenames
 // https://github.com/gazebosim/gz-fuel-tools/issues/106
 // See https://github.com/gazebosim/gz-fuel-tools/issues/231
-TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(CachedModel))
+TEST_F(FuelClientTest, CachedModel)
 {
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));

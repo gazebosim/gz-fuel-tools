@@ -251,22 +251,20 @@ FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest)
 
   this->dataPtr->cache = std::make_unique<LocalCache>(&(this->dataPtr->config));
 
-  this->dataPtr->urlModelRegex.reset(new std::regex(
-    this->dataPtr->kModelUrlRegexStr));
-  this->dataPtr->urlWorldRegex.reset(new std::regex(
-    this->dataPtr->kWorldUrlRegexStr));
-  this->dataPtr->urlModelFileRegex.reset(new std::regex(
-    this->dataPtr->kModelFileUrlRegexStr));
-  this->dataPtr->urlWorldFileRegex.reset(new std::regex(
-    this->dataPtr->kWorldFileUrlRegexStr));
-  this->dataPtr->urlCollectionRegex.reset(new std::regex(
-    this->dataPtr->kCollectionUrlRegexStr));
+  this->dataPtr->urlModelRegex =
+    std::make_unique<std::regex>(this->dataPtr->kModelUrlRegexStr);
+  this->dataPtr->urlWorldRegex =
+    std::make_unique<std::regex>(this->dataPtr->kWorldUrlRegexStr);
+  this->dataPtr->urlModelFileRegex =
+    std::make_unique<std::regex>(this->dataPtr->kModelFileUrlRegexStr);
+  this->dataPtr->urlWorldFileRegex =
+    std::make_unique<std::regex>(this->dataPtr->kWorldFileUrlRegexStr);
+  this->dataPtr->urlCollectionRegex =
+    std::make_unique<std::regex>(this->dataPtr->kCollectionUrlRegexStr);
 }
 
 //////////////////////////////////////////////////
-FuelClient::~FuelClient()
-{
-}
+FuelClient::~FuelClient() = default;
 
 //////////////////////////////////////////////////
 ClientConfig &FuelClient::Config()
@@ -336,7 +334,6 @@ ModelIter FuelClient::Models(const ServerConfig &_server) const
 Result FuelClient::WorldDetails(const WorldIdentifier &_id,
     WorldIdentifier &_world) const
 {
-
   return this->WorldDetails(_id, _world, {});
 }
 
