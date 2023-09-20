@@ -232,10 +232,13 @@ ModelIter LocalCache::AllModels()
   {
     for (auto &server : this->dataPtr->config->Servers())
     {
+      auto uri = server.Url();
+
       std::string path = common::joinPaths(
           this->dataPtr->config->CacheLocation(), uriToPath(server.Url()));
 
       auto srvModels = this->dataPtr->ModelsInServer(path);
+
       for (auto &mod : srvModels)
       {
         mod.dataPtr->id.SetServer(server);
@@ -284,6 +287,7 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
   for (ModelIter iter = this->AllModels(); iter; ++iter)
   {
     ModelIdentifier id = iter->Identification();
+
     if (_id == id)
     {
       if (_id.Version() == id.Version())

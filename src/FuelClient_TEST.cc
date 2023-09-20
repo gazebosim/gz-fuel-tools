@@ -23,6 +23,7 @@
 
 #include "gz/fuel_tools/FuelClient.hh"
 #include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/Helpers.hh"
 #include "gz/fuel_tools/Result.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
@@ -82,7 +83,7 @@ void createLocalModel(ClientConfig &_conf)
   }
 
   gz::fuel_tools::ServerConfig srv;
-  srv.SetUrl(common::URI("http://localhost:8007/"));
+  srv.SetUrl(common::URI("http://localhost:8007/", true));
   _conf.AddServer(srv);
 }
 
@@ -113,7 +114,7 @@ void createLocalWorld(ClientConfig &_conf)
   }
 
   gz::fuel_tools::ServerConfig srv;
-  srv.SetUrl(gz::common::URI("http://localhost:8007/"));
+  srv.SetUrl(gz::common::URI("http://localhost:8007/", true));
   _conf.AddServer(srv);
 }
 
@@ -697,66 +698,69 @@ TEST_F(FuelClientTest, CachedModel)
   FuelClient client(config);
   EXPECT_EQ(config.CacheLocation(), client.Config().CacheLocation());
 
+  auto basePath = common::joinPaths(common::cwd(), "test_cache",
+                                    sanitizeAuthority("localhost:8007"));
+
   // Cached model (no version)
   {
-    common::URI url{"http://localhost:8007/1.0/alice/models/My Model"};
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model", true};
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
-    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+    EXPECT_EQ(common::joinPaths(basePath,
         "alice", "models", "My Model", "3"), path);
   }
 
   // Cached model (tip)
   {
-    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip"};
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip", true};
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
-    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+    EXPECT_EQ(common::joinPaths(basePath,
         "alice", "models", "My Model", "3"), path);
   }
 
   // Cached model (version number)
   {
-    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/2"};
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/2", true};
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
-    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+    EXPECT_EQ(common::joinPaths(basePath,
         "alice", "models", "My Model", "2"), path);
   }
 
   // Cached model file (tip)
   {
     common::URI url{
-        "http://localhost:8007/1.0/alice/models/My Model/tip/files/model.sdf"};
+        "http://localhost:8007/1.0/alice/models/My Model/tip/files/model.sdf", true};
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
-    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+    EXPECT_EQ(common::joinPaths(basePath,
         "alice", "models", "My Model", "3", "model.sdf"), path);
   }
 
   // Deeper cached model file
   {
     common::URI url{"http://localhost:8007/1.0/alice/models/My Model/2/files/"
-                    "meshes/model.dae"};
+                    "meshes/model.dae", true};
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
-    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+    EXPECT_EQ(common::joinPaths(basePath,
         "alice", "models", "My Model", "2", "meshes", "model.dae"), path);
   }
 
   // Non-cached model
   {
-    common::URI url{"http://localhost:8007/1.0/alice/models/Banana"};
+    common::URI url{"http://localhost:8007/1.0/alice/models/Banana", true};
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_FALSE(result);
@@ -765,7 +769,7 @@ TEST_F(FuelClientTest, CachedModel)
 
   // Non-cached model (when looking for file)
   {
-    common::URI url{"http://localhost:8007/1.0/alice/models/Banana/model.sdf"};
+    common::URI url{"http://localhost:8007/1.0/alice/models/Banana/model.sdf", true};
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_FALSE(result);
@@ -775,7 +779,7 @@ TEST_F(FuelClientTest, CachedModel)
   // Non-cached model file
   {
     common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip/files/"
-                    "meshes/banana.dae"
+                    "meshes/banana.dae", true
     };
     std::string path;
     auto result = client.CachedModelFile(url, path);
@@ -785,7 +789,7 @@ TEST_F(FuelClientTest, CachedModel)
 
   // Model root URL to model file
   {
-    common::URI url{"http://localhost:8007/1.0/alice/models/My Model"};
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model", true};
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_FALSE(result);
@@ -1158,6 +1162,9 @@ TEST_F(FuelClientTest, CachedWorld)
   FuelClient client(config);
   EXPECT_EQ(config.CacheLocation(), client.Config().CacheLocation());
 
+  auto basePath = common::joinPaths(common::cwd(), "test_cache",
+                                    sanitizeAuthority("localhost:8007"));
+
   // Cached world (no version)
   {
     common::URI url{"http://localhost:8007/1.0/banana/worlds/My World"};
@@ -1165,8 +1172,8 @@ TEST_F(FuelClientTest, CachedWorld)
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
-    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "localhost:8007", "banana", "worlds", "My World", "3"), path);
+    EXPECT_EQ(common::joinPaths(basePath,
+        "banana", "worlds", "My World", "3"), path);
   }
 
   // Cached world (tip)
@@ -1176,8 +1183,8 @@ TEST_F(FuelClientTest, CachedWorld)
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
-    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "localhost:8007", "banana", "worlds", "My World", "3"), path);
+    EXPECT_EQ(common::joinPaths(basePath,
+        "banana", "worlds", "My World", "3"), path);
   }
 
   // Cached world (version number)
@@ -1187,8 +1194,8 @@ TEST_F(FuelClientTest, CachedWorld)
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
-    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "localhost:8007", "banana", "worlds", "My World", "2"), path);
+    EXPECT_EQ(common::joinPaths(basePath,
+        "banana", "worlds", "My World", "2"), path);
   }
 
   // Cached world file (tip)
@@ -1199,8 +1206,8 @@ TEST_F(FuelClientTest, CachedWorld)
     auto result = client.CachedWorldFile(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
-    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "localhost:8007", "banana", "worlds", "My World", "3",
+    EXPECT_EQ(common::joinPaths(basePath,
+        "banana", "worlds", "My World", "3",
         "strawberry.world"), path);
   }
 
@@ -1212,8 +1219,8 @@ TEST_F(FuelClientTest, CachedWorld)
     auto result = client.CachedWorldFile(url, path);
     EXPECT_TRUE(result);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, result.Type());
-    EXPECT_EQ(common::joinPaths(common::cwd(), "test_cache",
-        "localhost:8007", "banana", "worlds", "My World", "2",
+    EXPECT_EQ(common::joinPaths(basePath,
+        "banana", "worlds", "My World", "2",
         "strawberry.world"), path);
   }
 
@@ -1498,7 +1505,8 @@ TEST_F(FuelClientTest, PatchModelFail)
 
   // Bad model.config
   result = client.PatchModel(modelId, headers,
-      common::joinPaths(common::cwd(), "test_cache", "localhost:8007",
+      common::joinPaths(common::cwd(), "test_cache", 
+        sanitizeAuthority("localhost:8007"),
         "alice", "models", "My Model", "3"));
   EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
 

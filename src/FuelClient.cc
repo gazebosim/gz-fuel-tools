@@ -1094,7 +1094,11 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   }
 
   // Get remaining server information from config
-  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  common::URI serverUri;
+  serverUri.SetScheme(scheme);
+  serverUri.SetAuthority(gz::common::URIAuthority("//" + server));
+
+  _id.Server().SetUrl(serverUri);
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
@@ -1160,7 +1164,11 @@ bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
   }
 
   // Get remaining server information from config
-  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  common::URI serverUri;
+  serverUri.SetScheme(scheme);
+  serverUri.SetAuthority(gz::common::URIAuthority("//" + server));
+
+  _id.Server().SetUrl(serverUri);
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
