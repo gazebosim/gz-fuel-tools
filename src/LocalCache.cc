@@ -392,8 +392,9 @@ bool LocalCache::SaveModel(
 
   std::string cacheLocation = this->dataPtr->config->CacheLocation();
 
-  std::string modelRootDir = common::joinPaths(cacheLocation,
-      uriToPath(_id.Server().Url()), _id.Owner(), "models", _id.Name());
+  std::string modelRootDir =
+    common::joinPaths(cacheLocation, _id.UniqueName());
+
   std::string modelVersionedDir =
     common::joinPaths(modelRootDir, _id.VersionStr());
 
@@ -744,10 +745,13 @@ bool LocalCache::SaveWorld(
     return false;
   }
 
-  auto cacheLocation = this->dataPtr->config->CacheLocation();
+  std::string cacheLocation = this->dataPtr->config->CacheLocation();
 
-  auto worldRootDir = common::joinPaths(cacheLocation, _id.UniqueName());
-  auto worldVersionedDir = common::joinPaths(worldRootDir, _id.VersionStr());
+  std::string worldRootDir =
+    common::joinPaths(cacheLocation, _id.UniqueName());
+
+  std::string worldVersionedDir =
+    common::joinPaths(worldRootDir , _id.VersionStr());
 
   // Is it already in the cache?
   if (common::isDirectory(worldVersionedDir) && !_overwrite)

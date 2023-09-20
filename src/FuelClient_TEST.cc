@@ -131,6 +131,11 @@ class FuelClientTest: public ::testing::Test
     ASSERT_FALSE(common::exists("test_cache"));
     ASSERT_TRUE(common::createDirectories("test_cache"));
     ASSERT_TRUE(common::isDirectory("test_cache"));
+
+    ASSERT_FALSE(common::exists("test_cache/fuel.gazebosim.org"));
+    ASSERT_TRUE(common::createDirectories("test_cache/fuel.gazebosim.org"));
+    ASSERT_TRUE(common::isDirectory("test_cache/fuel.gazebosim.org"));
+
   }
 
   public: std::shared_ptr<gz::common::TempDirectory> tempDir;
@@ -1167,7 +1172,7 @@ TEST_F(FuelClientTest, CachedWorld)
 
   // Cached world (no version)
   {
-    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World"};
+    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World", true};
     std::string path;
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
@@ -1178,7 +1183,7 @@ TEST_F(FuelClientTest, CachedWorld)
 
   // Cached world (tip)
   {
-    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World/tip"};
+    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World/tip", true};
     std::string path;
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
@@ -1189,7 +1194,7 @@ TEST_F(FuelClientTest, CachedWorld)
 
   // Cached world (version number)
   {
-    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World/2"};
+    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World/2", true};
     std::string path;
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
@@ -1201,7 +1206,7 @@ TEST_F(FuelClientTest, CachedWorld)
   // Cached world file (tip)
   {
     common::URI url{"http://localhost:8007/1.0/banana/worlds/My World/tip/"
-                    "files/strawberry.world"};
+                    "files/strawberry.world", true};
     std::string path;
     auto result = client.CachedWorldFile(url, path);
     EXPECT_TRUE(result);

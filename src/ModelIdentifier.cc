@@ -149,7 +149,7 @@ ModelIdentifier::~ModelIdentifier()
 //////////////////////////////////////////////////
 std::string ModelIdentifier::UniqueName() const
 {
-  return common::joinPaths(this->dataPtr->server.Url().Str(),
+  return common::joinPaths(uriToPath(this->dataPtr->server.Url()),
                            this->dataPtr->owner, "models",
                            this->dataPtr->name);
 }

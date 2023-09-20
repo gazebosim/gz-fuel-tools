@@ -713,7 +713,9 @@ Result FuelClient::DownloadModel(const ModelIdentifier &_id,
   // Save
   // Note that the save function doesn't return the path
   if (zipData.empty() || !this->dataPtr->cache->SaveModel(newId, zipData, true))
+  {
     return Result(ResultType::FETCH_ERROR);
+  }
 
   return this->ModelDependencies(_id, _dependencies);
 }
@@ -1236,7 +1238,11 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_modelFileUrl,
   }
 
   // Get remaining server information from config
-  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  common::URI serverUri;
+  serverUri.SetScheme(scheme);
+  serverUri.SetAuthority(gz::common::URIAuthority("//" + server));
+
+  _id.Server().SetUrl(serverUri);
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
@@ -1305,7 +1311,11 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_worldFileUrl,
   }
 
   // Get remaining server information from config
-  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  common::URI serverUri;
+  serverUri.SetScheme(scheme);
+  serverUri.SetAuthority(gz::common::URIAuthority("//" + server));
+
+  _id.Server().SetUrl(serverUri);
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
@@ -1372,7 +1382,11 @@ bool FuelClient::ParseCollectionUrl(const common::URI &_url,
   }
 
   // Get remaining server information from config
-  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  common::URI serverUri;
+  serverUri.SetScheme(scheme);
+  serverUri.SetAuthority(gz::common::URIAuthority("//" + server));
+
+  _id.Server().SetUrl(serverUri);
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
