@@ -45,6 +45,10 @@ class gz::fuel_tools::WorldIdentifierPrivate
 
   /// \brief Path of this model in the local cache
   public: std::string localPath;
+
+  /// \brief True indicates the world is private, false indicates the
+  /// world is public.
+  public: bool privacy{false};
 };
 
 //////////////////////////////////////////////////
@@ -229,3 +233,14 @@ std::string WorldIdentifier::AsPrettyString(const std::string &_prefix) const
   return out.str();
 }
 
+//////////////////////////////////////////////////
+bool WorldIdentifier::Private() const
+{
+  return this->dataPtr->privacy;
+}
+
+//////////////////////////////////////////////////
+void WorldIdentifier::SetPrivate(bool _private) const
+{
+  this->dataPtr->privacy = _private;
+}

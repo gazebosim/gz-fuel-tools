@@ -118,6 +118,7 @@ SUBCOMMANDS = {
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -m [--model] arg         Path to directory containing the model.      \n"\
+  "  -w [--world] arg         Path to directory containing the world.      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
   "                           https://fuel.gazebosim.org.                  \n"\
@@ -161,6 +162,8 @@ SUBCOMMANDS = {
   "Available Options:                                                      \n"\
   "  -m [--model] arg         Path to directory containing a model, or     \n"\
   "                           multiple models each in a subdirectory.      \n"\
+  "  -w [--world] arg         Path to directory containing a world, or     \n"\
+  "                           multiple worlds each in a subdirectory.      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
   "                           https://fuel.gazebosim.org.                  \n"\
@@ -208,7 +211,8 @@ class Cmd
       'pbtxt2config' => '',
       'private' => '',
       'onlymodels' => '0',
-      'onlyworlds' => '0'
+      'onlyworlds' => '0',
+      'world' => ''
     }
 
     usage = COMMANDS[args[0]]
@@ -252,6 +256,9 @@ class Cmd
       end
       opts.on('--model [model]', String, 'Model to upload.') do |m|
         options['model'] = m
+      end
+      opts.on('--world [world]', String, 'World to upload.') do |w|
+        options['world'] = w
       end
       opts.on('--config2pbtxt [config]',
               String, 'Convert config file.') do |c|
@@ -328,8 +335,8 @@ class Cmd
         exit(-1)
       end
     when 'upload'
-      if options['model'] == ''
-        puts "Missing model path."
+      if options['model'] == '' and options['world'] == ''
+        puts "Missing model or world path."
         exit(-1)
       end
       if options['url'] == ''
@@ -407,9 +414,17 @@ class Cmd
         end
       when 'edit'
         Importer.extern 'int editUrl(const char *, const char *, const char *, const char *)'
-        if not Importer.editUrl(options['url'], options['header'],
-            options['private'], options['model'])
-          exit(-1)
+        Importer.extern 'int editWorld(const char *, const char *, const char *, const char *)'
+        if options['model'] != ''
+          if not Importer.editUrl(options['url'], options['header'],
+              options['private'], options['model'])
+            exit(-1)
+          end
+        else
+          if not Importer.editWorld(options['url'], options['header'],
+              options['private'], options['world'])
+            exit(-1)
+          end
         end
       when 'list'
         if options['type'] == 'model'
@@ -442,13 +457,24 @@ class Cmd
           end
         end
       when 'upload'
-        Importer.extern 'int upload(const char *, const char *, const char *, const char *, const char *)'
-        if not Importer.upload(options['model'],
-                               options['url'],
-                               options['header'],
-                               options['private'],
-                               options['owner'])
-          exit(-1)
+        Importer.extern 'int uploadModel(const char *, const char *, const char *, const char *, const char *)'
+        Importer.extern 'int uploadWorld(const char *, const char *, const char *, const char *, const char *)'
+        if options['model'] != ''
+          if not Importer.uploadModel(options['model'],
+                                 options['url'],
+                                 options['header'],
+                                 options['private'],
+                                 options['owner'])
+            exit(-1)
+          end
+        else
+          if not Importer.uploadWorld(options['world'],
+                                 options['url'],
+                                 options['header'],
+                                 options['private'],
+                                 options['owner'])
+            exit(-1)
+          end
         end
       when 'update'
         Importer.extern 'int update(const char *, const char *, const char *)'

@@ -82,6 +82,25 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
     const char *_url, const char *_header = nullptr,
     const char *_private = nullptr, const char *_owner = nullptr);
 
+/// \brief External hook to execute 'gz fuel upload -m path' from the command
+/// line.
+///
+/// Example usage, including a private access token which is required:
+///
+/// `gz fuel upload -m ~/my_model --header "Private-Token: <access_token>"`
+///
+/// \param[in] _path Resource path.
+/// \param[in] _url Server URL.
+/// \param[in] _header An HTTP header.
+/// \param[in] _private "1" to make the resource private, "0" to make it
+/// public.
+/// \param[in] _owner Upload the resource to the provided owner, or nullptr
+/// to upload to the account specified by the token in the header.
+/// \return 1 if successful, 0 if not.
+extern "C" GZ_FUEL_TOOLS_VISIBLE int uploadWorld(const char *_path,
+    const char *_url, const char *_header = nullptr,
+    const char *_private = nullptr, const char *_owner = nullptr);
+
 /// \brief External hook to execute 'gz fuel delete [options]' from the command
 /// line.
 ///

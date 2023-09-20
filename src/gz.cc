@@ -656,7 +656,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE void cmdVerbosity(const char *_verbosity)
 }
 
 //////////////////////////////////////////////////
-extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
+extern "C" GZ_FUEL_TOOLS_VISIBLE int uploadModel(const char *_path,
     const char *_url, const char *_header, const char *_private,
     const char *_owner)
 {
@@ -731,6 +731,83 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
   return 1;
 }
 
+//////////////////////////////////////////////////
+extern "C" GZ_FUEL_TOOLS_VISIBLE int uploadWorld(const char *_path,
+    const char *_url, const char *_header, const char *_private,
+    const char *_owner)
+{
+  gz::common::SignalHandler handler;
+  bool sigKilled{false};
+  handler.AddCallback([&sigKilled](const int)
+  {
+    sigKilled = true;
+  });
+
+  gz::fuel_tools::ClientConfig conf;
+  conf.SetUserAgent("FuelTools " GZ_FUEL_TOOLS_VERSION_FULL);
+  gz::fuel_tools::FuelClient client(conf);
+  gz::fuel_tools::WorldIdentifier world;
+
+  // Set the server URL, if present.
+  if (_url && std::strlen(_url) != 0)
+    world.Server().SetUrl(gz::common::URI(_url));
+
+  // Store header information
+  std::vector<std::string> headers;
+  if (_header && strlen(_header) > 0)
+    headers.push_back(_header);
+
+  // Determine if the resource should be private.
+  bool privateBool = false;
+  if (_private && std::strlen(_private) != 0)
+  {
+    std::string privateStr = gz::common::lowercase(_private);
+    privateBool = privateStr == "1" || privateStr == "true";
+  }
+
+  if (!gz::common::exists(_path))
+  {
+    gzerr << "The world path[" << _path << "] doesn't exist.\n";
+    return 0;
+  }
+
+  // Get the set of licenses from the server. This license information will
+  // be used during the upload process.
+  client.PopulateLicenses(world.Server());
+
+  /*if (gz::common::exists(
+        gz::common::joinPaths(_path, "metadata.pbtxt")) ||
+      gz::common::exists(
+        gz::common::joinPaths(_path, "model.config")))
+  {
+  */
+    std::cout << "Uploading a world[" << _path << "]\n";
+    // Upload the model
+    return client.UploadWorld(_path, world, headers, privateBool, _owner);
+  //}
+
+  /*// If a model.config or metadata.pbtxt file does not exist, then assume
+  // that the given path is a directory containing multiple models.
+  gz::common::DirIter dirIter(_path);
+  gz::common::DirIter end;
+  while (!sigKilled && dirIter != end)
+  {
+    if (gz::common::isDirectory(*dirIter) &&
+        (gz::common::exists(
+           gz::common::joinPaths(*dirIter, "metadata.pbtxt")) ||
+         gz::common::exists(
+           gz::common::joinPaths(*dirIter, "model.config"))))
+    {
+      if (!client.UploadModel(*dirIter, model, headers, privateBool, _owner))
+      {
+        gzerr << "Failed to upload model[" << *dirIter << "]\n";
+      }
+    }
+    ++dirIter;
+  }
+  */
+  //return 1;
+}
 //////////////////////////////////////////////////
 extern "C" GZ_FUEL_TOOLS_VISIBLE int deleteUrl(
     const char *_url, const char *_header)
@@ -887,6 +964,83 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int editUrl(
   else
   {
     std::cout << "Invalid URL: only models can be edited right now."
+      << std::endl;
+    return 0;
+  }
+
+  return 1;
+}
+
+//////////////////////////////////////////////////
+extern "C" GZ_FUEL_TOOLS_VISIBLE int editWorld(
+    const char *_url, const char *_header, const char *_private,
+    const char *_path)
+{
+  gz::fuel_tools::ClientConfig conf;
+  conf.SetUserAgent("FuelTools " GZ_FUEL_TOOLS_VERSION_FULL);
+  gz::fuel_tools::FuelClient client(conf);
+
+  // Store header information
+  std::vector<std::string> headers;
+  if (_header && strlen(_header) > 0)
+    headers.push_back(_header);
+
+  gz::common::URI url(_url);
+
+  // Get a privacy change.
+  std::optional<bool> privateBool;
+  if (_private && std::strlen(_private) != 0)
+  {
+    std::string privateStr = gz::common::lowercase(_private);
+    privateBool = privateStr == "1" || privateStr == "true";
+  }
+
+  gz::fuel_tools::WorldIdentifier world;
+
+  std::string worldPath;
+  if (_path && std::strlen(_path) != 0)
+  {
+    if (!gz::common::exists(_path))
+    {
+      gzerr << "The world path[" << _path << "] doesn't exist.\n";
+      return 0;
+    }
+    worldPath = _path;
+  }
+
+  // Check to see if a world has been specified in the the URI.
+  if (client.ParseWorldUrl(url, world))
+  {
+    if (gz::common::Console::Verbosity() >= 3)
+    {
+      std::cout << "Editing world: " << "\033[36m" << std::endl
+        << world.AsPrettyString("  ") << "\033[39m" << std::endl;
+    }
+
+    // Get the world details from the server
+    gz::fuel_tools::WorldIdentifier details;
+    if (!client.WorldDetails(world, details, headers))
+    {
+      gzerr << "Failed to fetch world details for world["
+        << world.Name() << "]\n";
+      return 0;
+    }
+
+    // Change the privacy setting, if a change is present.
+    if (privateBool.has_value() || !worldPath.empty())
+    {
+      details.SetPrivate(*privateBool);
+
+      if (!client.PatchWorld(details, headers, worldPath))
+      {
+        gzerr << "Failed to patch world[" << world.Name() << "].\n";
+        return 0;
+      }
+    }
+  }
+  else
+  {
+    std::cout << "Invalid URL: only worlds can be edited right now."
       << std::endl;
     return 0;
   }

@@ -188,6 +188,19 @@ class gz::fuel_tools::FuelClientPrivate
               const std::string &_owner,
               std::multimap<std::string, std::string> &_form);
 
+  /// \brief Populate a model form such that it can be used during
+  /// model creation and editing REST calls.
+  /// \param[in] _pathToModelDir Path to the model directory.
+  /// \param[in] _id Model identifier information.
+  /// \param[in] _private True if this model should be private.
+  /// \param[in] _owner Model owner name.
+  /// \param[out] _form Form to fill.
+  /// \return True if the operation completed successfully.
+  public: bool FillWorldForm(const std::string &_pathToWorldDir,
+              const WorldIdentifier &_id, bool _private,
+              const std::string &_owner,
+              std::multimap<std::string, std::string> &_form);
+
   /// \brief This function requests the available licenses from the
   ///  Fuel server and stores this information locally.
   ///
@@ -531,6 +544,47 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
            << "     then you can get the complete list at"
            << "     https://fuel.ignitionrobotics.org/1.0/categories.\n"
            << "  3. If the owner is specified, make sure you have correct\n"
+           << "     permissions." << std::endl;
+    return Result(ResultType::FETCH_ERROR);
+  }
+
+  return Result(ResultType::UPLOAD);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::UploadWorld(const std::string &_pathToWorldDir,
+    const WorldIdentifier &_id, const std::vector<std::string> &_headers,
+    bool _private, const std::string &_owner)
+{
+  gz::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  std::multimap<std::string, std::string> form;
+  if (!this->dataPtr->FillWorldForm(_pathToWorldDir, _id, _private, _owner,
+        form))
+  {
+    return Result(ResultType::UPLOAD_ERROR);
+  }
+
+  std::vector<std::string> headersIncludingServerConfig = _headers;
+  AddServerConfigParametersToHeaders(
+    _id.Server(), headersIncludingServerConfig);
+  // Send the request.
+  resp = rest.Request(HttpMethod::POST_FORM, _id.Server().Url().Str(),
+      _id.Server().Version(), "worlds", {},
+      headersIncludingServerConfig, "", form);
+
+  if (resp.statusCode != 200)
+  {
+    gzerr << "Failed to upload world." << std::endl
+           << "  Server: " << _id.Server().Url().Str() << std::endl
+           << "  Server API Version: " <<  _id.Server().Version() << std::endl
+           << "  Route: /worlds\n"
+           << "  REST response code: " << resp.statusCode
+           << std::endl << std::endl
+           << "Suggestions" << std::endl
+           << "  1. Is the Server URL correct? Try entering it on a browser.\n"
+           << "  2. If the owner is specified, make sure you have correct\n"
            << "     permissions." << std::endl;
     return Result(ResultType::FETCH_ERROR);
   }
@@ -1652,6 +1706,45 @@ Result FuelClient::PatchModel(
 }
 
 //////////////////////////////////////////////////
+Result FuelClient::PatchWorld(
+    const gz::fuel_tools::WorldIdentifier &_world,
+    const std::vector<std::string> &_headers,
+    const std::string &_pathToWorldDir)
+{
+  gz::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  auto serverUrl = _world.Server().Url().Str();
+  auto version = _world.Server().Version();
+  common::URIPath path;
+  path = path / _world.Owner() / "worlds" / _world.Name();
+
+  std::multimap<std::string, std::string> form;
+
+  if (!_pathToWorldDir.empty() &&
+      !this->dataPtr->FillWorldForm(_pathToWorldDir, _world,
+        _world.Private(), _world.Owner(), form))
+  {
+    return Result(ResultType::UPLOAD_ERROR);
+  }
+  else
+  {
+    form.emplace("private", _world.Private() ? "1" : "0");
+  }
+
+  std::vector<std::string> headersIncludingServerConfig = _headers;
+  AddServerConfigParametersToHeaders(
+    _world.Server(), headersIncludingServerConfig);
+  resp = rest.Request(HttpMethod::PATCH_FORM, serverUrl, version,
+      path.Str(), {}, headersIncludingServerConfig, "", form);
+
+  if (resp.statusCode != 200)
+    return Result(ResultType::PATCH_ERROR);
+
+  return Result(ResultType::PATCH);
+}
+
+//////////////////////////////////////////////////
 void FuelClientPrivate::AllFiles(const std::string &_path,
     std::vector<std::string> &_files) const
 {
@@ -1835,6 +1928,127 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
   {
     _form.emplace("file", std::string("@") + file + ";"
         + file.substr(_pathToModelDir.size()+1));
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool FuelClientPrivate::FillWorldForm(const std::string &_pathToWorldDir,
+    const WorldIdentifier &_id, bool _private, const std::string &_owner,
+    std::multimap<std::string, std::string> &_form)
+{
+  if (!common::exists(_pathToWorldDir))
+  {
+    gzerr << "The world path[" << _pathToWorldDir << "] doesn't exist.\n";
+    return false;
+  }
+
+  gz::msgs::FuelMetadata meta;
+
+  // Try the `metadata.pbtxt` file first since it contains more information
+  // than `model.config`.
+  if (common::exists(common::joinPaths(_pathToWorldDir, "metadata.pbtxt")))
+  {
+    std::string filePath = common::joinPaths(_pathToWorldDir, "metadata.pbtxt");
+
+    gzdbg << "Parsing " << filePath  << std::endl;
+
+    // Read the pbtxt file.
+    std::ifstream inputFile(filePath);
+    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+        std::istreambuf_iterator<char>());
+
+    // Parse the file into the fuel metadata message
+    google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+  }
+  else
+  {
+    meta.set_name(_id.Name());
+    meta.set_description("The " + _id.Name() + " world.");
+  }
+
+  _form =
+  {
+    {"name", meta.name()},
+    {"description", meta.description()},
+    {"private", _private ? "1" : "0"},
+  };
+
+  // Add owner if specified.
+  if (!_owner.empty())
+  {
+    _form.emplace("owner", _owner);
+  }
+
+  // \todo(nkoenig) The gz-fuelserver expects an integer number for the
+  // license information. The fuelserver should be modified to accept
+  // a string. Otherwise, we have to bake into each client a mapping of
+  // license name to integer.
+  //
+  // If we have legal, then attempt to fill in the correct license information.
+  if (meta.has_legal())
+  {
+    // Attempt to retrieve the available licenses, if we have no available
+    // licenses.
+    if (this->licenses.empty())
+    {
+      this->PopulateLicenses(_id.Server());
+      // Fail if a license has been requested, but we couldn't get the
+      // available licenses.
+      if (this->licenses.empty())
+      {
+        return false;
+      }
+    }
+
+    // Find the license by name.
+    std::map<std::string, unsigned int>::const_iterator licenseIt =
+      this->licenses.find(meta.legal().license());
+    if (licenseIt != this->licenses.end())
+    {
+      _form.emplace("license", std::to_string(licenseIt->second));
+    }
+    // No license found, print an error and return.
+    else
+    {
+      std::string validLicenseNames;
+      auto end = this->licenses.end();
+      std::advance(end, -1);
+      for (licenseIt = this->licenses.begin(); licenseIt != end; ++licenseIt)
+      {
+        validLicenseNames += "    " + licenseIt->first + "\n";
+      }
+      validLicenseNames += "    " + licenseIt->first;
+
+      gzerr << "Invalid license[" << meta.legal().license() << "].\n"
+             << "  Valid licenses include:\n"
+             << validLicenseNames << std::endl;
+
+      return false;
+    }
+  }
+  // If there is no license information, then default to
+  // "Creative Commons - Public Domain"
+  else
+  {
+    _form.emplace("license", "1");
+  }
+
+  // Add tags
+  std::string tags;
+  for (int i = 0; i < meta.tags_size(); ++i)
+    tags += meta.tags(i) + ",";
+  if (!tags.empty())
+    _form.emplace("tags", tags);
+
+  // Recursively get all the files.
+  std::vector<std::string> files;
+  this->AllFiles(_pathToWorldDir, files);
+  for (const std::string &file : files)
+  {
+    _form.emplace("file", std::string("@") + file + ";"
+        + file.substr(_pathToWorldDir.size()));
   }
 
   return true;

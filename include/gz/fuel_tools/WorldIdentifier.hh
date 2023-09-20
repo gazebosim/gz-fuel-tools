@@ -150,6 +150,16 @@ namespace gz
       /// \return World information string
       public: std::string AsPrettyString(const std::string &_prefix = "") const;
 
+      /// \brief Returns the privacy setting of the world.
+      /// \return True if the world is private, false if the world is
+      /// public.
+      public: bool Private() const;
+
+      /// \brief Set the privacy setting of the world.
+      /// \param[in] True indicates the model is private, false indicates the
+      /// world is public.
+      public: void SetPrivate(bool _private) const;
+
       /// \brief PIMPL
       private: std::unique_ptr<WorldIdentifierPrivate> dataPtr;
     };
