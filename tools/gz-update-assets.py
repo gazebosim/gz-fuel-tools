@@ -13,17 +13,20 @@ import subprocess
 import zipfile
 
 # Replace all occurrences of a string with another string inside all 
-# files matching the file_pattern.
-def find_and_replace(directory, find, replace, file_pattern):
+# files with the provided extension. The extension is treated as
+# case-insentive.
+def find_and_replace(directory, find, replace, extension):
   for root, dirs, files in os.walk(directory):
-    for file in fnmatch.filter(files, file_pattern):
-      filepath = os.path.join(root, file)
-      with open(filepath) as f:
-        contents = f.read()
-      #contents = contents.replace(find, replace)
-      contents = re.sub(find, replace, contents)
-      with open(filepath, "w") as f:
-        f.write(contents)
+    for file in files:
+      base, ext = os.path.splitext(file)
+      if ext.lower() == extension.lower():
+        filepath = os.path.join(root, file)
+        with open(filepath) as f:
+          contents = f.read()
+        #contents = contents.replace(find, replace)
+        contents = re.sub(find, replace, contents)
+        with open(filepath, "w") as f:
+          f.write(contents)
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or greater is required. Try running `python3 download_collection.py`")
@@ -104,15 +107,18 @@ while True:
         with zipfile.ZipFile(dl_file, 'r') as zip_ref:
             zip_ref.extractall(model_path)
         # Update plugin names
-        find_and_replace(model_path, "ignition::gazebo::systems", "gz::sim::systems", "*.sdf")
-        find_and_replace(model_path, r"libignition-gazebo-(.*)\.so", r"gz-sim-\1", "*.sdf")
+        find_and_replace(model_path, "ignition::gazebo::systems", "gz::sim::systems", "sdf")
+        find_and_replace(model_path, r"(?:lib)?ignition-gazebo-([^.\s]*)(?:\.so)?", r"gz-sim-\1", "sdf")
+        find_and_replace(model_path, "ignition::gazebo::systems", "gz::sim::systems", "erb")
+        find_and_replace(model_path, r"(?:lib)?ignition-gazebo-([^.\s]*)(?:\.so)?", r"gz-sim-\1", "erb")
+
         # Update fuel server
-        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "*.sdf")
-        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "*.config")
-        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "*.pbtxt")
-        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "*.dae")
-        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "*.obj")
-        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "*.mtl")
+        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "sdf")
+        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "config")
+        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "pbtxt")
+        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "dae")
+        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "obj")
+        find_and_replace(model_path, "fuel.ignitionrobotics", "fuel.gazebosim", "mtl")
         model_url = '{}/{}/{}/models/{}'.format(base_url, fuel_version, owner_name, model_name)
         token_header = 'Private-Token: {}'.format(private_token)
         print("Uploading model {}".format(model_name))
