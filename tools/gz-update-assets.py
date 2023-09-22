@@ -23,7 +23,6 @@ def find_and_replace(directory, find, replace, extension):
         filepath = os.path.join(root, file)
         with open(filepath) as f:
           contents = f.read()
-        #contents = contents.replace(find, replace)
         contents = re.sub(find, replace, contents)
         with open(filepath, "w") as f:
           f.write(contents)
