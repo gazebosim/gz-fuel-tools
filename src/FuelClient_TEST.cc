@@ -541,17 +541,20 @@ TEST_P(FuelClientDownloadTest, DownloadModel)
     EXPECT_FALSE(res2);
     EXPECT_EQ(ResultType::FETCH_ERROR, res2.Type());
 
+    std::cout << "Download model" << std::endl;
     // Download
     std::string path;
     Result res3 = client.DownloadModel(url, path);
     EXPECT_TRUE(res3);
     EXPECT_EQ(ResultType::FETCH, res3.Type());
 
+    std::cout << "Check cache for url " << std::endl;
     // Check it is cached
     Result res4 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res4);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res4.Type());
 
+    std::cout << "Check cache for depurl " << std::endl;
     // Check the dependency is cached
     Result res5 = client.CachedModel(depUrl, cachedPath);
     EXPECT_TRUE(res5);

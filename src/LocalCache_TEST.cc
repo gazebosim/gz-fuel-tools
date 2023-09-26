@@ -83,7 +83,7 @@ void createLocal6Models(ClientConfig &_conf)
       "trudy", "models", "tm2", "2", "model.config")));
 
   gz::fuel_tools::ServerConfig srv;
-  srv.SetUrl(common::URI("http://localhost:8001/"));
+  srv.SetUrl(common::URI("http://localhost:8001/", true));
   _conf.AddServer(srv);
 }
 
@@ -118,7 +118,7 @@ void createLocal3Models(ClientConfig &_conf)
       "trudy", "models", "tm1", "3", "model.config")));
 
   gz::fuel_tools::ServerConfig srv;
-  srv.SetUrl(gz::common::URI("http://localhost:8007/"));
+  srv.SetUrl(gz::common::URI("http://localhost:8007/", true));
   _conf.AddServer(srv);
 }
 
@@ -171,7 +171,7 @@ void createLocal6Worlds(ClientConfig &_conf)
       "trudy", "worlds", "tm2", "2", "world.world")));
 
   gz::fuel_tools::ServerConfig srv;
-  srv.SetUrl(gz::common::URI("http://localhost:8001/"));
+  srv.SetUrl(gz::common::URI("http://localhost:8001/", true));
   _conf.AddServer(srv);
 }
 
@@ -206,7 +206,7 @@ void createLocal3Worlds(ClientConfig &_conf)
       "trudy", "worlds", "tm1", "3", "world.world")));
 
   gz::fuel_tools::ServerConfig srv;
-  srv.SetUrl(common::URI("http://localhost:8007/"));
+  srv.SetUrl(common::URI("http://localhost:8007/", true));
   _conf.AddServer(srv);
 }
 
@@ -223,6 +223,10 @@ class LocalCacheTest : public ::testing::Test
     ASSERT_FALSE(common::exists("test_cache"));
     ASSERT_TRUE(common::createDirectories("test_cache"));
     ASSERT_TRUE(common::isDirectory("test_cache"));
+
+    // This suppresses some unnecessary console spam.
+    common::createDirectories(
+        common::joinPaths("test_cache", "fuel.gazebosim.org"));
   }
 
   public: std::shared_ptr<gz::common::TempDirectory> tempDir;
@@ -230,7 +234,6 @@ class LocalCacheTest : public ::testing::Test
 
 /////////////////////////////////////////////////
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/231
 TEST_F(LocalCacheTest, AllModels)
 {
   ClientConfig conf;
@@ -250,13 +253,12 @@ TEST_F(LocalCacheTest, AllModels)
   EXPECT_EQ(9u, uniqueNames.size());
 
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-      "http://localhost:8001/alice/models/am1"));
+      "localhost%3A8001/alice/models/am1"));
 }
 
 /////////////////////////////////////////////////
 /// \brief Get all models that match some fields
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/307
 TEST_F(LocalCacheTest, MatchingModels)
 {
   ClientConfig conf;
@@ -300,7 +302,6 @@ TEST_F(LocalCacheTest, MatchingModels)
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/307
 TEST_F(LocalCacheTest, MatchingModel)
 {
   ClientConfig conf;
@@ -310,10 +311,10 @@ TEST_F(LocalCacheTest, MatchingModel)
   gz::fuel_tools::LocalCache cache(&conf);
 
   gz::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(common::URI("http://localhost:8001/"));
+  srv1.SetUrl(common::URI("http://localhost:8001/", true));
 
   gz::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(common::URI("http://localhost:8002/"));
+  srv2.SetUrl(common::URI("http://localhost:8002/", true));
 
   ModelIdentifier am1;
   am1.SetServer(srv1);
@@ -354,7 +355,6 @@ TEST_F(LocalCacheTest, MatchingModel)
 /////////////////////////////////////////////////
 /// \brief Iterate through all worlds in cache
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/307
 TEST_F(LocalCacheTest, AllWorlds)
 {
   ClientConfig conf;
@@ -373,13 +373,12 @@ TEST_F(LocalCacheTest, AllWorlds)
   }
   EXPECT_EQ(9u, uniqueNames.size());
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    gz::common::joinPaths(sanitizeAuthority("localhost:8001"), "alice", "worlds", "am1")));
+    sanitizeAuthority("localhost:8001") + "/alice/worlds/am1"));
 }
 
 /////////////////////////////////////////////////
 /// \brief Get all worlds that match some fields
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/307
 TEST_F(LocalCacheTest, MatchingWorlds)
 {
   ClientConfig conf;
@@ -411,7 +410,6 @@ TEST_F(LocalCacheTest, MatchingWorlds)
 /////////////////////////////////////////////////
 /// \brief Get a specific world from cache
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/307
 TEST_F(LocalCacheTest, MatchingWorld)
 {
   ClientConfig conf;
@@ -421,10 +419,10 @@ TEST_F(LocalCacheTest, MatchingWorld)
   gz::fuel_tools::LocalCache cache(&conf);
 
   gz::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(gz::common::URI("http://localhost:8001/"));
+  srv1.SetUrl(gz::common::URI("http://localhost:8001/", true));
 
   gz::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(gz::common::URI("http://localhost:8002/"));
+  srv2.SetUrl(gz::common::URI("http://localhost:8002/", true));
 
   WorldIdentifier am1;
   am1.SetServer(srv1);

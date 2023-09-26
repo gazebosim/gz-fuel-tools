@@ -284,9 +284,13 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
   bool tip = (_id.Version() == 0);
   Model tipModel;
 
+  std::cout << "Searching for: " << _id.UniqueName() << std::endl;
+
   for (ModelIter iter = this->AllModels(); iter; ++iter)
   {
     ModelIdentifier id = iter->Identification();
+
+    std::cout << "Found: " << id.UniqueName() << std::endl;
 
     if (_id == id)
     {

@@ -44,29 +44,26 @@ TEST(WorldIdentifier, SetFields)
 TEST(WorldIdentifier, UniqueName)
 {
   gz::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(gz::common::URI("https://localhost:8001/"));
+  srv1.SetUrl(gz::common::URI("https://localhost:8001/", true));
 
   gz::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(gz::common::URI("https://localhost:8002"));
+  srv2.SetUrl(gz::common::URI("https://localhost:8002", true));
 
   gz::fuel_tools::ServerConfig srv3;
-
-  srv3.SetUrl(gz::common::URI("https://localhost:8003/"));
+  srv3.SetUrl(gz::common::URI("https://localhost:8003/", true));
 
   WorldIdentifier id;
   id.SetName("hello");
   id.SetOwner("alice");
+
   id.SetServer(srv1);
-  EXPECT_EQ(common::joinPaths("localhost:8001", "alice", "worlds", "hello"),
-      id.UniqueName());
+  EXPECT_EQ("localhost%3A8001/alice/worlds/hello", id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ(common::joinPaths("localhost:8002", "alice", "worlds", "hello"),
-      id.UniqueName());
+  EXPECT_EQ("localhost%3A8002/alice/worlds/hello", id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ(common::joinPaths("localhost:8003", "alice", "worlds", "hello"),
-      id.UniqueName());
+  EXPECT_EQ("localhost%3A8003/alice/worlds/hello", id.UniqueName());
 }
 
 /////////////////////////////////////////////////

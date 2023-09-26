@@ -316,6 +316,13 @@ namespace gz
                   size_t _jobs = 2);
 
       /// \brief Check if a model is already present in the local cache.
+      /// \param[in] _id The model identifier
+      /// \param[out] _path Local path where the model can be found.
+      /// \return FETCH_ERROR if not cached, FETCH_ALREADY_EXISTS if cached.
+      public: Result CachedModel(const ModelIdentifier &_id,
+                                 std::string &_path);
+
+      /// \brief Check if a model is already present in the local cache.
       /// \param[in] _modelUrl The unique URL of the model on a Fuel server.
       /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer
       /// \param[out] _path Local path where the model can be found.
