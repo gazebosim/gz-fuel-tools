@@ -65,8 +65,6 @@ class ClientConfigTest: public ::testing::Test
   public: std::shared_ptr<gz::common::TempDirectory> tempDir;
 };
 
-class ServerConfigTest: public ClientConfigTest {};
-
 /////////////////////////////////////////////////
 /// \brief Initially only the default server in config
 TEST_F(ClientConfigTest, InitiallyDefaultServers)
@@ -269,19 +267,6 @@ TEST_F(ClientConfigTest, UserAgent)
 }
 
 /////////////////////////////////////////////////
-TEST_F(ServerConfigTest, ApiKey)
-{
-  ServerConfig config;
-  EXPECT_TRUE(config.ApiKey().empty());
-
-  config.SetApiKey("my_api_key");
-  EXPECT_EQ("my_api_key", config.ApiKey());
-
-  config.SetApiKey("my_other_api_key");
-  EXPECT_EQ("my_other_api_key", config.ApiKey());
-}
-
-/////////////////////////////////////////////////
 TEST_F(ClientConfigTest, AsString)
 {
   common::Console::SetVerbosity(4);
@@ -369,50 +354,5 @@ TEST_F(ClientConfigTest, AsPrettyString)
     EXPECT_EQ(str.find("local_name"), std::string::npos);
     EXPECT_NE(str.find("2.0"), std::string::npos);
     EXPECT_NE(str.find("ABCD"), std::string::npos);
-  }
-}
-
-/////////////////////////////////////////////////
-TEST_F(ServerConfigTest, Url)
-{
-  // Invalid URL string
-  {
-    ServerConfig srv;
-    srv.SetUrl(common::URI("asdf"));
-    EXPECT_TRUE(srv.Url().Str().empty());
-  }
-
-  // Valid URL
-  {
-    ServerConfig srv;
-    srv.SetUrl(common::URI("http://banana:8080"));
-    EXPECT_EQ("http://banana:8080", srv.Url().Str());
-    EXPECT_EQ("http", srv.Url().Scheme());
-    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
-    EXPECT_FALSE(srv.Url().Authority());
-  }
-
-  // Trailing /
-  {
-    ServerConfig srv;
-    srv.SetUrl(common::URI("http://banana:8080"));
-    EXPECT_EQ("http://banana:8080", srv.Url().Str());
-    EXPECT_EQ("http", srv.Url().Scheme());
-    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
-    EXPECT_FALSE(srv.Url().Authority());
-  }
-
-  // Set from URI
-  {
-    auto url = common::URI();
-    url.SetScheme("http");
-    url.Path() = common::URIPath("banana:8080");
-
-    ServerConfig srv;
-    srv.SetUrl(url);
-    EXPECT_EQ("http://banana:8080", srv.Url().Str());
-    EXPECT_EQ("http", srv.Url().Scheme());
-    EXPECT_EQ("banana:8080", srv.Url().Path().Str());
-    EXPECT_FALSE(srv.Url().Authority());
   }
 }

@@ -12,6 +12,7 @@ set (sources
   ModelIter.cc
   RestClient.cc
   Result.cc
+  ServerConfig.cc
   Zip.cc
   WorldIdentifier.cc
   WorldIter.cc
@@ -31,6 +32,7 @@ set (gtest_sources
   Model_TEST.cc
   RestClient_TEST.cc
   Result_TEST.cc
+  ServerConfig_TEST.cc
   WorldIdentifier_TEST.cc
   WorldIter_TEST.cc
   Zip_TEST.cc
