@@ -10,6 +10,7 @@ set (sources
   Model.cc
   ModelIdentifier.cc
   ModelIter.cc
+  ModelIterPrivate.cc
   RestClient.cc
   Result.cc
   ServerConfig.cc

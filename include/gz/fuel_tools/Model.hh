@@ -21,16 +21,8 @@
 #include <memory>
 #include <string>
 
-#include "gz/fuel_tools/Helpers.hh"
 #include "gz/fuel_tools/Result.hh"
 #include "gz/fuel_tools/ModelIdentifier.hh"
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::shared_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
 
 namespace gz
 {
@@ -78,13 +70,11 @@ namespace gz
       /// \brief Default constructor
       public: Model();
 
-      /// \brief Copy constructor
-      /// \param[in] _orig Model to copy.
-      public: Model(const Model &_orig) = default;
+      public: explicit Model(const gz::fuel_tools::ModelIdentifier &_id,
+                             const std::string &_pathOnDisk = "");
 
-      /// \brief Protected constructor
-      /// \param[in] _dPtr Model private data to copy.
-      protected: explicit Model(std::shared_ptr<ModelPrivate> _dptr);
+      public: Model(const std::string &_name, const std::string &_owner,
+                    const gz::fuel_tools::ServerConfig &_server);
 
       /// \brief Returns false if model was constructed via Model()
       public: operator bool() const;
@@ -108,13 +98,8 @@ namespace gz
       public: std::string PathToModel() const;
 
       /// \brief PIMPL
-      private: std::shared_ptr<ModelPrivate> dataPtr;
+      GZ_UTILS_IMPL_PTR_FWD(ModelPrivate, dataPtr)
     };
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-
 #endif

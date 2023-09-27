@@ -138,13 +138,12 @@ std::vector<Model> LocalCachePrivate::ModelsInServer(
 
         if (common::exists(common::joinPaths(*versionIter, "model.config")))
         {
-          std::shared_ptr<ModelPrivate> modPriv(new ModelPrivate);
-          modPriv->id.SetName(common::basename(*modIter));
-          modPriv->id.SetOwner(common::basename(*ownIter));
-          modPriv->id.SetVersionStr(common::basename(*versionIter));
-          modPriv->pathOnDisk = common::absPath(*versionIter);
-          Model model(modPriv);
-          models.push_back(model);
+          ModelIdentifier id;
+          id.SetName(common::basename(*modIter));
+          id.SetOwner(common::basename(*ownIter));
+          id.SetVersionStr(common::basename(*versionIter));
+          auto pathOnDisk = common::absPath(*versionIter);
+          models.emplace_back(id, pathOnDisk);
         }
         ++versionIter;
       }

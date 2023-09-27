@@ -20,23 +20,14 @@
 
 #include <memory>
 
-#include "gz/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/Model.hh"
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
 
 namespace gz
 {
   namespace fuel_tools
   {
     /// \brief forward declaration
-    class FuelClient;
-    class ModelIterPrivate;
     class ModelIterFactory;
 
     /// \brief class for iterating through models
@@ -44,24 +35,11 @@ namespace gz
     {
       friend ModelIterFactory;
 
-      /// \brief Construct an iterator with the data it needs to function
-      /// \param[in] _dptr Pointer to private data to copy
-      protected: explicit ModelIter(std::unique_ptr<ModelIterPrivate> _dptr);
-
-      /// \brief Move constructor
-      /// \param[in] _old Iter to move
-      public: ModelIter(ModelIter && _old);
-
-      /// \brief Default destructor.
-      public: ~ModelIter();
+      protected: ModelIter();
 
       /// \brief Conversion operator
       /// \return false once the iterator is one past the end of the models
-      public: operator bool();
-
-      /// \brief Conversion operator
-      /// \return false once the iterator is one past the end of the models
-      public: operator bool() const;
+      public: explicit operator bool() const;
 
       /// \brief Prefix increment
       /// \return Next iteration
@@ -76,13 +54,9 @@ namespace gz
       public: Model *operator->();
 
       /// \brief Private data pointer.
-      private: std::unique_ptr<ModelIterPrivate> dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #endif

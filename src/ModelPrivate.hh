@@ -20,23 +20,18 @@
 
 #include <string>
 
-#include "gz/fuel_tools/Helpers.hh"
 #include "gz/fuel_tools/ModelIdentifier.hh"
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::string
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
 
 namespace gz
 {
   namespace fuel_tools
   {
     /// \brief Private class, do not use
-    class GZ_FUEL_TOOLS_VISIBLE ModelPrivate
+    class ModelPrivate
     {
+      /// \brief Is this model valid
+      public: bool isValid {false} ;
+
       /// \brief How this model is ID'd
       public: ModelIdentifier id;
 
@@ -45,9 +40,5 @@ namespace gz
     };
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #endif
