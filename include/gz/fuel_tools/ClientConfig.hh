@@ -27,20 +27,10 @@
 #include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/ServerConfig.hh"
 
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-
 namespace gz
 {
   namespace fuel_tools
   {
-    /// \brief Forward Declaration
-    class ClientConfigPrivate;
-
     /// \brief High level interface to Gazebo Fuel.
     ///
     class GZ_FUEL_TOOLS_VISIBLE ClientConfig
@@ -48,16 +38,6 @@ namespace gz
       /// \brief Constructor.
       public: ClientConfig();
 
-      /// \brief Copy constructor.
-      /// \param[in] _copy ClientConfig to copy.
-      public: ClientConfig(const ClientConfig &_copy);
-
-      /// \brief Assignment operator overload.
-      /// \param[in] _copy ClientConfig to copy.
-      public: ClientConfig &operator=(const ClientConfig &_copy);
-
-      /// \brief Destructor.
-      public: ~ClientConfig();
 
       /// \brief Clear the client config. This will set all values to empty
       /// strings, except the user agent which will be set to its default
@@ -88,10 +68,6 @@ namespace gz
       /// \return The list of servers.
       public: std::vector<ServerConfig> Servers() const;
 
-      /// \brief List of servers the client will connect to.
-      /// \return The list of servers.
-      public: std::vector<ServerConfig> & MutableServers() const;
-
       /// \brief Add a server to the list.
       /// \param[in] _srv The server config.
       public: void AddServer(const ServerConfig &_srv);
@@ -110,13 +86,9 @@ namespace gz
       public: std::string AsString(const std::string &_prefix = "") const;
 
       /// \brief PIMPL
-      private: std::unique_ptr<ClientConfigPrivate> dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #endif

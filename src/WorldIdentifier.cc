@@ -29,7 +29,7 @@
 using namespace gz;
 using namespace fuel_tools;
 
-class gz::fuel_tools::WorldIdentifierPrivate
+class gz::fuel_tools::WorldIdentifier::Implementation
 {
   /// \brief a name given to this world by a user
   public: std::string name;
@@ -49,32 +49,14 @@ class gz::fuel_tools::WorldIdentifierPrivate
 
 //////////////////////////////////////////////////
 WorldIdentifier::WorldIdentifier()
-  : dataPtr(new WorldIdentifierPrivate)
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
-}
-
-//////////////////////////////////////////////////
-WorldIdentifier::WorldIdentifier(const WorldIdentifier &_orig)
-{
-  this->dataPtr.reset(new WorldIdentifierPrivate(*(_orig.dataPtr.get())));
-}
-
-//////////////////////////////////////////////////
-WorldIdentifier &WorldIdentifier::operator=(const WorldIdentifier &_orig)
-{
-  this->dataPtr.reset(new WorldIdentifierPrivate(*(_orig.dataPtr.get())));
-  return *this;
 }
 
 //////////////////////////////////////////////////
 bool WorldIdentifier::operator==(const WorldIdentifier &_rhs) const
 {
   return this->UniqueName() == _rhs.UniqueName();
-}
-
-//////////////////////////////////////////////////
-WorldIdentifier::~WorldIdentifier()
-{
 }
 
 //////////////////////////////////////////////////
@@ -123,7 +105,13 @@ bool WorldIdentifier::SetServer(const ServerConfig &_server)
 }
 
 //////////////////////////////////////////////////
-ServerConfig &WorldIdentifier::Server() const
+const ServerConfig &WorldIdentifier::Server() const
+{
+  return this->dataPtr->server;
+}
+
+//////////////////////////////////////////////////
+ServerConfig &WorldIdentifier::Server()
 {
   return this->dataPtr->server;
 }
@@ -162,7 +150,7 @@ bool WorldIdentifier::SetVersionStr(const std::string &_version)
   {
     this->dataPtr->version = std::stoi(_version);
   }
-  catch(std::invalid_argument &_e)
+  catch(const std::invalid_argument &_e)
   {
     return false;
   }
@@ -228,4 +216,3 @@ std::string WorldIdentifier::AsPrettyString(const std::string &_prefix) const
       << this->Server().AsPrettyString(_prefix + "  ");
   return out.str();
 }
-

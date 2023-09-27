@@ -21,41 +21,18 @@
 #include <memory>
 #include <string>
 
-#include "gz/fuel_tools/Helpers.hh"
-
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
+#include "gz/fuel_tools/ServerConfig.hh"
 
 namespace gz
 {
   namespace fuel_tools
   {
-    /// \brief Forward Declaration
-    class CollectionIdentifierPrivate;
-    class ServerConfig;
-
     /// \brief Defines how to identify a collection
     class GZ_FUEL_TOOLS_VISIBLE CollectionIdentifier
     {
       /// \brief Constructor.
       public: CollectionIdentifier();
 
-      /// \brief Copy Constructor.
-      /// \param[in] _orig CollectionIdentifier to copy.
-      public: CollectionIdentifier(const CollectionIdentifier &_orig);
-
-      /// \brief Destructor.
-      public: ~CollectionIdentifier();
-
-      /// \brief Assignment operator
-      /// \param[in] _orig CollectionIdentifier to copy.
-      /// \return Reference to this object.
-      public: CollectionIdentifier
-              &operator=(const CollectionIdentifier &_orig);
 
         /// \brief Equality operator.
         /// \param[in] _rhs CollectionIdentifier to compare.
@@ -82,7 +59,12 @@ namespace gz
 
       /// \brief Returns server information to retrieve collection from.
       /// \return Server information.
-      public: ServerConfig &Server() const;
+      public: const ServerConfig &Server() const;
+
+
+      /// \brief Returns server information to retrieve collection from.
+      /// \return Server information.
+      public: ServerConfig &Server();
 
       /// \brief Set the server from which this collection comes.
       /// \param[in] _server The server to retrieve the collection from.
@@ -107,13 +89,9 @@ namespace gz
       public: std::string AsPrettyString(const std::string &_prefix = "") const;
 
       /// \brief PIMPL
-      private: std::unique_ptr<CollectionIdentifierPrivate> dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #endif

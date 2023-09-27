@@ -31,7 +31,7 @@ using namespace fuel_tools;
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class gz::fuel_tools::ServerConfigPrivate
+class gz::fuel_tools::ServerConfig::Implementation
 {
   /// \brief Clear values.
   public: void Clear()
@@ -53,33 +53,14 @@ class gz::fuel_tools::ServerConfigPrivate
 
 //////////////////////////////////////////////////
 ServerConfig::ServerConfig()
-  : dataPtr (new ServerConfigPrivate)
+  : dataPtr (gz::utils::MakeImpl<Implementation>())
 {
-}
-
-//////////////////////////////////////////////////
-ServerConfig::ServerConfig(const ServerConfig &_orig)
-  : dataPtr(new ServerConfigPrivate)
-{
-  *(this->dataPtr) = *(_orig.dataPtr);
 }
 
 //////////////////////////////////////////////////
 void ServerConfig::Clear()
 {
   this->dataPtr->Clear();
-}
-
-//////////////////////////////////////////////////
-ServerConfig &ServerConfig::operator=(const ServerConfig &_orig)
-{
-  *(this->dataPtr) = *(_orig.dataPtr);
-  return *this;
-}
-
-//////////////////////////////////////////////////
-ServerConfig::~ServerConfig()
-{
 }
 
 //////////////////////////////////////////////////

@@ -84,6 +84,9 @@ namespace gz
       /// \brief Default constructor.
       public: Rest() = default;
 
+      /// \brief Default destructor.
+      public: virtual ~Rest() = default;
+
       /// \brief Trigger a REST request.
       /// \param[in] _method The HTTP method. Use all uppercase letters.
       ///            E.g.: "GET"

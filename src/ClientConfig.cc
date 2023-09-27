@@ -33,10 +33,10 @@ using namespace fuel_tools;
 
 //////////////////////////////////////////////////
 /// \brief Private data class
-class gz::fuel_tools::ClientConfigPrivate
+class gz::fuel_tools::ClientConfig::Implementation
 {
   /// \brief Constructor.
-  public: ClientConfigPrivate()
+  public: Implementation()
           {
             std::string homePath;
             gz::common::env(GZ_HOMEDIR, homePath);
@@ -71,7 +71,8 @@ class gz::fuel_tools::ClientConfigPrivate
 };
 
 //////////////////////////////////////////////////
-ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
+ClientConfig::ClientConfig()
+: dataPtr(gz::utils::MakeImpl<Implementation>())
 {
   std::string gzFuelPath = "";
   if (!gz::common::env("GZ_FUEL_CACHE_PATH", gzFuelPath))
@@ -85,26 +86,6 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
     return;
   }
   this->SetCacheLocation(gzFuelPath);
-}
-
-//////////////////////////////////////////////////
-ClientConfig::ClientConfig(const ClientConfig &_copy)
-  : dataPtr(new ClientConfigPrivate)
-{
-  *(this->dataPtr) = *(_copy.dataPtr);
-}
-
-//////////////////////////////////////////////////
-ClientConfig &ClientConfig::operator=(const ClientConfig &_copy)
-{
-  *(this->dataPtr) = *(_copy.dataPtr);
-
-  return *this;
-}
-
-//////////////////////////////////////////////////
-ClientConfig::~ClientConfig()
-{
 }
 
 //////////////////////////////////////////////////
@@ -200,7 +181,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
           {
             // Sanity check: Make sure that the server is not already stored.
             bool repeated = false;
-            for (auto & savedServer : this->MutableServers())
+            for (auto & savedServer : this->dataPtr->servers)
             {
               if (savedServer.Url().Str() == serverURL)
               {
@@ -321,12 +302,6 @@ std::string ClientConfig::ConfigPath() const
 
 //////////////////////////////////////////////////
 std::vector<ServerConfig> ClientConfig::Servers() const
-{
-  return this->dataPtr->servers;
-}
-
-//////////////////////////////////////////////////
-std::vector<ServerConfig> & ClientConfig::MutableServers() const
 {
   return this->dataPtr->servers;
 }
