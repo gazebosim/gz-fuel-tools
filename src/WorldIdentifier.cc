@@ -74,7 +74,9 @@ bool WorldIdentifier::operator==(const WorldIdentifier &_rhs) const
 }
 
 //////////////////////////////////////////////////
-WorldIdentifier::~WorldIdentifier() = default;
+WorldIdentifier::~WorldIdentifier()
+{
+}
 
 //////////////////////////////////////////////////
 std::string WorldIdentifier::UniqueName() const

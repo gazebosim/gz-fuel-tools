@@ -143,7 +143,9 @@ bool ModelIdentifier::operator!=(const ModelIdentifier &_rhs) const
 }
 
 //////////////////////////////////////////////////
-ModelIdentifier::~ModelIdentifier() = default;
+ModelIdentifier::~ModelIdentifier()
+{
+}
 
 //////////////////////////////////////////////////
 std::string ModelIdentifier::UniqueName() const

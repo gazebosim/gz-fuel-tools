@@ -133,7 +133,6 @@ namespace gz
       /// \return Unique world name.
       public: std::string UniqueName() const;
 
-
       // /// \brief Sets the SHA 2 256 hash of the world
       // /// \param[in] _hash a 256 bit SHA 2 hash
       // /// \returns true if successful

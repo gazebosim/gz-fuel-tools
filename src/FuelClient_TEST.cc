@@ -38,6 +38,8 @@ using namespace gz::fuel_tools;
 /// Taken from LocalCache_TEST
 void createLocalModel(ClientConfig &_conf)
 {
+  gzdbg << "Creating local model in [" << common::cwd() << "]" << std::endl;
+
   auto modelPath = common::joinPaths(
       "test_cache",
       sanitizeAuthority("localhost:8007"),
@@ -93,6 +95,8 @@ void createLocalModel(ClientConfig &_conf)
 /// Taken from LocalCache_TEST
 void createLocalWorld(ClientConfig &_conf)
 {
+  gzdbg << "Creating local world in [" << common::cwd() << "]" << std::endl;
+
   auto worldPath = common::joinPaths(
       "test_cache",
       sanitizeAuthority("localhost:8007"),
@@ -131,11 +135,9 @@ class FuelClientTest: public ::testing::Test
     ASSERT_FALSE(common::exists("test_cache"));
     ASSERT_TRUE(common::createDirectories("test_cache"));
     ASSERT_TRUE(common::isDirectory("test_cache"));
-
     ASSERT_FALSE(common::exists("test_cache/fuel.gazebosim.org"));
     ASSERT_TRUE(common::createDirectories("test_cache/fuel.gazebosim.org"));
     ASSERT_TRUE(common::isDirectory("test_cache/fuel.gazebosim.org"));
-
   }
 
   public: std::shared_ptr<gz::common::TempDirectory> tempDir;
@@ -541,20 +543,17 @@ TEST_P(FuelClientDownloadTest, DownloadModel)
     EXPECT_FALSE(res2);
     EXPECT_EQ(ResultType::FETCH_ERROR, res2.Type());
 
-    std::cout << "Download model" << std::endl;
     // Download
     std::string path;
     Result res3 = client.DownloadModel(url, path);
     EXPECT_TRUE(res3);
     EXPECT_EQ(ResultType::FETCH, res3.Type());
 
-    std::cout << "Check cache for url " << std::endl;
     // Check it is cached
     Result res4 = client.CachedModel(url, cachedPath);
     EXPECT_TRUE(res4);
     EXPECT_EQ(ResultType::FETCH_ALREADY_EXISTS, res4.Type());
 
-    std::cout << "Check cache for depurl " << std::endl;
     // Check the dependency is cached
     Result res5 = client.CachedModel(depUrl, cachedPath);
     EXPECT_TRUE(res5);

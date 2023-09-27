@@ -51,7 +51,6 @@ std::string gz::fuel_tools::uriToPath(const common::URI &_uri)
   }
 
   authority = sanitizeAuthority(authority);
-
   if (authority.empty())
   {
     return path;
