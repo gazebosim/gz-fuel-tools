@@ -112,7 +112,6 @@ TEST(WorldIdentifier, AsString)
   common::Console::SetVerbosity(4);
   {
     WorldIdentifier id;
-#ifndef _WIN32
     std::string str =
         "Name: \n"\
         "Owner: \n"\
@@ -123,18 +122,6 @@ TEST(WorldIdentifier, AsString)
         "  URL: https://fuel.gazebosim.org\n"
         "  Version: 1.0\n"
         "  API key: \n";
-#else
-    std::string str =
-        "Name: \n"\
-        "Owner: \n"\
-        "Version: tip\n"\
-        "Unique name: fuel.gazebosim.org\\worlds\\\n"
-        "Local path: \n"
-        "Server:\n"
-        "  URL: https://fuel.gazebosim.org\n"
-        "  Version: 1.0\n"
-        "  API key: \n";
-#endif
     EXPECT_EQ(str, id.AsString());
   }
 
