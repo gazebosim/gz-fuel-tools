@@ -1,6 +1,6 @@
 ## Gazebo Fuel Tools 9.x
 
-### Gazebo Fuel Tools 9.0.0 (202X-XX-XX)
+### Gazebo Fuel Tools 9.0.0 (2023-09-29)
 
 1. Added script to update assets to gz
     * [Pull request #377](https://github.com/gazebosim/gz-fuel-tools/pull/377)
