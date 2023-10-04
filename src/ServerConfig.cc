@@ -20,13 +20,11 @@
 #include <sstream>
 #include <stack>
 #include <string>
-#include <vector>
 #include <gz/common/Console.hh>
 #include <gz/common/Filesystem.hh>
 #include <gz/common/Util.hh>
 
 #include "gz/fuel_tools/ServerConfig.hh"
-#include "gz/fuel_tools/config.hh"
 
 using namespace gz;
 using namespace fuel_tools;

@@ -24,7 +24,6 @@
 #include <gz/common/testing/TestPaths.hh>
 #include <gz/common/Util.hh>
 
-#include "gz/fuel_tools/config.hh"
 #include "gz/fuel_tools/ServerConfig.hh"
 
 using namespace gz;
@@ -77,7 +76,6 @@ TEST_F(ServerConfigTest, ApiKey)
   config.SetApiKey("my_other_api_key");
   EXPECT_EQ("my_other_api_key", config.ApiKey());
 }
-
 
 /////////////////////////////////////////////////
 TEST_F(ServerConfigTest, Url)
