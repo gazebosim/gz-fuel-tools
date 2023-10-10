@@ -1,6 +1,31 @@
 ## Gazebo Fuel Tools 9.x
 
-### Gazebo Fuel Tools 9.0.0 (202X-XX-XX)
+### Gazebo Fuel Tools 9.0.0 (2023-09-29)
+
+1. Added script to update assets to gz
+    * [Pull request #377](https://github.com/gazebosim/gz-fuel-tools/pull/377)
+
+1. Documentation fixes
+    * [Pull request #371](https://github.com/gazebosim/gz-fuel-tools/pull/371)
+    * [Pull request #372](https://github.com/gazebosim/gz-fuel-tools/pull/372)
+    * [Pull request #375](https://github.com/gazebosim/gz-fuel-tools/pull/375)
+
+1. ign -> gz
+    * [Pull request #364](https://github.com/gazebosim/gz-fuel-tools/pull/364)
+    * [Pull request #375](https://github.com/gazebosim/gz-fuel-tools/pull/375)
+
+1. Remove GZ_FUEL_INITIAL_CONFIG_PATH macro
+    * [Pull request #363](https://github.com/gazebosim/gz-fuel-tools/pull/363)
+
+1. Infrastructure
+    * [Pull request #323](https://github.com/gazebosim/gz-fuel-tools/pull/323)
+    * [Pull request #374](https://github.com/gazebosim/gz-fuel-tools/pull/374)
+
+1. Update package dependencies for harmonic (gz-msgs10)
+    * [Pull request #326](https://github.com/gazebosim/gz-fuel-tools/pull/326)
+
+1. ⬆️  Bump main to 9.0.0~pre1
+    * [Pull request #283](https://github.com/gazebosim/gz-fuel-tools/pull/283)
 
 ## Gazebo Fuel Tools 8.x
 
