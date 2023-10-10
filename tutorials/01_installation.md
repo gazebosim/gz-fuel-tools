@@ -168,16 +168,18 @@ sudo make uninstall
 
 1. Clone the repository
   ```
-  git clone https://github.com/gazebosim/gz-fuel-tools -b ign-fuel-tools<#>
+  git clone https://github.com/gazebosim/gz-fuel-tools -b gz-fuel-tools<#>
   ```
-  Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
-  which version you need.
+  Be sure to replace `<#>` with a number value, such as 8 or 9, depending on
+  which version you need. 
+  
+  **Note:** If the version is 7 or downwards replace `gz-fuel-tools<#>` for `ign-fuel-tools<#>` in the command line. For more information take a look [here](https://community.gazebosim.org/t/a-new-era-for-gazebo/1356).
 
 2. Install dependencies
   ```
   brew install --only-dependencies gz-fuel-tools<#>
   ```
-  Be sure to replace `<#>` with a number value, such as 1 or 2, depending on
+  Be sure to replace `<#>` with a number value, such as 8 or 9, depending on
   which version you need.
 
 3. Configure and build
