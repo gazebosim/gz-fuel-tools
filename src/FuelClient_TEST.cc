@@ -407,8 +407,7 @@ class FuelClientDownloadTest
 
 INSTANTIATE_TEST_SUITE_P(
     FuelClientTest, FuelClientDownloadTest,
-    ::testing::Values("fuel.gazebosim.org",
-                      "fuel.ignitionrobotics.org"));
+    ::testing::Values("fuel.gazebosim.org"));
 
 /////////////////////////////////////////////////
 // Protocol "https" not supported or disabled in libcurl for Windows
