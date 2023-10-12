@@ -83,7 +83,7 @@ class gz::fuel_tools::ServerConfigPrivate
           }
 
   /// \brief URL to reach server
-  public: common::URI url{"https://fuel.gazebosim.org"};
+  public: common::URI url{"https://fuel.gazebosim.org", true};
 
   /// \brief A key to auth with the server
   public: std::string key = "";

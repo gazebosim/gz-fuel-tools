@@ -56,32 +56,28 @@ TEST(ModelIdentifier, SetFields)
 
 /////////////////////////////////////////////////
 /// \brief Unique Name
-// See https://github.com/gazebosim/gz-fuel-tools/issues/231
-TEST(ModelIdentifier, GZ_UTILS_TEST_DISABLED_ON_WIN32(UniqueName))
+TEST(ModelIdentifier, UniqueName)
 {
   gz::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(common::URI("https://localhost:8001"));
+  srv1.SetUrl(common::URI("https://localhost:8001", true));
 
   gz::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(common::URI("https://localhost:8002"));
+  srv2.SetUrl(common::URI("https://localhost:8002", true));
 
   gz::fuel_tools::ServerConfig srv3;
-  srv3.SetUrl(common::URI("https://localhost:8003"));
+  srv3.SetUrl(common::URI("https://localhost:8003", true));
 
   ModelIdentifier id;
   id.SetName("hello");
   id.SetOwner("alice");
   id.SetServer(srv1);
-  EXPECT_EQ(common::joinPaths("https://localhost:8001", "alice", "models",
-      "hello"), id.UniqueName());
+  EXPECT_EQ("localhost%3A8001/alice/models/hello", id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ(common::joinPaths("https://localhost:8002", "alice", "models",
-      "hello"), id.UniqueName());
+  EXPECT_EQ("localhost%3A8002/alice/models/hello", id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ(common::joinPaths("https://localhost:8003", "alice", "models",
-      "hello"), id.UniqueName());
+  EXPECT_EQ("localhost%3A8003/alice/models/hello", id.UniqueName());
 }
 
 /////////////////////////////////////////////////
@@ -156,7 +152,7 @@ TEST(ModelIdentifier, AsString)
         "Name: \n"\
         "Owner: \n"\
         "Version: tip\n"\
-        "Unique name: https://fuel.gazebosim.org/models/\n"
+        "Unique name: fuel.gazebosim.org/models/\n"
         "Description: \n"
         "File size: 0\n"
         "Upload date: 0\n"
