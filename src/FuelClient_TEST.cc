@@ -1149,7 +1149,8 @@ TEST_F(FuelClientTest, DownloadWorld)
 /////////////////////////////////////////////////
 // Windows doesn't support colons in filenames
 // https://github.com/gazebosim/gz-fuel-tools/issues/106
-TEST_F(FuelClientTest, CachedWorld)
+// This is fixed in gz-fuel-tools9+, but not here to preserve behavior
+TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(CachedWorld))
 {
   ClientConfig config;
   config.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -1477,8 +1478,11 @@ TEST_F(FuelClientTest, UploadModelFail)
   EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
 }
 
-//////////////////////////////////////////////////
-TEST_F(FuelClientTest, PatchModelFail)
+/////////////////////////////////////////////////
+// Windows doesn't support colons in filenames
+// https://github.com/gazebosim/gz-fuel-tools/issues/106
+// This is fixed in gz-fuel-tools9+, but not here to preserve behavior
+TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(PatchModelFail))
 {
   FuelClient client;
   ModelIdentifier modelId;
