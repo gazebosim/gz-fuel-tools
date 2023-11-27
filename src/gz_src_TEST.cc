@@ -51,6 +51,10 @@ class CmdLine : public ::testing::Test
     // instead of on teardown leaves the folder intact for debugging if needed
     common::removeAll(testCachePath);
     ASSERT_TRUE(common::createDirectories(testCachePath));
+    ASSERT_TRUE(common::createDirectories(
+        common::joinPaths(testCachePath, "fuel.gazebosim.org")));
+    ASSERT_TRUE(common::createDirectories(
+        common::joinPaths(testCachePath, "fuel.ignitionrobotics.org")));
     setenv("GZ_FUEL_CACHE_PATH", this->testCachePath.c_str(), true);
   }
 
