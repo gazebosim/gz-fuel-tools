@@ -21,6 +21,7 @@
 
 #include <gz/common/Console.hh>
 #include <gz/common/Filesystem.hh>
+#include <gz/common/StringUtils.hh>
 #include <gz/common/Util.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
@@ -149,9 +150,10 @@ ModelIdentifier::~ModelIdentifier()
 //////////////////////////////////////////////////
 std::string ModelIdentifier::UniqueName() const
 {
-  return common::joinPaths(this->dataPtr->server.Url().Str(),
-                           this->dataPtr->owner, "models",
-                           this->dataPtr->name);
+  return common::copyToUnixPath(common::joinPaths(
+    uriToPath(this->dataPtr->server.Url()),
+    this->dataPtr->owner, "models",
+    this->dataPtr->name));
 }
 
 //////////////////////////////////////////////////

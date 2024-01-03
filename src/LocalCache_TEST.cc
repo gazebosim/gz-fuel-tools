@@ -26,6 +26,7 @@
 #include <gz/utils/ExtraTestMacros.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/Helpers.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
 #include "LocalCache.hh"
@@ -38,7 +39,8 @@ void createLocal6Models(ClientConfig &_conf)
 {
   gzdbg << "Creating 6 local models in [" << common::cwd() << "]" << std::endl;
 
-  auto serverPath = common::joinPaths("test_cache", "localhost:8001");
+  auto serverPath =
+    common::joinPaths("test_cache", sanitizeAuthority("localhost:8001"));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "models", "am1", "2")));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -81,7 +83,7 @@ void createLocal6Models(ClientConfig &_conf)
       "trudy", "models", "tm2", "2", "model.config")));
 
   gz::fuel_tools::ServerConfig srv;
-  srv.SetUrl(common::URI("http://localhost:8001/"));
+  srv.SetUrl(common::URI("http://localhost:8001/", true));
   _conf.AddServer(srv);
 }
 
@@ -90,7 +92,8 @@ void createLocal3Models(ClientConfig &_conf)
 {
   gzdbg << "Creating 3 local models in [" << common::cwd() << "]" << std::endl;
 
-  auto serverPath = common::joinPaths("test_cache", "localhost:8007");
+  auto serverPath =
+    common::joinPaths("test_cache", sanitizeAuthority("localhost:8007"));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "models", "am1", "2")));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -115,7 +118,7 @@ void createLocal3Models(ClientConfig &_conf)
       "trudy", "models", "tm1", "3", "model.config")));
 
   gz::fuel_tools::ServerConfig srv;
-  srv.SetUrl(gz::common::URI("http://localhost:8007/"));
+  srv.SetUrl(gz::common::URI("http://localhost:8007/", true));
   _conf.AddServer(srv);
 }
 
@@ -124,7 +127,8 @@ void createLocal6Worlds(ClientConfig &_conf)
 {
   gzdbg << "Creating 6 local worlds in [" << common::cwd() << "]" << std::endl;
 
-  auto serverPath = common::joinPaths("test_cache", "localhost:8001");
+  auto serverPath =
+    common::joinPaths("test_cache", sanitizeAuthority("localhost:8001"));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2")));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -167,7 +171,7 @@ void createLocal6Worlds(ClientConfig &_conf)
       "trudy", "worlds", "tm2", "2", "world.world")));
 
   gz::fuel_tools::ServerConfig srv;
-  srv.SetUrl(gz::common::URI("http://localhost:8001/"));
+  srv.SetUrl(gz::common::URI("http://localhost:8001/", true));
   _conf.AddServer(srv);
 }
 
@@ -176,7 +180,8 @@ void createLocal3Worlds(ClientConfig &_conf)
 {
   gzdbg << "Creating 3 local worlds in [" << common::cwd() << "]" << std::endl;
 
-  auto serverPath = common::joinPaths("test_cache", "localhost:8007");
+  auto serverPath = common::joinPaths(
+    "test_cache", sanitizeAuthority("localhost:8007"));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
       "alice", "worlds", "am1", "2")));
   ASSERT_TRUE(common::createDirectories(common::joinPaths(serverPath,
@@ -201,7 +206,7 @@ void createLocal3Worlds(ClientConfig &_conf)
       "trudy", "worlds", "tm1", "3", "world.world")));
 
   gz::fuel_tools::ServerConfig srv;
-  srv.SetUrl(common::URI("http://localhost:8007/"));
+  srv.SetUrl(common::URI("http://localhost:8007/", true));
   _conf.AddServer(srv);
 }
 
@@ -218,6 +223,10 @@ class LocalCacheTest : public ::testing::Test
     ASSERT_FALSE(common::exists("test_cache"));
     ASSERT_TRUE(common::createDirectories("test_cache"));
     ASSERT_TRUE(common::isDirectory("test_cache"));
+
+    // This suppresses some unnecessary console spam.
+    common::createDirectories(
+        common::joinPaths("test_cache", "fuel.gazebosim.org"));
   }
 
   public: std::shared_ptr<gz::common::TempDirectory> tempDir;
@@ -225,8 +234,7 @@ class LocalCacheTest : public ::testing::Test
 
 /////////////////////////////////////////////////
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/231
-TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
+TEST_F(LocalCacheTest, AllModels)
 {
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -245,14 +253,13 @@ TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllModels))
   EXPECT_EQ(9u, uniqueNames.size());
 
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-      "http://localhost:8001/alice/models/am1"));
+      "localhost%3A8001/alice/models/am1"));
 }
 
 /////////////////////////////////////////////////
 /// \brief Get all models that match some fields
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/307
-TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingModels))
+TEST_F(LocalCacheTest, MatchingModels)
 {
   ClientConfig conf;
   conf.Clear();
@@ -295,8 +302,7 @@ TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingModels))
 /////////////////////////////////////////////////
 /// \brief Get a specific model from cache
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/307
-TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingModel))
+TEST_F(LocalCacheTest, MatchingModel)
 {
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -305,10 +311,10 @@ TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingModel))
   gz::fuel_tools::LocalCache cache(&conf);
 
   gz::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(common::URI("http://localhost:8001/"));
+  srv1.SetUrl(common::URI("http://localhost:8001/", true));
 
   gz::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(common::URI("http://localhost:8002/"));
+  srv2.SetUrl(common::URI("http://localhost:8002/", true));
 
   ModelIdentifier am1;
   am1.SetServer(srv1);
@@ -349,8 +355,7 @@ TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingModel))
 /////////////////////////////////////////////////
 /// \brief Iterate through all worlds in cache
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/307
-TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllWorlds))
+TEST_F(LocalCacheTest, AllWorlds)
 {
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -367,20 +372,14 @@ TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(AllWorlds))
     ++iter;
   }
   EXPECT_EQ(9u, uniqueNames.size());
-#ifdef _WIN32
   EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    gz::common::joinPaths("localhost8001", "alice", "worlds", "am1")));
-#else
-  EXPECT_NE(uniqueNames.end(), uniqueNames.find(
-    gz::common::joinPaths("localhost:8001", "alice", "worlds", "am1")));
-#endif
+    sanitizeAuthority("localhost:8001") + "/alice/worlds/am1"));
 }
 
 /////////////////////////////////////////////////
 /// \brief Get all worlds that match some fields
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/307
-TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorlds))
+TEST_F(LocalCacheTest, MatchingWorlds)
 {
   ClientConfig conf;
   conf.Clear();
@@ -411,8 +410,7 @@ TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorlds))
 /////////////////////////////////////////////////
 /// \brief Get a specific world from cache
 /// \brief Iterate through all models in cache
-// See https://github.com/gazebosim/gz-fuel-tools/issues/307
-TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorld))
+TEST_F(LocalCacheTest, MatchingWorld)
 {
   ClientConfig conf;
   conf.SetCacheLocation(common::joinPaths(common::cwd(), "test_cache"));
@@ -421,10 +419,10 @@ TEST_F(LocalCacheTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(MatchingWorld))
   gz::fuel_tools::LocalCache cache(&conf);
 
   gz::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(gz::common::URI("http://localhost:8001/"));
+  srv1.SetUrl(gz::common::URI("http://localhost:8001/", true));
 
   gz::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(gz::common::URI("http://localhost:8002/"));
+  srv2.SetUrl(gz::common::URI("http://localhost:8002/", true));
 
   WorldIdentifier am1;
   am1.SetServer(srv1);
