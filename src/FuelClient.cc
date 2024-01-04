@@ -717,7 +717,8 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
   // Locate any dependencies from the input model and download them.
   std::string path;
   gz::msgs::FuelMetadata meta;
-  if (this->CachedModel(gz::common::URI(_id.UniqueName()), path))
+
+  if (this->CachedModel(_id, path))
   {
     std::string metadataPath =
       gz::common::joinPaths(path, "metadata.pbtxt");
@@ -1084,7 +1085,11 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   }
 
   // Get remaining server information from config
-  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  common::URI serverUri;
+  serverUri.SetScheme(scheme);
+  serverUri.SetAuthority(gz::common::URIAuthority("//" + server));
+
+  _id.Server().SetUrl(serverUri);
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
@@ -1150,7 +1155,11 @@ bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
   }
 
   // Get remaining server information from config
-  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  common::URI serverUri;
+  serverUri.SetScheme(scheme);
+  serverUri.SetAuthority(gz::common::URIAuthority("//" + server));
+
+  _id.Server().SetUrl(serverUri);
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
@@ -1218,7 +1227,11 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_modelFileUrl,
   }
 
   // Get remaining server information from config
-  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  common::URI serverUri;
+  serverUri.SetScheme(scheme);
+  serverUri.SetAuthority(gz::common::URIAuthority("//" + server));
+
+  _id.Server().SetUrl(serverUri);
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
@@ -1287,7 +1300,11 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_worldFileUrl,
   }
 
   // Get remaining server information from config
-  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  common::URI serverUri;
+  serverUri.SetScheme(scheme);
+  serverUri.SetAuthority(gz::common::URIAuthority("//" + server));
+
+  _id.Server().SetUrl(serverUri);
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
@@ -1354,7 +1371,11 @@ bool FuelClient::ParseCollectionUrl(const common::URI &_url,
   }
 
   // Get remaining server information from config
-  _id.Server().SetUrl(common::URI(scheme + "://" + server));
+  common::URI serverUri;
+  serverUri.SetScheme(scheme);
+  serverUri.SetAuthority(gz::common::URIAuthority("//" + server));
+
+  _id.Server().SetUrl(serverUri);
   _id.Server().SetVersion(apiVersion);
   for (const auto &s : this->dataPtr->config.Servers())
   {
@@ -1401,9 +1422,6 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   if (!result)
     return result;
 
-  // TODO(anyone) We shouldn't need to reconstruct the path, SaveModel should
-  // be changed to return it
-
   // We need to figure out the version for the tip
   if (id.Version() == 0 || id.VersionStr() == "tip")
   {
@@ -1412,8 +1430,7 @@ Result FuelClient::DownloadModel(const common::URI &_modelUrl,
   }
 
   _path = gz::common::joinPaths(this->Config().CacheLocation(),
-      id.Server().Url().Path().Str(), id.Owner(), "models", id.Name(),
-      id.VersionStr());
+      id.UniqueName(), id.VersionStr());
 
   return result;
 }
@@ -1440,15 +1457,23 @@ Result FuelClient::DownloadWorld(const common::URI &_worldUrl,
 }
 
 //////////////////////////////////////////////////
+Result FuelClient::CachedModel(const ModelIdentifier &_id,
+                               std::string &_path)
+{
+  auto modelIter = this->dataPtr->cache->MatchingModel(_id);
+  if (modelIter)
+  {
+    _path = modelIter.PathToModel();
+    return Result(ResultType::FETCH_ALREADY_EXISTS);
+  }
+  return Result(ResultType::FETCH_ERROR);
+}
+
+//////////////////////////////////////////////////
 bool FuelClient::CachedModel(const common::URI &_modelUrl)
 {
-  // Get data from URL
-  ModelIdentifier id;
-  if (!this->ParseModelUrl(_modelUrl, id))
-    return Result(ResultType::FETCH_ERROR);
-
-  // Check local cache
-  return this->dataPtr->cache->MatchingModel(id) ? true : false;
+  std::string path;
+  return this->CachedModel(_modelUrl, path).Type() != ResultType::FETCH_ERROR;
 }
 
 //////////////////////////////////////////////////
@@ -1462,15 +1487,7 @@ Result FuelClient::CachedModel(const common::URI &_modelUrl,
     return Result(ResultType::FETCH_ERROR);
   }
 
-  // Check local cache
-  auto modelIter = this->dataPtr->cache->MatchingModel(id);
-  if (modelIter)
-  {
-    _path = modelIter.PathToModel();
-    return Result(ResultType::FETCH_ALREADY_EXISTS);
-  }
-
-  return Result(ResultType::FETCH_ERROR);
+  return this->CachedModel(id, _path);
 }
 
 //////////////////////////////////////////////////

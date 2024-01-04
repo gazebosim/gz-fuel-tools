@@ -20,6 +20,7 @@
 #include <vector>
 
 #include <gz/common/Filesystem.hh>
+#include <gz/common/StringUtils.hh>
 #include <gz/common/Util.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
@@ -62,10 +63,10 @@ bool WorldIdentifier::operator==(const WorldIdentifier &_rhs) const
 //////////////////////////////////////////////////
 std::string WorldIdentifier::UniqueName() const
 {
-  return common::joinPaths(uriToPath(this->dataPtr->server.Url()),
-                           this->dataPtr->owner,
-                           "worlds",
-                           this->dataPtr->name);
+  return common::copyToUnixPath(common::joinPaths(
+    uriToPath(this->dataPtr->server.Url()),
+    this->dataPtr->owner, "worlds",
+    this->dataPtr->name));
 }
 
 //////////////////////////////////////////////////

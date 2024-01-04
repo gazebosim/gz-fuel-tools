@@ -44,29 +44,26 @@ TEST(WorldIdentifier, SetFields)
 TEST(WorldIdentifier, UniqueName)
 {
   gz::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(gz::common::URI("https://localhost:8001/"));
+  srv1.SetUrl(gz::common::URI("https://localhost:8001/", true));
 
   gz::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(gz::common::URI("https://localhost:8002"));
+  srv2.SetUrl(gz::common::URI("https://localhost:8002", true));
 
   gz::fuel_tools::ServerConfig srv3;
-
-  srv3.SetUrl(gz::common::URI("https://localhost:8003/"));
+  srv3.SetUrl(gz::common::URI("https://localhost:8003/", true));
 
   WorldIdentifier id;
   id.SetName("hello");
   id.SetOwner("alice");
+
   id.SetServer(srv1);
-  EXPECT_EQ(common::joinPaths("localhost:8001", "alice", "worlds", "hello"),
-      id.UniqueName());
+  EXPECT_EQ("localhost%3A8001/alice/worlds/hello", id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ(common::joinPaths("localhost:8002", "alice", "worlds", "hello"),
-      id.UniqueName());
+  EXPECT_EQ("localhost%3A8002/alice/worlds/hello", id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ(common::joinPaths("localhost:8003", "alice", "worlds", "hello"),
-      id.UniqueName());
+  EXPECT_EQ("localhost%3A8003/alice/worlds/hello", id.UniqueName());
 }
 
 /////////////////////////////////////////////////
@@ -115,7 +112,6 @@ TEST(WorldIdentifier, AsString)
   common::Console::SetVerbosity(4);
   {
     WorldIdentifier id;
-#ifndef _WIN32
     std::string str =
         "Name: \n"\
         "Owner: \n"\
@@ -126,18 +122,6 @@ TEST(WorldIdentifier, AsString)
         "  URL: https://fuel.gazebosim.org\n"
         "  Version: 1.0\n"
         "  API key: \n";
-#else
-    std::string str =
-        "Name: \n"\
-        "Owner: \n"\
-        "Version: tip\n"\
-        "Unique name: fuel.gazebosim.org\\worlds\\\n"
-        "Local path: \n"
-        "Server:\n"
-        "  URL: https://fuel.gazebosim.org\n"
-        "  Version: 1.0\n"
-        "  API key: \n";
-#endif
     EXPECT_EQ(str, id.AsString());
   }
 
