@@ -28,40 +28,56 @@ using namespace gz;
 using namespace fuel_tools;
 
 //////////////////////////////////////////////////
-Model::Model() : dataPtr(nullptr)
+Model::Model()
+: dataPtr(gz::utils::MakeImpl<ModelPrivate>())
 {
 }
 
 //////////////////////////////////////////////////
-Model::Model(std::shared_ptr<ModelPrivate> _dptr)
+Model::Model(const gz::fuel_tools::ModelIdentifier &_id,
+             const std::string &_pathOnDisk)
+: Model()
 {
-  this->dataPtr = _dptr;
+  this->dataPtr->isValid = true;
+  this->dataPtr->id = _id;
+  this->dataPtr->pathOnDisk = _pathOnDisk;
+}
+
+//////////////////////////////////////////////////
+Model::Model(const std::string &_name, const std::string &_owner,
+             const gz::fuel_tools::ServerConfig &_server)
+: Model()
+{
+  this->dataPtr->isValid = true;
+  this->dataPtr->id.SetName(_name);
+  this->dataPtr->id.SetOwner(_owner);
+  this->dataPtr->id.SetServer(_server);
 }
 
 //////////////////////////////////////////////////
 Model::operator bool()
 {
-  return this->dataPtr.get() != nullptr;
+  return this->dataPtr->isValid;
 }
 
 //////////////////////////////////////////////////
 Model::operator bool() const
 {
-  return this->dataPtr.get() != nullptr;
+  return this->dataPtr->isValid;
 }
 
 //////////////////////////////////////////////////
 ModelIdentifier Model::Identification() const
 {
-  if (this->dataPtr)
+  if (this->dataPtr->isValid)
     return this->dataPtr->id;
-  return ModelIdentifier();
+  return {};
 }
 
 //////////////////////////////////////////////////
 Result Model::Fetch() const
 {
-  if (this->dataPtr)
+  if (this->dataPtr->isValid)
   {
     if (this->PathToModel().empty())
     {
@@ -76,7 +92,7 @@ Result Model::Fetch() const
 //////////////////////////////////////////////////
 std::string Model::PathToModel() const
 {
-  if (this->dataPtr)
+  if (this->dataPtr->isValid)
   {
     if (this->dataPtr->pathOnDisk.empty())
     {
@@ -84,5 +100,5 @@ std::string Model::PathToModel() const
     }
     return this->dataPtr->pathOnDisk;
   }
-  return "";
+  return {};
 }

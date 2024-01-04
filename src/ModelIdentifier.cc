@@ -30,7 +30,7 @@
 using namespace gz;
 using namespace fuel_tools;
 
-class gz::fuel_tools::ModelIdentifierPrivate
+class gz::fuel_tools::ModelIdentifier::Implementation
 {
   /// \brief returns true if name follows rules
   /// \param[in] _name Name to validate
@@ -84,7 +84,7 @@ class gz::fuel_tools::ModelIdentifierPrivate
 };
 
 //////////////////////////////////////////////////
-bool ModelIdentifierPrivate::ValidName(const std::string &_name)
+bool ModelIdentifier::Implementation::ValidName(const std::string &_name)
 {
   // ToDo: Enable name validation when model names are prepared for this.
   return true;
@@ -113,21 +113,8 @@ bool ModelIdentifierPrivate::ValidName(const std::string &_name)
 
 //////////////////////////////////////////////////
 ModelIdentifier::ModelIdentifier()
-  : dataPtr(new ModelIdentifierPrivate)
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
-}
-
-//////////////////////////////////////////////////
-ModelIdentifier::ModelIdentifier(const ModelIdentifier &_orig)
-{
-  this->dataPtr.reset(new ModelIdentifierPrivate(*(_orig.dataPtr.get())));
-}
-
-//////////////////////////////////////////////////
-ModelIdentifier &ModelIdentifier::operator=(const ModelIdentifier &_orig)
-{
-  this->dataPtr.reset(new ModelIdentifierPrivate(*(_orig.dataPtr.get())));
-  return *this;
 }
 
 //////////////////////////////////////////////////
@@ -140,11 +127,6 @@ bool ModelIdentifier::operator==(const ModelIdentifier &_rhs) const
 bool ModelIdentifier::operator!=(const ModelIdentifier &_rhs) const
 {
   return !(*this == _rhs);
-}
-
-//////////////////////////////////////////////////
-ModelIdentifier::~ModelIdentifier()
-{
 }
 
 //////////////////////////////////////////////////
@@ -205,7 +187,13 @@ std::string ModelIdentifier::Owner() const
 }
 
 //////////////////////////////////////////////////
-ServerConfig &ModelIdentifier::Server() const
+const ServerConfig &ModelIdentifier::Server() const
+{
+  return this->dataPtr->server;
+}
+
+//////////////////////////////////////////////////
+ServerConfig &ModelIdentifier::Server()
 {
   return this->dataPtr->server;
 }
@@ -506,7 +494,7 @@ bool ModelIdentifier::Private() const
 }
 
 //////////////////////////////////////////////////
-void ModelIdentifier::SetPrivate(bool _private) const
+void ModelIdentifier::SetPrivate(bool _private)
 {
   this->dataPtr->privacy = _private;
 }

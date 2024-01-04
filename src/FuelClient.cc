@@ -56,13 +56,11 @@
 using namespace gz;
 using namespace fuel_tools;
 
-/// \brief Private Implementation
-class gz::fuel_tools::FuelClientPrivate
-{
+namespace {
   /// \brief A model URL,
   /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer/2
   /// Where the API version and the model version are optional.
-  public: const std::string kModelUrlRegexStr{
+  const std::string kModelUrlRegexStr{
     // Method
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
@@ -83,7 +81,7 @@ class gz::fuel_tools::FuelClientPrivate
   /// \brief A world URL,
   /// E.g.: https://fuel.gazebosim.org/1.0/OpenRobotics/worlds/Empty/1
   /// Where the API version and the world version are optional.
-  public: const std::string kWorldUrlRegexStr{
+  const std::string kWorldUrlRegexStr{
     // Method
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
@@ -104,7 +102,7 @@ class gz::fuel_tools::FuelClientPrivate
   /// \brief A model file URL,
   /// E.g.: https://server.org/1.0/owner/models/modelname/files/meshes/mesh.dae
   /// Where the API version is optional, but the model version is required.
-  public: const std::string kModelFileUrlRegexStr{
+  const std::string kModelFileUrlRegexStr{
     // Method
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
@@ -129,7 +127,7 @@ class gz::fuel_tools::FuelClientPrivate
   /// \brief A world file URL,
   /// E.g.: https://server.org/1.0/owner/worlds/worldname/files/meshes/mesh.dae
   /// Where the API version is optional, but the world version is required.
-  public: const std::string kWorldFileUrlRegexStr{
+  const std::string kWorldFileUrlRegexStr{
     // Method
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
@@ -155,7 +153,7 @@ class gz::fuel_tools::FuelClientPrivate
   /// E.g.:
   /// https://fuel.gazebosim.org/1.0/OpenRobotics/collections/TestColl
   /// Where the API version is optional
-  public: const std::string kCollectionUrlRegexStr{
+  const std::string kCollectionUrlRegexStr{
     // Method
     "^([[:alnum:]\\.\\+\\-]+):\\/\\/"
     // Server
@@ -168,6 +166,11 @@ class gz::fuel_tools::FuelClientPrivate
     "collections\\/+"
     // Name
     "([^\\/]+)\\/*"};
+}  // namespace
+
+/// \brief Private Implementation
+class gz::fuel_tools::FuelClient::Implementation
+{
 
   /// \brief Recursively get all the files in the given path.
   /// \param[in] _path Path to process.
@@ -205,6 +208,7 @@ class gz::fuel_tools::FuelClientPrivate
   public: void ZipFromResponse(const RestResponse &_resp,
               std::string &_zip);
 
+
   /// \brief Client configuration
   public: ClientConfig config;
 
@@ -215,19 +219,19 @@ class gz::fuel_tools::FuelClientPrivate
   public: std::shared_ptr<LocalCache> cache;
 
   /// \brief Regex to parse Gazebo Fuel model URLs.
-  public: std::unique_ptr<std::regex> urlModelRegex;
+  public: std::regex urlModelRegex {kModelUrlRegexStr};
 
   /// \brief Regex to parse Gazebo Fuel world URLs.
-  public: std::unique_ptr<std::regex> urlWorldRegex;
+  public: std::regex urlWorldRegex {kWorldUrlRegexStr};
 
   /// \brief Regex to parse Gazebo Fuel model file URLs.
-  public: std::unique_ptr<std::regex> urlModelFileRegex;
+  public: std::regex urlModelFileRegex {kModelFileUrlRegexStr};
 
   /// \brief Regex to parse Gazebo Fuel world file URLs.
-  public: std::unique_ptr<std::regex> urlWorldFileRegex;
+  public: std::regex urlWorldFileRegex {kWorldFileUrlRegexStr};
 
   /// \brief Regex to parse Gazebo Fuel Collection URLs.
-  public: std::unique_ptr<std::regex> urlCollectionRegex;
+  public: std::regex urlCollectionRegex {kCollectionUrlRegexStr};
 
   /// \brief The set of licenses where the key is the name of the license
   /// and the value is the license ID on a Fuel server. See the
@@ -243,29 +247,12 @@ FuelClient::FuelClient()
 
 //////////////////////////////////////////////////
 FuelClient::FuelClient(const ClientConfig &_config, const Rest &_rest)
-  : dataPtr(std::make_unique<FuelClientPrivate>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
   this->dataPtr->config = _config;
   this->dataPtr->rest = _rest;
   this->dataPtr->rest.SetUserAgent(this->dataPtr->config.UserAgent());
-
   this->dataPtr->cache = std::make_unique<LocalCache>(&(this->dataPtr->config));
-
-  this->dataPtr->urlModelRegex.reset(new std::regex(
-    this->dataPtr->kModelUrlRegexStr));
-  this->dataPtr->urlWorldRegex.reset(new std::regex(
-    this->dataPtr->kWorldUrlRegexStr));
-  this->dataPtr->urlModelFileRegex.reset(new std::regex(
-    this->dataPtr->kModelFileUrlRegexStr));
-  this->dataPtr->urlWorldFileRegex.reset(new std::regex(
-    this->dataPtr->kWorldFileUrlRegexStr));
-  this->dataPtr->urlCollectionRegex.reset(new std::regex(
-    this->dataPtr->kCollectionUrlRegexStr));
-}
-
-//////////////////////////////////////////////////
-FuelClient::~FuelClient()
-{
 }
 
 //////////////////////////////////////////////////
@@ -1080,7 +1067,7 @@ bool FuelClient::ParseModelUrl(const common::URI &_modelUrl,
   std::string modelName;
   std::string modelVersion;
 
-  if (std::regex_match(urlStr, match, *this->dataPtr->urlModelRegex) &&
+  if (std::regex_match(urlStr, match, this->dataPtr->urlModelRegex) &&
       match.size() >= 5u)
   {
     unsigned int i{1};
@@ -1150,7 +1137,7 @@ bool FuelClient::ParseWorldUrl(const common::URI &_worldUrl,
   std::string worldName;
   std::string worldVersion;
 
-  if (std::regex_match(urlStr, match, *this->dataPtr->urlWorldRegex) &&
+  if (std::regex_match(urlStr, match, this->dataPtr->urlWorldRegex) &&
       match.size() >= 5u)
   {
     unsigned int i{1};
@@ -1221,7 +1208,7 @@ bool FuelClient::ParseModelFileUrl(const common::URI &_modelFileUrl,
   std::string modelVersion;
   std::string file;
 
-  if (std::regex_match(urlStr, match, *this->dataPtr->urlModelFileRegex) &&
+  if (std::regex_match(urlStr, match, this->dataPtr->urlModelFileRegex) &&
       match.size() == 8u)
   {
     unsigned int i{1};
@@ -1294,7 +1281,7 @@ bool FuelClient::ParseWorldFileUrl(const common::URI &_worldFileUrl,
   std::string worldVersion;
   std::string file;
 
-  if (std::regex_match(urlStr, match, *this->dataPtr->urlWorldFileRegex) &&
+  if (std::regex_match(urlStr, match, this->dataPtr->urlWorldFileRegex) &&
       match.size() == 8u)
   {
     unsigned int i{1};
@@ -1366,7 +1353,7 @@ bool FuelClient::ParseCollectionUrl(const common::URI &_url,
   std::string collectionName;
 
   bool result =
-      std::regex_match(urlStr, match, *this->dataPtr->urlCollectionRegex);
+      std::regex_match(urlStr, match, this->dataPtr->urlCollectionRegex);
 
   if (result && match.size() >= 5u)
   {
@@ -1657,7 +1644,7 @@ Result FuelClient::PatchModel(
 }
 
 //////////////////////////////////////////////////
-void FuelClientPrivate::AllFiles(const std::string &_path,
+void FuelClient::Implementation::AllFiles(const std::string &_path,
     std::vector<std::string> &_files) const
 {
   common::DirIter dirIter(_path);
@@ -1680,7 +1667,7 @@ void FuelClient::PopulateLicenses(const ServerConfig &_server)
 }
 
 //////////////////////////////////////////////////
-bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
+bool FuelClient::Implementation::FillModelForm(const std::string &_pathToModelDir,
     const ModelIdentifier &_id, bool _private, const std::string &_owner,
     std::multimap<std::string, std::string> &_form)
 {
@@ -1846,7 +1833,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
 }
 
 //////////////////////////////////////////////////
-void FuelClientPrivate::PopulateLicenses(const ServerConfig &_server)
+void FuelClient::Implementation::PopulateLicenses(const ServerConfig &_server)
 {
   RestResponse resp;
 
@@ -1945,9 +1932,22 @@ bool FuelClient::UpdateWorlds(const std::vector<std::string> &_headers)
   }
   return true;
 }
+//////////////////////////////////////////////////
+void FuelClient::Implementation::CheckForDeprecatedUri(const common::URI &_uri)
+{
+  static std::string oldServer = "fuel.ignitionrobotics.org";
+  auto ignFuelPos = _uri.Str().find(oldServer);
+  if (ignFuelPos != std::string::npos)
+  {
+    std::string newUrl = _uri.Str();
+    newUrl.replace(ignFuelPos, oldServer.size(), "fuel.gazebosim.org");
+    gzwarn << "The " << oldServer << " URL is deprecrated. Pleasse change "
+      << _uri.Str() << " to " << newUrl << std::endl;
+  }
+}
 
 //////////////////////////////////////////////////
-void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
+void FuelClient::Implementation::ZipFromResponse(const RestResponse &_resp,
     std::string &_zip)
 {
   // Check the content-type which could be empty (ideally not):

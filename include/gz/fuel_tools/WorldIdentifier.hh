@@ -23,19 +23,11 @@
 
 #include "gz/fuel_tools/Helpers.hh"
 
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-
 namespace gz
 {
   namespace fuel_tools
   {
     /// \brief Forward Declaration
-    class WorldIdentifierPrivate;
     class ServerConfig;
 
     /// \brief Defines how to identify a world
@@ -44,17 +36,6 @@ namespace gz
       /// \brief Constructor.
       public: WorldIdentifier();
 
-      /// \brief Copy Constructor.
-      /// \param[in] _orig WorldIdentifier to copy.
-      public: WorldIdentifier(const WorldIdentifier &_orig);
-
-      /// \brief Destructor.
-      public: ~WorldIdentifier();
-
-      /// \brief Assignment operator
-      /// \param[in] _orig WorldIdentifier to copy.
-      /// \return Reference to this object.
-      public: WorldIdentifier &operator=(const WorldIdentifier &_orig);
 
       /// \brief Equality operator.
       /// \param[in] _rhs WorldIdentifier to compare.
@@ -81,7 +62,11 @@ namespace gz
 
       /// \brief Returns server information to retrieve world from.
       /// \return Server information.
-      public: ServerConfig &Server() const;
+      public: const ServerConfig &Server() const;
+
+      /// \brief Returns server information to retrieve world from.
+      /// \return Server information.
+      public: ServerConfig &Server();
 
       /// \brief Set the server from which this world comes.
       /// \param[in] _server The server to retrieve the world from.
@@ -151,13 +136,9 @@ namespace gz
       public: std::string AsPrettyString(const std::string &_prefix = "") const;
 
       /// \brief PIMPL
-      private: std::unique_ptr<WorldIdentifierPrivate> dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #endif

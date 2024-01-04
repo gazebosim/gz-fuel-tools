@@ -79,13 +79,7 @@ namespace gz
             std::string name = buf;
             std::snprintf(buf, sizeof(buf), "owner%d", i);
             std::string owner = buf;
-
-            std::shared_ptr<ModelPrivate> ptr(new ModelPrivate);
-            ptr->id.SetName(name);
-            ptr->id.SetOwner(owner);
-            ptr->id.SetServer(srv);
-
-            models.push_back(Model(ptr));
+            models.emplace_back(name, owner, srv);
           }
           return ModelIterFactory::Create(models);
         }

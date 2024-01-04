@@ -23,11 +23,9 @@
 
 #include "gz/fuel_tools/Export.hh"
 
+#include <gz/utils/ImplPtr.hh>
+
 #ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
 // TODO(jrivero): rename the DELETE method which is a reserved word in Windows
 #undef DELETE
 #endif
@@ -99,23 +97,6 @@ namespace gz
       /// \param[in] _type Result type
       public: explicit Result(const ResultType _type);
 
-      /// \brief Copy constructor.
-      /// \param[in] _result Result to copy.
-      public: Result(const Result &_result);
-
-      /// \brief Move constructor
-      /// \param[in] _result Result to move.
-      public: Result(Result &&_result) noexcept;  // NOLINT
-
-      /// \brief Copy assignment operator.
-      /// \param[in] _result Result to copy.
-      public: Result &operator=(const Result &_result);
-
-      /// \brief Move assignment operator.
-      /// \param[in] _result Result component to move.
-      /// \return Reference to this.
-      public: Result &operator=(Result &&_result) noexcept;  // NOLINT
-
       /// \brief Get the type of result
       /// \return The type of result.
       public: ResultType Type() const;
@@ -129,7 +110,7 @@ namespace gz
       public: virtual std::string ReadableResult() const;
 
       /// brief Pointer to private data
-      private: std::unique_ptr<ResultPrivate> dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
   }
 }

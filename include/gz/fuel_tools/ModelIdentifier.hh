@@ -26,19 +26,11 @@
 
 #include "gz/fuel_tools/Helpers.hh"
 
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::unique_ptr
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
-
 namespace gz
 {
   namespace fuel_tools
   {
     /// \brief Forward Declaration
-    class ModelIdentifierPrivate;
     class ServerConfig;
 
     /// \brief Defines how to identify a model
@@ -47,17 +39,6 @@ namespace gz
       /// \brief Constructor.
       public: ModelIdentifier();
 
-      /// \brief Copy Constructor.
-      /// \param[in] _orig ModelIdentifier to copy.
-      public: ModelIdentifier(const ModelIdentifier &_orig);
-
-      /// \brief Destructor.
-      public: ~ModelIdentifier();
-
-      /// \brief Assignment operator
-      /// \param[in] _orig ModelIdentifier to copy.
-      /// \return Reference to this object.
-      public: ModelIdentifier &operator=(const ModelIdentifier &_orig);
 
       /// \brief Equality operator.
       /// \param[in] _rhs ModelIdentifier to compare.
@@ -79,7 +60,11 @@ namespace gz
 
       /// \brief Returns server information to retrieve model from.
       /// \return Server information.
-      public: ServerConfig &Server() const;
+      public: ServerConfig &Server();
+
+      /// \brief Returns server information to retrieve model from.
+      /// \return Server information.
+      public: const ServerConfig &Server() const;
 
       /// \brief Returns a unique name for the model.
       /// \remarks this is Server/Owner/Name.
@@ -149,7 +134,7 @@ namespace gz
       /// \brief Set the privacy setting of the model.
       /// \param[in] True indicates the model is private, false indicates the
       /// model is public.
-      public: void SetPrivate(bool _private) const;
+      public: void SetPrivate(bool _private);
 
       /// \brief Set the description of the model.
       /// \param[in] _desc The description
@@ -252,13 +237,9 @@ namespace gz
       public: std::string AsPrettyString(const std::string &_prefix = "") const;
 
       /// \brief PIMPL
-      private: std::unique_ptr<ModelIdentifierPrivate> dataPtr;
+      GZ_UTILS_IMPL_PTR(dataPtr)
     };
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #endif

@@ -17,12 +17,11 @@
 
 #include "gz/fuel_tools/Result.hh"
 
-namespace ignft = gz::fuel_tools;
 using namespace gz;
-using namespace ignft;
+using namespace fuel_tools;
 
 
-class ignft::ResultPrivate
+class gz::fuel_tools::Result::Implementation
 {
   /// \brief a type of result
   public: ResultType type = ResultType::UNKNOWN;
@@ -30,8 +29,15 @@ class ignft::ResultPrivate
 
 //////////////////////////////////////////////////
 Result::Result()
-  : dataPtr(std::make_unique<ResultPrivate>())
+  : dataPtr(gz::utils::MakeImpl<Implementation>())
 {
+}
+
+//////////////////////////////////////////////////
+Result::Result(const ResultType _type)
+  : Result()
+{
+  this->dataPtr->type = _type;
 }
 
 //////////////////////////////////////////////////
@@ -42,32 +48,6 @@ ResultType Result::Type() const
 {
   return this->dataPtr->type;
 }
-
-//////////////////////////////////////////////////
-Result::Result(const ResultType _type)
-  : dataPtr(std::make_unique<ResultPrivate>())
-{
-  this->dataPtr->type = _type;
-}
-
-//////////////////////////////////////////////////
-Result::Result(const Result &_result)
-  : dataPtr(std::make_unique<ResultPrivate>(*_result.dataPtr))
-{
-}
-
-/////////////////////////////////////////////////
-Result::Result(Result &&_result) noexcept = default;  // NOLINT
-
-/////////////////////////////////////////////////
-Result &Result::operator=(const Result &_result)
-{
-  *this->dataPtr = (*_result.dataPtr);
-  return *this;
-}
-
-/////////////////////////////////////////////////
-Result &Result::operator=(Result &&_result) noexcept = default;  // NOLINT
 
 //////////////////////////////////////////////////
 Result::operator bool() const

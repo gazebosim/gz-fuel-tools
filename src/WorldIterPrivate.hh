@@ -21,9 +21,9 @@
 #include <string>
 #include <vector>
 
-#include "gz/fuel_tools/ClientConfig.hh"
-#include "gz/fuel_tools/WorldIdentifier.hh"
 #include "gz/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/ServerConfig.hh"
+#include "gz/fuel_tools/WorldIdentifier.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by

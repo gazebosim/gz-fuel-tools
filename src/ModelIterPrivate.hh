@@ -21,53 +21,18 @@
 #include <string>
 #include <vector>
 
-#include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/Model.hh"
 #include "gz/fuel_tools/ModelIdentifier.hh"
 #include "gz/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/ServerConfig.hh"
 
-#ifdef _WIN32
-// Disable warning C4251 which is triggered by
-// std::vector
-#pragma warning(push)
-#pragma warning(disable: 4251)
-#endif
 
 namespace gz
 {
   namespace fuel_tools
   {
-    /// \brief forward declaration
-    class ModelIter;
-
     /// \brief Private class, do not include or instantiate
-    class GZ_FUEL_TOOLS_VISIBLE ModelIterFactory
-    {
-      /// \brief Create a model iterator from a vector of model identifiers
-      /// \param[in] _ids Model identifiers
-      /// \return Model iterator
-      public: static ModelIter Create(const std::vector<ModelIdentifier> &_ids);
-
-      /// \brief Create a model iterator from a vector of models
-      /// \param[in] _ids Models
-      /// \return Model iterator
-      public: static ModelIter Create(const std::vector<Model> &_models);
-
-      /// \brief Create a model iter that will make Rest api calls
-      /// \param[in] _rest a Rest request
-      /// \param[in] _server The server to request the operation
-      /// \param[in] _api The path to request
-      public: static ModelIter Create(const Rest &_rest,
-                                      const ServerConfig &_server,
-                                      const std::string &_api);
-
-      /// \brief Create a model iterator that is empty
-      /// \return An empty iterator
-      public: static ModelIter Create();
-    };
-
-    /// \brief Private class, do not include or instantiate
-    class GZ_FUEL_TOOLS_VISIBLE ModelIterPrivate
+    class ModelIterPrivate
     {
       /// \brief Destructor
       public: virtual ~ModelIterPrivate();
@@ -77,7 +42,7 @@ namespace gz
 
       /// \brief True if this iterator has reach the end
       /// \return True if reached end.
-      public: virtual bool HasReachedEnd() = 0;
+      public: virtual bool HasReachedEnd() const = 0;
 
       /// \brief Current model for returning references
       public: Model model;
@@ -85,19 +50,19 @@ namespace gz
 
     /// \brief class for iterating through model ids where all are known
     ///        in advance
-    class GZ_FUEL_TOOLS_VISIBLE IterIds : public ModelIterPrivate
+    class IterIds : public ModelIterPrivate
     {
       /// \brief Constructor
-      public: explicit IterIds(std::vector<ModelIdentifier> _ids);
+      public: explicit IterIds(const std::vector<ModelIdentifier> &_ids);
 
       /// \brief Destructor
-      public: virtual ~IterIds();
+      public: ~IterIds() override;
 
       // Documentation inherited
-      public: virtual void Next() override;
+      public: void Next() override;
 
       // Documentation inherited
-      public: virtual bool HasReachedEnd() override;
+      public: bool HasReachedEnd() const override;
 
       /// \brief Model identifiers that have been requested
       protected: std::vector<ModelIdentifier> ids;
@@ -108,19 +73,19 @@ namespace gz
 
     /// \brief class for iterating through model ids where all are known
     ///        in advance
-    class GZ_FUEL_TOOLS_VISIBLE IterModels: public ModelIterPrivate
+    class IterModels: public ModelIterPrivate
     {
       /// \brief Constructor
-      public: explicit IterModels(std::vector<Model> _models);
+      public: explicit IterModels(const std::vector<Model> &_models);
 
       /// \brief Destructor
-      public: virtual ~IterModels();
+      public: ~IterModels() override;
 
       // Documentation inherited
-      public: virtual void Next() override;
+      public: void Next() override;
 
       // Documentation inherited
-      public: virtual bool HasReachedEnd() override;
+      public: bool HasReachedEnd() const override;
 
       /// \brief Models to iterator through
       protected: std::vector<Model> models;
@@ -130,7 +95,7 @@ namespace gz
     };
 
     /// \brief class for iterating through model ids from a rest API
-    class GZ_FUEL_TOOLS_HIDDEN IterRestIds: public ModelIterPrivate
+    class IterRestIds: public ModelIterPrivate
     {
       /// \brief constructor
       public: IterRestIds(const Rest &_rest,
@@ -138,14 +103,14 @@ namespace gz
                           const std::string &_api);
 
       /// \brief destructor
-      public: virtual ~IterRestIds();
+      public: ~IterRestIds() override;
 
       /// \brief Advance iterator to next model.
-      public: virtual void Next() override;
+      public: void Next() override;
 
       /// \brief True if this iterator has reach the end.
       /// \return True if iterator has reached the end.
-      public: virtual bool HasReachedEnd() override;
+      public: bool HasReachedEnd() const override;
 
       /// \brief Client configuration
       public: ServerConfig config;
@@ -179,9 +144,5 @@ namespace gz
     };
   }
 }
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
 #endif
