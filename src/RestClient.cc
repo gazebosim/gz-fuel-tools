@@ -16,10 +16,6 @@
 */
 
 #include <curl/curl.h>
-#ifdef _WIN32
-// DELETE is defined in winnt.h and causes a problem with HttpMethod::DELETE
-#undef DELETE
-#endif
 
 #include <cstring>
 #include <iostream>

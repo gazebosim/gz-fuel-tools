@@ -22,14 +22,13 @@
 #include <string>
 
 #include "gz/fuel_tools/Export.hh"
+#include "gz/fuel_tools/ResultType.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
 // std::unique_ptr
 #pragma warning(push)
 #pragma warning(disable: 4251)
-// TODO(jrivero): rename the DELETE method which is a reserved word in Windows
-#undef DELETE
 #endif
 
 namespace gz::fuel_tools
@@ -37,52 +36,6 @@ namespace gz::fuel_tools
   // forward declaration
   class ResultPrivate;
   class Model;
-
-  /// Result type.
-  enum class ResultType
-  {
-    /// \brief Uninitialized type.
-    UNKNOWN = 0,
-
-    /// \brief Delete successful.
-    DELETE,
-
-    /// \brief Model not found.
-    DELETE_NOT_FOUND,
-
-    /// \brief Delete failed. Other errors.
-    /// \sa ReadableResult
-    DELETE_ERROR,
-
-    /// \brief Fetch successful.
-    FETCH,
-
-    /// \brief Model already exists.
-    FETCH_ALREADY_EXISTS,
-
-    /// \brief Model not found.
-    FETCH_NOT_FOUND,
-
-    /// \brief Fetch failed. Other errors.
-    /// \sa ReadableResult
-    FETCH_ERROR,
-
-    /// \brief Upload successful.
-    UPLOAD,
-
-    /// \brief Model already exists.
-    UPLOAD_ALREADY_EXISTS,
-
-    /// \brief Upload failed. Other errors.
-    /// \sa ReadableResult
-    UPLOAD_ERROR,
-
-    /// \brief Patch failed.
-    PATCH_ERROR,
-
-    /// \brief Patch successful.
-    PATCH,
-  };
 
   /// \brief Class describing a result of an operation.
   class GZ_FUEL_TOOLS_VISIBLE Result

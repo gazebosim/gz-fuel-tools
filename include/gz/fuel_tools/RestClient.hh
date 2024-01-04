@@ -23,14 +23,13 @@
 #include <vector>
 
 #include "gz/fuel_tools/Export.hh"
+#include "gz/fuel_tools/HttpMethod.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
 // std::string
 #pragma warning(push)
 #pragma warning(disable: 4251)
-// TODO(jrivero): rename the DELETE method which is a reserved word in Windows
-#undef DELETE
 #endif
 
 namespace gz::fuel_tools
@@ -49,31 +48,6 @@ namespace gz::fuel_tools
     /// For example, a raw header of the form "Content-Type: json" would
     /// use "Content-Type" as a key and "json" as the key's data.
     public: std::map<std::string, std::string> headers;
-  };
-
-  /// \brief the types of HTTP methods
-  enum class HttpMethod
-  {
-    /// \brief Get method.
-    GET,
-
-    /// \brief Post method.
-    POST,
-
-    /// \brief Delete method.
-    DELETE,
-
-    /// \brief Put method.
-    PUT,
-
-    /// \brief Patch method.
-    PATCH,
-
-    /// \brief Post form method.
-    POST_FORM,
-
-    /// \brief Patch form method.
-    PATCH_FORM
   };
 
   /// \brief A helper class for making REST requests.
