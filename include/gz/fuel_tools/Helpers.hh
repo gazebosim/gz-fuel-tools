@@ -39,6 +39,21 @@ namespace gz
 {
 namespace fuel_tools
 {
+/// \brief Convert the authority portion of a URI to a string
+/// suitable to be used as a path on disk for all platforms.
+///
+/// It encodes illegal characters on Windows and Linux filesystems with
+/// their corresponding URL-encoded values.
+///
+/// This assumes an authority of the form: username@host:port
+/// "@" is encoded as %40
+/// ":" is encoded as %3A
+///
+/// \param[in] _uriAuthority the authority section of the URI to convert.
+/// \return String suitable to use in file paths
+GZ_FUEL_TOOLS_VISIBLE
+std::string sanitizeAuthority(const std::string &_uriAuthority);
+
 /// \brief Convert a URI to a string suitable to use as a path on disk.
 /// It strips the scheme and authority's `//` prefix.
 /// \param[in] _uri URI to convert.

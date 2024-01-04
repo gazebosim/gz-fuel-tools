@@ -389,7 +389,8 @@ bool LocalCache::SaveModel(
   std::string cacheLocation = this->dataPtr->config->CacheLocation();
 
   std::string modelRootDir = common::joinPaths(cacheLocation,
-      uriToPath(_id.Server().Url()), _id.Owner(), "models", _id.Name());
+                                               _id.UniqueName());
+
   std::string modelVersionedDir =
     common::joinPaths(modelRootDir, _id.VersionStr());
 
@@ -741,7 +742,6 @@ bool LocalCache::SaveWorld(
   }
 
   auto cacheLocation = this->dataPtr->config->CacheLocation();
-
   auto worldRootDir = common::joinPaths(cacheLocation, _id.UniqueName());
   auto worldVersionedDir = common::joinPaths(worldRootDir, _id.VersionStr());
 
