@@ -27,10 +27,10 @@
 #include "gz/fuel_tools/Helpers.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
-using namespace gz;
-using namespace fuel_tools;
 
-class gz::fuel_tools::WorldIdentifierPrivate
+namespace gz::fuel_tools
+{
+class WorldIdentifierPrivate
 {
   /// \brief a name given to this world by a user
   public: std::string name;
@@ -229,3 +229,4 @@ std::string WorldIdentifier::AsPrettyString(const std::string &_prefix) const
       << this->Server().AsPrettyString(_prefix + "  ");
   return out.str();
 }
+}  // namespace gz::fuel_tools

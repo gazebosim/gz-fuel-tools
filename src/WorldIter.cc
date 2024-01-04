@@ -29,8 +29,8 @@
 
 #include "WorldIterPrivate.hh"
 
-using namespace gz;
-using namespace fuel_tools;
+namespace gz::fuel_tools
+{
 
 //////////////////////////////////////////////////
 WorldIter WorldIterFactory::Create(const std::vector<WorldIdentifier> &_ids)
@@ -241,3 +241,4 @@ WorldIter::operator WorldIdentifier() const
 {
   return this->dataPtr->worldId;
 }
+}  // namespace gz::fuel_tools

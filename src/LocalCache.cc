@@ -43,10 +43,9 @@
 #include "WorldIterPrivate.hh"
 #include "LocalCache.hh"
 
-using namespace gz;
-using namespace fuel_tools;
-
-class gz::fuel_tools::LocalCachePrivate
+namespace gz::fuel_tools
+{
+class LocalCachePrivate
 {
   /// \brief return all models in a given directory
   /// \param[in] _path A directory for the local server cache
@@ -786,3 +785,4 @@ bool LocalCache::SaveWorld(
 
   return true;
 }
+}  // namespace gz::fuel_tools
