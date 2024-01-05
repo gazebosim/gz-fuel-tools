@@ -31,124 +31,121 @@
 #include "gz/fuel_tools/Interface.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 
-namespace gz
+namespace gz::fuel_tools
 {
-  namespace fuel_tools
+  //////////////////////////////////////////////
+  std::string fetchResource(const std::string &_uri)
   {
-    //////////////////////////////////////////////
-    std::string fetchResource(const std::string &_uri)
+    gz::fuel_tools::FuelClient client;
+    return fetchResourceWithClient(_uri, client);
+  }
+
+  //////////////////////////////////////////////
+  std::string fetchResourceWithClient(const std::string &_uri,
+      gz::fuel_tools::FuelClient &_client)
+  {
+    std::string result;
+
+    gz::fuel_tools::ModelIdentifier model;
+    gz::fuel_tools::WorldIdentifier world;
+    std::string fileUrl;
+    gz::common::URI uri(_uri);
+    // Download the model, if it is a model URI
+    if (_client.ParseModelUrl(uri, model) &&
+        !_client.CachedModel(uri, result))
     {
-      gz::fuel_tools::FuelClient client;
-      return fetchResourceWithClient(_uri, client);
+      _client.DownloadModel(uri, result);
+    }
+    // Download the model, if it's a model file URI
+    else if (_client.ParseModelFileUrl(uri, model, fileUrl) &&
+        !_client.CachedModelFile(uri, result))
+    {
+      auto modelUri = _uri.substr(0,
+          _uri.find("files", model.UniqueName().size())-1);
+      _client.DownloadModel(common::URI(modelUri), result);
+      result = common::joinPaths(result, fileUrl);
+    }
+    // Download the world, if it is a world URI
+    else if (_client.ParseWorldUrl(uri, world) &&
+             !_client.CachedWorld(uri, result))
+    {
+      _client.DownloadWorld(uri, result);
+    }
+    // Download the world, if it's a world file URI
+    else if (_client.ParseWorldFileUrl(uri, world, fileUrl) &&
+        !_client.CachedWorldFile(uri, result))
+    {
+      auto worldUri = _uri.substr(0,
+          _uri.find("files", world.UniqueName().size())-1);
+      _client.DownloadWorld(common::URI(worldUri), result);
+      result = common::joinPaths(result, fileUrl);
+
     }
 
-    //////////////////////////////////////////////
-    std::string fetchResourceWithClient(const std::string &_uri,
-        gz::fuel_tools::FuelClient &_client)
+    return result;
+  }
+
+  //////////////////////////////////////////////
+  std::string sdfFromPath(const std::string &_path)
+  {
+    gz::msgs::FuelMetadata meta;
+    std::string metadataPath =
+      gz::common::joinPaths(_path, "metadata.pbtxt");
+    std::string modelConfigPath =
+      gz::common::joinPaths(_path, "model.config");
+
+    bool foundMetadataPath = gz::common::exists(metadataPath);
+    bool foundModelConfigPath = gz::common::exists(modelConfigPath);
+
+    // Use the metadata.pbtxt or model.config first.
+    if (foundMetadataPath || foundModelConfigPath)
     {
-      std::string result;
+      std::string modelPath =
+        (foundMetadataPath) ? metadataPath : modelConfigPath;
 
-      gz::fuel_tools::ModelIdentifier model;
-      gz::fuel_tools::WorldIdentifier world;
-      std::string fileUrl;
-      gz::common::URI uri(_uri);
-      // Download the model, if it is a model URI
-      if (_client.ParseModelUrl(uri, model) &&
-          !_client.CachedModel(uri, result))
-      {
-        _client.DownloadModel(uri, result);
-      }
-      // Download the model, if it's a model file URI
-      else if (_client.ParseModelFileUrl(uri, model, fileUrl) &&
-          !_client.CachedModelFile(uri, result))
-      {
-        auto modelUri = _uri.substr(0,
-            _uri.find("files", model.UniqueName().size())-1);
-        _client.DownloadModel(common::URI(modelUri), result);
-        result = common::joinPaths(result, fileUrl);
-      }
-      // Download the world, if it is a world URI
-      else if (_client.ParseWorldUrl(uri, world) &&
-               !_client.CachedWorld(uri, result))
-      {
-        _client.DownloadWorld(uri, result);
-      }
-      // Download the world, if it's a world file URI
-      else if (_client.ParseWorldFileUrl(uri, world, fileUrl) &&
-          !_client.CachedWorldFile(uri, result))
-      {
-        auto worldUri = _uri.substr(0,
-            _uri.find("files", world.UniqueName().size())-1);
-        _client.DownloadWorld(common::URI(worldUri), result);
-        result = common::joinPaths(result, fileUrl);
+      // Read the pbtxt or config file.
+      std::ifstream inputFile(modelPath);
+      std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+          std::istreambuf_iterator<char>());
 
+      if (foundMetadataPath)
+      {
+        // Parse the file into the fuel metadata message
+        google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+      }
+      else
+      {
+        if (!gz::msgs::ConvertFuelMetadata(inputStr, meta))
+          return "";
       }
 
-      return result;
-    }
-
-    //////////////////////////////////////////////
-    std::string sdfFromPath(const std::string &_path)
-    {
-      gz::msgs::FuelMetadata meta;
-      std::string metadataPath =
-        gz::common::joinPaths(_path, "metadata.pbtxt");
-      std::string modelConfigPath =
-        gz::common::joinPaths(_path, "model.config");
-
-      bool foundMetadataPath = gz::common::exists(metadataPath);
-      bool foundModelConfigPath = gz::common::exists(modelConfigPath);
-
-      // Use the metadata.pbtxt or model.config first.
-      if (foundMetadataPath || foundModelConfigPath)
-      {
-        std::string modelPath =
-          (foundMetadataPath) ? metadataPath : modelConfigPath;
-
-        // Read the pbtxt or config file.
-        std::ifstream inputFile(modelPath);
-        std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
-            std::istreambuf_iterator<char>());
-
-        if (foundMetadataPath)
-        {
-          // Parse the file into the fuel metadata message
-          google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
-        }
-        else
-        {
-          if (!gz::msgs::ConvertFuelMetadata(inputStr, meta))
-            return "";
-        }
-
-        if (meta.has_model())
-          return gz::common::joinPaths(_path, meta.model().file());
-        else if (meta.has_world())
-          return gz::common::joinPaths(_path, meta.world().file());
-        return "";
-      }
-
-      // Otherwise, use the first ".sdf" file found in the given path.
-      common::DirIter dirIter(_path);
-      common::DirIter end;
-      while (dirIter != end)
-      {
-        if (common::isFile(*dirIter))
-        {
-          std::string basename = gz::common::basename(*dirIter);
-          // Just some safety checks.
-          if (!basename.empty() && basename.find(".sdf") != std::string::npos)
-          {
-            std::string extension = basename.substr(
-                basename.find_last_of('.') + 1);
-            if (extension == "sdf")
-              return *dirIter;
-          }
-        }
-        ++dirIter;
-      }
-
+      if (meta.has_model())
+        return gz::common::joinPaths(_path, meta.model().file());
+      else if (meta.has_world())
+        return gz::common::joinPaths(_path, meta.world().file());
       return "";
     }
+
+    // Otherwise, use the first ".sdf" file found in the given path.
+    common::DirIter dirIter(_path);
+    common::DirIter end;
+    while (dirIter != end)
+    {
+      if (common::isFile(*dirIter))
+      {
+        std::string basename = gz::common::basename(*dirIter);
+        // Just some safety checks.
+        if (!basename.empty() && basename.find(".sdf") != std::string::npos)
+        {
+          std::string extension = basename.substr(
+              basename.find_last_of('.') + 1);
+          if (extension == "sdf")
+            return *dirIter;
+        }
+      }
+      ++dirIter;
+    }
+
+    return "";
   }
-}
+}  // namespace gz::fuel_tools

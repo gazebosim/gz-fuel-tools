@@ -28,12 +28,11 @@
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/config.hh"
 
-using namespace gz;
-using namespace fuel_tools;
-
+namespace gz::fuel_tools
+{
 //////////////////////////////////////////////////
 /// \brief Private data class
-class gz::fuel_tools::ClientConfigPrivate
+class ClientConfigPrivate
 {
   /// \brief Constructor.
   public: ClientConfigPrivate()
@@ -69,134 +68,6 @@ class gz::fuel_tools::ClientConfigPrivate
   public: std::string userAgent =
           "GazeboFuelTools-" GZ_FUEL_TOOLS_VERSION_FULL;
 };
-
-//////////////////////////////////////////////////
-/// \brief Private data class
-class gz::fuel_tools::ServerConfigPrivate
-{
-  /// \brief Clear values.
-  public: void Clear()
-          {
-            this->url.Clear();
-            this->key = "";
-            this->version = "1.0";
-          }
-
-  /// \brief URL to reach server
-  public: common::URI url{"https://fuel.gazebosim.org", true};
-
-  /// \brief A key to auth with the server
-  public: std::string key = "";
-
-  /// \brief The protocol version used when talking with this server.
-  public: std::string version = "1.0";
-};
-
-//////////////////////////////////////////////////
-ServerConfig::ServerConfig()
-  : dataPtr (new ServerConfigPrivate)
-{
-}
-
-//////////////////////////////////////////////////
-ServerConfig::ServerConfig(const ServerConfig &_orig)
-  : dataPtr(new ServerConfigPrivate)
-{
-  *(this->dataPtr) = *(_orig.dataPtr);
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::Clear()
-{
-  this->dataPtr->Clear();
-}
-
-//////////////////////////////////////////////////
-ServerConfig &ServerConfig::operator=(const ServerConfig &_orig)
-{
-  *(this->dataPtr) = *(_orig.dataPtr);
-  return *this;
-}
-
-//////////////////////////////////////////////////
-ServerConfig::~ServerConfig()
-{
-}
-
-//////////////////////////////////////////////////
-common::URI ServerConfig::Url() const
-{
-  return this->dataPtr->url;
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::SetUrl(const common::URI &_url)
-{
-  this->dataPtr->url = _url;
-}
-
-//////////////////////////////////////////////////
-std::string ServerConfig::ApiKey() const
-{
-  return this->dataPtr->key;
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::SetApiKey(const std::string &_key)
-{
-  this->dataPtr->key = _key;
-}
-
-//////////////////////////////////////////////////
-std::string ServerConfig::Version() const
-{
-  return this->dataPtr->version;
-}
-
-//////////////////////////////////////////////////
-void ServerConfig::SetVersion(const std::string &_version)
-{
-  this->dataPtr->version = _version;
-}
-
-//////////////////////////////////////////////////
-std::string ServerConfig::AsString(const std::string &_prefix) const
-{
-  std::stringstream out;
-  out << _prefix << "URL: " << this->Url().Str() << std::endl
-      << _prefix << "Version: " << this->Version() << std::endl
-      << _prefix << "API key: " << this->ApiKey() << std::endl;
-  return out.str();
-}
-
-//////////////////////////////////////////////////
-std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
-{
-  std::string prop = "\033[96m\033[1m";
-  std::string value = "\033[37m";
-  std::string reset = "\033[0m";
-
-  std::stringstream out;
-
-  if (this->Url().Valid())
-  {
-    out << _prefix << prop << "URL: " << reset
-        << value << this->Url().Str() << reset << std::endl;
-  }
-
-  if (!this->Version().empty())
-  {
-    out << _prefix << prop << "Version: " << reset
-        << value << this->Version() << reset << std::endl;
-  }
-
-  if (!this->ApiKey().empty())
-  {
-    out << _prefix << prop << "API key: " << reset
-        << value << this->ApiKey() << reset << std::endl;
-  }
-  return out.str();
-}
 
 //////////////////////////////////////////////////
 ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
@@ -527,3 +398,4 @@ std::string ClientConfig::AsString(const std::string &_prefix) const
 
   return out.str();
 }
+}  // namespace gz::fuel_tools

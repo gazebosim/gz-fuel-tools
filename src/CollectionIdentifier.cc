@@ -24,10 +24,10 @@
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/CollectionIdentifier.hh"
 
-using namespace gz;
-using namespace fuel_tools;
 
-class gz::fuel_tools::CollectionIdentifierPrivate
+namespace gz::fuel_tools
+{
+class CollectionIdentifierPrivate
 {
   /// \brief a name given to this collection by a user
   public: std::string name;
@@ -156,3 +156,4 @@ std::string CollectionIdentifier::AsPrettyString(
       << this->Server().AsPrettyString(_prefix + "  ");
   return out.str();
 }
+}  // namespace gz::fuel_tools

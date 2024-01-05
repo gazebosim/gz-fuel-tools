@@ -30,59 +30,56 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace gz
+namespace gz::fuel_tools
 {
-  namespace fuel_tools
+  /// \brief forward declaration
+  class FuelClient;
+  class ModelIterPrivate;
+  class ModelIterFactory;
+
+  /// \brief class for iterating through models
+  class GZ_FUEL_TOOLS_VISIBLE ModelIter
   {
-    /// \brief forward declaration
-    class FuelClient;
-    class ModelIterPrivate;
-    class ModelIterFactory;
+    friend ModelIterFactory;
 
-    /// \brief class for iterating through models
-    class GZ_FUEL_TOOLS_VISIBLE ModelIter
-    {
-      friend ModelIterFactory;
+    /// \brief Construct an iterator with the data it needs to function
+    /// \param[in] _dptr Pointer to private data to copy
+    protected: explicit ModelIter(std::unique_ptr<ModelIterPrivate> _dptr);
 
-      /// \brief Construct an iterator with the data it needs to function
-      /// \param[in] _dptr Pointer to private data to copy
-      protected: explicit ModelIter(std::unique_ptr<ModelIterPrivate> _dptr);
+    /// \brief Move constructor
+    /// \param[in] _old Iter to move
+    public: ModelIter(ModelIter && _old);
 
-      /// \brief Move constructor
-      /// \param[in] _old Iter to move
-      public: ModelIter(ModelIter && _old);
+    /// \brief Default destructor.
+    public: ~ModelIter();
 
-      /// \brief Default destructor.
-      public: ~ModelIter();
+    /// \brief Conversion operator
+    /// \return false once the iterator is one past the end of the models
+    public: operator bool();
 
-      /// \brief Conversion operator
-      /// \return false once the iterator is one past the end of the models
-      public: operator bool();
+    /// \brief Conversion operator
+    /// \return false once the iterator is one past the end of the models
+    public: operator bool() const;
 
-      /// \brief Conversion operator
-      /// \return false once the iterator is one past the end of the models
-      public: operator bool() const;
+    /// \brief Prefix increment
+    /// \return Next iteration
+    public: ModelIter &operator++();
 
-      /// \brief Prefix increment
-      /// \return Next iteration
-      public: ModelIter &operator++();
+    /// \brief Dereference operator
+    /// \return Reference
+    public: Model &operator*();
 
-      /// \brief Dereference operator
-      /// \return Reference
-      public: Model &operator*();
+    /// \brief -> operator
+    /// \return Internal world identifier
+    public: Model *operator->();
 
-      /// \brief -> operator
-      /// \return Internal world identifier
-      public: Model *operator->();
-
-      /// \brief Private data pointer.
-      private: std::unique_ptr<ModelIterPrivate> dataPtr;
-    };
-  }
-}
+    /// \brief Private data pointer.
+    private: std::unique_ptr<ModelIterPrivate> dataPtr;
+  };
+}  // namespace gz::fuel_tools
 
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-#endif
+#endif  // GZ_FUEL_TOOLS_MODELITER_HH_
