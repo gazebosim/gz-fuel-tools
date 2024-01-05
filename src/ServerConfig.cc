@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Open Source Robotics Foundation
+ * Copyright (C) 2024 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@
 #include <stack>
 #include <string>
 #include <vector>
+
 #include <gz/common/Console.hh>
 #include <gz/common/Filesystem.hh>
 #include <gz/common/Util.hh>
 
 #include "gz/fuel_tools/ServerConfig.hh"
-#include "gz/fuel_tools/config.hh"
 
 namespace gz::fuel_tools
 {

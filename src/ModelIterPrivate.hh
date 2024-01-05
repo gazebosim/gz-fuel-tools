@@ -18,10 +18,10 @@
 #ifndef GZ_FUEL_TOOLS_MODELITERPRIVATE_HH_
 #define GZ_FUEL_TOOLS_MODELITERPRIVATE_HH_
 
+#include <cstddef>
 #include <string>
 #include <vector>
 
-#include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/Model.hh"
 #include "gz/fuel_tools/ModelIdentifier.hh"
 #include "gz/fuel_tools/RestClient.hh"

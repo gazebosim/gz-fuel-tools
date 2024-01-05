@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Open Source Robotics Foundation
+ * Copyright (C) 2024 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@
 #ifndef GZ_FUEL_TOOLS_RESULTTYPE_HH_
 #define GZ_FUEL_TOOLS_RESULTTYPE_HH_
 
-#include <memory>
-#include <string>
-
 #if defined(_WIN32) && defined(DELETE)
+// Windows defines "DELETE" as part of the Win32 "Standard Access Rights"
+// Since we aren't using that here, go ahead and undefine so that we can
+// use it as part of the ResultType enum class.
+// Ref: https://learn.microsoft.com/en-us/windows/win32/secauthz/standard-access-rights
 #undef DELETE
 #endif
 
