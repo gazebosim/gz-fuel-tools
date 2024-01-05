@@ -1,6 +1,6 @@
 ## Gazebo Fuel Tools 4.x
 
-### Gazebo Fuel Tools 4.10.0 (2024-01-05)
+### Gazebo Fuel Tools 4.9.1 (2024-01-05)
 
 1. Create directories and more output on fail
     * [Pull request #392](https://github.com/gazebosim/gz-fuel-tools/pull/392)
