@@ -28,12 +28,11 @@
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/config.hh"
 
-using namespace gz;
-using namespace fuel_tools;
-
+namespace gz::fuel_tools
+{
 //////////////////////////////////////////////////
 /// \brief Private data class
-class gz::fuel_tools::ClientConfigPrivate
+class ClientConfigPrivate
 {
   /// \brief Constructor.
   public: ClientConfigPrivate()
@@ -377,3 +376,4 @@ std::string ClientConfig::AsString(const std::string &_prefix) const
 
   return out.str();
 }
+}  // namespace gz::fuel_tools

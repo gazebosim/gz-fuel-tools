@@ -34,89 +34,86 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace gz
+namespace gz::fuel_tools
 {
-  namespace fuel_tools
+  /// \brief Forward Declaration
+  class ClientConfigPrivate;
+
+  /// \brief High level interface to Gazebo Fuel.
+  ///
+  class GZ_FUEL_TOOLS_VISIBLE ClientConfig
   {
-    /// \brief Forward Declaration
-    class ClientConfigPrivate;
+    /// \brief Constructor.
+    public: ClientConfig();
 
-    /// \brief High level interface to Gazebo Fuel.
-    ///
-    class GZ_FUEL_TOOLS_VISIBLE ClientConfig
-    {
-      /// \brief Constructor.
-      public: ClientConfig();
+    /// \brief Copy constructor.
+    /// \param[in] _copy ClientConfig to copy.
+    public: ClientConfig(const ClientConfig &_copy);
 
-      /// \brief Copy constructor.
-      /// \param[in] _copy ClientConfig to copy.
-      public: ClientConfig(const ClientConfig &_copy);
+    /// \brief Assignment operator overload.
+    /// \param[in] _copy ClientConfig to copy.
+    public: ClientConfig &operator=(const ClientConfig &_copy);
 
-      /// \brief Assignment operator overload.
-      /// \param[in] _copy ClientConfig to copy.
-      public: ClientConfig &operator=(const ClientConfig &_copy);
+    /// \brief Destructor.
+    public: ~ClientConfig();
 
-      /// \brief Destructor.
-      public: ~ClientConfig();
+    /// \brief Clear the client config. This will set all values to empty
+    /// strings, except the user agent which will be set to its default
+    /// value.
+    public: void Clear();
 
-      /// \brief Clear the client config. This will set all values to empty
-      /// strings, except the user agent which will be set to its default
-      /// value.
-      public: void Clear();
+    /// \brief Set the user agent name.
+    /// \param[in] _agent User agent name.
+    public: void SetUserAgent(const std::string &_agent);
 
-      /// \brief Set the user agent name.
-      /// \param[in] _agent User agent name.
-      public: void SetUserAgent(const std::string &_agent);
+    /// \brief Get the user agent name.
+    /// \return Name of the user agent.
+    public: const std::string &UserAgent() const;
 
-      /// \brief Get the user agent name.
-      /// \return Name of the user agent.
-      public: const std::string &UserAgent() const;
+    /// \brief Load a YAML configuration file.
+    /// \param[in] _file Config file to load.
+    /// \return True if the configuration was loaded correctly.
+    /// \sa ConfigPath
+    public: bool LoadConfig(const std::string &_file);
 
-      /// \brief Load a YAML configuration file.
-      /// \param[in] _file Config file to load.
-      /// \return True if the configuration was loaded correctly.
-      /// \sa ConfigPath
-      public: bool LoadConfig(const std::string &_file);
+    /// \brief Get the location of the configuration file.
+    /// \return Path to the configuration file, which is set via
+    /// LoadConfig. The default return value is an empty string.
+    /// \sa LoadConfig
+    public: std::string ConfigPath() const;
 
-      /// \brief Get the location of the configuration file.
-      /// \return Path to the configuration file, which is set via
-      /// LoadConfig. The default return value is an empty string.
-      /// \sa LoadConfig
-      public: std::string ConfigPath() const;
+    /// \brief List of servers the client will connect to.
+    /// \return The list of servers.
+    public: std::vector<ServerConfig> Servers() const;
 
-      /// \brief List of servers the client will connect to.
-      /// \return The list of servers.
-      public: std::vector<ServerConfig> Servers() const;
+    /// \brief List of servers the client will connect to.
+    /// \return The list of servers.
+    public: std::vector<ServerConfig> & MutableServers() const;
 
-      /// \brief List of servers the client will connect to.
-      /// \return The list of servers.
-      public: std::vector<ServerConfig> & MutableServers() const;
+    /// \brief Add a server to the list.
+    /// \param[in] _srv The server config.
+    public: void AddServer(const ServerConfig &_srv);
 
-      /// \brief Add a server to the list.
-      /// \param[in] _srv The server config.
-      public: void AddServer(const ServerConfig &_srv);
+    /// \brief Where are models and stuff stored locally?
+    /// \return The location where assets are stored locally.
+    public: std::string CacheLocation() const;
 
-      /// \brief Where are models and stuff stored locally?
-      /// \return The location where assets are stored locally.
-      public: std::string CacheLocation() const;
+    /// \brief Set where models and stuff are saved.
+    /// \param[in] _path path on disk where models are saved.
+    public: void SetCacheLocation(const std::string &_path);
 
-      /// \brief Set where models and stuff are saved.
-      /// \param[in] _path path on disk where models are saved.
-      public: void SetCacheLocation(const std::string &_path);
+    /// \brief Returns all the client information as a string.
+    /// \param[in] _prefix Optional prefix for every line of the string.
+    /// \return Client information string
+    public: std::string AsString(const std::string &_prefix = "") const;
 
-      /// \brief Returns all the client information as a string.
-      /// \param[in] _prefix Optional prefix for every line of the string.
-      /// \return Client information string
-      public: std::string AsString(const std::string &_prefix = "") const;
-
-      /// \brief PIMPL
-      private: std::unique_ptr<ClientConfigPrivate> dataPtr;
-    };
-  }
-}
+    /// \brief PIMPL
+    private: std::unique_ptr<ClientConfigPrivate> dataPtr;
+  };
+}  // namespace gz::fuel_tools
 
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-#endif
+#endif  // GZ_FUEL_TOOLS_CLIENTCONFIG_HH_

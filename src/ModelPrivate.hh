@@ -30,24 +30,19 @@
 #pragma warning(disable: 4251)
 #endif
 
-namespace gz
+namespace gz::fuel_tools
 {
-  namespace fuel_tools
+  /// \brief Private class, do not use
+  class GZ_FUEL_TOOLS_VISIBLE ModelPrivate
   {
-    /// \brief Private class, do not use
-    class GZ_FUEL_TOOLS_VISIBLE ModelPrivate
-    {
-      /// \brief How this model is ID'd
-      public: ModelIdentifier id;
+    /// \brief How this model is ID'd
+    public: ModelIdentifier id;
 
-      /// \brief Where this model is on disk
-      public: std::string pathOnDisk;
-    };
-  }
+    /// \brief Where this model is on disk
+    public: std::string pathOnDisk;
+  };
 }
-
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
-#endif
+#endif  // GZ_FUEL_TOOLS_MODELPRIVATE_HH_

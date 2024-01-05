@@ -16,10 +16,6 @@
 */
 
 #include <curl/curl.h>
-#ifdef _WIN32
-// DELETE is defined in winnt.h and causes a problem with HttpMethod::DELETE
-#undef DELETE
-#endif
 
 #include <cstring>
 #include <iostream>
@@ -30,8 +26,8 @@
 
 #include "gz/fuel_tools/RestClient.hh"
 
-using namespace gz;
-using namespace fuel_tools;
+namespace gz::fuel_tools
+{
 
 // List of known file extensions and associated mime type.
 static const std::map<std::string, std::string> kContentTypes =
@@ -387,3 +383,4 @@ const std::string &Rest::UserAgent() const
 {
   return this->userAgent;
 }
+}  // namespace gz::fuel_tools
