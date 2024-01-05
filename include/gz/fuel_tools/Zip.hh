@@ -23,26 +23,23 @@
 
 #include "gz/fuel_tools/Export.hh"
 
-namespace gz
+namespace gz::fuel_tools
 {
-  namespace fuel_tools
+  /// \brief A helper class for making REST requests.
+  class GZ_FUEL_TOOLS_VISIBLE Zip
   {
-    /// \brief A helper class for making REST requests.
-    class GZ_FUEL_TOOLS_VISIBLE Zip
-    {
-      /// \brief Compress a file or directory
-      /// \param[in] _src Path to file or directory to compress
-      /// \param[in] _dst Output compressed file path
-      public: static bool Compress(const std::string &_src,
-          const std::string &_dst);
+    /// \brief Compress a file or directory
+    /// \param[in] _src Path to file or directory to compress
+    /// \param[in] _dst Output compressed file path
+    public: static bool Compress(const std::string &_src,
+        const std::string &_dst);
 
-      /// \brief Extract a compressed file
-      /// \param[in] _src Path to compressed file
-      /// \param[in] _dst Output extracted file path
-      public: static bool Extract(const std::string &_src,
-          const std::string &_dst);
-    };
-  }
-}
+    /// \brief Extract a compressed file
+    /// \param[in] _src Path to compressed file
+    /// \param[in] _dst Output extracted file path
+    public: static bool Extract(const std::string &_src,
+        const std::string &_dst);
+  };
+}  // namespace gz::fuel_tools
 
-#endif
+#endif  // GZ_FUEL_TOOLS_ZIP_HH_

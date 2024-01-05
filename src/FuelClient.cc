@@ -48,16 +48,28 @@
 #include "gz/fuel_tools/ModelIdentifier.hh"
 #include "gz/fuel_tools/RestClient.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
+#include "gz/fuel_tools/WorldIter.hh"
 
 #include "LocalCache.hh"
 #include "ModelIterPrivate.hh"
 #include "WorldIterPrivate.hh"
 
-using namespace gz;
-using namespace fuel_tools;
+namespace std
+{
+  template<> struct hash<gz::fuel_tools::ModelIdentifier>
+  {
+    std::size_t operator()(
+      const gz::fuel_tools::ModelIdentifier &_id) const noexcept
+    {
+      return std::hash<std::string>{}(_id.AsString());
+    }
+  };
+}  // namespace std
 
+namespace gz::fuel_tools
+{
 /// \brief Private Implementation
-class gz::fuel_tools::FuelClientPrivate
+class FuelClientPrivate
 {
   /// \brief A model URL,
   /// E.g.: https://fuel.gazebosim.org/1.0/caguero/models/Beer/2
@@ -891,18 +903,6 @@ Result FuelClient::DownloadWorld(WorldIdentifier &_id,
       return Result(ResultType::FETCH_ERROR);
 
   return Result(ResultType::FETCH);
-}
-
-//////////////////////////////////////////////////
-namespace std
-{
-  template<> struct hash<ModelIdentifier>
-  {
-    std::size_t operator()(const ModelIdentifier &_id) const noexcept
-    {
-      return std::hash<std::string>{}(_id.AsString());
-    }
-  };
 }
 
 //////////////////////////////////////////////////
@@ -2008,3 +2008,5 @@ void FuelClientPrivate::ZipFromResponse(const RestResponse &_resp,
     _zip = std::move(_resp.data);
   }
 }
+}  // namespace gz::fuel_tools
+

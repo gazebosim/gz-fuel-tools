@@ -23,117 +23,88 @@
 #include <vector>
 
 #include "gz/fuel_tools/Export.hh"
+#include "gz/fuel_tools/HttpMethod.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
 // std::string
 #pragma warning(push)
 #pragma warning(disable: 4251)
-// TODO(jrivero): rename the DELETE method which is a reserved word in Windows
-#undef DELETE
 #endif
 
-namespace gz
+namespace gz::fuel_tools
 {
-  namespace fuel_tools
+  /// \brief Stores a response to a RESTful request
+  struct GZ_FUEL_TOOLS_VISIBLE RestResponse
   {
-    /// \brief Stores a response to a RESTful request
-    struct GZ_FUEL_TOOLS_VISIBLE RestResponse
-    {
-      /// \brief The returned status code. E.g.: 200
-      // cppcheck-suppress unusedStructMember
-      public: int statusCode = 0;
+    /// \brief The returned status code. E.g.: 200
+    // cppcheck-suppress unusedStructMember
+    public: int statusCode = 0;
 
-      /// \brief The data received.
-      public: std::string data = "";
+    /// \brief The data received.
+    public: std::string data = "";
 
-      /// \brief Map of headers where the key is the header type.
-      /// For example, a raw header of the form "Content-Type: json" would
-      /// use "Content-Type" as a key and "json" as the key's data.
-      public: std::map<std::string, std::string> headers;
-    };
+    /// \brief Map of headers where the key is the header type.
+    /// For example, a raw header of the form "Content-Type: json" would
+    /// use "Content-Type" as a key and "json" as the key's data.
+    public: std::map<std::string, std::string> headers;
+  };
 
-    /// \brief the types of HTTP methods
-    enum class HttpMethod
-    {
-      /// \brief Get method.
-      GET,
+  /// \brief A helper class for making REST requests.
+  class GZ_FUEL_TOOLS_VISIBLE Rest
+  {
+    /// \brief Default constructor.
+    public: Rest() = default;
 
-      /// \brief Post method.
-      POST,
+    /// \brief Trigger a REST request.
+    /// \param[in] _method The HTTP method. Use all uppercase letters.
+    ///            E.g.: "GET"
+    /// \param[in] _url The url to request.
+    ///            E.g.: "http://localhost:8000/"
+    /// \param[in] _version The protocol version.
+    ///            E.g.: "1.0"
+    /// \param[in] _path The path to request.
+    ///            E.g.: "collection"
+    /// \param[in] _queryStrings All the query strings to be requested.
+    ///            E.g.: {"sort=name", "sortdir=1"}
+    /// \param[in] _headers All the headers to be included in the HTTP request
+    ///            E.g.: {"Accept: application/json"}
+    /// \param[in] _data Data to be included in the HTTP request.
+    /// \param[in] _form Multi-part / form data to be used with
+    /// Method::POST_FORM. Files can be transferred by using a value of
+    /// "@<local_file_path>;<upload_filename>". For example, to transfer the
+    /// local file "/tmp/test.txt" and upload the file as "changed.txt"
+    /// in a form with the field name "file", then insert
+    /// the following key-value pair into the _form parameter:
+    /// `{"file", "@/tmp/test.txt;changed.txt"}`. The ";<upload_filename>"
+    /// portion is optional. If this part is absent, then the basename of
+    /// provided "<local_file_path>" is used. For example,
+    /// "@/tmp/text.txt" will be uploaded as "text.txt".
+    public: virtual RestResponse Request(const HttpMethod _method,
+        const std::string &_url,
+        const std::string &_version,
+        const std::string &_path,
+        const std::vector<std::string> &_queryStrings,
+        const std::vector<std::string> &_headers,
+        const std::string &_data,
+        const std::multimap<std::string, std::string> &_form =
+        std::multimap<std::string, std::string>()) const;
 
-      /// \brief Delete method.
-      DELETE,
+    /// \brief Set the user agent name.
+    /// \param[in] _agent User agent name.
+    public: void SetUserAgent(const std::string &_agent);
 
-      /// \brief Put method.
-      PUT,
+    /// \brief Get the user agent name.
+    /// \return Name of the user agent.
+    public: const std::string &UserAgent() const;
 
-      /// \brief Patch method.
-      PATCH,
-
-      /// \brief Post form method.
-      POST_FORM,
-
-      /// \brief Patch form method.
-      PATCH_FORM
-    };
-
-    /// \brief A helper class for making REST requests.
-    class GZ_FUEL_TOOLS_VISIBLE Rest
-    {
-      /// \brief Default constructor.
-      public: Rest() = default;
-
-      /// \brief Trigger a REST request.
-      /// \param[in] _method The HTTP method. Use all uppercase letters.
-      ///            E.g.: "GET"
-      /// \param[in] _url The url to request.
-      ///            E.g.: "http://localhost:8000/"
-      /// \param[in] _version The protocol version.
-      ///            E.g.: "1.0"
-      /// \param[in] _path The path to request.
-      ///            E.g.: "collection"
-      /// \param[in] _queryStrings All the query strings to be requested.
-      ///            E.g.: {"sort=name", "sortdir=1"}
-      /// \param[in] _headers All the headers to be included in the HTTP request
-      ///            E.g.: {"Accept: application/json"}
-      /// \param[in] _data Data to be included in the HTTP request.
-      /// \param[in] _form Multi-part / form data to be used with
-      /// Method::POST_FORM. Files can be transferred by using a value of
-      /// "@<local_file_path>;<upload_filename>". For example, to transfer the
-      /// local file "/tmp/test.txt" and upload the file as "changed.txt"
-      /// in a form with the field name "file", then insert
-      /// the following key-value pair into the _form parameter:
-      /// `{"file", "@/tmp/test.txt;changed.txt"}`. The ";<upload_filename>"
-      /// portion is optional. If this part is absent, then the basename of
-      /// provided "<local_file_path>" is used. For example,
-      /// "@/tmp/text.txt" will be uploaded as "text.txt".
-      public: virtual RestResponse Request(const HttpMethod _method,
-          const std::string &_url,
-          const std::string &_version,
-          const std::string &_path,
-          const std::vector<std::string> &_queryStrings,
-          const std::vector<std::string> &_headers,
-          const std::string &_data,
-          const std::multimap<std::string, std::string> &_form =
-          std::multimap<std::string, std::string>()) const;
-
-      /// \brief Set the user agent name.
-      /// \param[in] _agent User agent name.
-      public: void SetUserAgent(const std::string &_agent);
-
-      /// \brief Get the user agent name.
-      /// \return Name of the user agent.
-      public: const std::string &UserAgent() const;
-
-      /// \brief The user agent name.
-      private: std::string userAgent;
-    };
-  }
-}
+    /// \brief The user agent name.
+    private: std::string userAgent;
+  };
+}  // namespace gz::fuel_tools
 
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
 
-#endif
+#endif  // GZ_FUEL_TOOLS_RESTCLIENT_HH_

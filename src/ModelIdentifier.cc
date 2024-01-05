@@ -27,10 +27,9 @@
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/ModelIdentifier.hh"
 
-using namespace gz;
-using namespace fuel_tools;
-
-class gz::fuel_tools::ModelIdentifierPrivate
+namespace gz::fuel_tools
+{
+class ModelIdentifierPrivate
 {
   /// \brief returns true if name follows rules
   /// \param[in] _name Name to validate
@@ -510,3 +509,4 @@ void ModelIdentifier::SetPrivate(bool _private) const
 {
   this->dataPtr->privacy = _private;
 }
+}  // namespace gz::fuel_tools

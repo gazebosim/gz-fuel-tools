@@ -19,8 +19,10 @@
 
 #include "gz/fuel_tools/Helpers.hh"
 
+namespace gz::fuel_tools
+{
 //////////////////////////////////////////////////
-std::string gz::fuel_tools::sanitizeAuthority(const std::string &_uriAuthority)
+std::string sanitizeAuthority(const std::string &_uriAuthority)
 {
   // Take an authority of the form userinfo@host:port and turn it into a valid
   // subset of characters for a path.
@@ -30,7 +32,7 @@ std::string gz::fuel_tools::sanitizeAuthority(const std::string &_uriAuthority)
 }
 
 //////////////////////////////////////////////////
-std::string gz::fuel_tools::uriToPath(const common::URI &_uri)
+std::string uriToPath(const common::URI &_uri)
 {
   auto path = _uri.Path().Str();
   if (_uri.Path().IsAbsolute())
@@ -63,3 +65,4 @@ std::string gz::fuel_tools::uriToPath(const common::URI &_uri)
 
   return common::joinPaths(authority, path);
 }
+}  // namespace gz::fuel_tools

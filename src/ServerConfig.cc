@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Open Source Robotics Foundation
+ * Copyright (C) 2024 Open Source Robotics Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,18 @@
 #include <sstream>
 #include <stack>
 #include <string>
+
 #include <gz/common/Console.hh>
 #include <gz/common/Filesystem.hh>
 #include <gz/common/Util.hh>
 
 #include "gz/fuel_tools/ServerConfig.hh"
 
-using namespace gz;
-using namespace fuel_tools;
-
+namespace gz::fuel_tools
+{
 //////////////////////////////////////////////////
 /// \brief Private data class
-class gz::fuel_tools::ServerConfigPrivate
+class ServerConfigPrivate
 {
   /// \brief Clear values.
   public: void Clear()
@@ -156,3 +156,4 @@ std::string ServerConfig::AsPrettyString(const std::string &_prefix) const
   }
   return out.str();
 }
+}  // namespace gz::fuel_tools

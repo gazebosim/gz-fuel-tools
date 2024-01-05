@@ -22,9 +22,7 @@
 
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/JSONParser.hh"
-
-using namespace gz;
-using namespace fuel_tools;
+#include "gz/fuel_tools/WorldIter.hh"
 
 #if defined(_WIN32) && !defined(timegm)
   #define timegm _mkgmtime
@@ -32,6 +30,9 @@ using namespace fuel_tools;
 
 #define GZ_JSON_HAVE_EXCEPTIONS ((JSONCPP_VERSION_MAJOR < 1 && \
       JSONCPP_VERSION_MINOR < 10) ||  JSON_USE_EXCEPTION == 0)
+
+namespace gz::fuel_tools
+{
 
 /////////////////////////////////////////////////
 std::time_t ParseDateTime(const std::string &_datetime)
@@ -388,3 +389,4 @@ bool JSONParser::ParseLicenses(const std::string &_json,
 
   return true;
 }
+}  // namespace gz::fuel_tools

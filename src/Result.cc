@@ -17,12 +17,10 @@
 
 #include "gz/fuel_tools/Result.hh"
 
-namespace ignft = gz::fuel_tools;
-using namespace gz;
-using namespace ignft;
+namespace gz::fuel_tools
+{
 
-
-class ignft::ResultPrivate
+class ResultPrivate
 {
   /// \brief a type of result
   public: ResultType type = ResultType::UNKNOWN;
@@ -119,3 +117,4 @@ std::string Result::ReadableResult() const
       return "Unknown result";
   }
 }
+}  // namespace gz::fuel_tools
