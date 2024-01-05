@@ -31,9 +31,8 @@
 #include "ModelIterPrivate.hh"
 #include "ModelPrivate.hh"
 
-using namespace gz;
-using namespace fuel_tools;
-
+namespace gz::fuel_tools
+{
 //////////////////////////////////////////////////
 ModelIter ModelIterFactory::Create(const std::vector<ModelIdentifier> &_ids)
 {
@@ -264,3 +263,4 @@ Model *ModelIter::operator->()
 {
   return &(this->dataPtr->model);
 }
+}  // namespace gz::fuel_tools

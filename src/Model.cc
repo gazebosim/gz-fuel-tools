@@ -24,9 +24,8 @@
 
 #include "ModelPrivate.hh"
 
-using namespace gz;
-using namespace fuel_tools;
-
+namespace gz::fuel_tools
+{
 //////////////////////////////////////////////////
 Model::Model() : dataPtr(nullptr)
 {
@@ -86,3 +85,4 @@ std::string Model::PathToModel() const
   }
   return "";
 }
+}  // namespace gz::fuel_tools
