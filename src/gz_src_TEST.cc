@@ -89,7 +89,7 @@ TEST_F(CmdLine, ModelListFail)
 
   EXPECT_NE(this->stdOutBuffer.str().find("Invalid URL"),
       std::string::npos) << this->stdOutBuffer.str();
-  EXPECT_TRUE(this->stdErrBuffer.str().empty());
+  EXPECT_TRUE(this->stdErrBuffer.str().empty()) << this->stdErrBuffer.str();
 }
 
 /////////////////////////////////////////////////
