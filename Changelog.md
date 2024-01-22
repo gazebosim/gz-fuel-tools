@@ -341,6 +341,17 @@
 1. Support link referral download
     * [Pull request #333](https://github.com/gazebosim/gz-fuel-tools/pull/333)
 
+### Gazebo Fuel Tools 4.9.1 (2024-01-05)
+
+1. Create directories and more output on fail
+    * [Pull request #392](https://github.com/gazebosim/gz-fuel-tools/pull/392)
+
+1. Update github action workflows
+    * [Pull request #388](https://github.com/gazebosim/gz-fuel-tools/pull/388)
+
+1. Zip: use non-deprecated methods
+    * [Pull request #360](https://github.com/gazebosim/gz-fuel-tools/pull/360)
+
 ### Gazebo Fuel Tools 4.9.0 (2023-05-03)
 
 1. Add bash completion
