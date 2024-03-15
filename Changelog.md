@@ -1,5 +1,26 @@
 ## Gazebo Fuel Tools 9.x
 
+### Gazebo Fuel Tools 9.0.1 (2024-03-14)
+
+1. Tidy nested namespaces
+    * [Pull request #396](https://github.com/gazebosim/gz-fuel-tools/pull/396)
+
+1. Update CI badges in README
+    * [Pull request #393](https://github.com/gazebosim/gz-fuel-tools/pull/393)
+
+1. Create directories and more output on fail
+    * [Pull request #392](https://github.com/gazebosim/gz-fuel-tools/pull/392)
+
+1. Disable tests that are known to fail on Windows
+    * [Pull request #387](https://github.com/gazebosim/gz-fuel-tools/pull/387)
+
+1. Update github action workflows
+    * [Pull request #388](https://github.com/gazebosim/gz-fuel-tools/pull/388)
+    * [Pull request #390](https://github.com/gazebosim/gz-fuel-tools/pull/390)
+
+1. Re-enabling Windows tests
+    * [Pull request #376](https://github.com/gazebosim/gz-fuel-tools/pull/376)
+
 ### Gazebo Fuel Tools 9.0.0 (2023-09-29)
 
 1. Added script to update assets to gz
