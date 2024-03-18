@@ -1,5 +1,10 @@
 ## Gazebo Fuel Tools 9.x
 
+### Gazebo Fuel Tools 9.0.2 (2024-03-18)
+
+1. Fix `LocalCache` so that models/worlds downloaded via fuel.ignitionrobotics.org can be found in the cache
+    * [Pull request #406](https://github.com/gazebosim/gz-fuel-tools/pull/406)
+
 ### Gazebo Fuel Tools 9.0.1 (2024-03-14)
 
 1. Tidy nested namespaces
