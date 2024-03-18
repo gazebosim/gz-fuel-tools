@@ -279,16 +279,23 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
   // For the tip, we have to find the highest version
   bool tip = (_id.Version() == 0);
   Model tipModel;
+  if (!this->dataPtr->config)
+    return tipModel;
 
-  for (ModelIter iter = this->AllModels(); iter; ++iter)
+  std::string path = common::joinPaths(
+      this->dataPtr->config->CacheLocation(), uriToPath(_id.Server().Url()));
+
+  auto srvModels = this->dataPtr->ModelsInServer(path);
+  for (auto &model: srvModels)
   {
-    ModelIdentifier id = iter->Identification();
+    model.dataPtr->id.SetServer(_id.Server());
+    auto id = model.Identification();
     if (_id == id)
     {
       if (_id.Version() == id.Version())
-        return *iter;
+        return model;
       else if (tip && id.Version() > tipModel.Identification().Version())
-        tipModel = *iter;
+        tipModel = model;
     }
   }
 
@@ -302,16 +309,24 @@ bool LocalCache::MatchingWorld(WorldIdentifier &_id) const
   bool tip = (_id.Version() == 0);
   WorldIdentifier tipWorld;
 
-  for (auto id = this->AllWorlds(); id; ++id)
+  if (!this->dataPtr->config)
+    return false;
+
+  std::string path = common::joinPaths(
+      this->dataPtr->config->CacheLocation(), uriToPath(_id.Server().Url()));
+
+  auto srvWorlds = this->dataPtr->WorldsInServer(path);
+  for (auto id: srvWorlds)
   {
+    id.SetServer(_id.Server());
     if (_id == id)
     {
-      if (_id.Version() == id->Version())
+      if (_id.Version() == id.Version())
       {
         _id = id;
         return true;
       }
-      else if (tip && id->Version() > tipWorld.Version())
+      else if (tip && id.Version() > tipWorld.Version())
       {
         tipWorld = id;
       }
