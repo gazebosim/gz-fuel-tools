@@ -93,7 +93,7 @@ sudo apt-get install git cmake pkg-config python ruby-ronn libignition-cmake2-de
 Clone the repository into a directory and go into it:
 
 ```
-git clone https://github.com/gazbosim/gz-fuel-tools /tmp/gz-fuel-tools
+git clone https://github.com/gazbosim/gz-fuel-tools /tmp/gz-fuel-tools -b ign-fuel-tools7
 cd /tmp/gz-fuel-tools
 ```
 
