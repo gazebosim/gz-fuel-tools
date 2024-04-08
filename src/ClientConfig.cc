@@ -228,9 +228,14 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
       this->SetCacheLocation(gzFuelPath);
   }
 
-  std::string configFile = common::joinPaths(this->CacheLocation(), "config.yaml");
-  if (gz::common::exists(configFile))
-    this->LoadConfig(configFile);
+  std::string configYamlFile = common::joinPaths(this->CacheLocation(),
+                                                 "config.yaml");
+  std::string configYmlFile = common::joinPaths(this->CacheLocation(),
+                                                "config.yml");
+  if (gz::common::exists(configYamlFile))
+    this->LoadConfig(configYamlFile);
+  else if (gz::common::exists(configYmlFile))
+    this->LoadConfig(configYmlFile);
 }
 
 //////////////////////////////////////////////////
