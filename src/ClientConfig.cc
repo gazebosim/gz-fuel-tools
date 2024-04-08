@@ -218,18 +218,19 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
              << "to set cache path. Please use [GZ_FUEL_CACHE_PATH] instead."
              << std::endl;
     }
-    else
-    {
-      return;
-    }
   }
 
-  if (!gz::common::isDirectory(gzFuelPath))
+  if (!gzFuelPath.empty())
   {
-    gzerr << "[" << gzFuelPath << "] is not a directory" << std::endl;
-    return;
+    if (!gz::common::isDirectory(gzFuelPath))
+      gzerr << "[" << gzFuelPath << "] is not a directory" << std::endl;
+    else
+      this->SetCacheLocation(gzFuelPath);
   }
-  this->SetCacheLocation(gzFuelPath);
+
+  std::string configFile = common::joinPaths(this->CacheLocation(), "config.yaml");
+  if (gz::common::exists(configFile))
+    this->LoadConfig(configFile);
 }
 
 //////////////////////////////////////////////////
