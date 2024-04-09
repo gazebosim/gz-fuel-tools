@@ -1,5 +1,10 @@
 ## Gazebo Fuel Tools 9.x
 
+### Gazebo Fuel Tools 9.0.3 (2024-04-09)
+
+1. Use relative install path for gz tool data
+    * [Pull request #409](https://github.com/gazebosim/gz-fuel-tools/pull/409)
+
 ### Gazebo Fuel Tools 9.0.2 (2024-03-18)
 
 1. Fix `LocalCache` so that models/worlds downloaded via fuel.ignitionrobotics.org can be found in the cache
