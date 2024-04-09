@@ -162,7 +162,7 @@ TEST(CmdLine,
      "---\n"
      "servers:\n"
      "- name: Fuel\n"
-     "  url: https://fuel.gazebosim.org\n" 
+     "  url: https://fuel.gazebosim.org\n"
      "  private-token: ''\n";
 
   EXPECT_EQ(output.find(expected), 0);
