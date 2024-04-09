@@ -87,8 +87,11 @@ SUBCOMMANDS = {
  'configure' =>
   "Create `~/.gz/fuel/config.yaml` to hold Fuel server configurations.     \n"\
   "                                                                        \n"\
-  "  gz fuel configure                                                     \n"\
+  "  gz fuel configure [options]                                           \n"\
   "                                                                        \n"\
+  "  --defaults               Use all the defaults and save.               \n"\
+  "                           This will overwrite ~/.gz/fuel/config.yaml.  \n"\
+  "  --console                Output to the console instead of to a file.  \n"\
   "  -h [--help]              Print this help message.                     \n"\
   "                                                                        \n"\
   "  --force-version <VERSION>  Use a specific library version.            \n"\
@@ -223,7 +226,9 @@ class Cmd
       'pbtxt2config' => '',
       'private' => '',
       'onlymodels' => '0',
-      'onlyworlds' => '0'
+      'onlyworlds' => '0',
+      'defaults' => false,
+      'console' => false
     }
 
     usage = COMMANDS[args[0]]
@@ -290,6 +295,12 @@ class Cmd
       end
       opts.on('--onlyworlds', 'Only update worlds') do
         options['onlyworlds'] = '1'
+      end
+      opts.on('--defaults', 'Use default values') do
+        options['defaults'] = true
+      end
+      opts.on('--console', 'Output to console') do
+        options['console'] = true
       end
     end # opt_parser do
 
@@ -416,7 +427,7 @@ class Cmd
 
       case options['subcommand']
       when 'configure'
-        configure()
+        configure(options['defaults'], options['console'])
       when 'delete'
         Importer.extern 'int deleteUrl(const char *, const char *)'
         if not Importer.deleteUrl(options['url'], options['header'])
@@ -488,16 +499,22 @@ class Cmd
   end # execute
 
   # Runs `gz fuel configure`
-  def configure()
+  def configure(defaults, console)
+    # Default fuel directory and configuration path
+    local_fuel_dir = File.join(Dir.home, '.gz', 'fuel')
+    config_path = File.join(local_fuel_dir, 'config.yaml')
+
+    # The default Fuel server URL
+    default_url = 'https://fuel.gazebosim.org'
 
     # A lambda function that prompts the user to enter Fuel server information
-    get_server_info = -> {
-      # The default Fuel server URL
-      default_url = "https://fuel.gazebosim.org"
+    get_server_info = lambda {
+      server_url = default_url
+      default_name = 'Fuel'
 
       # Prompt the user for a server name with a default value
       # Repeat until the URL is valid, or the user hits ctrl-c
-      while true
+      until defaults
         print "Fuel server URL [#{default_url}]: "
         server_url = STDIN.gets.chomp
         server_url = default_url if server_url.empty?
@@ -506,66 +523,92 @@ class Cmd
           default_name = !uri.host || uri.host.empty? ? uri.to_s : uri.host
           break
         rescue URI::InvalidURIError
-          puts "Invalid URL.\n"
+          puts 'Invalid URL.\n'
         end
       end
 
-      # Prompt the user for an access token with a default value of an empty string
-      print "Optional access token [None]: "
-      access_token = STDIN.gets.chomp
+      # Prompt the user for an access token with a default value of an
+      # empty string
+      access_token = ''
+      unless defaults
+        print 'Optional access token [None]: '
+        access_token = STDIN.gets.chomp
+      end
+
+      # Get the cache location
+      cache = local_fuel_dir
+      unless defaults
+        print "Local cache path [#{local_fuel_dir}]: "
+        cache = STDIN.gets.chomp
+        cache = local_fuel_dir if cache.empty?
+      end
 
       # Get a name to associate with this server
-      print "Name this server [#{default_name}]: "
-      server_name = STDIN.gets.chomp
-      server_name = default_name if server_name.empty?
+      server_name = default_name
+      unless defaults
+        print "Name this server [#{default_name}]: "
+        server_name = STDIN.gets.chomp
+        server_name = default_name if server_name.empty?
+      end
 
-      return [server_name, server_url, access_token]
+      [server_name, server_url, access_token, cache]
     }
 
-    config_dir = File.join(Dir.home, '.gz', 'fuel')
-    config_path = File.join(config_dir, 'config.yaml')
-
-    puts "# Set Fuel server configurations."
-    puts "# This will create or replace `#{config_path}`.\n\n"
+    unless console
+      puts '# Set Fuel server configurations.'
+      puts "# This will create or replace `#{config_path}`.\n\n"
+    end
 
     servers = []
+    confirmation = 'n'
     # Allow the user to enter multiple Fuel servers
     begin
-      server_name, server_url, access_token = get_server_info.call
-      servers << {"name" => server_name, "url" => server_url, "private-token" => access_token}
-      print "\nAdd another Fuel server? [y/N]:"
-      confirmation = STDIN.gets.chomp.downcase
-      confirmation = 'n' if confirmation.empty?
+      server_name, server_url, access_token, cache = get_server_info.call
+      servers << { 'name' => server_name,
+                   'url' => server_url,
+                   'private-token' => access_token,
+                   'cache' => { 'path' => cache } }
+      unless defaults
+        print "\nAdd another Fuel server? [y/N]:"
+        confirmation = STDIN.gets.chomp.downcase
+        confirmation = 'n' if confirmation.empty?
+      end
     end while confirmation == 'y'
 
-    puts "\nReview:\n"
-    servers.each do |server|
-      puts "    Name: #{server['name']}"
-      puts "    URL: #{server['url']}"
-      puts "    Access token: #{server['private-token']}"
-      if servers.size() > 1
-        puts "\n"
+    unless defaults || console
+      puts "\nReview:\n"
+      servers.each do |server|
+        puts "    Name: #{server['name']}"
+        puts "    URL: #{server['url']}"
+        puts "    Cache: #{server['cache']['path']}"
+        puts "    Access token: #{server['private-token']}"
+        puts "\n" if servers.size > 1
       end
     end
 
-    print "Save? [Y/n]:"
-    confirmation = STDIN.gets.chomp.downcase
-    confirmation = 'y' if confirmation.empty?
+    confirmation = 'y'
+    unless defaults || console
+      print 'Save? [Y/n]:'
+      confirmation = STDIN.gets.chomp.downcase
+      confirmation = 'y' if confirmation.empty?
+    end
 
     # Save settings
     if confirmation == 'y'
-      config = {"servers" => servers}
+      config = {'servers' => servers}
 
-      # Make sure the ~/.gz/fuel directory exists.
-      FileUtils.mkdir_p(config_dir)
+      if console
+        puts config.to_yaml
+      else
+        # Make sure the ~/.gz/fuel directory exists.
+        FileUtils.mkdir_p(local_fuel_dir)
 
-      # Write to the config.yaml file
-      File.open(config_path, "w") { |file|
-        file.write(config.to_yaml())
-      }
-      puts "Settings saved to ~/.gz/fuel/config.yaml."
+        # Write to the config.yaml file
+        File.open(config_path, 'w') { |file| file.write(config.to_yaml) }
+        puts 'Settings saved to ~/.gz/fuel/config.yaml.'
+      end
     else
-      puts "Settings not saved."
+      puts 'Settings not saved.'
     end
-  end # configure
+  end
 end # class

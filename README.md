@@ -61,7 +61,7 @@ Download succeeded.
 **Private access tokens**
 Private models and worlds can be downloaded using access tokens.
 Access tokens are generated on `app.gazebosim.org`. After logging in,
-go to `Setting->Access Tokens`.
+go to `Settings->Access Tokens`.
 
 An access token can be used with CLI commands via the `--header` option:
 ```

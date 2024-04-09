@@ -40,7 +40,7 @@ downloaded. If not used, all assets are stored under `$HOME/.gz/fuel`.
 The `gz fuel configure` CLI will walk you through the process of creating a 
 `~/.gz/fuel/config.yaml` file. Just run the following command, and answer
 the prompts. Note that this command will replace your existing `~/.gz/fuel/config.yaml`
-if you choose to save at the last step.
+if you choose to save on the last step.
 
 ```
 gz fuel configure
