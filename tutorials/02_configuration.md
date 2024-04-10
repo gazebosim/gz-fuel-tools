@@ -42,7 +42,7 @@ The `gz fuel configure` CLI will walk you through the process of creating a
 the prompts. Note that this command will replace your existing `~/.gz/fuel/config.yaml`
 if you choose to save on the last step.
 
-```
+```bash
 gz fuel configure
 ```
 
