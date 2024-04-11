@@ -156,7 +156,7 @@ namespace gz
       public: bool Private() const;
 
       /// \brief Set the privacy setting of the world.
-      /// \param[in] True indicates the world is private, false indicates the
+      /// \param[in] _private True indicates the world is private, false indicates the
       /// world is public.
       public: void SetPrivate(bool _private);
 
