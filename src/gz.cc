@@ -16,6 +16,7 @@
 */
 
 #include <curl/curl.h>
+#include <curl/easy.h>
 #include <string.h>
 #include <tinyxml2.h>
 
@@ -138,6 +139,7 @@ extern "C" void uglyPrint(
                 << std::string(encodedRes) << std::endl;
     }
   }
+  curl_easy_cleanup(curl);
 }
 
 //////////////////////////////////////////////////
