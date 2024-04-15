@@ -63,14 +63,15 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(
     const char *_url = nullptr, const char *_configFile = nullptr,
     const char *_header = nullptr, const char *_type = nullptr, int _jobs = 1);
 
-/// \brief External hook to execute 'gz fuel upload -m path' from the command
-/// line.
+/// \brief External hook to execute 'gz fuel upload' from the command
+/// line. This can upload either a model or world.
 ///
 /// Example usage, including a private access token which is required:
 ///
 /// `gz fuel upload -m ~/my_model --header "Private-Token: <access_token>"`
 ///
-/// \param[in] _path Resource path.
+/// \param[in] _modelPath Resource path to a model. If set, the _worldPath should be null.
+/// \param[in] _worldPath Resource path to a world. If set, the _modelPath should be null.
 /// \param[in] _url Server URL.
 /// \param[in] _header An HTTP header.
 /// \param[in] _private "1" to make the resource private, "0" to make it
@@ -78,9 +79,10 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(
 /// \param[in] _owner Upload the resource to the provided owner, or nullptr
 /// to upload to the account specified by the token in the header.
 /// \return 1 if successful, 0 if not.
-extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_path,
-    const char *_url, const char *_header = nullptr,
-    const char *_private = nullptr, const char *_owner = nullptr);
+extern "C" GZ_FUEL_TOOLS_VISIBLE int upload(const char *_modelPath,
+    const char *_worldPath, const char *_url,
+    const char *_header = nullptr, const char *_private = nullptr,
+    const char *_owner = nullptr);
 
 /// \brief External hook to execute 'gz fuel delete [options]' from the command
 /// line.
@@ -116,16 +118,19 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path);
 ///
 /// `gz fuel edit -u https://fuel.gazebosim.org/1.0/openrobotics/models/Ambulance --header "Private-Token: <access_token>"` --public // NOLINT
 ///
+/// \param[in] _modelPath Path to a model. If set, the _worldPath
+///            parameter should be null.
+/// \param[in] _worldPath Path to a world. If set, the _modelPath
+///            parameters should be null.
 /// \param[in] _url Resource URL.
 /// \param[in] _header An HTTP header.
 /// \param[in] _private "1" to make the resource private, "0" to make it
 ///            public
-/// \param[in] _path Resource path.
 /// \return 1 if successful, 0 if not.
 extern "C" GZ_FUEL_TOOLS_VISIBLE int editUrl(
+    const char *_modelPath, const char *_worldPath,
     const char *_url, const char *_header = nullptr,
-    const char *_private = nullptr,
-    const char *_path = nullptr);
+    const char *_private = nullptr);
 
 /// \brief External hook to execute 'gz fuel update [options] from the command'
 /// line

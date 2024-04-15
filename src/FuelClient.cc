@@ -188,6 +188,49 @@ class gz::fuel_tools::FuelClientPrivate
               const std::string &_owner,
               std::multimap<std::string, std::string> &_form);
 
+  /// \brief Populate a world form such that it can be used
+  /// during world creation and editing REST calls.
+  /// \param[in] _pathToWorldDir Path to the world directory.
+  /// \param[in] _id World identifier information.
+  /// \param[in] _private True if this world should be private.
+  /// \param[in] _owner World owner name.
+  /// \param[out] _form Form to fill.
+  /// \return True if the operation completed successfully.
+  public: bool FillWorldForm(const std::string &_pathToModelDir,
+              const WorldIdentifier &_id, bool _private,
+              const std::string &_owner,
+              std::multimap<std::string, std::string> &_form);
+
+  /// \brief Parse a metadata.pbtxt file and fill in the the
+  /// FuelMetadata variable.
+  /// \param[in] _pathToResourceDir Path to the metadata.pbtxt file.
+  /// \param[out] _meta Fuel metadata that will be filled with info
+  /// from the metadata.pbtxt file.
+  void ParseMetadata(const std::string &_pathToResourceDir,
+                     gz::msgs::FuelMetadata &_meta);
+
+  /// \brief Parse a model.config file and fill in the the
+  /// FuelMetadata variable.
+  /// \param[in] _pathToResourceDir Path to the model.config file.
+  /// \param[out] _meta Fuel metadata the will be filled with info
+  /// from the model.config file.
+  /// \return True on success, false otherwise.
+  bool ParseModelConfig(const std::string &_pathToResourceDir,
+                        gz::msgs::FuelMetadata &_meta);
+
+  /// \brief Populate the REST form based on the metadata.
+  /// \param[in] _pathToResourceDir Path to the model or world.
+  /// \param[in] _server The server config.
+  /// \param[in] _meta Fuel metadata.
+  /// \param[out] _form The REST form to fill.
+  /// \return True on success, false otherwise.
+  bool FillForm(const std::string &_pathToResourceDir,
+                const ServerConfig &_server,
+                bool _private,
+                const std::string &_owner,
+                const gz::msgs::FuelMetadata &_meta,
+                std::multimap<std::string, std::string> &_form);
+
   /// \brief This function requests the available licenses from the
   ///  Fuel server and stores this information locally.
   ///
@@ -533,6 +576,56 @@ Result FuelClient::UploadModel(const std::string &_pathToModelDir,
            << "  3. If the owner is specified, make sure you have correct\n"
            << "     permissions." << std::endl;
     return Result(ResultType::FETCH_ERROR);
+  }
+
+  return Result(ResultType::UPLOAD);
+}
+
+//////////////////////////////////////////////////
+Result FuelClient::UploadWorld(const std::string &_pathToWorldDir,
+    const WorldIdentifier &_id, const std::vector<std::string> &_headers,
+    bool _private, const std::string &_owner)
+{
+  gz::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  std::multimap<std::string, std::string> form;
+  if (!this->dataPtr->FillWorldForm(_pathToWorldDir, _id, _private, _owner, form))
+  {
+    return Result(ResultType::UPLOAD_ERROR);
+  }
+
+  std::vector<std::string> headersIncludingServerConfig = _headers;
+  AddServerConfigParametersToHeaders(
+    _id.Server(), headersIncludingServerConfig);
+  // Send the request.
+  resp = rest.Request(HttpMethod::POST_FORM, _id.Server().Url().Str(),
+      _id.Server().Version(), "worlds", {},
+      headersIncludingServerConfig, "", form);
+
+  if (resp.statusCode != 200)
+  {
+    std::string categories;
+    if (form.find("categories") != form.end())
+    {
+      categories = form.find("categories")->second;
+    }
+
+    gzerr << "Failed to upload world." << std::endl
+           << "  Server: " << _id.Server().Url().Str() << std::endl
+           << "  Server API Version: " <<  _id.Server().Version() << std::endl
+           << "  Route: /worlds\n"
+           << "  Categories: " << categories << std::endl
+           << "  REST response code: " << resp.statusCode
+           << std::endl << std::endl
+           << "Suggestions" << std::endl
+           << "  1. Is the Server URL correct? Try entering it on a browser.\n"
+           << "  2. Do the categories exist? If you are using the Fuel server,"
+           << "     then you can get the complete list at"
+           << "     https://fuel.gazebosim.org/1.0/categories.\n"
+           << "  3. If the owner is specified, make sure you have correct\n"
+           << "     permissions." << std::endl;
+    return Result(ResultType::UPLOAD_ERROR);
   }
 
   return Result(ResultType::UPLOAD);
@@ -1652,6 +1745,49 @@ Result FuelClient::PatchModel(
 }
 
 //////////////////////////////////////////////////
+Result FuelClient::PatchWorld(
+    const gz::fuel_tools::WorldIdentifier &_world,
+    const std::vector<std::string> &_headers,
+    const std::string &_pathToWorldDir)
+{
+  gz::fuel_tools::Rest rest;
+  RestResponse resp;
+
+  auto serverUrl = _world.Server().Url().Str();
+  auto version = _world.Server().Version();
+  common::URIPath path;
+  path = path / _world.Owner() / "worlds" / _world.Name();
+
+  std::multimap<std::string, std::string> form;
+
+  if (!_pathToWorldDir.empty() &&
+      !this->dataPtr->FillWorldForm(_pathToWorldDir, _world,
+        _world.Private(), _world.Owner(), form))
+  {
+      std::cout << "1\n";
+    return Result(ResultType::UPLOAD_ERROR);
+  }
+  else
+  {
+    form.emplace("private", _world.Private() ? "1" : "0");
+  }
+
+  std::vector<std::string> headersIncludingServerConfig = _headers;
+  AddServerConfigParametersToHeaders(
+    _world.Server(), headersIncludingServerConfig);
+  resp = rest.Request(HttpMethod::PATCH_FORM, serverUrl, version,
+      path.Str(), {}, headersIncludingServerConfig, "", form);
+
+  if (resp.statusCode != 200)
+  {
+      std::cout << "2\n";
+    return Result(ResultType::PATCH_ERROR);
+  }
+
+  return Result(ResultType::PATCH);
+}
+
+//////////////////////////////////////////////////
 void FuelClientPrivate::AllFiles(const std::string &_path,
     std::vector<std::string> &_files) const
 {
@@ -1687,37 +1823,16 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
 
   gz::msgs::FuelMetadata meta;
 
-  // Try the `metadata.pbtxt` file first since it contains more information
-  // than `model.config`.
+  // Try the `metadata.pbtxt` file first since it contains more
+  // information than `model.config` and works with world files.
   if (common::exists(common::joinPaths(_pathToModelDir, "metadata.pbtxt")))
   {
-    std::string filePath = common::joinPaths(_pathToModelDir, "metadata.pbtxt");
-
-    gzdbg << "Parsing " << filePath  << std::endl;
-
-    // Read the pbtxt file.
-    std::ifstream inputFile(filePath);
-    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
-        std::istreambuf_iterator<char>());
-
-    // Parse the file into the fuel metadata message
-    google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+    this->ParseMetadata(_pathToModelDir, meta);
   }
   else if (common::exists(common::joinPaths(_pathToModelDir, "model.config")))
   {
-    std::string filePath = common::joinPaths(_pathToModelDir, "model.config");
-
-    gzdbg << "Parsing " << filePath << std::endl;
-
-    std::ifstream inputFile(filePath);
-    std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
-        std::istreambuf_iterator<char>());
-
-    if (!gz::msgs::ConvertFuelMetadata(inputStr, meta))
-    {
-      gzerr << "Unable to convert model config[" << _pathToModelDir << "].\n";
+    if (!this->ParseModelConfig(_pathToModelDir, meta))
       return false;
-    }
   }
   else
   {
@@ -1726,10 +1841,88 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
     return false;
   }
 
+  return this->FillForm(_pathToModelDir, _id.Server(), _private, _owner, meta, _form);
+}
+
+//////////////////////////////////////////////////
+bool FuelClientPrivate::FillWorldForm(const std::string &_pathToWorldDir,
+    const WorldIdentifier &_id, bool _private, const std::string &_owner,
+    std::multimap<std::string, std::string> &_form)
+{
+  if (!common::exists(_pathToWorldDir))
+  {
+    gzerr << "The world path[" << _pathToWorldDir << "] doesn't exist.\n";
+    return false;
+  }
+
+  gz::msgs::FuelMetadata meta;
+
+  // World's must use the `metadata.pbtxt` file.
+  if (common::exists(common::joinPaths(_pathToWorldDir, "metadata.pbtxt")))
+  {
+    this->ParseMetadata(_pathToWorldDir, meta);
+  }
+  else
+  {
+    gzerr << "Provided world directory[" <<  _pathToWorldDir
+      << "] needs a metadata.pbtxt.";
+    return false;
+  }
+
+  return this->FillForm(_pathToWorldDir, _id.Server(), _private, _owner, meta, _form);
+}
+
+//////////////////////////////////////////////////
+void FuelClientPrivate::ParseMetadata(
+  const std::string &_pathToResourceDir,
+  gz::msgs::FuelMetadata &meta)
+{
+  std::string filePath = common::joinPaths(_pathToResourceDir, "metadata.pbtxt");
+
+  gzdbg << "Parsing " << filePath  << std::endl;
+
+  // Read the pbtxt file.
+  std::ifstream inputFile(filePath);
+  std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+                       std::istreambuf_iterator<char>());
+
+  // Parse the file into the fuel metadata message
+  google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+}
+
+//////////////////////////////////////////////////
+bool FuelClientPrivate::ParseModelConfig(
+  const std::string &_pathToResourceDir, gz::msgs::FuelMetadata &meta)
+{
+  std::string filePath = common::joinPaths(_pathToResourceDir, "model.config");
+
+  gzdbg << "Parsing " << filePath << std::endl;
+
+  std::ifstream inputFile(filePath);
+  std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
+                       std::istreambuf_iterator<char>());
+
+  if (!gz::msgs::ConvertFuelMetadata(inputStr, meta))
+  {
+    gzerr << "Unable to convert model.config [" << _pathToResourceDir << "].\n";
+    return false;
+  }
+
+  return true;
+}
+
+//////////////////////////////////////////////////
+bool FuelClientPrivate::FillForm(const std::string &_pathToResourceDir,
+                                 const ServerConfig &_server,
+                                 bool _private,
+                                 const std::string &_owner,
+                                 const gz::msgs::FuelMetadata &_meta,
+                                 std::multimap<std::string, std::string> &_form)
+{
   _form =
   {
-    {"name", meta.name()},
-    {"description", meta.description()},
+    {"name", _meta.name()},
+    {"description", _meta.description()},
     {"private", _private ? "1" : "0"},
   };
 
@@ -1745,13 +1938,13 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
   // license name to integer.
   //
   // If we have legal, then attempt to fill in the correct license information.
-  if (meta.has_legal())
+  if (_meta.has_legal())
   {
     // Attempt to retrieve the available licenses, if we have no available
     // licenses.
     if (this->licenses.empty())
     {
-      this->PopulateLicenses(_id.Server());
+      this->PopulateLicenses(_server);
       // Fail if a license has been requested, but we couldn't get the
       // available licenses.
       if (this->licenses.empty())
@@ -1762,7 +1955,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
 
     // Find the license by name.
     std::map<std::string, unsigned int>::const_iterator licenseIt =
-      this->licenses.find(meta.legal().license());
+      this->licenses.find(_meta.legal().license());
     if (licenseIt != this->licenses.end())
     {
       _form.emplace("license", std::to_string(licenseIt->second));
@@ -1779,7 +1972,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
       }
       validLicenseNames += "    " + licenseIt->first;
 
-      gzerr << "Invalid license[" << meta.legal().license() << "].\n"
+      gzerr << "Invalid license[" << _meta.legal().license() << "].\n"
              << "  Valid licenses include:\n"
              << validLicenseNames << std::endl;
 
@@ -1795,33 +1988,33 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
 
   // Add tags
   std::string tags;
-  for (int i = 0; i < meta.tags_size(); ++i)
-    tags += meta.tags(i) + ",";
+  for (int i = 0; i < _meta.tags_size(); ++i)
+    tags += _meta.tags(i) + ",";
   if (!tags.empty())
     _form.emplace("tags", tags);
 
   // Add categories
   std::string categories;
-  if (meta.has_categories())
+  if (_meta.has_categories())
   {
     // Add the first category, if present.
-    if (!meta.categories().first().empty())
-      categories = meta.categories().first();
+    if (!_meta.categories().first().empty())
+      categories = _meta.categories().first();
 
     // Add the second category, if present.
-    if (!meta.categories().second().empty())
+    if (!_meta.categories().second().empty())
     {
       // Add a comma separator if the first category was not empty.
       if (!categories.empty())
         categories += ", ";
-      categories += meta.categories().second();
+      categories += _meta.categories().second();
     }
   }
   if (!categories.empty())
     _form.emplace("categories", categories);
 
   // Add annotations as metadata.
-  for (const auto &annotation : meta.annotations())
+  for (const auto &annotation : _meta.annotations())
   {
     std::string formAnnotation = std::string("{\"key\":\"") +
       annotation.first + "\",\"value\":\"" + annotation.second + "\"}";
@@ -1830,11 +2023,11 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
 
   // Recursively get all the files.
   std::vector<std::string> files;
-  this->AllFiles(_pathToModelDir, files);
+  this->AllFiles(_pathToResourceDir, files);
   for (const std::string &file : files)
   {
     _form.emplace("file", std::string("@") + file + ";"
-        + file.substr(_pathToModelDir.size()+1));
+        + file.substr(_pathToResourceDir.size()+1));
   }
 
   return true;

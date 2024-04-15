@@ -1479,6 +1479,17 @@ TEST_F(FuelClientTest, UploadModelFail)
 }
 
 /////////////////////////////////////////////////
+TEST_F(FuelClientTest, UploadWorldFailInvalidPath)
+{
+  FuelClient client;
+  WorldIdentifier worldId;
+
+  std::vector<std::string> headers;
+  Result result = client.UploadWorld("path", worldId, headers, false, "owner");
+  EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
+}
+
+/////////////////////////////////////////////////
 // Windows doesn't support colons in filenames
 // https://github.com/gazebosim/gz-fuel-tools/issues/106
 // This is fixed in gz-fuel-tools9+, but not here to preserve behavior

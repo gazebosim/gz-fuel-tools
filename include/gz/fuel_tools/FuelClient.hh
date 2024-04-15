@@ -214,6 +214,20 @@ namespace gz
                                  bool _private,
                                  const std::string &_owner);
 
+      /// \brief Upload a directory as a new world
+      /// \param[in] _pathToWorldDir a path to a directory containing a world
+      /// \param[in] _id An identifier to assign to this new world
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \param[in] _private True to make the world private.
+      /// \param[in] _owner Name of the owner. Empty string indicates that
+      /// the owner is specified by the private token in the headers.
+      /// \return Result of the upload operation
+      public: Result UploadWorld(const std::string &_pathToWorldDir,
+                                 const WorldIdentifier &_id,
+                                 const std::vector<std::string> &_headers,
+                                 bool _private,
+                                 const std::string &_owner);
+
       /// \brief Remove a resource, such as a model or world, from Gazebo Fuel
       /// \param[in] _uri The full URI of the resource, e.g:
       /// https://fuel.gazebosim.org/1.0/openrobotcs/model/my_model
@@ -453,6 +467,24 @@ namespace gz
                   const gz::fuel_tools::ModelIdentifier &_model,
                   const std::vector<std::string> &_headers,
                   const std::string &_pathToModelDir);
+
+      /// \brief Update a world using a PATCH request.
+      ///
+      /// World fields that are patched by this function:
+      ///   * private
+      ///   * World files contained in _pathToWorldDir.
+      ///   * Description, tags, license, and other attributes found in the
+      ///     metadata.pbtxt file.
+      ///
+      /// \param[in] _world The world to patch. The contents of this world
+      ///            will be sent in the PATCH request.
+      /// \param[in] _headers Headers to set on the HTTP request.
+      /// \param[in] _pathToWorldDir a path to a directory containing a world.
+      /// \return Result of the patch operation.
+      public: Result PatchWorld(
+                  const gz::fuel_tools::WorldIdentifier &_world,
+                  const std::vector<std::string> &_headers,
+                  const std::string &_pathToWorldDir);
 
       /// \brief Parse Collection identifer from URL.
       /// \param[in] _url The unique URL of a collection. It may also be a

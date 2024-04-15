@@ -118,6 +118,7 @@ SUBCOMMANDS = {
   "                                                                        \n"\
   "Available Options:                                                      \n"\
   "  -m [--model] arg         Path to directory containing the model.      \n"\
+  "  -w [--world] arg         Path to directory containing the world.      \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
   "                           https://fuel.gazebosim.org.                  \n"\
@@ -161,6 +162,7 @@ SUBCOMMANDS = {
   "Available Options:                                                      \n"\
   "  -m [--model] arg         Path to directory containing a model, or     \n"\
   "                           multiple models each in a subdirectory.      \n"\
+  "  -w [--world] arg         Path to directory containing a world.         \n"\
   "  -u [--url] arg           URL of the server that should receive        \n"\
   "                           the model. If unspecified, the server will be\n"\
   "                           https://fuel.gazebosim.org.                  \n"\
@@ -204,6 +206,7 @@ class Cmd
       'config' => '',
       'header' => '',
       'model' => '',
+      'world' => '',
       'config2pbtxt' => '',
       'pbtxt2config' => '',
       'private' => '',
@@ -252,6 +255,9 @@ class Cmd
       end
       opts.on('--model [model]', String, 'Model to upload.') do |m|
         options['model'] = m
+      end
+      opts.on('--world [world]', String, 'World to upload.') do |m|
+        options['world'] = m
       end
       opts.on('--config2pbtxt [config]',
               String, 'Convert config file.') do |c|
@@ -328,8 +334,8 @@ class Cmd
         exit(-1)
       end
     when 'upload'
-      if options['model'] == ''
-        puts "Missing model path."
+      if options['model'] == '' && options['world'] == ''
+        puts "Missing model or world path."
         exit(-1)
       end
       if options['url'] == ''
@@ -406,9 +412,10 @@ class Cmd
           exit(-1)
         end
       when 'edit'
-        Importer.extern 'int editUrl(const char *, const char *, const char *, const char *)'
-        if not Importer.editUrl(options['url'], options['header'],
-            options['private'], options['model'])
+        Importer.extern 'int editUrl(const char*, const char *, const char *, const char *, const char *)'
+        if not Importer.editUrl(options['model'], options['world'],
+                                options['url'], options['header'],
+                                options['private'])
           exit(-1)
         end
       when 'list'
@@ -442,12 +449,14 @@ class Cmd
           end
         end
       when 'upload'
-        Importer.extern 'int upload(const char *, const char *, const char *, const char *, const char *)'
-        if not Importer.upload(options['model'],
-                               options['url'],
-                               options['header'],
-                               options['private'],
-                               options['owner'])
+        Importer.extern 'int upload(const char *, const char *, const char *, const char *, const char *, const char *)'
+        if not Importer.upload(
+          options['model'].empty? ? nil : options['model'],
+          options['world'].empty? ? nil : options['world'],
+          options['url'],
+          options['header'],
+          options['private'],
+          options['owner'])
           exit(-1)
         end
       when 'update'

@@ -1,0 +1,16 @@
+world {
+  file: "empty.sdf"
+  file_format {
+    version {
+      major: 1
+      minor: 6
+    }
+    name: "sdf"
+  }
+}
+name: "Empty world"
+description: "A SDF world with no models."
+authors {
+  name: "Nate Koenig"
+  email: "natekoenig@gmail.com"
+}
