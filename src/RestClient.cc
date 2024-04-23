@@ -223,6 +223,7 @@ RestResponse Rest::Request(HttpMethod _method,
 
     encodedPath = curl_easy_escape(curl, decodedPath, decodedSize);
     url = RestJoinUrl(url, encodedPath);
+    curl_free(decodedPath);
   }
 
   // Process query strings.
