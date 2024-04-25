@@ -308,6 +308,7 @@ RestResponse Rest::Request(HttpMethod _method,
   else if (_method == HttpMethod::POST_FORM)
   {
     AddFormPost(multipart, _form);
+    curl_easy_setopt(curl, CURLOPT_MIMEPOST, multipart);
   }
   else if (_method == HttpMethod::DELETE)
   {
