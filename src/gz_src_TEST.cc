@@ -95,7 +95,8 @@ TEST_F(CmdLine, ModelListFail)
 // https://github.com/gazebosim/gz-fuel-tools/issues/105
 TEST_F(CmdLine, ModelListConfigServerUgly)
 {
-  EXPECT_TRUE(listModels("", "openroboticstest", "true"));
+  EXPECT_TRUE(listModels("https://fuel.gazebosim.org",
+                         "openroboticstest", "true"));
 
   EXPECT_NE(this->stdOutBuffer.str().find("https://fuel.gazebosim.org"),
       std::string::npos) << this->stdOutBuffer.str();
