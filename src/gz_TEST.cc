@@ -98,7 +98,7 @@ TEST(CmdLine, IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ListFail))
 TEST(CmdLine,
     IGN_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListConfigServerUgly))
 {
-  auto output = custom_exec_str(g_listCmd + " -t model --raw");
+  auto output = custom_exec_str(g_listCmd + " -t model --raw -u 'https://fuel.gazebosim.org' -o openrobotics");
   EXPECT_NE(output.find("https://fuel.gazebosim.org/1.0/"),
             std::string::npos) << output;
   EXPECT_EQ(output.find("owners"), std::string::npos) << output;
