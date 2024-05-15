@@ -100,8 +100,9 @@ TEST(CmdLine, GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ListFail))
 TEST(CmdLine,
     GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ModelListConfigServerUgly))
 {
-  auto output = custom_exec_str(g_listCmd + " -t model --raw");
-  EXPECT_NE(output.find("https://fuel.gazebosim.org/1.0/"),
+  auto output = custom_exec_str(g_listCmd +
+    " -t model --raw -u 'https://fuel.gazebosim.org' -o openrobotics");
+  EXPECT_NE(output.find("https://fuel.gazebosim.org"),
             std::string::npos) << output;
   EXPECT_EQ(output.find("owners"), std::string::npos) << output;
 }
@@ -150,4 +151,20 @@ TEST(CmdLine,
       std::string::npos) << output;
   EXPECT_NE(output.find("owners"), std::string::npos) << output;
   EXPECT_NE(output.find("worlds"), std::string::npos) << output;
+}
+
+TEST(CmdLine,
+    GZ_UTILS_TEST_ENABLED_ONLY_ON_LINUX(ConfigureDefaultsConsole))
+{
+  std::string output = custom_exec_str(
+    g_exec + " fuel configure --console --defaults");
+
+  std::string expected =
+     "---\n"
+     "servers:\n"
+     "- name: Fuel\n"
+     "  url: https://fuel.gazebosim.org\n"
+     "  private-token: ''\n";
+
+  EXPECT_EQ(output.find(expected), 0);
 }
