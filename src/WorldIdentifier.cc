@@ -44,8 +44,12 @@ class WorldIdentifierPrivate
   /// \brief World version. Valid versions start from 1, 0 means the tip.
   public: unsigned int version{0};
 
-  /// \brief Path of this model in the local cache
+  /// \brief Path of this world in the local cache
   public: std::string localPath;
+
+  /// \brief True indicates the world is private, false indicates the
+  /// world is public.
+  public: bool privacy{false};
 };
 
 //////////////////////////////////////////////////
@@ -228,5 +232,16 @@ std::string WorldIdentifier::AsPrettyString(const std::string &_prefix) const
   out << _prefix << prop << "Server:" << reset << std::endl
       << this->Server().AsPrettyString(_prefix + "  ");
   return out.str();
+}
+//////////////////////////////////////////////////
+bool WorldIdentifier::Private() const
+{
+  return this->dataPtr->privacy;
+}
+
+//////////////////////////////////////////////////
+void WorldIdentifier::SetPrivate(bool _private)
+{
+  this->dataPtr->privacy = _private;
 }
 }  // namespace gz::fuel_tools

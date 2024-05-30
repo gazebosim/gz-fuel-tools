@@ -78,12 +78,22 @@ ClientConfig::ClientConfig() : dataPtr(new ClientConfigPrivate)
     return;
   }
 
-  if (!gz::common::isDirectory(gzFuelPath))
+  if (!gzFuelPath.empty())
   {
-    gzerr << "[" << gzFuelPath << "] is not a directory" << std::endl;
-    return;
+    if (!gz::common::isDirectory(gzFuelPath))
+      gzerr << "[" << gzFuelPath << "] is not a directory" << std::endl;
+    else
+      this->SetCacheLocation(gzFuelPath);
   }
-  this->SetCacheLocation(gzFuelPath);
+
+  std::string configYamlFile = common::joinPaths(this->CacheLocation(),
+                                                 "config.yaml");
+  std::string configYmlFile = common::joinPaths(this->CacheLocation(),
+                                                "config.yml");
+  if (gz::common::exists(configYamlFile))
+    this->LoadConfig(configYamlFile);
+  else if (gz::common::exists(configYmlFile))
+    this->LoadConfig(configYmlFile);
 }
 
 //////////////////////////////////////////////////
