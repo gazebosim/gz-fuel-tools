@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
-  <name>gz-fuel_tools9</name>
+  <name>gz-fuel_tools10</name>
   <version>10.0.0</version>
   <description>Gazebo Fuel Tools: Classes and tools for interacting with Gazebo Fuel</description>
   <maintainer email="natekoenig@gmail.com">Nate Koenig</maintainer>
@@ -16,7 +16,7 @@
   <depend>gz-math8</depend>
   <depend>gz-msgs11</depend>
   <depend>gz-tools2</depend>
-  <depend>gz-utils2</depend>
+  <depend>gz-utils3</depend>
   <depend>libcurl-dev</depend>
   <depend>libgflags-dev</depend>
   <depend>libjsoncpp-dev</depend>
