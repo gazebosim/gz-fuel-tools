@@ -124,13 +124,13 @@ size_t RestWriteMemoryCallback(void *_buffer, size_t _size, size_t _nmemb,
 }
 
 /////////////////////////////////////////////////
-struct curl_httppost *BuildFormPost(
+void AddFormPost(
+    curl_mime * const multipart,
     const std::multimap<std::string, std::string> &_form)
 {
-  struct curl_httppost *formpost = nullptr;
-  struct curl_httppost *lastptr = nullptr;
   for (const auto &[key, value] : _form)
   {
+    curl_mimepart *part = curl_mime_addpart(multipart);
     // follow same convention as curl cmdline tool
     // field starting with @ indicates path to file to upload
     // others are standard fields to describe the file
@@ -171,26 +171,17 @@ struct curl_httppost *BuildFormPost(
         }
       }
 
-      curl_formadd(&formpost,
-          &lastptr,
-          CURLFORM_COPYNAME, key.c_str(),
-          CURLFORM_FILENAME, uploadFilename.c_str(),
-          CURLFORM_FILE, path.c_str(),
-          CURLFORM_CONTENTTYPE, contentType.c_str(),
-          CURLFORM_END);
+      curl_mime_name(part, key.c_str());
+      curl_mime_filename(part, uploadFilename.c_str());
+      curl_mime_filedata(part, path.c_str());
+      curl_mime_type(part, contentType.c_str());
     }
     else
     {
-      // standard key:value fields
-      curl_formadd(&formpost,
-          &lastptr,
-          CURLFORM_COPYNAME, key.c_str(),
-          CURLFORM_COPYCONTENTS, value.c_str(),
-          CURLFORM_END);
+      curl_mime_name(part, key.c_str());
+      curl_mime_data(part, value.c_str(), CURL_ZERO_TERMINATED);
     }
   }
-
-  return formpost;
 }
 
 /////////////////////////////////////////////////
@@ -223,6 +214,7 @@ RestResponse Rest::Request(HttpMethod _method,
 
     encodedPath = curl_easy_escape(curl, decodedPath, decodedSize);
     url = RestJoinUrl(url, encodedPath);
+    curl_free(decodedPath);
   }
 
   // Process query strings.
@@ -293,7 +285,7 @@ RestResponse Rest::Request(HttpMethod _method,
   curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 3L);
 
   std::ifstream ifs;
-  struct curl_httppost *formpost = nullptr;
+  curl_mime *multipart = curl_mime_init(curl);
 
   // Send the request.
   if (_method == HttpMethod::GET)
@@ -302,9 +294,11 @@ RestResponse Rest::Request(HttpMethod _method,
   }
   else if (_method == HttpMethod::PATCH_FORM)
   {
-    formpost = BuildFormPost(_form);
+    AddFormPost(multipart, _form);
+
     curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PATCH");
-    curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
+
+    curl_easy_setopt(curl, CURLOPT_MIMEPOST, multipart);
   }
   else if (_method == HttpMethod::POST)
   {
@@ -313,8 +307,8 @@ RestResponse Rest::Request(HttpMethod _method,
   }
   else if (_method == HttpMethod::POST_FORM)
   {
-    formpost = BuildFormPost(_form);
-    curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
+    AddFormPost(multipart, _form);
+    curl_easy_setopt(curl, CURLOPT_MIMEPOST, multipart);
   }
   else if (_method == HttpMethod::DELETE)
   {
@@ -354,9 +348,6 @@ RestResponse Rest::Request(HttpMethod _method,
   // Update the header data.
   res.headers = headerData;
 
-  if (formpost)
-    curl_formfree(formpost);
-
   // free encoded path char*
   if (encodedPath)
     curl_free(encodedPath);
@@ -365,6 +356,7 @@ RestResponse Rest::Request(HttpMethod _method,
   curl_slist_free_all(headers);
 
   // Cleaning.
+  curl_mime_free(multipart);
   curl_easy_cleanup(curl);
 
   if (ifs.is_open())

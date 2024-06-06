@@ -58,6 +58,25 @@ Downloading model:
 Download succeeded.
 ```
 
+**Private access tokens**
+Private models and worlds can be downloaded using access tokens.
+Access tokens are generated on `app.gazebosim.org`. After logging in,
+go to `Settings->Access Tokens`.
+
+An access token can be used with CLI commands via the `--header` option:
+
+```bash
+$ gz fuel download -u https://fuel.gazebosim.org/1.0/openrobotics/models/ambulance --header 'Private-Token: <access_token>'
+```
+
+Or, an access token can be stored in a `~/.gz/fuel/config.yaml` file. The token is then
+automatically used by the command line tool and API calls. Use the `configure` helper
+tool create your `~/.gz/fuel/config.yaml` file.
+
+```bash
+$ gz fuel configure
+```
+
 **C++ Get List models**
 ```cpp
   // Create a client (uses https://fuel.gazebosim.org by default)

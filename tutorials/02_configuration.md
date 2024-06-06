@@ -35,6 +35,17 @@ The `cache` section captures options related with the local storage of the
 assets. `path` specifies the local directory where all assets will be
 downloaded. If not used, all assets are stored under `$HOME/.gz/fuel`.
 
+## Guided Configuration
+
+The `gz fuel configure` CLI will walk you through the process of creating a 
+`~/.gz/fuel/config.yaml` file. Just run the following command, and answer
+the prompts. Note that this command will replace your existing `~/.gz/fuel/config.yaml`
+if you choose to save on the last step.
+
+```bash
+gz fuel configure
+```
+
 ## Custom configuration file path
 
 Gazebo Fuel's default configuration file is stored under
