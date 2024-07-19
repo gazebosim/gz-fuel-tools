@@ -286,7 +286,7 @@ Model LocalCache::MatchingModel(const ModelIdentifier &_id)
       this->dataPtr->config->CacheLocation(), uriToPath(_id.Server().Url()));
 
   auto srvModels = this->dataPtr->ModelsInServer(path);
-  for (auto &model: srvModels)
+  for (auto &model : srvModels)
   {
     model.dataPtr->id.SetServer(_id.Server());
     auto id = model.Identification();
@@ -316,7 +316,7 @@ bool LocalCache::MatchingWorld(WorldIdentifier &_id) const
       this->dataPtr->config->CacheLocation(), uriToPath(_id.Server().Url()));
 
   auto srvWorlds = this->dataPtr->WorldsInServer(path);
-  for (auto id: srvWorlds)
+  for (auto id : srvWorlds)
   {
     id.SetServer(_id.Server());
     if (_id == id)
