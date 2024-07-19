@@ -9,12 +9,16 @@ on:
       - 'main'
 
 jobs:
-  jammy-ci:
+  noble-ci:
     runs-on: ubuntu-latest
-    name: Ubuntu Jammy CI
+    name: Ubuntu Noble CI
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Compile and test
         id: ci
-        uses: gazebo-tooling/action-gz-ci@jammy
+        uses: gazebo-tooling/action-gz-ci@noble
+        with:
+          codecov-enabled: true
+          cppcheck-enabled: true
+          cpplint-enabled: true
