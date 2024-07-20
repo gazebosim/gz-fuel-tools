@@ -1,0 +1,22 @@
+---
+repositories:
+  gz-cmake:
+    type: git
+    url: https://github.com/azeey/gz-cmake
+    version: fix_lcov
+  gz-common:
+    type: git
+    url: https://github.com/gazebosim/gz-common
+    version: main
+  gz-math:
+    type: git
+    url: https://github.com/gazebosim/gz-math
+    version: main
+  gz-msgs:
+    type: git
+    url: https://github.com/gazebosim/gz-msgs
+    version: main
+  gz-utils:
+    type: git
+    url: https://github.com/gazebosim/gz-utils
+    version: main
