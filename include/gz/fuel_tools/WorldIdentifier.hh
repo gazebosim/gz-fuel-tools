@@ -131,6 +131,10 @@ namespace gz::fuel_tools
     /// \return Unique world name.
     public: std::string UniqueName() const;
 
+    /// \brief Returns a URL for the world.
+    /// \remarks this is Server/Owner/Name.
+    public: gz::common::URI Url() const;
+
     // /// \brief Sets the SHA 2 256 hash of the world
     // /// \param[in] _hash a 256 bit SHA 2 hash
     // /// \returns true if successful

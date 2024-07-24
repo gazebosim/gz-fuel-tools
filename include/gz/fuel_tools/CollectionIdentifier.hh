@@ -92,6 +92,10 @@ namespace gz::fuel_tools
     /// \return Unique collection name.
     public: std::string UniqueName() const;
 
+    /// \brief Returns a URL for the collection.
+    /// \remarks this is Server/Owner/Name.
+    public: gz::common::URI Url() const;
+
     /// \brief Returns all the collection information as a string. Convenient
     /// for debugging.
     /// \param[in] _prefix Optional prefix for every line of the string.
