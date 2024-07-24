@@ -84,6 +84,10 @@ namespace gz::fuel_tools
     /// \return Unique model name.
     public: std::string UniqueName() const;
 
+    /// \brief Returns a URL for the model.
+    /// \remarks this is Server/Owner/Name.
+    public: gz::common::URI Url() const;
+
     /// \brief set the name of the model.
     /// \param[in] _name The name to set. Must be ascii and pass [-_a-z0-9]+.
     /// \return true if successful.

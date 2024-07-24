@@ -81,6 +81,32 @@ TEST(ModelIdentifier, UniqueName)
 }
 
 /////////////////////////////////////////////////
+/// \brief Url
+TEST(ModelIdentifier, Url)
+{
+  gz::fuel_tools::ServerConfig srv1;
+  srv1.SetUrl(common::URI("https://localhost:8001", true));
+
+  gz::fuel_tools::ServerConfig srv2;
+  srv2.SetUrl(common::URI("https://localhost:8002", true));
+
+  gz::fuel_tools::ServerConfig srv3;
+  srv3.SetUrl(common::URI("https://localhost:8003", true));
+
+  ModelIdentifier id;
+  id.SetName("hello");
+  id.SetOwner("alice");
+  id.SetServer(srv1);
+  EXPECT_EQ("https://localhost:8001/alice/models/hello", id.Url().Str());
+
+  id.SetServer(srv2);
+  EXPECT_EQ("https://localhost:8002/alice/models/hello", id.Url().Str());
+
+  id.SetServer(srv3);
+  EXPECT_EQ("https://localhost:8003/alice/models/hello", id.Url().Str());
+}
+
+/////////////////////////////////////////////////
 /// \brief Copy constructor deep copies
 TEST(ModelIdentifier, CopyConstructorDeepCopy)
 {
