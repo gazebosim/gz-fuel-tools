@@ -88,16 +88,6 @@ gz::common::URI CollectionIdentifier::Url() const
 }
 
 //////////////////////////////////////////////////
-gz::common::URI CollectionIdentifier::Url() const
-{
-  return common::URI(
-    common::joinPaths(this->dataPtr->server.Url().Str(),
-                      this->dataPtr->owner,
-                      "collections",
-                      this->dataPtr->name), true);
-}
-
-//////////////////////////////////////////////////
 std::string CollectionIdentifier::Name() const
 {
   return this->dataPtr->name;
