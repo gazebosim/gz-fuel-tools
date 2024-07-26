@@ -71,9 +71,10 @@ CollectionIdentifier::~CollectionIdentifier() = default;
 //////////////////////////////////////////////////
 std::string CollectionIdentifier::UniqueName() const
 {
-  return common::joinPaths(this->dataPtr->server.Url().Str(),
-                           this->dataPtr->owner, "collections",
-                           this->dataPtr->name);
+  return common::copyToUnixPath(common::joinPaths(
+    uriToPath(this->dataPtr->server.Url()),
+    this->dataPtr->owner, "collections",
+    this->dataPtr->name));
 }
 
 //////////////////////////////////////////////////
