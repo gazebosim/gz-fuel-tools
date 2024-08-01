@@ -721,7 +721,8 @@ TEST_F(FuelClientTest, CachedModel)
 
   // Cached model (tip)
   {
-    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip", true};
+    common::URI url{"http://localhost:8007/1.0/alice/models/My Model/tip",
+                    true};
     std::string path;
     auto result = client.CachedModel(url, path);
     EXPECT_TRUE(result);
@@ -744,7 +745,8 @@ TEST_F(FuelClientTest, CachedModel)
   // Cached model file (tip)
   {
     common::URI url{
-        "http://localhost:8007/1.0/alice/models/My Model/tip/files/model.sdf", true};
+        "http://localhost:8007/1.0/alice/models/My Model/tip/files/model.sdf",
+        true};
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_TRUE(result);
@@ -776,7 +778,8 @@ TEST_F(FuelClientTest, CachedModel)
 
   // Non-cached model (when looking for file)
   {
-    common::URI url{"http://localhost:8007/1.0/alice/models/Banana/model.sdf", true};
+    common::URI url{"http://localhost:8007/1.0/alice/models/Banana/model.sdf",
+                    true};
     std::string path;
     auto result = client.CachedModelFile(url, path);
     EXPECT_FALSE(result);
@@ -1186,7 +1189,8 @@ TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(CachedWorld))
 
   // Cached world (tip)
   {
-    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World/tip", true};
+    common::URI url{"http://localhost:8007/1.0/banana/worlds/My World/tip",
+                    true};
     std::string path;
     auto result = client.CachedWorld(url, path);
     EXPECT_TRUE(result);
@@ -1516,7 +1520,7 @@ TEST_F(FuelClientTest, GZ_UTILS_TEST_DISABLED_ON_WIN32(PatchModelFail))
 
   // Bad model.config
   result = client.PatchModel(modelId, headers,
-      common::joinPaths(common::cwd(), "test_cache", 
+      common::joinPaths(common::cwd(), "test_cache",
         sanitizeAuthority("localhost:8007"),
         "alice", "models", "My Model", "3"));
   EXPECT_EQ(ResultType::UPLOAD_ERROR, result.Type());
