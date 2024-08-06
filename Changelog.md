@@ -1,5 +1,22 @@
 ## Gazebo Fuel Tools 7.x
 
+### Gazebo Fuel Tools 7.3.1 (2024-07-19)
+
+1. Fix tests pulling from wrong server
+    * [Pull request #421](https://github.com/gazebosim/gz-fuel-tools/pull/421)
+
+1. Fixed from source install command
+    * [Pull request #404](https://github.com/gazebosim/gz-fuel-tools/pull/404)
+
+1. Create directories and more output on fail
+    * [Pull request #392](https://github.com/gazebosim/gz-fuel-tools/pull/392)
+
+1. Infrastructure
+    * [Pull request #388](https://github.com/gazebosim/gz-fuel-tools/pull/388)
+
+1. Zip: use non-deprecated methods
+    * [Pull request #360](https://github.com/gazebosim/gz-fuel-tools/pull/360)
+
 ### Gazebo Fuel Tools 7.3.0 (2023-06-13)
 
 1. Forward merges
