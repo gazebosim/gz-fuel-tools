@@ -1901,7 +1901,7 @@ bool FuelClient::UpdateModels(const std::vector<std::string> &_headers)
   }
 
   // Attempt to update each model.
-  for (const auto id : toProcess)
+  for (const auto &id : toProcess)
   {
     ignition::fuel_tools::ModelIdentifier cloudId;
 
@@ -1942,7 +1942,7 @@ bool FuelClient::UpdateWorlds(const std::vector<std::string> &_headers)
   }
 
   // Attempt to update each world.
-  for (const auto id : toProcess)
+  for (const auto &id : toProcess)
   {
     ignition::fuel_tools::WorldIdentifier cloudId;
 
