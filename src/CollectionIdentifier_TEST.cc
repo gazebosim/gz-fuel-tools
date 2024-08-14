@@ -44,29 +44,54 @@ TEST(CollectionIdentifier, SetFields)
 
 /////////////////////////////////////////////////
 /// \brief Unique Name
-// See https://github.com/gazebosim/gz-fuel-tools/issues/231
 TEST(CollectionIdentifier, UniqueName)
 {
   gz::fuel_tools::ServerConfig srv1;
-  srv1.SetUrl(common::URI("https://localhost:8001"));
+  srv1.SetUrl(common::URI("https://localhost:8001", true));
 
   gz::fuel_tools::ServerConfig srv2;
-  srv2.SetUrl(common::URI("https://localhost:8002"));
+  srv2.SetUrl(common::URI("https://localhost:8002", true));
 
   gz::fuel_tools::ServerConfig srv3;
-  srv3.SetUrl(common::URI("https://localhost:8003"));
+  srv3.SetUrl(common::URI("https://localhost:8003", true));
 
   CollectionIdentifier id;
   id.SetName("hello");
   id.SetOwner("alice");
   id.SetServer(srv1);
-  EXPECT_EQ("https://localhost:8001/alice/collections/hello", id.UniqueName());
+  EXPECT_EQ("localhost%3A8001/alice/collections/hello", id.UniqueName());
 
   id.SetServer(srv2);
-  EXPECT_EQ("https://localhost:8002/alice/collections/hello", id.UniqueName());
+  EXPECT_EQ("localhost%3A8002/alice/collections/hello", id.UniqueName());
 
   id.SetServer(srv3);
-  EXPECT_EQ("https://localhost:8003/alice/collections/hello", id.UniqueName());
+  EXPECT_EQ("localhost%3A8003/alice/collections/hello", id.UniqueName());
+}
+
+/////////////////////////////////////////////////
+/// \brief Unique Name
+TEST(CollectionIdentifier, Url)
+{
+  gz::fuel_tools::ServerConfig srv1;
+  srv1.SetUrl(common::URI("https://localhost:8001", true));
+
+  gz::fuel_tools::ServerConfig srv2;
+  srv2.SetUrl(common::URI("https://localhost:8002", true));
+
+  gz::fuel_tools::ServerConfig srv3;
+  srv3.SetUrl(common::URI("https://localhost:8003", true));
+
+  CollectionIdentifier id;
+  id.SetName("hello");
+  id.SetOwner("alice");
+  id.SetServer(srv1);
+  EXPECT_EQ("https://localhost:8001/alice/collections/hello", id.Url().Str());
+
+  id.SetServer(srv2);
+  EXPECT_EQ("https://localhost:8002/alice/collections/hello", id.Url().Str());
+
+  id.SetServer(srv3);
+  EXPECT_EQ("https://localhost:8003/alice/collections/hello", id.Url().Str());
 }
 
 /////////////////////////////////////////////////
@@ -124,7 +149,7 @@ TEST(CollectionIdentifier, AsString)
     std::string str =
         "Name: \n"\
         "Owner: \n"\
-        "Unique name: https://fuel.gazebosim.org/collections/\n"
+        "Unique name: fuel.gazebosim.org/collections/\n"
         "Server:\n"
         "  URL: https://fuel.gazebosim.org\n"
         "  Version: 1.0\n"

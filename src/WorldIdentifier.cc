@@ -92,6 +92,16 @@ std::string WorldIdentifier::UniqueName() const
 }
 
 //////////////////////////////////////////////////
+gz::common::URI WorldIdentifier::Url() const
+{
+  return common::URI(
+    common::joinPaths(this->dataPtr->server.Url().Str(),
+                      this->dataPtr->owner,
+                      "worlds",
+                      this->dataPtr->name), true);
+}
+
+//////////////////////////////////////////////////
 std::string WorldIdentifier::Name() const
 {
   return this->dataPtr->name;

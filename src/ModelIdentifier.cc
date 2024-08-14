@@ -156,6 +156,16 @@ std::string ModelIdentifier::UniqueName() const
 }
 
 //////////////////////////////////////////////////
+common::URI ModelIdentifier::Url() const
+{
+  return common::URI(
+    common::joinPaths(this->dataPtr->server.Url().Str(),
+                      this->dataPtr->owner,
+                      "models",
+                      this->dataPtr->name), true);
+}
+
+//////////////////////////////////////////////////
 std::string ModelIdentifier::Name() const
 {
   return this->dataPtr->name;
