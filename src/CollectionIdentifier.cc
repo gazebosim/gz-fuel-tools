@@ -20,9 +20,11 @@
 #include <vector>
 
 #include <gz/common/Filesystem.hh>
+#include <gz/common/URI.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
 #include "gz/fuel_tools/CollectionIdentifier.hh"
+#include "gz/fuel_tools/Helpers.hh"
 
 
 namespace gz::fuel_tools
