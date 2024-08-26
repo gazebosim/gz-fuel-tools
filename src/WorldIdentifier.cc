@@ -21,6 +21,7 @@
 
 #include <gz/common/Filesystem.hh>
 #include <gz/common/StringUtils.hh>
+#include <gz/common/URI.hh>
 #include <gz/common/Util.hh>
 
 #include "gz/fuel_tools/ClientConfig.hh"
