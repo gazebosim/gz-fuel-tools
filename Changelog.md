@@ -1,6 +1,33 @@
 ## Gazebo Fuel Tools 10.x
 
-### Gazebo Fuel Tools 10.0.0 (2023-XX-XX)
+### Gazebo Fuel Tools 10.0.0 (2024-09-XX)
+
+Changes since 9.1.0
+
+1. Require cmake 3.22.1
+    * [Pull request #436](https://github.com/gazebosim/gz-fuel-tools/pull/436)
+
+1. Add missing URI header files
+    * [Pull request #435](https://github.com/gazebosim/gz-fuel-tools/pull/435)
+
+1. Use Ubuntu 24.04 in Github Actions CI workflow
+    * [Pull request #427](https://github.com/gazebosim/gz-fuel-tools/pull/427)
+
+1. Remove HIDE_SYMBOLS_BY_DEFAULT: replace by a default configuration in gz-cmake.
+    * [Pull request #399](https://github.com/gazebosim/gz-fuel-tools/pull/399)
+
+1. Use HIDE_SYMBOLS_BY_DEFAULT
+    * [Pull request #389](https://github.com/gazebosim/gz-fuel-tools/pull/389)
+
+1. Split ServerConfig and ClientConfig across multiple files
+    * [Pull request #380](https://github.com/gazebosim/gz-fuel-tools/pull/380)
+
+1. Bumps in Ionic: gz-fuel-tools10
+    * [Pull request #385](https://github.com/gazebosim/gz-fuel-tools/pull/385)
+    * [Pull request #386](https://github.com/gazebosim/gz-fuel-tools/pull/386)
+
+1. Remove deprecated ignition files
+    * [Pull request #379](https://github.com/gazebosim/gz-fuel-tools/pull/379)
 
 ## Gazebo Fuel Tools 9.x
 
@@ -116,7 +143,7 @@
 1. Add bash completion
     * [Pull request #329](https://github.com/gazebosim/gz-fuel-tools/pull/329)
 
-1. Reflect pagination of RESTful requests in iterator API 
+1. Reflect pagination of RESTful requests in iterator API
     * [Pull request #350](https://github.com/gazebosim/gz-fuel-tools/pull/350)
 
 1. Disable all LocalCache Tests for Windows
@@ -143,7 +170,7 @@
 1. Fix model downloads for ignitionrobotics.org URIs.
     * [Pull request #318](https://github.com/gazebosim/gz-fuel-tools/pull/318)
 
-1. Fix build when `JSON_USE_EXCEPTION == 0` 
+1. Fix build when `JSON_USE_EXCEPTION == 0`
     * [Pull request #332](https: //github.com/gazebosim/gz-fuel-tools/pull/332)
 
 ### Gazebo Fuel Tools 8.0.1
