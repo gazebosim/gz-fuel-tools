@@ -2,7 +2,13 @@
 
 ### Gazebo Fuel Tools 10.0.0 (2024-09-XX)
 
-Changes since 9.1.0
+1. **Baseline:** this includes all changes from 9.1.0 and earlier.
+
+1. Update badges to point to gz-fuel-tools10
+    * [Pull request #439](https://github.com/gazebosim/gz-fuel-tools/pull/439)
+
+1. Ionic changelog
+    * [Pull request #438](https://github.com/gazebosim/gz-fuel-tools/pull/438)
 
 1. Require cmake 3.22.1
     * [Pull request #436](https://github.com/gazebosim/gz-fuel-tools/pull/436)
