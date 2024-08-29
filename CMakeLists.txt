@@ -15,7 +15,7 @@ set(GZ_CMAKE_VER ${gz-cmake4_VERSION_MAJOR})
 #============================================================================
 # Configure the project
 #============================================================================
-gz_configure_project(VERSION_SUFFIX pre1)
+gz_configure_project(VERSION_SUFFIX pre2)
 
 #============================================================================
 # Set project-specific options
