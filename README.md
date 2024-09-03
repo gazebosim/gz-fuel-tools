@@ -31,6 +31,7 @@ Default is `/usr/local/share/gz`.
 For a complete list of commands run `gz fuel -h` on the command line.
 
 **List all models**
+
 ```{.sh}
 $ gz fuel list -t model -r | head
 https://fuel.gazebosim.org/anonymous/test_model_595389531
@@ -46,6 +47,7 @@ https://fuel.gazebosim.org/anonymous/test_model_380348669
 ```
 
 **Download a model**
+
 ```{.sh}
 $ gz fuel download -u https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ambulance -v 4
 Downloading model:
@@ -98,13 +100,14 @@ in.
 Create a private token at
 [https://app.gazebosim.org/settings#access_tokens](https://app.gazebosim.org/settings#access_tokens). Store the generated token someplace safe.
 
-The private token can then used to upload a model:
+The private token can then be used to upload a model:
 ```{.sh}
 gz fuel upload -m ~/path_to_model --header 'Private-token: <TOKEN>'
 ```
 
 ## Dependencies
 On ubuntu run
+
 ```{.sh}
 sudo apt install ruby-ffi libzip-dev libcurl-dev libjsoncpp-dev
 ```
