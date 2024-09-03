@@ -13,6 +13,12 @@ this tutorial:
 mkdir /tmp/fuel_tutorial && cd /tmp/fuel_tutorial
 ```
 
+Install compilation prerequisites:
+
+```bash
+sudo apt-get install libgflags-dev
+```
+
 Download the files `list.cc`, `details.cc`, `download.cc`,
 `CMakeLists.txt`, and save them under `/tmp/fuel_tutorial`:
 
@@ -172,7 +178,7 @@ for (const auto &server : client.Config().Servers())
     id.SetServer(server);
 
     gz::fuel_tools::ModelIdentifier model;
-    if (!client.ModelDetails(server, id, model))
+    if (!client.ModelDetails(id, model))
       continue;
 
     std::cout << model.AsPrettyString() << std::endl;
