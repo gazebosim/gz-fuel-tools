@@ -31,8 +31,7 @@ https://fuel.gazebosim.org
 By default, Fuel will list resources from all the servers listed in your
 `config.yaml` file. See the \ref configuration for more details.
 
-> **Tip**: If you want to see resources from a different Fuel server, add it to
-`config.yaml` to and re-run the list command to see resources from both servers!
+> **Tip**: If you want to see resources from a different Fuel server, add it to `config.yaml` to and re-run the list command to see resources from both servers!
 
 There are a few other options on the command, run the help to see all of them:
 
@@ -123,7 +122,10 @@ sub-command. You can access the list of edit options using:
 gz fuel edit -h
 ```
 
-You must be the resource owner, or an authorized member of the organization that owns the resource, in order to edit the resource. This in turn means you must use the `--header 'Private-token: YOUR_TOKEN'` option with the `edit` sub-command.
+You must be the resource owner, or an authorized member of the organization that owns the resource, in order to edit the resource. This in turn means you must use the next option with the `edit` subcommand:
+```
+--header 'Private-token: YOUR_TOKEN'
+```
 
 ### Change resource privacy
 
