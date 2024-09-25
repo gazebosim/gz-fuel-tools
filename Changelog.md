@@ -1,8 +1,14 @@
 ## Gazebo Fuel Tools 10.x
 
-### Gazebo Fuel Tools 10.0.0 (2024-09-XX)
+### Gazebo Fuel Tools 10.0.0 (2024-09-25)
 
 1. **Baseline:** this includes all changes from 9.1.0 and earlier.
+
+1. Miscellaneous documentation fixes
+    * [Pull request #445](https://github.com/gazebosim/gz-fuel-tools/pull/445)
+    * [Pull request #444](https://github.com/gazebosim/gz-fuel-tools/pull/444)
+    * [Pull request #443](https://github.com/gazebosim/gz-fuel-tools/pull/443)
+    * [Pull request #442](https://github.com/gazebosim/gz-fuel-tools/pull/442)
 
 1. Update badges to point to gz-fuel-tools10
     * [Pull request #439](https://github.com/gazebosim/gz-fuel-tools/pull/439)
