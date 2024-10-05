@@ -31,7 +31,15 @@ set(cmd_script_configured "${CMAKE_CURRENT_BINARY_DIR}/${CMD_NAME}${PROJECT_VERS
 
 # Set the library_location variable to the relative path to the library file
 # within the install directory structure.
-set(library_location "../../../${CMAKE_INSTALL_LIBDIR}/$<TARGET_FILE_NAME:${PROJECT_LIBRARY_TARGET_NAME}>")
+if (MSVC)
+  set(library_location_prefix "${CMAKE_INSTALL_BINDIR}")
+else()
+  set(library_location_prefix "${CMAKE_INSTALL_LIBDIR}")
+endif()
+
+# Set the library_location variable to the relative path to the library file
+# within the install directory structure.
+set(library_location "../../../${library_location_prefix}/$<TARGET_FILE_NAME:${PROJECT_LIBRARY_TARGET_NAME}>")
 
 configure_file(
   "${CMD_NAME}.rb.in"
