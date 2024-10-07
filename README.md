@@ -21,7 +21,7 @@ interacting with Gazebo Fuel servers.
 
 # Building and installing
 
-See the [installation tutorial](https://gazebosim.org/api/fuel_tools/9/install.html).
+See the [installation tutorial](https://gazebosim.org/api/fuel_tools/10/install.html).
 
 Make sure `GZ_CONFIG_PATH` is set to the right install location so that `gz fuel` will work.
 Default is `/usr/local/share/gz`.
@@ -31,7 +31,8 @@ Default is `/usr/local/share/gz`.
 For a complete list of commands run `gz fuel -h` on the command line.
 
 **List all models**
-```{.sh}
+
+```bash
 $ gz fuel list -t model -r | head
 https://fuel.gazebosim.org/anonymous/test_model_595389531
 https://fuel.gazebosim.org/anonymous/test_model_122023392
@@ -46,7 +47,8 @@ https://fuel.gazebosim.org/anonymous/test_model_380348669
 ```
 
 **Download a model**
-```{.sh}
+
+```bash
 $ gz fuel download -u https://fuel.gazebosim.org/1.0/OpenRobotics/models/Ambulance -v 4
 Downloading model:
   Name: Ambulance
@@ -98,14 +100,15 @@ in.
 Create a private token at
 [https://app.gazebosim.org/settings#access_tokens](https://app.gazebosim.org/settings#access_tokens). Store the generated token someplace safe.
 
-The private token can then used to upload a model:
-```{.sh}
+The private token can then be used to upload a model:
+```bash
 gz fuel upload -m ~/path_to_model --header 'Private-token: <TOKEN>'
 ```
 
 ## Dependencies
 On ubuntu run
-```{.sh}
+
+```bash
 sudo apt install ruby-ffi libzip-dev libcurl-dev libjsoncpp-dev
 ```
 
