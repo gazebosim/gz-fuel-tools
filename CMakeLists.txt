@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(gz-fuel_tools10 VERSION 10.0.0)
+project(gz-fuel_tools11 VERSION 11.0.0)
 
 #============================================================================
 # Find gz-cmake
@@ -15,7 +15,7 @@ set(GZ_CMAKE_VER ${gz-cmake4_VERSION_MAJOR})
 #============================================================================
 # Configure the project
 #============================================================================
-gz_configure_project(VERSION_SUFFIX)
+gz_configure_project(VERSION_SUFFIX pre1)
 
 #============================================================================
 # Set project-specific options
