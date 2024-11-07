@@ -1,5 +1,32 @@
 ## Gazebo Fuel Tools 8.x
 
+### Gazebo Fuel Tools 8.2.0 (2024-11-06)
+
+1. Fix a test
+    * [Pull request #419](https://github.com/gazebosim/gz-fuel-tools/pull/419)
+
+1. CLI for creating config.yaml
+    * [Pull request #413](https://github.com/gazebosim/gz-fuel-tools/pull/413)
+
+1. Add Private function to world identifier
+    * [Pull request #414](https://github.com/gazebosim/gz-fuel-tools/pull/414)
+
+1. Use config.yaml file from default cache location, if it exists
+    * [Pull request #410](https://github.com/gazebosim/gz-fuel-tools/pull/410)
+
+1. Create directories and more output on fail
+    * [Pull request #392](https://github.com/gazebosim/gz-fuel-tools/pull/392)
+
+1. Disable tests that are known to fail on Windows
+    * [Pull request #387](https://github.com/gazebosim/gz-fuel-tools/pull/387)
+
+1. Infrastructure
+    * [Pull request #390](https://github.com/gazebosim/gz-fuel-tools/pull/390)
+    * [Pull request #388](https://github.com/gazebosim/gz-fuel-tools/pull/388)
+
+1. Add script to update assets to gz
+    * [Pull request #377](https://github.com/gazebosim/gz-fuel-tools/pull/377)
+
 ### Gazebo Fuel Tools 8.1.0 (2023-08-21)
 
 1. Use `pull_request_target` for triage workflow
