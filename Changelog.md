@@ -1,5 +1,10 @@
 ## Gazebo Fuel Tools 4.x
 
+### Gazebo Fuel Tools 4.9.2 (2025-01-29)
+
+1. Fix tests pulling from wrong server
+    * [Pull request #421](https://github.com/gazebosim/gz-fuel-tools/pull/421)
+
 ### Gazebo Fuel Tools 4.9.1 (2024-01-05)
 
 1. Create directories and more output on fail
