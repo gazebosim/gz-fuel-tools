@@ -1,5 +1,10 @@
 ## Gazebo Fuel Tools 9.x
 
+### Gazebo Fuel Tools 9.1.1 (2025-01-30)
+
+1. Add missing URI header files
+    * [Pull request #435](https://github.com/gazebosim/gz-fuel-tools/pull/435)
+
 ### Gazebo Fuel Tools 9.1.0 (2024-08-06)
 
 1. Make `CollectionIdentifier::UniqueName` consistent
