@@ -12,7 +12,7 @@ Build | Status
 Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-fuel-tools/tree/gz-fuel-tools10/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-fuel-tools/tree/gz-fuel-tools10)
 Ubuntu Noble  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-ci-fuel-tools10-noble-amd64)](https://build.osrfoundation.org/job/gz_fuel_tools-ci-gz-fuel-tools10-noble-amd64)
 Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-ci-gz-fuel-tools10-homebrew-amd64)](https://build.osrfoundation.org/job/gz_fuel_tools-ci-gz-fuel-tools10-homebrew-amd64)
-Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-10-win)](https://build.osrfoundation.org/job/gz_fuel_tools-10-win/)
+Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-10-clowin)](https://build.osrfoundation.org/job/gz_fuel_tools-10-clowin/)
 
 Gazebo Fuel Tools is composed by a client library and command line tools for
 interacting with Gazebo Fuel servers.
