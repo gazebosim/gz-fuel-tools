@@ -1,6 +1,6 @@
 # Gazebo Fuel Tools: Classes and tools for interacting with Gazebo Fuel
 
-**Maintainer:** nate AT openrobotics DOT org
+**Maintainer:** Email@openrobotics.org
 
 [![GitHub open issues](https://img.shields.io/github/issues-raw/gazebosim/gz-fuel-tools.svg)](https://github.com/gazebosim/gz-fuel-tools/issues)
 [![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/gazebosim/gz-fuel-tools.svg)](https://github.com/gazebosim/gz-fuel-tools/pulls)
@@ -119,25 +119,25 @@ sudo apt install ruby-ffi libzip-dev libcurl-dev libjsoncpp-dev
         E.g.: localRepository.List("models")
         remote1Repository.List("models")
     * Details(assetIdentifier).
-        E.g.: Modeldentifier model;
+        E.g.: ModelIdentifier model;
         model.Owner("the_owner");
         model.Name("the_name");
         localRepository.Details(model)
         remote1Repository.Details(model)
     * Create(assetIdentifier, path_to_the_asset).
-        E.g.: Modeldentifier model;
+        E.g.: ModelIdentifier model;
         model.Owner("the_owner");
         model.Name("the_name");
         localRepository.Create(model, path_to_the_asset)
         remote1Repository.Create(model, path_to_the_asset)
     * Delete(assetIdentifier).
-        E.g.: Modeldentifier model;
+        E.g.: ModelIdentifier model;
         model.Owner("the_owner");
         model.Name("the_name");
         localRepository.Delete(model)
         remote1Repository.Delete(model)
      * CopyTo(assetIdentifier, dst_repository).
-        E.g.: Modeldentifier model;
+        E.g.: ModelIdentifier model;
         model.Owner("the_owner");
         model.Name("the_name");
         localRepository.CopyTo(model, remote1Repository)
