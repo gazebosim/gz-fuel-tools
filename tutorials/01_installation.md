@@ -115,7 +115,7 @@ Configure Gazebo Fuel Tools (choose either method a or b below):
   ```
 
   Note: You can use a custom install path to make it easier to switch
-  between source and debian installs:
+  between source and Debian installs:
   ```
   cmake -DCMAKE_INSTALL_PREFIX=/home/$USER/local ../
   ```
@@ -244,7 +244,7 @@ conda install libgz-cmake<#> libgz-common<#> libgz-msgs<#> libgz-tools<#> --chan
   cmake --build . --config Release
   ```
 
-4. Optionally, install. You wil likely need to run a terminal with admin privileges for this call to succeed.
+4. Optionally, install. You will likely need to run a terminal with admin privileges for this call to succeed.
   ```
   cmake --install . --config Release
   ```

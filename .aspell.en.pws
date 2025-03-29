@@ -1,4 +1,4 @@
-personal_ws-1.1 en 79 
+personal_ws-1.1 en 89 
 APIs
 ASAN
 AsString
@@ -7,15 +7,20 @@ BitBucket
 Bitbucket
 CLI
 CMake
+Capitan
 ClientConfig
+Conda
 CopyTo
 DownloadModel
+El
 FuelClient
+GDB
 GZ
 Github
 Homebrew
 LocalCache
 MSVC
+Miniconda
 ModelId
 ModelIdentifier
 ModelIter
@@ -33,6 +38,8 @@ ServerConfig
 URI
 URIs
 Url
+XCode
+Xenial
 accessor
 assetIdentifier
 backend
@@ -62,6 +69,7 @@ https
 ign
 ignitionrobotics
 localRepository
+macOS
 md
 modelname
 msgs
@@ -69,6 +77,8 @@ mutator
 namespace
 namespaces
 openrobotics
+osrf
+pre
 serverurl
 subcommand
 subcommands
