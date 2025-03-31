@@ -1,4 +1,4 @@
-personal_ws-1.1 en 278 
+personal_ws-1.1 en 299 
 APIs
 ASAN
 AddServer
@@ -153,8 +153,10 @@ WorldIterFactory
 WorldIterPrivate
 XCode
 Xenial
+ZipFile
 accessor
 api
+args
 ascii
 assetIdentifier
 auth
@@ -183,6 +185,9 @@ dataPtr
 deprecations
 desc
 destructor
+dir
+dirs
+dl
 dptr
 dst
 eg
@@ -190,17 +195,23 @@ emissive
 encodings
 endif
 enum
+erb
 executables
+extractall
+fd
 fetchResource
 fetchResourceWithClient
 filePath
 fileUrl
+filepath
 filesize
 filesystem
 filesystems
+fnmatch
 formadd
 fuelserver
 gazebosim
+getopt
 gflags
 gz
 hh
@@ -209,16 +220,19 @@ ifdef
 ifndef
 ign
 ignitionrobotics
+iter
 json
 libsdformat
 localRepository
 macOS
+makedirs
 md
 modelFileUrl
 modelIt
 modelUrl
 modelname
 msgs
+mtl
 multimap
 mutator
 mworlds
@@ -229,6 +243,8 @@ namespaces
 nate
 noexcept
 openrobotics
+optlist
+os
 osrf
 param
 pathToModelDir
@@ -237,6 +253,7 @@ pragma
 pre
 programmatically
 ptr
+py
 queryStrings
 resourcePath
 resourceSdf
@@ -259,6 +276,8 @@ struct
 subcommand
 subcommands
 subpage
+subprocess
+sys
 tinyxml
 tmp
 txt
@@ -272,8 +291,10 @@ uriAuthority
 uriToPath
 url
 userAgent
+wb
 worldFileUrl
 worldIt
 worldUrl
 xml
 yaml
+zipfile
