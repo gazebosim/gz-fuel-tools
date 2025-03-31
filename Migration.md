@@ -6,7 +6,7 @@
 
 ## Gazebo Fuel Tools 7.X to 8.X
 
-### Deprecations
+### Deprecated
 
 * **Deprecation**: `ignition` namespace
 * **Replacement**: `gz` namespace
@@ -29,7 +29,7 @@
 
 ## Gazebo Fuel Tools 5.X to 6.X
 
-### Deprecations
+### Deprecated
 
 * **Deprecation**: `FuelClient::DeleteModel`
 * **Replacement**: `FuelClient::DeleteUrl`
@@ -38,14 +38,14 @@
 
 ## Gazebo Fuel Tools 4.X to 5.X
 
-### Deprecations
+### Deprecated
 
 * **Deprecation**: `LocalCache`
 * **Replacement**: None
 
 ## Gazebo Fuel Tools 3.X to 4.X
 
-### Depercations
+### Deprecated
 
 1. The `fuel.ignitionrobotics.org` Fuel server has been deprecated, and
     redirects to `fuel.gazebosim.org`. Use `fuel.gazebosim.org` in all Fuel
@@ -82,7 +82,6 @@
 
 1. Deprecated the accessor `ModelIdentifier::Downloads` for `ModelIdentifier::DownloadCount`, and the mutator `ModelIdentifier::Downloads` for `ModelIdentifier::SetDownloadCount`.
     * [BitBucket pull request #52](https://osrf-migration.github.io/ignition-gh-pages/#!/ignitionrobotics/ign-fuel-tools/pull-requests/52)
-
 
 1. ResultTypes have moved from a plain `enum` inside the `Result` class to
    an `enum class ResultType` outside the `Result` class scope.

@@ -27,7 +27,7 @@
 1. Add missing URI header files
     * [Pull request #435](https://github.com/gazebosim/gz-fuel-tools/pull/435)
 
-1. Use Ubuntu 24.04 in Github Actions CI workflow
+1. Use Ubuntu 24.04 in GitHub Actions CI workflow
     * [Pull request #427](https://github.com/gazebosim/gz-fuel-tools/pull/427)
 
 1. Remove HIDE_SYMBOLS_BY_DEFAULT: replace by a default configuration in gz-cmake.
@@ -98,7 +98,7 @@
 1. Disable tests that are known to fail on Windows
     * [Pull request #387](https://github.com/gazebosim/gz-fuel-tools/pull/387)
 
-1. Update github action workflows
+1. Update GitHub action workflows
     * [Pull request #388](https://github.com/gazebosim/gz-fuel-tools/pull/388)
     * [Pull request #390](https://github.com/gazebosim/gz-fuel-tools/pull/390)
 
@@ -204,7 +204,7 @@
 
 ### Gazebo Fuel Tools 8.0.0
 
-1. Update test infrastruture
+1. Update test infrastructure
     * [Pull request #245](https://github.com/gazebosim/gz-fuel-tools/pull/245)
     * [Pull request #246](https://github.com/gazebosim/gz-fuel-tools/pull/246)
     * [Pull request #269](https://github.com/gazebosim/gz-fuel-tools/pull/269)
@@ -480,7 +480,7 @@
 1. Create directories and more output on fail
     * [Pull request #392](https://github.com/gazebosim/gz-fuel-tools/pull/392)
 
-1. Update github action workflows
+1. Update GitHub action workflows
     * [Pull request #388](https://github.com/gazebosim/gz-fuel-tools/pull/388)
 
 1. Zip: use non-deprecated methods
@@ -543,7 +543,7 @@
 1. Ignition -> Gazebo
     * [Pull request #276](https://github.com/gazebosim/gz-fuel-tools/pull/276)
 
-1. Remove unused files (bitbucket-pipelines, docs)
+1. Remove unused files (Bitbucket-pipelines, docs)
     * [Pull request #273](https://github.com/gazebosim/gz-fuel-tools/pull/273)
 
 1. Disable `staging-fuel.gazebosim.org` test
@@ -669,7 +669,7 @@
 
 ### Gazebo Fuel Tools 3.4.0 (2020-08-19)
 
-1. Modernize github actions by updating to the new style.
+1. Modernize GitHub actions by updating to the new style.
     * [Pull request 94](https://github.com/gazebosim/gz-fuel-tools/pull/94)
 
 1. Fix test worlds.
