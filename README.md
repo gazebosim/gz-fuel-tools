@@ -1,6 +1,6 @@
 # Gazebo Fuel Tools: Classes and tools for interacting with Gazebo Fuel
 
-**Maintainer:** Email@openrobotics.org
+**Maintainer:** nate AT openrobotics DOT org
 
 [![GitHub open issues](https://img.shields.io/github/issues-raw/gazebosim/gz-fuel-tools.svg)](https://github.com/gazebosim/gz-fuel-tools/issues)
 [![GitHub open pull requests](https://img.shields.io/github/issues-pr-raw/gazebosim/gz-fuel-tools.svg)](https://github.com/gazebosim/gz-fuel-tools/pulls)
