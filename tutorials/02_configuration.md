@@ -6,7 +6,7 @@ Next Tutorial: \ref cmdline
 
 Some aspects of Gazebo Fuel Tools can be configured according to the needs of
 the library users. This configuration can be done via a YAML configuration file
-or programatically.
+or programmatically.
 
 Gazebo Fuel Tools accepts a YAML file with the following syntax:
 
