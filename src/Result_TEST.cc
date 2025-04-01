@@ -99,7 +99,7 @@ TEST(Result, ReadableStringsHaveLength)
 }
 
 //////////////////////////////////////////////////
-/// \brief Check that operator bool returns true for successfull cases
+/// \brief Check that operator bool returns true for successful cases
 TEST(Result, TrueOnSuccess)
 {
   EXPECT_TRUE(Result(ResultType::DELETE));

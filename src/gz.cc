@@ -583,7 +583,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       }
       else
       {
-        gzerr << "Unknown resource type [" << _type << "] sepcified.\n";
+        gzerr << "Unknown resource type [" << _type << "] specified.\n";
         return false;
       }
     }
@@ -801,7 +801,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
   std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
       std::istreambuf_iterator<char>());
 
-  // Parse the file into the fuell metadata message
+  // Parse the file into the fuel metadata message
   google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
 
   std::string modelConfig;

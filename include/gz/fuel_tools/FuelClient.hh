@@ -300,7 +300,7 @@ namespace gz::fuel_tools
     /// \param[in] _jobs Number of parallel jobs to use to download models
     /// \return Result of the download operation.
     //    The resulting vector will be at least the size of the _ids input
-    //    vector, but may be larger depending on the number of depedencies
+    //    vector, but may be larger depending on the number of dependencies
     //    downloaded
     public: std::vector<ModelResult> DownloadModels(
                 const std::vector<ModelIdentifier> &_ids,
@@ -460,7 +460,7 @@ namespace gz::fuel_tools
                 const std::vector<std::string> &_headers,
                 const std::string &_pathToModelDir);
 
-    /// \brief Parse Collection identifer from URL.
+    /// \brief Parse Collection identifier from URL.
     /// \param[in] _url The unique URL of a collection. It may also be a
     /// unique name, which is a URL without the server version.
     /// \param[out] _id The collection identifier. It may contain incomplete
@@ -483,7 +483,7 @@ namespace gz::fuel_tools
 
     /// \brief Checked if there is any header already specify
     /// \param[in] _serverConfig Server configuration
-    /// \param[inout] _headers Vector with headers to check
+    /// \param[input] _headers Vector with headers to check
     private: void AddServerConfigParametersToHeaders(
       const gz::fuel_tools::ServerConfig &_serverConfig,
       std::vector<std::string> &_headers) const;

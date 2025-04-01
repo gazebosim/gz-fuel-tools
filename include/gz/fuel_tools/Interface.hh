@@ -52,11 +52,11 @@ namespace gz::fuel_tools
   ///   1. Check for a metadata.pbtxt file, and return the SDF file specified
   /// within the metadata.pbtxt file.
   ///   2. Check for a model.config file, and return the SDF file specified
-  /// withing the model.config file.
+  /// within the model.config file.
   ///   3. Return the first file with an `.sdf` extension.
   /// \param[in] _path Filesystem path to a Fuel model or world directory.
   /// \return Full path to the model or world SDF file, or empty string if
-  /// the SDF file coult not be determined.
+  /// the SDF file coul not be determined.
   GZ_FUEL_TOOLS_VISIBLE std::string sdfFromPath(
       const std::string &_path);
 }  // namespace gz::fuel_tools

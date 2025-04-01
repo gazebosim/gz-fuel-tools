@@ -178,7 +178,7 @@ bool ClientConfig::LoadConfig(const std::string &_file)
       // Stream start/end.
       case YAML_STREAM_START_EVENT:
       case YAML_STREAM_END_EVENT:
-      // Block delimeters.
+      // Block delimiters.
       case YAML_DOCUMENT_START_EVENT:
       case YAML_DOCUMENT_END_EVENT:
       case YAML_SEQUENCE_START_EVENT:
