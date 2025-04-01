@@ -1,4 +1,4 @@
-personal_ws-1.1 en 299 
+personal_ws-1.1 en 300 
 APIs
 ASAN
 AddServer
@@ -106,6 +106,7 @@ ResultType
 ResultTypes
 Roadmap
 SDF
+SEH
 SHA
 ServerConfig
 ServerConfigPrivate

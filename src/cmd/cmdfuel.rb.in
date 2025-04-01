@@ -49,7 +49,7 @@ COMMON_OPTIONS =
   "   the --header command line option.                                     \n"\
   "                                                                         \n"\
   "   Two types of credentials are supported on Gazebo Fuel, Private        \n"\
-  "   Token and JSON Web Token(JWT). The Private Token method is prefered.  \n"\
+  "   Token and JSON Web Token(JWT). The Private Token method is preferred.  \n"\
   "   Private tokens can be created through your  user settings on          \n"\
   "   https://app.gazebosim.org. Example usage:                             \n"\
   "     1. Private token method:                                            \n"\
@@ -168,7 +168,7 @@ SUBCOMMANDS = {
   "  --config2pbtxt arg       Convert a model.config file to a             \n"\
   "                           metadata.pbtxt.                              \n"+
   "  --pbtxt2config arg       Convert a metadata.pbtxt file to a           \n"\
-  "                           model.confg.                                 \n"+
+  "                           model.config.                                 \n"+
   COMMON_OPTIONS,
 
  'upload' =>
