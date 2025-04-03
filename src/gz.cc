@@ -528,9 +528,10 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       result = client.DownloadModel(model);
     }
 
-    if (!result)
+    if (result != gz::fuel_tools::ResultType::FETCH)
     {
-      std::cout << "Download failed." << std::endl;
+      std::cout << "Download failed because " << result.ReadableResult()
+        << std::endl;
       return false;
     }
   }
@@ -553,7 +554,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
 
     gz::fuel_tools::Result result = client.DownloadWorld(world);
 
-    if (!result)
+    if (result != gz::fuel_tools::ResultType::FETCH)
     {
       std::cout << "Download failed because " << result.ReadableResult()
         << std::endl;
