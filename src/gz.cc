@@ -516,7 +516,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
               << std::endl;
     }
 
-    int result = 0;
+    gz::fuel_tools::Result result(gz::fuel_tools::ResultType::UNKNOWN);
     if (_header && strlen(_header) > 0)
     {
       std::vector<std::string> headers;
