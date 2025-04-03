@@ -109,9 +109,11 @@ int main(int argc, char **argv)
       auto id = modelIdentifier;
       id.SetServer(server);
 
-      // Download
-      if (client.DownloadModel(id))
+      // Download and return 0 only if success
+      if (client.DownloadModel(id).Type() == ResultType::FETCH)
+      {
         return 0;
+      }
     }
     else if (FLAGS_t == "world")
     {
@@ -119,9 +121,11 @@ int main(int argc, char **argv)
       auto id = worldIdentifier;
       id.SetServer(server);
 
-      // Download
-      if (client.DownloadWorld(id))
+      // Download and return 0 only if success
+      if (client.DownloadWorld(id).Type() == ResultType::FETCH)
+      {
         return 0;
+      }
     }
   }
 
