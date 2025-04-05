@@ -56,7 +56,7 @@ namespace gz::fuel_tools
   ///   3. Return the first file with an `.sdf` extension.
   /// \param[in] _path Filesystem path to a Fuel model or world directory.
   /// \return Full path to the model or world SDF file, or empty string if
-  /// the SDF file coul not be determined.
+  /// the SDF file could not be determined.
   GZ_FUEL_TOOLS_VISIBLE std::string sdfFromPath(
       const std::string &_path);
 }  // namespace gz::fuel_tools

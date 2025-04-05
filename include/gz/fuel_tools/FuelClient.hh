@@ -483,7 +483,7 @@ namespace gz::fuel_tools
 
     /// \brief Checked if there is any header already specify
     /// \param[in] _serverConfig Server configuration
-    /// \param[input] _headers Vector with headers to check
+    /// \param[in,out] _headers Vector with headers to check
     private: void AddServerConfigParametersToHeaders(
       const gz::fuel_tools::ServerConfig &_serverConfig,
       std::vector<std::string> &_headers) const;

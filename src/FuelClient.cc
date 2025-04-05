@@ -1744,7 +1744,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
     _form.emplace("owner", _owner);
   }
 
-  // \TODO(nkoenig) The gz-fuelserver expects an integer number for the
+  // \todo(nkoenig) The gz-fuelserver expects an integer number for the
   // license information. The fuelserver should be modified to accept
   // a string. Otherwise, we have to bake into each client a mapping of
   // license name to integer.
