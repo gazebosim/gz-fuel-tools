@@ -84,7 +84,7 @@ class LocalCachePrivate
 
   /// \brief Helper function to fix a single model:// URI that is contained
   /// in an element.
-  /// \param[in] _elem Pointer to an element tha contains a URI.
+  /// \param[in] _elem Pointer to an element that contains a URI.
   /// \param[in] _id Model identifier
   /// \sa FixPaths
   public: void FixPathsInUri(tinyxml2::XMLElement *_elem,

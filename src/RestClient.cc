@@ -76,7 +76,7 @@ std::string RestJoinUrl(const std::string &_base,
   }
   else if (_base[_base.size()-1] != '/' && _more[0] != '/')
   {
-    // Niether have a slash
+    // Neither have a slash
     return  _base + '/' + _more;
   }
   else

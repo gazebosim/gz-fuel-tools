@@ -68,7 +68,7 @@ namespace gz::fuel_tools
     /// \return Internal world identifier
     public: WorldIdentifier *operator->();
 
-    /// \brief Derefence operator
+    /// \brief Dereference operator
     /// \return Internal world identifier
     public: WorldIdentifier &operator*();
 
