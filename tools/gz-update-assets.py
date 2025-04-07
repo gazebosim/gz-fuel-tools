@@ -14,7 +14,7 @@ import zipfile
 
 # Replace all occurrences of a string with another string inside all 
 # files with the provided extension. The extension is treated as
-# case-insentive.
+# case-insensitive.
 def find_and_replace(directory, find, replace, extension):
   for root, dirs, files in os.walk(directory):
     for file in files:
