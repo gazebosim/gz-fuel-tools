@@ -783,7 +783,7 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
         ModelIdentifier dependencyID;
         if(!this->ParseModelUrl(dependencyURI, dependencyID))
         {
-          // There is a potential that depdencies are specified via
+          // There is a potential that dependencies are specified via
           // [model://model_name], which is valid, but not something that we
           // can fetch from Fuel. In that case, warn the user so they have
           // a chance to update their specified dependencies.
@@ -1727,7 +1727,7 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
   else
   {
     gzerr << "Provided model directory[" <<  _pathToModelDir
-      << "] needs a metadata.pbtxt or a model.confg file.";
+      << "] needs a metadata.pbtxt or a model.config file.";
     return false;
   }
 
