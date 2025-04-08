@@ -122,7 +122,7 @@ int main(int argc, char **argv)
       id.SetServer(server);
 
       // Download and return 0 only if success
-      if (client.DownloadWorld(id).Type() ==  gz::fuel_tools::ResultType::FETCH)
+      if (client.DownloadWorld(id).Type() == gz::fuel_tools::ResultType::FETCH)
       {
         return 0;
       }
