@@ -110,7 +110,7 @@ int main(int argc, char **argv)
       id.SetServer(server);
 
       // Download and return 0 only if success
-      if (client.DownloadModel(id).Type() ==  gz::fuel_tools::ResultType::FETCH)
+      if (client.DownloadModel(id).Type() == gz::fuel_tools::ResultType::FETCH)
       {
         return 0;
       }
