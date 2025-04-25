@@ -465,7 +465,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int listWorlds(const char *_url,
 
 //////////////////////////////////////////////////
 extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
-    const char *_configFile, const char *_header, const char *_type, int _jobs)
+    const char *_configFile, const char *_header, const char *_type, int _jobs, const char *_skipCached)
 {
   // Add signal handler for SIGTERM and SIGINT. Ctrl-C doesn't work without this
   // handler.
@@ -499,9 +499,24 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
   gz::fuel_tools::WorldIdentifier world;
   gz::fuel_tools::CollectionIdentifier collection;
 
+  // Check if we should skip cached resources
+  std::string skipCachedStr{_skipCached ? _skipCached : "false"};
+  std::transform(skipCachedStr.begin(), skipCachedStr.end(),
+                skipCachedStr.begin(), ::tolower);
+  bool skipCached = skipCachedStr == "true";
+
   // Model?
   if (client.ParseModelUrl(url, model))
   {
+    // If skipCached is enabled, check if the model is already in the cache
+    if (skipCached)
+    {
+      std::string cachedPath;
+      if (client.CachedModel(url, cachedPath))
+        std::cout << "Model '" << model.Name() << "' found in cache at: " << cachedPath << ". Skipping download." << std::endl;
+        return true;
+    }
+
     // Download
     if (gz::common::Console::Verbosity() >= 3)
     {
@@ -538,6 +553,13 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
   // World?
   else if (client.ParseWorldUrl(url, world))
   {
+    if (skipCached)
+    {
+      std::string cachedPath;
+      if (client.CachedWorld(url, cachedPath))
+        std::cout << "World '" << world.Name() << "' found in cache at: " << cachedPath << ". Skipping download." << std::endl;
+        return true;
+    }
     // Download
     if (gz::common::Console::Verbosity() >= 3)
     {
@@ -598,7 +620,21 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       auto modelsIter = client.Models(collection);
       for (; modelsIter; ++modelsIter)
       {
-        modelIds.push_back(modelsIter->Identification());
+        // modelIds.push_back(modelsIter->Identification());
+        auto modelId = modelsIter->Identification();
+        if (skipCached)
+        {
+          std::string cachedPath;
+          if (client.CachedModel(modelId, cachedPath))
+          {
+            if (gz::common::Console::Verbosity() >= 3)
+            {
+              gzmsg << "Skipping cached model: " << modelId.Name() << std::endl;
+            }
+            continue;
+          }
+        }
+        modelIds.push_back(modelId);
       }
       gzmsg << "Found " << modelIds.size() << " models in collection ["
         << collection.Name() << "]" << std::endl;
@@ -610,7 +646,21 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(const char *_url,
       auto worldIter = client.Worlds(collection);
       for (; worldIter; ++worldIter)
       {
-        worldIds.push_back(worldIter);
+        // worldIds.push_back(worldIter);
+        if (skipCached)
+        {
+          std::string cachedPath;
+          gz::common::URI worldUri = worldIter->Url();
+          if (client.CachedWorld(worldUri, cachedPath))
+          {
+            if (gz::common::Console::Verbosity() >= 3)
+            {
+              gzmsg << "Skipping cached world: " << worldIter->Name() << std::endl;
+            }
+            continue;
+          }
+        }
+        worldIds.push_back(*worldIter);
       }
       gzmsg << "Found " << worldIds.size() << " worlds in collection ["
         << collection.Name() << "]" << std::endl;
