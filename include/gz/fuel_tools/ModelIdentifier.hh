@@ -149,8 +149,8 @@ namespace gz::fuel_tools
     public: bool Private() const;
 
     /// \brief Set the privacy setting of the model.
-    /// \param[in] True indicates the model is private, false indicates the
-    /// model is public.
+    /// \param[in] _private True indicates the model is private,
+    /// false indicates the model is public.
     public: void SetPrivate(bool _private) const;
 
     /// \brief Set the description of the model.

@@ -43,7 +43,7 @@ namespace gz::fuel_tools
 /// It encodes illegal characters on Windows and Linux filesystems with
 /// their corresponding URL-encoded values.
 ///
-/// This assumes an authority of the form: username@host:port
+/// This assumes an authority of the form: `username@host:port`
 /// "@" is encoded as %40
 /// ":" is encoded as %3A
 ///

@@ -122,7 +122,7 @@ namespace gz::fuel_tools
     public: std::string LocalPath() const;
 
     /// \brief Sets the path of the world in the local cache.
-    /// \param[in] Local path to world.
+    /// \param[in] _path Local path to world.
     /// \sa LocalPath
     public: bool SetLocalPath(const std::string &_path);
 
