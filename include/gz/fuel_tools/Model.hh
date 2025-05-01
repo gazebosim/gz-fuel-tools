@@ -81,7 +81,7 @@ namespace gz::fuel_tools
     public: Model(const Model &_orig) = default;
 
     /// \brief Protected constructor
-    /// \param[in] _dPtr Model private data to copy.
+    /// \param[in] _dptr Model private data to copy.
     protected: explicit Model(std::shared_ptr<ModelPrivate> _dptr);
 
     /// \brief Returns false if model was constructed via Model()
