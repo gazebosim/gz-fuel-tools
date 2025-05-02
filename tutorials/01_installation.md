@@ -90,7 +90,7 @@ sudo apt-get remove libgz-fuel-tools<#>-dev
 Install prerequisites. A clean Ubuntu system will need:
 
 ```
-sudo apt-get install git cmake pkg-config python ruby-ronn libgz-cmake4-dev libgz-common6-dev libgz-math8-dev libgz-msgs11-dev libgz-tools2-dev libzip-dev libjsoncpp-dev libcurl4-openssl-dev libyaml-dev
+sudo apt-get install git cmake pkg-config python ruby-ronn libgz-cmake5-dev libgz-common7-dev libgz-math9-dev libgz-msgs12-dev libgz-tools2-dev libzip-dev libjsoncpp-dev libcurl4-openssl-dev libyaml-dev
 ```
 
 Clone the repository into a directory and go into it:
