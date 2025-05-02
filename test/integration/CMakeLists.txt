@@ -9,5 +9,5 @@ link_directories(${PROJECT_BINARY_DIR}/test)
 
 gz_build_tests(TYPE INTEGRATION
                 SOURCES ${tests}
-                LIB_DEPS gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
+                LIB_DEPS gz-common::gz-common
 )

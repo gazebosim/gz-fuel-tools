@@ -3,14 +3,13 @@ cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
 #============================================================================
 # Initialize the project
 #============================================================================
-project(gz-fuel_tools11 VERSION 11.0.0)
+project(gz-fuel_tools VERSION 11.0.0)
 
 #============================================================================
 # Find gz-cmake
 #============================================================================
 # If you get an error at this line, you need to install gz-cmake
-find_package(gz-cmake4 REQUIRED)
-set(GZ_CMAKE_VER ${gz-cmake4_VERSION_MAJOR})
+find_package(gz-cmake REQUIRED)
 
 #============================================================================
 # Configure the project
@@ -49,23 +48,19 @@ gz_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find gz-utils
-gz_find_package(gz-utils3 REQUIRED)
-set(GZ_UTILS_VER ${gz-utils3_VERSION_MAJOR})
+gz_find_package(gz-utils REQUIRED)
 
 #--------------------------------------
 # Find gz-common
-gz_find_package(gz-common6 REQUIRED PRIVATE COMPONENTS testing)
-set(GZ_COMMON_VER ${gz-common6_VERSION_MAJOR})
+gz_find_package(gz-common REQUIRED PRIVATE COMPONENTS testing)
 
 #--------------------------------------
 # Find gz-math
-gz_find_package(gz-math8 REQUIRED PRIVATE)
-set(GZ_MATH_VER ${gz-math8_VERSION_MAJOR})
+gz_find_package(gz-math REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find gz-msgs
-gz_find_package(gz-msgs11 REQUIRED PRIVATE)
-set(GZ_MSGS_VER ${gz-msgs11_VERSION_MAJOR})
+gz_find_package(gz-msgs REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find gz-tools

@@ -1,12 +1,12 @@
 curl
 libcurl4-openssl-dev
 libgflags-dev
-libgz-cmake4-dev
-libgz-common6-dev
-libgz-math8-dev
-libgz-msgs11-dev
+libgz-cmake5-dev
+libgz-common7-dev
+libgz-math9-dev
+libgz-msgs12-dev
 libgz-tools2-dev
-libgz-utils3-dev
+libgz-utils4-dev
 libjsoncpp-dev
 libtinyxml2-dev
 libyaml-dev

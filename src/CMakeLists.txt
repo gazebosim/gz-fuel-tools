@@ -50,9 +50,9 @@ gz_create_core_library(SOURCES ${sources} CXX_STANDARD 17)
 # Link the libraries that we always need.
 target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
   PUBLIC
-    gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
+    gz-common::gz-common
   PRIVATE
-    gz-msgs${GZ_MSGS_VER}::gz-msgs${GZ_MSGS_VER}
+    gz-msgs::gz-msgs
     curl::curl
     ${JSONCPP_TARGET}
     TINYXML2::TINYXML2
@@ -61,8 +61,8 @@ target_link_libraries(${PROJECT_LIBRARY_TARGET_NAME}
 )
 
 gz_target_interface_include_directories(${PROJECT_LIBRARY_TARGET_NAME}
-  gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
-  gz-msgs${GZ_MSGS_VER}::gz-msgs${GZ_MSGS_VER}
+  gz-common::gz-common
+  gz-msgs::gz-msgs
 )
 
 
@@ -71,8 +71,8 @@ gz_build_tests(TYPE UNIT
                 SOURCES ${gtest_sources}
                 TEST_LIST test_targets
                 LIB_DEPS
-                  gz-common${GZ_COMMON_VER}::gz-common${GZ_COMMON_VER}
-                  gz-common${GZ_COMMON_VER}::testing
+                  gz-common::gz-common
+                  gz-common::testing
                   TINYXML2::TINYXML2
 )
 

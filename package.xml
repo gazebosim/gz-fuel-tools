@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
-  <name>gz-fuel_tools11</name>
+  <name>gz-fuel_tools</name>
   <version>11.0.0</version>
   <description>Gazebo Fuel Tools: Classes and tools for interacting with Gazebo Fuel</description>
   <maintainer email="natekoenig@gmail.com">Nate Koenig</maintainer>
@@ -10,13 +10,13 @@
 
   <buildtool_depend>cmake</buildtool_depend>
 
-  <build_depend>gz-cmake4</build_depend>
+  <build_depend>gz-cmake</build_depend>
 
-  <depend>gz-common6</depend>
-  <depend>gz-math8</depend>
-  <depend>gz-msgs11</depend>
+  <depend>gz-common</depend>
+  <depend>gz-math</depend>
+  <depend>gz-msgs</depend>
   <depend>gz-tools2</depend>
-  <depend>gz-utils3</depend>
+  <depend>gz-utils</depend>
   <depend>libcurl-dev</depend>
   <depend>libgflags-dev</depend>
   <depend>libjsoncpp-dev</depend>

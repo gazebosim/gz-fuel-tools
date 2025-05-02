@@ -3,8 +3,7 @@ cmake_minimum_required(VERSION 3.22.1 FATAL_ERROR)
 project(fuel-tools-examples)
 
 # Find the Gazebo Fuel Tools library
-find_package(gz-fuel_tools11 QUIET REQUIRED)
-set(GZ_FUEL_TOOLS_VER ${gz-fuel_tools11_VERSION_MAJOR})
+find_package(gz-fuel_tools QUIET REQUIRED)
 
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GZ-FUEL-TOOLS_CXX_FLAGS}")
 
@@ -21,21 +20,21 @@ endif()
 if (EXISTS "${CMAKE_SOURCE_DIR}/list.cc")
   add_executable(list list.cc)
   target_link_libraries(list
-                        gz-fuel_tools${GZ_FUEL_TOOLS_VER}::gz-fuel_tools${GZ_FUEL_TOOLS_VER}
+                        gz-fuel_tools::gz-fuel_tools
                         ${gflags_LIBRARIES})
 endif()
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/download.cc")
   add_executable(download download.cc)
   target_link_libraries(download
-                        gz-fuel_tools${GZ_FUEL_TOOLS_VER}::gz-fuel_tools${GZ_FUEL_TOOLS_VER}
+                        gz-fuel_tools::gz-fuel_tools
                         ${gflags_LIBRARIES})
 endif()
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/details.cc")
   add_executable(details details.cc)
   target_link_libraries(details
-                        gz-fuel_tools${GZ_FUEL_TOOLS_VER}::gz-fuel_tools${GZ_FUEL_TOOLS_VER}
+                        gz-fuel_tools::gz-fuel_tools
                         ${gflags_LIBRARIES})
 endif()
 
