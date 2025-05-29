@@ -65,13 +65,22 @@ cc_library(
     ],
     includes = ["include"],
     visibility = ["//visibility:public"],
+    features = [
+        # Layering check fails due to use of rules_foreign_cc//cmake in @libzip.
+        # See related https://github.com/bazel-contrib/rules_foreign_cc/issues/1221
+        "-layering_check",
+    ],
     deps = [
+        "@com_google_protobuf//:protobuf",
         "@curl",
         "@gz-common",
+        "@gz-math",
         "@gz-msgs",
+        "@gz-msgs//:gzmsgs_cc_proto",
         "@jsoncpp",
         "@libyaml",
         "@libzip",
+        "@tinyxml2",
     ],
 )
 
@@ -86,6 +95,8 @@ test_sources = glob(
 [cc_test(
     name = src.replace("/", "_").replace(".cc", "").replace("src_", ""),
     srcs = [src],
+    # Some tests need private headers.
+    copts = ["-Wno-private-header"],
     env = {
         "GZ_BAZEL": "1",
     },
@@ -93,6 +104,7 @@ test_sources = glob(
         ":fuel_tools",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
+        "@gz-common",
         "@gz-common//testing",
         "@gz-utils//:ExtraTestMacros",
     ],
