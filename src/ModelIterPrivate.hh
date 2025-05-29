@@ -25,6 +25,7 @@
 #include "gz/fuel_tools/Model.hh"
 #include "gz/fuel_tools/ModelIdentifier.hh"
 #include "gz/fuel_tools/RestClient.hh"
+#include "gz/fuel_tools/ServerConfig.hh"
 
 #ifdef _WIN32
 // Disable warning C4251 which is triggered by
