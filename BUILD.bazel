@@ -55,7 +55,7 @@ public_headers = public_headers_no_gen + [
 ]
 
 cc_library(
-    name = "fuel_tools",
+    name = "gz-fuel-tools",
     srcs = sources + private_headers,
     hdrs = public_headers,
     defines = [
@@ -101,7 +101,7 @@ test_sources = glob(
         "GZ_BAZEL": "1",
     },
     deps = [
-        ":fuel_tools",
+        ":gz-fuel-tools",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
         "@gz-common",
