@@ -17,7 +17,7 @@ gz_configure_header(
     ],
     package_xml = "//:package.xml",
     deps = [
-        "//:fuel_tools",
+        "//:gz-fuel-tools",
         "@googletest//:gtest",
     ],
 )
@@ -35,7 +35,7 @@ gz_configure_header(
             "integration",
         ],
         deps = [
-            "//:fuel_tools",
+            "//:gz-fuel-tools",
             "@googletest//:gtest",
             "@googletest//:gtest_main",
             "@gz-common",
