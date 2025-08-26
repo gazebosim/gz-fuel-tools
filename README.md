@@ -9,7 +9,7 @@
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-fuel-tools/tree/main/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-fuel-tools/tree/main)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-fuel-tools/tree/gz-fuel-tools11/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-fuel-tools/tree/gz-fuel-tools11)
 Ubuntu Noble  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-ci-gz-fuel-tools11-noble-amd64)](https://build.osrfoundation.org/job/gz_fuel_tools-ci-gz-fuel-tools11-noble-amd64)
 Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-ci-gz-fuel-tools11-homebrew-amd64)](https://build.osrfoundation.org/job/gz_fuel_tools-ci-gz-fuel-tools11-homebrew-amd64)
 Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-11-cnlwin)](https://build.osrfoundation.org/job/gz_fuel_tools-11-cnlwin/)
