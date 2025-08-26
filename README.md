@@ -9,10 +9,10 @@
 
 Build | Status
 -- | --
-Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-fuel-tools/tree/main/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-fuel-tools/tree/main)
-Ubuntu Noble  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-ci-main-noble-amd64)](https://build.osrfoundation.org/job/gz_fuel_tools-ci-main-noble-amd64)
-Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-ci-main-homebrew-amd64)](https://build.osrfoundation.org/job/gz_fuel_tools-ci-main-homebrew-amd64)
-Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-main-clowin)](https://build.osrfoundation.org/job/gz_fuel_tools-main-clowin/)
+Test coverage | [![codecov](https://codecov.io/gh/gazebosim/gz-fuel-tools/tree/gz-fuel-tools11/graph/badge.svg)](https://codecov.io/gh/gazebosim/gz-fuel-tools/tree/gz-fuel-tools11)
+Ubuntu Noble  | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-ci-gz-fuel-tools11-noble-amd64)](https://build.osrfoundation.org/job/gz_fuel_tools-ci-gz-fuel-tools11-noble-amd64)
+Homebrew      | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-ci-gz-fuel-tools11-homebrew-amd64)](https://build.osrfoundation.org/job/gz_fuel_tools-ci-gz-fuel-tools11-homebrew-amd64)
+Windows       | [![Build Status](https://build.osrfoundation.org/buildStatus/icon?job=gz_fuel_tools-11-cnlwin)](https://build.osrfoundation.org/job/gz_fuel_tools-11-cnlwin/)
 
 Gazebo Fuel Tools is composed by a client library and command line tools for
 interacting with Gazebo Fuel servers.
@@ -21,7 +21,7 @@ interacting with Gazebo Fuel servers.
 
 # Building and installing
 
-See the [installation tutorial](https://gazebosim.org/api/fuel_tools/10/install.html).
+See the [installation tutorial](https://gazebosim.org/api/fuel_tools/11/install.html).
 
 Make sure `GZ_CONFIG_PATH` is set to the right install location so that `gz fuel` will work.
 Default is `/usr/local/share/gz`.
