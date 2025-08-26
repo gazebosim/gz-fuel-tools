@@ -2,6 +2,16 @@
 
 ### Gazebo Fuel Tools 11.0.0 (20XX-XX-XX)
 
+### Gazebo Fuel Tools 11.0.0 (2025-09-XX)
+
+1. **Baseline:** this includes all changes from 10.1.0 and earlier.
+
+1. Bump gz-cmake and others in jetty
+    * [Pull request #464](https://github.com/gazebosim/gz-fuel-tools/pull/464)
+
+1. Fix code documentation spelling
+    * [Pull request #458](https://github.com/gazebosim/gz-fuel-tools/pull/458)
+
 ## Gazebo Fuel Tools 10.x
 
 ### Gazebo Fuel Tools 10.1.0 (2025-06-06)
