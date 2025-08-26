@@ -1,7 +1,5 @@
 ## Gazebo Fuel Tools 11.x
 
-### Gazebo Fuel Tools 11.0.0 (20XX-XX-XX)
-
 ### Gazebo Fuel Tools 11.0.0 (2025-09-XX)
 
 1. **Baseline:** this includes all changes from 10.1.0 and earlier.
