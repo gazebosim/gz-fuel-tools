@@ -1,9 +1,10 @@
 name: Bazel CI
 on:
-  push:
-    branches: [gz-fuel-tools10, main]
   pull_request:
-    branches: [gz-fuel-tools10, main]
+  push:
+    branches:
+      - 'gz-fuel-tools[1-9]?[0-9]'
+      - 'main'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
