@@ -1,8 +1,11 @@
 ## Gazebo Fuel Tools 11.x
 
-### Gazebo Fuel Tools 11.0.0 (2025-09-XX)
+### Gazebo Fuel Tools 11.0.0 (2025-09-30)
 
 1. **Baseline:** this includes all changes from 10.1.0 and earlier.
+
+1. [Bazel] Update bazel module to use jetty release branches
+    * [Pull request #474](https://github.com/gazebosim/gz-fuel-tools/pull/474)
 
 1. Bump gz-cmake and others in jetty
     * [Pull request #464](https://github.com/gazebosim/gz-fuel-tools/pull/464)
