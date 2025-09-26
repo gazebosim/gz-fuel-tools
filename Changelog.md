@@ -7,6 +7,9 @@
 1. [Bazel] Update bazel module to use jetty release branches
     * [Pull request #474](https://github.com/gazebosim/gz-fuel-tools/pull/474)
 
+1. Update gz-fuel-tools11 badge URLs
+    * [Pull request #473](https://github.com/gazebosim/gz-fuel-tools/pull/473)
+
 1. Bump gz-cmake and others in jetty
     * [Pull request #464](https://github.com/gazebosim/gz-fuel-tools/pull/464)
 
