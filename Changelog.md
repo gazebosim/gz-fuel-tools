@@ -1,3 +1,7 @@
+## Gazebo Fuel Tools 12.x
+
+### Gazebo Fuel Tools 12.0.0 (20XX-XX-XX)
+
 ## Gazebo Fuel Tools 11.x
 
 ### Gazebo Fuel Tools 11.0.0 (2025-09-XX)
