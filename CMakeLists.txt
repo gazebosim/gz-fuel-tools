@@ -9,7 +9,7 @@ project(gz-fuel_tools VERSION 11.0.0)
 # Find gz-cmake
 #============================================================================
 # If you get an error at this line, you need to install gz-cmake
-find_package(gz-cmake REQUIRED)
+find_package(gz-cmake 5 REQUIRED)
 
 #============================================================================
 # Configure the project
@@ -48,19 +48,19 @@ gz_find_package(ZIP REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find gz-utils
-gz_find_package(gz-utils REQUIRED)
+gz_find_package(gz-utils VERSION 4 REQUIRED)
 
 #--------------------------------------
 # Find gz-common
-gz_find_package(gz-common REQUIRED PRIVATE COMPONENTS testing)
+gz_find_package(gz-common VERSION 7 REQUIRED PRIVATE COMPONENTS testing)
 
 #--------------------------------------
 # Find gz-math
-gz_find_package(gz-math REQUIRED PRIVATE)
+gz_find_package(gz-math VERSION 9 REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find gz-msgs
-gz_find_package(gz-msgs REQUIRED PRIVATE)
+gz_find_package(gz-msgs VERSION 12 REQUIRED PRIVATE)
 
 #--------------------------------------
 # Find gz-tools
