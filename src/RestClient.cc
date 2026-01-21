@@ -133,11 +133,8 @@ struct curl_httppost *BuildFormPost(
 {
   struct curl_httppost *formpost = nullptr;
   struct curl_httppost *lastptr = nullptr;
-  for (const std::pair<std::string, std::string> &it : _form)
+  for (const auto &[key, value] : _form)
   {
-    std::string key = it.first;
-    std::string value = it.second;
-
     // follow same convention as curl cmdline tool
     // field starting with @ indicates path to file to upload
     // others are standard fields to describe the file
