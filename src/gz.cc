@@ -803,7 +803,11 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
       std::istreambuf_iterator<char>());
 
   // Parse the file into the fuel metadata message
-  google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+  if (!google::protobuf::TextFormat::ParseFromString(inputStr, &meta))
+  {
+    std::cerr << "Unable to parse Fuel metadata from [" << _path << "]\n";
+    return 0;
+  }
 
   std::string modelConfig;
   if (!gz::msgs::ConvertFuelMetadata(meta, modelConfig))
