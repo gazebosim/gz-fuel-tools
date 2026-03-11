@@ -808,8 +808,12 @@ extern "C" IGNITION_FUEL_TOOLS_VISIBLE int pbtxt2Config(const char *_path)
   std::string inputStr((std::istreambuf_iterator<char>(inputFile)),
       std::istreambuf_iterator<char>());
 
-  // Parse the file into the fuell metadata message
-  google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+  // Parse the file into the fuel metadata message
+  if (!google::protobuf::TextFormat::ParseFromString(inputStr, &meta))
+  {
+    std::cerr << "Unable to parse Fuel metadata from [" << _path << "]\n";
+    return 0;
+  }
 
   std::string modelConfig;
   if (!gz::msgs::ConvertFuelMetadata(meta, modelConfig))

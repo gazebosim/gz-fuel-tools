@@ -111,8 +111,9 @@ namespace ignition
         if (foundMetadataPath)
         {
           // Parse the file into the fuel metadata message
-          google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
-        }
+          if (!google::protobuf::TextFormat::ParseFromString(inputStr, &meta))
+            return "";
+          }
         else
         {
           if (!msgs::ConvertFuelMetadata(inputStr, meta))
