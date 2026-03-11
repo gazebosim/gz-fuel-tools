@@ -54,7 +54,13 @@ namespace ignition
       if (_client.ParseModelUrl(uri, model) &&
           !_client.CachedModel(uri, result))
       {
+<<<<<<< HEAD
         _client.DownloadModel(uri, result);
+=======
+        // Parse the file into the fuel metadata message
+        if (!google::protobuf::TextFormat::ParseFromString(inputStr, &meta))
+          return "";
+>>>>>>> d0382af (Fix unused result warnings (#493))
       }
       // Download the model, if it's a model file URI
       else if (_client.ParseModelFileUrl(uri, model, fileUrl) &&
