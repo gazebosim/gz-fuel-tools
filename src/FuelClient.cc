@@ -766,7 +766,12 @@ Result FuelClient::ModelDependencies(const ModelIdentifier &_id,
       if (foundMetadataPath)
       {
         // Parse the file into the fuel metadata message
-        google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+        if (!google::protobuf::TextFormat::ParseFromString(inputStr, &meta))
+        {
+          gzerr << "Unable to parse fuel metadata message ["
+                << modelPath << "]" << std::endl;
+          return Result(ResultType::FETCH_ERROR);
+        }
       }
       else
       {
@@ -1706,7 +1711,12 @@ bool FuelClientPrivate::FillModelForm(const std::string &_pathToModelDir,
         std::istreambuf_iterator<char>());
 
     // Parse the file into the fuel metadata message
-    google::protobuf::TextFormat::ParseFromString(inputStr, &meta);
+    if (!google::protobuf::TextFormat::ParseFromString(inputStr, &meta))
+    {
+      gzerr << "Unable to parse fuel metadata message [" << filePath << ']'
+            << std::endl;
+      return false;
+    }
   }
   else if (common::exists(common::joinPaths(_pathToModelDir, "model.config")))
   {
