@@ -8,7 +8,7 @@ configure_file(
     "${CMAKE_CURRENT_BINARY_DIR}/fuel${PROJECT_VERSION_MAJOR}.yaml.configured" @ONLY)
 
 file(GENERATE
-  OUTPUT "${CMAKE_BINARY_DIR}/test/conf/fuel${PROJECT_VERSION_MAJOR}.yaml"
+  OUTPUT "${CMAKE_BINARY_DIR}/test/conf/$<CONFIG>/fuel${PROJECT_VERSION_MAJOR}.yaml"
   INPUT "${CMAKE_CURRENT_BINARY_DIR}/fuel${PROJECT_VERSION_MAJOR}.yaml.configured")
 
 set(gz_library_path "${CMAKE_INSTALL_PREFIX}/lib/ruby/gz/cmdfuel${PROJECT_VERSION_MAJOR}")
