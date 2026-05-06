@@ -55,6 +55,7 @@ GZ_DOWNLOAD_COMPLETION_LIST="
   -j --jobs
   -t --type
   -u --url
+  -s --skip-cached
   --force-version
   --versions
 "

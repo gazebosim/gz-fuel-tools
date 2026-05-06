@@ -46,6 +46,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int listModels(
 /// \param[in] _owner Optional owner name
 /// \param[in] _raw 'true' for machine readable output.
 /// \param[in] _configFile Path to a YAML configuration file.
+/// \param[in] _skipCached "true" to skip resources already in cache.
 /// \return 1 if successful, 0 if not.
 extern "C" GZ_FUEL_TOOLS_VISIBLE int listWorlds(
     const char *_url = nullptr, const char *_owner = "",
@@ -61,7 +62,7 @@ extern "C" GZ_FUEL_TOOLS_VISIBLE int listWorlds(
 /// \return 1 if successful, 0 if not.
 extern "C" GZ_FUEL_TOOLS_VISIBLE int downloadUrl(
     const char *_url = nullptr, const char *_configFile = nullptr,
-    const char *_header = nullptr, const char *_type = nullptr, int _jobs = 1);
+    const char *_header = nullptr, const char *_type = nullptr, int _jobs = 1, const char *_skipCached = "false");
 
 /// \brief External hook to execute 'gz fuel upload -m path' from the command
 /// line.
