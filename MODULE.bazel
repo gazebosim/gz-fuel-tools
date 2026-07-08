@@ -4,9 +4,9 @@ module(
 )
 
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.1")
-bazel_dep(name = "curl", version = "8.8.0.bcr.3")
-bazel_dep(name = "googletest", version = "1.17.0")
-bazel_dep(name = "jsoncpp", version = "1.9.6")
+bazel_dep(name = "curl", version = "8.12.0.bcr.1")
+bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
+bazel_dep(name = "jsoncpp", version = "1.9.6.bcr.2")
 bazel_dep(name = "libyaml", version = "0.2.5")
 bazel_dep(name = "libzip", version = "1.11.4")
 bazel_dep(name = "protobuf", version = "30.1", repo_name = "com_google_protobuf")
