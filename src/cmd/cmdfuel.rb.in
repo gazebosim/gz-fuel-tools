@@ -126,7 +126,8 @@ SUBCOMMANDS = {
   "  -t [--type] arg          Limit what resource type (i.e. model, world) \n"\
   "                           to download from a collection. All resources \n"\
   "                           will be downloaded if unspecified. Ignored   \n"\
-  "                           if not downloading collection.               \n"+
+  "                           if not downloading collection.               \n"\
+  "  -s [--skip-cached]       Skip downloading resources already in cache. \n"+
   COMMON_OPTIONS,
 
  'edit' =>
@@ -228,7 +229,8 @@ class Cmd
       'onlymodels' => '0',
       'onlyworlds' => '0',
       'defaults' => false,
-      'console' => false
+      'console' => false,
+      'skip_cached' => 'false'
     }
 
     usage = COMMANDS[args[0]]
@@ -301,6 +303,9 @@ class Cmd
       end
       opts.on('--console', 'Output to console') do
         options['console'] = true
+      end
+      opts.on('-s', '--skip-cached', 'Skip downloading resources already in cache') do
+        options['skip_cached'] = 'true'
       end
     end # opt_parser do
 
@@ -434,9 +439,9 @@ class Cmd
           exit(-1)
         end
       when 'download'
-        Importer.extern 'int downloadUrl(const char *, const  char *, const char *, const char *, unsigned int)'
+        Importer.extern 'int downloadUrl(const char *, const  char *, const char *, const char *, unsigned int, const char *)'
         if not Importer.downloadUrl(options['url'], options['config'],
-            options['header'], options['type'], options['jobs_int'])
+            options['header'], options['type'], options['jobs_int'], options['skip_cached'])
           exit(-1)
         end
       when 'edit'
