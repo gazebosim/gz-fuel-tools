@@ -5,7 +5,7 @@
   <version>12.0.0</version>
   <description>Gazebo Fuel Tools: Classes and tools for interacting with Gazebo Fuel</description>
   <maintainer email="natekoenig@gmail.com">Nate Koenig</maintainer>
-  <license>Apache License 2.0</license>
+  <license>Apache-2.0</license>
   <url type="website">https://github.com/gazebosim/gz-fuel-tools</url>
 
   <buildtool_depend>cmake</buildtool_depend>
