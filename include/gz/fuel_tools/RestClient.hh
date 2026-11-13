@@ -18,7 +18,6 @@
 #define GZ_FUEL_TOOLS_RESTCLIENT_HH_
 
 #include <map>
-#include <memory>
 #include <string>
 #include <vector>
 

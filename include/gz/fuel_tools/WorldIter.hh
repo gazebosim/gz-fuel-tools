@@ -20,6 +20,7 @@
 
 #include <memory>
 
+#include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/Helpers.hh"
 
 #ifdef _WIN32

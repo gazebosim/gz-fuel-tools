@@ -21,7 +21,7 @@
 #include <memory>
 #include <string>
 
-#include "gz/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/Model.hh"
 #include "gz/fuel_tools/ModelIter.hh"
 #include "gz/fuel_tools/WorldIter.hh"

@@ -24,6 +24,9 @@
 #include <string>
 #include <vector>
 
+#include <gz/common/URI.hh>
+
+#include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/Helpers.hh"
 
 #ifdef _WIN32
