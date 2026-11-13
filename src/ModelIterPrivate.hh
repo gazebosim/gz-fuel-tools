@@ -22,6 +22,7 @@
 #include <string>
 #include <vector>
 
+#include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/Model.hh"
 #include "gz/fuel_tools/ModelIdentifier.hh"
 #include "gz/fuel_tools/RestClient.hh"

@@ -21,7 +21,8 @@
 #include <string>
 #include <vector>
 
-#include "gz/fuel_tools/ClientConfig.hh"
+#include "gz/fuel_tools/Export.hh"
+#include "gz/fuel_tools/ServerConfig.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"
 #include "gz/fuel_tools/RestClient.hh"
 

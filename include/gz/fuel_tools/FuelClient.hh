@@ -18,12 +18,14 @@
 #ifndef GZ_FUEL_TOOLS_FUELCLIENT_HH_
 #define GZ_FUEL_TOOLS_FUELCLIENT_HH_
 
+#include <cstddef>
 #include <memory>
 #include <string>
 #include <tuple>
 #include <vector>
 #include <gz/common/URI.hh>
 
+#include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/ModelIter.hh"
 #include "gz/fuel_tools/RestClient.hh"
 #include "gz/fuel_tools/Result.hh"

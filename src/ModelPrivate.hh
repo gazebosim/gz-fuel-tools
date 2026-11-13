@@ -20,7 +20,7 @@
 
 #include <string>
 
-#include "gz/fuel_tools/Helpers.hh"
+#include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/ModelIdentifier.hh"
 
 #ifdef _WIN32
