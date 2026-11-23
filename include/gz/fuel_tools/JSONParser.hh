@@ -20,9 +20,9 @@
 
 #include <map>
 #include <string>
-#include <utility>
 #include <vector>
 
+#include "gz/fuel_tools/Export.hh"
 #include "gz/fuel_tools/ModelIdentifier.hh"
 #include "gz/fuel_tools/ModelIter.hh"
 #include "gz/fuel_tools/WorldIdentifier.hh"

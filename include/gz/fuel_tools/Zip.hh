@@ -17,9 +17,7 @@
 #ifndef GZ_FUEL_TOOLS_ZIP_HH_
 #define GZ_FUEL_TOOLS_ZIP_HH_
 
-#include <memory>
 #include <string>
-#include <vector>
 
 #include "gz/fuel_tools/Export.hh"
 
