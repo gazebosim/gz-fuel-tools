@@ -1,5 +1,34 @@
 ## Gazebo Fuel Tools 10.x
 
+### Gazebo Fuel Tools 10.1.1 (2026-11-24)
+
+1. Update code owners
+    * [Pull request #525](https://github.com/gazebosim/gz-fuel-tools/pull/525)
+
+1. Use the SPDX identifier Apache-2.0 in the license declaration
+    * [Pull request #521](https://github.com/gazebosim/gz-fuel-tools/pull/521)
+
+1. Update BCR maintainers
+    * [Pull request #515](https://github.com/gazebosim/gz-fuel-tools/pull/515)
+
+1. Change Bazel to use Clang for layering checks
+    * [Pull request #514](https://github.com/gazebosim/gz-fuel-tools/pull/514)
+
+1. ci.yml: fix push branch filter pattern
+    * [Pull request #502](https://github.com/gazebosim/gz-fuel-tools/pull/502)
+
+1. Fix unused result warnings
+    * [Pull request #493](https://github.com/gazebosim/gz-fuel-tools/pull/493)
+
+1. [bazel/infra] Disable windows CI
+    * [Pull request #487](https://github.com/gazebosim/gz-fuel-tools/pull/487)
+
+1. [bazel/infra] Add manual BCR release workflow
+    * [Pull request #485](https://github.com/gazebosim/gz-fuel-tools/pull/485)
+
+1. Bazel updates: prep for BCR release automation
+    * [Pull request #479](https://github.com/gazebosim/gz-fuel-tools/pull/479)
+
 ### Gazebo Fuel Tools 10.1.0 (2025-06-06)
 
 1. Migrate bazel build setup to use bzlmod
