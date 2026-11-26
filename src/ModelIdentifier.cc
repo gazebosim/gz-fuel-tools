@@ -74,6 +74,9 @@ class ModelIdentifierPrivate
   /// \brief Collection of tags
   public: std::vector<std::string> tags;
 
+  /// \brief Thumbnail URL as it was set. It can be relative to the server.
+  public: std::string thumbnailUrl;
+
   /// \brief Model version. Valid versions start from 1, 0 means the tip.
   public: unsigned int version{0};
 
@@ -277,6 +280,34 @@ std::string ModelIdentifier::LicenseImageUrl() const
 std::vector<std::string> ModelIdentifier::Tags() const
 {
   return this->dataPtr->tags;
+}
+
+//////////////////////////////////////////////////
+common::URI ModelIdentifier::ThumbnailUrl() const
+{
+  const std::string &url = this->dataPtr->thumbnailUrl;
+  if (url.empty())
+    return common::URI();
+
+  if (url.find("://") != std::string::npos)
+    return common::URI(url, true);
+
+  // Fuel returns the URL relative to the server URL and its API version
+  std::string base = this->dataPtr->server.Url().Str();
+  while (!base.empty() && base.back() == '/')
+    base.pop_back();
+  const std::string version = this->dataPtr->server.Version();
+  if (!version.empty())
+    base += "/" + version;
+
+  return common::URI(base + (url.front() == '/' ? "" : "/") + url, true);
+}
+
+//////////////////////////////////////////////////
+bool ModelIdentifier::SetThumbnailUrl(const std::string &_url)
+{
+  this->dataPtr->thumbnailUrl = _url;
+  return true;
 }
 
 //////////////////////////////////////////////////

@@ -143,6 +143,13 @@ namespace gz::fuel_tools
     /// \return The collection of tags.
     public: std::vector<std::string> Tags() const;
 
+    /// \brief Returns the URL of the model's thumbnail image. A relative
+    /// URL set with SetThumbnailUrl is resolved against the URL and the
+    /// API version of the model's server.
+    /// \return Thumbnail URL. Empty if the model has no thumbnail.
+    /// \sa SetThumbnailUrl
+    public: gz::common::URI ThumbnailUrl() const;
+
     /// \brief Returns the privacy setting of the model.
     /// \return True if the model is private, false if the model is
     /// public.
@@ -201,6 +208,15 @@ namespace gz::fuel_tools
     /// \param[in] _tags The tags.
     /// \return True if successful.
     public: bool SetTags(const std::vector<std::string> &_tags);
+
+    /// \brief Set the URL of the model's thumbnail image.
+    /// \param[in] _url An absolute URL, or a path relative to the server's
+    /// URL and API version as Fuel returns it, for example
+    /// "/OpenRobotics/models/Chair/tip/files/thumbnails/1.png". An empty
+    /// string clears it.
+    /// \return True if successful.
+    /// \sa ThumbnailUrl
+    public: bool SetThumbnailUrl(const std::string &_url);
 
     /// \brief Returns the model's version as a number. Versions are integers
     /// counting from 1. Version zero means the tip.
