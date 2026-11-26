@@ -1,5 +1,52 @@
 ## Gazebo Fuel Tools 11.x
 
+### Gazebo Fuel Tools 11.0.1 (2025-11-25)
+
+1. [bazel] Update presubmit
+    * [Pull request #528](https://github.com/gazebosim/gz-fuel-tools/pull/528)
+
+1. update code owners
+    * [Pull request #523](https://github.com/gazebosim/gz-fuel-tools/pull/523)
+
+1. Use the SPDX identifier Apache-2.0 in the license declaration
+    * [Pull request #518](https://github.com/gazebosim/gz-fuel-tools/pull/518)
+
+1. Update BCR maintainers
+    * [Pull request #515](https://github.com/gazebosim/gz-fuel-tools/pull/515)
+
+1. use clang for bazel ci build
+    * [Pull request #512](https://github.com/gazebosim/gz-fuel-tools/pull/512)
+
+1. ci: test on Ubuntu Resolute (26.04)
+    * [Pull request #511](https://github.com/gazebosim/gz-fuel-tools/pull/511)
+
+1. [bazel] Minor deps update plus bugfixes
+    * [Pull request #509](https://github.com/gazebosim/gz-fuel-tools/pull/509)
+
+1. [bazel] Bump default bazel version to 9.1.1 and CI workflow version
+    * [Pull request #507](https://github.com/gazebosim/gz-fuel-tools/pull/507)
+
+1. ci.yml: fix push branch filter pattern
+    * [Pull request #502](https://github.com/gazebosim/gz-fuel-tools/pull/502)
+
+1. Fix unused result warnings
+    * [Pull request #493](https://github.com/gazebosim/gz-fuel-tools/pull/493)
+
+1. [bazel] Fix CI on MacOS
+    * [Pull request #489](https://github.com/gazebosim/gz-fuel-tools/pull/489)
+
+1. Find jetty packages with explicit version
+    * [Pull request #488](https://github.com/gazebosim/gz-fuel-tools/pull/488)
+
+1. [bazel/infra] Disable windows CI
+    * [Pull request #481](https://github.com/gazebosim/gz-fuel-tools/pull/481)
+
+1. [bazel/infra] Add manual BCR release workflow
+    * [Pull request #480](https://github.com/gazebosim/gz-fuel-tools/pull/480)
+
+1. Bazel updates: prep for BCR release automation
+    * [Pull request #476](https://github.com/gazebosim/gz-fuel-tools/pull/476)
+
 ### Gazebo Fuel Tools 11.0.0 (2025-09-30)
 
 1. **Baseline:** this includes all changes from 10.1.0 and earlier.
