@@ -224,6 +224,8 @@ bool JSONParser::ParseModelImpl(
       _model.SetTags(ParseTags(_json["tags"]));
     if (_json.isMember("version"))
       _model.SetVersion(_json["version"].asUInt());
+    if (_json.isMember("thumbnail_url") && _json["thumbnail_url"].isString())
+      _model.SetThumbnailUrl(_json["thumbnail_url"].asString());
   }
 #if GZ_JSON_HAVE_EXCEPTIONS == 1
   catch (...)

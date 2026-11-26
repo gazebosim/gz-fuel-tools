@@ -114,6 +114,41 @@ TEST(JSONParser, ParseModel)
 }
 
 /////////////////////////////////////////////////
+/// \brief Thumbnail URLs are read from the JSON and resolved against the
+/// server
+TEST(JSONParser, ParseModelsThumbnailUrl)
+{
+  std::stringstream tmpJsonStr;
+  tmpJsonStr << "["
+    << "{\"name\":\"Dining Chair\",\"owner\":\"OpenRobotics\","
+    << "\"thumbnail_url\":\"/OpenRobotics/models/Dining%20Chair/tip/files/"
+    << "thumbnails/DiningChair.png\"},"
+    << "{\"name\":\"car\",\"owner\":\"alice\",\"thumbnail_url\":null},"
+    << "{\"name\":\"house\",\"owner\":\"alice\"}]";
+
+  ServerConfig srv;
+  srv.SetUrl(common::URI("https://fuel.gazebosim.org", true));
+
+  auto modelIds = JSONParser::ParseModels(tmpJsonStr.str(), srv);
+  ASSERT_EQ(3u, modelIds.size());
+  EXPECT_EQ("https://fuel.gazebosim.org/1.0/OpenRobotics/models/"
+            "Dining%20Chair/tip/files/thumbnails/DiningChair.png",
+            modelIds[0].ThumbnailUrl().Str());
+  // Fuel sends null for models without a thumbnail
+  EXPECT_TRUE(modelIds[1].ThumbnailUrl().Str().empty());
+  EXPECT_TRUE(modelIds[2].ThumbnailUrl().Str().empty());
+
+  // A single model
+  ModelIdentifier model = JSONParser::ParseModel(
+      "{\"name\":\"CONE_SORTING\",\"owner\":\"GoogleResearch\","
+      "\"thumbnail_url\":\"/GoogleResearch/models/CONE_SORTING/tip/files/"
+      "thumbnails/0.jpg\"}", srv);
+  EXPECT_EQ("https://fuel.gazebosim.org/1.0/GoogleResearch/models/"
+            "CONE_SORTING/tip/files/thumbnails/0.jpg",
+            model.ThumbnailUrl().Str());
+}
+
+/////////////////////////////////////////////////
 /// \brief Convert JSON string to world iterator
 TEST(JSONParser, ParseWorlds)
 {

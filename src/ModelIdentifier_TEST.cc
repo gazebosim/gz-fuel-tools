@@ -107,6 +107,59 @@ TEST(ModelIdentifier, Url)
 }
 
 /////////////////////////////////////////////////
+/// \brief Thumbnail URL
+TEST(ModelIdentifier, ThumbnailUrl)
+{
+  gz::fuel_tools::ServerConfig srv;
+  srv.SetUrl(common::URI("https://fuel.gazebosim.org", true));
+
+  ModelIdentifier id;
+  id.SetServer(srv);
+
+  // No thumbnail
+  EXPECT_TRUE(id.ThumbnailUrl().Str().empty());
+
+  // Fuel returns the URL relative to the server and its API version
+  EXPECT_TRUE(id.SetThumbnailUrl(
+      "/OpenRobotics/models/Chair/tip/files/thumbnails/1.png"));
+  EXPECT_EQ("https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair/tip/"
+            "files/thumbnails/1.png", id.ThumbnailUrl().Str());
+
+  // Percent-encoded characters are kept
+  id.SetThumbnailUrl(
+      "/OpenRobotics/models/Dining%20Chair/tip/files/thumbnails/a.png");
+  EXPECT_EQ("https://fuel.gazebosim.org/1.0/OpenRobotics/models/"
+            "Dining%20Chair/tip/files/thumbnails/a.png",
+            id.ThumbnailUrl().Str());
+
+  // Spaces in file names are kept
+  id.SetThumbnailUrl(
+      "/alice/models/cone/tip/files/thumbnails/Screenshot from 2025.png");
+  EXPECT_EQ("https://fuel.gazebosim.org/1.0/alice/models/cone/tip/files/"
+            "thumbnails/Screenshot from 2025.png", id.ThumbnailUrl().Str());
+
+  // Relative path without a leading slash
+  id.SetThumbnailUrl("alice/models/hello/tip/files/thumbnails/0.jpg");
+  EXPECT_EQ("https://fuel.gazebosim.org/1.0/alice/models/hello/tip/files/"
+            "thumbnails/0.jpg", id.ThumbnailUrl().Str());
+
+  // The server's API version and a trailing slash in its URL
+  srv.SetUrl(common::URI("https://localhost:8001/", true));
+  srv.SetVersion("2.0");
+  id.SetServer(srv);
+  EXPECT_EQ("https://localhost:8001/2.0/alice/models/hello/tip/files/"
+            "thumbnails/0.jpg", id.ThumbnailUrl().Str());
+
+  // Absolute URLs are used as they are
+  id.SetThumbnailUrl("https://example.org/thumbnails/1.jpg");
+  EXPECT_EQ("https://example.org/thumbnails/1.jpg", id.ThumbnailUrl().Str());
+
+  // Clearing it
+  id.SetThumbnailUrl("");
+  EXPECT_TRUE(id.ThumbnailUrl().Str().empty());
+}
+
+/////////////////////////////////////////////////
 /// \brief Copy constructor deep copies
 TEST(ModelIdentifier, CopyConstructorDeepCopy)
 {
